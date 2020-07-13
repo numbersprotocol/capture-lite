@@ -1,11 +1,11 @@
 import { browser, by, element } from 'protractor';
 
 export class AppPage {
-  navigateTo() {
+  async navigateTo() {
     return browser.get('/');
   }
 
-  getParagraphText() {
+  async getParagraphText() {
     return element(by.deepCss('app-root ion-content')).getText();
   }
 }

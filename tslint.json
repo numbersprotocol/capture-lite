@@ -13,7 +13,11 @@
     "deprecation": {
       "severity": "warning"
     },
-    "component-class-suffix": [true, "Page", "Component"],
+    "component-class-suffix": [
+      true,
+      "Page",
+      "Component"
+    ],
     "contextual-lifecycle": true,
     "directive-class-suffix": true,
     "directive-selector": [
@@ -141,7 +145,21 @@
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "no-parameter-reassignment": true,
+    "no-for-in": true,
+    "promise-function-async": true,
+    "await-promise": true,
+    "function-constructor": true,
+    "no-async-without-await": true,
+    "no-null-keyword": true,
+    "no-return-await": true,
+    "no-tautology-expression": true,
+    "no-this-assignment": true,
+    "prefer-object-spread": true,
+    "prefer-conditional-expression": true,
+    "unnecessary-constructor": true,
+    "prefer-readonly": true
   },
   "rulesDirectory": [
     "codelyzer"
