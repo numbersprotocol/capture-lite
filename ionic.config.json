@@ -1,0 +1,7 @@
+{
+  "name": "capture-lite",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
