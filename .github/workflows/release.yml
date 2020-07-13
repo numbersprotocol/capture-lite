@@ -1,0 +1,42 @@
+name: Node.js Package
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  release-private-coupon:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 10
+
+    - name: Check if version has been updated
+      id: version_check
+      uses: EndBug/version-check@v1
+      with:
+        diff-search: true
+        file-name: projects/private-coupon/package.json
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create GitHub release
+      id: create_release
+      if: steps.version_check.outputs.changed == 'true'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version_check.outputs.version }}
+        release_name: ${{ steps.version_check.outputs.version }}
+        body: |
+          ![release!](https://i.giphy.com/media/lPulaaB9lDMnGZiivs/source.gif)
+          
+          # Changelog
+
+          Release type: ${{ steps.version_check.outputs.type }}
+        prerelease: true

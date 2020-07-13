@@ -1,0 +1,37 @@
+name: Node.js CI
+
+on: [push, pull_request]
+
+jobs:
+  build-private-coupon:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10
+    
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Lint
+      run: npm run lint
+
+    - name: Test
+      run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage
+        path: ./coverage
+
+    - name: Build
+      run: npm run build
