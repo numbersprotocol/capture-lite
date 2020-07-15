@@ -5,10 +5,18 @@
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>settings</ion-title>
+    <ion-title>{{ 'settings' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-list>
+    <ion-item>
+      <ion-label>Languages</ion-label>
+      <ion-select [value]="defaultLanguage.value">
+        <ion-select-option *ngFor="let language of langauges" [value]="language.value">{{ language.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 </ion-content>

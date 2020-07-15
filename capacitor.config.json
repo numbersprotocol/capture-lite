@@ -1,5 +1,5 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "io.numbersprotocol.capturelite",
   "appName": "capture-lite",
   "bundledWebRuntime": false,
   "npmClient": "npm",
