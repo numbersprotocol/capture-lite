@@ -2,11 +2,14 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [{
-  path: 'home',
-  loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
+  path: 'storage',
+  loadChildren: () => import('./pages/storage/storage.module').then(m => m.StoragePageModule)
+}, {
+  path: 'settings',
+  loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
 }, {
   path: '',
-  redirectTo: 'home',
+  redirectTo: 'storage',
   pathMatch: 'full'
 }];
 
