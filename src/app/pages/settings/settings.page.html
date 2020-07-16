@@ -12,9 +12,10 @@
 <ion-content>
   <ion-list>
     <ion-item>
+      <ion-icon name="language" slot="start"></ion-icon>
       <ion-label>Languages</ion-label>
-      <ion-select [value]="defaultLanguage.value">
-        <ion-select-option *ngFor="let language of langauges" [value]="language.value">{{ language.name }}
+      <ion-select [ngModel]="currentLanguageKey$ | async" (ngModelChange)="setCurrentLanguage($event)">
+        <ion-select-option *ngFor="let language of langauges | keyvalue" [value]="language.key">{{ language.value }}
         </ion-select-option>
       </ion-select>
     </ion-item>

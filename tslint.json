@@ -159,7 +159,8 @@
     "prefer-object-spread": true,
     "prefer-conditional-expression": true,
     "unnecessary-constructor": true,
-    "prefer-readonly": true
+    "prefer-readonly": true,
+    "no-unnecessary-type-assertion": true
   },
   "rulesDirectory": [
     "codelyzer"
