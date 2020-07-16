@@ -14,7 +14,7 @@ export class LanguageService {
     'zh-tw': '繁體中文（台灣）'
   };
   readonly defaultLanguage = Object.entries(this.languages)[0];
-  readonly currentLanguageKey$ = this.preferences.get('languageKey', this.defaultLanguage[0]);
+  readonly currentLanguageKey$ = this.preferences.get$('languageKey', this.defaultLanguage[0]);
 
   constructor(
     private readonly translateService: TranslateService
@@ -23,13 +23,13 @@ export class LanguageService {
   init() {
     this.translateService.setDefaultLang(this.defaultLanguage[0]);
     this.currentLanguageKey$.pipe(
-      switchMap(key => this.setCurrentLanguage(key)),
+      switchMap(key => this.setCurrentLanguage$(key)),
       first(),
     ).subscribe();
   }
 
-  setCurrentLanguage(key: string) {
-    return this.preferences.set('languageKey', key).pipe(
+  setCurrentLanguage$(key: string) {
+    return this.preferences.set$('languageKey', key).pipe(
       switchMap(_ => this.translateService.use(key)),
       map(_ => key)
     );

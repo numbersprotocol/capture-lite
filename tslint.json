@@ -1,5 +1,8 @@
 {
-  "extends": "tslint:recommended",
+  "extends": [
+    "tslint:recommended",
+    "rxjs-tslint-rules"
+  ],
   "rules": {
     "align": {
       "options": [
@@ -160,7 +163,19 @@
     "prefer-conditional-expression": true,
     "unnecessary-constructor": true,
     "prefer-readonly": true,
-    "no-unnecessary-type-assertion": true
+    "no-unnecessary-type-assertion": true,
+    "rxjs-finnish": true,
+    "rxjs-no-create": true,
+    "rxjs-no-explicit-generics": true,
+    "rxjs-no-exposed-subjects": true,
+    "rxjs-no-nested-subscribe": true,
+    "rxjs-no-unbound-methods": true,
+    "rxjs-no-unsafe-catch": true,
+    "rxjs-no-unsafe-first": true,
+    "rxjs-no-unsafe-scope": true,
+    "rxjs-no-unsafe-subject-next": true,
+    "rxjs-no-unsafe-switchmap": true,
+    "rxjs-no-unsafe-takeuntil": true
   },
   "rulesDirectory": [
     "codelyzer"
