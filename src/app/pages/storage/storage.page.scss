@@ -1,0 +1,7 @@
+ion-thumbnail {
+    --size: 25vw;
+}
+
+ion-card {
+    margin: calc(var(--ion-padding, 16px) / 4);
+}
