@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FilesystemDirectory, Plugins } from '@capacitor/core';
-import { defer } from 'rxjs';
+import { BehaviorSubject, defer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Proof } from './proof';
 
@@ -13,13 +13,18 @@ export class ProofRepository {
 
   static readonly RAW_FILES_DIR = FilesystemDirectory.Data;
   static readonly RAW_FILES_DIR_NAME = 'raw';
-  private readonly proofList: Set<Proof> = new Set();
+  private readonly proofList$ = new BehaviorSubject(new Set<Proof>());
 
-  getAll() { return this.proofList; }
+  getAll$() { return this.proofList$.asObservable(); }
 
-  add(...proofs: Proof[]) { proofs.forEach(proof => this.proofList.add(proof)); }
+  add(...proofs: Proof[]) { proofs.forEach(proof => this.proofList$.next(this.proofList$.value.add(proof))); }
 
-  remove(...proofs: Proof[]) { proofs.forEach(proof => this.proofList.delete(proof)); }
+  remove(...proofs: Proof[]) {
+    proofs.forEach(proof => {
+      this.proofList$.value.delete(proof);
+      this.proofList$.next(this.proofList$.value);
+    });
+  }
 
   getRawFile$(proof: Proof) {
     return defer(() => Filesystem.readFile({
