@@ -6,6 +6,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
@@ -25,7 +26,7 @@ jobs:
       run: npm run lint
 
     - name: Test
-      run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
+      run: npm run test-ci
 
     - name: Upload coverage reports
       uses: actions/upload-artifact@v2
