@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FilesystemDirectory, Plugins } from '@capacitor/core';
-import { BehaviorSubject, defer } from 'rxjs';
+import { BehaviorSubject, defer, from, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { sha256$ } from 'src/app/utils/crypto/crypto';
 import { MimeType } from 'src/app/utils/mime-type';
@@ -19,6 +19,12 @@ export class ProofRepository {
 
   getAll$() { return this.proofList$.asObservable(); }
 
+  getByHash$(hash: string) {
+    return this.proofList$.pipe(
+      map(proofSet => [...proofSet].find(proof => proof.hash === hash))
+    );
+  }
+
   add(...proofs: Proof[]) {
     proofs.forEach(proof => this.proofList$.next(this.proofList$.value.add(proof)));
     return proofs;
@@ -32,11 +38,15 @@ export class ProofRepository {
     return proofs;
   }
 
-  getRawFile$(proof: Proof) {
-    return defer(() => Filesystem.readFile({
-      path: `${this.rawFileDirName}/${proof.hash}.${proof.mimeType.extension}`,
-      directory: this.rawFileDir
-    })).pipe(
+  getRawFile$(proofOrHash: Proof | string) {
+    return defer(() => {
+      if (typeof proofOrHash === 'object') { return of(proofOrHash); }
+      else { return this.getByHash$(proofOrHash); }
+    }).pipe(
+      switchMap(proof => from(Filesystem.readFile({
+        path: `${this.rawFileDirName}/${proof.hash}.${proof.mimeType.extension}`,
+        directory: this.rawFileDir
+      }))),
       map(result => result.data)
     );
   }

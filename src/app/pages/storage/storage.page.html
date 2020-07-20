@@ -13,10 +13,11 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let proofThumb of proofThumbs$ | async" size="3" class="ion-no-padding">
+      <ion-col *ngFor="let proofWithRaw of proofListWithRaw$ | async"
+        [routerLink]="['/proof', {hash: proofWithRaw.proof.hash}]" size="3" class="ion-no-padding">
         <ion-card>
           <ion-thumbnail>
-            <ion-img [src]="'data:image/*;base64,' + proofThumb"></ion-img>
+            <ion-img [src]="'data:image/*;base64,' + proofWithRaw.rawBase64"></ion-img>
           </ion-thumbnail>
         </ion-card>
       </ion-col>

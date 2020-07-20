@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { forkJoin } from 'rxjs';
-import { concatMap, map, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, of, zip } from 'rxjs';
+import { concatMap, map, switchMap } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
@@ -15,10 +15,16 @@ import { fromExtension } from 'src/app/utils/mime-type';
 })
 export class StoragePage {
 
-  readonly proofThumbs$ = this.proofRepository.getAll$().pipe(
+  readonly proofListWithRaw$ = this.proofRepository.getAll$().pipe(
     map(proofSet => [...proofSet]),
-    map(proofArray => proofArray.map(proof => this.proofRepository.getRawFile$(proof))),
-    concatMap(rawFileObservables => forkJoin(rawFileObservables))
+    concatMap(proofArray => zip(
+      of(proofArray),
+      forkJoin(proofArray.map(proof => this.proofRepository.getRawFile$(proof)))
+    )),
+    map(([proofs, base64Strings]) => proofs.map((proof, index) => ({
+      proof,
+      rawBase64: base64Strings[index]
+    })))
   );
 
   constructor(
@@ -33,7 +39,6 @@ export class StoragePage {
         cameraPhoto.base64String,
         fromExtension(cameraPhoto.format)
       )),
-      tap(v => console.log(v)),
       untilDestroyed(this)
     ).subscribe();
   }
