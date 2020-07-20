@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { first, map, switchMap } from 'rxjs/operators';
+import { first, mapTo, switchMap, switchMapTo } from 'rxjs/operators';
 import { PreferencesService } from '../preferences/preferences.service';
 
 @Injectable({
@@ -30,8 +30,8 @@ export class LanguageService {
 
   setCurrentLanguage$(key: string) {
     return this.preferences.set$('languageKey', key).pipe(
-      switchMap(_ => this.translateService.use(key)),
-      map(_ => key)
+      switchMapTo(this.translateService.use(key)),
+      mapTo(key)
     );
   }
 }

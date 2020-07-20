@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { forkJoin, of, zip } from 'rxjs';
-import { concatMap, map, switchMap, tap } from 'rxjs/operators';
+import { concatMap, map, mapTo, switchMap } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
@@ -35,7 +35,7 @@ export class StoragePage {
 
   refresh(event: any) {
     this.proofRepository.refresh$().pipe(
-      tap(_ => event.target.complete()),
+      mapTo(event.target.complete()),
       untilDestroyed(this)
     ).subscribe();
   }

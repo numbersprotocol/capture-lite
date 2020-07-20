@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FilesystemDirectory, FilesystemEncoding, Plugins } from '@capacitor/core';
-import { BehaviorSubject, defer, forkJoin, from, of, zip } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, defer, forkJoin, from, Observable, of, zip } from 'rxjs';
+import { catchError, map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { sha256$ } from 'src/app/utils/crypto/crypto';
 import { MimeType } from 'src/app/utils/mime-type';
 import { Proof } from './proof';
@@ -20,15 +20,33 @@ export class ProofRepository {
   private readonly proofList$ = new BehaviorSubject(new Set<Proof>());
 
   refresh$() {
-    return defer(() => Filesystem.readdir({
-      path: `${this.proofFolderName}`,
-      directory: this.proofDir
-    })).pipe(
+    return this.mkProofDir$().pipe(
+      switchMapTo(this.readProofDir$()),
       map(result => result.files),
       switchMap(fileNames => forkJoin(fileNames.map(fileName => this.readProof$(fileName)))),
       map(results => results.map(result => JSON.parse(result.data) as Proof)),
       tap(proofList => this.proofList$.next(new Set(proofList)))
     );
+  }
+
+  private mkProofDir$(): Observable<void> {
+    return defer(() => Filesystem.mkdir({
+      path: this.proofFolderName,
+      directory: this.proofDir,
+      recursive: true
+    })).pipe(
+      mapTo(void 0),
+      catchError((err: Error) => {
+        console.log(`${err.message} (${this.proofDir}/${this.proofFolderName})`);
+        return of(void 0);
+      }));
+  }
+
+  private readProofDir$() {
+    return defer(() => Filesystem.readdir({
+      path: this.proofFolderName,
+      directory: this.proofDir
+    }));
   }
 
   private readProof$(fileName: string) {
@@ -41,13 +59,13 @@ export class ProofRepository {
 
   getAll$() {
     return this.refresh$().pipe(
-      switchMap(_ => this.proofList$.asObservable())
+      switchMapTo(this.proofList$.asObservable())
     );
   }
 
   getByHash$(hash: string) {
     return this.refresh$().pipe(
-      switchMap(_ => this.proofList$),
+      switchMapTo(this.proofList$),
       map(proofSet => [...proofSet].find(proof => proof.hash === hash))
     );
   }
@@ -71,7 +89,7 @@ export class ProofRepository {
 
   remove$(...proofs: Proof[]) {
     return forkJoin(proofs.map(proof => this.deleteProofFile$(proof))).pipe(
-      switchMap(_ => this.refresh$())
+      switchMapTo(this.refresh$())
     );
   }
 
