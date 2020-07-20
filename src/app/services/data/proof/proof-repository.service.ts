@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FilesystemDirectory, FilesystemEncoding, Plugins } from '@capacitor/core';
-import { BehaviorSubject, defer, forkJoin, from, Observable, of, zip } from 'rxjs';
-import { catchError, map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { BehaviorSubject, defer, forkJoin, Observable, of, zip } from 'rxjs';
+import { catchError, filter, map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { sha256$ } from 'src/app/utils/crypto/crypto';
 import { MimeType } from 'src/app/utils/mime-type';
 import { Proof } from './proof';
@@ -23,6 +23,7 @@ export class ProofRepository {
     return this.mkProofDir$().pipe(
       switchMapTo(this.readProofDir$()),
       map(result => result.files),
+      tap(v => console.log(v)),
       switchMap(fileNames => forkJoin(fileNames.map(fileName => this.readProof$(fileName)))),
       map(results => results.map(result => JSON.parse(result.data) as Proof)),
       tap(proofList => this.proofList$.next(new Set(proofList)))
@@ -57,16 +58,12 @@ export class ProofRepository {
     }));
   }
 
-  getAll$() {
-    return this.refresh$().pipe(
-      switchMapTo(this.proofList$.asObservable())
-    );
-  }
+  getAll$() { return this.proofList$.asObservable(); }
 
   getByHash$(hash: string) {
-    return this.refresh$().pipe(
-      switchMapTo(this.proofList$),
-      map(proofSet => [...proofSet].find(proof => proof.hash === hash))
+    return this.proofList$.pipe(
+      map(proofSet => [...proofSet].find(proof => proof.hash === hash)),
+      filter(proof => !!proof)
     );
   }
 
@@ -100,17 +97,11 @@ export class ProofRepository {
     }));
   }
 
-  getRawFile$(proofOrHash: Proof | string) {
-    return defer(() => {
-      if (typeof proofOrHash === 'object') { return of(proofOrHash); }
-      else { return this.getByHash$(proofOrHash); }
-    }).pipe(
-      switchMap(proof => from(Filesystem.readFile({
-        path: `${this.rawFileFolderName}/${proof.hash}.${proof.mimeType.extension}`,
-        directory: this.rawFileDir
-      }))),
-      map(result => result.data)
-    );
+  getRawFile$(proof: Proof) {
+    return defer(() => Filesystem.readFile({
+      path: `${this.rawFileFolderName}/${proof.hash}.${proof.mimeType.extension}`,
+      directory: this.rawFileDir
+    })).pipe(map(result => result.data));
   }
 
   /**

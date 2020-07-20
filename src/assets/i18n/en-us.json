@@ -1,5 +1,9 @@
 {
   "capture": "Capture",
   "settings": "Settings",
-  "proofDetails": "Proof Details"
+  "proofDetails": "Proof Details",
+  "caption": "Caption",
+  "hash": "Hash",
+  "mimeType": "MIME Type",
+  "timestamp": "Timestamp"
 }
