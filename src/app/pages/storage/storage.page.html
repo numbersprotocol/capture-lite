@@ -13,10 +13,10 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let proof of proofList$ | async" size="3" class="ion-no-padding">
+      <ion-col *ngFor="let proofThumb of proofThumbs$ | async" size="3" class="ion-no-padding">
         <ion-card>
           <ion-thumbnail>
-            <ion-img src="https://ionicframework.com/docs/demos/api/card/madison.jpg"></ion-img>
+            <ion-img [src]="'data:image/*;base64,' + proofThumb"></ion-img>
           </ion-thumbnail>
         </ion-card>
       </ion-col>
