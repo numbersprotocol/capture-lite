@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { TranslateModule } from '@ngx-translate/core';
 import { StoragePage } from './storage.page';
 
 describe('StoragePage', () => {
@@ -9,7 +11,7 @@ describe('StoragePage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [StoragePage],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot(), TranslateModule.forRoot(), RouterTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(StoragePage);
