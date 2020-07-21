@@ -16,10 +16,9 @@ import { fromExtension } from 'src/app/utils/mime-type';
 export class StoragePage implements OnInit {
 
   readonly proofListWithRaw$ = this.proofRepository.getAll$().pipe(
-    map(proofSet => [...proofSet]),
-    concatMap(proofArray => zip(
-      of(proofArray),
-      forkJoin(proofArray.map(proof => this.proofRepository.getRawFile$(proof)))
+    concatMap(proofList => zip(
+      of(proofList),
+      forkJoin(proofList.map(proof => this.proofRepository.getRawFile$(proof)))
     )),
     map(([proofs, base64Strings]) => proofs.map((proof, index) => ({
       proof,

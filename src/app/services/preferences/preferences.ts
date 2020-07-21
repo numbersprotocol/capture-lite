@@ -1,8 +1,6 @@
-import { Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/core';
 import { defer, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-const { Storage } = Plugins;
 
 export class Preferences {
 

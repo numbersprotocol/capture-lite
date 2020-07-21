@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 
 @UntilDestroy({ checkProperties: true })
@@ -21,14 +22,26 @@ export class ProofPage implements OnInit {
   readonly hash$ = this.proof$.pipe(map(proof => proof.hash));
   readonly mimeType$ = this.proof$.pipe(map(proof => proof.mimeType.type));
   readonly timestamp$ = this.proof$.pipe(map(proof => new Date(proof.timestamp)));
+  readonly providersWithInformationList$ = this.proof$.pipe(
+    switchMap(proof => this.informationRepository.getByProof$(proof)),
+    map(informationList => {
+      const providers = new Set(informationList.map(information => information.provider));
+      return [...providers].map(provider => ({
+        provider,
+        informationList: informationList.filter(information => information.provider === provider)
+      }));
+    })
+  );
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly proofRepository: ProofRepository
+    private readonly proofRepository: ProofRepository,
+    private readonly informationRepository: InformationRepository
   ) { }
 
   ngOnInit() {
     this.proofRepository.refresh$().pipe(
+      switchMapTo(this.informationRepository.refresh$()),
       untilDestroyed(this)
     ).subscribe();
   }

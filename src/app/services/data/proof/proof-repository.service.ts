@@ -1,100 +1,38 @@
 import { Injectable } from '@angular/core';
-import { FilesystemDirectory, FilesystemEncoding, Plugins } from '@capacitor/core';
-import { BehaviorSubject, defer, forkJoin, Observable, of, zip } from 'rxjs';
-import { catchError, filter, map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
-import { sha256$ } from 'src/app/utils/crypto/crypto';
+import { Filesystem, FilesystemDirectory } from '@capacitor/core';
+import { defer, forkJoin } from 'rxjs';
+import { filter, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
 import { MimeType } from 'src/app/utils/mime-type';
+import { Storage } from 'src/app/utils/storage/storage';
 import { Proof } from './proof';
-
-const { Filesystem } = Plugins;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProofRepository {
 
-  private readonly proofDir = FilesystemDirectory.Data;
-  private readonly proofFolderName = 'proof';
+  private readonly proofStorage = new Storage<Proof>('proof');
   private readonly rawFileDir = FilesystemDirectory.Data;
   private readonly rawFileFolderName = 'raw';
-  private readonly proofList$ = new BehaviorSubject(new Set<Proof>());
 
-  refresh$() {
-    return this.mkProofDir$().pipe(
-      switchMapTo(this.readProofDir$()),
-      map(result => result.files),
-      tap(v => console.log(v)),
-      switchMap(fileNames => forkJoin(fileNames.map(fileName => this.readProof$(fileName)))),
-      map(results => results.map(result => JSON.parse(result.data) as Proof)),
-      tap(proofList => this.proofList$.next(new Set(proofList)))
-    );
-  }
+  refresh$() { return this.proofStorage.refresh$(); }
 
-  private mkProofDir$(): Observable<void> {
-    return defer(() => Filesystem.mkdir({
-      path: this.proofFolderName,
-      directory: this.proofDir,
-      recursive: true
-    })).pipe(
-      mapTo(void 0),
-      catchError((err: Error) => {
-        console.log(`${err.message} (${this.proofDir}/${this.proofFolderName})`);
-        return of(void 0);
-      }));
-  }
-
-  private readProofDir$() {
-    return defer(() => Filesystem.readdir({
-      path: this.proofFolderName,
-      directory: this.proofDir
-    }));
-  }
-
-  private readProof$(fileName: string) {
-    return defer(() => Filesystem.readFile({
-      path: `${this.proofFolderName}/${fileName}`,
-      directory: this.proofDir,
-      encoding: FilesystemEncoding.UTF8
-    }));
-  }
-
-  getAll$() { return this.proofList$.asObservable(); }
+  getAll$() { return this.proofStorage.getAll$(); }
 
   getByHash$(hash: string) {
-    return this.proofList$.pipe(
-      map(proofSet => [...proofSet].find(proof => proof.hash === hash)),
+    return this.getAll$().pipe(
+      map(proofList => proofList.find(proof => proof.hash === hash)),
       filter(proof => !!proof)
     );
   }
 
-  add$(...proofs: Proof[]) {
-    return forkJoin(proofs.map(proof => this.saveProofFile$(proof))).pipe(
-      map(results => results.map(result => result.uri)),
-      switchMap(uris => zip(of(uris), this.refresh$())),
-      map(([uris, _]) => uris)
-    );
-  }
-
-  private saveProofFile$(proof: Proof) {
-    return defer(() => Filesystem.writeFile({
-      path: `${this.proofFolderName}/${proof.hash}.json`,
-      data: JSON.stringify(proof),
-      directory: this.proofDir,
-      encoding: FilesystemEncoding.UTF8
-    }));
-  }
+  add$(...proofs: Proof[]) { return this.proofStorage.add$(...proofs); }
 
   remove$(...proofs: Proof[]) {
-    return forkJoin(proofs.map(proof => this.deleteProofFile$(proof))).pipe(
-      switchMapTo(this.refresh$())
+    return this.proofStorage.remove$(...proofs).pipe(
+      switchMapTo(forkJoin(proofs.map(proof => this.deleteRawFile$(proof))))
     );
-  }
-
-  private deleteProofFile$(proof: Proof) {
-    return defer(() => Filesystem.deleteFile({
-      path: `${this.proofFolderName}/${proof.hash}.json`,
-      directory: this.proofDir
-    }));
   }
 
   getRawFile$(proof: Proof) {
@@ -109,8 +47,8 @@ export class ProofRepository {
    * @param rawBase64 The original source of raw file which will be copied.
    * @param mimeType The file added in the internal storage. The name of the returned file will be its hash with original extension.
    */
-  addRawFile$(rawBase64: string, mimeType: MimeType) {
-    return sha256$(rawBase64).pipe(
+  saveRawFile$(rawBase64: string, mimeType: MimeType) {
+    return sha256WithBase64$(rawBase64).pipe(
       switchMap(hash => Filesystem.writeFile({
         path: `${this.rawFileFolderName}/${hash}.${mimeType.extension}`,
         data: rawBase64,
@@ -120,7 +58,7 @@ export class ProofRepository {
     );
   }
 
-  removeRawFile$(proof: Proof) {
+  private deleteRawFile$(proof: Proof) {
     return defer(() => Filesystem.deleteFile({
       path: `${this.rawFileFolderName}/${proof.hash}.${proof.mimeType.extension}`,
       directory: this.rawFileDir

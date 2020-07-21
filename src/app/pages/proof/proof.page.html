@@ -11,7 +11,7 @@
 
 <ion-content>
   <ion-img [src]="'data:image/*;base64,' + (rawBase64$ | async)"></ion-img>
-  <ion-list>
+  <ion-list lines="none">
     <ion-item>
       <ion-icon slot="start" name="reader"></ion-icon>
       <ion-label>
@@ -42,6 +42,57 @@
         <h2>{{ 'timestamp' | translate }}</h2>
         <p>{{ timestamp$ | async }}</p>
       </ion-label>
+    </ion-item>
+    <ion-list-header>
+      <ion-label>
+        <h2>{{ 'information' | translate }}</h2>
+      </ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-slides pager>
+        <ion-slide *ngFor="let providerWithInformationList of (providersWithInformationList$ | async)">
+          <ion-card class="slide-card">
+            <ion-card-header>
+              <ion-card-title>{{ providerWithInformationList.provider }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <ion-item *ngFor="let information of providerWithInformationList.informationList">
+                  <ion-label>
+                    <h3>{{ information.name }}</h3>
+                    <p>{{ information.value }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+      </ion-slides>
+    </ion-item>
+    <ion-list-header>
+      <ion-label>
+        <h2>{{ 'signatures' | translate }}</h2>
+      </ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-slides pager>
+        <ion-slide>
+          <ion-card style="width: 100%; margin-bottom: 35px;">
+            <ion-card-header>
+              <ion-card-title>Title1</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>content</ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <ion-slide>
+          <ion-card style="width: 100%; margin-bottom: 35px;">
+            <ion-card-header>
+              <ion-card-title>Title2</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>content</ion-card-content>
+          </ion-card>
+        </ion-slide>
+      </ion-slides>
     </ion-item>
   </ion-list>
 </ion-content>
