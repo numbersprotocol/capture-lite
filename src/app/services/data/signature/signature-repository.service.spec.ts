@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { SignatureRepository } from './signature-repository.service';
 
-import { PreferencesService } from './preferences.service';
-
-describe('PreferencesService', () => {
-  let service: PreferencesService;
+describe('SignatureRepository', () => {
+  let service: SignatureRepository;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PreferencesService);
+    service = TestBed.inject(SignatureRepository);
   });
 
   it('should be created', () => {

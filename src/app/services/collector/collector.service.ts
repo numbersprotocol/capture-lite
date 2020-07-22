@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of, zip } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
 import { ProofRepository } from '../data/proof/proof-repository.service';
 import { InformationProvider } from './information/information-provider';
+import { SignatureProvider } from './signature/signature-provider';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import { InformationProvider } from './information/information-provider';
 export class CollectorService {
 
   private readonly informationProviders = new Set<InformationProvider>();
+  private readonly signatureProviders = new Set<SignatureProvider>();
 
   constructor(
     private readonly proofRepository: ProofRepository
@@ -23,8 +25,12 @@ export class CollectorService {
       // TODO: store the media file
       switchMap(hash => this.proofRepository.add$({ hash, mimeType, timestamp: Date.now() })),
       // TODO: collect the info (e.g. GPS) with the background task
-      switchMap(({ 0: added }) => forkJoin([...this.informationProviders].map(provider => provider.collectAndStore$(added))))
+      switchMap(({ 0: proof }) => zip(
+        of(proof),
+        forkJoin([...this.informationProviders].map(provider => provider.collectAndStore$(proof))))
+      ),
       // TODO: sign the proof with the background task
+      switchMap(([proof]) => forkJoin([...this.signatureProviders].map(provider => provider.collectAndStore$(proof))))
     );
   }
 
@@ -34,5 +40,13 @@ export class CollectorService {
 
   removeInformationProvider(...providers: InformationProvider[]) {
     providers.forEach(provider => this.informationProviders.delete(provider));
+  }
+
+  addSignatureProvider(...providers: SignatureProvider[]) {
+    providers.forEach(provider => this.signatureProviders.add(provider));
+  }
+
+  removeSignatureProvider(...providers: SignatureProvider[]) {
+    providers.forEach(provider => this.signatureProviders.delete(provider));
   }
 }

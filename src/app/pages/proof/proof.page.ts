@@ -4,6 +4,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { filter, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
+import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -32,16 +33,21 @@ export class ProofPage implements OnInit {
       }));
     })
   );
+  readonly signatures$ = this.proof$.pipe(
+    switchMap(proof => this.signatureRepository.getByProof$(proof))
+  );
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly proofRepository: ProofRepository,
-    private readonly informationRepository: InformationRepository
+    private readonly informationRepository: InformationRepository,
+    private readonly signatureRepository: SignatureRepository
   ) { }
 
   ngOnInit() {
     this.proofRepository.refresh$().pipe(
       switchMapTo(this.informationRepository.refresh$()),
+      switchMapTo(this.signatureRepository.refresh$()),
       untilDestroyed(this)
     ).subscribe();
   }

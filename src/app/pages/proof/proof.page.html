@@ -76,20 +76,27 @@
     </ion-list-header>
     <ion-item>
       <ion-slides pager>
-        <ion-slide>
-          <ion-card style="width: 100%; margin-bottom: 35px;">
+        <ion-slide *ngFor="let signature of (signatures$ | async)">
+          <ion-card class="slide-card">
             <ion-card-header>
-              <ion-card-title>Title1</ion-card-title>
+              <ion-card-title>{{ signature.provider }}</ion-card-title>
             </ion-card-header>
-            <ion-card-content>content</ion-card-content>
-          </ion-card>
-        </ion-slide>
-        <ion-slide>
-          <ion-card style="width: 100%; margin-bottom: 35px;">
-            <ion-card-header>
-              <ion-card-title>Title2</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>content</ion-card-content>
+            <ion-card-content>
+              <ion-list>
+                <ion-item>
+                  <ion-label>
+                    <h3>{{ 'signature' | translate }}</h3>
+                    <p>{{ signature.signature }}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    <h3>{{ 'publicKey' | translate }}</h3>
+                    <p>{{ signature.publicKey }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
           </ion-card>
         </ion-slide>
       </ion-slides>

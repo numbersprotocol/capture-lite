@@ -23,5 +23,7 @@
   "totalDiskSpace": "Total Disk Space",
   "batteryLevel": "Battery Level",
   "batteryCharging": "Battery Charging",
-  "deviceLanguageCode": "Device Language Code"
+  "deviceLanguageCode": "Device Language Code",
+  "signature": "Signature",
+  "publicKey": "Public Key"
 }

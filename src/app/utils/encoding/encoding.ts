@@ -1,3 +1,6 @@
+const textEncoder = new TextEncoder();
+const textDecoder = new TextDecoder();
+
 export function base64ToArrayBuffer(base64: string) {
   const binaryString = atob(base64);
   const bytes = new Uint8Array(binaryString.length);
@@ -19,4 +22,12 @@ export function arrayBufferToHex(arrayBuffer: ArrayBuffer) {
 
 export function hexToArrayBuffer(hex: string) {
   return new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16))).buffer;
+}
+
+export function stringToArrayBuffer(str: string) {
+  return textEncoder.encode(str).buffer;
+}
+
+export function arrayBufferToString(arrayBuffer: ArrayBuffer) {
+  return textDecoder.decode(arrayBuffer);
 }

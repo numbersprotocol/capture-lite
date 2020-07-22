@@ -12,11 +12,11 @@ export abstract class InformationProvider {
     private readonly informationRepository: InformationRepository
   ) { }
 
-  protected abstract provide$(proof: Proof): Observable<Information[]>;
-
   collectAndStore$(proof: Proof) {
     return this.provide$(proof).pipe(
       switchMap(information => this.informationRepository.add$(...information))
     );
   }
+
+  protected abstract provide$(proof: Proof): Observable<Information[]>;
 }
