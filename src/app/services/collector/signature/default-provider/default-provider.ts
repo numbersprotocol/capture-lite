@@ -18,8 +18,8 @@ export class DefaultSignatureProvider extends SignatureProvider {
 
   static initialize$() {
     return zip(
-      preferences.getString$(PrefKeys.PublicKey),
-      preferences.getString$(PrefKeys.PrivateKey)
+      this.getPublicKey$(),
+      this.getPrivateKey$()
     ).pipe(
       filter(([publicKey, privateKey]) => publicKey.length === 0 || privateKey.length === 0),
       switchMapTo(createEcKeyPair$()),
@@ -30,10 +30,18 @@ export class DefaultSignatureProvider extends SignatureProvider {
     );
   }
 
+  static getPublicKey$() {
+    return preferences.getString$(PrefKeys.PublicKey);
+  }
+
+  static getPrivateKey$() {
+    return preferences.getString$(PrefKeys.PrivateKey);
+  }
+
   provide$(proof: Proof, serialized: string): Observable<Signature> {
     return preferences.getString$(PrefKeys.PrivateKey).pipe(
       switchMap(privateKeyHex => signWithSha256AndEcdsa$(serialized, privateKeyHex)),
-      switchMap(signatureHex => zip(of(signatureHex), preferences.getString$(PrefKeys.PublicKey))),
+      switchMap(signatureHex => zip(of(signatureHex), DefaultSignatureProvider.getPublicKey$())),
       map(([signatureHex, publicKeyHex]) => ({
         proofHash: proof.hash,
         provider: this.name,

@@ -11,13 +11,29 @@
 
 <ion-content>
   <ion-list>
+    <ion-list-header>{{ 'general' | translate }}</ion-list-header>
     <ion-item>
       <ion-icon name="language" slot="start"></ion-icon>
-      <ion-label>Languages</ion-label>
+      <ion-label>{{ 'languages' | translate }}</ion-label>
       <ion-select [ngModel]="currentLanguageKey$ | async" (ngModelChange)="setCurrentLanguage($event)">
         <ion-select-option *ngFor="let language of langauges | keyvalue" [value]="language.key">{{ language.value }}
         </ion-select-option>
       </ion-select>
+    </ion-item>
+    <ion-list-header>{{ 'defaultSignature' | translate }}</ion-list-header>
+    <ion-item>
+      <ion-icon name="key" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <h2>{{ 'publicKey' | translate }}</h2>
+        <p>{{ publicKey$ | async }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="key" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <h2>{{ 'privateKey' | translate }}</h2>
+        <p>{{ privateKey$ | async }}</p>
+      </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

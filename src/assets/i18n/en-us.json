@@ -25,5 +25,9 @@
   "batteryCharging": "Battery Charging",
   "deviceLanguageCode": "Device Language Code",
   "signature": "Signature",
-  "publicKey": "Public Key"
+  "publicKey": "Public Key",
+  "privateKey": "Private Key",
+  "general": "General",
+  "languages": "Languages",
+  "defaultSignature": "Default Siganture"
 }
