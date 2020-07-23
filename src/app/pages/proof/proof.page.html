@@ -58,7 +58,7 @@
             <ion-card-content>
               <ion-list>
                 <ion-item *ngFor="let information of providerWithInformationList.informationList">
-                  <ion-label>
+                  <ion-label class="ion-text-wrap">
                     <h3>{{ information.name }}</h3>
                     <p>{{ information.value }}</p>
                   </ion-label>
@@ -84,15 +84,15 @@
             <ion-card-content>
               <ion-list>
                 <ion-item>
-                  <ion-label>
+                  <ion-label class="ion-text-wrap">
                     <h3>{{ 'signature' | translate }}</h3>
                     <p>{{ signature.signature }}</p>
                   </ion-label>
                 </ion-item>
                 <ion-item>
-                  <ion-label>
+                  <ion-label class="ion-text-wrap">
                     <h3>{{ 'publicKey' | translate }}</h3>
-                    <p>{{ signature.publicKey }}</p>
+                    <p class="multiline">{{ signature.publicKey }}</p>
                   </ion-label>
                 </ion-item>
               </ion-list>

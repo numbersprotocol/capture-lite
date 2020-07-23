@@ -46,20 +46,20 @@ export function createEcKeyPair$(): Observable<KeyPair> {
     true,
     [Usage.Sign, Usage.Verify]
   )).pipe(
-    switchMap(({ publicKey, privateKey }) => zip(exportKey$(publicKey), exportKey$(privateKey))),
+    switchMap(({ publicKey, privateKey }) => zip(exportKeyInJwk$(publicKey), exportKeyInJwk$(privateKey))),
     map(([publicKey, privateKey]) => ({ publicKey, privateKey }))
   );
 }
 
 export function signWithSha256AndEcdsa$(message: string, privateKeyHex: string) {
-  return importKey$(privateKeyHex, { name: ECDSA, namedCurve: SECP256R1 }, [Usage.Sign]).pipe(
+  return importKeyInJwk$(privateKeyHex, { name: ECDSA, namedCurve: SECP256R1 }, [Usage.Sign]).pipe(
     switchMap(key => subtle.sign({ name: ECDSA, hash: SHA_256 }, key, stringToArrayBuffer(message))),
     map(signature => arrayBufferToHex(signature))
   );
 }
 
 export function verifyWithSha256AndEcdsa$(message: string, signatureHex: string, publicKeyHex: string) {
-  return importKey$(publicKeyHex, { name: ECDSA, namedCurve: SECP256R1 }, [Usage.Verify]).pipe(
+  return importKeyInJwk$(publicKeyHex, { name: ECDSA, namedCurve: SECP256R1 }, [Usage.Verify]).pipe(
     switchMap(key => subtle.verify(
       { name: ECDSA, hash: SHA_256 },
       key,
@@ -69,13 +69,13 @@ export function verifyWithSha256AndEcdsa$(message: string, signatureHex: string,
   );
 }
 
-function exportKey$(key: CryptoKey) {
+function exportKeyInJwk$(key: CryptoKey) {
   return defer(() => subtle.exportKey(KEY_FORMAT, key)).pipe(
-    map(exported => JSON.stringify(exported))
+    map(exported => JSON.stringify(exported, undefined, 2))
   );
 }
 
-function importKey$(
+function importKeyInJwk$(
   keyInJwk: string,
   algorithm: string | AesKeyAlgorithm | EcKeyImportParams | HmacImportParams | RsaHashedImportParams | DhImportKeyParams,
   keyUsages: KeyUsage[]
