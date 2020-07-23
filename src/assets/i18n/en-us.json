@@ -24,6 +24,7 @@
   "batteryLevel": "Battery Level",
   "batteryCharging": "Battery Charging",
   "deviceLanguageCode": "Device Language Code",
+  "location": "Location",
   "signature": "Signature",
   "publicKey": "Public Key",
   "privateKey": "Private Key",

@@ -1,4 +1,4 @@
-import { Device } from '@capacitor/core';
+import { Device, Geolocation } from '@capacitor/core';
 import { TranslateService } from '@ngx-translate/core';
 import { defer, Observable, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -7,9 +7,9 @@ import { InformationRepository } from 'src/app/services/data/information/informa
 import { Proof } from 'src/app/services/data/proof/proof';
 import { InformationProvider } from '../information-provider';
 
-export class DeviceProvider extends InformationProvider {
+export class CapacitorProvider extends InformationProvider {
 
-  readonly name = 'Capacitor Device';
+  readonly name = 'Capacitor';
 
   constructor(
     informationRepository: InformationRepository,
@@ -22,9 +22,14 @@ export class DeviceProvider extends InformationProvider {
     return zip(
       defer(() => Device.getInfo()),
       defer(() => Device.getBatteryInfo()),
-      defer(() => Device.getLanguageCode())
+      defer(() => Device.getLanguageCode()),
+      defer(() => Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        maximumAge: 10 * 60 * 1000,
+        timeout: 10 * 1000
+      }))
     ).pipe(
-      map(([deviceInfo, batteryInfo, languageCode]) => {
+      map(([deviceInfo, batteryInfo, languageCode, geolocationPosition]) => {
         return [{
           proofHash: proof.hash,
           provider: this.name,
@@ -105,6 +110,11 @@ export class DeviceProvider extends InformationProvider {
           provider: this.name,
           name: this.translateService.instant('deviceLanguageCode'),
           value: String(languageCode.value)
+        }, {
+          proofHash: proof.hash,
+          provider: this.name,
+          name: this.translateService.instant('location'),
+          value: `(${geolocationPosition.coords.latitude}, ${geolocationPosition.coords.longitude})`
         }];
       })
     );
