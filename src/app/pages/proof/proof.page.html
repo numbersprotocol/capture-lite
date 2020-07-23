@@ -6,6 +6,11 @@
       </ion-button>
     </ion-buttons>
     <ion-title>{{ 'proofDetails' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="remove()">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

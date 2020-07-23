@@ -29,5 +29,11 @@
   "privateKey": "Private Key",
   "general": "General",
   "languages": "Languages",
-  "defaultSignature": "Default Siganture"
+  "defaultSignature": "Default Siganture",
+  "areYouSure": "Are You Sure",
+  "cancel": "Cancel",
+  "ok": "Ok",
+  "message": {
+    "areYouSure": "This action cannot be undone."
+  }
 }

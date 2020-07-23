@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { filter, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
@@ -38,7 +39,9 @@ export class ProofPage implements OnInit {
   );
 
   constructor(
+    private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly confirmAlert: ConfirmAlert,
     private readonly proofRepository: ProofRepository,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository
@@ -50,5 +53,15 @@ export class ProofPage implements OnInit {
       switchMapTo(this.signatureRepository.refresh$()),
       untilDestroyed(this)
     ).subscribe();
+  }
+
+  remove() {
+    const onConfirm = () => this.proof$.pipe(
+      switchMap(proof => this.proofRepository.remove$(proof)),
+      switchMapTo(this.router.navigate(['..'])),
+      untilDestroyed(this)
+    ).subscribe();
+
+    return this.confirmAlert.present$(onConfirm).pipe(untilDestroyed(this)).subscribe();
   }
 }

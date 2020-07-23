@@ -1,6 +1,6 @@
 import { Filesystem, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
 import { BehaviorSubject, defer, forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { catchError, defaultIfEmpty, map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { sha256$ } from '../crypto/crypto';
 
 export class Storage<T extends object> {
@@ -16,7 +16,7 @@ export class Storage<T extends object> {
     return this.makeNameDir$().pipe(
       switchMapTo(this.readNameDir$()),
       map(result => result.files),
-      switchMap(fileNames => forkJoin(fileNames.map(fileName => this.readFile$(fileName)))),
+      switchMap(fileNames => forkJoin(fileNames.map(fileName => this.readFile$(fileName))).pipe(defaultIfEmpty([]))),
       map(results => results.map(result => JSON.parse(result.data) as T)),
       tap(tuples => this.tuples$.next(tuples))
     );
@@ -80,7 +80,7 @@ export class Storage<T extends object> {
   private deleteFile$(tuple: T) {
     return sha256$(tuple).pipe(
       switchMap(hash => Filesystem.deleteFile({
-        path: `${this.name}/${hash}`,
+        path: `${this.name}/${hash}.json`,
         directory: this.directory
       })));
   }

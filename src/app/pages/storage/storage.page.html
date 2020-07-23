@@ -17,7 +17,7 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let proofWithRaw of proofListWithRaw$ | async"
+      <ion-col *ngFor="let proofWithRaw of proofsWithRaw$ | async"
         [routerLink]="['/proof', {hash: proofWithRaw.proof.hash}]" size="3" class="ion-no-padding">
         <ion-card>
           <ion-thumbnail>

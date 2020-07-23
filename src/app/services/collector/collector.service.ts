@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, of, zip } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { defaultIfEmpty, map, switchMap } from 'rxjs/operators';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
 import { ProofRepository } from '../data/proof/proof-repository.service';
@@ -27,7 +27,7 @@ export class CollectorService {
       // TODO: collect the info (e.g. GPS) with the background task
       switchMap(({ 0: proof }) => zip(
         of(proof),
-        forkJoin([...this.informationProviders].map(provider => provider.collectAndStore$(proof))))
+        forkJoin([...this.informationProviders].map(provider => provider.collectAndStore$(proof)))).pipe(defaultIfEmpty([]))
       ),
       // TODO: sign the proof with the background task
       switchMap(([proof]) => forkJoin([...this.signatureProviders].map(provider => provider.collectAndStore$(proof))))

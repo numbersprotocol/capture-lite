@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { forkJoin, of, zip } from 'rxjs';
-import { concatMap, map, mapTo, switchMap } from 'rxjs/operators';
+import { concatMap, defaultIfEmpty, map, mapTo, switchMap } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
@@ -15,11 +15,10 @@ import { fromExtension } from 'src/app/utils/mime-type';
 })
 export class StoragePage implements OnInit {
 
-  readonly proofListWithRaw$ = this.proofRepository.getAll$().pipe(
-    concatMap(proofList => zip(
-      of(proofList),
-      forkJoin(proofList.map(proof => this.proofRepository.getRawFile$(proof)))
-    )),
+  private readonly proofs$ = this.proofRepository.getAll$();
+  readonly proofsWithRaw$ = this.proofs$.pipe(
+    concatMap(proofs => forkJoin(proofs.map(proof => this.proofRepository.getRawFile$(proof))).pipe(defaultIfEmpty([]))),
+    switchMap(base64Strings => zip(this.proofs$, of(base64Strings))),
     map(([proofs, base64Strings]) => proofs.map((proof, index) => ({
       proof,
       rawBase64: base64Strings[index]

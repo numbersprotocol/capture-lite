@@ -5,6 +5,8 @@ import { filter, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
 import { MimeType } from 'src/app/utils/mime-type';
 import { Storage } from 'src/app/utils/storage/storage';
+import { InformationRepository } from '../information/information-repository.service';
+import { SignatureRepository } from '../signature/signature-repository.service';
 import { Proof } from './proof';
 
 @Injectable({
@@ -15,6 +17,11 @@ export class ProofRepository {
   private readonly proofStorage = new Storage<Proof>('proof');
   private readonly rawFileDir = FilesystemDirectory.Data;
   private readonly rawFileFolderName = 'raw';
+
+  constructor(
+    private readonly informationRepository: InformationRepository,
+    private readonly signatureRepository: SignatureRepository
+  ) { }
 
   refresh$() { return this.proofStorage.refresh$(); }
 
@@ -31,7 +38,9 @@ export class ProofRepository {
 
   remove$(...proofs: Proof[]) {
     return this.proofStorage.remove$(...proofs).pipe(
-      switchMapTo(forkJoin(proofs.map(proof => this.deleteRawFile$(proof))))
+      switchMapTo(forkJoin(proofs.map(proof => this.deleteRawFile$(proof)))),
+      switchMapTo(forkJoin(proofs.map(proof => this.informationRepository.removeByProof$(proof)))),
+      switchMapTo(forkJoin(proofs.map(proof => this.signatureRepository.removeByProof$(proof))))
     );
   }
 
