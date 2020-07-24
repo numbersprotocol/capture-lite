@@ -46,7 +46,7 @@ export class StoragePage implements OnInit {
 
   capture() {
     this.cameraService.capture$().pipe(
-      switchMap(cameraPhoto => this.collectorService.storeAndCollect$(
+      map(cameraPhoto => this.collectorService.storeAndCollect(
         cameraPhoto.base64String,
         fromExtension(cameraPhoto.format)
       )),
