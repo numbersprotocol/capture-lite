@@ -21,9 +21,9 @@
       <ion-icon slot="start" name="reader"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h2>{{ 'caption' | translate }}</h2>
-        <p>caption here</p>
+        <p>{{ (caption$ | async) === '' ? '(' + ( 'nothingHere' | translate ) + ')' : (caption$ | async) }}</p>
       </ion-label>
-      <ion-button slot="end" fill="clear" shape="round">
+      <ion-button (click)="editCaption()" slot="end" fill="clear" shape="round">
         <ion-icon slot="icon-only" name="create"></ion-icon>
       </ion-button>
     </ion-item>

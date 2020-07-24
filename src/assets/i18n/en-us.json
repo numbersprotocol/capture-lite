@@ -34,6 +34,8 @@
   "areYouSure": "Are You Sure",
   "cancel": "Cancel",
   "ok": "Ok",
+  "nothingHere": "Nothing Here",
+  "editCaption": "Edit Caption",
   "message": {
     "areYouSure": "This action cannot be undone."
   }

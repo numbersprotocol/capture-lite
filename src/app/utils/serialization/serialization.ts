@@ -11,9 +11,9 @@ export function createSortedProofInformation(
     const nameCompared = a.name.localeCompare(b.name);
     const valueCompared = a.value.localeCompare(b.value);
     if (proofHashCompared !== 0) { return proofHashCompared; }
-    else if (providerCompared !== 0) { return providerCompared; }
-    else if (nameCompared !== 0) { return nameCompared; }
-    else { return valueCompared; }
+    if (providerCompared !== 0) { return providerCompared; }
+    if (nameCompared !== 0) { return nameCompared; }
+    return valueCompared;
   });
   return ({ proof, sortedInformation });
 }
