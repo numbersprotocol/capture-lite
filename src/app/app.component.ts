@@ -9,6 +9,8 @@ import { DefaultSignatureProvider } from './services/collector/signature/default
 import { InformationRepository } from './services/data/information/information-repository.service';
 import { SignatureRepository } from './services/data/signature/signature-repository.service';
 import { LanguageService } from './services/language/language.service';
+import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
+import { SamplePublisher } from './services/publisher/sample-publisher/sample-publisher';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -20,6 +22,7 @@ export class AppComponent {
   constructor(
     private readonly platform: Platform,
     private readonly collectorService: CollectorService,
+    private readonly publishersAlert: PublishersAlert,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
     private readonly translateService: TranslateService,
@@ -27,6 +30,7 @@ export class AppComponent {
   ) {
     this.initializeApp();
     this.initializeCollector();
+    this.initializePublisher();
     langaugeService.initialize$().pipe(untilDestroyed(this)).subscribe();
   }
 
@@ -43,6 +47,12 @@ export class AppComponent {
     );
     this.collectorService.addSignatureProvider(
       new DefaultSignatureProvider(this.signatureRepository, this.informationRepository)
+    );
+  }
+
+  initializePublisher() {
+    this.publishersAlert.addPublisher(
+      new SamplePublisher()
     );
   }
 }

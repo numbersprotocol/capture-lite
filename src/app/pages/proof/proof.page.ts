@@ -9,6 +9,7 @@ import { CaptionRepository } from 'src/app/services/data/caption/caption-reposit
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
+import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/publishers-alert.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -54,6 +55,7 @@ export class ProofPage implements OnInit {
     private readonly translateService: TranslateService,
     private readonly alertController: AlertController,
     private readonly confirmAlert: ConfirmAlert,
+    private readonly publishersAlert: PublishersAlert,
     private readonly proofRepository: ProofRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly informationRepository: InformationRepository,
@@ -77,6 +79,13 @@ export class ProofPage implements OnInit {
     ).subscribe();
 
     return this.confirmAlert.present$(onConfirm).pipe(untilDestroyed(this)).subscribe();
+  }
+
+  publish() {
+    this.proof$.pipe(
+      switchMap(proof => this.publishersAlert.present$(proof)),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   editCaption() {

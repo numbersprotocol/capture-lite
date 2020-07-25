@@ -7,6 +7,9 @@
     </ion-buttons>
     <ion-title>{{ 'proofDetails' | translate }}</ion-title>
     <ion-buttons slot="end">
+      <ion-button (click)="publish()">
+        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+      </ion-button>
       <ion-button (click)="remove()">
         <ion-icon slot="icon-only" name="trash"></ion-icon>
       </ion-button>

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Device, Plugins } from '@capacitor/core';
-import { defer, forkJoin, of, zip } from 'rxjs';
+import { Plugins } from '@capacitor/core';
+import { forkJoin, of, zip } from 'rxjs';
 import { defaultIfEmpty, map, switchMap } from 'rxjs/operators';
+import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
 import { ProofRepository } from '../data/proof/proof-repository.service';
@@ -23,17 +24,7 @@ export class CollectorService {
   ) { }
 
   storeAndCollect(rawBase64: string, mimeType: MimeType) {
-    defer(() => Device.getInfo()).pipe(
-      map(info => {
-        if (info.platform === 'electron' || info.platform === 'web') {
-          this._storeAndCollect$(rawBase64, mimeType).subscribe();
-        } else { // Run the collection process in the background task on iOS or Android platforms.
-          const taskId = BackgroundTask.beforeExit(() => {
-            this._storeAndCollect$(rawBase64, mimeType).subscribe(_ => BackgroundTask.finish({ taskId }));
-          });
-        }
-      })
-    ).subscribe();
+    subscribeInBackground(this._storeAndCollect$(rawBase64, mimeType));
   }
 
   private _storeAndCollect$(rawBase64: string, mimeType: MimeType) {
