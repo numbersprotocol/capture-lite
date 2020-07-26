@@ -1,19 +1,14 @@
-import { Device, Plugins } from '@capacitor/core';
-import { defer, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Capacitor, Plugins } from '@capacitor/core';
+import { Observable } from 'rxjs';
 
 const { BackgroundTask } = Plugins;
 
 export function subscribeInBackground(work$: Observable<any>) {
-  defer(() => Device.getInfo()).pipe(
-    map(info => {
-      if (info.platform === 'electron' || info.platform === 'web') {
-        work$.subscribe();
-      } else {
-        const taskId = BackgroundTask.beforeExit(() => {
-          work$.subscribe(_ => BackgroundTask.finish({ taskId }));
-        });
-      }
-    })
-  ).subscribe();
+  if (Capacitor.isNative) {
+    const taskId = BackgroundTask.beforeExit(() => {
+      work$.subscribe(_ => BackgroundTask.finish({ taskId }));
+    });
+  } else {
+    work$.subscribe();
+  }
 }

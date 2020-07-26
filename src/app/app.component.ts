@@ -9,6 +9,7 @@ import { DefaultSignatureProvider } from './services/collector/signature/default
 import { InformationRepository } from './services/data/information/information-repository.service';
 import { SignatureRepository } from './services/data/signature/signature-repository.service';
 import { LanguageService } from './services/language/language.service';
+import { NotificationService } from './services/notification/notification.service';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { SamplePublisher } from './services/publisher/sample-publisher/sample-publisher';
 
@@ -26,6 +27,7 @@ export class AppComponent {
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
     private readonly translateService: TranslateService,
+    private readonly notificationService: NotificationService,
     langaugeService: LanguageService
   ) {
     this.initializeApp();
@@ -52,7 +54,7 @@ export class AppComponent {
 
   initializePublisher() {
     this.publishersAlert.addPublisher(
-      new SamplePublisher()
+      new SamplePublisher(this.translateService, this.notificationService)
     );
   }
 }
