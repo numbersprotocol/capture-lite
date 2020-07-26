@@ -1,4 +1,4 @@
-name: Node.js CI
+name: build
 
 on: [push, pull_request]
 
@@ -34,5 +34,11 @@ jobs:
         name: coverage
         path: ./coverage
 
-    - name: Build
+    - name: Build Ionic
       run: npm run build
+
+    - name: Build Android
+      run: |
+        npx cap sync
+        cd android/
+        ./gradlew assembleDebug
