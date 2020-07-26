@@ -29,4 +29,8 @@ export class NotificationService {
       notifications: [{ title, body, id }]
     })));
   }
+
+  cancel(id: number) {
+    subscribeInBackground(defer(() => LocalNotifications.cancel({ notifications: [{ id: String(id) }] })));
+  }
 }

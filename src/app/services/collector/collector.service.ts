@@ -57,7 +57,8 @@ export class CollectorService {
         this.translateService.instant('collectingProof'),
         this.translateService.instant('signingProof')
       )),
-      switchMapTo(forkJoin([...this.signatureProviders].map(provider => provider.collectAndStore$(proof))))
+      switchMapTo(forkJoin([...this.signatureProviders].map(provider => provider.collectAndStore$(proof)))),
+      tap(_ => this.notificationService.cancel(notificationId))
     );
   }
 
