@@ -1,7 +1,9 @@
-import { Filesystem, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
+import { FilesystemDirectory, FilesystemEncoding, Plugins } from '@capacitor/core';
 import { BehaviorSubject, defer, forkJoin, Observable, of } from 'rxjs';
 import { catchError, defaultIfEmpty, map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { sha256$ } from '../crypto/crypto';
+
+const { Filesystem } = Plugins;
 
 export class Storage<T extends object> {
 
@@ -13,6 +15,7 @@ export class Storage<T extends object> {
   private readonly tuples$ = new BehaviorSubject<T[]>([]);
 
   refresh$() {
+    console.log(`Storege refreshing: ${this.name}`);
     return this.makeNameDir$().pipe(
       switchMapTo(this.readNameDir$()),
       map(result => result.files),
@@ -66,7 +69,8 @@ export class Storage<T extends object> {
         path: `${this.name}/${hash}.json`,
         data: JSON.stringify(tuple),
         directory: this.directory,
-        encoding: FilesystemEncoding.UTF8
+        encoding: FilesystemEncoding.UTF8,
+        recursive: true
       })));
   }
 

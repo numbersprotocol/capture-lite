@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { LocalNotifications } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
 import { defer } from 'rxjs';
 import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
+
+const { LocalNotifications } = Plugins;
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Filesystem, FilesystemDirectory } from '@capacitor/core';
+import { FilesystemDirectory, Plugins } from '@capacitor/core';
 import { defer, forkJoin } from 'rxjs';
 import { defaultIfEmpty, filter, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
@@ -9,6 +9,8 @@ import { CaptionRepository } from '../caption/caption-repository.service';
 import { InformationRepository } from '../information/information-repository.service';
 import { SignatureRepository } from '../signature/signature-repository.service';
 import { Proof } from './proof';
+
+const { Filesystem } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -64,7 +66,8 @@ export class ProofRepository {
       switchMap(hash => Filesystem.writeFile({
         path: `${this.rawFileFolderName}/${hash}.${mimeType.extension}`,
         data: rawBase64,
-        directory: this.rawFileDir
+        directory: this.rawFileDir,
+        recursive: true
       })),
       map(result => result.uri)
     );

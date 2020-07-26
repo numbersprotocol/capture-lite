@@ -1,4 +1,4 @@
-import { Device, Geolocation } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
 import { TranslateService } from '@ngx-translate/core';
 import { defer, Observable, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -6,6 +6,8 @@ import { Information } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { Proof } from 'src/app/services/data/proof/proof';
 import { InformationProvider } from '../information-provider';
+
+const { Device, Geolocation } = Plugins;
 
 export class CapacitorProvider extends InformationProvider {
 

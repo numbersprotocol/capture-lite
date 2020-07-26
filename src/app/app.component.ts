@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SplashScreen } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TranslateService } from '@ngx-translate/core';
@@ -12,6 +12,8 @@ import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { SamplePublisher } from './services/publisher/sample-publisher/sample-publisher';
+
+const { SplashScreen } = Plugins;
 
 @UntilDestroy({ checkProperties: true })
 @Component({

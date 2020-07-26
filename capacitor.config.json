@@ -1,6 +1,6 @@
 {
   "appId": "io.numbersprotocol.capturelite",
-  "appName": "capture-lite",
+  "appName": "Capture Lite",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
@@ -9,5 +9,6 @@
       "launchShowDuration": 0
     }
   },
-  "cordova": {}
+  "cordova": {},
+  "linuxAndroidStudioPath": "/home/username/android-studio/bin/studio.sh"
 }
