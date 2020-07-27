@@ -83,6 +83,7 @@ export class ProofPage {
 
   publish() {
     this.proof$.pipe(
+      first(),
       switchMap(proof => this.publishersAlert.present$(proof)),
       untilDestroyed(this)
     ).subscribe();
