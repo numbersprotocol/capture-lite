@@ -101,3 +101,32 @@ See [the serialization schema of Starling Capture](https://github.com/numberspro
 
 * This app is still in the experimental stage.
 * This app uses raw file system to save proofs, and thus the performance is not optimized.
+
+### Release
+
+Bump version in `package.json`.
+
+``` json
+{
+  "version": "a.b.c"
+}
+```
+
+Bump version in `android/app/build.gradle`.
+
+``` gradle
+android {
+    defaultConfig {
+        versionCode abc
+        versionName "a.b.c"
+    }
+}
+```
+
+When push to the `master` branch with new version in the `package.json` file, GitHub Action would automatically create new release.
+
+### Deploy
+
+#### Demo App
+
+The demo app is hosted on the GitHub Page. It would be updated when there is a new commit on the `develop` branch.
