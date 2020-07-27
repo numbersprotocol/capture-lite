@@ -11,4 +11,4 @@ assignees: ''
 
 The content of the suggestion.
 
-![write_codes](https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif)
+![write codes](https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif)

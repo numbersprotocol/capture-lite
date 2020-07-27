@@ -1,5 +1,5 @@
 ---
-name: Bug report
+name: Bug Report
 about: Create a report to help us improve
 title: ''
 labels: bug
@@ -10,6 +10,8 @@ assignees: ''
 ## Description
 
 A clear and concise description of what the bug is.
+
+![bugs found](https://media.giphy.com/media/UAUtB4Oi9U4EM/giphy.gif)
 
 ## Steps to Reproduce
 
