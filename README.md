@@ -8,6 +8,12 @@
 * Generate digital proofs on media assets created.
 * WIP: Publish digital proofs to decentralized networks.
 
+## Demo App
+
+![preview](https://i.imgur.com/VRXhKo3.png)
+
+[The demo app](https://numbersprotocol.github.io/capture-lite/) is hosted on GitHub Page. You can simulate the mobile device by [toggling device mode with Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/device-mode).
+
 ## Getting Started
 
 Node.js 10.16.0+ is required.
