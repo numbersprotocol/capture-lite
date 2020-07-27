@@ -1,0 +1,40 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  gh-pages:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 10
+
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+
+    - name: Install Ionic CLI
+      run: npm install -g @ionic/cli
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Ionic
+      run: ionic build
+
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@3.5.8
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: www
