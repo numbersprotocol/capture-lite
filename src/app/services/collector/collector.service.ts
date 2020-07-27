@@ -26,8 +26,8 @@ export class CollectorService {
   ) { }
 
   storeAndCollect(rawBase64: string, mimeType: MimeType) {
-    // XXX: Deliberately store proof and its media file in the foreground, so the app page can
-    //      correctly and continuously subscribe the Storage.getAll$().
+    // Deliberately store proof and its media file in the foreground, so the app page can
+    // correctly and continuously subscribe the Storage.getAll$().
     this.store$(rawBase64, mimeType).subscribe(proof => {
       subscribeInBackground(this.collectAndSign$(proof));
     });

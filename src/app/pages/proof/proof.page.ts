@@ -71,7 +71,6 @@ export class ProofPage {
     ).subscribe();
   }
 
-  // FIXME: remove does not refresh storage page on Android.
   remove() {
     const onConfirm = () => this.proof$.pipe(
       switchMap(proof => this.proofRepository.remove$(proof)),
@@ -98,7 +97,8 @@ export class ProofPage {
         inputs: [{
           name: captionInputName,
           type: 'text',
-          value: caption
+          value: caption,
+          placeholder: this.translateService.instant('nothingHere')
         }],
         buttons: [{
           text: this.translateService.instant('cancel'),
