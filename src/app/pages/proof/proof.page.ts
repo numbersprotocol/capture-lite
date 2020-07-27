@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -17,7 +17,7 @@ import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/pub
   templateUrl: './proof.page.html',
   styleUrls: ['./proof.page.scss'],
 })
-export class ProofPage implements OnInit {
+export class ProofPage {
 
   readonly proof$ = this.route.paramMap.pipe(
     map(params => params.get('hash')),
@@ -62,7 +62,7 @@ export class ProofPage implements OnInit {
     private readonly signatureRepository: SignatureRepository
   ) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.proofRepository.refresh$().pipe(
       switchMapTo(this.captionRepository.refresh$()),
       switchMapTo(this.informationRepository.refresh$()),
@@ -71,6 +71,7 @@ export class ProofPage implements OnInit {
     ).subscribe();
   }
 
+  // FIXME: remove does not refresh storage page on Android.
   remove() {
     const onConfirm = () => this.proof$.pipe(
       switchMap(proof => this.proofRepository.remove$(proof)),

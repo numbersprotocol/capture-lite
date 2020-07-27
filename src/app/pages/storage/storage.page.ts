@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { forkJoin, of, zip } from 'rxjs';
 import { concatMap, defaultIfEmpty, map, mapTo, switchMap } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { fromExtension } from 'src/app/utils/mime-type';
   templateUrl: 'storage.page.html',
   styleUrls: ['storage.page.scss'],
 })
-export class StoragePage implements OnInit {
+export class StoragePage {
 
   private readonly proofs$ = this.proofRepository.getAll$();
   readonly proofsWithRaw$ = this.proofs$.pipe(
@@ -31,7 +31,7 @@ export class StoragePage implements OnInit {
     private readonly collectorService: CollectorService
   ) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.proofRepository.refresh$().pipe(
       untilDestroyed(this)
     ).subscribe();
