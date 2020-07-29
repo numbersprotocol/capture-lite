@@ -12,6 +12,7 @@ import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { SamplePublisher } from './services/publisher/sample-publisher/sample-publisher';
+import { SerializationService } from './services/serialization/serialization.service';
 
 const { SplashScreen } = Plugins;
 
@@ -26,6 +27,7 @@ export class AppComponent {
     private readonly platform: Platform,
     private readonly collectorService: CollectorService,
     private readonly publishersAlert: PublishersAlert,
+    private readonly serializationService: SerializationService,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
     private readonly translateService: TranslateService,
@@ -50,7 +52,7 @@ export class AppComponent {
       new CapacitorProvider(this.informationRepository, this.translateService)
     );
     this.collectorService.addSignatureProvider(
-      new DefaultSignatureProvider(this.signatureRepository, this.informationRepository)
+      new DefaultSignatureProvider(this.signatureRepository, this.serializationService)
     );
   }
 

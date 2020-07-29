@@ -10,6 +10,7 @@ import { InformationRepository } from 'src/app/services/data/information/informa
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
 import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/publishers-alert.service';
+import { SerializationService } from 'src/app/services/serialization/serialization.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -59,7 +60,8 @@ export class ProofPage {
     private readonly proofRepository: ProofRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly informationRepository: InformationRepository,
-    private readonly signatureRepository: SignatureRepository
+    private readonly signatureRepository: SignatureRepository,
+    private readonly serializationService: SerializationService
   ) { }
 
   ionViewWillEnter() {
@@ -67,6 +69,14 @@ export class ProofPage {
       switchMapTo(this.captionRepository.refresh$()),
       switchMapTo(this.informationRepository.refresh$()),
       switchMapTo(this.signatureRepository.refresh$()),
+      untilDestroyed(this)
+    ).subscribe();
+  }
+
+  publish() {
+    this.proof$.pipe(
+      first(),
+      switchMap(proof => this.publishersAlert.present$(proof)),
       untilDestroyed(this)
     ).subscribe();
   }
@@ -79,14 +89,6 @@ export class ProofPage {
     ).subscribe();
 
     return this.confirmAlert.present$(onConfirm).pipe(untilDestroyed(this)).subscribe();
-  }
-
-  publish() {
-    this.proof$.pipe(
-      first(),
-      switchMap(proof => this.publishersAlert.present$(proof)),
-      untilDestroyed(this)
-    ).subscribe();
   }
 
   editCaption() {

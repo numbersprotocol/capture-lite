@@ -1,10 +1,9 @@
 import { Observable } from 'rxjs';
-import { first, map, switchMap } from 'rxjs/operators';
-import { createSortedProofInformation } from 'src/app/utils/serialization/serialization';
-import { InformationRepository } from '../../data/information/information-repository.service';
+import { map, switchMap } from 'rxjs/operators';
 import { Proof } from '../../data/proof/proof';
 import { Signature } from '../../data/signature/signature';
 import { SignatureRepository } from '../../data/signature/signature-repository.service';
+import { SerializationService } from '../../serialization/serialization.service';
 
 export abstract class SignatureProvider {
 
@@ -12,14 +11,12 @@ export abstract class SignatureProvider {
 
   constructor(
     private readonly signatureRepository: SignatureRepository,
-    private readonly informationRepository: InformationRepository
+    private readonly serializationService: SerializationService
   ) { }
 
   collectAndStore$(proof: Proof) {
-    return this.informationRepository.getByProof$(proof).pipe(
-      first(),
-      map(informationList => createSortedProofInformation(proof, informationList)),
-      switchMap(sortedProofInformation => this.provide$(proof, JSON.stringify(sortedProofInformation))),
+    return this.serializationService.stringify$(proof).pipe(
+      switchMap(serialized => this.provide$(proof, serialized)),
       switchMap(signature => this.signatureRepository.add$(signature)),
       map(signatures => signatures[0])
     );
