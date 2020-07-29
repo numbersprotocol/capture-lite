@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { FilesystemDirectory, Plugins } from '@capacitor/core';
+import { FileDeleteResult, FilesystemDirectory, Plugins } from '@capacitor/core';
 import { defer, forkJoin } from 'rxjs';
 import { defaultIfEmpty, filter, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
 import { MimeType } from 'src/app/utils/mime-type';
 import { Storage } from 'src/app/utils/storage/storage';
+import { Caption } from '../caption/caption';
 import { CaptionRepository } from '../caption/caption-repository.service';
+import { Information } from '../information/information';
 import { InformationRepository } from '../information/information-repository.service';
+import { Signature } from '../signature/signature';
 import { SignatureRepository } from '../signature/signature-repository.service';
 import { Proof } from './proof';
 
@@ -42,10 +45,18 @@ export class ProofRepository {
 
   remove$(...proofs: Proof[]) {
     return this.proofStorage.remove$(...proofs).pipe(
-      switchMapTo(forkJoin(proofs.map(proof => this.deleteRawFile$(proof))).pipe(defaultIfEmpty([]))),
-      switchMapTo(forkJoin(proofs.map(proof => this.captionRepository.removeByProof$(proof))).pipe(defaultIfEmpty([]))),
-      switchMapTo(forkJoin(proofs.map(proof => this.informationRepository.removeByProof$(proof))).pipe(defaultIfEmpty([]))),
-      switchMapTo(forkJoin(proofs.map(proof => this.signatureRepository.removeByProof$(proof))).pipe(defaultIfEmpty([])))
+      switchMapTo(forkJoin(proofs.map(proof => this.deleteRawFile$(proof))).pipe(
+        defaultIfEmpty([] as FileDeleteResult[])
+      )),
+      switchMapTo(forkJoin(proofs.map(proof => this.captionRepository.removeByProof$(proof))).pipe(
+        defaultIfEmpty([] as Caption[][])
+      )),
+      switchMapTo(forkJoin(proofs.map(proof => this.informationRepository.removeByProof$(proof))).pipe(
+        defaultIfEmpty([] as Information[][])
+      )),
+      switchMapTo(forkJoin(proofs.map(proof => this.signatureRepository.removeByProof$(proof))).pipe(
+        defaultIfEmpty([] as Signature[][])
+      ))
     );
   }
 

@@ -21,7 +21,8 @@ export function arrayBufferToHex(arrayBuffer: ArrayBuffer) {
 }
 
 export function hexToArrayBuffer(hex: string) {
-  return new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16))).buffer;
+  // tslint:disable-next-line: no-non-null-assertion
+  return new Uint8Array(hex.match(/[\da-f]{2}/gi)!.map(h => parseInt(h, 16))).buffer;
 }
 
 export function stringToArrayBuffer(str: string) {

@@ -5,6 +5,7 @@ import { defaultIfEmpty, map, switchMap, switchMapTo, tap } from 'rxjs/operators
 import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
+import { Information } from '../data/information/information';
 import { Proof } from '../data/proof/proof';
 import { ProofRepository } from '../data/proof/proof-repository.service';
 import { NotificationService } from '../notification/notification.service';
@@ -51,7 +52,7 @@ export class CollectorService {
       this.translateService.instant('collectingInformation')
     );
     return forkJoin([...this.informationProviders].map(provider => provider.collectAndStore$(proof))).pipe(
-      defaultIfEmpty([]),
+      defaultIfEmpty([] as Information[][]),
       tap(_ => this.notificationService.notify(
         notificationId,
         this.translateService.instant('collectingProof'),

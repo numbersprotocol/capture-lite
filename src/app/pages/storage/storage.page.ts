@@ -17,7 +17,7 @@ export class StoragePage {
 
   private readonly proofs$ = this.proofRepository.getAll$();
   readonly proofsWithRaw$ = this.proofs$.pipe(
-    concatMap(proofs => forkJoin(proofs.map(proof => this.proofRepository.getRawFile$(proof))).pipe(defaultIfEmpty([]))),
+    concatMap(proofs => forkJoin(proofs.map(proof => this.proofRepository.getRawFile$(proof))).pipe(defaultIfEmpty([] as string[]))),
     switchMap(base64Strings => zip(this.proofs$, of(base64Strings))),
     map(([proofs, base64Strings]) => proofs.map((proof, index) => ({
       proof,

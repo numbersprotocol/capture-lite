@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TranslateService } from '@ngx-translate/core';
-import { filter, first, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { first, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
@@ -11,6 +11,7 @@ import { ProofRepository } from 'src/app/services/data/proof/proof-repository.se
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
 import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/publishers-alert.service';
 import { SerializationService } from 'src/app/services/serialization/serialization.service';
+import { isNonNullable } from 'src/app/utils/type';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -22,8 +23,9 @@ export class ProofPage {
 
   readonly proof$ = this.route.paramMap.pipe(
     map(params => params.get('hash')),
-    filter(hash => !!hash),
-    switchMap(hash => this.proofRepository.getByHash$(hash))
+    isNonNullable(),
+    switchMap(hash => this.proofRepository.getByHash$(hash)),
+    isNonNullable()
   );
   readonly rawBase64$ = this.proof$.pipe(switchMap(proof => this.proofRepository.getRawFile$(proof)));
   readonly hash$ = this.proof$.pipe(map(proof => proof.hash));

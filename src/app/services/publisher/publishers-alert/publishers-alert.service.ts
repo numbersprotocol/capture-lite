@@ -37,7 +37,7 @@ export class PublishersAlert {
         role: 'cancel'
       }, {
         text: this.translateService.instant('ok'),
-        handler: (name) => this.getPublisherByName(name).publish(proof)
+        handler: (name) => this.getPublisherByName(name)?.publish(proof)
       }]
     })).pipe(
       switchMap(alertElement => alertElement.present())
