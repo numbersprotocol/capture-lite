@@ -35,5 +35,13 @@
         <p>{{ privateKey$ | async }}</p>
       </ion-label>
     </ion-item>
+    <ion-list-header>{{ 'about' | translate }}</ion-list-header>
+    <ion-item>
+      <ion-icon name="information" slot="start"></ion-icon>
+      <ion-label>
+        <h2>{{ 'version' | translate }}</h2>
+        <p>{{ version$ | async }}</p>
+      </ion-label>
+    </ion-item>
   </ion-list>
 </ion-content>
