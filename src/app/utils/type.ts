@@ -3,10 +3,6 @@ import { filter } from 'rxjs/operators';
 
 export function isNonNullable<T>() {
   return (source$: Observable<null | undefined | T>) => source$.pipe(
-    filter(valueIsNonNullable)
+    filter((v): v is NonNullable<T> => v !== null && v !== undefined)
   );
-}
-
-function valueIsNonNullable<T>(value: null | undefined | T): value is T {
-  return value !== null && value !== undefined;
 }
