@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { defer, Observable, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Information } from 'src/app/services/data/information/information';
@@ -15,7 +15,7 @@ export class CapacitorProvider extends InformationProvider {
 
   constructor(
     informationRepository: InformationRepository,
-    private readonly translateService: TranslateService
+    private readonly translocoService: TranslocoService
   ) {
     super(informationRepository);
   }
@@ -35,87 +35,87 @@ export class CapacitorProvider extends InformationProvider {
         return [{
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('deviceName'),
+          name: this.translocoService.translate('deviceName'),
           value: String(deviceInfo.name)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('deviceModel'),
+          name: this.translocoService.translate('deviceModel'),
           value: String(deviceInfo.model)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('devicePlatform'),
+          name: this.translocoService.translate('devicePlatform'),
           value: String(deviceInfo.platform)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('uuid'),
+          name: this.translocoService.translate('uuid'),
           value: String(deviceInfo.uuid)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('appVersion'),
+          name: this.translocoService.translate('appVersion'),
           value: String(deviceInfo.appVersion)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('appVersionCode'),
+          name: this.translocoService.translate('appVersionCode'),
           value: String(deviceInfo.appBuild)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('operatingSystem'),
+          name: this.translocoService.translate('operatingSystem'),
           value: String(deviceInfo.operatingSystem)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('osVersion'),
+          name: this.translocoService.translate('osVersion'),
           value: String(deviceInfo.osVersion)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('deviceManufacturer'),
+          name: this.translocoService.translate('deviceManufacturer'),
           value: String(deviceInfo.manufacturer)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('runningOnVm'),
+          name: this.translocoService.translate('runningOnVm'),
           value: String(deviceInfo.isVirtual)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('usedMemory'),
+          name: this.translocoService.translate('usedMemory'),
           value: String(deviceInfo.memUsed)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('freeDiskSpace'),
+          name: this.translocoService.translate('freeDiskSpace'),
           value: String(deviceInfo.diskFree)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('totalDiskSpace'),
+          name: this.translocoService.translate('totalDiskSpace'),
           value: String(deviceInfo.diskTotal)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('batteryLevel'),
+          name: this.translocoService.translate('batteryLevel'),
           value: String(batteryInfo.batteryLevel)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('batteryCharging'),
+          name: this.translocoService.translate('batteryCharging'),
           value: String(batteryInfo.isCharging)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('deviceLanguageCode'),
+          name: this.translocoService.translate('deviceLanguageCode'),
           value: String(languageCode.value)
         }, {
           proofHash: proof.hash,
           provider: this.name,
-          name: this.translateService.instant('location'),
+          name: this.translocoService.translate('location'),
           value: `(${geolocationPosition.coords.latitude}, ${geolocationPosition.coords.longitude})`
         }];
       })

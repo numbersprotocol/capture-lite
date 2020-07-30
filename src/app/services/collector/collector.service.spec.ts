@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from 'src/app/transloco-module.spec';
 import { CollectorService } from './collector.service';
 
 describe('CollectorService', () => {
@@ -7,7 +7,7 @@ describe('CollectorService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()]
+      imports: [getTranslocoModule()]
     });
     service = TestBed.inject(CollectorService);
   });

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { TranslateService } from '@ngx-translate/core';
 import { first, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
@@ -54,7 +54,7 @@ export class ProofPage {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly translateService: TranslateService,
+    private readonly translocoService: TranslocoService,
     private readonly alertController: AlertController,
     private readonly confirmAlert: ConfirmAlert,
     private readonly publishersAlert: PublishersAlert,
@@ -96,18 +96,18 @@ export class ProofPage {
     this.caption$.pipe(
       first(),
       switchMap(caption => this.alertController.create({
-        header: this.translateService.instant('editCaption'),
+        header: this.translocoService.translate('editCaption'),
         inputs: [{
           name: captionInputName,
           type: 'text',
           value: caption,
-          placeholder: this.translateService.instant('nothingHere')
+          placeholder: this.translocoService.translate('nothingHere')
         }],
         buttons: [{
-          text: this.translateService.instant('cancel'),
+          text: this.translocoService.translate('cancel'),
           role: 'cancel'
         }, {
-          text: this.translateService.instant('ok'),
+          text: this.translocoService.translate('ok'),
           handler: (inputs) => this.saveCaption(inputs[captionInputName])
         }]
       })),

@@ -17,7 +17,6 @@ const { Device } = Plugins;
 export class SettingsPage {
 
   readonly langauges = this.languageService.languages;
-  readonly defaultLanguage = this.languageService.defaultLanguage;
   readonly currentLanguageKey$ = this.languageService.currentLanguageKey$;
   readonly publicKey$ = DefaultSignatureProvider.getPublicKey$();
   readonly privateKey$ = DefaultSignatureProvider.getPrivateKey$();

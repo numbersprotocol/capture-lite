@@ -1,11 +1,11 @@
-<ion-header>
+<ion-header *transloco="let t">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button routerLink=".." routerDirection="back">
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ 'proofDetails' | translate }}</ion-title>
+    <ion-title>{{ t('proofDetails') }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="publish()">
         <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
@@ -17,14 +17,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *transloco="let t">
   <ion-img [src]="'data:image/*;base64,' + (rawBase64$ | async)"></ion-img>
   <ion-list lines="none">
     <ion-item>
       <ion-icon slot="start" name="reader"></ion-icon>
       <ion-label class="ion-text-wrap">
-        <h2>{{ 'caption' | translate }}</h2>
-        <p>{{ (caption$ | async) === '' ? '(' + ( 'nothingHere' | translate ) + ')' : (caption$ | async) }}</p>
+        <h2>{{ t('caption') }}</h2>
+        <p>{{ (caption$ | async) === '' ? '(' + ( t('nothingHere') ) + ')' : (caption$ | async) }}</p>
       </ion-label>
       <ion-button (click)="editCaption()" slot="end" fill="clear" shape="round">
         <ion-icon slot="icon-only" name="create"></ion-icon>
@@ -33,27 +33,27 @@
     <ion-item>
       <ion-icon slot="start" name="information"></ion-icon>
       <ion-label class="ion-text-wrap">
-        <h2>{{ 'hash' | translate }}</h2>
+        <h2>{{ t('hash') }}</h2>
         <p>{{ hash$ | async }}</p>
       </ion-label>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="image"></ion-icon>
       <ion-label class="ion-text-wrap">
-        <h2>{{ 'mimeType' | translate }}</h2>
+        <h2>{{ t('mimeType') }}</h2>
         <p>{{ mimeType$ | async }}</p>
       </ion-label>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="time"></ion-icon>
       <ion-label class="ion-text-wrap">
-        <h2>{{ 'timestamp' | translate }}</h2>
+        <h2>{{ t('timestamp') }}</h2>
         <p>{{ timestamp$ | async }}</p>
       </ion-label>
     </ion-item>
     <ion-list-header>
       <ion-label>
-        <h2>{{ 'information' | translate }}</h2>
+        <h2>{{ t('information') }}</h2>
       </ion-label>
     </ion-list-header>
     <ion-item>
@@ -79,7 +79,7 @@
     </ion-item>
     <ion-list-header>
       <ion-label>
-        <h2>{{ 'signatures' | translate }}</h2>
+        <h2>{{ t('signatures') }}</h2>
       </ion-label>
     </ion-list-header>
     <ion-item>
@@ -93,13 +93,13 @@
               <ion-list>
                 <ion-item>
                   <ion-label class="ion-text-wrap">
-                    <h3>{{ 'signature' | translate }}</h3>
+                    <h3>{{ t('signature') }}</h3>
                     <p>{{ signature.signature }}</p>
                   </ion-label>
                 </ion-item>
                 <ion-item>
                   <ion-label class="ion-text-wrap">
-                    <h3>{{ 'publicKey' | translate }}</h3>
+                    <h3>{{ t('publicKey') }}</h3>
                     <p class="multiline">{{ signature.publicKey }}</p>
                   </ion-label>
                 </ion-item>

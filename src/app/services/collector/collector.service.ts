@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { forkJoin } from 'rxjs';
 import { defaultIfEmpty, map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
@@ -23,7 +23,7 @@ export class CollectorService {
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly notificationService: NotificationService,
-    private readonly translateService: TranslateService
+    private readonly translocoService: TranslocoService
   ) { }
 
   storeAndCollect(rawBase64: string, mimeType: MimeType) {
@@ -48,15 +48,15 @@ export class CollectorService {
     const notificationId = this.notificationService.createNotificationId();
     this.notificationService.notify(
       notificationId,
-      this.translateService.instant('collectingProof'),
-      this.translateService.instant('collectingInformation')
+      this.translocoService.translate('collectingProof'),
+      this.translocoService.translate('collectingInformation')
     );
     return forkJoin([...this.informationProviders].map(provider => provider.collectAndStore$(proof))).pipe(
       defaultIfEmpty([] as Information[][]),
       tap(_ => this.notificationService.notify(
         notificationId,
-        this.translateService.instant('collectingProof'),
-        this.translateService.instant('signingProof')
+        this.translocoService.translate('collectingProof'),
+        this.translocoService.translate('signingProof')
       )),
       switchMapTo(forkJoin([...this.signatureProviders].map(provider => provider.collectAndStore$(proof)))),
       tap(_ => this.notificationService.cancel(notificationId))

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { defer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Proof } from '../../data/proof/proof';
@@ -15,7 +15,7 @@ export class PublishersAlert {
 
   constructor(
     private readonly alertController: AlertController,
-    private readonly translateService: TranslateService
+    private readonly translocoService: TranslocoService
   ) { }
 
   addPublisher(publisher: Publisher) {
@@ -24,7 +24,7 @@ export class PublishersAlert {
 
   present$(proof: Proof) {
     return defer(() => this.alertController.create({
-      header: this.translateService.instant('selectAPublisher'),
+      header: this.translocoService.translate('selectAPublisher'),
       inputs: this.publishers.map((publisher, index) => ({
         name: publisher.name,
         type: 'radio',
@@ -33,10 +33,10 @@ export class PublishersAlert {
         checked: index === 0
       })),
       buttons: [{
-        text: this.translateService.instant('cancel'),
+        text: this.translocoService.translate('cancel'),
         role: 'cancel'
       }, {
-        text: this.translateService.instant('ok'),
+        text: this.translocoService.translate('ok'),
         handler: (name) => this.getPublisherByName(name)?.publish(proof)
       }]
     })).pipe(

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { TranslateService } from '@ngx-translate/core';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorProvider } from './services/collector/information/capacitor-provider/capacitor-provider';
 import { DefaultSignatureProvider } from './services/collector/signature/default-provider/default-provider';
@@ -30,7 +30,7 @@ export class AppComponent {
     private readonly serializationService: SerializationService,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
-    private readonly translateService: TranslateService,
+    private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService,
     langaugeService: LanguageService
   ) {
@@ -49,7 +49,7 @@ export class AppComponent {
   initializeCollector() {
     DefaultSignatureProvider.initialize$().pipe(untilDestroyed(this)).subscribe();
     this.collectorService.addInformationProvider(
-      new CapacitorProvider(this.informationRepository, this.translateService)
+      new CapacitorProvider(this.informationRepository, this.translocoService)
     );
     this.collectorService.addSignatureProvider(
       new DefaultSignatureProvider(this.signatureRepository, this.serializationService)
@@ -58,7 +58,7 @@ export class AppComponent {
 
   initializePublisher() {
     this.publishersAlert.addPublisher(
-      new SamplePublisher(this.translateService, this.notificationService)
+      new SamplePublisher(this.translocoService, this.notificationService)
     );
   }
 }

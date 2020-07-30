@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from 'src/app/transloco-module.spec';
 import { PublishersAlert } from './publishers-alert.service';
 
 describe('PublishersAlert', () => {
@@ -7,7 +7,7 @@ describe('PublishersAlert', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()]
+      imports: [getTranslocoModule()]
     });
     service = TestBed.inject(PublishersAlert);
   });
