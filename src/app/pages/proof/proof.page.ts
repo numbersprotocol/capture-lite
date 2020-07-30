@@ -10,7 +10,6 @@ import { InformationRepository } from 'src/app/services/data/information/informa
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
 import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/publishers-alert.service';
-import { SerializationService } from 'src/app/services/serialization/serialization.service';
 import { isNonNullable } from 'src/app/utils/type';
 
 @UntilDestroy({ checkProperties: true })
@@ -62,8 +61,7 @@ export class ProofPage {
     private readonly proofRepository: ProofRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly informationRepository: InformationRepository,
-    private readonly signatureRepository: SignatureRepository,
-    private readonly serializationService: SerializationService
+    private readonly signatureRepository: SignatureRepository
   ) { }
 
   ionViewWillEnter() {
