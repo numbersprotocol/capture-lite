@@ -38,7 +38,7 @@ export class DefaultSignatureProvider extends SignatureProvider {
     return preferences.getString$(PrefKeys.PrivateKey);
   }
 
-  provide$(proof: Proof, serialized: string): Observable<Signature> {
+  protected provide$(proof: Proof, serialized: string): Observable<Signature> {
     return preferences.getString$(PrefKeys.PrivateKey).pipe(
       switchMap(privateKeyHex => signWithSha256AndEcdsa$(serialized, privateKeyHex)),
       switchMap(signatureHex => zip(of(signatureHex), DefaultSignatureProvider.getPublicKey$())),

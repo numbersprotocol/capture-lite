@@ -15,6 +15,10 @@ export class Preferences {
     );
   }
 
+  getBoolean$(key: string, defaultValue: boolean = false) {
+    return this.get$(key, defaultValue, (v) => v === 'true');
+  }
+
   getNumber$(key: string, defaultValue: number = 0) {
     return this.get$(key, defaultValue, Number);
   }
@@ -27,6 +31,10 @@ export class Preferences {
     return defer(() => Storage.set({ key: `${name}_${key}`, value: converter(value) })).pipe(
       mapTo(value)
     );
+  }
+
+  setBoolean$(key: string, value: boolean) {
+    return this.set$(key, value, String);
   }
 
   setNumber$(key: string, value: number) {
