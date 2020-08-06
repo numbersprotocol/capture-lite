@@ -47,6 +47,11 @@
   "defaultInformationProvider": "Default Information Provider",
   "collectDeviceInfo": "Collect Device Info",
   "collectLocationInfo": "Collect Location Info",
+  "publisher": "Publisher",
+  "email": "Email",
+  "password": "Password",
+  "login": "Login",
+  "signUp": "Sign Up",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "publishingProof": "Publishing proof {{hash}} to {{publisherName}}.",

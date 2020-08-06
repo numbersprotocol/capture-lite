@@ -10,8 +10,8 @@ import { InformationRepository } from './services/data/information/information-r
 import { SignatureRepository } from './services/data/signature/signature-repository.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
+import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
-import { SamplePublisher } from './services/publisher/sample-publisher/sample-publisher';
 import { SerializationService } from './services/serialization/serialization.service';
 
 const { SplashScreen } = Plugins;
@@ -58,7 +58,7 @@ export class AppComponent {
 
   initializePublisher() {
     this.publishersAlert.addPublisher(
-      new SamplePublisher(this.translocoService, this.notificationService)
+      new NumbersStoragePublisher(this.translocoService, this.notificationService)
     );
   }
 }

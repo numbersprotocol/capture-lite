@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink=".." routerDirection="back">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Numbers Storage</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *transloco="let t">
+  <ion-img class="numbers-logo" src="../../../../assets/image/numbers.svg"></ion-img>
+  <ion-button [routerLink]="['login']" expand="block">go to login</ion-button>
+  <ion-button [routerLink]="['sign-up']" expand="block">go to sign up</ion-button>
+</ion-content>

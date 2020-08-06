@@ -48,6 +48,11 @@
         <p>{{ privateKey$ | async }}</p>
       </ion-label>
     </ion-item>
+    <ion-list-header>{{ t('publisher')}}</ion-list-header>
+    <ion-item [routerLink]="['/publishers', 'numbers-storage']" lines="full">
+      <ion-icon src="../../../assets/image/n.svg" slot="start"></ion-icon>
+      <ion-label>Numbers Storage</ion-label>
+    </ion-item>
     <ion-list-header>{{ t('about') }}</ion-list-header>
     <ion-item lines="none">
       <ion-icon name="information" slot="start"></ion-icon>

@@ -14,6 +14,12 @@ const routes: Routes = [{
 }, {
   path: 'proof',
   loadChildren: () => import('./pages/proof/proof.module').then(m => m.ProofPageModule)
+}, {
+  path: 'publishers',
+  redirectTo: 'settings'
+}, {
+  path: 'publishers/numbers-storage',
+  loadChildren: () => import('./pages/publishers/numbers-storage/numbers-storage.module').then(m => m.NumbersStoragePageModule)
 }];
 
 @NgModule({

@@ -3,9 +3,9 @@ import { delay, tap } from 'rxjs/operators';
 import { Proof } from '../../data/proof/proof';
 import { Publisher } from '../publisher';
 
-export class SamplePublisher extends Publisher {
+export class NumbersStoragePublisher extends Publisher {
 
-  readonly name = 'Sample Publisher';
+  readonly name = 'Numbers Storage';
 
   run$(proof: Proof): Observable<void> {
     return of(void 0).pipe(
