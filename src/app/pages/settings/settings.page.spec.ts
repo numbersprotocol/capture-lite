@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from 'src/app/transloco-module.spec';
+import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { SettingsPage } from './settings.page';
 
 describe('SettingsPage', () => {

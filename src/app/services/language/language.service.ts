@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { mapTo, switchMap } from 'rxjs/operators';
-import { defaultLanguage, languages } from 'src/app/transloco-root.module';
+import { defaultLanguage, languages } from 'src/app/transloco/transloco-root.module';
 import { PreferenceManager } from '../../utils/preferences/preference-manager';
 
 @Injectable({

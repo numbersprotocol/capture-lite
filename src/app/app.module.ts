@@ -7,7 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TranslocoRootModule } from './transloco-root.module';
+import { TranslocoRootModule } from './transloco/transloco-root.module';
 
 @NgModule({
   declarations: [AppComponent],
