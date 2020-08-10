@@ -30,7 +30,7 @@
     "@ngneat/transloco": "^2.18.4",
     "@ngneat/until-destroy": "^8.0.1",
     "rxjs": "~6.6.2",
-    "tslib": "^2.0.0",
+    "tslib": "^2.0.1",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
