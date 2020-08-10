@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgModule } from '@angular/core';
 import { Translation, translocoConfig, TranslocoLoader, TranslocoModule, TRANSLOCO_CONFIG, TRANSLOCO_LOADER } from '@ngneat/transloco';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 export const languages: { [key: string]: string; } = {
   'en-us': 'English (United State)',

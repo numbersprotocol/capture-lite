@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { getTranslocoModule } from 'src/app/transloco-module.spec';
+import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { CollectorService } from './collector.service';
 
 describe('CollectorService', () => {
