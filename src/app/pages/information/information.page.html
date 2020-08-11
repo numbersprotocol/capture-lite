@@ -14,7 +14,7 @@
             <ion-slide *ngFor="let providerWithInformationList of (providersWithInformationList$ | async)">
                 <ion-card class="slide-card">
                     <ion-card-header>
-                        <ion-card-title>Location</ion-card-title>
+                        <ion-card-title>{{ t('location') }}</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list lines="none" *ngFor="let information of providerWithInformationList.informationList">
@@ -35,7 +35,7 @@
             <ion-slide *ngFor="let providerWithInformationList of (providersWithInformationList$ | async)">
                 <ion-card class="slide-card">
                     <ion-card-header>
-                        <ion-card-title>Hash</ion-card-title>
+                        <ion-card-title>{{ t('hash') }}</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list lines="none" *ngFor="let information of providerWithInformationList.informationList">
@@ -56,7 +56,7 @@
             <ion-slide *ngFor="let providerWithInformationList of (providersWithInformationList$ | async)">
                 <ion-card class="slide-card">
                     <ion-card-header>
-                        <ion-card-title>Other</ion-card-title>
+                        <ion-card-title>{{ t('other') }}</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list lines="none" *ngFor="let information of providerWithInformationList.informationList">
