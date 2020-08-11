@@ -64,67 +64,93 @@ export class CapacitorProvider extends InformationProvider {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceName'),
-            value: String(deviceInfo.name)
+            value: String(deviceInfo.name),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceModel'),
-            value: String(deviceInfo.model)
+            value: String(deviceInfo.model),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('devicePlatform'),
-            value: String(deviceInfo.platform)
+            value: String(deviceInfo.platform),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('uuid'),
-            value: String(deviceInfo.uuid)
+            value: String(deviceInfo.uuid),
+            important: true,
+            type: 2
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('appVersion'),
-            value: String(deviceInfo.appVersion)
+            value: String(deviceInfo.appVersion),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('appVersionCode'),
-            value: String(deviceInfo.appBuild)
+            value: String(deviceInfo.appBuild),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('operatingSystem'),
-            value: String(deviceInfo.operatingSystem)
+            value: String(deviceInfo.operatingSystem),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('osVersion'),
-            value: String(deviceInfo.osVersion)
+            value: String(deviceInfo.osVersion),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceManufacturer'),
-            value: String(deviceInfo.manufacturer)
+            value: String(deviceInfo.manufacturer),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('runningOnVm'),
-            value: String(deviceInfo.isVirtual)
+            value: String(deviceInfo.isVirtual),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('usedMemory'),
-            value: String(deviceInfo.memUsed)
+            value: String(deviceInfo.memUsed),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('freeDiskSpace'),
-            value: String(deviceInfo.diskFree)
+            value: String(deviceInfo.diskFree),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('totalDiskSpace'),
-            value: String(deviceInfo.diskTotal)
+            value: String(deviceInfo.diskTotal),
+            important: false,
+            type: 0
           });
         }
         if (batteryInfo !== undefined) {
@@ -132,12 +158,16 @@ export class CapacitorProvider extends InformationProvider {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('batteryLevel'),
-            value: String(batteryInfo.batteryLevel)
+            value: String(batteryInfo.batteryLevel),
+            important: false,
+            type: 0
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('batteryCharging'),
-            value: String(batteryInfo.isCharging)
+            value: String(batteryInfo.isCharging),
+            important: false,
+            type: 0
           });
         }
         if (languageCode !== undefined) {
@@ -145,7 +175,9 @@ export class CapacitorProvider extends InformationProvider {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceLanguageCode'),
-            value: String(languageCode.value)
+            value: String(languageCode.value),
+            important: false,
+            type: 0
           });
         }
         if (geolocationPosition !== undefined) {
@@ -153,7 +185,9 @@ export class CapacitorProvider extends InformationProvider {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('location'),
-            value: `(${geolocationPosition.coords.latitude}, ${geolocationPosition.coords.longitude})`
+            value: `(${geolocationPosition.coords.latitude}, ${geolocationPosition.coords.longitude})`,
+            important: true,
+            type: 1
           });
         }
         return informationList;
