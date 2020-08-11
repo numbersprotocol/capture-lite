@@ -23,13 +23,35 @@ export class InformationPage {
 
     readonly hash$ = this.proof$.pipe(map(proof => proof.hash));
 
-    readonly providersWithInformationList$ = this.proof$.pipe(
+    readonly locationInformation$ = this.proof$.pipe(
         switchMap(proof => this.informationRepository.getByProof$(proof)),
         map(informationList => {
-            const providers = new Set(informationList.map(information => information.provider));
-            return [...providers].map(provider => ({
-                provider,
-                informationList: informationList.filter(information => information.provider === provider)
+            const types = new Array(informationList.map(information => information.type));
+            return [...types].map(type => ({
+                type,
+                informationList: informationList.filter(information => information.type === 1)
+            }));
+        })
+    );
+
+    readonly hashInformation$ = this.proof$.pipe(
+        switchMap(proof => this.informationRepository.getByProof$(proof)),
+        map(informationList => {
+            const types = new Array(informationList.map(information => information.type));
+            return [...types].map(type => ({
+                type,
+                informationList: informationList.filter(information => information.type === 2)
+            }));
+        })
+    );
+
+    readonly otherInformation$ = this.proof$.pipe(
+        switchMap(proof => this.informationRepository.getByProof$(proof)),
+        map(informationList => {
+            const types = new Array(informationList.map(information => information.type));
+            return [...types].map(type => ({
+                type,
+                informationList: informationList.filter(information => information.type === 0)
             }));
         })
     );
