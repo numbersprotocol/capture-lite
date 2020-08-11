@@ -26,6 +26,7 @@ export class ProofPage {
     switchMap(hash => this.proofRepository.getByHash$(hash)),
     isNonNullable()
   );
+
   readonly rawBase64$ = this.proof$.pipe(switchMap(proof => this.proofRepository.getRawFile$(proof)));
   readonly hash$ = this.proof$.pipe(map(proof => proof.hash));
   readonly mimeType$ = this.proof$.pipe(map(proof => proof.mimeType.type));
@@ -47,6 +48,7 @@ export class ProofPage {
       }));
     })
   );
+
   readonly signatures$ = this.proof$.pipe(
     switchMap(proof => this.signatureRepository.getByProof$(proof))
   );
@@ -114,6 +116,10 @@ export class ProofPage {
       switchMap(alertElement => alertElement.present()),
       untilDestroyed(this)
     ).subscribe();
+  }
+
+  openInformationPage() {
+    this.router.navigate(['/information']);
   }
 
   private saveCaption(text: string) {

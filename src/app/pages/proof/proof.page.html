@@ -64,14 +64,18 @@
               <ion-card-title>{{ providerWithInformationList.provider }}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <ion-list>
-                <ion-item *ngFor="let information of providerWithInformationList.informationList">
+              <ion-list *ngFor="let information of providerWithInformationList.informationList">
+                <ion-item *ngIf="information.important">
                   <ion-label class="ion-text-wrap">
                     <h3>{{ information.name }}</h3>
                     <p>{{ information.value }}</p>
                   </ion-label>
                 </ion-item>
               </ion-list>
+              <section>
+                <ion-button expand="block" [routerLink]="['/information', {hash: (hash$ | async)}]">View All
+                </ion-button>
+              </section>
             </ion-card-content>
           </ion-card>
         </ion-slide>
