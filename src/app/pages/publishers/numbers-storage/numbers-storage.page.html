@@ -11,6 +11,5 @@
 
 <ion-content *transloco="let t">
   <ion-img class="numbers-logo" src="../../../../assets/image/numbers.svg"></ion-img>
-  <ion-button [routerLink]="['login']" expand="block">go to login</ion-button>
-  <ion-button [routerLink]="['sign-up']" expand="block">go to sign up</ion-button>
+  <ion-button (click)="logout()" expand="block" class="ion-padding">{{ t('logout') }}</ion-button>
 </ion-content>

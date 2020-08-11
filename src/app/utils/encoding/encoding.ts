@@ -1,3 +1,6 @@
+import { defer, Subject } from 'rxjs';
+import { first, switchMap } from 'rxjs/operators';
+
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 
@@ -31,4 +34,22 @@ export function stringToArrayBuffer(str: string) {
 
 export function arrayBufferToString(arrayBuffer: ArrayBuffer) {
   return textDecoder.decode(arrayBuffer);
+}
+
+export function base64ToBlob$(base64: string) {
+  return defer(() => fetch(base64)).pipe(
+    first(),
+    switchMap(res => res.blob())
+  );
+}
+
+export function blobToBase64$(blob: Blob) {
+  const fileReader = new FileReader();
+  const subject$ = new Subject<string>();
+  fileReader.onloadend = () => {
+    subject$.next(fileReader.result as string);
+    subject$.complete();
+  };
+  fileReader.readAsDataURL(blob);
+  return subject$.asObservable();
 }

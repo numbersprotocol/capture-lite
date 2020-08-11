@@ -10,7 +10,7 @@ import { InformationRepository } from './services/data/information/information-r
 import { SignatureRepository } from './services/data/signature/signature-repository.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
-import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage';
+import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { SerializationService } from './services/serialization/serialization.service';
 

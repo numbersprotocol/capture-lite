@@ -1,6 +1,9 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { TranslocoModule } from '@ngneat/transloco';
 import { LoginPage } from './login.page';
 
 describe('LoginPage', () => {
@@ -10,7 +13,13 @@ describe('LoginPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [LoginPage],
-      imports: [IonicModule.forRoot(), ReactiveFormsModule]
+      imports: [
+        IonicModule.forRoot(),
+        ReactiveFormsModule,
+        RouterTestingModule,
+        TranslocoModule,
+        HttpClientTestingModule
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginPage);

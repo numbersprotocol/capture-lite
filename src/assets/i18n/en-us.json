@@ -48,13 +48,20 @@
   "collectDeviceInfo": "Collect Device Info",
   "collectLocationInfo": "Collect Location Info",
   "publisher": "Publisher",
+  "userName": "User Name",
   "email": "Email",
   "password": "Password",
   "login": "Login",
+  "logout": "Logout",
   "signUp": "Sign Up",
+  "required": "Required",
+  "tooShort": "Too Short",
+  "talkingToTheServer": "Talking to the Server",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "publishingProof": "Publishing proof {{hash}} to {{publisherName}}.",
-    "proofPublished": "Proof {{hash}} has been published to {{publisherName}}."
+    "proofPublished": "Proof {{hash}} has been published to {{publisherName}}.",
+    "forbiddenAllNumeric": "Cannot contain only numbers.",
+    "isNotEmail": "Does not follow email format."
   }
 }
