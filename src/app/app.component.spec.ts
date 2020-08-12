@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { Platform } from '@ionic/angular';
 import { AppComponent } from './app.component';
-import { getTranslocoModule } from './transloco-module.spec';
+import { getTranslocoModule } from './transloco/transloco-root.module.spec';
 
 describe('AppComponent', () => {
 

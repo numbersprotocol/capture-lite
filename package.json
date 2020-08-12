@@ -27,10 +27,10 @@
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^5.3.1",
     "@ionic/pwa-elements": "^3.0.1",
-    "@ngneat/transloco": "^2.18.3",
+    "@ngneat/transloco": "^2.18.4",
     "@ngneat/until-destroy": "^8.0.1",
     "rxjs": "~6.6.2",
-    "tslib": "^2.0.0",
+    "tslib": "^2.0.1",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "karma": "~5.1.1",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage-istanbul-reporter": "~3.0.3",
-    "karma-jasmine": "~3.3.0",
+    "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "~7.0.0",
     "rxjs-tslint-rules": "^4.34.0",

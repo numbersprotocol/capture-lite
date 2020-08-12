@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { getTranslocoModule } from 'src/app/transloco-module.spec';
+import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { ConfirmAlert } from './confirm-alert.service';
 
 describe('ConfirmAlert', () => {
