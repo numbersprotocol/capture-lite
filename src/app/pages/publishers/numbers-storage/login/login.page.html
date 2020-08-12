@@ -18,22 +18,11 @@
         <ion-icon name="mail" slot="start"></ion-icon>
         <ion-label position="floating">{{ t('email') }}</ion-label>
         <ion-input formControlName="email" type="email" autocomplete="email" inputmode="email" clearInput></ion-input>
-        <div class="errors"
-          *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)">
-          <p *ngIf="loginForm.get('email')?.hasError('required')">{{ t('required') }}</p>
-          <p *ngIf="loginForm.get('email')?.hasError('email')">{{ t('message.isNotEmail') }}</p>
-        </div>
       </ion-item>
       <ion-item>
         <ion-icon name="key" slot="start"></ion-icon>
         <ion-label position="floating">{{ t('password') }}</ion-label>
         <ion-input formControlName="password" type="password" clearInput></ion-input>
-        <div class="errors"
-          *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)">
-          <p *ngIf="loginForm.get('password')?.hasError('required')">{{ t('required') }}</p>
-          <p *ngIf="loginForm.get('password')?.hasError('minlength')">{{ t('tooShort') }}</p>
-          <p *ngIf="loginForm.get('password')?.hasError('allNumeric')">{{ t('message.forbiddenAllNumeric') }}</p>
-        </div>
       </ion-item>
     </ion-list>
     <ion-button type="submit" [disabled]="!loginForm.valid" class="ion-padding" expand="block">{{ t('login') }}

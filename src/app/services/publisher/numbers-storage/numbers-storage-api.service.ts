@@ -45,9 +45,7 @@ export class NumbersStorageApi {
     formData.append('email', email);
     formData.append('password', password);
     return this.httpClient.post<TokenCreate>(`${baseUrl}/auth/token/login/`, formData).pipe(
-      switchMap(tokenCreate => {
-        return preference.setString$(PrefKeys.AuthToken, `token ${tokenCreate.auth_token}`);
-      }),
+      switchMap(tokenCreate => preference.setString$(PrefKeys.AuthToken, `token ${tokenCreate.auth_token}`)),
       switchMapTo(preference.setBoolean$(PrefKeys.Enabled, true))
     );
   }
