@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { tap } from 'rxjs/operators';
+import { defer } from 'rxjs';
+import { catchError, switchMapTo, tap } from 'rxjs/operators';
+import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 
 @UntilDestroy({ checkProperties: true })
@@ -16,7 +18,7 @@ export class NumbersStoragePage {
 
   constructor(
     private readonly router: Router,
-    private readonly loadingController: LoadingController,
+    private readonly blockingActionService: BlockingActionService,
     private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
     private readonly numbersStorageApi: NumbersStorageApi
@@ -32,19 +34,20 @@ export class NumbersStoragePage {
     ).subscribe();
   }
 
-  // FIXME: cannot find a way to make this method readable and reactive
-  async logout() {
-    const loading = await this.loadingController.create({ message: this.translocoService.translate('talkingToTheServer') });
-    await loading.present();
-    try {
-      await this.numbersStorageApi.logout$().toPromise();
+  logout() {
+    const action$ = this.numbersStorageApi.logout$().pipe(
       // FIXME: do not know why ['login'] does not work
-      await this.router.navigate(['/publishers', 'numbers-storage', 'login']);
-    } catch (e) {
-      console.log(e);
-      const toast = await this.toastController.create({ message: JSON.stringify(e.error), duration: 4000 });
-      await toast.present();
-    }
-    await loading.dismiss();
+      switchMapTo(defer(() => this.router.navigate(['/publishers', 'numbers-storage', 'login']))),
+      catchError(err => this.toastController
+        .create({ message: JSON.stringify(err.error), duration: 4000 })
+        .then(toast => toast.present())
+      )
+    );
+    this.blockingActionService.run$(
+      action$,
+      { message: this.translocoService.translate('talkingToTheServer') }
+    ).pipe(
+      untilDestroyed(this)
+    ).subscribe();
   }
 }

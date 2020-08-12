@@ -37,11 +37,12 @@ export class LoginPage {
       this.loginForm.get('email')?.value,
       this.loginForm.get('password')?.value
     ).pipe(
+      // FIXME: do not know why ['..'] does not work
+      switchMapTo(defer(() => this.router.navigate(['/publishers', 'numbers-storage']))),
       catchError(err => this.toastController
         .create({ message: JSON.stringify(err.error), duration: 4000 })
         .then(toast => toast.present())
-      ),
-      switchMapTo(defer(() => this.router.navigate(['/publishers', 'numbers-storage'])))
+      )
     );
     this.blockingActionService.run$(
       action$,
