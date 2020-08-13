@@ -11,5 +11,8 @@
 
 <ion-content *transloco="let t">
   <ion-img class="numbers-logo" src="../../../../assets/image/numbers.svg"></ion-img>
-  <ion-button (click)="logout()" expand="block" class="ion-padding">{{ t('logout') }}</ion-button>
+  <ion-button *ngIf="!(isEnabled$ | async)" routerLink="login" expand="block" class="ion-padding">{{ t('login') }}
+  </ion-button>
+  <ion-button *ngIf="isEnabled$ | async" (click)="logout()" expand="block" class="ion-padding">{{ t('logout') }}
+  </ion-button>
 </ion-content>

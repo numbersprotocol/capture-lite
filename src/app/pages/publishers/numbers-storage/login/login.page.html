@@ -1,8 +1,7 @@
 <ion-header *transloco="let t">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <!-- FIXME: do not know why `routerLink=".."` does not work -->
-      <ion-button routerLink="/settings" routerDirection="back">
+      <ion-button routerLink=".." routerDirection="back">
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -28,7 +27,6 @@
     <ion-button type="submit" [disabled]="!loginForm.valid" class="ion-padding" expand="block">{{ t('login') }}
     </ion-button>
   </form>
-  <!-- FIXME: do not know why `routerLink="../sign-up"` does not work -->
-  <ion-button [routerLink]="['/publishers', 'numbers-storage', 'sign-up']" class="ion-padding" expand="block">
+  <ion-button routerLink="../sign-up" class="ion-padding" expand="block">
     {{ t('signUp') }}</ion-button>
 </ion-content>

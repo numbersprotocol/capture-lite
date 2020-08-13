@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -26,6 +26,7 @@ export class SignUpPage {
 
   constructor(
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly blockingActionService: BlockingActionService,
     private readonly toastController: ToastController,
@@ -39,8 +40,7 @@ export class SignUpPage {
       this.signUpForm.get('email')?.value,
       this.signUpForm.get('password')?.value
     ).pipe(
-      // FIXME: do not know why ['..'] does not work
-      switchMapTo(defer(() => this.router.navigate(['/publishers', 'numbers-storage']))),
+      switchMapTo(defer(() => this.router.navigate(['..'], { relativeTo: this.route }))),
       catchError(err => this.toastController
         .create({ message: JSON.stringify(err.error), duration: 4000 })
         .then(toast => toast.present())
