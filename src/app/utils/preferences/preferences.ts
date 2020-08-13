@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core';
-import { defer, Observable } from 'rxjs';
-import { map, mapTo } from 'rxjs/operators';
+import { BehaviorSubject, defer, Observable, of } from 'rxjs';
+import { concatMapTo, map, mapTo, switchMap, tap } from 'rxjs/operators';
 
 const { Storage } = Plugins;
 
@@ -8,10 +8,24 @@ export class Preferences {
 
   constructor(readonly name: string) { }
 
+  private readonly subjects = new Map<string, BehaviorSubject<any>>();
+
   get$<T>(key: string, defaultValue: T, converter: (str: string) => T = JSON.parse): Observable<T> {
-    return defer(() => Storage.get({ key: `${name}_${key}` })).pipe(
+    return of(this.subjects.has(key)).pipe(
+      switchMap(existed => {
+        if (!existed) { return this._get$(key, defaultValue, converter); }
+        return of(existed);
+      }),
+      // tslint:disable-next-line: no-non-null-assertion
+      concatMapTo(defer(() => this.subjects.get(key)!.asObservable()))
+    );
+  }
+
+  private _get$<T>(key: string, defaultValue: T, converter: (str: string) => T): Observable<T> {
+    return defer(() => Storage.get({ key: `${this.name}_${key}` })).pipe(
       map(ret => ret.value),
-      map(value => (value && value !== '[null]') ? converter(value) : defaultValue)
+      map(value => (value && value !== '[null]') ? converter(value) : defaultValue),
+      tap(converted => this.updateSubjects(key, converted))
     );
   }
 
@@ -28,7 +42,8 @@ export class Preferences {
   }
 
   set$<T>(key: string, value: T, converter: (value: T) => string = JSON.stringify): Observable<T> {
-    return defer(() => Storage.set({ key: `${name}_${key}`, value: converter(value) })).pipe(
+    return defer(() => Storage.set({ key: `${this.name}_${key}`, value: converter(value) })).pipe(
+      mapTo(this.updateSubjects(key, value)),
       mapTo(value)
     );
   }
@@ -43,5 +58,10 @@ export class Preferences {
 
   setString$(key: string, value: string) {
     return this.set$(key, value, (v) => v);
+  }
+
+  private updateSubjects<T>(key: string, value: T) {
+    if (this.subjects.has(key)) { this.subjects.get(key)?.next(value); }
+    else { this.subjects.set(key, new BehaviorSubject(value)); }
   }
 }
