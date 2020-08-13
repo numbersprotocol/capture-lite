@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { forkJoin } from 'rxjs';
-import { defaultIfEmpty, map, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
-import { Information } from '../data/information/information';
+import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { Proof } from '../data/proof/proof';
 import { ProofRepository } from '../data/proof/proof-repository.service';
 import { NotificationService } from '../notification/notification.service';
@@ -51,14 +50,13 @@ export class CollectorService {
       this.translocoService.translate('collectingProof'),
       this.translocoService.translate('collectingInformation')
     );
-    return forkJoin([...this.informationProviders].map(provider => provider.collectAndStore$(proof))).pipe(
-      defaultIfEmpty([] as Information[][]),
+    return forkJoinWithDefault([...this.informationProviders].map(provider => provider.collectAndStore$(proof))).pipe(
       tap(_ => this.notificationService.notify(
         notificationId,
         this.translocoService.translate('collectingProof'),
         this.translocoService.translate('signingProof')
       )),
-      switchMapTo(forkJoin([...this.signatureProviders].map(provider => provider.collectAndStore$(proof)))),
+      switchMapTo(forkJoinWithDefault([...this.signatureProviders].map(provider => provider.collectAndStore$(proof)))),
       tap(_ => this.notificationService.cancel(notificationId))
     );
   }
