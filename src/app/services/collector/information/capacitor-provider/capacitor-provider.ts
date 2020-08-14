@@ -1,7 +1,7 @@
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { defer, Observable, of, zip } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { first, map, switchMap } from 'rxjs/operators';
 import { Information } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { Proof } from 'src/app/services/data/proof/proof';
@@ -48,6 +48,7 @@ export class CapacitorProvider extends InformationProvider {
       CapacitorProvider.isDeviceInfoCollectionEnabled$(),
       CapacitorProvider.isLocationInfoCollectionEnabled$()
     ).pipe(
+      first(),
       switchMap(([isDeviceInfoCollectionEnabled, isLocationInfoCollectionEnabled]) => zip(
         isDeviceInfoCollectionEnabled ? defer(() => Device.getInfo()) : of(undefined),
         isDeviceInfoCollectionEnabled ? defer(() => Device.getBatteryInfo()) : of(undefined),

@@ -34,6 +34,7 @@ export class CaptionRepository {
 
   removeByProof$(proof: Proof) {
     return this.getByProof$(proof).pipe(
+      first(),
       switchMap(captions => this.remove$(...captions))
     );
   }
