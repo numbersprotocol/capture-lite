@@ -63,6 +63,13 @@ export class CapacitorProvider extends InformationProvider {
           informationList.push({
             proofHash: proof.hash,
             provider: this.name,
+            name: this.translocoService.translate('uuid'),
+            value: String(deviceInfo.uuid),
+            important: true,
+            type: 2
+          }, {
+            proofHash: proof.hash,
+            provider: this.name,
             name: this.translocoService.translate('deviceName'),
             value: String(deviceInfo.name),
             important: false,
@@ -81,13 +88,6 @@ export class CapacitorProvider extends InformationProvider {
             value: String(deviceInfo.platform),
             important: false,
             type: 0
-          }, {
-            proofHash: proof.hash,
-            provider: this.name,
-            name: this.translocoService.translate('uuid'),
-            value: String(deviceInfo.uuid),
-            important: true,
-            type: 2
           }, {
             proofHash: proof.hash,
             provider: this.name,
