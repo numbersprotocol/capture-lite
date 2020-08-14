@@ -14,7 +14,7 @@ export abstract class SignatureProvider {
     private readonly serializationService: SerializationService
   ) { }
 
-  collectAndStore$(proof: Proof) {
+  signAndStore$(proof: Proof) {
     return this.serializationService.stringify$(proof).pipe(
       switchMap(serialized => this.provide$(proof, serialized)),
       switchMap(signature => this.signatureRepository.add$(signature)),

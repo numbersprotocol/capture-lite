@@ -56,7 +56,7 @@ export class CollectorService {
         this.translocoService.translate('collectingProof'),
         this.translocoService.translate('signingProof')
       )),
-      switchMapTo(forkJoinWithDefault([...this.signatureProviders].map(provider => provider.collectAndStore$(proof)))),
+      switchMapTo(forkJoinWithDefault([...this.signatureProviders].map(provider => provider.signAndStore$(proof)))),
       tap(_ => this.notificationService.cancel(notificationId))
     );
   }

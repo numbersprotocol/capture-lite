@@ -16,7 +16,6 @@ export class Storage<T extends object> {
   private readonly tuples$ = new BehaviorSubject<T[]>([]);
 
   refresh$() {
-    console.log(`Storege refreshing: ${this.name}`);
     return this.makeNameDir$().pipe(
       switchMapTo(this.readNameDir$()),
       map(result => result.files),
@@ -34,8 +33,8 @@ export class Storage<T extends object> {
     })).pipe(
       mapTo(void 0),
       catchError((err: Error) => {
-        console.log(`${err.message} (${this.directory}/${this.name})`);
-        return of(void 0);
+        if (err.message === 'Current directory does already exist.') { return of(void 0); }
+        throw err;
       })
     );
   }

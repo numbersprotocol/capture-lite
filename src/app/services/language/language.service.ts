@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { mapTo, switchMap } from 'rxjs/operators';
+import { first, mapTo, switchMap } from 'rxjs/operators';
 import { defaultLanguage, languages } from 'src/app/transloco/transloco-root.module';
 import { PreferenceManager } from '../../utils/preferences/preference-manager';
+
+const preferences = PreferenceManager.LANGUAGE_PREF;
+const enum PrefKeys {
+  Language = 'language'
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class LanguageService {
 
-  private readonly preferences = PreferenceManager.LANGUAGE_PREF;
-  private readonly prefKeys = {
-    langauge: 'langauge'
-  };
   readonly languages = languages;
   readonly defaultLanguage = defaultLanguage;
-  readonly currentLanguageKey$ = this.preferences.get$(this.prefKeys.langauge, defaultLanguage[0]);
+  readonly currentLanguageKey$ = preferences.getString$(PrefKeys.Language, defaultLanguage[0]);
 
   constructor(
     private readonly translocoService: TranslocoService
@@ -23,11 +24,14 @@ export class LanguageService {
 
   initialize$() {
     this.translocoService.setDefaultLang(defaultLanguage[0]);
-    return this.currentLanguageKey$.pipe(switchMap(key => this.setCurrentLanguage$(key)));
+    return this.currentLanguageKey$.pipe(
+      first(),
+      switchMap(key => this.setCurrentLanguage$(key))
+    );
   }
 
   setCurrentLanguage$(key: string) {
-    return this.preferences.set$(this.prefKeys.langauge, key).pipe(
+    return preferences.setString$(PrefKeys.Language, key).pipe(
       mapTo(this.translocoService.setActiveLang(key)),
       mapTo(key)
     );
