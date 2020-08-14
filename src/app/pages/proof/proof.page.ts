@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { defer } from 'rxjs';
 import { first, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
@@ -10,7 +11,7 @@ import { InformationRepository } from 'src/app/services/data/information/informa
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
 import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/publishers-alert.service';
-import { isNonNullable } from 'src/app/utils/type';
+import { isNonNullable } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -97,7 +98,7 @@ export class ProofPage {
   remove() {
     const onConfirm = () => this.proof$.pipe(
       switchMap(proof => this.proofRepository.remove$(proof)),
-      switchMapTo(this.router.navigate(['..'])),
+      switchMapTo(defer(() => this.router.navigate(['..']))),
       untilDestroyed(this)
     ).subscribe();
 
