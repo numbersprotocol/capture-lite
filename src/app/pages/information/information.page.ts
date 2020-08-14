@@ -4,7 +4,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map, switchMap, switchMapTo } from 'rxjs/operators';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
-import { isNonNullable } from 'src/app/utils/type';
+import { isNonNullable } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
