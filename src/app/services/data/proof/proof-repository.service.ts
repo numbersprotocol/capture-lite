@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FilesystemDirectory, Plugins } from '@capacitor/core';
 import { defer } from 'rxjs';
-import { filter, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { filter, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
 import { MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
@@ -54,7 +54,7 @@ export class ProofRepository {
     return defer(() => Filesystem.readFile({
       path: `${this.rawFileFolderName}/${proof.hash}.${proof.mimeType.extension}`,
       directory: this.rawFileDir
-    })).pipe(map(result => result.data));
+    })).pipe(pluck('data'));
   }
 
   /**
@@ -70,7 +70,7 @@ export class ProofRepository {
         directory: this.rawFileDir,
         recursive: true
       })),
-      map(result => result.uri)
+      pluck('uri')
     );
   }
 

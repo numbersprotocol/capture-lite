@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { first, pluck } from 'rxjs/operators';
 import { CapacitorProvider } from 'src/app/services/collector/information/capacitor-provider/capacitor-provider';
 import { DefaultSignatureProvider } from 'src/app/services/collector/signature/default-provider/default-provider';
 import { LanguageService } from 'src/app/services/language/language.service';
@@ -25,7 +25,7 @@ export class SettingsPage {
   readonly privateKey$ = DefaultSignatureProvider.getPrivateKey$();
   readonly version$ = defer(() => Device.getInfo()).pipe(
     first(),
-    map(deviceInfo => deviceInfo.appVersion)
+    pluck('appVersion')
   );
 
   constructor(

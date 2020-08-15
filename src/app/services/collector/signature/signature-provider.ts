@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { pluck, switchMap } from 'rxjs/operators';
 import { Proof } from '../../data/proof/proof';
 import { Signature } from '../../data/signature/signature';
 import { SignatureRepository } from '../../data/signature/signature-repository.service';
@@ -18,7 +18,7 @@ export abstract class SignatureProvider {
     return this.serializationService.stringify$(proof).pipe(
       switchMap(serialized => this.provide$(proof, serialized)),
       switchMap(signature => this.signatureRepository.add$(signature)),
-      map(signatures => signatures[0])
+      pluck(0)
     );
   }
 

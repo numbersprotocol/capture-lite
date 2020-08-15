@@ -14,4 +14,8 @@ export class SamplePublisher extends Publisher {
       tap(_ => console.log(`Finish publishing ${proof.hash} from ${this.name}.`))
     );
   }
+
+  isEnabled$() {
+    return of(true);
+  }
 }
