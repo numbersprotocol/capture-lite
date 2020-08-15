@@ -4,7 +4,7 @@ import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
-import { catchError, switchMapTo, tap } from 'rxjs/operators';
+import { catchError, switchMapTo } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 
@@ -16,9 +16,7 @@ import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/nu
 })
 export class NumbersStoragePage {
 
-  readonly isEnabled$ = this.numbersStorageApi.isEnabled$().pipe(
-    tap(v => console.log(v))
-  );
+  readonly isEnabled$ = this.numbersStorageApi.isEnabled$();
 
   constructor(
     private readonly router: Router,

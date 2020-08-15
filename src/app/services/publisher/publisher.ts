@@ -32,5 +32,7 @@ export abstract class Publisher {
     );
   }
 
+  abstract isEnabled$(): Observable<boolean>;
+
   protected abstract run$(proof: Proof): Observable<void>;
 }
