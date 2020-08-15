@@ -10,6 +10,7 @@ import { InformationRepository } from './services/data/information/information-r
 import { SignatureRepository } from './services/data/signature/signature-repository.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
+import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-storage-api.service';
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { SerializationService } from './services/serialization/serialization.service';
@@ -32,6 +33,7 @@ export class AppComponent {
     private readonly signatureRepository: SignatureRepository,
     private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService,
+    private readonly numbersStorageApi: NumbersStorageApi,
     langaugeService: LanguageService
   ) {
     this.initializeApp();
@@ -58,7 +60,7 @@ export class AppComponent {
 
   initializePublisher() {
     this.publishersAlert.addPublisher(
-      new NumbersStoragePublisher(this.translocoService, this.notificationService)
+      new NumbersStoragePublisher(this.translocoService, this.notificationService, this.numbersStorageApi)
     );
   }
 }
