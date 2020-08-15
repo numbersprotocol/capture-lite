@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
-import { forkJoin, of, zip } from 'rxjs';
-import { first, map, switchMap } from 'rxjs/operators';
+import { from, of, zip } from 'rxjs';
+import { filter, first, pluck, switchMap, toArray } from 'rxjs/operators';
 import { Proof } from '../../data/proof/proof';
 import { Publisher } from '../publisher';
 
@@ -45,14 +45,12 @@ export class PublishersAlert {
     );
   }
 
-  // XXX: Use toArray to replace forkJoin in many places!!
-  // https://stackoverflow.com/questions/52156063/how-to-filter-out-observable-values-based-on-observable-property-of-each-value
   private getEnabledPublishers$() {
-    return forkJoin(this.publishers.map(publisher => zip(
-      of(publisher),
-      publisher.isEnabled$().pipe(first())
-    ))).pipe(
-      map(publishersWithisEnabled => publishersWithisEnabled.filter(v => v[1]).map(v => v[0]))
+    return from(this.publishers).pipe(
+      switchMap(publisher => zip(of(publisher), publisher.isEnabled$().pipe(first()))),
+      filter(([_, isEnabled]) => isEnabled),
+      pluck(0),
+      toArray()
     );
   }
 

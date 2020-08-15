@@ -4,7 +4,7 @@ import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
-import { first, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { first, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
@@ -28,8 +28,8 @@ export class ProofPage {
     isNonNullable()
   );
   readonly rawBase64$ = this.proof$.pipe(switchMap(proof => this.proofRepository.getRawFile$(proof)));
-  readonly hash$ = this.proof$.pipe(map(proof => proof.hash));
-  readonly mimeType$ = this.proof$.pipe(map(proof => proof.mimeType.type));
+  readonly hash$ = this.proof$.pipe(pluck('hash'));
+  readonly mimeType$ = this.proof$.pipe(pluck('mimeType', 'type'));
   readonly timestamp$ = this.proof$.pipe(map(proof => new Date(proof.timestamp)));
   readonly caption$ = this.proof$.pipe(
     switchMap(proof => this.captionRepository.getByProof$(proof)),

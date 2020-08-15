@@ -1,6 +1,6 @@
 import { FilesystemDirectory, FilesystemEncoding, Plugins } from '@capacitor/core';
-import { BehaviorSubject, defer, Observable, of } from 'rxjs';
-import { catchError, map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { BehaviorSubject, defer, from, Observable, of } from 'rxjs';
+import { catchError, concatMap, map, mapTo, pluck, switchMap, switchMapTo, tap, toArray } from 'rxjs/operators';
 import { sha256$ } from '../crypto/crypto';
 import { forkJoinWithDefault } from '../rx-operators';
 
@@ -18,9 +18,11 @@ export class Storage<T extends object> {
   refresh$() {
     return this.makeNameDir$().pipe(
       switchMapTo(this.readNameDir$()),
-      map(result => result.files),
-      switchMap(fileNames => forkJoinWithDefault(fileNames.map(fileName => this.readFile$(fileName)))),
-      map(results => results.map(result => JSON.parse(result.data) as T)),
+      pluck('files'),
+      switchMap(fileNames => from(fileNames)),
+      concatMap(fileName => this.readFile$(fileName)),
+      map(result => JSON.parse(result.data) as T),
+      toArray(),
       tap(tuples => this.tuples$.next(tuples))
     );
   }
