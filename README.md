@@ -78,6 +78,7 @@ npm run lint
 ### Contribution
 
 * The committed codes should pass all GitHub workflows.
+* Avoid using getters/setters in TypeScript so [the linter for RxJS can correctly identify the unsafe scope](https://github.com/cartant/rxjs-tslint-rules#rxjs-no-unsafe-scope).
 
 ### Platform
 
