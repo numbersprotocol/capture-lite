@@ -17,6 +17,8 @@ import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/nu
 export class NumbersStoragePage {
 
   readonly isEnabled$ = this.numbersStorageApi.isEnabled$();
+  readonly userName$ = this.numbersStorageApi.userName$;
+  readonly email$ = this.numbersStorageApi.email$;
 
   constructor(
     private readonly router: Router,

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { zip } from 'rxjs';
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { base64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { baseUrl } from './secret';
@@ -9,7 +9,9 @@ import { baseUrl } from './secret';
 const preference = PreferenceManager.NUMBERS_STORAGE_PUBLISHER_PREF;
 const enum PrefKeys {
   Enabled = 'enabled',
-  AuthToken = 'authToken'
+  AuthToken = 'authToken',
+  UserName = 'userName',
+  Email = 'email'
 }
 
 @Injectable({
@@ -23,6 +25,14 @@ export class NumbersStorageApi {
 
   isEnabled$() {
     return preference.getBoolean$(PrefKeys.Enabled);
+  }
+
+  get userName$() {
+    return preference.getString$(PrefKeys.UserName);
+  }
+
+  get email$() {
+    return preference.getString$(PrefKeys.Email);
   }
 
   createUser$(
@@ -45,8 +55,21 @@ export class NumbersStorageApi {
     formData.append('email', email);
     formData.append('password', password);
     return this.httpClient.post<TokenCreate>(`${baseUrl}/auth/token/login/`, formData).pipe(
-      switchMap(tokenCreate => preference.setString$(PrefKeys.AuthToken, `token ${tokenCreate.auth_token}`)),
-      switchMapTo(preference.setBoolean$(PrefKeys.Enabled, true))
+      pluck('auth_token'),
+      concatMap(authToken => preference.setString$(PrefKeys.AuthToken, `token ${authToken}`)),
+      concatMapTo(this.getUserInformation$()),
+      concatMap(user => zip(
+        preference.setString$(PrefKeys.UserName, user.username),
+        preference.setString$(PrefKeys.Email, user.email)
+      )),
+      concatMapTo(preference.setBoolean$(PrefKeys.Enabled, true))
+    );
+  }
+
+  getUserInformation$() {
+    return preference.getString$(PrefKeys.AuthToken).pipe(
+      map(authToken => new HttpHeaders({ Authorization: authToken })),
+      switchMap(headers => this.httpClient.get<User>(`${baseUrl}/auth/users/me/`, { headers }))
     );
   }
 
