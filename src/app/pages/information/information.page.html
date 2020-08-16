@@ -1,75 +1,75 @@
 <ion-header *transloco="let t">
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-button [routerLink]="['/proof', {hash: (hash$ | async)}]" routerDirection="back">
-                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <ion-title>{{ t('informationDetails') }}</ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="['/proof', {hash: (hash$ | async)}]" routerDirection="back">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ t('informationDetails') }}</ion-title>
+  </ion-toolbar>
 </ion-header>
 <ion-content *transloco="let t">
-    <ion-item>
-        <ion-slides pager>
-            <ion-slide *ngFor="let locationInfo of (locationInformation$ | async)">
-                <ion-card class="slide-card">
-                    <ion-card-header>
-                        <ion-card-title>{{ t('location') }}</ion-card-title>
-                    </ion-card-header>
-                    <ion-card-content>
-                        <ion-list lines="none" *ngFor="let information of locationInfo.informationList">
-                            <ion-item>
-                                <ion-label class="ion-text-wrap">
-                                    <h3>{{information.name}}</h3>
-                                    <p>{{information.value}}</p>
-                                </ion-label>
-                            </ion-item>
-                        </ion-list>
-                    </ion-card-content>
-                </ion-card>
-            </ion-slide>
-        </ion-slides>
-    </ion-item>
-    <ion-item>
-        <ion-slides pager>
-            <ion-slide *ngFor="let hashInfo of (hashInformation$ | async)">
-                <ion-card class="slide-card">
-                    <ion-card-header>
-                        <ion-card-title>{{ t('hash') }}</ion-card-title>
-                    </ion-card-header>
-                    <ion-card-content>
-                        <ion-list lines="none" *ngFor="let information of hashInfo.informationList">
-                            <ion-item>
-                                <ion-label class="ion-text-wrap">
-                                    <h3>{{information.name}}</h3>
-                                    <p>{{information.value}}</p>
-                                </ion-label>
-                            </ion-item>
-                        </ion-list>
-                    </ion-card-content>
-                </ion-card>
-            </ion-slide>
-        </ion-slides>
-    </ion-item>
-    <ion-item>
-        <ion-slides pager>
-            <ion-slide *ngFor="let otherInfo of (otherInformation$ | async)">
-                <ion-card class="slide-card">
-                    <ion-card-header>
-                        <ion-card-title>{{ t('other') }}</ion-card-title>
-                    </ion-card-header>
-                    <ion-card-content>
-                        <ion-list lines="none" *ngFor="let information of otherInfo.informationList">
-                            <ion-item>
-                                <ion-label class="ion-text-wrap">
-                                    <h3>{{information.name}}</h3>
-                                    <p>{{information.value}}</p>
-                                </ion-label>
-                            </ion-item>
-                        </ion-list>
-                    </ion-card-content>
-                </ion-card>
-            </ion-slide>
-        </ion-slides>
-    </ion-item>
+  <ion-item>
+    <ion-slides pager>
+      <ion-slide *ngFor="let locationInfo of (locationInformation$ | async)">
+        <ion-card class="slide-card">
+          <ion-card-header>
+            <ion-card-title>{{ t('location') }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="none" *ngFor="let information of locationInfo.informationList">
+              <ion-item>
+                <ion-label class="ion-text-wrap">
+                  <h3>{{information.name}}</h3>
+                  <p>{{information.value}}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </ion-item>
+  <ion-item>
+    <ion-slides pager>
+      <ion-slide *ngFor="let hashInfo of (hashInformation$ | async)">
+        <ion-card class="slide-card">
+          <ion-card-header>
+            <ion-card-title>{{ t('hash') }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="none" *ngFor="let information of hashInfo.informationList">
+              <ion-item>
+                <ion-label class="ion-text-wrap">
+                  <h3>{{information.name}}</h3>
+                  <p>{{information.value}}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </ion-item>
+  <ion-item>
+    <ion-slides pager>
+      <ion-slide *ngFor="let otherInfo of (otherInformation$ | async)">
+        <ion-card class="slide-card">
+          <ion-card-header>
+            <ion-card-title>{{ t('other') }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="none" *ngFor="let information of otherInfo.informationList">
+              <ion-item>
+                <ion-label class="ion-text-wrap">
+                  <h3>{{information.name}}</h3>
+                  <p>{{information.value}}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </ion-item>
 </ion-content>

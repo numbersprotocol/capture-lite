@@ -7,13 +7,13 @@ import { InformationPageRoutingModule } from './information-routing.module';
 import { InformationPage } from './information.page';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        IonicModule,
-        InformationPageRoutingModule,
-        TranslocoModule
-    ],
-    declarations: [InformationPage]
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    InformationPageRoutingModule,
+    TranslocoModule
+  ],
+  declarations: [InformationPage]
 })
 export class InformationPageModule { }
