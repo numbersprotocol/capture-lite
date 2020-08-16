@@ -4,7 +4,7 @@ import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
-import { catchError, switchMapTo } from 'rxjs/operators';
+import { catchError, concatMapTo } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 
@@ -31,7 +31,7 @@ export class NumbersStoragePage {
 
   logout() {
     const action$ = this.numbersStorageApi.logout$().pipe(
-      switchMapTo(defer(() => this.router.navigate(['login'], { relativeTo: this.route }))),
+      concatMapTo(defer(() => this.router.navigate(['login'], { relativeTo: this.route }))),
       catchError(err => this.toastController
         .create({ message: JSON.stringify(err.error), duration: 4000 })
         .then(toast => toast.present())

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { zip } from 'rxjs';
-import { concatMap, concatMapTo, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, map, pluck } from 'rxjs/operators';
 import { base64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { baseUrl } from './secret';
@@ -69,15 +69,15 @@ export class NumbersStorageApi {
   getUserInformation$() {
     return preference.getString$(PrefKeys.AuthToken).pipe(
       map(authToken => new HttpHeaders({ Authorization: authToken })),
-      switchMap(headers => this.httpClient.get<User>(`${baseUrl}/auth/users/me/`, { headers }))
+      concatMap(headers => this.httpClient.get<User>(`${baseUrl}/auth/users/me/`, { headers }))
     );
   }
 
   logout$() {
     return preference.setBoolean$(PrefKeys.Enabled, false).pipe(
-      switchMapTo(preference.getString$(PrefKeys.AuthToken)),
+      concatMapTo(preference.getString$(PrefKeys.AuthToken)),
       map(authToken => new HttpHeaders({ Authorization: authToken })),
-      switchMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, new FormData(), { headers }))
+      concatMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, new FormData(), { headers }))
     );
   }
 
@@ -90,8 +90,8 @@ export class NumbersStorageApi {
     tag: string
   ) {
     return preference.getString$(PrefKeys.AuthToken).pipe(
-      switchMap(headers => zip(base64ToBlob$(rawFileBase64), headers)),
-      switchMap(([rawFile, authToken]) => {
+      concatMap(headers => zip(base64ToBlob$(rawFileBase64), headers)),
+      concatMap(([rawFile, authToken]) => {
         const headers = new HttpHeaders({ Authorization: authToken });
         const formData = new FormData();
         formData.append('file', rawFile);
