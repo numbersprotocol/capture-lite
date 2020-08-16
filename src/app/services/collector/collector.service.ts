@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { catchError, map, pluck, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
@@ -39,7 +40,7 @@ export class CollectorService {
       map(uri => fileNameWithoutExtension(uri)),
       // Store the media file.
       switchMap(hash => this.proofRepository.add$({ hash, mimeType, timestamp: Date.now() })),
-      map(proofs => proofs[0])
+      pluck(0)
     );
   }
 
@@ -57,7 +58,11 @@ export class CollectorService {
         this.translocoService.translate('signingProof')
       )),
       switchMapTo(forkJoinWithDefault([...this.signatureProviders].map(provider => provider.signAndStore$(proof)))),
-      tap(_ => this.notificationService.cancel(notificationId))
+      tap(_ => this.notificationService.cancel(notificationId)),
+      catchError(error => {
+        this.notificationService.notifyError(notificationId, error);
+        return EMPTY;
+      })
     );
   }
 

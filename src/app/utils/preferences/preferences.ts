@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core';
 import { BehaviorSubject, defer, Observable, of } from 'rxjs';
-import { concatMapTo, map, mapTo, switchMap, tap } from 'rxjs/operators';
+import { concatMapTo, map, mapTo, pluck, switchMap, tap } from 'rxjs/operators';
 
 const { Storage } = Plugins;
 
@@ -11,7 +11,7 @@ export class Preferences {
   private readonly subjects = new Map<string, BehaviorSubject<any>>();
 
   get$<T>(key: string, defaultValue: T, converter: (str: string) => T = JSON.parse): Observable<T> {
-    return of(this.subjects.has(key)).pipe(
+    return defer(() => of(this.subjects.has(key))).pipe(
       switchMap(existed => {
         if (!existed) { return this._get$(key, defaultValue, converter); }
         return of(existed);
@@ -23,7 +23,7 @@ export class Preferences {
 
   private _get$<T>(key: string, defaultValue: T, converter: (str: string) => T): Observable<T> {
     return defer(() => Storage.get({ key: `${this.name}_${key}` })).pipe(
-      map(ret => ret.value),
+      pluck('value'),
       map(value => (value && value !== '[null]') ? converter(value) : defaultValue),
       tap(converted => this.updateSubjects(key, converted))
     );

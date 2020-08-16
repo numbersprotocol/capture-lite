@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
-import { concatMap, map, mapTo, switchMap } from 'rxjs/operators';
+import { concatMap, map, mapTo } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
@@ -19,7 +19,7 @@ export class StoragePage {
   private readonly proofs$ = this.proofRepository.getAll$();
   readonly proofsWithRaw$ = this.proofs$.pipe(
     concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getRawFile$(proof)))),
-    switchMap(base64Strings => zip(this.proofs$, of(base64Strings))),
+    concatMap(base64Strings => zip(this.proofs$, of(base64Strings))),
     map(([proofs, base64Strings]) => proofs.map((proof, index) => ({
       proof,
       rawBase64: base64Strings[index]
