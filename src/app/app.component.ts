@@ -6,7 +6,9 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorProvider } from './services/collector/information/capacitor-provider/capacitor-provider';
 import { DefaultSignatureProvider } from './services/collector/signature/default-provider/default-provider';
+import { CaptionRepository } from './services/data/caption/caption-repository.service';
 import { InformationRepository } from './services/data/information/information-repository.service';
+import { ProofRepository } from './services/data/proof/proof-repository.service';
 import { SignatureRepository } from './services/data/signature/signature-repository.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
@@ -29,8 +31,10 @@ export class AppComponent {
     private readonly collectorService: CollectorService,
     private readonly publishersAlert: PublishersAlert,
     private readonly serializationService: SerializationService,
+    private readonly proofRepository: ProofRepository,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
+    private readonly captionRepository: CaptionRepository,
     private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService,
     private readonly numbersStorageApi: NumbersStorageApi,
@@ -60,7 +64,14 @@ export class AppComponent {
 
   initializePublisher() {
     this.publishersAlert.addPublisher(
-      new NumbersStoragePublisher(this.translocoService, this.notificationService, this.numbersStorageApi)
+      new NumbersStoragePublisher(
+        this.translocoService,
+        this.notificationService,
+        this.proofRepository,
+        this.informationRepository,
+        this.signatureRepository,
+        this.captionRepository,
+        this.numbersStorageApi)
     );
   }
 }

@@ -1,10 +1,14 @@
 import { TranslocoService } from '@ngneat/transloco';
-import { Observable, of } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { Observable, zip } from 'rxjs';
+import { concatMap, first, mapTo, tap } from 'rxjs/operators';
+import { CaptionRepository } from '../../data/caption/caption-repository.service';
+import { InformationRepository } from '../../data/information/information-repository.service';
 import { Proof } from '../../data/proof/proof';
+import { ProofRepository } from '../../data/proof/proof-repository.service';
+import { SignatureRepository } from '../../data/signature/signature-repository.service';
 import { NotificationService } from '../../notification/notification.service';
 import { Publisher } from '../publisher';
-import { NumbersStorageApi } from './numbers-storage-api.service';
+import { NumbersStorageApi, TargetProvider } from './numbers-storage-api.service';
 
 export class NumbersStoragePublisher extends Publisher {
 
@@ -13,6 +17,10 @@ export class NumbersStoragePublisher extends Publisher {
   constructor(
     translocoService: TranslocoService,
     notificationService: NotificationService,
+    private readonly proofRepository: ProofRepository,
+    private readonly informationRepository: InformationRepository,
+    private readonly signatureRepository: SignatureRepository,
+    private readonly captionRepository: CaptionRepository,
     private readonly numbersStorageApi: NumbersStorageApi
   ) {
     super(translocoService, notificationService);
@@ -23,10 +31,23 @@ export class NumbersStoragePublisher extends Publisher {
   }
 
   run$(proof: Proof): Observable<void> {
-    return of(void 0).pipe(
-      tap(_ => console.log(`Start publishing ${proof.hash} from ${this.name}.`)),
-      delay(3000),
-      tap(_ => console.log(`Finish publishing ${proof.hash} from ${this.name}.`))
+    return zip(
+      this.proofRepository.getRawFile$(proof),
+      this.informationRepository.getByProof$(proof),
+      this.signatureRepository.getByProof$(proof),
+      this.captionRepository.getByProof$(proof),
+    ).pipe(
+      first(),
+      tap(v => console.log(v)),
+      concatMap(([rawFileBase64, information, signatures, captions]) => this.numbersStorageApi.createMedia$(
+        `data:${proof.mimeType.type};base64,${rawFileBase64}`,
+        JSON.stringify(information),
+        TargetProvider.Numbers,
+        JSON.stringify(captions[0]),
+        JSON.stringify(signatures),
+        'capture-lite'
+      )),
+      mapTo(void 0)
     );
   }
 }

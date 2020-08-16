@@ -1,10 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { zip } from 'rxjs';
-import { concatMap, concatMapTo, map, pluck } from 'rxjs/operators';
+import { of, zip } from 'rxjs';
+import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
 import { base64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { baseUrl } from './secret';
+
+export const enum TargetProvider {
+  Numbers = 'Numbers'
+}
 
 const preference = PreferenceManager.NUMBERS_STORAGE_PUBLISHER_PREF;
 const enum PrefKeys {
@@ -27,11 +31,11 @@ export class NumbersStorageApi {
     return preference.getBoolean$(PrefKeys.Enabled);
   }
 
-  get userName$() {
+  getUserName$() {
     return preference.getString$(PrefKeys.UserName);
   }
 
-  get email$() {
+  getEmail$() {
     return preference.getString$(PrefKeys.Email);
   }
 
@@ -68,6 +72,7 @@ export class NumbersStorageApi {
 
   getUserInformation$() {
     return preference.getString$(PrefKeys.AuthToken).pipe(
+      first(),
       map(authToken => new HttpHeaders({ Authorization: authToken })),
       concatMap(headers => this.httpClient.get<User>(`${baseUrl}/auth/users/me/`, { headers }))
     );
@@ -76,6 +81,7 @@ export class NumbersStorageApi {
   logout$() {
     return preference.setBoolean$(PrefKeys.Enabled, false).pipe(
       concatMapTo(preference.getString$(PrefKeys.AuthToken)),
+      first(),
       map(authToken => new HttpHeaders({ Authorization: authToken })),
       concatMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, new FormData(), { headers }))
     );
@@ -84,13 +90,14 @@ export class NumbersStorageApi {
   createMedia$(
     rawFileBase64: string,
     information: string,
-    targetProvider: string,
+    targetProvider: TargetProvider,
     caption: string,
     signatures: string,
     tag: string
   ) {
     return preference.getString$(PrefKeys.AuthToken).pipe(
-      concatMap(headers => zip(base64ToBlob$(rawFileBase64), headers)),
+      first(),
+      concatMap(authToken => zip(base64ToBlob$(rawFileBase64), of(authToken))),
       concatMap(([rawFile, authToken]) => {
         const headers = new HttpHeaders({ Authorization: authToken });
         const formData = new FormData();
