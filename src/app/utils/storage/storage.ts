@@ -35,8 +35,8 @@ export class Storage<T extends object> {
     })).pipe(
       mapTo(void 0),
       catchError((err: Error) => {
-        if (err.message === 'Current directory does already exist.') { return of(void 0); }
-        throw err;
+        console.log(`${this.directory}/${this.name}: ${err.message}`);
+        return of(void 0);
       })
     );
   }

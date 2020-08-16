@@ -17,9 +17,7 @@ describe('AppComponent', () => {
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [getTranslocoModule()],
-      providers: [
-        { provide: Platform, useValue: platformSpy }
-      ],
+      providers: [{ provide: Platform, useValue: platformSpy }],
     }).compileComponents();
   }));
 
