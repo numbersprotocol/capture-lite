@@ -28,7 +28,8 @@ export abstract class Publisher {
           this.translocoService.translate('proofPublished'),
           this.translocoService.translate('message.proofPublished', { hash: proof.hash, publisherName: this.name })
         ))
-      )
+      ),
+      error => this.notificationService.notifyError(notificationId, error)
     );
   }
 
