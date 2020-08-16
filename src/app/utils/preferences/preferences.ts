@@ -11,7 +11,7 @@ export class Preferences {
   private readonly subjects = new Map<string, BehaviorSubject<any>>();
 
   get$<T>(key: string, defaultValue: T, converter: (str: string) => T = JSON.parse): Observable<T> {
-    return of(this.subjects.has(key)).pipe(
+    return defer(() => of(this.subjects.has(key))).pipe(
       switchMap(existed => {
         if (!existed) { return this._get$(key, defaultValue, converter); }
         return of(existed);
