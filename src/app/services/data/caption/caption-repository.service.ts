@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { concatMap, concatMapTo, first, map, switchMap } from 'rxjs/operators';
+import { isNonNullable } from 'src/app/utils/rx-operators';
 import { Storage } from 'src/app/utils/storage/storage';
 import { Proof } from '../proof/proof';
 import { Caption } from './caption';
@@ -16,7 +17,7 @@ export class CaptionRepository {
 
   getByProof$(proof: Proof) {
     return this.captionStorage.getAll$().pipe(
-      map(captions => captions.filter(caption => caption.proofHash === proof.hash))
+      map(captions => captions.find(caption => caption.proofHash === proof.hash))
     );
   }
 
@@ -35,7 +36,8 @@ export class CaptionRepository {
   removeByProof$(proof: Proof) {
     return this.getByProof$(proof).pipe(
       first(),
-      switchMap(captions => this.remove$(...captions))
+      isNonNullable(),
+      switchMap(caption => this.remove$(caption))
     );
   }
 

@@ -57,6 +57,7 @@
   "required": "Required",
   "tooShort": "Too Short",
   "talkingToTheServer": "Talking to the Server",
+  "unknownError": "Unknown Error",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "publishingProof": "Publishing proof {{hash}} to {{publisherName}}.",

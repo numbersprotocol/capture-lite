@@ -39,11 +39,11 @@ export class NumbersStoragePublisher extends Publisher {
     ).pipe(
       first(),
       tap(v => console.log(v)),
-      concatMap(([rawFileBase64, information, signatures, captions]) => this.numbersStorageApi.createMedia$(
+      concatMap(([rawFileBase64, information, signatures, caption]) => this.numbersStorageApi.createMedia$(
         `data:${proof.mimeType.type};base64,${rawFileBase64}`,
         JSON.stringify(information),
         TargetProvider.Numbers,
-        JSON.stringify(captions[0]),
+        JSON.stringify(caption ? caption : ''),
         JSON.stringify(signatures),
         'capture-lite'
       )),

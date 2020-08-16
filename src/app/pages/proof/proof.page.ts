@@ -33,9 +33,9 @@ export class ProofPage {
   readonly timestamp$ = this.proof$.pipe(map(proof => new Date(proof.timestamp)));
   readonly caption$ = this.proof$.pipe(
     switchMap(proof => this.captionRepository.getByProof$(proof)),
-    map(captions => {
-      if (captions.length === 0 || captions[0].text.length === 0) { return ''; }
-      return captions[0].text;
+    map(caption => {
+      if (caption && caption.text.length > 0) { return caption.text; }
+      return '';
     })
   );
   readonly providersWithInformationList$ = this.proof$.pipe(
