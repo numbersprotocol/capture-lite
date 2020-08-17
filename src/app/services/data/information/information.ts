@@ -14,6 +14,6 @@ export interface Information {
   readonly provider: string;
   readonly name: string;
   readonly value: string;
-  readonly important: Importance;
+  readonly importance: Importance;
   readonly type: InformationType;
 }

@@ -49,7 +49,7 @@ export class ProofPage {
         provider,
         informationList: informationList.filter(
           information => information.provider === provider
-            && information.important === Importance.High
+            && information.importance === Importance.High
         )
       }));
     })

@@ -66,91 +66,91 @@ export class CapacitorProvider extends InformationProvider {
             provider: this.name,
             name: this.translocoService.translate('uuid'),
             value: String(deviceInfo.uuid),
-            important: Importance.High,
+            importance: Importance.High,
             type: InformationType.Other
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceName'),
             value: String(deviceInfo.name),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceModel'),
             value: String(deviceInfo.model),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('devicePlatform'),
             value: String(deviceInfo.platform),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('appVersion'),
             value: String(deviceInfo.appVersion),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('appVersionCode'),
             value: String(deviceInfo.appBuild),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('operatingSystem'),
             value: String(deviceInfo.operatingSystem),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('osVersion'),
             value: String(deviceInfo.osVersion),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceManufacturer'),
             value: String(deviceInfo.manufacturer),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('runningOnVm'),
             value: String(deviceInfo.isVirtual),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('usedMemory'),
             value: String(deviceInfo.memUsed),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('freeDiskSpace'),
             value: String(deviceInfo.diskFree),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('totalDiskSpace'),
             value: String(deviceInfo.diskTotal),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           });
         }
@@ -160,14 +160,14 @@ export class CapacitorProvider extends InformationProvider {
             provider: this.name,
             name: this.translocoService.translate('batteryLevel'),
             value: String(batteryInfo.batteryLevel),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('batteryCharging'),
             value: String(batteryInfo.isCharging),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           });
         }
@@ -177,7 +177,7 @@ export class CapacitorProvider extends InformationProvider {
             provider: this.name,
             name: this.translocoService.translate('deviceLanguageCode'),
             value: String(languageCode.value),
-            important: Importance.Low,
+            importance: Importance.Low,
             type: InformationType.Device
           });
         }
@@ -187,7 +187,7 @@ export class CapacitorProvider extends InformationProvider {
             provider: this.name,
             name: this.translocoService.translate('location'),
             value: `(${geolocationPosition.coords.latitude}, ${geolocationPosition.coords.longitude})`,
-            important: Importance.High,
+            importance: Importance.High,
             type: InformationType.Location
           });
         }
