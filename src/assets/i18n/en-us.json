@@ -50,6 +50,9 @@
   "collectDeviceInfo": "Collect Device Info",
   "collectLocationInfo": "Collect Location Info",
   "unknownError": "Unknown Error",
+  "low": "Low",
+  "high": "High",
+  "device": "Device",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "publishingProof": "Publishing proof {{hash}} to {{publisherName}}.",
