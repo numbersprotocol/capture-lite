@@ -2,7 +2,7 @@ import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { defer, Observable, of, zip } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
-import { Information } from 'src/app/services/data/information/information';
+import { Importance, Information, InformationType } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { Proof } from 'src/app/services/data/proof/proof';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
@@ -66,92 +66,92 @@ export class CapacitorProvider extends InformationProvider {
             provider: this.name,
             name: this.translocoService.translate('uuid'),
             value: String(deviceInfo.uuid),
-            important: true,
-            type: 2
+            important: Importance.High,
+            type: InformationType.Other
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceName'),
             value: String(deviceInfo.name),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceModel'),
             value: String(deviceInfo.model),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('devicePlatform'),
             value: String(deviceInfo.platform),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('appVersion'),
             value: String(deviceInfo.appVersion),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('appVersionCode'),
             value: String(deviceInfo.appBuild),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('operatingSystem'),
             value: String(deviceInfo.operatingSystem),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('osVersion'),
             value: String(deviceInfo.osVersion),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('deviceManufacturer'),
             value: String(deviceInfo.manufacturer),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('runningOnVm'),
             value: String(deviceInfo.isVirtual),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('usedMemory'),
             value: String(deviceInfo.memUsed),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('freeDiskSpace'),
             value: String(deviceInfo.diskFree),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('totalDiskSpace'),
             value: String(deviceInfo.diskTotal),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           });
         }
         if (batteryInfo !== undefined) {
@@ -160,15 +160,15 @@ export class CapacitorProvider extends InformationProvider {
             provider: this.name,
             name: this.translocoService.translate('batteryLevel'),
             value: String(batteryInfo.batteryLevel),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.name,
             name: this.translocoService.translate('batteryCharging'),
             value: String(batteryInfo.isCharging),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           });
         }
         if (languageCode !== undefined) {
@@ -177,8 +177,8 @@ export class CapacitorProvider extends InformationProvider {
             provider: this.name,
             name: this.translocoService.translate('deviceLanguageCode'),
             value: String(languageCode.value),
-            important: false,
-            type: 0
+            important: Importance.Low,
+            type: InformationType.Device
           });
         }
         if (geolocationPosition !== undefined) {
@@ -187,8 +187,8 @@ export class CapacitorProvider extends InformationProvider {
             provider: this.name,
             name: this.translocoService.translate('location'),
             value: `(${geolocationPosition.coords.latitude}, ${geolocationPosition.coords.longitude})`,
-            important: true,
-            type: 1
+            important: Importance.High,
+            type: InformationType.Location
           });
         }
         return informationList;
