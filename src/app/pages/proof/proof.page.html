@@ -58,14 +58,14 @@
     </ion-list-header>
     <ion-item>
       <ion-slides pager>
-        <ion-slide *ngFor="let listinfo of (information$ | async)">
+        <ion-slide>
           <ion-card class="slide-card"
-            *ngFor="let providerWithInformationList of (providersWithInformationList$ | async)">
+            *ngFor="let providerWithInformationList of (providersWithImportantInformation$ | async)">
             <ion-card-header>
               <ion-card-title>{{ providerWithInformationList.provider }}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <ion-list *ngFor="let information of listinfo.informationList">
+              <ion-list *ngFor="let information of providerWithInformationList.informationList">
                 <ion-item>
                   <ion-label class="ion-text-wrap">
                     <h3>{{ information.name }}</h3>
