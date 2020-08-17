@@ -48,8 +48,7 @@ export class ProofPage {
       return [...providers].map(provider => ({
         provider,
         informationList: informationList.filter(
-          information => information.provider === provider
-            && information.importance === Importance.High
+          information => information.provider === provider && information.importance === Importance.High
         )
       }));
     })
@@ -122,10 +121,6 @@ export class ProofPage {
       switchMap(alertElement => alertElement.present()),
       untilDestroyed(this)
     ).subscribe();
-  }
-
-  openInformationPage() {
-    this.router.navigate(['/information']);
   }
 
   private saveCaption(text: string) {

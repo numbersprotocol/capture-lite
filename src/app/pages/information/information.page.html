@@ -16,11 +16,11 @@
           <ion-card-title>{{ t('location') }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <ion-list lines="none" *ngFor="let locationInfo of (locationInformation$ | async)">
+          <ion-list lines="none" *ngFor="let information of (locationInformation$ | async)">
             <ion-item>
               <ion-label class="ion-text-wrap">
-                <h3>{{ locationInfo.name }}</h3>
-                <p>{{ locationInfo.value }}</p>
+                <h3>{{ information.name }}</h3>
+                <p>{{ information.value }}</p>
               </ion-label>
             </ion-item>
           </ion-list>
@@ -35,11 +35,11 @@
           <ion-card-title>{{ t('other') }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <ion-list lines="none" *ngFor="let otherInfo of (otherInformation$ | async)">
+          <ion-list lines="none" *ngFor="let information of (otherInformation$ | async)">
             <ion-item>
               <ion-label class="ion-text-wrap">
-                <h3>{{ otherInfo.name }}</h3>
-                <p>{{ otherInfo.value }}</p>
+                <h3>{{ information.name }}</h3>
+                <p>{{ information.value }}</p>
               </ion-label>
             </ion-item>
           </ion-list>
@@ -54,11 +54,11 @@
           <ion-card-title>{{ t('device') }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <ion-list lines="none" *ngFor="let deviceInfo of (deviceInformation$ | async)">
+          <ion-list lines="none" *ngFor="let information of (deviceInformation$ | async)">
             <ion-item>
               <ion-label class="ion-text-wrap">
-                <h3>{{ deviceInfo.name }}</h3>
-                <p>{{ deviceInfo.value }}</p>
+                <h3>{{ information.name }}</h3>
+                <p>{{ information.value }}</p>
               </ion-label>
             </ion-item>
           </ion-list>
