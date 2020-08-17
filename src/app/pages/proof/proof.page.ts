@@ -40,16 +40,6 @@ export class ProofPage {
       return '';
     })
   );
-  // readonly providersWithInformationList$ = this.proof$.pipe(
-  //   switchMap(proof => this.informationRepository.getByProof$(proof)),
-  //   map(informationList => {
-  //     const providers = new Set(informationList.map(information => information.provider));
-  //     return [...providers].map(provider => ({
-  //       provider,
-  //       informationList: informationList.filter(information => information.provider === provider)
-  //     }));
-  //   })
-  // );
 
   readonly providersWithImportantInformation$ = this.proof$.pipe(
     switchMap(proof => this.informationRepository.getByProof$(proof)),
@@ -64,17 +54,6 @@ export class ProofPage {
       }));
     })
   );
-
-  // readonly information$ = this.proof$.pipe(
-  //   switchMap(proof => this.informationRepository.getByProof$(proof)),
-  //   map(informationList => {
-  //     const importants = new Array(informationList.map(information => information.important));
-  //     return [...importants].map(important => ({
-  //       important,
-  //       informationList: informationList.filter(information => information.important === true)
-  //     }));
-  //   })
-  // );
 
   readonly signatures$ = this.proof$.pipe(
     switchMap(proof => this.signatureRepository.getByProof$(proof))
