@@ -62,6 +62,12 @@ Lint the projects.
 npm run lint
 ```
 
+[Update `cordova-res` (splash screens and launcher icons)](https://capacitorjs.com/docs/guides/splash-screens-and-icons).
+
+``` bash
+cordova-res android --skip-config --copy
+```
+
 ### Contribution
 
 * The committed codes should pass all GitHub workflows.
