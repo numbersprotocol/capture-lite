@@ -68,10 +68,10 @@ export class AppComponent {
         this.translocoService,
         this.notificationService,
         this.proofRepository,
-        this.informationRepository,
         this.signatureRepository,
         this.captionRepository,
-        this.numbersStorageApi)
+        this.numbersStorageApi
+      )
     );
   }
 }

@@ -4,6 +4,9 @@ import { of, zip } from 'rxjs';
 import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
 import { base64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
+import { Proof } from '../../data/proof/proof';
+import { Signature } from '../../data/signature/signature';
+import { SerializationService } from '../../serialization/serialization.service';
 import { baseUrl } from './secret';
 
 export const enum TargetProvider {
@@ -24,7 +27,8 @@ const enum PrefKeys {
 export class NumbersStorageApi {
 
   constructor(
-    private readonly httpClient: HttpClient
+    private readonly httpClient: HttpClient,
+    private readonly serializationService: SerializationService
   ) { }
 
   isEnabled$() {
@@ -89,23 +93,28 @@ export class NumbersStorageApi {
 
   createMedia$(
     rawFileBase64: string,
-    information: string,
+    proof: Proof,
     targetProvider: TargetProvider,
     caption: string,
-    signatures: string,
+    signatures: Signature[],
     tag: string
   ) {
     return preference.getString$(PrefKeys.AuthToken).pipe(
       first(),
-      concatMap(authToken => zip(base64ToBlob$(rawFileBase64), of(authToken))),
-      concatMap(([rawFile, authToken]) => {
+      concatMap(authToken => zip(
+        base64ToBlob$(rawFileBase64),
+        this.serializationService.stringify$(proof),
+        of(authToken)
+      )),
+      concatMap(([rawFile, information, authToken]) => {
         const headers = new HttpHeaders({ Authorization: authToken });
         const formData = new FormData();
         formData.append('file', rawFile);
+        console.log(information);
         formData.append('meta', information);
         formData.append('target_provider', targetProvider);
         formData.append('caption', caption);
-        formData.append('signature', signatures);
+        formData.append('signature', JSON.stringify(signatures));
         formData.append('tag', tag);
         return this.httpClient.post(`${baseUrl}/api/v1/media/`, formData, { headers });
       })

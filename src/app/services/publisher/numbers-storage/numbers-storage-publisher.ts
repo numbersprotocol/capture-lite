@@ -1,8 +1,7 @@
 import { TranslocoService } from '@ngneat/transloco';
 import { Observable, zip } from 'rxjs';
-import { concatMap, first, mapTo, tap } from 'rxjs/operators';
+import { concatMap, first, mapTo } from 'rxjs/operators';
 import { CaptionRepository } from '../../data/caption/caption-repository.service';
-import { InformationRepository } from '../../data/information/information-repository.service';
 import { Proof } from '../../data/proof/proof';
 import { ProofRepository } from '../../data/proof/proof-repository.service';
 import { SignatureRepository } from '../../data/signature/signature-repository.service';
@@ -18,7 +17,6 @@ export class NumbersStoragePublisher extends Publisher {
     translocoService: TranslocoService,
     notificationService: NotificationService,
     private readonly proofRepository: ProofRepository,
-    private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly numbersStorageApi: NumbersStorageApi
@@ -33,18 +31,16 @@ export class NumbersStoragePublisher extends Publisher {
   run$(proof: Proof): Observable<void> {
     return zip(
       this.proofRepository.getRawFile$(proof),
-      this.informationRepository.getByProof$(proof),
       this.signatureRepository.getByProof$(proof),
       this.captionRepository.getByProof$(proof),
     ).pipe(
       first(),
-      tap(v => console.log(v)),
-      concatMap(([rawFileBase64, information, signatures, caption]) => this.numbersStorageApi.createMedia$(
+      concatMap(([rawFileBase64, signatures, caption]) => this.numbersStorageApi.createMedia$(
         `data:${proof.mimeType.type};base64,${rawFileBase64}`,
-        JSON.stringify(information),
+        proof,
         TargetProvider.Numbers,
         JSON.stringify(caption ? caption : ''),
-        JSON.stringify(signatures),
+        signatures,
         'capture-lite'
       )),
       mapTo(void 0)
