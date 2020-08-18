@@ -1,7 +1,7 @@
 <ion-header *transloco="let t">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button routerLink=".." routerDirection="back">
+      <ion-button [routerLink]="['/storage']" routerDirection="back">
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -58,20 +58,25 @@
     </ion-list-header>
     <ion-item>
       <ion-slides pager>
-        <ion-slide *ngFor="let providerWithInformationList of (providersWithInformationList$ | async)">
-          <ion-card class="slide-card">
+        <ion-slide>
+          <ion-card class="slide-card"
+            *ngFor="let providerWithInformationList of (providersWithImportantInformation$ | async)">
             <ion-card-header>
               <ion-card-title>{{ providerWithInformationList.provider }}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <ion-list>
-                <ion-item *ngFor="let information of providerWithInformationList.informationList">
+              <ion-list *ngFor="let information of providerWithInformationList.informationList">
+                <ion-item>
                   <ion-label class="ion-text-wrap">
                     <h3>{{ information.name }}</h3>
                     <p>{{ information.value }}</p>
                   </ion-label>
                 </ion-item>
               </ion-list>
+              <section>
+                <ion-button expand="block" [routerLink]="['/information', {hash: (hash$ | async)}]">View All
+                </ion-button>
+              </section>
             </ion-card-content>
           </ion-card>
         </ion-slide>
