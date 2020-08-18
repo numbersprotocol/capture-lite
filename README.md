@@ -75,6 +75,12 @@ Lint the projects.
 npm run lint
 ```
 
+[Update `cordova-res` (splash screens and launcher icons)](https://capacitorjs.com/docs/guides/splash-screens-and-icons).
+
+``` bash
+cordova-res android --skip-config --copy
+```
+
 ### Contribution
 
 * The committed codes should pass all GitHub workflows.
@@ -84,13 +90,6 @@ npm run lint
 
 #### Android
 
-Before running the app with Android Studio, build and sync the dependencies and web assets.
-
-``` bash
-ionic build
-npx cap sync
-```
-
 If your operating system is Linux, set the `linuxAndroidStudioPath` in `capacitor.config.json`. For example,
 
 ``` json
@@ -99,10 +98,23 @@ If your operating system is Linux, set the `linuxAndroidStudioPath` in `capacito
 }
 ```
 
+Before running the app with Android Studio, build and sync the dependencies and web assets.
+
+``` bash
+ionic build
+npx cap sync
+```
+
 Open the project in Android Studio.
 
 ``` bash
 npx cap open android
+```
+
+The script does the same thing for you.
+
+``` bash
+npm run build-android
 ```
 
 ### Architecture
