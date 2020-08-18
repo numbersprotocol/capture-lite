@@ -14,6 +14,9 @@ const routes: Routes = [{
 }, {
   path: 'proof',
   loadChildren: () => import('./pages/proof/proof.module').then(m => m.ProofPageModule)
+}, {
+  path: 'information',
+  loadChildren: () => import('./pages/information/information.module').then(m => m.InformationPageModule)
 }];
 
 @NgModule({

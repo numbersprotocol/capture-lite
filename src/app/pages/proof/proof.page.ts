@@ -7,6 +7,7 @@ import { defer } from 'rxjs';
 import { first, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
+import { Importance } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
@@ -27,6 +28,7 @@ export class ProofPage {
     switchMap(hash => this.proofRepository.getByHash$(hash)),
     isNonNullable()
   );
+
   readonly rawBase64$ = this.proof$.pipe(switchMap(proof => this.proofRepository.getRawFile$(proof)));
   readonly hash$ = this.proof$.pipe(pluck('hash'));
   readonly mimeType$ = this.proof$.pipe(pluck('mimeType', 'type'));
@@ -38,16 +40,20 @@ export class ProofPage {
       return '';
     })
   );
-  readonly providersWithInformationList$ = this.proof$.pipe(
+
+  readonly providersWithImportantInformation$ = this.proof$.pipe(
     switchMap(proof => this.informationRepository.getByProof$(proof)),
     map(informationList => {
       const providers = new Set(informationList.map(information => information.provider));
       return [...providers].map(provider => ({
         provider,
-        informationList: informationList.filter(information => information.provider === provider)
+        informationList: informationList.filter(
+          information => information.provider === provider && information.importance === Importance.High
+        )
       }));
     })
   );
+
   readonly signatures$ = this.proof$.pipe(
     switchMap(proof => this.signatureRepository.getByProof$(proof))
   );
