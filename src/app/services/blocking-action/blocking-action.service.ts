@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { LoadingOptions } from '@ionic/core';
-import { defer, Observable } from 'rxjs';
-import { switchMap, switchMapTo } from 'rxjs/operators';
+import { defer, Observable, of, zip } from 'rxjs';
+import { catchError, map, switchMap, switchMapTo } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,16 +13,21 @@ export class BlockingActionService {
     private readonly loadingController: LoadingController
   ) { }
 
-  run$(action$: Observable<any>, opts: LoadingOptions) {
+  run$<T>(action$: Observable<T>, opts: LoadingOptions) {
     return defer(() => this.loadingController.create(opts)).pipe(
       switchMap(loading => this._run$(action$, loading))
     );
   }
 
-  private _run$(action$: Observable<any>, loading: HTMLIonLoadingElement) {
+  private _run$<T>(action$: Observable<T>, loading: HTMLIonLoadingElement) {
     return defer(() => loading.present()).pipe(
       switchMapTo(action$),
-      switchMapTo(defer(() => loading.dismiss()))
+      catchError(err => {
+        loading.dismiss();
+        throw err;
+      }),
+      switchMap(result => zip(defer(() => loading.dismiss()), of(result))),
+      map(([_, result]) => result)
     );
   }
 }
