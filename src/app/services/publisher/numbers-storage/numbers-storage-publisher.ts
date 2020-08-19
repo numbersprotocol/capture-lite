@@ -36,7 +36,7 @@ export class NumbersStoragePublisher extends Publisher {
     ).pipe(
       first(),
       concatMap(([rawFileBase64, signatures, caption]) => this.numbersStorageApi.createMedia$(
-        `data:${proof.mimeType.type};base64,${rawFileBase64}`,
+        `data:${proof.mimeType};base64,${rawFileBase64}`,
         proof,
         TargetProvider.Numbers,
         JSON.stringify(caption ? caption : ''),

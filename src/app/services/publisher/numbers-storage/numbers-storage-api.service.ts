@@ -110,7 +110,6 @@ export class NumbersStorageApi {
         const headers = new HttpHeaders({ Authorization: authToken });
         const formData = new FormData();
         formData.append('file', rawFile);
-        console.log(information);
         formData.append('meta', information);
         formData.append('target_provider', targetProvider);
         formData.append('caption', caption);

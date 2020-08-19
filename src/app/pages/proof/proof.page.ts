@@ -5,6 +5,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
 import { first, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
+import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
 import { Importance } from 'src/app/services/data/information/information';
@@ -31,7 +32,7 @@ export class ProofPage {
 
   readonly rawBase64$ = this.proof$.pipe(switchMap(proof => this.proofRepository.getRawFile$(proof)));
   readonly hash$ = this.proof$.pipe(pluck('hash'));
-  readonly mimeType$ = this.proof$.pipe(pluck('mimeType', 'type'));
+  readonly mimeType$ = this.proof$.pipe(pluck('mimeType'));
   readonly timestamp$ = this.proof$.pipe(map(proof => new Date(proof.timestamp)));
   readonly caption$ = this.proof$.pipe(
     switchMap(proof => this.captionRepository.getByProof$(proof)),
@@ -68,7 +69,8 @@ export class ProofPage {
     private readonly proofRepository: ProofRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly informationRepository: InformationRepository,
-    private readonly signatureRepository: SignatureRepository
+    private readonly signatureRepository: SignatureRepository,
+    private readonly blockingActionService: BlockingActionService
   ) { }
 
   ionViewWillEnter() {
@@ -89,11 +91,13 @@ export class ProofPage {
   }
 
   remove() {
-    const onConfirm = () => this.proof$.pipe(
-      switchMap(proof => this.proofRepository.remove$(proof)),
-      switchMapTo(defer(() => this.router.navigate(['..']))),
-      untilDestroyed(this)
-    ).subscribe();
+    const onConfirm = () => this.blockingActionService.run$(
+      this.proof$.pipe(
+        switchMap(proof => this.proofRepository.remove$(proof)),
+        switchMapTo(defer(() => this.router.navigate(['..'])))
+      ),
+      { message: this.translocoService.translate('processing') }
+    ).pipe(untilDestroyed(this)).subscribe();
 
     return this.confirmAlert.present$(onConfirm).pipe(untilDestroyed(this)).subscribe();
   }

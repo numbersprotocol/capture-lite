@@ -1,28 +1,24 @@
-export interface MimeType {
-  readonly type: string;
-  readonly extension: string;
-}
+// MimeType should be the subset of string type so `JSON.stringify` can generate meaningful text to
+// other platform.
+export type MimeType = 'image/jpeg' | 'image/png';
 
-export function fromExtension(extension: string) {
-  switch (extension) {
-    case 'jpeg':
-    case 'jpg':
-      return JPEG;
-
-    case 'png':
-      return PNG;
-
-    default:
-      throw new Error('Unknown extension.');
+export function getExtension(mimeType: MimeType) {
+  switch (mimeType) {
+    case 'image/jpeg':
+      return 'jpg';
+    case 'image/png':
+      return 'png';
   }
 }
 
-export const JPEG: MimeType = {
-  type: 'image/jpeg',
-  extension: 'jpg'
-};
-
-export const PNG: MimeType = {
-  type: 'image/png',
-  extension: 'png'
-};
+export function fromExtension(extension: string): MimeType {
+  switch (extension) {
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg';
+    case 'png':
+      return 'image/png';
+    default:
+      throw TypeError(`Unknown extension: ${extension}`);
+  }
+}

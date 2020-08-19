@@ -3,7 +3,7 @@ import { FilesystemDirectory, Plugins } from '@capacitor/core';
 import { defer } from 'rxjs';
 import { filter, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
-import { MimeType } from 'src/app/utils/mime-type';
+import { getExtension, MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { Storage } from 'src/app/utils/storage/storage';
 import { CaptionRepository } from '../caption/caption-repository.service';
@@ -52,7 +52,7 @@ export class ProofRepository {
 
   getRawFile$(proof: Proof) {
     return defer(() => Filesystem.readFile({
-      path: `${this.rawFileFolderName}/${proof.hash}.${proof.mimeType.extension}`,
+      path: `${this.rawFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.rawFileDir
     })).pipe(pluck('data'));
   }
@@ -65,7 +65,7 @@ export class ProofRepository {
   saveRawFile$(rawBase64: string, mimeType: MimeType) {
     return sha256WithBase64$(rawBase64).pipe(
       switchMap(hash => Filesystem.writeFile({
-        path: `${this.rawFileFolderName}/${hash}.${mimeType.extension}`,
+        path: `${this.rawFileFolderName}/${hash}.${getExtension(mimeType)}`,
         data: rawBase64,
         directory: this.rawFileDir,
         recursive: true
@@ -76,7 +76,7 @@ export class ProofRepository {
 
   private deleteRawFile$(proof: Proof) {
     return defer(() => Filesystem.deleteFile({
-      path: `${this.rawFileFolderName}/${proof.hash}.${proof.mimeType.extension}`,
+      path: `${this.rawFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.rawFileDir
     }));
   }
