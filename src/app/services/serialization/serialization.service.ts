@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { first, map } from 'rxjs/operators';
+import { first, map, tap } from 'rxjs/operators';
 import { Information } from '../data/information/information';
 import { InformationRepository } from '../data/information/information-repository.service';
 import { Proof } from '../data/proof/proof';
@@ -22,7 +22,8 @@ export class SerializationService {
 
   stringify$(proof: Proof) {
     return this.createSortedProofInformation$(proof).pipe(
-      map(sortedProofInformation => JSON.stringify(sortedProofInformation))
+      map(sortedProofInformation => JSON.stringify(sortedProofInformation)),
+      tap(v => console.log(v))
     );
   }
 

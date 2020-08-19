@@ -31,7 +31,7 @@ export class ProofPage {
 
   readonly rawBase64$ = this.proof$.pipe(switchMap(proof => this.proofRepository.getRawFile$(proof)));
   readonly hash$ = this.proof$.pipe(pluck('hash'));
-  readonly mimeType$ = this.proof$.pipe(pluck('mimeType', 'type'));
+  readonly mimeType$ = this.proof$.pipe(pluck('mimeType'));
   readonly timestamp$ = this.proof$.pipe(map(proof => new Date(proof.timestamp)));
   readonly caption$ = this.proof$.pipe(
     switchMap(proof => this.captionRepository.getByProof$(proof)),
