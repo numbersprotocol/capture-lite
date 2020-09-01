@@ -1,6 +1,6 @@
 import { FilesystemDirectory, FilesystemEncoding, Plugins } from '@capacitor/core';
 import { BehaviorSubject, defer, from, Observable, of } from 'rxjs';
-import { catchError, concatMap, map, mapTo, pluck, switchMap, switchMapTo, tap, toArray } from 'rxjs/operators';
+import { catchError, concatMap, concatMapTo, map, mapTo, pluck, tap, toArray } from 'rxjs/operators';
 import { sha256$ } from '../crypto/crypto';
 import { forkJoinWithDefault } from '../rx-operators';
 
@@ -17,9 +17,9 @@ export class Storage<T extends object> {
 
   refresh$() {
     return this.makeNameDir$().pipe(
-      switchMapTo(this.readNameDir$()),
+      concatMapTo(this.readNameDir$()),
       pluck('files'),
-      switchMap(fileNames => from(fileNames)),
+      concatMap(fileNames => from(fileNames)),
       concatMap(fileName => this.readFile$(fileName)),
       map(result => JSON.parse(result.data) as T),
       toArray(),
@@ -60,14 +60,14 @@ export class Storage<T extends object> {
 
   add$(...tuples: T[]) {
     return forkJoinWithDefault(tuples.map(tuple => this.saveFile$(tuple))).pipe(
-      switchMapTo(this.refresh$()),
+      concatMapTo(this.refresh$()),
       mapTo(tuples)
     );
   }
 
   private saveFile$(tuple: T) {
     return sha256$(tuple).pipe(
-      switchMap(hash => Filesystem.writeFile({
+      concatMap(hash => Filesystem.writeFile({
         path: `${this.name}/${hash}.json`,
         data: JSON.stringify(tuple),
         directory: this.directory,
@@ -78,14 +78,14 @@ export class Storage<T extends object> {
 
   remove$(...tuples: T[]) {
     return forkJoinWithDefault(tuples.map(tuple => this.deleteFile$(tuple))).pipe(
-      switchMapTo(this.refresh$()),
+      concatMapTo(this.refresh$()),
       mapTo(tuples)
     );
   }
 
   private deleteFile$(tuple: T) {
     return sha256$(tuple).pipe(
-      switchMap(hash => Filesystem.deleteFile({
+      concatMap(hash => Filesystem.deleteFile({
         path: `${this.name}/${hash}.json`,
         directory: this.directory
       })));
