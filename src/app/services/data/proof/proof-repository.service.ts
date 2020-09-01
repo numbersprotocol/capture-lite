@@ -28,8 +28,6 @@ export class ProofRepository {
     private readonly signatureRepository: SignatureRepository
   ) { }
 
-  refresh$() { return this.proofStorage.refresh$(); }
-
   getAll$() { return this.proofStorage.getAll$(); }
 
   getByHash$(hash: string) {

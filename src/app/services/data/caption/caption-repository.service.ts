@@ -13,8 +13,6 @@ export class CaptionRepository {
 
   private readonly captionStorage = new Storage<Caption>('caption');
 
-  refresh$() { return this.captionStorage.refresh$(); }
-
   getByProof$(proof: Proof) {
     return this.captionStorage.getAll$().pipe(
       map(captions => captions.find(caption => caption.proofHash === proof.hash))

@@ -18,7 +18,7 @@
 </ion-header>
 
 <ion-content *transloco="let t">
-  <ion-img [src]="'data:image/*;base64,' + (rawBase64$ | async)"></ion-img>
+  <img [src]="base64Src$ | async" />
   <ion-list lines="none">
     <ion-item>
       <ion-icon slot="start" name="reader"></ion-icon>

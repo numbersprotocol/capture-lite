@@ -14,9 +14,19 @@ export class Storage<T extends object> {
   ) { }
 
   private readonly tuples$ = new BehaviorSubject<T[]>([]);
+  private hasInitialized = false;
 
-  refresh$() {
-    return this.makeNameDir$().pipe(
+  private checkInitialization$() {
+    return defer(() => {
+      if (this.hasInitialized) { return of(void 0); }
+      else { return this.refresh$(); }
+    });
+  }
+
+  private refresh$() {
+    return of(void 0).pipe(
+      tap(_ => this.hasInitialized = true),
+      concatMapTo(this.makeNameDir$()),
       concatMapTo(this.readNameDir$()),
       pluck('files'),
       concatMap(fileNames => from(fileNames)),
@@ -56,10 +66,15 @@ export class Storage<T extends object> {
     }));
   }
 
-  getAll$() { return this.tuples$.asObservable(); }
+  getAll$() {
+    return this.checkInitialization$().pipe(
+      concatMapTo(this.tuples$.asObservable())
+    );
+  }
 
   add$(...tuples: T[]) {
     return forkJoinWithDefault(tuples.map(tuple => this.saveFile$(tuple))).pipe(
+      concatMapTo(this.checkInitialization$()),
       tap(_ => this.tuples$.next([...this.tuples$.value, ...tuples])),
       mapTo(tuples)
     );
