@@ -60,7 +60,7 @@ export class Storage<T extends object> {
 
   add$(...tuples: T[]) {
     return forkJoinWithDefault(tuples.map(tuple => this.saveFile$(tuple))).pipe(
-      concatMapTo(this.refresh$()),
+      tap(_ => this.tuples$.next([...this.tuples$.value, ...tuples])),
       mapTo(tuples)
     );
   }
