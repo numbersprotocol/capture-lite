@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { FilesystemDirectory, Plugins } from '@capacitor/core';
-import { defer } from 'rxjs';
+import { defer, zip } from 'rxjs';
 import { map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
+import { base64ToBlob$, blobToBase64$ } from 'src/app/utils/encoding/encoding';
 import { getExtension, MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { Storage } from 'src/app/utils/storage/storage';
@@ -12,6 +13,8 @@ import { SignatureRepository } from '../signature/signature-repository.service';
 import { Proof } from './proof';
 
 const { Filesystem } = Plugins;
+// @ts-ignore
+const ImageBlobReduce = require('image-blob-reduce')();
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +24,9 @@ export class ProofRepository {
   private readonly proofStorage = new Storage<Proof>('proof');
   private readonly rawFileDir = FilesystemDirectory.Data;
   private readonly rawFileFolderName = 'raw';
+  private readonly thumbnailFileDir = FilesystemDirectory.Data;
+  private readonly thumbnailFileFolderName = 'thumb';
+  private readonly thumbnailSize = 200;
 
   constructor(
     private readonly captionRepository: CaptionRepository,
@@ -60,6 +66,15 @@ export class ProofRepository {
    * @param mimeType The file added in the internal storage. The name of the returned file will be its hash with original extension.
    */
   saveRawFile$(rawBase64: string, mimeType: MimeType) {
+    return zip(
+      this._saveRawFile$(rawBase64, mimeType),
+      this.generateAndSaveThumbnailFile$(rawBase64, mimeType)
+    ).pipe(
+      map(([rawUri, _]) => rawUri)
+    );
+  }
+
+  private _saveRawFile$(rawBase64: string, mimeType: MimeType) {
     return sha256WithBase64$(rawBase64).pipe(
       switchMap(hash => Filesystem.writeFile({
         path: `${this.rawFileFolderName}/${hash}.${getExtension(mimeType)}`,
@@ -76,5 +91,26 @@ export class ProofRepository {
       path: `${this.rawFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.rawFileDir
     }));
+  }
+
+  getThumbnail$(proof: Proof) {
+    return defer(() => Filesystem.readFile({
+      path: `${this.thumbnailFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
+      directory: this.thumbnailFileDir
+    })).pipe(pluck('data'));
+  }
+
+  private generateAndSaveThumbnailFile$(rawBase64: string, mimeType: MimeType) {
+    return base64ToBlob$(`data:${mimeType};base64,${rawBase64}`).pipe(
+      switchMap(rawImageBlob => ImageBlobReduce.toBlob(rawImageBlob, { max: this.thumbnailSize })),
+      switchMap(thumbnailBlob => zip(blobToBase64$(thumbnailBlob as Blob), sha256WithBase64$(rawBase64))),
+      switchMap(([thumbnailBase64, hash]) => Filesystem.writeFile({
+        path: `${this.thumbnailFileFolderName}/${hash}.${getExtension(mimeType)}`,
+        data: thumbnailBase64,
+        directory: this.thumbnailFileDir,
+        recursive: true
+      })),
+      pluck('uri')
+    );
   }
 }
