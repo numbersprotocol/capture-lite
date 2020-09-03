@@ -81,6 +81,9 @@ export class Storage<T extends object> {
   }
 
   private saveFile$(tuple: T) {
+    // XXX: Use sha256 is not a good idea as `sha256$()` uses `JSON.stringify()` under the hood.
+    //      Thus, the order of the tuple (properties) will result in different hash if tuple is
+    //      an array (object).
     return sha256$(tuple).pipe(
       concatMap(hash => Filesystem.writeFile({
         path: `${this.name}/${hash}.json`,
@@ -99,6 +102,9 @@ export class Storage<T extends object> {
   }
 
   private deleteFile$(tuple: T) {
+    // XXX: Use sha256 is not a good idea as `sha256$()` uses `JSON.stringify()` under the hood.
+    //      Thus, the order of the tuple (properties) will result in different hash if tuple is
+    //      an array (object).
     return sha256$(tuple).pipe(
       concatMap(hash => Filesystem.deleteFile({
         path: `${this.name}/${hash}.json`,
