@@ -12,8 +12,6 @@ export class SignatureRepository {
 
   private readonly signatureStorage = new Storage<Signature>('signature');
 
-  refresh$() { return this.signatureStorage.refresh$(); }
-
   getByProof$(proof: Proof) {
     return this.signatureStorage.getAll$().pipe(
       map(signatures => signatures.filter(info => info.proofHash === proof.hash))

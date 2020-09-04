@@ -11,8 +11,6 @@ export class InformationRepository {
 
   private readonly informationStorage = new Storage<Information>('information');
 
-  refresh$() { return this.informationStorage.refresh$(); }
-
   getByProof$(proof: Proof) {
     return this.informationStorage.getAll$().pipe(
       map(informationList => informationList.filter(info => info.proofHash === proof.hash))

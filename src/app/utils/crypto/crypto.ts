@@ -20,6 +20,10 @@ interface KeyPair {
   privateKey: string;
 }
 
+/**
+ * Use SHA-256 to hash the object.
+ * @param object The target object. Note that the order of the object properties is sensitive.
+ */
 export function sha256$<T extends object>(object: T) {
   return of(JSON.stringify(object)).pipe(
     switchMap(json => sha256WithString$(json))

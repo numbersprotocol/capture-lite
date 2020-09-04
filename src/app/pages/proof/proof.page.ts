@@ -30,7 +30,10 @@ export class ProofPage {
     isNonNullable()
   );
 
-  readonly rawBase64$ = this.proof$.pipe(switchMap(proof => this.proofRepository.getRawFile$(proof)));
+  readonly base64Src$ = this.proof$.pipe(
+    switchMap(proof => this.proofRepository.getRawFile$(proof)),
+    map(rawBase64 => `data:image/png;base64,${rawBase64}`)
+  );
   readonly hash$ = this.proof$.pipe(pluck('hash'));
   readonly mimeType$ = this.proof$.pipe(pluck('mimeType'));
   readonly timestamp$ = this.proof$.pipe(map(proof => new Date(proof.timestamp)));
@@ -72,15 +75,6 @@ export class ProofPage {
     private readonly signatureRepository: SignatureRepository,
     private readonly blockingActionService: BlockingActionService
   ) { }
-
-  ionViewWillEnter() {
-    this.proofRepository.refresh$().pipe(
-      switchMapTo(this.captionRepository.refresh$()),
-      switchMapTo(this.informationRepository.refresh$()),
-      switchMapTo(this.signatureRepository.refresh$()),
-      untilDestroyed(this)
-    ).subscribe();
-  }
 
   publish() {
     this.proof$.pipe(

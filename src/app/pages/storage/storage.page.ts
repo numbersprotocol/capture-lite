@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
-import { concatMap, map, mapTo } from 'rxjs/operators';
+import { concatMap, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
@@ -18,7 +18,7 @@ export class StoragePage {
 
   private readonly proofs$ = this.proofRepository.getAll$();
   readonly proofsWithRaw$ = this.proofs$.pipe(
-    concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getRawFile$(proof)))),
+    concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getThumbnail$(proof)))),
     concatMap(base64Strings => zip(this.proofs$, of(base64Strings))),
     map(([proofs, base64Strings]) => proofs.map((proof, index) => ({
       proof,
@@ -31,19 +31,6 @@ export class StoragePage {
     private readonly cameraService: CameraService,
     private readonly collectorService: CollectorService
   ) { }
-
-  ionViewWillEnter() {
-    this.proofRepository.refresh$().pipe(
-      untilDestroyed(this)
-    ).subscribe();
-  }
-
-  refresh(event: any) {
-    this.proofRepository.refresh$().pipe(
-      mapTo(event.target.complete()),
-      untilDestroyed(this)
-    ).subscribe();
-  }
 
   capture() {
     this.cameraService.capture$().pipe(
