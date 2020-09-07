@@ -1,4 +1,4 @@
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
@@ -10,7 +10,7 @@ export abstract class Publisher {
   abstract readonly name: string;
 
   constructor(
-    private readonly translateService: TranslateService,
+    private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService
   ) { }
 
@@ -18,19 +18,22 @@ export abstract class Publisher {
     const notificationId = this.notificationService.createNotificationId();
     this.notificationService.notify(
       notificationId,
-      this.translateService.instant('publishingProof'),
-      this.translateService.instant('message.publishingProof', { hash: proof.hash, publisherName: this.name })
+      this.translocoService.translate('publishingProof'),
+      this.translocoService.translate('message.publishingProof', { hash: proof.hash, publisherName: this.name })
     );
     subscribeInBackground(
       this.run$(proof).pipe(
         tap(_ => this.notificationService.notify(
           notificationId,
-          this.translateService.instant('proofPublished'),
-          this.translateService.instant('message.proofPublished', { hash: proof.hash, publisherName: this.name })
+          this.translocoService.translate('proofPublished'),
+          this.translocoService.translate('message.proofPublished', { hash: proof.hash, publisherName: this.name })
         ))
-      )
+      ),
+      error => this.notificationService.notifyError(notificationId, error)
     );
   }
+
+  abstract isEnabled$(): Observable<boolean>;
 
   protected abstract run$(proof: Proof): Observable<void>;
 }

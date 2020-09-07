@@ -1,5 +1,5 @@
 import { Observable, of, zip } from 'rxjs';
-import { filter, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { filter, first, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { Proof } from 'src/app/services/data/proof/proof';
 import { Signature } from 'src/app/services/data/signature/signature';
 import { createEcKeyPair$, signWithSha256AndEcdsa$ } from 'src/app/utils/crypto/crypto';
@@ -21,6 +21,7 @@ export class DefaultSignatureProvider extends SignatureProvider {
       this.getPublicKey$(),
       this.getPrivateKey$()
     ).pipe(
+      first(),
       filter(([publicKey, privateKey]) => publicKey.length === 0 || privateKey.length === 0),
       switchMapTo(createEcKeyPair$()),
       switchMap(({ publicKey, privateKey }) => zip(
@@ -38,10 +39,12 @@ export class DefaultSignatureProvider extends SignatureProvider {
     return preferences.getString$(PrefKeys.PrivateKey);
   }
 
-  provide$(proof: Proof, serialized: string): Observable<Signature> {
-    return preferences.getString$(PrefKeys.PrivateKey).pipe(
+  protected provide$(proof: Proof, serialized: string): Observable<Signature> {
+    return DefaultSignatureProvider.getPrivateKey$().pipe(
+      first(),
       switchMap(privateKeyHex => signWithSha256AndEcdsa$(serialized, privateKeyHex)),
       switchMap(signatureHex => zip(of(signatureHex), DefaultSignatureProvider.getPublicKey$())),
+      first(),
       map(([signatureHex, publicKeyHex]) => ({
         proofHash: proof.hash,
         provider: this.name,

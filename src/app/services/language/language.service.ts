@@ -1,37 +1,38 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { mapTo, switchMap, switchMapTo } from 'rxjs/operators';
+import { TranslocoService } from '@ngneat/transloco';
+import { first, mapTo, switchMap } from 'rxjs/operators';
+import { defaultLanguage, languages } from 'src/app/transloco/transloco-root.module';
 import { PreferenceManager } from '../../utils/preferences/preference-manager';
+
+const preferences = PreferenceManager.LANGUAGE_PREF;
+const enum PrefKeys {
+  Language = 'language'
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class LanguageService {
 
-  private readonly preferences = PreferenceManager.LANGUAGE_PREF;
-  private readonly prefKeys = {
-    langauge: 'langauge'
-  };
-
-  readonly languages: { [key: string]: string; } = {
-    'en-us': 'English (United State)',
-    'zh-tw': '繁體中文（台灣）'
-  };
-  readonly defaultLanguage = Object.entries(this.languages)[0];
-  readonly currentLanguageKey$ = this.preferences.get$(this.prefKeys.langauge, this.defaultLanguage[0]);
+  readonly languages = languages;
+  readonly defaultLanguage = defaultLanguage;
+  readonly currentLanguageKey$ = preferences.getString$(PrefKeys.Language, defaultLanguage[0]);
 
   constructor(
-    private readonly translateService: TranslateService
+    private readonly translocoService: TranslocoService
   ) { }
 
   initialize$() {
-    this.translateService.setDefaultLang(this.defaultLanguage[0]);
-    return this.currentLanguageKey$.pipe(switchMap(key => this.setCurrentLanguage$(key)));
+    this.translocoService.setDefaultLang(defaultLanguage[0]);
+    return this.currentLanguageKey$.pipe(
+      first(),
+      switchMap(key => this.setCurrentLanguage$(key))
+    );
   }
 
   setCurrentLanguage$(key: string) {
-    return this.preferences.set$(this.prefKeys.langauge, key).pipe(
-      switchMapTo(this.translateService.use(key)),
+    return preferences.setString$(PrefKeys.Language, key).pipe(
+      mapTo(this.translocoService.setActiveLang(key)),
       mapTo(key)
     );
   }

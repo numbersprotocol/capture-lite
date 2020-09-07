@@ -1,7 +1,8 @@
 import { FilesystemDirectory, FilesystemEncoding, Plugins } from '@capacitor/core';
-import { BehaviorSubject, defer, forkJoin, Observable, of } from 'rxjs';
-import { catchError, defaultIfEmpty, map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { BehaviorSubject, defer, from, Observable, of } from 'rxjs';
+import { catchError, concatMap, map, mapTo, pluck, switchMap, switchMapTo, tap, toArray } from 'rxjs/operators';
 import { sha256$ } from '../crypto/crypto';
+import { forkJoinWithDefault } from '../rx-operators';
 
 const { Filesystem } = Plugins;
 
@@ -15,12 +16,13 @@ export class Storage<T extends object> {
   private readonly tuples$ = new BehaviorSubject<T[]>([]);
 
   refresh$() {
-    console.log(`Storege refreshing: ${this.name}`);
     return this.makeNameDir$().pipe(
       switchMapTo(this.readNameDir$()),
-      map(result => result.files),
-      switchMap(fileNames => forkJoin(fileNames.map(fileName => this.readFile$(fileName))).pipe(defaultIfEmpty([]))),
-      map(results => results.map(result => JSON.parse(result.data) as T)),
+      pluck('files'),
+      switchMap(fileNames => from(fileNames)),
+      concatMap(fileName => this.readFile$(fileName)),
+      map(result => JSON.parse(result.data) as T),
+      toArray(),
       tap(tuples => this.tuples$.next(tuples))
     );
   }
@@ -33,7 +35,7 @@ export class Storage<T extends object> {
     })).pipe(
       mapTo(void 0),
       catchError((err: Error) => {
-        console.log(`${err.message} (${this.directory}/${this.name})`);
+        console.log(`${this.directory}/${this.name}: ${err.message}`);
         return of(void 0);
       })
     );
@@ -57,7 +59,7 @@ export class Storage<T extends object> {
   getAll$() { return this.tuples$.asObservable(); }
 
   add$(...tuples: T[]) {
-    return forkJoin(tuples.map(tuple => this.saveFile$(tuple))).pipe(
+    return forkJoinWithDefault(tuples.map(tuple => this.saveFile$(tuple))).pipe(
       switchMapTo(this.refresh$()),
       mapTo(tuples)
     );
@@ -75,7 +77,7 @@ export class Storage<T extends object> {
   }
 
   remove$(...tuples: T[]) {
-    return forkJoin(tuples.map(tuple => this.deleteFile$(tuple))).pipe(
+    return forkJoinWithDefault(tuples.map(tuple => this.deleteFile$(tuple))).pipe(
       switchMapTo(this.refresh$()),
       mapTo(tuples)
     );

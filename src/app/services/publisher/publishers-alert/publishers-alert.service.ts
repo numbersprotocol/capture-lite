@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { defer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { TranslocoService } from '@ngneat/transloco';
+import { from, of, zip } from 'rxjs';
+import { filter, first, pluck, switchMap, toArray } from 'rxjs/operators';
 import { Proof } from '../../data/proof/proof';
 import { Publisher } from '../publisher';
 
@@ -15,7 +15,7 @@ export class PublishersAlert {
 
   constructor(
     private readonly alertController: AlertController,
-    private readonly translateService: TranslateService
+    private readonly translocoService: TranslocoService
   ) { }
 
   addPublisher(publisher: Publisher) {
@@ -23,24 +23,34 @@ export class PublishersAlert {
   }
 
   present$(proof: Proof) {
-    return defer(() => this.alertController.create({
-      header: this.translateService.instant('selectAPublisher'),
-      inputs: this.publishers.map((publisher, index) => ({
-        name: publisher.name,
-        type: 'radio',
-        label: publisher.name,
-        value: publisher.name,
-        checked: index === 0
+    return this.getEnabledPublishers$().pipe(
+      switchMap(publishers => this.alertController.create({
+        header: this.translocoService.translate('selectAPublisher'),
+        inputs: publishers.map((publisher, index) => ({
+          name: publisher.name,
+          type: 'radio',
+          label: publisher.name,
+          value: publisher.name,
+          checked: index === 0
+        })),
+        buttons: [{
+          text: this.translocoService.translate('cancel'),
+          role: 'cancel'
+        }, {
+          text: this.translocoService.translate('ok'),
+          handler: (name) => this.getPublisherByName(name)?.publish(proof)
+        }]
       })),
-      buttons: [{
-        text: this.translateService.instant('cancel'),
-        role: 'cancel'
-      }, {
-        text: this.translateService.instant('ok'),
-        handler: (name) => this.getPublisherByName(name).publish(proof)
-      }]
-    })).pipe(
       switchMap(alertElement => alertElement.present())
+    );
+  }
+
+  private getEnabledPublishers$() {
+    return from(this.publishers).pipe(
+      switchMap(publisher => zip(of(publisher), publisher.isEnabled$().pipe(first()))),
+      filter(([_, isEnabled]) => isEnabled),
+      pluck(0),
+      toArray()
     );
   }
 

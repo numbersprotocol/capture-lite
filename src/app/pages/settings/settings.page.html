@@ -1,38 +1,59 @@
-<ion-header>
+<ion-header *transloco="let t">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button routerLink=".." routerDirection="back">
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ 'settings' | translate }}</ion-title>
+    <ion-title>{{ t('settings') }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *transloco="let t">
   <ion-list>
-    <ion-list-header>{{ 'general' | translate }}</ion-list-header>
+    <ion-list-header>{{ t('general') }}</ion-list-header>
     <ion-item>
       <ion-icon name="language" slot="start"></ion-icon>
-      <ion-label>{{ 'languages' | translate }}</ion-label>
+      <ion-label>{{ t('languages') }}</ion-label>
       <ion-select [ngModel]="currentLanguageKey$ | async" (ngModelChange)="setCurrentLanguage($event)">
         <ion-select-option *ngFor="let language of langauges | keyvalue" [value]="language.key">{{ language.value }}
         </ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-list-header>{{ 'defaultSignature' | translate }}</ion-list-header>
-    <ion-item>
+    <ion-list-header>{{ t('defaultInformationProvider') + ' (Capacitor)' }}</ion-list-header>
+    <ion-item lines="none">
+      <ion-icon name="phone-portrait" slot="start"></ion-icon>
+      <ion-label>{{ t('collectDeviceInfo') }}</ion-label>
+      <ion-toggle [checked]="isDeviceInfoCollectionEnabled$ | async"
+        (ionChange)="setDeviceInfoCollection($event.detail.checked)" slot="end"></ion-toggle>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-icon name="locate" slot="start"></ion-icon>
+      <ion-label>{{ t('collectLocationInfo') }}</ion-label>
+      <ion-toggle [checked]="isLocationInfoCollectionEnabled$ | async"
+        (ionChange)="setLocationInfoCollection($event.detail.checked)" slot="end"></ion-toggle>
+    </ion-item>
+    <ion-list-header>{{ t('defaultSignature') + ' (Web Crypto API)' }}</ion-list-header>
+    <ion-item lines="none">
       <ion-icon name="key" slot="start"></ion-icon>
       <ion-label class="ion-text-wrap">
-        <h2>{{ 'publicKey' | translate }}</h2>
+        <h2>{{ t('publicKey') }}</h2>
         <p>{{ publicKey$ | async }}</p>
       </ion-label>
     </ion-item>
-    <ion-item>
+    <ion-item lines="full">
       <ion-icon name="key" slot="start"></ion-icon>
       <ion-label class="ion-text-wrap">
-        <h2>{{ 'privateKey' | translate }}</h2>
+        <h2>{{ t('privateKey') }}</h2>
         <p>{{ privateKey$ | async }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-list-header>{{ t('about') }}</ion-list-header>
+    <ion-item lines="none">
+      <ion-icon name="information" slot="start"></ion-icon>
+      <ion-label>
+        <h2>{{ t('version') }}</h2>
+        <p>{{ version$ | async }}</p>
       </ion-label>
     </ion-item>
   </ion-list>

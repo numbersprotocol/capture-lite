@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { SettingsPage } from './settings.page';
 
 describe('SettingsPage', () => {
@@ -11,7 +12,7 @@ describe('SettingsPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SettingsPage],
-      imports: [IonicModule.forRoot(), TranslateModule.forRoot(), RouterTestingModule]
+      imports: [FormsModule, IonicModule.forRoot(), RouterTestingModule, getTranslocoModule()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(SettingsPage);

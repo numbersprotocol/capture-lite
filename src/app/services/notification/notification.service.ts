@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { defer } from 'rxjs';
 import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
 
@@ -12,7 +13,9 @@ export class NotificationService {
 
   private currentId = 1;
 
-  constructor() {
+  constructor(
+    private readonly translocoService: TranslocoService
+  ) {
     LocalNotifications.requestPermission()
       .then(result => console.log(`Notification permission request result: ${result.granted}`));
   }
@@ -25,9 +28,14 @@ export class NotificationService {
   // TODO: Add on-going configurations when this PR got merged and released:
   //       https://github.com/ionic-team/capacitor/pull/3165
   notify(id: number, title: string, body: string) {
+    console.log(`${title}: ${body}`);
     subscribeInBackground(defer(() => LocalNotifications.schedule({
       notifications: [{ title, body, id }]
     })));
+  }
+
+  notifyError(id: number, error: Error) {
+    this.notify(id, this.translocoService.translate('unknownError'), JSON.stringify(error));
   }
 
   cancel(id: number) {

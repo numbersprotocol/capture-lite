@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, switchMap } from 'rxjs/operators';
+import { first, map, switchMap } from 'rxjs/operators';
 import { Storage } from 'src/app/utils/storage/storage';
 import { Proof } from '../proof/proof';
 import { Information } from './information';
@@ -23,6 +23,7 @@ export class InformationRepository {
 
   removeByProof$(proof: Proof) {
     return this.getByProof$(proof).pipe(
+      first(),
       switchMap(informationList => this.remove$(...informationList))
     );
   }

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { LanguageService } from './language.service';
 
 describe('LanguageService', () => {
@@ -7,7 +7,7 @@ describe('LanguageService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()]
+      imports: [getTranslocoModule()]
     });
     service = TestBed.inject(LanguageService);
   });

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { defer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -11,18 +11,18 @@ export class ConfirmAlert {
 
   constructor(
     private readonly alertController: AlertController,
-    private readonly translateService: TranslateService
+    private readonly translocoService: TranslocoService
   ) { }
 
   present$(onConfirm: () => void) {
     return defer(() => this.alertController.create({
-      header: this.translateService.instant('areYouSure'),
-      message: this.translateService.instant('message.areYouSure'),
+      header: this.translocoService.translate('areYouSure'),
+      message: this.translocoService.translate('message.areYouSure'),
       buttons: [{
-        text: this.translateService.instant('cancel'),
+        text: this.translocoService.translate('cancel'),
         role: 'cancel'
       }, {
-        text: this.translateService.instant('ok'),
+        text: this.translocoService.translate('ok'),
         handler: onConfirm
       }]
     })).pipe(

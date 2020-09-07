@@ -14,11 +14,17 @@ const routes: Routes = [{
 }, {
   path: 'proof',
   loadChildren: () => import('./pages/proof/proof.module').then(m => m.ProofPageModule)
+}, {
+  path: 'information',
+  loadChildren: () => import('./pages/information/information.module').then(m => m.InformationPageModule)
 }];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules,
+      relativeLinkResolution: 'corrected'
+    })
   ],
   exports: [RouterModule]
 })

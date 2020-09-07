@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { StoragePage } from './storage.page';
 
 describe('StoragePage', () => {
@@ -11,7 +11,7 @@ describe('StoragePage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [StoragePage],
-      imports: [IonicModule.forRoot(), TranslateModule.forRoot(), RouterTestingModule]
+      imports: [IonicModule.forRoot(), RouterTestingModule, getTranslocoModule()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(StoragePage);

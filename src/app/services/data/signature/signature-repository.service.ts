@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { first, map, switchMap } from 'rxjs/operators';
 import { Storage } from 'src/app/utils/storage/storage';
 import { Proof } from '../proof/proof';
 import { Signature } from './signature';
@@ -26,6 +26,7 @@ export class SignatureRepository {
 
   removeByProof$(proof: Proof) {
     return this.getByProof$(proof).pipe(
+      first(),
       switchMap(signatures => this.remove$(...signatures))
     );
   }

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FilesystemDirectory, Plugins } from '@capacitor/core';
-import { defer, forkJoin } from 'rxjs';
-import { defaultIfEmpty, filter, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { defer } from 'rxjs';
+import { filter, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
-import { MimeType } from 'src/app/utils/mime-type';
+import { getExtension, MimeType } from 'src/app/utils/mime-type';
+import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { Storage } from 'src/app/utils/storage/storage';
 import { CaptionRepository } from '../caption/caption-repository.service';
 import { InformationRepository } from '../information/information-repository.service';
@@ -42,18 +43,18 @@ export class ProofRepository {
 
   remove$(...proofs: Proof[]) {
     return this.proofStorage.remove$(...proofs).pipe(
-      switchMapTo(forkJoin(proofs.map(proof => this.deleteRawFile$(proof))).pipe(defaultIfEmpty([]))),
-      switchMapTo(forkJoin(proofs.map(proof => this.captionRepository.removeByProof$(proof))).pipe(defaultIfEmpty([]))),
-      switchMapTo(forkJoin(proofs.map(proof => this.informationRepository.removeByProof$(proof))).pipe(defaultIfEmpty([]))),
-      switchMapTo(forkJoin(proofs.map(proof => this.signatureRepository.removeByProof$(proof))).pipe(defaultIfEmpty([])))
+      switchMapTo(forkJoinWithDefault(proofs.map(proof => this.deleteRawFile$(proof)))),
+      switchMapTo(forkJoinWithDefault(proofs.map(proof => this.captionRepository.removeByProof$(proof)))),
+      switchMapTo(forkJoinWithDefault(proofs.map(proof => this.informationRepository.removeByProof$(proof)))),
+      switchMapTo(forkJoinWithDefault(proofs.map(proof => this.signatureRepository.removeByProof$(proof))))
     );
   }
 
   getRawFile$(proof: Proof) {
     return defer(() => Filesystem.readFile({
-      path: `${this.rawFileFolderName}/${proof.hash}.${proof.mimeType.extension}`,
+      path: `${this.rawFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.rawFileDir
-    })).pipe(map(result => result.data));
+    })).pipe(pluck('data'));
   }
 
   /**
@@ -64,18 +65,18 @@ export class ProofRepository {
   saveRawFile$(rawBase64: string, mimeType: MimeType) {
     return sha256WithBase64$(rawBase64).pipe(
       switchMap(hash => Filesystem.writeFile({
-        path: `${this.rawFileFolderName}/${hash}.${mimeType.extension}`,
+        path: `${this.rawFileFolderName}/${hash}.${getExtension(mimeType)}`,
         data: rawBase64,
         directory: this.rawFileDir,
         recursive: true
       })),
-      map(result => result.uri)
+      pluck('uri')
     );
   }
 
   private deleteRawFile$(proof: Proof) {
     return defer(() => Filesystem.deleteFile({
-      path: `${this.rawFileFolderName}/${proof.hash}.${proof.mimeType.extension}`,
+      path: `${this.rawFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.rawFileDir
     }));
   }

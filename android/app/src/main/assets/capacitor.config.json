@@ -6,9 +6,10 @@
   "webDir": "www",
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 0
+      "androidScaleType": "CENTER_CROP",
+      "launchAutoHide": false
     }
   },
   "cordova": {},
-  "linuxAndroidStudioPath": "/home/username/android-studio/bin/studio.sh"
+  "linuxAndroidStudioPath": "/home/seanwu/android-studio/bin/studio.sh"
 }

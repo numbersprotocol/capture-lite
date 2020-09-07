@@ -1,15 +1,19 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { TranslateService } from '@ngx-translate/core';
-import { filter, first, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { defer } from 'rxjs';
+import { first, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
+import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
+import { Importance } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
 import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/publishers-alert.service';
+import { isNonNullable } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -21,30 +25,36 @@ export class ProofPage {
 
   readonly proof$ = this.route.paramMap.pipe(
     map(params => params.get('hash')),
-    filter(hash => !!hash),
-    switchMap(hash => this.proofRepository.getByHash$(hash))
+    isNonNullable(),
+    switchMap(hash => this.proofRepository.getByHash$(hash)),
+    isNonNullable()
   );
+
   readonly rawBase64$ = this.proof$.pipe(switchMap(proof => this.proofRepository.getRawFile$(proof)));
-  readonly hash$ = this.proof$.pipe(map(proof => proof.hash));
-  readonly mimeType$ = this.proof$.pipe(map(proof => proof.mimeType.type));
+  readonly hash$ = this.proof$.pipe(pluck('hash'));
+  readonly mimeType$ = this.proof$.pipe(pluck('mimeType'));
   readonly timestamp$ = this.proof$.pipe(map(proof => new Date(proof.timestamp)));
   readonly caption$ = this.proof$.pipe(
     switchMap(proof => this.captionRepository.getByProof$(proof)),
-    map(captions => {
-      if (captions.length === 0 || captions[0].text.length === 0) { return ''; }
-      return captions[0].text;
+    map(caption => {
+      if (caption && caption.text.length > 0) { return caption.text; }
+      return '';
     })
   );
-  readonly providersWithInformationList$ = this.proof$.pipe(
+
+  readonly providersWithImportantInformation$ = this.proof$.pipe(
     switchMap(proof => this.informationRepository.getByProof$(proof)),
     map(informationList => {
       const providers = new Set(informationList.map(information => information.provider));
       return [...providers].map(provider => ({
         provider,
-        informationList: informationList.filter(information => information.provider === provider)
+        informationList: informationList.filter(
+          information => information.provider === provider && information.importance === Importance.High
+        )
       }));
     })
   );
+
   readonly signatures$ = this.proof$.pipe(
     switchMap(proof => this.signatureRepository.getByProof$(proof))
   );
@@ -52,14 +62,15 @@ export class ProofPage {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly translateService: TranslateService,
+    private readonly translocoService: TranslocoService,
     private readonly alertController: AlertController,
     private readonly confirmAlert: ConfirmAlert,
     private readonly publishersAlert: PublishersAlert,
     private readonly proofRepository: ProofRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly informationRepository: InformationRepository,
-    private readonly signatureRepository: SignatureRepository
+    private readonly signatureRepository: SignatureRepository,
+    private readonly blockingActionService: BlockingActionService
   ) { }
 
   ionViewWillEnter() {
@@ -71,21 +82,24 @@ export class ProofPage {
     ).subscribe();
   }
 
-  remove() {
-    const onConfirm = () => this.proof$.pipe(
-      switchMap(proof => this.proofRepository.remove$(proof)),
-      switchMapTo(this.router.navigate(['..'])),
-      untilDestroyed(this)
-    ).subscribe();
-
-    return this.confirmAlert.present$(onConfirm).pipe(untilDestroyed(this)).subscribe();
-  }
-
   publish() {
     this.proof$.pipe(
+      first(),
       switchMap(proof => this.publishersAlert.present$(proof)),
       untilDestroyed(this)
     ).subscribe();
+  }
+
+  remove() {
+    const onConfirm = () => this.blockingActionService.run$(
+      this.proof$.pipe(
+        switchMap(proof => this.proofRepository.remove$(proof)),
+        switchMapTo(defer(() => this.router.navigate(['..'])))
+      ),
+      { message: this.translocoService.translate('processing') }
+    ).pipe(untilDestroyed(this)).subscribe();
+
+    return this.confirmAlert.present$(onConfirm).pipe(untilDestroyed(this)).subscribe();
   }
 
   editCaption() {
@@ -93,18 +107,18 @@ export class ProofPage {
     this.caption$.pipe(
       first(),
       switchMap(caption => this.alertController.create({
-        header: this.translateService.instant('editCaption'),
+        header: this.translocoService.translate('editCaption'),
         inputs: [{
           name: captionInputName,
           type: 'text',
           value: caption,
-          placeholder: this.translateService.instant('nothingHere')
+          placeholder: this.translocoService.translate('nothingHere')
         }],
         buttons: [{
-          text: this.translateService.instant('cancel'),
+          text: this.translocoService.translate('cancel'),
           role: 'cancel'
         }, {
-          text: this.translateService.instant('ok'),
+          text: this.translocoService.translate('ok'),
           handler: (inputs) => this.saveCaption(inputs[captionInputName])
         }]
       })),

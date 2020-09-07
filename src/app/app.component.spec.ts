@@ -1,8 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { Platform } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
+import { getTranslocoModule } from './transloco/transloco-root.module.spec';
 
 describe('AppComponent', () => {
 
@@ -16,10 +16,8 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [TranslateModule.forRoot()],
-      providers: [
-        { provide: Platform, useValue: platformSpy }
-      ],
+      imports: [getTranslocoModule()],
+      providers: [{ provide: Platform, useValue: platformSpy }],
     }).compileComponents();
   }));
 

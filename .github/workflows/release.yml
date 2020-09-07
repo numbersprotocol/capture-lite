@@ -2,11 +2,11 @@ name: release
 
 on:
   push:
-    branches: 
-      - master
+    branches:
+      - develop
 
 jobs:
-  release:
+  qa-release:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 

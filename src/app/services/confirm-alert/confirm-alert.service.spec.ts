@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { ConfirmAlert } from './confirm-alert.service';
 
 describe('ConfirmAlert', () => {
@@ -7,7 +7,7 @@ describe('ConfirmAlert', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()]
+      imports: [getTranslocoModule()]
     });
     service = TestBed.inject(ConfirmAlert);
   });

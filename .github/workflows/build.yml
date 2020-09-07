@@ -32,10 +32,10 @@ jobs:
       run: npm run test-ci
 
     - name: Upload coverage reports
-      uses: actions/upload-artifact@v2
+      uses: codacy/codacy-coverage-reporter-action@master
       with:
-        name: coverage
-        path: ./coverage
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: ./coverage/cobertura-coverage.xml
 
     - name: Build Ionic
       run: ionic build

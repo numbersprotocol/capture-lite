@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { forkJoin } from 'rxjs';
-import { defaultIfEmpty, map, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { TranslocoService } from '@ngneat/transloco';
+import { EMPTY } from 'rxjs';
+import { catchError, map, pluck, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
+import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { Proof } from '../data/proof/proof';
 import { ProofRepository } from '../data/proof/proof-repository.service';
 import { NotificationService } from '../notification/notification.service';
@@ -22,7 +23,7 @@ export class CollectorService {
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly notificationService: NotificationService,
-    private readonly translateService: TranslateService
+    private readonly translocoService: TranslocoService
   ) { }
 
   storeAndCollect(rawBase64: string, mimeType: MimeType) {
@@ -39,7 +40,7 @@ export class CollectorService {
       map(uri => fileNameWithoutExtension(uri)),
       // Store the media file.
       switchMap(hash => this.proofRepository.add$({ hash, mimeType, timestamp: Date.now() })),
-      map(proofs => proofs[0])
+      pluck(0)
     );
   }
 
@@ -47,18 +48,21 @@ export class CollectorService {
     const notificationId = this.notificationService.createNotificationId();
     this.notificationService.notify(
       notificationId,
-      this.translateService.instant('collectingProof'),
-      this.translateService.instant('collectingInformation')
+      this.translocoService.translate('collectingProof'),
+      this.translocoService.translate('collectingInformation')
     );
-    return forkJoin([...this.informationProviders].map(provider => provider.collectAndStore$(proof))).pipe(
-      defaultIfEmpty([]),
+    return forkJoinWithDefault([...this.informationProviders].map(provider => provider.collectAndStore$(proof))).pipe(
       tap(_ => this.notificationService.notify(
         notificationId,
-        this.translateService.instant('collectingProof'),
-        this.translateService.instant('signingProof')
+        this.translocoService.translate('collectingProof'),
+        this.translocoService.translate('signingProof')
       )),
-      switchMapTo(forkJoin([...this.signatureProviders].map(provider => provider.collectAndStore$(proof)))),
-      tap(_ => this.notificationService.cancel(notificationId))
+      switchMapTo(forkJoinWithDefault([...this.signatureProviders].map(provider => provider.signAndStore$(proof)))),
+      tap(_ => this.notificationService.cancel(notificationId)),
+      catchError(error => {
+        this.notificationService.notifyError(notificationId, error);
+        return EMPTY;
+      })
     );
   }
 
