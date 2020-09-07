@@ -3,6 +3,8 @@ import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { map } from 'rxjs/operators';
+import { CameraService } from './services/camera/camera.service';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorProvider } from './services/collector/information/capacitor-provider/capacitor-provider';
 import { DefaultSignatureProvider } from './services/collector/signature/default-provider/default-provider';
@@ -16,6 +18,7 @@ import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { SerializationService } from './services/serialization/serialization.service';
+import { fromExtension } from './utils/mime-type';
 
 const { SplashScreen } = Plugins;
 
@@ -38,12 +41,24 @@ export class AppComponent {
     private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService,
     private readonly numbersStorageApi: NumbersStorageApi,
-    langaugeService: LanguageService
+    langaugeService: LanguageService,
+    private readonly cameraService: CameraService
   ) {
+    this.restoreAppStatus();
     this.initializeApp();
     this.initializeCollector();
     this.initializePublisher();
     langaugeService.initialize$().pipe(untilDestroyed(this)).subscribe();
+  }
+
+  restoreAppStatus() {
+    this.cameraService.restoreKilledAppResult$().pipe(
+      map(cameraPhoto => this.collectorService.storeAndCollect(
+        cameraPhoto.base64String,
+        fromExtension(cameraPhoto.format)
+      )),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
   initializeApp() {

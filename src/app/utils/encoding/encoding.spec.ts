@@ -1,7 +1,7 @@
 import { concatMap } from 'rxjs/operators';
 import {
-  arrayBufferToBase64, arrayBufferToHex, arrayBufferToString, base64ToArrayBuffer, base64ToBlob$,
-  blobToBase64$, hexToArrayBuffer, stringToArrayBuffer
+  arrayBufferToBase64, arrayBufferToHex, arrayBufferToString, base64ToArrayBuffer,
+  base64ToBlob$, blobToBase64$, hexToArrayBuffer, stringToArrayBuffer
 } from './encoding';
 
 describe('encoding', () => {

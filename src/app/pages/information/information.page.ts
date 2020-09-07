@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { map, pluck, switchMap } from 'rxjs/operators';
 import { InformationType } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
@@ -44,11 +44,4 @@ export class InformationPage {
     private readonly proofRepository: ProofRepository,
     private readonly informationRepository: InformationRepository,
   ) { }
-
-  ionViewWillEnter() {
-    this.proofRepository.refresh$().pipe(
-      switchMapTo(this.informationRepository.refresh$()),
-      untilDestroyed(this)
-    ).subscribe();
-  }
 }
