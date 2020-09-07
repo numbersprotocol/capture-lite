@@ -138,10 +138,10 @@ android {
 }
 ```
 
-When push to the `master` branch with new version in the `package.json` file, GitHub Action would automatically create new release.
+When push to the `develop` branch with new version in the `package.json` file, GitHub Action would automatically create new release.
 
 ### Deploy
 
 #### Demo App
 
-The demo app is hosted on the GitHub Page. It would be updated when there is a new commit on the `develop` branch.
+The demo app is hosted on the GitHub Page. It would be updated when there is a new commit on the `master` branch.
