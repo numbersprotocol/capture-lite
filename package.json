@@ -21,7 +21,7 @@
     "@angular/platform-browser": "~10.0.6",
     "@angular/platform-browser-dynamic": "~10.0.6",
     "@angular/router": "~10.0.6",
-    "@capacitor/android": "^2.4.0",
+    "@capacitor/android": "^2.4.1",
     "@capacitor/core": "2.4.0",
     "@ionic-native/core": "^5.0.7",
     "@ionic/angular": "^5.3.2",
