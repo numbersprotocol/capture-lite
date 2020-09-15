@@ -7,9 +7,20 @@
     </ion-buttons>
     <ion-title>{{ t('capture') }}</ion-title>
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
+  <ion-tabs>
+    <ion-tab-bar slot="top">
+      <ion-tab-button tab="schedule">
+        <ion-label>All</ion-label>
+      </ion-tab-button>
+      <ion-tab-button tab="schedule">
+        <ion-label>Tags</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let proofWithRaw of proofsWithRaw$ | async"
