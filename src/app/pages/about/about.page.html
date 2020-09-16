@@ -1,0 +1,22 @@
+<ion-header *transloco="let t">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink=".." routerDirection="back">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ t('about') }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *transloco="let t">
+  <ion-list>
+    <ion-item lines="none">
+      <ion-icon name="information" slot="start"></ion-icon>
+      <ion-label>
+        <h2>{{ t('version') }}</h2>
+        <p>{{ version$ | async }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

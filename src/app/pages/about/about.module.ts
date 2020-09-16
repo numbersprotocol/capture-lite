@@ -3,19 +3,17 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
-import { HeaderModule } from 'src/app/components/header/header.module';
-import { StoragePageRoutingModule } from './storage-routing.module';
-import { StoragePage } from './storage.page';
+import { AboutPageRoutingModule } from './about-routing.module';
+import { AboutPage } from './about.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    StoragePageRoutingModule,
-    TranslocoModule,
-    HeaderModule
+    AboutPageRoutingModule,
+    TranslocoModule
   ],
-  declarations: [StoragePage]
+  declarations: [AboutPage]
 })
-export class StoragePageModule { }
+export class AboutPageModule { }
