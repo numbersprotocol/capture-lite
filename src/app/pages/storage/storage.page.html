@@ -1,49 +1,10 @@
 <ion-header *transloco="let t" style="background-color:white !important">
   <ion-toolbar style="background-color:white !important">
-    <!-- <ion-buttons slot="secondary">
-      <ion-button routerLink="/settings"> -->
-    <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
-    <!-- <img slot="icon-only" src="../../../assets/appicon/More.svg" />
-      </ion-button>
-    </ion-buttons> -->
-    <!-- <ion-buttons slot="primary">
-      <ion-button routerLink="/settings"> -->
-    <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
-    <!-- <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
-      </ion-button>
-    </ion-buttons> -->
-    <!-- <ion-title>
-      {{ t('capture') }}
-      <ion-row>
-        <ion-col>
-          <ion-button routerLink="/settings">
-            <img slot="icon-only" src="../../../assets/appicon/More.svg" />
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button class="Top-Bar" expand="full" color="Blue" size="large" (click)="back()">
-            All
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button class="Top-Bar" expand="full" color="Blue" size="large" (click)="next()">
-            Tags
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button routerLink="/settings">
-            <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-title> -->
-
     <ion-buttons>
       <ion-grid>
         <ion-row>
           <ion-col style="text-align: left;">
             <ion-button routerLink="/settings">
-              <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
               <img slot="icon-only" src="../../../assets/appicon/More.svg" />
             </ion-button>
           </ion-col>
@@ -59,7 +20,6 @@
           </ion-col>
           <ion-col style="text-align: right;">
             <ion-button routerLink="/settings">
-              <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
               <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
             </ion-button>
           </ion-col>
@@ -95,16 +55,13 @@
       <ion-grid>
         <ion-col *ngFor="let proofWithRaw of proofsWithRaw$ | async"
           [routerLink]="['/proof', {hash: proofWithRaw.proof.hash}]" size="3" class="ion-no-padding">
-          <div class="date-card-title"> <strong>All {{ proofWithRaw.proof.timestamp}}</strong> </div>
+          <div class="date-card-title"> <strong>All {{getDays( proofWithRaw.proof.timestamp)}}</strong> </div>
           <ion-card class="select-card">
             <ion-thumbnail class="select-thumbnail">
               <ion-img [src]="'data:image/*;base64,' + proofWithRaw.rawBase64"></ion-img>
             </ion-thumbnail>
           </ion-card>
-
-
         </ion-col>
-
       </ion-grid>
     </ion-slide>
   </ion-slides>
