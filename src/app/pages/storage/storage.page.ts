@@ -42,6 +42,12 @@ export class StoragePage {
       // await new Promise(resolve => setTimeout(resolve, 1000));
     })();
   });
+  // proofsWithRaw$>>>proofsWithRawByDate$>>{data,img} 
+  // 建議的實現：
+  // 該功能應僅在存儲頁面中實現。首先，創建日期應從每個證明的時間戳中得出。creation_date在返回的對象（將由發出的對象）中添加一個屬性，proofWithRaw$並用轉換為的值填充該屬性timestamp。
+  // 聲明另一個只讀observable proofsWithRawByDate$，proofsWithRaw$用作源observable，使用pipable運算符將發出的源observable類型（對像數組）轉換為嵌套的對像數組，其中外部數組代表每個唯一的日期，內部數組代表所有的證明/ b64strings在給定的日期內。
+  // 修改模板以使用proofsWithRawByDate$而不是proofsWithRaw$，展開嵌套數組以按日期對照片進行分類。
+  // 調整樣式以符合UI設計
 
 
   readonly proofsWithRawByDate$ = this.proofs$.pipe(
@@ -93,12 +99,6 @@ export class StoragePage {
     tap(console.log)
   );
 
-  // proofsWithRaw$>>>proofsWithRawByDate$>>{data,img} 
-  // 建議的實現：
-  // 該功能應僅在存儲頁面中實現。首先，創建日期應從每個證明的時間戳中得出。creation_date在返回的對象（將由發出的對象）中添加一個屬性，proofWithRaw$並用轉換為的值填充該屬性timestamp。
-  // 聲明另一個只讀observable proofsWithRawByDate$，proofsWithRaw$用作源observable，使用pipable運算符將發出的源observable類型（對像數組）轉換為嵌套的對像數組，其中外部數組代表每個唯一的日期，內部數組代表所有的證明/ b64strings在給定的日期內。
-  // 修改模板以使用proofsWithRawByDate$而不是proofsWithRaw$，展開嵌套數組以按日期對照片進行分類。
-  // 調整樣式以符合UI設計
 
 
   readonly proofsWithRaw$ = this.proofs$.pipe(
@@ -146,37 +146,19 @@ export class StoragePage {
 
   ngOnInit() {
   }
-  ionSlideChange(slides: { getActiveIndex: () => Promise<number>; }) {
-    this.selectedSlide = slides;
 
-    // slides.getActiveIndex().then(
-    //   (slidesIndex: number) => {
-    //     if (slidesIndex == 5) {
-    //       this.buttonName = "Continue";
-    //     } else {
-    //       this.buttonName = "Next";
-    //     }
-    //   });
+  ionSlideLoad(slide: any) {
+    this.selectedSlide = slide;
+  }
+
+  ionSlideChange(slide: any) {
+    this.selectedSlide = slide;
   }
 
   next() {
     this.selectedSlide.slideNext();
-    // this.selectedSlide.getActiveIndex().then((slidesIndex: number) => {
-    //   if (slidesIndex == 5) {
-    //     console.log("Done Slider");
-    //   } else {
-    //     this.selectedSlide.slideNext();
-    //   }
-    // });
   }
   back() {
     this.selectedSlide.slidePrev();
-    // this.selectedSlide.getActiveIndex().then((slidesIndex: number) => {
-    //   if (slidesIndex == 5) {
-    //     console.log("Done Slider");
-    //   } else {
-    //     this.selectedSlide.slidePrev();
-    //   }
-    // });
   }
 }

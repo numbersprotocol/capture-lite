@@ -1,12 +1,14 @@
-// ion-thumbnail {
-//   --size: 25vw;
-// }
+
 .img-card {
-  margin: calc(var(--ion-padding, 12px) / 3);
-  // margin:0;
-  // width: calc(100vw/3);
+  margin: calc(var(--ion-padding, 9px) / 3);
   width: 30vw;
 
+}
+.Title {
+  // display: flex;
+  // flex-direction: row;
+  // justify-self: start;
+  color: #000;
 }
 .setTitle {
   display: flex;
@@ -14,15 +16,11 @@
   justify-self: start;
   padding-bottom: 10px;
   color: #000;
-  margin: calc(var(--ion-padding, 12px) / 3);
+  margin: calc(var(--ion-padding, 9px) / 3);
 }
 
 .img-thumbnail {
   --size: calc(90vw/3);
-  // --size: 30vw;
-
-  // width: calc(100vw/3);
-
 }
 
 .select-thumbnail {
@@ -36,7 +34,6 @@ color: #000;
 margin-left: 5vw;
 padding-bottom: 10px;
 padding-top: 10px;
-
 }
 
 

@@ -1,36 +1,77 @@
 <ion-header *transloco="let t" style="background-color:white !important">
   <ion-toolbar style="background-color:white !important">
-    <ion-buttons slot="secondary">
-      <ion-button routerLink="/settings">
-        <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
-        <img slot="icon-only" src="../../../assets/appicon/More.svg" />
+    <!-- <ion-buttons slot="secondary">
+      <ion-button routerLink="/settings"> -->
+    <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
+    <!-- <img slot="icon-only" src="../../../assets/appicon/More.svg" />
       </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="primary">
-      <ion-button routerLink="/settings">
-        <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
-        <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
+    </ion-buttons> -->
+    <!-- <ion-buttons slot="primary">
+      <ion-button routerLink="/settings"> -->
+    <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
+    <!-- <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
       </ion-button>
-    </ion-buttons>
-    <ion-title>
-      <!-- {{ t('capture') }} -->
+    </ion-buttons> -->
+    <!-- <ion-title>
+      {{ t('capture') }}
       <ion-row>
         <ion-col>
+          <ion-button routerLink="/settings">
+            <img slot="icon-only" src="../../../assets/appicon/More.svg" />
+          </ion-button>
+        </ion-col>
+        <ion-col>
           <ion-button class="Top-Bar" expand="full" color="Blue" size="large" (click)="back()">
-            <div class="parent"> All </div>
+            All
           </ion-button>
         </ion-col>
         <ion-col>
           <ion-button class="Top-Bar" expand="full" color="Blue" size="large" (click)="next()">
-            <div class="parent"> Tags </div>
+            Tags
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button routerLink="/settings">
+            <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
           </ion-button>
         </ion-col>
       </ion-row>
-    </ion-title>
+    </ion-title> -->
+
+    <ion-buttons>
+      <ion-grid>
+        <ion-row>
+          <ion-col style="text-align: left;">
+            <ion-button routerLink="/settings">
+              <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
+              <img slot="icon-only" src="../../../assets/appicon/More.svg" />
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: center;" (click)="back()">
+            <ion-button style="color: black;" class="Top-Bar" expand="full" color="Blue" size="large">
+              All
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: center;" (click)="next()">
+            <ion-button style="color: black;" class="Top-Bar" expand="full" color="Blue" size="large">
+              Tags
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: right;">
+            <ion-button routerLink="/settings">
+              <!-- <ion-icon slot="icon-only" name="settings"></ion-icon> -->
+              <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-slides #slides [options]="slideOpts" autoplay="false" (ionSlideDidChange)="ionSlideChange(slides)" pager>
+
+  <ion-slides #slides [options]="slideOpts" autoplay="false" (ionSlidesDidLoad)="ionSlideLoad(slides)"
+    (ionSlideDidChange)="ionSlideChange(slides)" pager>
     <ion-slide style="background:white">
       <ion-grid>
         <ion-col class="img-set" *ngFor="let proofWithSet of proofsWithRawByDate$ | async">
