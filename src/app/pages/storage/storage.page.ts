@@ -53,8 +53,8 @@ export class StoragePage {
           )
           .reduce((groupedProofsWithRawBase64, proofWithRawBase64) => {
             const index = groupedProofsWithRawBase64.findIndex(
-              proofsWithRawBase64 =>
-                new Date(proofsWithRawBase64[0].proof.timestamp)
+              processingproofsWithRawBase64 =>
+                new Date(processingproofsWithRawBase64[0].proof.timestamp)
                   .toISOString()
                   .substr(0, 'yyyy-mm-dd'.length) ===
                 new Date(proofWithRawBase64.proof.timestamp)
