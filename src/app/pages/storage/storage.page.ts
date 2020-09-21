@@ -30,9 +30,9 @@ export class StoragePage {
     })))
   );
 
-  index: number = 0;
+  index = 0;
   @ViewChildren('slides') slides: IonSlides | undefined;
-  buttonName = "Next";
+  buttonName = 'Next';
   selectedSlide: any;
 
   slideOpts = {
@@ -64,8 +64,6 @@ export class StoragePage {
     ).subscribe();
   }
 
-  ngOnInit() {
-  }
 
   ionSlideLoad(slide: any) {
     this.selectedSlide = slide;
