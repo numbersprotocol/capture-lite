@@ -19,18 +19,7 @@ export class StoragePage {
 
   private readonly proofs$ = this.proofRepository.getAll$();
 
-  // readonly proofsWithRawByDate$ = this.proofs$.pipe(
-  //   concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getThumbnail$(proof)))),
-  //   concatMap(base64Strings => zip(this.proofs$, of(base64Strings))),
-  //   map(([proofs, base64Strings]) => proofs.map((proof, index) => ({
-  //     proof,
-  //     rawBase64: base64Strings[index]
-  //   }))),
-  //   map((proofsWithRawBase64) => proofsWithRawBase64.sort(
-  //     (proofWithRawBase64A, proofWithRawBase64B) =>
-  //       proofWithRawBase64B.proof.timestamp - proofWithRawBase64A.proof.timestamp
-  //   ))
-  // );
+
   readonly today$ = new Observable(observer => {
     (async () => {
       observer.next('');
