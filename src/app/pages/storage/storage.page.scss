@@ -1,6 +1,6 @@
 
 .img-card {
-  margin: calc( var( --ion-padding, 9px ) / 3 );
+  margin: calc(var(--ion-padding, 9px) / 3);
   width: 30vw;
 
 }
@@ -15,11 +15,11 @@
   justify-self: start;
   padding-bottom: 10px;
   color: #000;
-  margin: calc( var( --ion-padding, 9px ) / 3 );
+  margin: calc(var(--ion-padding, 9px) / 3);
 }
 
 .img-thumbnail {
-  --size: calc( 90vw / 3 );
+  --size: calc(90vw / 3);
 }
 
 .select-thumbnail {
