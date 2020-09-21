@@ -1,5 +1,4 @@
-import { Component, ViewChildren } from '@angular/core';
-import { IonSlides } from '@ionic/angular';
+import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, Observable, of, zip } from 'rxjs';
 import { concatMap, map, mergeMap } from 'rxjs/operators';
@@ -98,17 +97,7 @@ export class StoragePage {
     })))
   );
 
-  index: number = 0;
-  @ViewChildren('slides') slides: IonSlides | undefined;
-  buttonName = "Next";
-  selectedSlide: any;
 
-  slideOpts = {
-    // slidesPerView: 1,
-
-    loop: false,
-    autoplay: false
-  };
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly cameraService: CameraService,
@@ -135,18 +124,4 @@ export class StoragePage {
   ngOnInit() {
   }
 
-  ionSlideLoad(slide: any) {
-    this.selectedSlide = slide;
-  }
-
-  ionSlideChange(slide: any) {
-    this.selectedSlide = slide;
-  }
-
-  next() {
-    this.selectedSlide.slideNext();
-  }
-  back() {
-    this.selectedSlide.slidePrev();
-  }
 }
