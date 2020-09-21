@@ -1,0 +1,51 @@
+<ion-header *transloco="let t" id="menu">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ t(headerTitle) }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-menu *transloco="let t" side="start" menuId="first" contentId="menu">
+  <ion-header>
+    <ion-toolbar color="translucent">
+      <ion-title>{{ t('settings') }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-menu-toggle>
+        <ion-item routerLink="/general">
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('general') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle>
+        <ion-item routerLink="/defaultinformationprovider">
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('defaultInformationProvider') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle>
+        <ion-item routerLink="/defaultsignature">
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('defaultSignature') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle>
+        <ion-item>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('informationProvider') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle>
+        <ion-item routerLink="/about">
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('about') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-list>
+  </ion-content>
+</ion-menu>
