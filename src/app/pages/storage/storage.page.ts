@@ -110,7 +110,5 @@ export class StoragePage {
     ).subscribe();
   }
 
-  ngOnInit() {
-  }
 
 }
