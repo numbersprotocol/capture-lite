@@ -19,6 +19,19 @@ const routes: Routes = [{
 }, {
   path: 'information',
   loadChildren: () => import('./pages/information/information.module').then(m => m.InformationPageModule)
+}, {
+  path: 'general',
+  loadChildren: () => import('./pages/general/general.module').then(m => m.GeneralPageModule)
+}, {
+  path: 'defaultinformationprovider',
+  // tslint:disable-next-line: max-line-length
+  loadChildren: () => import('./pages/defaultinformationprovider/defaultinformationprovider.module').then(m => m.DefaultInformationProviderPageModule)
+}, {
+  path: 'defaultsignature',
+  loadChildren: () => import('./pages/defaultsignature/defaultsignature.module').then(m => m.DefaultSignaturePageModule)
+}, {
+  path: 'about',
+  loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule)
 }];
 
 @NgModule({

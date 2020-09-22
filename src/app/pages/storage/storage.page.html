@@ -1,13 +1,4 @@
-<ion-header *transloco="let t">
-  <ion-toolbar>
-    <ion-buttons slot="primary">
-      <ion-button routerLink="/settings">
-        <ion-icon slot="icon-only" name="settings"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>{{ t('capture') }}</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [headerTitle]="'capture'"></app-header>
 
 <ion-content>
 

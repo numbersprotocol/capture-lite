@@ -47,6 +47,7 @@
   "about": "About",
   "version": "Version",
   "defaultInformationProvider": "Default Information Provider",
+  "informationProvider": "Information Provider",
   "collectDeviceInfo": "Collect Device Info",
   "collectLocationInfo": "Collect Location Info",
   "unknownError": "Unknown Error",
