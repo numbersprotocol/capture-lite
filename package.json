@@ -23,13 +23,16 @@
     "@angular/router": "~10.0.6",
     "@capacitor/android": "^2.4.1",
     "@capacitor/core": "2.4.1",
+    "@capacitor/ios": "^2.4.1",
     "@ionic-native/core": "^5.0.7",
     "@ionic/angular": "^5.3.2",
     "@ionic/pwa-elements": "^3.0.1",
     "@ngneat/transloco": "^2.19.1",
-    "image-blob-reduce": "^1.0.7",
     "@ngneat/until-destroy": "^8.0.2",
+
+    "image-blob-reduce": "^1.0.7",
     "rxjs": "~6.6.3",
+
     "tslib": "^2.0.1",
     "zone.js": "~0.10.2"
   },
