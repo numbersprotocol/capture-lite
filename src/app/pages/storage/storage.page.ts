@@ -22,9 +22,7 @@ export class StoragePage {
 
 
   readonly today$ = new Observable(observer => {
-    (async () => {
-      observer.next('');
-    })();
+    observer.next('');
   });
 
   readonly proofsWithRaw$ = this.proofs$.pipe(
@@ -38,7 +36,8 @@ export class StoragePage {
 
 
   readonly proofsWithRawByDate$ = this.proofsWithRaw$.pipe(
-    map(proofsWithRaw => proofsWithRaw.sort((proofWithRawBase64A, proofWithRawBase64B) => proofWithRawBase64B.proof.timestamp - proofWithRawBase64A.proof.timestamp)),
+    map(proofsWithRaw => proofsWithRaw.sort((proofWithRawBase64A, proofWithRawBase64B) =>
+      proofWithRawBase64B.proof.timestamp - proofWithRawBase64A.proof.timestamp)),
     mergeMap(proofsWithRawBase64 => this.today$.pipe(
       map(date =>
         proofsWithRawBase64
