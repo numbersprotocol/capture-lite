@@ -4,7 +4,7 @@
 
   <ion-grid>
     <ion-col class="img-set" *ngFor="let proofWithSet of proofsWithRawByDate$ | async">
-      <div class="setTitle"><strong>{{getDays(proofWithSet[0].proof.timestamp)}}</strong></div>
+      <div class="setTitle"><strong>{{getDate(proofWithSet[0].proof.timestamp)}}</strong></div>
       <ion-row>
         <!-- {{ proofWithSet[0].proof.timestamp}} -->
         <ion-card size="4" class="img-card" *ngFor="let proofWithRaw of proofWithSet"
