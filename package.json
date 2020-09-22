@@ -31,6 +31,7 @@
     "@ngneat/until-destroy": "^8.0.2",
     "image-blob-reduce": "^1.0.7",
     "rxjs": "~6.6.3",
+
     "tslib": "^2.0.1",
     "zone.js": "~0.10.2"
   },
