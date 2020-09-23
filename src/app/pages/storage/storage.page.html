@@ -29,24 +29,23 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
   <ion-slides #slides [options]="slideOpts" autoplay="false" (ionSlidesDidLoad)="ionSlideLoad(slides)"
     (ionSlideDidChange)="ionSlideChange(slides)" pager>
     <ion-slide style="background:white">
-      <ion-grid>
-        <ion-row>
-          <ion-col *ngFor="let proofWithRaw of proofsWithRaw$ | async"
-            [routerLink]="['/proof', {hash: proofWithRaw.proof.hash}]" size="3" class="ion-no-padding">
-            <ion-card>
-              <ion-thumbnail>
-                <ion-img [src]="'data:image/*;base64,' + proofWithRaw.rawBase64"></ion-img>
-              </ion-thumbnail>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+       <ion-grid>
+    <ion-col class="img-set" *ngFor="let proofWithSet of proofsWithRawByDate$ | async">
+      <div class="setTitle"><strong>{{proofWithSet[0].date}}</strong></div>
+      <ion-row>
+        <ion-card size="4" class="img-card" *ngFor="let proofWithRaw of proofWithSet"
+          [routerLink]="['/proof', {hash: proofWithRaw.proof.hash}]">
+          <ion-thumbnail class="img-thumbnail">
+            <ion-img [src]="'data:image/*;base64,' + proofWithRaw.rawBase64"></ion-img>
+          </ion-thumbnail>
+        </ion-card>
+      </ion-row>
+    </ion-col>
+  </ion-grid>
     </ion-slide>
     <ion-slide style="background:white">
       <!-- <h1>Slide 2</h1> -->
@@ -63,6 +62,7 @@
       </ion-grid>
     </ion-slide>
   </ion-slides>
+
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button (click)="capture()">
       <ion-icon name="camera"></ion-icon>
