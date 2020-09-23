@@ -1,5 +1,6 @@
 import { formatDate } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChildren } from '@angular/core';
+import { IonSlides } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
@@ -9,6 +10,7 @@ import { Proof } from 'src/app/services/data/proof/proof';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { fromExtension } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
+
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -30,6 +32,16 @@ export class StoragePage {
       date: this.getDate(proof.timestamp)
     })))
   );
+
+  index = 0;
+  @ViewChildren('slides') slides: IonSlides | undefined;
+  buttonName = 'Next';
+  selectedSlide: any;
+
+  slideOpts = {
+    loop: false,
+    autoplay: false
+  };
 
 
   readonly proofsWithRawByDate$ = this.proofsWithRaw$.pipe(
@@ -55,9 +67,6 @@ export class StoragePage {
   );
 
 
-
-
-
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly cameraService: CameraService,
@@ -66,6 +75,7 @@ export class StoragePage {
 
   getDate(timestamp: number) {
     return formatDate(timestamp, 'mediumDate', 'en-US');
+
   }
 
   capture() {
@@ -79,4 +89,18 @@ export class StoragePage {
   }
 
 
+  ionSlideLoad(slide: any) {
+    this.selectedSlide = slide;
+  }
+
+  ionSlideChange(slide: any) {
+    this.selectedSlide = slide;
+  }
+
+  next() {
+    this.selectedSlide.slideNext();
+  }
+  back() {
+    this.selectedSlide.slidePrev();
+  }
 }
