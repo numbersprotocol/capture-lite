@@ -1,33 +1,5 @@
-<ion-header *transloco="let t" style="background-color:white !important">
-  <ion-toolbar style="background-color:white !important">
-    <ion-buttons>
-      <ion-grid>
-        <ion-row>
-          <ion-col style="text-align: left;">
-            <ion-button routerLink="/settings">
-              <img slot="icon-only" src="../../../assets/appicon/More.svg" />
-            </ion-button>
-          </ion-col>
-          <ion-col style="text-align: center;" (click)="back()">
-            <ion-button style="color: black;" class="Top-Bar" expand="full" color="Blue" size="large">
-              All
-            </ion-button>
-          </ion-col>
-          <ion-col style="text-align: center;" (click)="next()">
-            <ion-button style="color: black;" class="Top-Bar" expand="full" color="Blue" size="large">
-              Tags
-            </ion-button>
-          </ion-col>
-          <ion-col style="text-align: right;">
-            <ion-button routerLink="/settings">
-              <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-header [headerTitle]="capture" (next)="next()" (back)="back()"></app-header>
+
 <ion-content>
   <ion-slides #slides [options]="slideOpts" autoplay="false" (ionSlidesDidLoad)="ionSlideLoad(slides)"
     (ionSlideDidChange)="ionSlideChange(slides)" pager>

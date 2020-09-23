@@ -1,9 +1,31 @@
 <ion-header *transloco="let t" id="menu">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+  <ion-toolbar style="background-color:white !important">
+    <ion-buttons>
+      <ion-grid>
+        <ion-row>
+          <ion-col style="text-align: left;">
+            <ion-button>
+              <ion-menu-button></ion-menu-button>
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: center;" (click)="back.emit()">
+            <ion-button style="color: black;" class="Top-Bar" expand="full" color="Blue" size="large">
+              All
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: center;" (click)="next.emit()">
+            <ion-button style="color: black;" class="Top-Bar" expand="full" color="Blue" size="large">
+              Tags
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: right;">
+            <ion-button routerLink="/settings">
+              <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-buttons>
-    <ion-title>{{ t(headerTitle) }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
