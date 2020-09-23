@@ -1,7 +1,6 @@
+import { formatDate } from '@angular/common';
 import { Component, ViewChildren } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
-import { formatDate } from '@angular/common';
-
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
@@ -11,6 +10,7 @@ import { Proof } from 'src/app/services/data/proof/proof';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { fromExtension } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
+
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -39,8 +39,6 @@ export class StoragePage {
   selectedSlide: any;
 
   slideOpts = {
-    // slidesPerView: 1,
-
     loop: false,
     autoplay: false
   };
