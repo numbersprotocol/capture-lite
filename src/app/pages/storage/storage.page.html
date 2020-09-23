@@ -2,7 +2,7 @@
 <ion-content>
   <ion-grid>
     <ion-col class="img-set" *ngFor="let proofWithSet of proofsWithRawByDate$ | async">
-      <div class="setTitle"><strong>{{getDate(proofWithSet[0].proof.timestamp)}}</strong></div>
+      <div class="setTitle"><strong>{{proofWithSet[0].date}}</strong></div>
       <ion-row>
         <ion-card size="4" class="img-card" *ngFor="let proofWithRaw of proofWithSet"
           [routerLink]="['/proof', {hash: proofWithRaw.proof.hash}]">

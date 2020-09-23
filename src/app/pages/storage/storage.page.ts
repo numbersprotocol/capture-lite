@@ -1,8 +1,8 @@
 import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Observable, of, zip } from 'rxjs';
-import { concatMap, map, mergeMap } from 'rxjs/operators';
+import { of, zip } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { Proof } from 'src/app/services/data/proof/proof';
@@ -21,16 +21,13 @@ export class StoragePage {
   private readonly proofs$ = this.proofRepository.getAll$();
 
 
-  readonly today$ = new Observable(observer => {
-    observer.next('');
-  });
-
   readonly proofsWithRaw$ = this.proofs$.pipe(
     concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getThumbnail$(proof)))),
     concatMap(base64Strings => zip(this.proofs$, of(base64Strings))),
     map(([proofs, base64Strings]) => proofs.map((proof, index) => ({
       proof,
-      rawBase64: base64Strings[index]
+      rawBase64: base64Strings[index],
+      date: this.getDate(proof.timestamp)
     })))
   );
 
@@ -38,31 +35,23 @@ export class StoragePage {
   readonly proofsWithRawByDate$ = this.proofsWithRaw$.pipe(
     map(proofsWithRaw => proofsWithRaw.sort((proofWithRawBase64A, proofWithRawBase64B) =>
       proofWithRawBase64B.proof.timestamp - proofWithRawBase64A.proof.timestamp)),
-    mergeMap(proofsWithRawBase64 => this.today$.pipe(
-      map(date =>
-        proofsWithRawBase64
-          .filter(
-            proofWithRawBase64 =>
-              true ||
-              this.getDate(proofWithRawBase64.proof.timestamp) === date
-          )
-          .reduce((groupedProofsWithRawBase64, proofWithRawBase64) => {
-            const index = groupedProofsWithRawBase64.findIndex(
-              processingproofsWithRawBase64 =>
-                this.getDate(processingproofsWithRawBase64[0].proof.timestamp)
-                === this.getDate(proofWithRawBase64.proof.timestamp)
-            );
-            if (index === -1) {
-              groupedProofsWithRawBase64.push([proofWithRawBase64]);
-            }
-            else {
-              groupedProofsWithRawBase64[index].push(proofWithRawBase64);
-            }
-
-            return groupedProofsWithRawBase64;
-          }, [] as { proof: Proof, rawBase64: string; }[][])
-      )
-    )),
+    map(proofsWithRawBase64 =>
+      proofsWithRawBase64
+        .reduce((groupedProofsWithRawBase64, proofWithRawBase64) => {
+          const index = groupedProofsWithRawBase64.findIndex(
+            processingproofsWithRawBase64 =>
+              processingproofsWithRawBase64[0].date
+              === proofWithRawBase64.date
+          );
+          if (index === -1) {
+            groupedProofsWithRawBase64.push([proofWithRawBase64]);
+          }
+          else {
+            groupedProofsWithRawBase64[index].push(proofWithRawBase64);
+          }
+          return groupedProofsWithRawBase64;
+        }, [] as { proof: Proof, rawBase64: string, date: string; }[][])
+    )
   );
 
 
@@ -76,7 +65,6 @@ export class StoragePage {
   ) { }
 
   getDate(timestamp: number) {
-    console.log(formatDate(timestamp, 'mediumDate', 'en-US'));
     return formatDate(timestamp, 'mediumDate', 'en-US');
   }
 
