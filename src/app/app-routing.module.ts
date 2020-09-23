@@ -5,10 +5,12 @@ const routes: Routes = [{
   path: '',
   redirectTo: 'storage',
   pathMatch: 'full'
-}, {
+},
+{
   path: 'storage',
   loadChildren: () => import('./pages/storage/storage.module').then(m => m.StoragePageModule)
-}, {
+},
+{
   path: 'settings',
   loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
 }, {
