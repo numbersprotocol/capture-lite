@@ -1,16 +1,19 @@
 import { formatDate } from '@angular/common';
 import { Component, ViewChildren } from '@angular/core';
-import { IonSlides } from '@ionic/angular';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
 import { of, zip } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { Proof } from 'src/app/services/data/proof/proof';
-import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
+import {
+  ProofRepository,
+} from 'src/app/services/data/proof/proof-repository.service';
 import { fromExtension } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 
+import { IonSlides } from '@ionic/angular';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -30,7 +33,9 @@ export class StoragePage {
       proof,
       rawBase64: base64Strings[index],
       date: this.getDate(proof.timestamp)
-    })))
+    }))),
+    map(proofsWithRaw => proofsWithRaw.sort((proofWithRawBase64A, proofWithRawBase64B) =>
+      proofWithRawBase64B.proof.timestamp - proofWithRawBase64A.proof.timestamp)),
   );
 
   index = 0;
@@ -45,8 +50,6 @@ export class StoragePage {
 
 
   readonly proofsWithRawByDate$ = this.proofsWithRaw$.pipe(
-    map(proofsWithRaw => proofsWithRaw.sort((proofWithRawBase64A, proofWithRawBase64B) =>
-      proofWithRawBase64B.proof.timestamp - proofWithRawBase64A.proof.timestamp)),
     map(proofsWithRawBase64 =>
       proofsWithRawBase64
         .reduce((groupedProofsWithRawBase64, proofWithRawBase64) => {
