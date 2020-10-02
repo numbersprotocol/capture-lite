@@ -3,9 +3,19 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [{
   path: '',
-  redirectTo: 'storage',
+  redirectTo: 'login',
+  // redirectTo: 'storage',
   pathMatch: 'full'
 },
+{
+  path: 'login',
+  loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
+},
+{
+  path: 'signup',
+  loadChildren: () => import('./pages/signup/signup.module').then(m => m.SignupPageModule)
+},
+
 {
   path: 'storage',
   loadChildren: () => import('./pages/storage/storage.module').then(m => m.StoragePageModule)
@@ -38,7 +48,8 @@ const routes: Routes = [{
 }, {
   path: 'about',
   loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule)
-}];
+},
+];
 
 @NgModule({
   imports: [
