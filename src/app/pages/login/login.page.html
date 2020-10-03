@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content *transloco="let t">
   <ion-grid>
     <ion-row>
       <div class="logo">
@@ -8,27 +8,27 @@
     <ion-row class="inputs">
       <ion-col>
         <div class="input">
-          <ion-input placeholder="Enter Email"></ion-input>
+          <ion-input [placeholder]=" t('email') "></ion-input>
         </div>
         <div class="input">
-          <ion-input placeholder="Enter Password"></ion-input>
+          <ion-input [placeholder]=" t('password') "></ion-input>
         </div>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col style="text-align: center;">
-        Bring Trust Into Data
+        <ion-title>{{ t('bringTrustIntoData') }}</ion-title>
       </ion-col>
     </ion-row>
     <ion-row class="buttons">
       <ion-col style="text-align: right;">
         <ion-button routerLink="">
-          <ion-title>LOGIN</ion-title>
+          {{ t('login') }}
         </ion-button>
       </ion-col>
       <ion-col style="text-align: right;">
         <ion-button replaceUrl="true" routerLink="/signup">
-          CREATE AN ACCOUNT?
+          {{ t('createAnAccount') }}
         </ion-button>
       </ion-col>
     </ion-row>
