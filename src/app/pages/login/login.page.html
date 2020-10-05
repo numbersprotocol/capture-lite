@@ -5,6 +5,7 @@
         <img slot="icon-only" src="../../../assets/Capture.svg" />
       </div>
     </ion-row>
+    <div class="input_msg">{{ t('message.PleaseCheckYourEmail') }}</div>
     <ion-row class="inputs">
       <ion-col>
         <div class="input">
@@ -16,17 +17,17 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col style="text-align: center;">
+      <ion-col class="input_C">
         <ion-title>{{ t('bringTrustIntoData') }}</ion-title>
       </ion-col>
     </ion-row>
     <ion-row class="buttons">
-      <ion-col style="text-align: right;">
+      <ion-col class="input_R">
         <ion-button routerLink="">
           {{ t('login') }}
         </ion-button>
       </ion-col>
-      <ion-col style="text-align: right;">
+      <ion-col class="input_R">
         <ion-button replaceUrl="true" routerLink="/signup">
           {{ t('createAnAccount') }}
         </ion-button>

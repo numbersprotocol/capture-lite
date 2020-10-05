@@ -38,6 +38,19 @@ ion-input{
   border-width: 10px!important;
   border-bottom: 10px!important;
 }
+.input_msg{
+  width: 100%;
+  height: 20px;
+  color: red!important;
+  text-align: center;
+  
+}
+.input_R {
+  text-align: right;
+}
+.input_C {
+  text-align: center;
+}
 .input{
   width: calc(100vw - var(--ion-padding, 23px) )!important;
   border-color: #564DFC!important;
