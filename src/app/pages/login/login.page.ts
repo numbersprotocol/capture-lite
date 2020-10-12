@@ -1,12 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import {
+  BlockingActionService,
+} from 'src/app/services/blocking-action/blocking-action.service';
+import {
+  NumbersStorageApi,
+} from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 
+import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 
+interface LoginFormModel {
+  email: string;
+  password: string;
+}
 @UntilDestroy()
 @Component({
   selector: 'app-login',
@@ -15,12 +27,19 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 })
 export class LoginPage implements OnInit {
   form = new FormGroup({});
-  model = {};
+  model: LoginFormModel = { email: '', password: '' };
+  options: FormlyFormOptions = {};
   fields: FormlyFieldConfig[] = [];
   formInitialized = false;
+  private readonly messageSubject$ = new BehaviorSubject('');
+  message$: Observable<string> = this.messageSubject$;
 
   constructor(
+    private readonly blockingActionService: BlockingActionService,
+    private readonly numbersStorageApi: NumbersStorageApi,
+    private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
+    private readonly router: Router,
   ) { }
 
   ngOnInit() {
@@ -38,7 +57,22 @@ export class LoginPage implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.model);
+    const action$ = this.numbersStorageApi.login$(this.model.email, this.model.password);
+    this.blockingActionService.run$(
+      action$,
+      { message: this.translocoService.translate('message.pleaseWait') }
+    ).pipe(
+      untilDestroyed(this),
+    ).subscribe(
+      () => this.router.navigate(['storage'], { replaceUrl: true }),
+      err => this.toastController
+        .create({
+          message: this.translocoService.translate('message.emailOrPasswordIsInvalid'),
+          duration: 4000,
+          color: 'danger',
+        })
+        .then(toast => toast.present()),
+    );
   }
 
   private createFormFields(translations: string[]): FormlyFieldConfig[] {

@@ -85,11 +85,12 @@
     "passwordNotMatching": "Password not matching.",
     "accountNotActivated": "This account has not been activated yet.",
     "ifYouNotReceiveEmail": "If you haven't received the verification email in 10 minutes, you can click the button below to resend the verification email.",
-    "emailOrPasswordIsInvalid": "The email address or password you entered is invalid",
+    "emailOrPasswordIsInvalid": "The email address or password you entered is invalid.",
     "tooManyRetries": "You have entered the invalid email or password too many times. Please try again later.",
     "publishingProof": "Publishing proof {{hash}} to {{publisherName}}.",
     "proofPublished": "Proof {{hash}} has been published to {{publisherName}}.",
     "forbiddenAllNumeric": "Cannot contain only numbers.",
-    "isNotEmail": "Does not follow email format."
+    "isNotEmail": "Does not follow email format.",
+    "pleaseWait": "Please wait..."
   }
 }

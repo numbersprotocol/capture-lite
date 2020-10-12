@@ -1,11 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import {
+  BlockingActionService,
+} from 'src/app/services/blocking-action/blocking-action.service';
+import {
+  NumbersStorageApi,
+} from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 
+import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
+
+interface LoginFormModel {
+  email: string;
+  password: string;
+  repeatPassword: string;
+}
+
+interface MessageConfig {
+  color: string;
+  text: string;
+}
 
 @UntilDestroy()
 @Component({
@@ -16,11 +34,17 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 export class SignupPage implements OnInit {
 
   form = new FormGroup({});
-  model = {};
+  model = { email: '', password: '', repeatPassword: '' };
+  options: FormlyFormOptions = {};
   fields: FormlyFieldConfig[] = [];
   formInitialized = false;
+  private readonly messageConfigSubject$ = new BehaviorSubject({ color: '', text: '' });
+  messageConfig$: Observable<MessageConfig> = this.messageConfigSubject$;
 
   constructor(
+    private readonly blockingActionService: BlockingActionService,
+    private readonly numbersStorageApi: NumbersStorageApi,
+    private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
   ) { }
 
@@ -40,7 +64,34 @@ export class SignupPage implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.model);
+    const defaultUsername = '';
+    const action$ = this.numbersStorageApi.createUser$(defaultUsername, this.model.email, this.model.password);
+
+    this.blockingActionService.run$(
+      action$,
+      { message: this.translocoService.translate('message.pleaseWait') }
+    ).pipe(
+      untilDestroyed(this),
+    ).subscribe(
+      () => {
+        this.messageConfigSubject$.next({
+          color: 'primary',
+          text:
+            this.translocoService.translate('message.verificationEmailSent') +
+            this.translocoService.translate('message.pleaseCheckYourEmail')
+        });
+        if (this?.options?.resetModel) {
+          this.options.resetModel();
+        }
+      },
+      // FIXME: The actual error type can't be determined from response. Fix this after API updates error messages.
+      err => this.toastController
+        .create({
+          message: this.translocoService.translate('message.emailAlreadyExists'),
+          duration: 4000,
+          color: 'danger',
+        })
+        .then(toast => toast.present()));
   }
 
   private createFormFields(translations: string[]): FormlyFieldConfig[] {

@@ -5,11 +5,10 @@
         <img slot="icon-only" src="../../../assets/Capture.svg" />
       </div>
     </ion-row>
-    <div class="input_msg">{{ t('message.PleaseCheckYourEmail') }}</div>
     <form [formGroup]="form" (ngSubmit)="onSubmit(model)" *ngIf="formInitialized">
       <ion-row class="inputs">
         <ion-col>
-          <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+          <formly-form [form]="form" [fields]="fields" [options]="options" [model]="model"></formly-form>
         </ion-col>
       </ion-row>
       <ion-row>
