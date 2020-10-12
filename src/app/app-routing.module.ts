@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
+import { AuthGuardService } from './services/auth/auth-guard.service';
+
 const routes: Routes = [{
   path: '',
-  redirectTo: 'login',
-  // redirectTo: 'storage',
+  redirectTo: 'storage',
   pathMatch: 'full'
 },
 {
@@ -18,36 +19,46 @@ const routes: Routes = [{
 
 {
   path: 'storage',
-  loadChildren: () => import('./pages/storage/storage.module').then(m => m.StoragePageModule)
+  loadChildren: () => import('./pages/storage/storage.module').then(m => m.StoragePageModule),
+  canActivate: [AuthGuardService],
 },
 {
   path: 'settings',
-  loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
+  loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule),
+  canActivate: [AuthGuardService],
 }, {
   path: 'proof',
-  loadChildren: () => import('./pages/proof/proof.module').then(m => m.ProofPageModule)
+  loadChildren: () => import('./pages/proof/proof.module').then(m => m.ProofPageModule),
+  canActivate: [AuthGuardService],
 }, {
   path: 'information',
-  loadChildren: () => import('./pages/information/information.module').then(m => m.InformationPageModule)
+  loadChildren: () => import('./pages/information/information.module').then(m => m.InformationPageModule),
+  canActivate: [AuthGuardService],
 }, {
   path: 'publishers',
-  redirectTo: 'settings'
+  redirectTo: 'settings',
+  canActivate: [AuthGuardService],
 }, {
   path: 'publishers/numbers-storage',
-  loadChildren: () => import('./pages/publishers/numbers-storage/numbers-storage.module').then(m => m.NumbersStoragePageModule)
+  loadChildren: () => import('./pages/publishers/numbers-storage/numbers-storage.module').then(m => m.NumbersStoragePageModule),
+  canActivate: [AuthGuardService],
 }, {
   path: 'general',
-  loadChildren: () => import('./pages/general/general.module').then(m => m.GeneralPageModule)
+  loadChildren: () => import('./pages/general/general.module').then(m => m.GeneralPageModule),
+  canActivate: [AuthGuardService],
 }, {
   path: 'defaultinformationprovider',
   // tslint:disable-next-line: max-line-length
-  loadChildren: () => import('./pages/defaultinformationprovider/defaultinformationprovider.module').then(m => m.DefaultInformationProviderPageModule)
+  loadChildren: () => import('./pages/defaultinformationprovider/defaultinformationprovider.module').then(m => m.DefaultInformationProviderPageModule),
+  canActivate: [AuthGuardService],
 }, {
   path: 'defaultsignature',
-  loadChildren: () => import('./pages/defaultsignature/defaultsignature.module').then(m => m.DefaultSignaturePageModule)
+  loadChildren: () => import('./pages/defaultsignature/defaultsignature.module').then(m => m.DefaultSignaturePageModule),
+  canActivate: [AuthGuardService],
 }, {
   path: 'about',
-  loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule)
+  loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule),
+  canActivate: [AuthGuardService],
 },
 ];
 
