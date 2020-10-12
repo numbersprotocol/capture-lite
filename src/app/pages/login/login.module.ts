@@ -1,10 +1,47 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { IonicModule } from '@ionic/angular';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import {
+  FORMLY_CONFIG, FormlyFieldConfig, FormlyModule,
+} from '@ngx-formly/core';
+import { FormlyIonicModule } from '@ngx-formly/ionic';
+
 import { LoginPageRoutingModule } from './login-routing.module';
 import { LoginPage } from './login.page';
+
+export function registerValidationMessages(translocoService: TranslocoService) {
+  return {
+    validationMessages: [
+      {
+        name: 'pattern',
+        message() {
+          return translocoService.selectTranslate('message.pleaseEnterValidEmail');
+        },
+      },
+      {
+        name: 'minlength',
+        message(_: any, fields: FormlyFieldConfig) {
+          return translocoService.selectTranslate(
+            'message.passwordMustBeBetween',
+            { min: fields?.templateOptions?.minLength, max: fields?.templateOptions?.maxLength },
+          );
+        },
+      },
+      {
+        name: 'maxlength',
+        message(_: any, fields: FormlyFieldConfig) {
+          return translocoService.selectTranslate(
+            'message.passwordMustBeBetween',
+            { min: fields?.templateOptions?.minLength, max: fields?.templateOptions?.maxLength },
+          );
+        },
+      }
+    ]
+  };
+}
 
 @NgModule({
   imports: [
@@ -12,8 +49,20 @@ import { LoginPage } from './login.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    LoginPageRoutingModule
+    LoginPageRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FormlyModule.forRoot({ extras: { lazyRender: true } }),
+    FormlyIonicModule,
   ],
-  declarations: [LoginPage]
+  declarations: [LoginPage],
+  providers: [
+    {
+      provide: FORMLY_CONFIG,
+      multi: true,
+      useFactory: registerValidationMessages,
+      deps: [TranslocoService],
+    },
+  ],
 })
 export class LoginPageModule { }

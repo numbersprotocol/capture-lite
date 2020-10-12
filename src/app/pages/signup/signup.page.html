@@ -6,35 +6,29 @@
       </div>
     </ion-row>
     <div class="input_msg">{{ t('message.PleaseCheckYourEmail') }}</div>
-    <ion-row class="inputs">
-      <ion-col>
-        <div class="input">
-          <ion-input [placeholder]=" t('email') "></ion-input>
-        </div>
-        <div class="input">
-          <ion-input [placeholder]=" t('password') "></ion-input>
-        </div>
-        <div class="input">
-          <ion-input [placeholder]=" t('repeatPassword') "></ion-input>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col class="input_Ｃ">
-        <ion-title>{{ t('bringTrustIntoData') }}</ion-title>
-      </ion-col>
-    </ion-row>
-    <ion-row class="buttons">
-      <ion-col class="input_R">
-        <ion-button class="SIGNUP" routerLink="">
-          {{ t('signup') }}
-        </ion-button>
-      </ion-col>
-      <ion-col class="input_R">
-        <ion-button replaceUrl="true" routerLink="/login">
-          {{ t('alreadyHaveAnAccount') }}
-        </ion-button>
-      </ion-col>
-    </ion-row>
+    <form [formGroup]="form" (ngSubmit)="onSubmit(model)" *ngIf="formInitialized">
+      <ion-row class="inputs">
+        <ion-col>
+          <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="input_Ｃ">
+          <ion-title>{{ t('bringTrustIntoData') }}</ion-title>
+        </ion-col>
+      </ion-row>
+      <ion-row class="buttons">
+        <ion-col class="input_R">
+          <ion-button class="SIGNUP" type="submit" [disabled]="!form.valid">
+            {{ t('signup') }}
+          </ion-button>
+        </ion-col>
+        <ion-col class="input_R">
+          <ion-button replaceUrl="true" routerLink="/login">
+            {{ t('alreadyHaveAnAccount') }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
   </ion-grid>
 </ion-content>
