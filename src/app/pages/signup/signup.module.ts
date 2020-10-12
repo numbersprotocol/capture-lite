@@ -14,16 +14,18 @@ import { FormlyIonicModule } from '@ngx-formly/ionic';
 import { SignupPageRoutingModule } from './signup-routing.module';
 import { SignupPage } from './signup.page';
 
-export function fieldMatchValidator(control: AbstractControl, translocoService: TranslocoService) {
+export function fieldMatchValidator(control: AbstractControl) {
   const { password, repeatPassword } = control.value;
 
   // avoid displaying the message error when values are empty
   if (!repeatPassword || !password) {
-    return undefined;
+    // tslint:disable-next-line: no-null-keyword
+    return null;
   }
 
   if (repeatPassword === password) {
-    return undefined;
+    // tslint:disable-next-line: no-null-keyword
+    return null;
   }
 
   return { fieldMatch: true };
