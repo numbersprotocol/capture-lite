@@ -1,0 +1,73 @@
+<ion-header *transloco="let t" id="menu">
+  <ion-toolbar style="background-color:white !important">
+    <ion-buttons>
+      <ion-grid>
+        <ion-row>
+          <ion-col style="text-align: left;">
+            <ion-button>
+              <ion-menu-button></ion-menu-button>
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: center;" (click)="back.emit()">
+            <ion-button style="color: black;" class="Top-Bar" expand="full" color="Blue" size="large">
+              All
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: center;" (click)="next.emit()">
+            <ion-button style="color: black;" class="Top-Bar" expand="full" color="Blue" size="large">
+              Tags
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: right;">
+            <ion-button routerLink="/settings">
+              <img slot="icon-only" src="../../../assets/appicon/Search.svg" />
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-menu *transloco="let t" side="start" menuId="first" contentId="menu">
+  <ion-header>
+    <ion-toolbar color="translucent">
+      <ion-title>{{ t('settings') }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-menu-toggle>
+        <ion-item routerLink="/general">
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('general') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle>
+        <ion-item routerLink="/defaultinformationprovider">
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('defaultInformationProvider') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle>
+        <ion-item routerLink="/defaultsignature">
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('defaultSignature') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle>
+        <ion-item>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('informationProvider') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle>
+        <ion-item routerLink="/about">
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('about') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-list>
+  </ion-content>
+</ion-menu>
