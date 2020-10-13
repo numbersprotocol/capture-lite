@@ -1,12 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { of, zip } from 'rxjs';
 import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
 import { base64ToBlob$ } from 'src/app/utils/encoding/encoding';
-import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
+import {
+  PreferenceManager,
+} from 'src/app/utils/preferences/preference-manager';
+
 import { Proof } from '../../data/proof/proof';
 import { Signature } from '../../data/signature/signature';
-import { SerializationService } from '../../serialization/serialization.service';
+import {
+  SerializationService,
+} from '../../serialization/serialization.service';
 import { baseUrl } from './secret';
 
 export const enum TargetProvider {
@@ -87,7 +93,8 @@ export class NumbersStorageApi {
       concatMapTo(preference.getString$(PrefKeys.AuthToken)),
       first(),
       map(authToken => new HttpHeaders({ Authorization: authToken })),
-      concatMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, new FormData(), { headers }))
+      concatMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, new FormData(), { headers })),
+      concatMap(() => preference.setString$(PrefKeys.AuthToken, '')),
     );
   }
 

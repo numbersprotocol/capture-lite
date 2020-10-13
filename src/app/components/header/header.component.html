@@ -68,6 +68,12 @@
           <ion-label>{{ t('about') }}</ion-label>
         </ion-item>
       </ion-menu-toggle>
+      <ion-menu-toggle>
+        <ion-item routerLink="/login" [queryParams]="{logout: true}">
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          <ion-label>{{ t('logout') }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
     </ion-list>
   </ion-content>
 </ion-menu>
