@@ -77,7 +77,7 @@
     "pleaseCheckYourEmail": "請檢查您的電子郵件收件箱，然後按照電子郵件中的說明啟用您的帳戶。",
     "emailAlreadyExists": "此電子郵件帳戶已經存在。",
     "pleaseEnterValidEmail": "請輸入有效的電子郵件地址。",
-    "passwordMustBeBetween": "密碼長度必須介於{{min}}至{{max}個字元之間。",
+    "passwordMustBeBetween": "密碼長度必須介於{{min}}至{{max}}個字元之間。",
     "passwordNotMatching": "密碼不符。",
     "accountNotActivated": "此帳戶尚未啟用。",
     "ifYouNotReceiveEmail": "如果您在10分鐘內仍未收到驗證電子郵件，請單擊下面的按鈕重新發送驗證電子郵件。",
