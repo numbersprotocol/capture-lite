@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import {
   BlockingActionService,
 } from 'src/app/services/blocking-action/blocking-action.service';
@@ -31,8 +31,6 @@ export class LoginPage implements OnInit {
   options: FormlyFormOptions = {};
   fields: FormlyFieldConfig[] = [];
   formInitialized = false;
-  private readonly messageSubject$ = new BehaviorSubject('');
-  message$: Observable<string> = this.messageSubject$;
 
   constructor(
     private readonly blockingActionService: BlockingActionService,

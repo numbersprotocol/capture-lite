@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import {
   BlockingActionService,
 } from 'src/app/services/blocking-action/blocking-action.service';
@@ -34,12 +34,10 @@ interface MessageConfig {
 export class SignupPage implements OnInit {
 
   form = new FormGroup({});
-  model = { email: '', password: '', repeatPassword: '' };
+  model: LoginFormModel = { email: '', password: '', repeatPassword: '' };
   options: FormlyFormOptions = {};
   fields: FormlyFieldConfig[] = [];
   formInitialized = false;
-  private readonly messageConfigSubject$ = new BehaviorSubject({ color: '', text: '' });
-  messageConfig$: Observable<MessageConfig> = this.messageConfigSubject$;
 
   constructor(
     private readonly blockingActionService: BlockingActionService,
@@ -74,12 +72,14 @@ export class SignupPage implements OnInit {
       untilDestroyed(this),
     ).subscribe(
       () => {
-        this.messageConfigSubject$.next({
-          color: 'primary',
-          text:
-            this.translocoService.translate('message.verificationEmailSent') +
-            this.translocoService.translate('message.pleaseCheckYourEmail')
-        });
+        this.toastController
+          .create({
+            message: this.translocoService.translate('message.verificationEmailSent') +
+              this.translocoService.translate('message.pleaseCheckYourEmail'),
+            duration: 8000,
+            color: 'primary',
+          })
+          .then(toast => toast.present());
         if (this?.options?.resetModel) {
           this.options.resetModel();
         }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import {
   PreferenceManager,
 } from 'src/app/utils/preferences/preference-manager';
@@ -24,7 +24,6 @@ export class AuthService {
   isAuthenticated$(): Observable<boolean> {
     return preference.getString$(PrefKeys.AuthToken)
       .pipe(
-        tap(auth => console.log(auth)),
         map(authToken => authToken !== ''),
       );
   }
