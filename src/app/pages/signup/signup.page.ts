@@ -14,7 +14,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 
-interface LoginFormModel {
+interface SignupFormModel {
   email: string;
   password: string;
   repeatPassword: string;
@@ -34,7 +34,7 @@ interface MessageConfig {
 export class SignupPage implements OnInit {
 
   form = new FormGroup({});
-  model: LoginFormModel = { email: '', password: '', repeatPassword: '' };
+  model: SignupFormModel = { email: '', password: '', repeatPassword: '' };
   options: FormlyFormOptions = {};
   fields: FormlyFieldConfig[] = [];
   formInitialized = false;
@@ -61,9 +61,9 @@ export class SignupPage implements OnInit {
     );
   }
 
-  onSubmit() {
+  onSubmit(model: SignupFormModel) {
     const defaultUsername = '';
-    const action$ = this.numbersStorageApi.createUser$(defaultUsername, this.model.email, this.model.password);
+    const action$ = this.numbersStorageApi.createUser$(defaultUsername, model.email, model.password);
 
     this.blockingActionService.run$(
       action$,

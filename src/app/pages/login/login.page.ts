@@ -54,8 +54,8 @@ export class LoginPage implements OnInit {
     );
   }
 
-  onSubmit() {
-    const action$ = this.numbersStorageApi.login$(this.model.email, this.model.password);
+  onSubmit(model: LoginFormModel) {
+    const action$ = this.numbersStorageApi.login$(model.email, model.password);
     this.blockingActionService.run$(
       action$,
       { message: this.translocoService.translate('message.pleaseWait') }
