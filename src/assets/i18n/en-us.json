@@ -50,6 +50,12 @@
   "informationProvider": "Information Provider",
   "collectDeviceInfo": "Collect Device Info",
   "collectLocationInfo": "Collect Location Info",
+  "publisher": "Publisher",
+  "userName": "User Name",
+  "signUp": "Sign Up",
+  "required": "Required",
+  "tooShort": "Too Short",
+  "talkingToTheServer": "Talking to the Server",
   "unknownError": "Unknown Error",
   "low": "Low",
   "high": "High",
@@ -70,12 +76,17 @@
     "verificationEmailSent": "A verification email has been sent to your email address.",
     "pleaseCheckYourEmail": "Please check your email inbox and follow the instructions in the email to activate your account.",
     "emailAlreadyExists": "An Account with this email already exists.",
-    "passwordMustBeBetween": "Password must be between {{min}} to {{max} characters long.",
+    "pleaseEnterValidEmail": "Please enter a valid email address",
+    "passwordMustBeBetween": "Password must be between {{min}} to {{max}} characters.",
+    "passwordNotMatching": "Password not matching.",
     "accountNotActivated": "This account has not been activated yet.",
     "ifYouNotReceiveEmail": "If you haven't received the verification email in 10 minutes, you can click the button below to resend the verification email.",
-    "emailOrPasswordIsInvalid": "The email address or password you entered is invalid",
+    "emailOrPasswordIsInvalid": "The email address or password you entered is invalid.",
     "tooManyRetries": "You have entered the invalid email or password too many times. Please try again later.",
     "publishingProof": "Publishing proof {{hash}} to {{publisherName}}.",
-    "proofPublished": "Proof {{hash}} has been published to {{publisherName}}."
+    "proofPublished": "Proof {{hash}} has been published to {{publisherName}}.",
+    "forbiddenAllNumeric": "Cannot contain only numbers.",
+    "isNotEmail": "Does not follow email format.",
+    "pleaseWait": "Please wait..."
   }
 }
