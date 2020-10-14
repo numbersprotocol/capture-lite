@@ -71,6 +71,9 @@
   "alreadyHaveAnAccount": "是否已有帳號？",
   "resendVerificationEmail": "重新傳送確認郵件",
   "logout": "登出",
+  "tags": "標籤",
+  "all": "所有",
+  "viewAll": "檢視全部",
   "message": {
     "areYouSure": "此操作不可撤銷。",
     "verificationEmailSent": "驗證電子郵件已發送到您的電子郵件地址。",
