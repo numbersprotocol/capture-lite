@@ -17,7 +17,15 @@ jobs:
       with:
         node-version: 10
 
+    - name: Check if version has been updated
+      id: version_check
+      uses: EndBug/version-check@v1
+      with:
+        diff-search: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Build Android APK
+      if: steps.version_check.outputs.changed == 'true'
       run: |
         npm install -g @angular/cli
         npm install -g @ionic/cli
@@ -27,13 +35,6 @@ jobs:
         cd android/
         ./gradlew assembleDebug
         cd ..
-
-    - name: Check if version has been updated
-      id: version_check
-      uses: EndBug/version-check@v1
-      with:
-        diff-search: true
-        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create GitHub release
       id: create_release

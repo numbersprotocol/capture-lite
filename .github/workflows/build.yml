@@ -3,7 +3,7 @@ name: build
 on: [push, pull_request]
 
 jobs:
-  build:
+  android:
 
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -42,6 +42,6 @@ jobs:
 
     - name: Build Android
       run: |
-        npx cap sync
+        npx cap sync android
         cd android/
         ./gradlew assembleDebug
