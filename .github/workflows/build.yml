@@ -38,7 +38,7 @@ jobs:
         coverage-reports: ./coverage/cobertura-coverage.xml
 
     - name: Build Ionic
-      run: ionic build
+      run: npm run build
 
     - name: Build Android
       run: |

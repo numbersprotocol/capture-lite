@@ -30,7 +30,7 @@ jobs:
       run: npm install
 
     - name: Build Ionic
-      run: ionic build -- --base-href=/capture-lite/
+      run: npm run build -- --base-href=/capture-lite/
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@3.7.1

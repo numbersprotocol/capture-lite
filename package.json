@@ -5,13 +5,14 @@
   "homepage": "https://numbersprotocol.io/",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "build-android": "ionic build && cap sync && cap open android",
-    "test": "ng test",
-    "test-ci": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "preconfig": "node set-secret.js",
+    "serve": "npm run preconfig && ionic serve",
+    "build": "npm run preconfig && ionic build",
+    "build-android": "npm run build && cap sync && cap open android",
+    "test": "npm run preconfig && ng test",
+    "test-ci": "npm run preconfig && ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
+    "lint": "npm run preconfig && ng lint",
+    "e2e": "npm run preconfig && ng e2e"
   },
   "private": true,
   "dependencies": {

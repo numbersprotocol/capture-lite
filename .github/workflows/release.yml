@@ -30,7 +30,7 @@ jobs:
         npm install -g @angular/cli
         npm install -g @ionic/cli
         npm install
-        ionic build
+        npm run build
         npx cap sync
         cd android/
         ./gradlew assembleDebug
