@@ -1,0 +1,50 @@
+<ion-header *transloco="let t">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink=".." routerDirection="back">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ t('signUp') }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *transloco="let t">
+  <ion-img class="numbers-logo" src="../../../../../assets/image/numbers.svg"></ion-img>
+  <form [formGroup]="signUpForm" (ngSubmit)="signUp()">
+    <ion-list>
+      <ion-item>
+        <ion-icon name="person" slot="start"></ion-icon>
+        <ion-label position="floating">{{ t('userName') }}</ion-label>
+        <ion-input formControlName="userName" type="text" autocomplete="name" inputmode="text" clearInput></ion-input>
+        <div class="errors"
+          *ngIf="signUpForm.get('userName')?.invalid && (signUpForm.get('userName')?.dirty || signUpForm.get('userName')?.touched)">
+          <p *ngIf="signUpForm.get('userName')?.hasError('required')">{{ t('required') }}</p>
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="mail" slot="start"></ion-icon>
+        <ion-label position="floating">{{ t('email') }}</ion-label>
+        <ion-input formControlName="email" type="email" autocomplete="email" inputmode="email" clearInput></ion-input>
+        <div class="errors"
+          *ngIf="signUpForm.get('email')?.invalid && (signUpForm.get('email')?.dirty || signUpForm.get('email')?.touched)">
+          <p *ngIf="signUpForm.get('email')?.hasError('required')">{{ t('required') }}</p>
+          <p *ngIf="signUpForm.get('email')?.hasError('email')">{{ t('message.isNotEmail') }}</p>
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="key" slot="start"></ion-icon>
+        <ion-label position="floating">{{ t('password') }}</ion-label>
+        <ion-input formControlName="password" type="password" clearInput></ion-input>
+        <div class="errors"
+          *ngIf="signUpForm.get('password')?.invalid && (signUpForm.get('password')?.dirty || signUpForm.get('password')?.touched)">
+          <p *ngIf="signUpForm.get('password')?.hasError('required')">{{ t('required') }}</p>
+          <p *ngIf="signUpForm.get('password')?.hasError('minlength')">{{ t('tooShort') }}</p>
+          <p *ngIf="signUpForm.get('password')?.hasError('allNumeric')">{{ t('message.forbiddenAllNumeric') }}</p>
+        </div>
+      </ion-item>
+    </ion-list>
+    <ion-button type="submit" [disabled]="!signUpForm.valid" class="ion-padding" expand="block">{{ t('signUp') }}
+    </ion-button>
+  </form>
+</ion-content>

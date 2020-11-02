@@ -1,0 +1,93 @@
+ion-title {
+  color: #333;
+}
+ion-grid {
+  height: 100%;
+  background: #fff !important;
+}
+ion-button {
+  &[disabled] {
+    opacity: 1;
+    --background: #eeeeee !important;
+    color: #000;
+  }
+  width: calc(100vw - var(--ion-padding, 23px));
+  padding-left: 23;
+  padding-right: 23;
+  --border-radius: 50px !important;
+  --height: 50px !important;
+  --background: #564dfc !important;
+}
+
+ion-title {
+  width: 100%;
+}
+ion-input {
+  color: #000;
+  width: calc(100vw - var(--ion-padding, 23px));
+  text-align: left;
+  border-color: gray !important;
+  border-width: 10px;
+  margin-bottom: 10px !important;
+  border-width: 10px !important;
+  border-bottom: 10px !important;
+}
+.native-input.sc-ion-input-ios {
+  text-align: left;
+  border-color: gray !important;
+  border-width: 10px;
+  margin-bottom: 10px !important;
+  border-width: 10px !important;
+  border-bottom: 10px !important;
+}
+.input_msg {
+  width: 100%;
+  height: 80px;
+  text-align: center;
+}
+.input_R {
+  text-align: right;
+}
+.input_C {
+  text-align: center;
+}
+.input {
+  width: calc(100vw - var(--ion-padding, 23px)) !important;
+  border-color: #564dfc !important;
+  text-align: left;
+  border-width: 10px !important;
+  border-bottom: 10px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+.img {
+  --height: 127.15px !important;
+}
+.logo {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  height: 35vh;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+  align-items: center;
+}
+.inputs {
+  width: 100% !important;
+  display: flex;
+  flex: 1;
+  height: 35vh;
+}
+.buttons {
+  width: 100% !important;
+  display: flex;
+  flex: 1;
+  bottom: 0px;
+}
+ion-content {
+  display: flex;
+  flex: 1;
+  background: #333 !important;
+  height: 100%;
+}

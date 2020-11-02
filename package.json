@@ -30,6 +30,9 @@
     "@ngneat/transloco": "^2.19.1",
     "@ngneat/until-destroy": "^8.0.2",
     "image-blob-reduce": "^2.0.0",
+    "@ngx-formly/core": "^5.0.0",
+    "@ngx-formly/ionic": "^5.0.0",
+    "@ngx-formly/schematics": "^5.10.3",
     "rxjs": "~6.6.3",
     "tslib": "^2.0.1",
     "zone.js": "~0.10.2"

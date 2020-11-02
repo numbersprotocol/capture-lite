@@ -8,12 +8,15 @@ import { CameraService } from './services/camera/camera.service';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorProvider } from './services/collector/information/capacitor-provider/capacitor-provider';
 import { DefaultSignatureProvider } from './services/collector/signature/default-provider/default-provider';
+import { CaptionRepository } from './services/data/caption/caption-repository.service';
 import { InformationRepository } from './services/data/information/information-repository.service';
+import { ProofRepository } from './services/data/proof/proof-repository.service';
 import { SignatureRepository } from './services/data/signature/signature-repository.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
+import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-storage-api.service';
+import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
-import { SamplePublisher } from './services/publisher/sample-publisher/sample-publisher';
 import { SerializationService } from './services/serialization/serialization.service';
 import { fromExtension } from './utils/mime-type';
 
@@ -31,10 +34,13 @@ export class AppComponent {
     private readonly collectorService: CollectorService,
     private readonly publishersAlert: PublishersAlert,
     private readonly serializationService: SerializationService,
+    private readonly proofRepository: ProofRepository,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
+    private readonly captionRepository: CaptionRepository,
     private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService,
+    private readonly numbersStorageApi: NumbersStorageApi,
     langaugeService: LanguageService,
     private readonly cameraService: CameraService
   ) {
@@ -73,7 +79,14 @@ export class AppComponent {
 
   initializePublisher() {
     this.publishersAlert.addPublisher(
-      new SamplePublisher(this.translocoService, this.notificationService)
+      new NumbersStoragePublisher(
+        this.translocoService,
+        this.notificationService,
+        this.proofRepository,
+        this.signatureRepository,
+        this.captionRepository,
+        this.numbersStorageApi
+      )
     );
   }
 }
