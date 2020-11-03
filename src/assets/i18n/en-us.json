@@ -90,6 +90,7 @@
     "proofPublished": "Proof {{hash}} has been published to {{publisherName}}.",
     "forbiddenAllNumeric": "Cannot contain only numbers.",
     "isNotEmail": "Does not follow email format.",
-    "pleaseWait": "Please wait..."
+    "pleaseWait": "Please wait...",
+    "copiedToClipboard": "Has copied to clipboard."
   }
 }

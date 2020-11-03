@@ -1,5 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
@@ -12,7 +16,16 @@ describe('SettingsPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SettingsPage],
-      imports: [FormsModule, IonicModule.forRoot(), RouterTestingModule, getTranslocoModule()]
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule,
+        getTranslocoModule(),
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatSelectModule
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(SettingsPage);

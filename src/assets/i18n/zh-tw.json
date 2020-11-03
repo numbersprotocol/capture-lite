@@ -90,6 +90,7 @@
     "proofPublished": "證明{{hash}}已發佈到{{publisherName}}。",
     "forbiddenAllNumeric": "密碼不能只有數字。",
     "isNotEmail": "電子郵件格式不符。",
-    "pleaseWait": "請稍候..."
+    "pleaseWait": "請稍候...",
+    "copiedToClipboard": "已複製至剪貼簿。"
   }
 }
