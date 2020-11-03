@@ -24,7 +24,7 @@ describe('SignupPage', () => {
         RouterTestingModule,
         getTranslocoModule(),
         HttpClientTestingModule,
-        FormlyModule.forRoot({ validators: [{ name: 'fieldMatch', validation: fieldMatchValidator },] }),
+        FormlyModule.forRoot({ validators: [{ name: 'fieldMatch', validation: fieldMatchValidator }] }),
         FormlyIonicModule,
         ReactiveFormsModule
       ]

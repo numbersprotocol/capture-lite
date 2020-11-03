@@ -72,7 +72,7 @@ export function registerValidationMessages(translocoService: TranslocoService) {
     SignupPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    FormlyModule.forRoot({ validators: [{ name: 'fieldMatch', validation: fieldMatchValidator },], extras: { lazyRender: true }, }),
+    FormlyModule.forRoot({ validators: [{ name: 'fieldMatch', validation: fieldMatchValidator }], extras: { lazyRender: true }, }),
     FormlyIonicModule,
   ],
   declarations: [SignupPage],

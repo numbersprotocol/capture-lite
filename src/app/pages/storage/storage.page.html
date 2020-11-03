@@ -16,7 +16,7 @@
         <a mat-list-item>{{ t('settings') }}</a>
       </mat-list-item>
       <mat-list-item>
-        <a mat-list-item>{{ t('privacy') }}</a>
+        <a routerLink="/privacy" (click)="sidenav.close()" mat-list-item>{{ t('privacy') }}</a>
       </mat-list-item>
       <mat-list-item>
         <a routerLink="/about" (click)="sidenav.close()" mat-list-item>{{ t('about') }}</a>

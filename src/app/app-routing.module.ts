@@ -47,10 +47,8 @@ const routes: Routes = [{
   loadChildren: () => import('./pages/general/general.module').then(m => m.GeneralPageModule),
   canActivate: [AuthGuardService],
 }, {
-  path: 'defaultinformationprovider',
-  // tslint:disable-next-line: max-line-length
-  loadChildren: () => import('./pages/defaultinformationprovider/defaultinformationprovider.module').then(m => m.DefaultInformationProviderPageModule),
-  canActivate: [AuthGuardService],
+  path: 'privacy',
+  loadChildren: () => import('./pages/privacy/privacy.module').then(m => m.PrivacyPageModule)
 }, {
   path: 'defaultsignature',
   loadChildren: () => import('./pages/defaultsignature/defaultsignature.module').then(m => m.DefaultSignaturePageModule),
