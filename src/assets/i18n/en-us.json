@@ -1,6 +1,8 @@
 {
   "capture": "Capture",
+  "profile": "Profile",
   "settings": "Settings",
+  "privacy": "Privacy",
   "proofDetails": "Proof Details",
   "informationDetails": "Information Details",
   "caption": "Caption",
