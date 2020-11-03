@@ -7,15 +7,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { AboutPage } from './about.page';
+import { ProfilePage } from './profile.page';
 
-describe('AboutPage', () => {
-  let component: AboutPage;
-  let fixture: ComponentFixture<AboutPage>;
+describe('ProfilePage', () => {
+  let component: ProfilePage;
+  let fixture: ComponentFixture<ProfilePage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AboutPage],
+      declarations: [ProfilePage],
       imports: [
         IonicModule.forRoot(),
         RouterTestingModule,
@@ -28,7 +28,7 @@ describe('AboutPage', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AboutPage);
+    fixture = TestBed.createComponent(ProfilePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

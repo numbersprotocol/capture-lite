@@ -5,10 +5,12 @@
   <span>{{ t('about') }}</span>
 </mat-toolbar>
 
-<mat-list *transloco="let t">
-  <mat-list-item>
-    <mat-icon mat-list-icon>update</mat-icon>
-    <div mat-line>{{ t('version') }}</div>
-    <div mat-line> {{ version$ | async }} </div>
-  </mat-list-item>
-</mat-list>
+<div class="page-content">
+  <mat-list *transloco="let t">
+    <mat-list-item>
+      <mat-icon mat-list-icon>update</mat-icon>
+      <div mat-line>{{ t('version') }}</div>
+      <div mat-line> {{ version$ | async }} </div>
+    </mat-list-item>
+  </mat-list>
+</div>

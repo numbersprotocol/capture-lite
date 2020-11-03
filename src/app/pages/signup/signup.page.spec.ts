@@ -1,16 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import {
-  HttpClientTestingModule, HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-
-import {
-  getTranslocoModule,
-} from 'src/app/transloco/transloco-root.module.spec';
-
 import { IonicModule } from '@ionic/angular';
-
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyIonicModule } from '@ngx-formly/ionic';
+import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { fieldMatchValidator } from './signup.module';
 import { SignupPage } from './signup.page';
 
 describe('SignupPage', () => {
@@ -24,9 +21,12 @@ describe('SignupPage', () => {
       declarations: [SignupPage],
       imports: [
         IonicModule.forRoot(),
-        HttpClientTestingModule,
+        RouterTestingModule,
         getTranslocoModule(),
-        RouterTestingModule
+        HttpClientTestingModule,
+        FormlyModule.forRoot({ validators: [{ name: 'fieldMatch', validation: fieldMatchValidator },] }),
+        FormlyIonicModule,
+        ReactiveFormsModule
       ]
     }).compileComponents();
 
