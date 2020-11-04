@@ -7,16 +7,13 @@
   <button mat-icon-button>
     <mat-icon>send</mat-icon>
   </button>
-  <button (click)="publish()" mat-icon-button>
-    <mat-icon>publish</mat-icon>
-  </button>
   <button (click)="remove()" mat-icon-button>
     <mat-icon>delete</mat-icon>
   </button>
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
-  <img [src]="base64Src$ | async">
+  <img class="proof-image" [src]="base64Src$ | async">
   <mat-list>
     <div mat-subheader>{{ t('information') }}</div>
     <mat-list-item *ngIf="(caption$ | async)">

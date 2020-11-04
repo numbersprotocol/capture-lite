@@ -5,7 +5,7 @@ import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
-import { first, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
+import { map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { CapacitorProvider } from 'src/app/services/collector/information/capacitor-provider/capacitor-provider';
 import { WebCryptoApiProvider } from 'src/app/services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
@@ -14,7 +14,6 @@ import { CaptionRepository } from 'src/app/services/data/caption/caption-reposit
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
-import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/publishers-alert.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 
 const { Clipboard } = Plugins;
@@ -65,7 +64,6 @@ export class ProofPage {
     private readonly route: ActivatedRoute,
     private readonly translocoService: TranslocoService,
     private readonly confirmAlert: ConfirmAlert,
-    private readonly publishersAlert: PublishersAlert,
     private readonly proofRepository: ProofRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly informationRepository: InformationRepository,
@@ -73,14 +71,6 @@ export class ProofPage {
     private readonly blockingActionService: BlockingActionService,
     private readonly snackBar: MatSnackBar
   ) { }
-
-  publish() {
-    this.proof$.pipe(
-      first(),
-      switchMap(proof => this.publishersAlert.present$(proof)),
-      untilDestroyed(this)
-    ).subscribe();
-  }
 
   remove() {
     const onConfirm = () => this.blockingActionService.run$(
