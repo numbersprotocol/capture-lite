@@ -25,6 +25,7 @@ export class StoragePage {
 
   private readonly proofs$ = this.proofRepository.getAll$();
 
+  // TODO: rename for better readability.
   readonly proofsWithRaw$ = this.proofs$.pipe(
     concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getThumbnail$(proof)))),
     concatMap(base64Strings => zip(this.proofs$, of(base64Strings))),
@@ -37,6 +38,7 @@ export class StoragePage {
       proofWithRawBase64B.proof.timestamp - proofWithRawBase64A.proof.timestamp)),
   );
 
+  // TODO: rename for better readability.
   readonly proofsWithRawByDate$ = this.proofsWithRaw$.pipe(
     map(proofsWithRawBase64 =>
       proofsWithRawBase64
