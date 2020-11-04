@@ -5,3 +5,12 @@ mat-toolbar {
 .toolbar-spacer {
   flex: 1 1 auto;
 }
+
+.page-content {
+  padding-bottom: 16px;
+}
+
+button.center {
+  display: block;
+  margin: 0 auto;
+}

@@ -7,7 +7,7 @@ import { SerializationService } from '../../serialization/serialization.service'
 
 export abstract class SignatureProvider {
 
-  abstract readonly name: string;
+  abstract readonly id: string;
 
   constructor(
     private readonly signatureRepository: SignatureRepository,

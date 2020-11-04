@@ -10,7 +10,7 @@ import { InformationProvider } from '../information-provider';
 
 const { Device, Geolocation } = Plugins;
 
-const preferences = PreferenceManager.DEFAULT_INFORMATION_PROVIDER_PREF;
+const preferences = PreferenceManager.CAPACITOR_PROVIDER_PREF;
 const enum PrefKeys {
   CollectDeviceInfo = 'collectDeviceInfo',
   CollectLocationInfo = 'collectLocationInfo'
@@ -18,7 +18,8 @@ const enum PrefKeys {
 
 export class CapacitorProvider extends InformationProvider {
 
-  readonly name = 'Capacitor';
+  static readonly ID = 'capacitor';
+  readonly id = CapacitorProvider.ID;
 
   constructor(
     informationRepository: InformationRepository,
@@ -63,91 +64,91 @@ export class CapacitorProvider extends InformationProvider {
         if (deviceInfo !== undefined) {
           informationList.push({
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('uuid'),
             value: String(deviceInfo.uuid),
             importance: Importance.High,
             type: InformationType.Other
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('deviceName'),
             value: String(deviceInfo.name),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('deviceModel'),
             value: String(deviceInfo.model),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('devicePlatform'),
             value: String(deviceInfo.platform),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('appVersion'),
             value: String(deviceInfo.appVersion),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('appVersionCode'),
             value: String(deviceInfo.appBuild),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('operatingSystem'),
             value: String(deviceInfo.operatingSystem),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('osVersion'),
             value: String(deviceInfo.osVersion),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('deviceManufacturer'),
             value: String(deviceInfo.manufacturer),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('runningOnVm'),
             value: String(deviceInfo.isVirtual),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('usedMemory'),
             value: String(deviceInfo.memUsed),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('freeDiskSpace'),
             value: String(deviceInfo.diskFree),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('totalDiskSpace'),
             value: String(deviceInfo.diskTotal),
             importance: Importance.Low,
@@ -157,14 +158,14 @@ export class CapacitorProvider extends InformationProvider {
         if (batteryInfo !== undefined) {
           informationList.push({
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('batteryLevel'),
             value: String(batteryInfo.batteryLevel),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('batteryCharging'),
             value: String(batteryInfo.isCharging),
             importance: Importance.Low,
@@ -174,7 +175,7 @@ export class CapacitorProvider extends InformationProvider {
         if (languageCode !== undefined) {
           informationList.push({
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('deviceLanguageCode'),
             value: String(languageCode.value),
             importance: Importance.Low,
@@ -184,7 +185,7 @@ export class CapacitorProvider extends InformationProvider {
         if (geolocationPosition !== undefined) {
           informationList.push({
             proofHash: proof.hash,
-            provider: this.name,
+            provider: this.id,
             name: this.translocoService.translate('location'),
             value: `(${geolocationPosition.coords.latitude}, ${geolocationPosition.coords.longitude})`,
             importance: Importance.High,

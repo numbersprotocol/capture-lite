@@ -4,6 +4,9 @@
   </button>
   <span>{{ t('proofDetails') }}</span>
   <span class="toolbar-spacer"></span>
+  <button mat-icon-button>
+    <mat-icon>send</mat-icon>
+  </button>
   <button (click)="publish()" mat-icon-button>
     <mat-icon>publish</mat-icon>
   </button>
@@ -15,6 +18,7 @@
 <div *transloco="let t" class="page-content">
   <img [src]="base64Src$ | async">
   <mat-list>
+    <div mat-subheader>{{ t('information') }}</div>
     <mat-list-item *ngIf="(caption$ | async)">
       <mat-icon mat-list-icon>sticky_note_2</mat-icon>
       <div mat-line>{{ t('caption') }}</div>
@@ -24,6 +28,9 @@
       <mat-icon mat-list-icon>code</mat-icon>
       <div mat-line>{{ t('hash') }}</div>
       <div mat-line>{{ hash$ | async }}</div>
+      <button *ngIf="(hash$ | async) as hash" (click)="copyToClipboard(hash)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>access_time</mat-icon>
@@ -38,77 +45,28 @@
     <mat-list-item>
       <mat-icon mat-list-icon>place</mat-icon>
       <div mat-line>{{ t('location') }}</div>
-      <div mat-line>{{ 'location' }}</div>
+      <div mat-line>{{ location$ | async }}</div>
     </mat-list-item>
-    <div mat-subheader>{{ t('information') }}</div>
+  </mat-list>
+  <button [routerLink]="['information', {hash: (hash$ | async)}]" class="center" mat-stroked-button
+    color="primary">{{ t('viewAll') }}</button>
+  <mat-list>
+    <div mat-subheader>{{ t('signature') }}</div>
+    <mat-list-item>
+      <mat-icon mat-list-icon>policy</mat-icon>
+      <div mat-line>{{ t('signature') }}</div>
+      <div mat-line>{{ (signature$ | async)?.signature }}</div>
+      <button *ngIf="(signature$ | async)?.signature as signature" (click)="copyToClipboard(signature)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>lock</mat-icon>
+      <div mat-line>{{ t('publicKey') }}</div>
+      <div mat-line>{{ (signature$ | async)?.publicKey }}</div>
+      <button *ngIf="(signature$ | async)?.publicKey as publicKey" (click)="copyToClipboard(publicKey)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
   </mat-list>
 </div>
-
-<!-- <ion-header *transloco="let t">
-
-<ion-content *transloco="let t">
-    <ion-list-header>
-      <ion-label>
-        <h2>{{ t('information') }}</h2>
-      </ion-label>
-    </ion-list-header>
-    <ion-item>
-      <ion-slides pager>
-        <ion-slide>
-          <ion-card class="slide-card"
-            *ngFor="let providerWithInformationList of (providersWithImportantInformation$ | async)">
-            <ion-card-header>
-              <ion-card-title>{{ providerWithInformationList.provider }}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-list *ngFor="let information of providerWithInformationList.informationList">
-                <ion-item>
-                  <ion-label class="ion-text-wrap">
-                    <h3>{{ information.name }}</h3>
-                    <p>{{ information.value }}</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-              <section>
-                <ion-button expand="block" [routerLink]="['/information', {hash: (hash$ | async)}]">{{ t('viewAll') }}
-                </ion-button>
-              </section>
-            </ion-card-content>
-          </ion-card>
-        </ion-slide>
-      </ion-slides>
-    </ion-item>
-    <ion-list-header>
-      <ion-label>
-        <h2>{{ t('signatures') }}</h2>
-      </ion-label>
-    </ion-list-header>
-    <ion-item>
-      <ion-slides pager>
-        <ion-slide *ngFor="let signature of (signatures$ | async)">
-          <ion-card class="slide-card">
-            <ion-card-header>
-              <ion-card-title>{{ signature.provider }}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-list>
-                <ion-item>
-                  <ion-label class="ion-text-wrap">
-                    <h3>{{ t('signature') }}</h3>
-                    <p>{{ signature.signature }}</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label class="ion-text-wrap">
-                    <h3>{{ t('publicKey') }}</h3>
-                    <p class="multiline">{{ signature.publicKey }}</p>
-                  </ion-label>
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-        </ion-slide>
-      </ion-slides>
-    </ion-item>
-  </ion-list>
-</ion-content> -->
