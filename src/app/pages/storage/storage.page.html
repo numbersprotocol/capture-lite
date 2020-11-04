@@ -45,7 +45,7 @@
             <div class="mat-title">{{ proofsWithRaw[0].date }}</div>
             <mat-grid-list cols="3" gutterSize="8px">
               <mat-grid-tile class="square-image-tile" *ngFor="let proofWithRaw of proofsWithRaw"
-                [routerLink]="['/proof', {hash: proofWithRaw.proof.hash}]"
+                [routerLink]="['proof', {hash: proofWithRaw.proof.hash}]"
                 [style]="'background-image: url(data:image/*;base64,' + proofWithRaw.rawBase64 + ');'"></mat-grid-tile>
             </mat-grid-list>
           </ng-container>

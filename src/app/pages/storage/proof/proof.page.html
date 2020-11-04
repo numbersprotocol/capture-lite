@@ -1,56 +1,52 @@
-<ion-header *transloco="let t">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button [routerLink]="['/storage']" routerDirection="back">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>{{ t('proofDetails') }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="publish()">
-        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
-      </ion-button>
-      <ion-button (click)="remove()">
-        <ion-icon slot="icon-only" name="trash"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<mat-toolbar *transloco="let t">
+  <button routerLink="../../" routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('proofDetails') }}</span>
+  <span class="toolbar-spacer"></span>
+  <button (click)="publish()" mat-icon-button>
+    <mat-icon>publish</mat-icon>
+  </button>
+  <button (click)="remove()" mat-icon-button>
+    <mat-icon>delete</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div *transloco="let t" class="page-content">
+  <img [src]="base64Src$ | async">
+  <mat-list>
+    <mat-list-item *ngIf="(caption$ | async)">
+      <mat-icon mat-list-icon>sticky_note_2</mat-icon>
+      <div mat-line>{{ t('caption') }}</div>
+      <div mat-line>{{ caption$ | async }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>code</mat-icon>
+      <div mat-line>{{ t('hash') }}</div>
+      <div mat-line>{{ hash$ | async }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>access_time</mat-icon>
+      <div mat-line>{{ t('timestamp') }}</div>
+      <div mat-line>{{ timestamp$ | async | date:'long' }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>image</mat-icon>
+      <div mat-line>{{ t('mimeType') }}</div>
+      <div mat-line>{{ mimeType$ | async }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>place</mat-icon>
+      <div mat-line>{{ t('location') }}</div>
+      <div mat-line>{{ 'location' }}</div>
+    </mat-list-item>
+    <div mat-subheader>{{ t('information') }}</div>
+  </mat-list>
+</div>
+
+<!-- <ion-header *transloco="let t">
 
 <ion-content *transloco="let t">
-  <img [src]="base64Src$ | async" />
-  <ion-list lines="none">
-    <ion-item>
-      <ion-icon slot="start" name="reader"></ion-icon>
-      <ion-label class="ion-text-wrap">
-        <h2>{{ t('caption') }}</h2>
-        <p>{{ (caption$ | async) === '' ? '(' + ( t('nothingHere') ) + ')' : (caption$ | async) }}</p>
-      </ion-label>
-      <ion-button (click)="editCaption()" slot="end" fill="clear" shape="round">
-        <ion-icon slot="icon-only" name="create"></ion-icon>
-      </ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-icon slot="start" name="information"></ion-icon>
-      <ion-label class="ion-text-wrap">
-        <h2>{{ t('hash') }}</h2>
-        <p>{{ hash$ | async }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon slot="start" name="image"></ion-icon>
-      <ion-label class="ion-text-wrap">
-        <h2>{{ t('mimeType') }}</h2>
-        <p>{{ mimeType$ | async }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon slot="start" name="time"></ion-icon>
-      <ion-label class="ion-text-wrap">
-        <h2>{{ t('timestamp') }}</h2>
-        <p>{{ timestamp$ | async }}</p>
-      </ion-label>
-    </ion-item>
     <ion-list-header>
       <ion-label>
         <h2>{{ t('information') }}</h2>
@@ -115,4 +111,4 @@
       </ion-slides>
     </ion-item>
   </ion-list>
-</ion-content>
+</ion-content> -->
