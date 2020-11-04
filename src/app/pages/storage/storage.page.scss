@@ -1,41 +1,51 @@
-
-.img-card {
-  margin: calc(var(--ion-padding, 9px) / 3);
-  width: 30vw;
+mat-sidenav-container {
+  background: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
-.Title {
-  color: #000;
+mat-sidenav {
+  width: 60%;
 }
 
-.setTitle {
-  display: flex;
-  flex-direction: row;
-  justify-self: start;
-  padding-bottom: 10px;
-  color: #000;
-  margin: calc(var(--ion-padding, 9px) / 3);
+mat-toolbar {
+  background: white;
 }
 
-.img-thumbnail {
-  --size: calc(90vw / 3);
+.toolbar-spacer {
+  flex: 1 1 auto;
 }
 
-.select-thumbnail {
-  --size: 90vw;
-  height: 60vw;
+mat-tab-group {
+  height: 100%;
 }
 
-.date-card-title {
-  text-align: start;
-  color: #000;
-  margin-left: 5vw;
-  padding-bottom: 10px;
-  padding-top: 10px;
+.tab-content {
+  padding: 16px;
+  margin-bottom: 128px;
 }
 
-.select-card {
-  width: 90vw;
-  margin-bottom: 0;
-  margin-top: 0;
+div.mat-title {
+  margin-top: 16px;
+}
+
+.square-image-tile {
+  border-radius: 4px;
+  background-position: center center;
+  background-size: cover;
+}
+
+app-post-capture-card {
+  width: 100%;
+  margin: 8px auto;
+}
+
+button[mat-fab] {
+  z-index: 999;
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
 }

@@ -3,23 +3,25 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
-import { AboutPageRoutingModule } from './about-routing.module';
-import { AboutPage } from './about.page';
+import { ProfilePageRoutingModule } from './profile-routing.module';
+import { ProfilePage } from './profile.page';
 
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
-    AboutPageRoutingModule,
+    ProfilePageRoutingModule,
     TranslocoModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatSnackBarModule
   ],
-  declarations: [AboutPage]
+  declarations: [ProfilePage]
 })
-export class AboutPageModule { }
+export class ProfilePageModule { }

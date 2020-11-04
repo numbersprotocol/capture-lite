@@ -1,16 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import {
-  HttpClientTestingModule, HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-
-import {
-  getTranslocoModule,
-} from 'src/app/transloco/transloco-root.module.spec';
-
 import { IonicModule } from '@ionic/angular';
-
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyIonicModule } from '@ngx-formly/ionic';
+import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { LoginPage } from './login.page';
 
 describe('LoginPage', () => {
@@ -24,9 +20,12 @@ describe('LoginPage', () => {
       declarations: [LoginPage],
       imports: [
         IonicModule.forRoot(),
-        HttpClientTestingModule,
-        getTranslocoModule(),
         RouterTestingModule,
+        getTranslocoModule(),
+        HttpClientTestingModule,
+        FormlyModule.forRoot(),
+        FormlyIonicModule,
+        ReactiveFormsModule
       ]
     }).compileComponents();
 

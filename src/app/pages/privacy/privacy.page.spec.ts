@@ -1,34 +1,34 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { AboutPage } from './about.page';
+import { PrivacyPage } from './privacy.page';
 
-describe('AboutPage', () => {
-  let component: AboutPage;
-  let fixture: ComponentFixture<AboutPage>;
+describe('PrivacyPage', () => {
+  let component: PrivacyPage;
+  let fixture: ComponentFixture<PrivacyPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AboutPage],
+      declarations: [PrivacyPage],
       imports: [
         IonicModule.forRoot(),
         RouterTestingModule,
         getTranslocoModule(),
-        HttpClientTestingModule,
         MatToolbarModule,
         MatButtonModule,
         MatIconModule,
-        MatListModule
+        MatListModule,
+        MatSlideToggleModule
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AboutPage);
+    fixture = TestBed.createComponent(PrivacyPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

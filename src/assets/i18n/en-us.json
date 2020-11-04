@@ -1,6 +1,8 @@
 {
   "capture": "Capture",
+  "profile": "Profile",
   "settings": "Settings",
+  "privacy": "Privacy",
   "proofDetails": "Proof Details",
   "informationDetails": "Information Details",
   "caption": "Caption",
@@ -32,7 +34,6 @@
   "privateKey": "Private Key",
   "general": "General",
   "languages": "Languages",
-  "defaultSignature": "Default Siganture",
   "areYouSure": "Are You Sure",
   "cancel": "Cancel",
   "ok": "Ok",
@@ -46,7 +47,6 @@
   "signingProof": "Signing Proof",
   "about": "About",
   "version": "Version",
-  "defaultInformationProvider": "Default Information Provider",
   "informationProvider": "Information Provider",
   "collectDeviceInfo": "Collect Device Info",
   "collectLocationInfo": "Collect Location Info",
@@ -74,6 +74,8 @@
   "tags": "Tags",
   "all": "All",
   "viewAll": "View All",
+  "address": "Address",
+  "mediaId": "Media ID",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "verificationEmailSent": "A verification email has been sent to your email address.",
@@ -90,6 +92,7 @@
     "proofPublished": "Proof {{hash}} has been published to {{publisherName}}.",
     "forbiddenAllNumeric": "Cannot contain only numbers.",
     "isNotEmail": "Does not follow email format.",
-    "pleaseWait": "Please wait..."
+    "pleaseWait": "Please wait...",
+    "copiedToClipboard": "Has copied to clipboard."
   }
 }

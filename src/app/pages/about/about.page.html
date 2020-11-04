@@ -1,22 +1,16 @@
-<ion-header *transloco="let t">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button routerLink=".." routerDirection="back">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>{{ t('about') }}</ion-title>
-  </ion-toolbar>
-</ion-header>
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('about') }}</span>
+</mat-toolbar>
 
-<ion-content *transloco="let t">
-  <ion-list>
-    <ion-item lines="none">
-      <ion-icon name="information" slot="start"></ion-icon>
-      <ion-label>
-        <h2>{{ t('version') }}</h2>
-        <p>{{ version$ | async }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-</ion-content>
+<div class="page-content">
+  <mat-list *transloco="let t">
+    <mat-list-item>
+      <mat-icon mat-list-icon>update</mat-icon>
+      <div mat-line>{{ t('version') }}</div>
+      <div mat-line> {{ version$ | async }} </div>
+    </mat-list-item>
+  </mat-list>
+</div>
