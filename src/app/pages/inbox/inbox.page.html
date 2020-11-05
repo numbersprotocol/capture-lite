@@ -4,20 +4,20 @@
   </button>
   <span>{{ t('Inbox') }}</span>
 </mat-toolbar>
-<mat-card *ngFor="let note of notes">
+<mat-card *ngFor="let item of Inbox">
   <mat-grid-list cols="3" rowHeight="25px">
     <mat-grid-tile [colspan]="1" [rowspan]="4">
       <img src="https://angular.io/assets/images/logos/angular/shield-large.svg" alt="...">
     </mat-grid-tile>
     <mat-grid-tile [colspan]="1" [rowspan]="1">
-      <div mat-line>{{note.file}}</div>
+      <div mat-line>{{item.file}}</div>
     </mat-grid-tile>
 
     <mat-grid-tile [colspan]="1" [rowspan]="1">
-      <div mat-line> {{note.updated | date}} </div>
+      <div mat-line> {{item.updated | date}} </div>
     </mat-grid-tile>
     <mat-grid-tile [colspan]="2" [rowspan]="1">
-      <div mat-line>Send By {{note.name}}</div>
+      <div mat-line>Send By {{item.name}}</div>
     </mat-grid-tile>
     <mat-grid-tile [colspan]="1" [rowspan]="2">
       <button mat-button color="accent">Ignore</button>
@@ -27,56 +27,3 @@
     </mat-grid-tile>
   </mat-grid-list>
 </mat-card>
-
-
-
-<div class="page-content">
-  <mat-list>
-    <mat-grid-list cols="3" rowHeight="25px" *ngFor="let note of notes">
-      <mat-grid-tile [colspan]="1" [rowspan]="4" [style.background]="'#DDBDF1'">
-        <img src="https://angular.io/assets/images/logos/angular/shield-large.svg" alt="...">
-      </mat-grid-tile>
-      <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="'#DDBDF1'">
-        <div mat-line>{{note.file}}</div>
-      </mat-grid-tile>
-      <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="'#DDBDF1'">
-        <div mat-line> {{note.updated | date}} </div>
-      </mat-grid-tile>
-      <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="'#DDBDF1'">
-        <div mat-line>Send By {{note.name}}</div>
-      </mat-grid-tile>
-      <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'#DDBDF1'">
-        <button mat-button color="accent">Ignore</button>
-      </mat-grid-tile>
-      <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'#DDBDF1'">
-        <button mat-raised-button color="accent">Accept</button>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-list>
-</div>
-<!-- <img class="fit-picture" src="https://angular.io/assets/images/logos/angular/shield-large.svg"
-alt="Grapefruit slice atop a pile of other slices"> -->
-
-
-<!-- <mat-grid-list cols="3" rowHeight="25px" *ngFor="let item of History">
-  <mat-grid-tile [colspan]="1" [rowspan]="2" [style.background]="'#DDFDB1'">
-    2 
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'#DDFDB1'">
-    1
-  </mat-grid-tile>
-
-  <mat-grid-tile [colspan]="1" [rowspan]="2" [style.background]="'#DDFDB1'">
-    2
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'#DDFDB1'">
-    1
-  </mat-grid-tile>
-</mat-grid-list> -->
-<!-- 
-<mat-grid-list cols="2" rowHeight="2:1">
-  <mat-grid-tile>1</mat-grid-tile>
-  <mat-grid-tile>2</mat-grid-tile>
-  <mat-grid-tile>3</mat-grid-tile>
-  <mat-grid-tile>4</mat-grid-tile>\
-</mat-grid-list> -->

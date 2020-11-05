@@ -33,8 +33,11 @@ const routes: Routes = [{
   path: 'about',
   loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule),
   canActivate: [AuthGuardService],
+}, {
+  path: 'inbox',
+  loadChildren: () => import('./pages/inbox/inbox.module').then(m => m.InboxPageModule),
   canActivate: [AuthGuardService],
-
+}];
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
