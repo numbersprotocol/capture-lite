@@ -68,7 +68,7 @@ export class CapacitorProvider extends InformationProvider {
             name: this.translocoService.translate('uuid'),
             value: String(deviceInfo.uuid),
             importance: Importance.High,
-            type: InformationType.Other
+            type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
