@@ -39,7 +39,8 @@ export class PublishersAlert {
         }, {
           text: this.translocoService.translate('ok'),
           handler: (name) => this.getPublisherByName(name)?.publish(proof)
-        }]
+        }],
+        mode: 'md'
       })),
       switchMap(alertElement => alertElement.present())
     );

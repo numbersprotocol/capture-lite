@@ -24,7 +24,8 @@ export class ConfirmAlert {
       }, {
         text: this.translocoService.translate('ok'),
         handler: onConfirm
-      }]
+      }],
+      mode: 'md'
     })).pipe(
       switchMap(alertElement => alertElement.present())
     );

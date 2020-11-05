@@ -34,14 +34,6 @@ const routes: Routes = [{
   loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule),
   canActivate: [AuthGuardService],
 }, {
-  path: 'proof',
-  loadChildren: () => import('./pages/proof/proof.module').then(m => m.ProofPageModule),
-  canActivate: [AuthGuardService],
-}, {
-  path: 'information',
-  loadChildren: () => import('./pages/information/information.module').then(m => m.InformationPageModule),
-  canActivate: [AuthGuardService],
-}, {
   path: 'publishers',
   redirectTo: 'settings',
   canActivate: [AuthGuardService],

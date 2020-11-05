@@ -26,10 +26,19 @@
 // @import "~@ionic/angular/css/flex-utils.css";
 
 .ion-page {
-  display: initial !important;
   background-color: white;
 }
 
 .page-content {
-  padding: 8px 16px;
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+mat-toolbar {
+  min-height: 56px;
+}
+
+button.expand {
+  width: calc(100vw - 16px);
+  margin: 0 8px;
 }

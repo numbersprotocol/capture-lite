@@ -76,6 +76,7 @@
   "viewAll": "檢視全部",
   "address": "地址",
   "mediaId": "媒體 ID",
+  "media": "媒體",
   "message": {
     "areYouSure": "此操作不可撤銷。",
     "verificationEmailSent": "驗證電子郵件已發送到您的電子郵件地址。",

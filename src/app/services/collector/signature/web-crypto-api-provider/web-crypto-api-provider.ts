@@ -6,15 +6,16 @@ import { createEcKeyPair$, signWithSha256AndEcdsa$ } from 'src/app/utils/crypto/
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { SignatureProvider } from '../signature-provider';
 
-const preferences = PreferenceManager.DEFAULT_SIGNATURE_PROVIDER_PREF;
+const preferences = PreferenceManager.WEB_CRYPTO_API_PROVIDER_PREF;
 const enum PrefKeys {
   PublicKey = 'publicKey',
   PrivateKey = 'privateKey'
 }
 
-export class DefaultSignatureProvider extends SignatureProvider {
+export class WebCryptoApiProvider extends SignatureProvider {
 
-  readonly name = 'Web Crypto API';
+  static readonly ID = 'web-crypto-api';
+  readonly id = WebCryptoApiProvider.ID;
 
   static initialize$() {
     return zip(
@@ -40,14 +41,14 @@ export class DefaultSignatureProvider extends SignatureProvider {
   }
 
   protected provide$(proof: Proof, serialized: string): Observable<Signature> {
-    return DefaultSignatureProvider.getPrivateKey$().pipe(
+    return WebCryptoApiProvider.getPrivateKey$().pipe(
       first(),
       switchMap(privateKeyHex => signWithSha256AndEcdsa$(serialized, privateKeyHex)),
-      switchMap(signatureHex => zip(of(signatureHex), DefaultSignatureProvider.getPublicKey$())),
+      switchMap(signatureHex => zip(of(signatureHex), WebCryptoApiProvider.getPublicKey$())),
       first(),
       map(([signatureHex, publicKeyHex]) => ({
         proofHash: proof.hash,
-        provider: this.name,
+        provider: this.id,
         signature: signatureHex,
         publicKey: publicKeyHex
       }))

@@ -11,6 +11,10 @@ mat-sidenav {
   width: 60%;
 }
 
+mat-sidenav-content {
+  overflow: hidden;
+}
+
 mat-toolbar {
   background: white;
 }

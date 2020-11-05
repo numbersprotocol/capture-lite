@@ -13,8 +13,11 @@ export class BlockingActionService {
     private readonly loadingController: LoadingController
   ) { }
 
-  run$<T>(action$: Observable<T>, opts: LoadingOptions) {
-    return defer(() => this.loadingController.create(opts)).pipe(
+  run$<T>(action$: Observable<T>, opts: Partial<LoadingOptions>) {
+    return defer(() => this.loadingController.create({
+      mode: 'md',
+      ...opts
+    })).pipe(
       switchMap(loading => this._run$(action$, loading))
     );
   }

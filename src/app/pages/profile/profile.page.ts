@@ -8,7 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
 import { catchError, concatMapTo } from 'rxjs/operators';
 import { BlockingActionService } from '../../services/blocking-action/blocking-action.service';
-import { DefaultSignatureProvider } from '../../services/collector/signature/default-provider/default-provider';
+import { WebCryptoApiProvider } from '../../services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
 import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
 
 const { Clipboard } = Plugins;
@@ -23,8 +23,8 @@ export class ProfilePage {
 
   readonly userName$ = this.numbersStorageApi.getUserName$();
   readonly email$ = this.numbersStorageApi.getEmail$();
-  readonly publicKey$ = DefaultSignatureProvider.getPublicKey$();
-  readonly privateKey$ = DefaultSignatureProvider.getPrivateKey$();
+  readonly publicKey$ = WebCryptoApiProvider.getPublicKey$();
+  readonly privateKey$ = WebCryptoApiProvider.getPrivateKey$();
 
   constructor(
     private readonly router: Router,
