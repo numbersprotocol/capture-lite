@@ -1,69 +1,38 @@
-<ion-header *transloco="let t">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button routerLink="../../../" routerDirection="back">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>{{ t('informationDetails') }}</ion-title>
-  </ion-toolbar>
-</ion-header>
-<ion-content *transloco="let t">
-  <ion-item>
-    <ion-slide>
-      <ion-card class="slide-card">
-        <ion-card-header>
-          <ion-card-title>{{ t('location') }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list lines="none" *ngFor="let information of (locationInformation$ | async)">
-            <ion-item>
-              <ion-label class="ion-text-wrap">
-                <h3>{{ information.name }}</h3>
-                <p>{{ information.value }}</p>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </ion-slide>
-  </ion-item>
-  <ion-item>
-    <ion-slide>
-      <ion-card class="slide-card">
-        <ion-card-header>
-          <ion-card-title>{{ t('other') }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list lines="none" *ngFor="let information of (otherInformation$ | async)">
-            <ion-item>
-              <ion-label class="ion-text-wrap">
-                <h3>{{ information.name }}</h3>
-                <p>{{ information.value }}</p>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </ion-slide>
-  </ion-item>
-  <ion-item>
-    <ion-slide>
-      <ion-card class="slide-card">
-        <ion-card-header>
-          <ion-card-title>{{ t('device') }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list lines="none" *ngFor="let information of (deviceInformation$ | async)">
-            <ion-item>
-              <ion-label class="ion-text-wrap">
-                <h3>{{ information.name }}</h3>
-                <p>{{ information.value }}</p>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </ion-slide>
-  </ion-item>
-</ion-content>
+<mat-toolbar *transloco="let t">
+  <button routerLink="../../../" routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('informationDetails') }}</span>
+</mat-toolbar>
+
+<div class="page-content">
+  <mat-list *transloco="let t">
+    <div *ngIf="(locationInformation$ | async)?.length" mat-subheader>{{ t('location') }}</div>
+    <mat-list-item *ngFor="let information of (locationInformation$ | async)">
+      <mat-icon mat-list-icon>information</mat-icon>
+      <div mat-line>{{ information.name }}</div>
+      <div mat-line>{{ information.value }}</div>
+      <button *ngIf="information.value as value" (click)="copyToClipboard(value)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+    <div *ngIf="(deviceInformation$ | async)?.length" mat-subheader>{{ t('device') }}</div>
+    <mat-list-item *ngFor="let information of (deviceInformation$ | async)">
+      <mat-icon mat-list-icon>information</mat-icon>
+      <div mat-line>{{ information.name }}</div>
+      <div mat-line>{{ information.value }}</div>
+      <button *ngIf="information.value as value" (click)="copyToClipboard(value)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+    <div *ngIf="(otherInformation$ | async)?.length" mat-subheader>{{ t('other') }}</div>
+    <mat-list-item *ngFor="let information of (otherInformation$ | async)">
+      <mat-icon mat-list-icon>information</mat-icon>
+      <div mat-line>{{ information.name }}</div>
+      <div mat-line>{{ information.value }}</div>
+      <button *ngIf="information.value as value" (click)="copyToClipboard(value)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+</div>
