@@ -1,0 +1,41 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('profile') }}</span>
+</mat-toolbar>
+
+<img class="numbers-logo" src="../../../assets/image/numbers.svg">
+
+<div *transloco="let t" class="page-content">
+  <mat-list>
+    <mat-list-item>
+      <mat-icon mat-list-icon>account_circle</mat-icon>
+      <div mat-line>{{ t('userName') }}</div>
+      <div mat-line>{{ userName$ | async }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>email</mat-icon>
+      <div mat-line>{{ t('email') }}</div>
+      <div mat-line>{{ email$ | async }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>lock</mat-icon>
+      <div mat-line>{{ t('publicKey') }}</div>
+      <div mat-line>{{ publicKey$ | async }}</div>
+      <button *ngIf="(publicKey$ | async) as publicKey" (click)="copyToClipboard(publicKey)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>vpn_key</mat-icon>
+      <div mat-line>{{ t('privateKey') }}</div>
+      <div mat-line>{{ privateKey$ | async }}</div>
+      <button *ngIf="(privateKey$ | async) as privateKey" (click)="copyToClipboard(privateKey)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+
+  <button (click)="logout()" class="expand" color="primary" mat-stroked-button>{{ t('logout') }}</button>
+</div>

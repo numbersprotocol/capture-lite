@@ -47,6 +47,7 @@ export class ProofRepository {
   remove$(...proofs: Proof[]) {
     return this.proofStorage.remove$(...proofs).pipe(
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.deleteRawFile$(proof)))),
+      switchMapTo(forkJoinWithDefault(proofs.map(proof => this.deleteThumbnail$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.captionRepository.removeByProof$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.informationRepository.removeByProof$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.signatureRepository.removeByProof$(proof))))
@@ -112,5 +113,12 @@ export class ProofRepository {
       })),
       pluck('uri')
     );
+  }
+
+  private deleteThumbnail$(proof: Proof) {
+    return defer(() => Filesystem.deleteFile({
+      path: `${this.thumbnailFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
+      directory: this.thumbnailFileDir
+    }));
   }
 }

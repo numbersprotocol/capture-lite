@@ -6,7 +6,7 @@ import { Proof } from '../../data/proof/proof';
 
 export abstract class InformationProvider {
 
-  abstract readonly name: string;
+  abstract readonly id: string;
 
   constructor(
     private readonly informationRepository: InformationRepository

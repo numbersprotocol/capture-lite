@@ -1,16 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import {
-  AbstractControl, FormsModule, ReactiveFormsModule,
-} from '@angular/forms';
-
+import { AbstractControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
-import {
-  FORMLY_CONFIG, FormlyFieldConfig, FormlyModule,
-} from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyModule, FORMLY_CONFIG } from '@ngx-formly/core';
 import { FormlyIonicModule } from '@ngx-formly/ionic';
-
 import { SignupPageRoutingModule } from './signup-routing.module';
 import { SignupPage } from './signup.page';
 
@@ -78,22 +72,15 @@ export function registerValidationMessages(translocoService: TranslocoService) {
     SignupPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    FormlyModule.forRoot({
-      validators: [
-        { name: 'fieldMatch', validation: fieldMatchValidator },
-      ],
-      extras: { lazyRender: true },
-    }),
+    FormlyModule.forRoot({ validators: [{ name: 'fieldMatch', validation: fieldMatchValidator }], extras: { lazyRender: true }, }),
     FormlyIonicModule,
   ],
   declarations: [SignupPage],
-  providers: [
-    {
-      provide: FORMLY_CONFIG,
-      multi: true,
-      useFactory: registerValidationMessages,
-      deps: [TranslocoService],
-    },
-  ],
+  providers: [{
+    provide: FORMLY_CONFIG,
+    multi: true,
+    useFactory: registerValidationMessages,
+    deps: [TranslocoService],
+  }]
 })
 export class SignupPageModule { }

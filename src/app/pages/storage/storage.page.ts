@@ -1,19 +1,19 @@
 import { formatDate } from '@angular/common';
-import { Component, ViewChildren } from '@angular/core';
-
+import { Component } from '@angular/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { Proof } from 'src/app/services/data/proof/proof';
 import {
-  ProofRepository,
+  ProofRepository
 } from 'src/app/services/data/proof/proof-repository.service';
+import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 import { fromExtension } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 
-import { IonSlides } from '@ionic/angular';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -25,30 +25,20 @@ export class StoragePage {
 
   private readonly proofs$ = this.proofRepository.getAll$();
 
-
+  // TODO: rename for better readability.
   readonly proofsWithRaw$ = this.proofs$.pipe(
     concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getThumbnail$(proof)))),
     concatMap(base64Strings => zip(this.proofs$, of(base64Strings))),
     map(([proofs, base64Strings]) => proofs.map((proof, index) => ({
       proof,
       rawBase64: base64Strings[index],
-      date: this.getDate(proof.timestamp)
+      date: formatDate(proof.timestamp, 'mediumDate', 'en-US')
     }))),
     map(proofsWithRaw => proofsWithRaw.sort((proofWithRawBase64A, proofWithRawBase64B) =>
       proofWithRawBase64B.proof.timestamp - proofWithRawBase64A.proof.timestamp)),
   );
 
-  index = 0;
-  @ViewChildren('slides') slides: IonSlides | undefined;
-  buttonName = 'Next';
-  selectedSlide: any;
-
-  slideOpts = {
-    loop: false,
-    autoplay: false
-  };
-
-
+  // TODO: rename for better readability.
   readonly proofsWithRawByDate$ = this.proofsWithRaw$.pipe(
     map(proofsWithRawBase64 =>
       proofsWithRawBase64
@@ -69,17 +59,14 @@ export class StoragePage {
     )
   );
 
+  readonly userName$ = this.numbersStorageApi.getUserName$();
 
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly cameraService: CameraService,
-    private readonly collectorService: CollectorService
+    private readonly collectorService: CollectorService,
+    private readonly numbersStorageApi: NumbersStorageApi
   ) { }
-
-  getDate(timestamp: number) {
-    return formatDate(timestamp, 'mediumDate', 'en-US');
-
-  }
 
   capture() {
     this.cameraService.capture$().pipe(
@@ -89,21 +76,5 @@ export class StoragePage {
       )),
       untilDestroyed(this)
     ).subscribe();
-  }
-
-
-  ionSlideLoad(slide: any) {
-    this.selectedSlide = slide;
-  }
-
-  ionSlideChange(slide: any) {
-    this.selectedSlide = slide;
-  }
-
-  next() {
-    this.selectedSlide.slideNext();
-  }
-  back() {
-    this.selectedSlide.slidePrev();
   }
 }
