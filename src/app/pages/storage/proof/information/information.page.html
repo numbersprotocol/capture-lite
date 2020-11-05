@@ -1,0 +1,38 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink="../../../" routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('informationDetails') }}</span>
+</mat-toolbar>
+
+<div class="page-content">
+  <mat-list *transloco="let t">
+    <div *ngIf="(locationInformation$ | async)?.length" mat-subheader>{{ t('location') }}</div>
+    <mat-list-item *ngFor="let information of (locationInformation$ | async)">
+      <mat-icon mat-list-icon>information</mat-icon>
+      <div mat-line>{{ information.name }}</div>
+      <div mat-line>{{ information.value }}</div>
+      <button *ngIf="information.value as value" (click)="copyToClipboard(value)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+    <div *ngIf="(deviceInformation$ | async)?.length" mat-subheader>{{ t('device') }}</div>
+    <mat-list-item *ngFor="let information of (deviceInformation$ | async)">
+      <mat-icon mat-list-icon>information</mat-icon>
+      <div mat-line>{{ information.name }}</div>
+      <div mat-line>{{ information.value }}</div>
+      <button *ngIf="information.value as value" (click)="copyToClipboard(value)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+    <div *ngIf="(otherInformation$ | async)?.length" mat-subheader>{{ t('other') }}</div>
+    <mat-list-item *ngFor="let information of (otherInformation$ | async)">
+      <mat-icon mat-list-icon>information</mat-icon>
+      <div mat-line>{{ information.name }}</div>
+      <div mat-line>{{ information.value }}</div>
+      <button *ngIf="information.value as value" (click)="copyToClipboard(value)" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+</div>

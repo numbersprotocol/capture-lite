@@ -1,19 +1,22 @@
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
-import { first, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
+import { map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
+import { CapacitorProvider } from 'src/app/services/collector/information/capacitor-provider/capacitor-provider';
+import { WebCryptoApiProvider } from 'src/app/services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
-import { Importance } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
-import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/publishers-alert.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
+
+const { Clipboard } = Plugins;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -34,9 +37,6 @@ export class ProofPage {
     switchMap(proof => this.proofRepository.getRawFile$(proof)),
     map(rawBase64 => `data:image/png;base64,${rawBase64}`)
   );
-  readonly hash$ = this.proof$.pipe(pluck('hash'));
-  readonly mimeType$ = this.proof$.pipe(pluck('mimeType'));
-  readonly timestamp$ = this.proof$.pipe(map(proof => new Date(proof.timestamp)));
   readonly caption$ = this.proof$.pipe(
     switchMap(proof => this.captionRepository.getByProof$(proof)),
     map(caption => {
@@ -44,45 +44,33 @@ export class ProofPage {
       return '';
     })
   );
-
-  readonly providersWithImportantInformation$ = this.proof$.pipe(
+  readonly hash$ = this.proof$.pipe(pluck('hash'));
+  readonly timestamp$ = this.proof$.pipe(pluck('timestamp'));
+  readonly mimeType$ = this.proof$.pipe(pluck('mimeType'));
+  readonly location$ = this.proof$.pipe(
     switchMap(proof => this.informationRepository.getByProof$(proof)),
-    map(informationList => {
-      const providers = new Set(informationList.map(information => information.provider));
-      return [...providers].map(provider => ({
-        provider,
-        informationList: informationList.filter(
-          information => information.provider === provider && information.importance === Importance.High
-        )
-      }));
-    })
+    map(informationList => informationList.find(information => information.provider === CapacitorProvider.ID && information.name === 'Location')),
+    isNonNullable(),
+    pluck('value')
   );
-
-  readonly signatures$ = this.proof$.pipe(
-    switchMap(proof => this.signatureRepository.getByProof$(proof))
+  readonly signature$ = this.proof$.pipe(
+    switchMap(proof => this.signatureRepository.getByProof$(proof)),
+    map(signatures => signatures.find(signature => signature.provider === WebCryptoApiProvider.ID)),
+    isNonNullable()
   );
 
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly translocoService: TranslocoService,
-    private readonly alertController: AlertController,
     private readonly confirmAlert: ConfirmAlert,
-    private readonly publishersAlert: PublishersAlert,
     private readonly proofRepository: ProofRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
-    private readonly blockingActionService: BlockingActionService
+    private readonly blockingActionService: BlockingActionService,
+    private readonly snackBar: MatSnackBar
   ) { }
-
-  publish() {
-    this.proof$.pipe(
-      first(),
-      switchMap(proof => this.publishersAlert.present$(proof)),
-      untilDestroyed(this)
-    ).subscribe();
-  }
 
   remove() {
     const onConfirm = () => this.blockingActionService.run$(
@@ -96,38 +84,8 @@ export class ProofPage {
     return this.confirmAlert.present$(onConfirm).pipe(untilDestroyed(this)).subscribe();
   }
 
-  editCaption() {
-    const captionInputName = 'captionInputName';
-    this.caption$.pipe(
-      first(),
-      switchMap(caption => this.alertController.create({
-        header: this.translocoService.translate('editCaption'),
-        inputs: [{
-          name: captionInputName,
-          type: 'text',
-          value: caption,
-          placeholder: this.translocoService.translate('nothingHere')
-        }],
-        buttons: [{
-          text: this.translocoService.translate('cancel'),
-          role: 'cancel'
-        }, {
-          text: this.translocoService.translate('ok'),
-          handler: (inputs) => this.saveCaption(inputs[captionInputName])
-        }]
-      })),
-      switchMap(alertElement => alertElement.present()),
-      untilDestroyed(this)
-    ).subscribe();
-  }
-
-  private saveCaption(text: string) {
-    this.proof$.pipe(
-      switchMap(proof => this.captionRepository.addOrEdit$({
-        proofHash: proof.hash,
-        text
-      })),
-      untilDestroyed(this)
-    ).subscribe();
+  copyToClipboard(value: string) {
+    Clipboard.write({ string: value });
+    this.snackBar.open(this.translocoService.translate('message.copiedToClipboard'));
   }
 }

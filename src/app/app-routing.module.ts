@@ -33,22 +33,6 @@ const routes: Routes = [{
   path: 'about',
   loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule),
   canActivate: [AuthGuardService],
-}, {
-  path: 'proof',
-  loadChildren: () => import('./pages/proof/proof.module').then(m => m.ProofPageModule),
-  canActivate: [AuthGuardService],
-}, {
-  path: 'information',
-  loadChildren: () => import('./pages/information/information.module').then(m => m.InformationPageModule),
-  canActivate: [AuthGuardService],
-}, {
-  path: 'publishers',
-  redirectTo: 'settings',
-  canActivate: [AuthGuardService],
-}, {
-  path: 'publishers/numbers-storage',
-  loadChildren: () => import('./pages/publishers/numbers-storage/numbers-storage.module').then(m => m.NumbersStoragePageModule),
-  canActivate: [AuthGuardService],
 }];
 
 @NgModule({

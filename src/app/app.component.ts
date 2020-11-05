@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { CameraService } from './services/camera/camera.service';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorProvider } from './services/collector/information/capacitor-provider/capacitor-provider';
-import { DefaultSignatureProvider } from './services/collector/signature/default-provider/default-provider';
+import { WebCryptoApiProvider } from './services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
 import { CaptionRepository } from './services/data/caption/caption-repository.service';
 import { InformationRepository } from './services/data/information/information-repository.service';
 import { ProofRepository } from './services/data/proof/proof-repository.service';
@@ -68,12 +68,12 @@ export class AppComponent {
   }
 
   initializeCollector() {
-    DefaultSignatureProvider.initialize$().pipe(untilDestroyed(this)).subscribe();
+    WebCryptoApiProvider.initialize$().pipe(untilDestroyed(this)).subscribe();
     this.collectorService.addInformationProvider(
       new CapacitorProvider(this.informationRepository, this.translocoService)
     );
     this.collectorService.addSignatureProvider(
-      new DefaultSignatureProvider(this.signatureRepository, this.serializationService)
+      new WebCryptoApiProvider(this.signatureRepository, this.serializationService)
     );
   }
 
