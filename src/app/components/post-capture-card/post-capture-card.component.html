@@ -1,0 +1,47 @@
+<mat-card *transloco="let t">
+  <mat-card-header>
+    <div mat-card-avatar class="post-capture-avatar"></div>
+    <mat-card-title>User Name</mat-card-title>
+    <mat-card-subtitle>sent from n hours</mat-card-subtitle>
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button>
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </mat-card-header>
+  <img [src]="imageSrc" mat-card-image>
+  <mat-card-content>
+    <mat-list dense class="info-list" [class.info-list-show]="openMore">
+      <mat-list-item>
+        <mat-icon mat-list-icon>access_time</mat-icon>
+        <div mat-line>
+          <span>{{ t('timestamp') }}</span>
+          <span class="info-list-content">{{ proof.timestamp | date:'medium' }}</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>place</mat-icon>
+        <div mat-line>
+          <span>{{ t('address') }}</span>
+          <span class="info-list-content">877 N Trinity St Eagle Pass, Texas(TX), 78852</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
+        <div mat-line>
+          <span>{{ t('mediaId') }}</span>
+          <span class="info-list-content">abcdef-abcdef-abcdef-abcdef-abcdef-abcdef-abcdef-abcdef-abcdef</span>
+        </div>
+      </mat-list-item>
+    </mat-list>
+    <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+      dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+      aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+      dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+      officia deserunt mollit anim id est laborum.
+    </p>
+  </mat-card-content>
+  <mat-card-actions [align]="'end'">
+    <button (click)="openMore = !openMore" mat-button>{{ t('viewAll') + '...' }}</button>
+  </mat-card-actions>
+</mat-card>

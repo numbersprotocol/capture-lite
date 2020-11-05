@@ -1,14 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
-import {
-  FORMLY_CONFIG, FormlyFieldConfig, FormlyModule,
-} from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyModule, FORMLY_CONFIG } from '@ngx-formly/core';
 import { FormlyIonicModule } from '@ngx-formly/ionic';
-
 import { LoginPageRoutingModule } from './login-routing.module';
 import { LoginPage } from './login.page';
 
@@ -56,13 +52,11 @@ export function registerValidationMessages(translocoService: TranslocoService) {
     FormlyIonicModule,
   ],
   declarations: [LoginPage],
-  providers: [
-    {
-      provide: FORMLY_CONFIG,
-      multi: true,
-      useFactory: registerValidationMessages,
-      deps: [TranslocoService],
-    },
-  ],
+  providers: [{
+    provide: FORMLY_CONFIG,
+    multi: true,
+    useFactory: registerValidationMessages,
+    deps: [TranslocoService],
+  }]
 })
 export class LoginPageModule { }

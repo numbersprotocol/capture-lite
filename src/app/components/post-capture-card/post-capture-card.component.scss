@@ -1,0 +1,49 @@
+:host {
+  display: block;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+mat-card img {
+  max-width: initial;
+}
+
+mat-card-content {
+  margin-bottom: 0;
+}
+
+.post-capture-avatar {
+  background-image: url("https://gravatar.com/avatar/8db683da3c728970bb776f6cc4048fd2?s=400&d=mp&r=x");
+  background-size: cover;
+}
+
+.caption-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.caption-full {
+  overflow: visible;
+  height: auto;
+  text-overflow: initial;
+  white-space: initial;
+}
+
+.info-list {
+  display: none;
+}
+
+.info-list-show {
+  display: block;
+}
+
+.info-list-content {
+  width: 60%;
+  float: right;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

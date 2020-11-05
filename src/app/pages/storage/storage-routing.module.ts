@@ -5,6 +5,9 @@ import { StoragePage } from './storage.page';
 const routes: Routes = [{
   path: '',
   component: StoragePage,
+}, {
+  path: 'proof',
+  loadChildren: () => import('./proof/proof.module').then(m => m.ProofPageModule),
 }];
 
 @NgModule({
