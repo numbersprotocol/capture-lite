@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-
 import { AuthGuardService } from './services/auth/auth-guard.service';
 import { LoginGuardService } from './services/auth/login-guard.service';
+
 
 const routes: Routes = [{
   path: '',
@@ -60,6 +60,11 @@ const routes: Routes = [{
 }, {
   path: 'about',
   loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule),
+  canActivate: [AuthGuardService],
+},
+{
+  path: 'inbox',
+  loadChildren: () => import('./pages/inbox/inbox.module').then(m => m.InboxPageModule),
   canActivate: [AuthGuardService],
 },
 ];
