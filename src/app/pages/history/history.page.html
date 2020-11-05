@@ -1,0 +1,24 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('history') }}</span>
+</mat-toolbar>
+
+<mat-grid-list class="historyList" cols="3" rowHeight="25px" *ngFor="let item of History">
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <img src="https://angular.io/assets/images/logos/angular/shield-large.svg" alt="...">
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <div mat-line>{{item.file}}</div>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <!-- <div mat-line>{{item.state}}</div> -->
+    <mat-chip selected [color]="item.color">
+      {{item.state}}
+    </mat-chip>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <div mat-line>{{item.updated | date}}</div>
+  </mat-grid-tile>
+</mat-grid-list>
