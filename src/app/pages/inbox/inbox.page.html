@@ -1,0 +1,127 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>inbox</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+</ion-content> -->
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('Inbox') }}</span>
+</mat-toolbar>
+
+<mat-grid-list cols="3" rowHeight="25px" *ngFor="let item of History">
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <img src="https://angular.io/assets/images/logos/angular/shield-large.svg" alt="...">
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <div mat-line>{{item.file}}</div>
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <!-- <div mat-line>{{item.state}}</div> -->
+    <mat-chip selected [color]="item.color">
+      {{item.state}}
+    </mat-chip>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <div mat-line>{{item.updated | date}}</div>
+  </mat-grid-tile>
+</mat-grid-list>
+
+
+<mat-grid-list cols="3" rowHeight="25px" *ngFor="let note of notes">
+  <mat-grid-tile [colspan]="1" [rowspan]="4">
+    <img src="https://angular.io/assets/images/logos/angular/shield-large.svg" alt="...">
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <div mat-line>{{note.file}}</div>
+    <div mat-line>Send By {{note.name}}</div>
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <div mat-line> {{note.updated | date}} </div>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <button mat-button color="accent">Ignore</button>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <button mat-raised-button color="accent">Accept</button>
+  </mat-grid-tile>
+</mat-grid-list>
+
+
+
+
+
+<div class="page-content">
+
+  <mat-list>
+
+
+    <mat-grid-list cols="3" rowHeight="25px" *ngFor="let note of notes">
+      <mat-grid-tile [colspan]="1" [rowspan]="4" [style.background]="'#DDBDF1'">
+        <img src="https://angular.io/assets/images/logos/angular/shield-large.svg" alt="...">
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="'#DDBDF1'">
+        <div mat-line>{{note.file}}</div>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="'#DDBDF1'">
+        <div mat-line> {{note.updated | date}} </div>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="'#DDBDF1'">
+        <div mat-line>Send By {{note.name}}</div>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'#DDBDF1'">
+        <button mat-button color="accent">Ignore</button>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'#DDBDF1'">
+        <button mat-raised-button color="accent">Accept</button>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+  </mat-list>
+
+  <!-- 
+  <mat-list *transloco="let t">
+    <mat-list-item>
+      <mat-icon mat-list-icon>language</mat-icon>
+      <div mat-line>{{ t('languages') }}</div>
+      <mat-select [value]="currentLanguageKey$ | async" (selectionChange)="setCurrentLanguage($event.value)">
+        <mat-option *ngFor="let language of langauges | keyvalue" [value]="language.key">
+          {{ language.value }}
+        </mat-option>
+      </mat-select>
+    </mat-list-item>
+  </mat-list> -->
+</div>
+<!-- <img class="fit-picture" src="https://angular.io/assets/images/logos/angular/shield-large.svg"
+alt="Grapefruit slice atop a pile of other slices"> -->
+
+
+<!-- <mat-grid-list cols="3" rowHeight="25px" *ngFor="let item of History">
+  <mat-grid-tile [colspan]="1" [rowspan]="2" [style.background]="'#DDFDB1'">
+    2 
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'#DDFDB1'">
+    1
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="1" [rowspan]="2" [style.background]="'#DDFDB1'">
+    2
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'#DDFDB1'">
+    1
+  </mat-grid-tile>
+</mat-grid-list> -->
+<!-- 
+<mat-grid-list cols="2" rowHeight="2:1">
+  <mat-grid-tile>1</mat-grid-tile>
+  <mat-grid-tile>2</mat-grid-tile>
+  <mat-grid-tile>3</mat-grid-tile>
+  <mat-grid-tile>4</mat-grid-tile>\
+</mat-grid-list> -->

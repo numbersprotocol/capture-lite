@@ -1,0 +1,83 @@
+mat-toolbar {
+  background: white;
+}
+
+mat-select {
+  width: 50%;
+}
+
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+mat-tab-group {
+  height: 100%;
+}
+
+.tab-content {
+  padding: 16px;
+  margin-bottom: 128px;
+}
+
+div.mat-title {
+  margin-top: 16px;
+}
+
+mat-grid-tile {
+  border-radius: 4px;
+  background-position: center center;
+  background-size: cover;
+}
+
+button[mat-fab] {
+  z-index: 999;
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+}
+
+.FlexContainer{
+  display: flex !important;
+  flex: 1;
+  height: 100px;
+}
+
+.Title{
+  
+  display: flex !important;
+  flex: 1;
+}
+.example-button-row {
+  display: table-cell;
+  width: 490px;
+}
+mat-chip {
+  max-width: 100px;
+}
+.Conter
+{
+  display: flex !important;
+
+  display: flex !important;
+  height: 100%;
+  flex: 3 3 auto;
+}
+.Title_img{
+  height: 100%;
+  width:  100%;
+  // flex: 1 1 auto;
+}
+.page-content{
+  display: flex !important;
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  // padding: 0;
+  // position: absolute;
+  // top: 0;
+  // bottom: 0;
+  // left: 0;
+  // right: 0;
+  // margin-bottom: 128px;
+}
