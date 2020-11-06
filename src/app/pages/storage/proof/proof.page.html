@@ -1,5 +1,5 @@
 <mat-toolbar *transloco="let t">
-  <button routerLink="../../" routerDirection="back" mat-icon-button>
+  <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span>{{ t('proofDetails') }}</span>
@@ -45,8 +45,7 @@
       <div mat-line>{{ location$ | async }}</div>
     </mat-list-item>
   </mat-list>
-  <button [routerLink]="['information', {hash: (hash$ | async)}]" class="center" mat-stroked-button
-    color="primary">{{ t('viewAll') }}</button>
+  <button routerLink="information" class="center" mat-stroked-button color="primary">{{ t('viewAll') }}</button>
   <mat-list>
     <div mat-subheader>{{ t('signature') }}</div>
     <mat-list-item>

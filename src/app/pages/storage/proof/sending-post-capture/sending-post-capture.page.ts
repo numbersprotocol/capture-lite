@@ -52,6 +52,6 @@ export class SendingPostCapturePage {
   }
 
   send() {
-    this.router.navigate(['../../../'], { relativeTo: this.route });
+    this.router.navigate(['..'], { relativeTo: this.route });
   }
 }
