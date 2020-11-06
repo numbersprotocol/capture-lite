@@ -77,6 +77,12 @@
   "address": "Address",
   "mediaId": "Media ID",
   "media": "Media",
+  "selectContact": "Select Contact",
+  "inviteFriend": "Invite Friend",
+  "invitationEmail": "Invitation Email",
+  "sendPostCapture": "Send PostCapture",
+  "previewPostCapture": "Preview PostCapture",
+  "preview": "Preview",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "verificationEmailSent": "A verification email has been sent to your email address.",
@@ -94,6 +100,7 @@
     "forbiddenAllNumeric": "Cannot contain only numbers.",
     "isNotEmail": "Does not follow email format.",
     "pleaseWait": "Please wait...",
-    "copiedToClipboard": "Has copied to clipboard."
+    "copiedToClipboard": "Has copied to clipboard.",
+    "invitationEmail": "Enter friend's email to send the invitation."
   }
 }

@@ -77,6 +77,12 @@
   "address": "地址",
   "mediaId": "媒體 ID",
   "media": "媒體",
+  "selectContact": "選擇聯絡人",
+  "inviteFriend": "邀請好友",
+  "invitationEmail": "邀請電子信箱",
+  "sendPostCapture": "發送 PostCapture",
+  "previewPostCapture": "預覽 PostCapture",
+  "preview": "預覽",
   "message": {
     "areYouSure": "此操作不可撤銷。",
     "verificationEmailSent": "驗證電子郵件已發送到您的電子郵件地址。",
@@ -94,6 +100,7 @@
     "forbiddenAllNumeric": "密碼不能只有數字。",
     "isNotEmail": "電子郵件格式不符。",
     "pleaseWait": "請稍候...",
-    "copiedToClipboard": "已複製至剪貼簿。"
+    "copiedToClipboard": "已複製至剪貼簿。",
+    "invitationEmail": "輸入好友電子信箱發送邀請。"
   }
 }

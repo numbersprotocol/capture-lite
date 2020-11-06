@@ -1,33 +1,35 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
 import { PostCaptureCardModule } from 'src/app/shared/post-capture-card/post-capture-card.module';
-import { StoragePageRoutingModule } from './storage-routing.module';
-import { StoragePage } from './storage.page';
+import { SendingPostCapturePageRoutingModule } from './sending-post-capture-routing.module';
+import { SendingPostCapturePage } from './sending-post-capture.page';
 
 @NgModule({
   imports: [
     CommonModule,
-    StoragePageRoutingModule,
+    FormsModule,
+    IonicModule,
+    SendingPostCapturePageRoutingModule,
     TranslocoModule,
     MatToolbarModule,
-    MatIconModule,
     MatButtonModule,
-    MatTabsModule,
-    MatGridListModule,
-    MatCardModule,
-    MatSidenavModule,
+    MatIconModule,
     MatListModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
     PostCaptureCardModule
   ],
-  declarations: [StoragePage]
+  declarations: [SendingPostCapturePage]
 })
-export class StoragePageModule { }
+export class SendingPostCapturePageModule { }

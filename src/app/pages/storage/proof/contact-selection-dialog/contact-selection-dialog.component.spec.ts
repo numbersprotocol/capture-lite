@@ -1,36 +1,35 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { ProofPage } from './proof.page';
+import { ContactSelectionDialogComponent } from './contact-selection-dialog.component';
 
-describe('ProofPage', () => {
-  let component: ProofPage;
-  let fixture: ComponentFixture<ProofPage>;
+
+describe('ContactSelectionDialogComponent', () => {
+  let component: ContactSelectionDialogComponent;
+  let fixture: ComponentFixture<ContactSelectionDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProofPage],
+      declarations: [ContactSelectionDialogComponent],
       imports: [
         IonicModule.forRoot(),
-        RouterTestingModule,
         getTranslocoModule(),
-        MatToolbarModule,
-        MatButtonModule,
-        MatIconModule,
+        MatDialogModule,
         MatListModule,
-        MatSnackBarModule,
-        MatDialogModule
+        MatIconModule,
+        MatButtonModule
+      ],
+      providers: [
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} }
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ProofPage);
+    fixture = TestBed.createComponent(ContactSelectionDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
