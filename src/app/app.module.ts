@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { FormlyModule } from '@ngx-formly/core';
-import { FormlyIonicModule } from '@ngx-formly/ionic';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TranslocoRootModule } from './transloco/transloco-root.module';
@@ -26,7 +26,7 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     FormsModule,
     ReactiveFormsModule,
     FormlyModule.forRoot({ extras: { lazyRender: true } }),
-    FormlyIonicModule,
+    FormlyMaterialModule,
     BrowserAnimationsModule
   ],
   providers: [{

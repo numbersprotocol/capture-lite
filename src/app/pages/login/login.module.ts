@@ -1,62 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { IonicModule } from '@ionic/angular';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
-import { FormlyFieldConfig, FormlyModule, FORMLY_CONFIG } from '@ngx-formly/core';
-import { FormlyIonicModule } from '@ngx-formly/ionic';
+import { TranslocoModule } from '@ngneat/transloco';
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 import { LoginPageRoutingModule } from './login-routing.module';
 import { LoginPage } from './login.page';
-
-export function registerValidationMessages(translocoService: TranslocoService) {
-  return {
-    validationMessages: [
-      {
-        name: 'pattern',
-        message() {
-          return translocoService.selectTranslate('message.pleaseEnterValidEmail');
-        },
-      },
-      {
-        name: 'minlength',
-        message(_: any, fields: FormlyFieldConfig) {
-          return translocoService.selectTranslate(
-            'message.passwordMustBeBetween',
-            { min: fields?.templateOptions?.minLength, max: fields?.templateOptions?.maxLength },
-          );
-        },
-      },
-      {
-        name: 'maxlength',
-        message(_: any, fields: FormlyFieldConfig) {
-          return translocoService.selectTranslate(
-            'message.passwordMustBeBetween',
-            { min: fields?.templateOptions?.minLength, max: fields?.templateOptions?.maxLength },
-          );
-        },
-      }
-    ]
-  };
-}
 
 @NgModule({
   imports: [
     TranslocoModule,
     CommonModule,
-    FormsModule,
     IonicModule,
     LoginPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     FormlyModule.forRoot({ extras: { lazyRender: true } }),
-    FormlyIonicModule,
+    FormlyMaterialModule,
+    MatButtonModule
   ],
-  declarations: [LoginPage],
-  providers: [{
-    provide: FORMLY_CONFIG,
-    multi: true,
-    useFactory: registerValidationMessages,
-    deps: [TranslocoService],
-  }]
+  declarations: [LoginPage]
 })
 export class LoginPageModule { }

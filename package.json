@@ -34,7 +34,7 @@
     "@ngneat/transloco": "^2.19.1",
     "@ngneat/until-destroy": "^8.0.2",
     "@ngx-formly/core": "^5.0.0",
-    "@ngx-formly/ionic": "^5.0.0",
+    "@ngx-formly/material": "^5.0.0",
     "@ngx-formly/schematics": "^5.10.3",
     "image-blob-reduce": "^2.0.0",
     "rxjs": "~6.6.3",

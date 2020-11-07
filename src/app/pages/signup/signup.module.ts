@@ -4,7 +4,7 @@ import { AbstractControl, FormsModule, ReactiveFormsModule } from '@angular/form
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { FormlyFieldConfig, FormlyModule, FORMLY_CONFIG } from '@ngx-formly/core';
-import { FormlyIonicModule } from '@ngx-formly/ionic';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 import { SignupPageRoutingModule } from './signup-routing.module';
 import { SignupPage } from './signup.page';
 
@@ -73,7 +73,7 @@ export function registerValidationMessages(translocoService: TranslocoService) {
     FormsModule,
     ReactiveFormsModule,
     FormlyModule.forRoot({ validators: [{ name: 'fieldMatch', validation: fieldMatchValidator }], extras: { lazyRender: true }, }),
-    FormlyIonicModule,
+    FormlyMaterialModule
   ],
   declarations: [SignupPage],
   providers: [{
