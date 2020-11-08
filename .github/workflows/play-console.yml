@@ -1,4 +1,4 @@
-name: qa-release
+name: play-console
 
 on: workflow_dispatch
 
@@ -15,13 +15,6 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 10
-
-      - name: Check if version has been updated
-        id: version_check
-        uses: EndBug/version-check@v1
-        with:
-          diff-search: true
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up JDK
         if: steps.extract_branch.outputs.branch == 'develop'
