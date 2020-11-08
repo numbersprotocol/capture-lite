@@ -8,7 +8,6 @@ import { IonicModule } from '@ionic/angular';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { fieldMatchValidator } from './signup.module';
 import { SignupPage } from './signup.page';
 
 describe('SignupPage', () => {
@@ -25,7 +24,7 @@ describe('SignupPage', () => {
         RouterTestingModule,
         getTranslocoModule(),
         HttpClientTestingModule,
-        FormlyModule.forRoot({ validators: [{ name: 'fieldMatch', validation: fieldMatchValidator }] }),
+        FormlyModule.forRoot(),
         FormlyMaterialModule,
         ReactiveFormsModule,
         BrowserAnimationsModule

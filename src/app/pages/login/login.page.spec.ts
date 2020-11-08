@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
@@ -29,7 +30,8 @@ describe('LoginPage', () => {
         FormlyMaterialModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
-        MatButtonModule
+        MatButtonModule,
+        MatSnackBarModule
       ]
     }).compileComponents();
 

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -9,9 +10,9 @@ import { combineLatest } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
-import { EMAIL_REGEXP } from 'src/app/utils/validators';
+import { EMAIL_REGEXP } from 'src/app/utils/validation';
 
-@UntilDestroy()
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -29,6 +30,7 @@ export class LoginPage {
     private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
     private readonly router: Router,
+    private readonly snackBar: MatSnackBar
   ) {
     combineLatest([
       this.translocoService.selectTranslate('email'),
@@ -62,17 +64,7 @@ export class LoginPage {
         type: 'password',
         placeholder: passwordTranslation,
         required: true,
-        hideRequiredMarker: true,
-        minLength: 8,
-        maxLength: 32
-      },
-      validation: {
-        messages: {
-          minlength: (_, field: FormlyFieldConfig) => this.translocoService.translate(
-            'message.passwordMustBeBetween',
-            { min: field.templateOptions?.minLength, max: field.templateOptions?.maxLength }
-          )
-        }
+        hideRequiredMarker: true
       }
     }];
   }
@@ -86,13 +78,14 @@ export class LoginPage {
       untilDestroyed(this),
     ).subscribe(
       () => this.router.navigate(['storage'], { replaceUrl: true }),
-      err => this.toastController // replace with material component
-        .create({
+      err => {
+        console.log(err);
+        this.toastController.create({
           message: this.translocoService.translate('message.emailOrPasswordIsInvalid'),
           duration: 4000,
-          color: 'danger',
-        })
-        .then(toast => toast.present()),
+          color: 'danger'
+        }).then(toast => toast.present());
+      }
     );
   }
 }
