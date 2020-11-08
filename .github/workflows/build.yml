@@ -38,6 +38,8 @@ jobs:
         coverage-reports: ./coverage/cobertura-coverage.xml
 
     - name: Build Ionic
+      env:
+        NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
       run: npm run build
 
     - name: Build Android
