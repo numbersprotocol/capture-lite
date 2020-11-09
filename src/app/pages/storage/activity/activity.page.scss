@@ -5,6 +5,8 @@ mat-toolbar {
 .page-content {
   mat-list-item {
     height: initial;
+    padding-top: 16px;
+    padding-bottom: 16px;
 
     div[mat-line] {
       margin: 4px 0;
@@ -16,7 +18,6 @@ mat-toolbar {
       height: calc(100vw / 5);
       max-width: 150px;
       max-height: 80px;
-      margin: 8px 0;
     }
 
     button.accepted {
