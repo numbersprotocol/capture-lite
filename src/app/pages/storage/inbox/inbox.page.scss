@@ -1,0 +1,30 @@
+mat-toolbar {
+  background: white;
+}
+
+.page-content {
+  mat-list-item {
+    height: initial;
+
+    div[mat-line] {
+      margin: 4px 0;
+    }
+
+    img[matListAvatar] {
+      border-radius: 4px;
+      width: calc(100vw / 3);
+      height: calc(100vw / 3);
+      max-width: 150px;
+      max-height: 150px;
+    }
+
+    .action {
+      display: flex;
+      gap: 4px;
+
+      button {
+        flex-grow: 1;
+      }
+    }
+  }
+}
