@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
@@ -15,6 +16,7 @@ import { InformationRepository } from 'src/app/services/data/information/informa
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
+import { ContactSelectionDialogComponent, SelectedContact } from './contact-selection-dialog/contact-selection-dialog.component';
 
 const { Clipboard } = Plugins;
 
@@ -32,7 +34,6 @@ export class ProofPage {
     switchMap(hash => this.proofRepository.getByHash$(hash)),
     isNonNullable()
   );
-
   readonly base64Src$ = this.proof$.pipe(
     switchMap(proof => this.proofRepository.getRawFile$(proof)),
     map(rawBase64 => `data:image/png;base64,${rawBase64}`)
@@ -69,8 +70,23 @@ export class ProofPage {
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
     private readonly blockingActionService: BlockingActionService,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
+    private readonly dialog: MatDialog
   ) { }
+
+  openContactSelectionDialog() {
+    const dialogRef = this.dialog.open(ContactSelectionDialogComponent, {
+      minWidth: '90%',
+      autoFocus: false,
+      data: { email: '' } as SelectedContact
+    });
+    dialogRef.afterClosed()
+      .pipe(isNonNullable())
+      .subscribe(result => this.router.navigate(
+        ['sending-post-capture', { contact: result }],
+        { relativeTo: this.route }
+      ));
+  }
 
   remove() {
     const onConfirm = () => this.blockingActionService.run$(

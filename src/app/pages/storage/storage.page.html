@@ -55,8 +55,9 @@
         <div class="tab-content">
           <ng-container *ngFor="let proofsWithRaw of proofsWithRawByDate$ | async">
             <div class="mat-title">{{ proofsWithRaw[0].date }}</div>
-            <app-post-capture-card *ngFor="let proofWithRaw of proofsWithRaw" [proof]="proofWithRaw.proof"
-              [imageSrc]="'data:image/png;base64,' + proofWithRaw.rawBase64"></app-post-capture-card>
+            <app-post-capture-card *ngFor="let proofWithRaw of proofsWithRaw" userName="User Name"
+              [proof]="proofWithRaw.proof" [imageSrc]="'data:image/png;base64,' + proofWithRaw.rawBase64">
+            </app-post-capture-card>
           </ng-container>
         </div>
       </mat-tab>

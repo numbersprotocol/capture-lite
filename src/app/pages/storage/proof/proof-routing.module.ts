@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuardService } from 'src/app/services/auth/auth-guard.service';
 import { ProofPage } from './proof.page';
 
 const routes: Routes = [{
@@ -8,8 +7,10 @@ const routes: Routes = [{
   component: ProofPage
 }, {
   path: 'information',
-  loadChildren: () => import('./information/information.module').then(m => m.InformationPageModule),
-  canActivate: [AuthGuardService],
+  loadChildren: () => import('./information/information.module').then(m => m.InformationPageModule)
+}, {
+  path: 'sending-post-capture',
+  loadChildren: () => import('./sending-post-capture/sending-post-capture.module').then(m => m.SendingPostCapturePageModule)
 }];
 
 @NgModule({

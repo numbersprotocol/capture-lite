@@ -9,7 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslocoModule } from '@ngneat/transloco';
-import { PostCaptureCardComponent } from 'src/app/components/post-capture-card/post-capture-card.component';
+import { PostCaptureCardModule } from 'src/app/shared/post-capture-card/post-capture-card.module';
 import { StoragePageRoutingModule } from './storage-routing.module';
 import { StoragePage } from './storage.page';
 
@@ -25,11 +25,9 @@ import { StoragePage } from './storage.page';
     MatGridListModule,
     MatCardModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    PostCaptureCardModule
   ],
-  declarations: [
-    StoragePage,
-    PostCaptureCardComponent
-  ]
+  declarations: [StoragePage]
 })
 export class StoragePageModule { }

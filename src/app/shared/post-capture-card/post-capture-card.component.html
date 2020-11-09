@@ -1,7 +1,7 @@
 <mat-card *transloco="let t">
   <mat-card-header>
     <div mat-card-avatar class="post-capture-avatar"></div>
-    <mat-card-title>User Name</mat-card-title>
+    <mat-card-title>{{ userName }}</mat-card-title>
     <mat-card-subtitle>sent from n hours</mat-card-subtitle>
     <span class="toolbar-spacer"></span>
     <button mat-icon-button>
@@ -33,13 +33,7 @@
         </div>
       </mat-list-item>
     </mat-list>
-    <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-      dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-      aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-      dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-      officia deserunt mollit anim id est laborum.
-    </p>
+    <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">{{ (caption$ | async)?.text }}</p>
   </mat-card-content>
   <mat-card-actions [align]="'end'">
     <button (click)="openMore = !openMore" mat-button>{{ t('viewAll') + '...' }}</button>
