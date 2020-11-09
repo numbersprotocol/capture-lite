@@ -1,0 +1,27 @@
+mat-toolbar {
+  background: white;
+}
+
+.page-content {
+  mat-list-item {
+    height: initial;
+
+    div[mat-line] {
+      margin: 4px 0;
+    }
+
+    img[matListAvatar] {
+      border-radius: 4px;
+      width: calc(100vw / 3);
+      height: calc(100vw / 5);
+      max-width: 150px;
+      max-height: 80px;
+      margin: 8px 0;
+    }
+
+    button.accepted {
+      color: mediumseagreen;
+      border-color: mediumseagreen;
+    }
+  }
+}
