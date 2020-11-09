@@ -1,0 +1,17 @@
+<h1 *transloco="let t" mat-dialog-title>{{ t('invitationEmail') }}</h1>
+
+<form #form="ngForm" *transloco="let t">
+  <div mat-dialog-content>
+    <p>{{ t('message.invitationEmail') }}</p>
+    <mat-form-field>
+      <mat-label>{{ t('email') }}</mat-label>
+      <mat-icon matSuffix>email</mat-icon>
+      <input [(ngModel)]="data.email" name="email" matInput required type="email" email>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button (click)="onCancelClicked()" mat-button>{{ t('cancel') }}</button>
+    <button [mat-dialog-close]="data.email" [disabled]="!form.form.valid" type="submit"
+      mat-button>{{ t('ok') }}</button>
+  </div>
+</form>

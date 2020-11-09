@@ -138,13 +138,20 @@ Bump version in `android/app/build.gradle`.
 ``` gradle
 android {
     defaultConfig {
-        versionCode abc
+        versionCode <versionCode++>
         versionName "a.b.c"
     }
 }
 ```
 
-When push to the `develop` branch with new version in the `package.json` file, GitHub Action would automatically create new release.
+__Remember to write the changelog in `CHANGELOG.md`.__
+
+When push to the `develop` branch with new version in the `package.json` file, GitHub Action would automatically do the following jobs:
+
+1. Create release GitHub page with debug APK.
+1. Publish the app to Play Console on alpha track.
+1. Upload debug apk to Google Drive.
+1. Send notification to the private `reminder-releases` slack channel.
 
 ### Deploy
 

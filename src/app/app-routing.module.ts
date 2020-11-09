@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AuthGuardService } from './services/auth/auth-guard.service';
-import { LoginGuardService } from './services/auth/login-guard.service';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 
 const routes: Routes = [{
@@ -10,33 +9,34 @@ const routes: Routes = [{
   pathMatch: 'full'
 }, {
   path: 'login',
-  loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule),
-  canActivate: [LoginGuardService],
+  loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
 }, {
   path: 'signup',
   loadChildren: () => import('./pages/signup/signup.module').then(m => m.SignupPageModule)
 }, {
   path: 'storage',
   loadChildren: () => import('./pages/storage/storage.module').then(m => m.StoragePageModule),
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuard]
 }, {
   path: 'profile',
-  loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
+  loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
+  canActivate: [AuthGuard]
 }, {
   path: 'settings',
   loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule),
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuard]
 }, {
   path: 'privacy',
-  loadChildren: () => import('./pages/privacy/privacy.module').then(m => m.PrivacyPageModule)
+  loadChildren: () => import('./pages/privacy/privacy.module').then(m => m.PrivacyPageModule),
+  canActivate: [AuthGuard]
 }, {
   path: 'about',
   loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule),
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuard]
 }, {
   path: 'inbox',
   loadChildren: () => import('./pages/inbox/inbox.module').then(m => m.InboxPageModule),
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuard]
 }];
 @NgModule({
   imports: [

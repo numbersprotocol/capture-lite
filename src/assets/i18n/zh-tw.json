@@ -63,12 +63,12 @@
   "processing": "處理中",
   "email": "電子郵件",
   "password": "密碼",
-  "repeatPassword": "再次輸入密碼",
+  "confirmPassword": "再次輸入密碼",
   "bringTrustIntoData": "Bring Trust Into Data",
   "login": "登入",
-  "createAnAccount": "建立帳號？",
+  "createAnAccount": "建立帳號",
   "signup": "註冊",
-  "alreadyHaveAnAccount": "是否已有帳號？",
+  "alreadyHaveAnAccount": "已有帳號",
   "resendVerificationEmail": "重新傳送確認郵件",
   "logout": "登出",
   "tags": "標籤",
@@ -77,6 +77,12 @@
   "address": "地址",
   "mediaId": "媒體 ID",
   "media": "媒體",
+  "selectContact": "選擇聯絡人",
+  "inviteFriend": "邀請好友",
+  "invitationEmail": "邀請電子信箱",
+  "sendPostCapture": "發送 PostCapture",
+  "previewPostCapture": "預覽 PostCapture",
+  "preview": "預覽",
   "message": {
     "areYouSure": "此操作不可撤銷。",
     "verificationEmailSent": "驗證電子郵件已發送到您的電子郵件地址。",
@@ -94,6 +100,8 @@
     "forbiddenAllNumeric": "密碼不能只有數字。",
     "isNotEmail": "電子郵件格式不符。",
     "pleaseWait": "請稍候...",
-    "copiedToClipboard": "已複製至剪貼簿。"
+    "copiedToClipboard": "已複製至剪貼簿。",
+    "invitationEmail": "輸入好友電子信箱發送邀請。",
+    "clickingSignupToAgreePolicy": "點擊「註冊」即表示你同意我們的《<a href=\"https://docs.google.com/document/d/1ZtD-E4-zcnh8DxQCSgR1Efhb9UooJMr7fb7bzPENd24/edit?usp=sharing\" target=\"_blank\">服務條款</a>》和《<a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">資料政策</a>》。"
   }
 }

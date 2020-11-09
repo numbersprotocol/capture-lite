@@ -32,11 +32,11 @@ mat-card-content {
   white-space: initial;
 }
 
-.info-list {
+.info-list[dense] {
   display: none;
 }
 
-.info-list-show {
+.info-list-show[dense] {
   display: block;
 }
 

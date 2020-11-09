@@ -1,28 +1,12 @@
-<ion-content *transloco="let t">
-  <ion-grid>
-    <ion-row>
-      <div class="logo">
-        <img slot="icon-only" src="../../../assets/Capture.svg" />
-      </div>
-    </ion-row>
-    <form [formGroup]="form" (ngSubmit)="onSubmit(model)" *ngIf="formInitialized">
-      <ion-row class="inputs">
-        <ion-col>
-          <formly-form [form]="form" [fields]="fields" [options]="options" [model]="model"></formly-form>
-        </ion-col>
-      </ion-row>
-      <ion-row class="buttons">
-        <ion-col class="input_R">
-          <ion-button type="submit" [disabled]="!form.valid">
-            {{ t('login') }}
-          </ion-button>
-        </ion-col>
-        <ion-col class="input_R">
-          <ion-button replaceUrl="true" routerLink="/signup">
-            {{ t('createAnAccount') }}
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </form>
-  </ion-grid>
-</ion-content>
+<div *transloco="let t" class="page-content">
+  <div class="logo">
+    <img src="../../../assets/image/capture.svg" />
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+    <button type="submit" [disabled]="!form.valid" mat-flat-button color="primary">{{ t('login') }}</button>
+  </form>
+
+  <button routerLink="/signup" replaceUrl mat-stroked-button color="primary">{{ t('createAnAccount') }}</button>
+</div>

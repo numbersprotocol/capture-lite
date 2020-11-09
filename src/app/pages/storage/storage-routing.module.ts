@@ -7,7 +7,7 @@ const routes: Routes = [{
   component: StoragePage,
 }, {
   path: 'proof',
-  loadChildren: () => import('./proof/proof.module').then(m => m.ProofPageModule),
+  loadChildren: () => import('./proof/proof.module').then(m => m.ProofPageModule)
 }];
 
 @NgModule({

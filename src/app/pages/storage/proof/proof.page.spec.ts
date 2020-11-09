@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -24,7 +25,8 @@ describe('ProofPage', () => {
         MatButtonModule,
         MatIconModule,
         MatListModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatDialogModule
       ]
     }).compileComponents();
 

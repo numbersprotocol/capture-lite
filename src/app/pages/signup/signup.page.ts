@@ -1,69 +1,112 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
-import { combineLatest } from 'rxjs';
-import {
-  BlockingActionService,
-} from 'src/app/services/blocking-action/blocking-action.service';
-import {
-  NumbersStorageApi,
-} from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
-
+import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+import { combineLatest } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
+import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
+import { EMAIL_REGEXP } from 'src/app/utils/validation';
 
-interface SignupFormModel {
-  email: string;
-  password: string;
-  repeatPassword: string;
-}
-
-interface MessageConfig {
-  color: string;
-  text: string;
-}
-
-@UntilDestroy()
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss'],
 })
-export class SignupPage implements OnInit {
+export class SignupPage {
 
   form = new FormGroup({});
-  model: SignupFormModel = { email: '', password: '', repeatPassword: '' };
-  options: FormlyFormOptions = {};
+  model: SignupFormModel = { email: '', password: '', confirmPassword: '' };
   fields: FormlyFieldConfig[] = [];
-  formInitialized = false;
 
   constructor(
     private readonly blockingActionService: BlockingActionService,
     private readonly numbersStorageApi: NumbersStorageApi,
     private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
-  ) { }
-
-  ngOnInit() {
+    private readonly router: Router
+  ) {
     combineLatest([
       this.translocoService.selectTranslate('email'),
       this.translocoService.selectTranslate('password'),
-      this.translocoService.selectTranslate('repeatPassword'),
+      this.translocoService.selectTranslate('confirmPassword'),
     ]).pipe(
-      untilDestroyed(this),
-    ).subscribe(
-      translations => {
-        this.fields = this.createFormFields(translations);
-        this.formInitialized = true;
-      }
-    );
+      tap(([emailTranslation, passwordTranslation, confirmPasswordTranslation]) => this.createFormFields(
+        emailTranslation, passwordTranslation, confirmPasswordTranslation
+      )),
+      untilDestroyed(this)
+    ).subscribe();
   }
 
-  onSubmit(model: SignupFormModel) {
-    const defaultUsername = '';
-    const action$ = this.numbersStorageApi.createUser$(defaultUsername, model.email, model.password);
+  private createFormFields(emailTranslation: string, passwordTranslation: string, confirmPasswordTranslation: string) {
+    this.fields = [{
+      validators: {
+        fieldMatch: {
+          expression: (control: FormGroup) => {
+            const { password, confirmPassword } = control.value;
+            return confirmPassword === password
+              // avoid displaying the message error when values are empty
+              || (!confirmPassword || !password);
+          },
+          message: this.translocoService.translate('message.passwordNotMatching'),
+          errorPath: 'confirmPassword'
+        }
+      },
+      fieldGroup: [{
+        key: 'email',
+        type: 'input',
+        templateOptions: {
+          type: 'email',
+          placeholder: emailTranslation,
+          required: true,
+          hideRequiredMarker: true,
+          pattern: EMAIL_REGEXP
+        },
+        validation: {
+          messages: {
+            pattern: () => this.translocoService.translate('message.pleaseEnterValidEmail')
+          }
+        }
+      }, {
+        key: 'password',
+        type: 'input',
+        templateOptions: {
+          type: 'password',
+          placeholder: passwordTranslation,
+          required: true,
+          hideRequiredMarker: true,
+          minLength: 8,
+          maxLength: 32,
+        },
+        validation: {
+          messages: {
+            minlength: (_, field: FormlyFieldConfig) => this.translocoService.translate(
+              'message.passwordMustBeBetween',
+              { min: field.templateOptions?.minLength, max: field.templateOptions?.maxLength }
+            )
+          }
+        }
+      }, {
+        key: 'confirmPassword',
+        type: 'input',
+        templateOptions: {
+          type: 'password',
+          placeholder: confirmPasswordTranslation,
+          required: true,
+          hideRequiredMarker: true,
+        }
+      }]
+    }
+    ];
+  }
+
+  onSubmit() {
+    const defaultUsername = this.model.email.substring(0, this.model.email.lastIndexOf('@'));
+    const action$ = this.numbersStorageApi.createUser$(defaultUsername, this.model.email, this.model.password);
 
     this.blockingActionService.run$(
       action$,
@@ -71,75 +114,22 @@ export class SignupPage implements OnInit {
     ).pipe(
       untilDestroyed(this),
     ).subscribe(
-      () => {
-        this.toastController
-          .create({
-            message: this.translocoService.translate('message.verificationEmailSent') +
-              this.translocoService.translate('message.pleaseCheckYourEmail'),
-            duration: 8000,
-            color: 'primary',
-          })
-          .then(toast => toast.present());
-        if (this?.options?.resetModel) {
-          this.options.resetModel();
-        }
-      },
-      // FIXME: The actual error type can't be determined from response. Fix this after API updates error messages.
-      err => this.toastController
-        .create({
+      () => this.router.navigate(['/signup/finished'], { replaceUrl: true }),
+      err => {
+        // FIXME: The actual error type can't be determined from response. Fix this after API updates error messages.
+        console.log(err);
+        this.toastController.create({
           message: this.translocoService.translate('message.emailAlreadyExists'),
           duration: 4000,
           color: 'danger',
-        })
-        .then(toast => toast.present()));
+        }).then(toast => toast.present());
+      }
+    );
   }
+}
 
-  private createFormFields(translations: string[]): FormlyFieldConfig[] {
-    const [emailTranslation, passwordTranslation, repeatPasswordTranslation] = translations;
-    const fields: FormlyFieldConfig[] = [{
-      validators: {
-        validation: [
-          { name: 'fieldMatch', options: { errorPath: 'repeatPassword' } },
-        ],
-      },
-      fieldGroup: [
-        {
-          key: 'email',
-          type: 'input',
-          templateOptions: {
-            type: 'email',
-            placeholder: emailTranslation,
-            required: true,
-            hideRequiredMarker: true,
-            pattern: /(.+)@(.+){2,}\.(.+){2,}/,
-          }
-        },
-        {
-          key: 'password',
-          type: 'input',
-          templateOptions: {
-            type: 'password',
-            placeholder: passwordTranslation,
-            required: true,
-            hideRequiredMarker: true,
-            minLength: 8,
-            maxLength: 32,
-          }
-        },
-        {
-          key: 'repeatPassword',
-          type: 'input',
-          templateOptions: {
-            type: 'password',
-            placeholder: repeatPasswordTranslation,
-            required: true,
-            hideRequiredMarker: true,
-          }
-        },
-      ]
-    }
-    ];
-    return fields;
-  }
-
+interface SignupFormModel {
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
