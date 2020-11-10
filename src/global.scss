@@ -36,6 +36,11 @@
 
 mat-toolbar {
   min-height: 56px;
+
+  span {
+    flex-grow: 1;
+    text-align: center;
+  }
 }
 
 button.expand {

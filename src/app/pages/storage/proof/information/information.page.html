@@ -7,32 +7,54 @@
 
 <div class="page-content">
   <mat-list *transloco="let t">
+    <div mat-subheader>{{ t('digitalAsset') }}</div>
+    <mat-list-item>
+      <mat-icon mat-list-icon>access_time</mat-icon>
+      <div mat-line>{{ t('timestamp') }}</div>
+      <div mat-line>{{ timestamp$ | async | date:'long' }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>code</mat-icon>
+      <div mat-line>{{ t('hash') }}</div>
+      <div mat-line>{{ hash$ | async }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>image</mat-icon>
+      <div mat-line>{{ t('mimeType') }}</div>
+      <div mat-line>{{ mimeType$ | async }}</div>
+    </mat-list-item>
+
     <div *ngIf="(locationInformation$ | async)?.length" mat-subheader>{{ t('location') }}</div>
     <mat-list-item *ngFor="let information of (locationInformation$ | async)">
       <mat-icon mat-list-icon>information</mat-icon>
       <div mat-line>{{ information.name }}</div>
       <div mat-line>{{ information.value }}</div>
-      <button *ngIf="information.value as value" (click)="copyToClipboard(value)" mat-icon-button>
-        <mat-icon>content_copy</mat-icon>
-      </button>
     </mat-list-item>
+
     <div *ngIf="(deviceInformation$ | async)?.length" mat-subheader>{{ t('device') }}</div>
     <mat-list-item *ngFor="let information of (deviceInformation$ | async)">
       <mat-icon mat-list-icon>information</mat-icon>
       <div mat-line>{{ information.name }}</div>
       <div mat-line>{{ information.value }}</div>
-      <button *ngIf="information.value as value" (click)="copyToClipboard(value)" mat-icon-button>
-        <mat-icon>content_copy</mat-icon>
-      </button>
     </mat-list-item>
+
     <div *ngIf="(otherInformation$ | async)?.length" mat-subheader>{{ t('other') }}</div>
     <mat-list-item *ngFor="let information of (otherInformation$ | async)">
       <mat-icon mat-list-icon>information</mat-icon>
       <div mat-line>{{ information.name }}</div>
       <div mat-line>{{ information.value }}</div>
-      <button *ngIf="information.value as value" (click)="copyToClipboard(value)" mat-icon-button>
-        <mat-icon>content_copy</mat-icon>
-      </button>
+    </mat-list-item>
+
+    <div mat-subheader>{{ t('signature') }}</div>
+    <mat-list-item>
+      <mat-icon mat-list-icon>policy</mat-icon>
+      <div mat-line>{{ t('signature') }}</div>
+      <div mat-line>{{ (signature$ | async)?.signature }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>lock</mat-icon>
+      <div mat-line>{{ t('publicKey') }}</div>
+      <div mat-line>{{ (signature$ | async)?.publicKey }}</div>
     </mat-list-item>
   </mat-list>
 </div>
