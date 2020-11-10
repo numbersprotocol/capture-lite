@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map, switchMap, tap } from 'rxjs/operators';
+import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
@@ -36,6 +38,7 @@ export class SendingPostCapturePage {
   readonly userName$ = this.contact$.pipe(
     map(contact => contact.substring(0, contact.lastIndexOf('@')))
   );
+  previewCaption = '';
   isPreview = false;
 
   constructor(
@@ -43,7 +46,9 @@ export class SendingPostCapturePage {
     private readonly route: ActivatedRoute,
     private readonly assetRepository: AssetRepository,
     private readonly proofRepository: ProofRepository,
-    private readonly captionRepository: CaptionRepository
+    private readonly captionRepository: CaptionRepository,
+    private readonly confirmAlert: ConfirmAlert,
+    private readonly translocoService: TranslocoService
   ) { }
 
   preview(captionText: string) {
@@ -58,6 +63,11 @@ export class SendingPostCapturePage {
   }
 
   send() {
-    this.router.navigate(['..'], { relativeTo: this.route });
+    this.confirmAlert.present$(
+      () => this.router.navigate(['../..'], { relativeTo: this.route }),
+      this.translocoService.translate('message.sendPostCaptureAlert')
+    ).pipe(
+      untilDestroyed(this)
+    ).subscribe();
   }
 }

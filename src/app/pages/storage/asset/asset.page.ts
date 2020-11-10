@@ -43,13 +43,6 @@ export class AssetPage {
     switchMap(proof => this.proofRepository.getRawFile$(proof)),
     map(rawBase64 => `data:image/png;base64,${rawBase64}`)
   );
-  readonly caption$ = this.proof$.pipe(
-    switchMap(proof => this.captionRepository.getByProof$(proof)),
-    map(caption => {
-      if (caption && caption.text.length > 0) { return caption.text; }
-      return '';
-    })
-  );
   readonly timestamp$ = this.proof$.pipe(pluck('timestamp'));
   readonly location$ = this.proof$.pipe(
     switchMap(proof => this.informationRepository.getByProof$(proof)),

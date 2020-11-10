@@ -19,11 +19,6 @@
       <div mat-line>{{ t('owner') }}</div>
       <div mat-line>{{ (asset$ | async)?.owner }}</div>
     </mat-list-item>
-    <mat-list-item *ngIf="(caption$ | async)">
-      <mat-icon mat-list-icon>sticky_note_2</mat-icon>
-      <div mat-line>{{ t('caption') }}</div>
-      <div mat-line>{{ caption$ | async }}</div>
-    </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>place</mat-icon>
       <div mat-line>{{ t('location') }}</div>

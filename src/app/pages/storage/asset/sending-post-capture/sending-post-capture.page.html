@@ -1,6 +1,6 @@
 <mat-toolbar *transloco="let t">
-  <button [routerLink]="isPreview ? null : '..'" [routerDirection]="isPreview ? null : 'back'"
-    (click)="isPreview ? isPreview = false : null" mat-icon-button>
+  <button [routerLink]="isPreview ? null : '..'" routerDirection="back" (click)="isPreview ? isPreview = false : null"
+    mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span>{{ t(isPreview ? 'previewPostCapture' : 'sendPostCapture') }}</span>
@@ -15,7 +15,7 @@
         <mat-card-content>
           <mat-form-field appearance="outline">
             <mat-label>{{ t('caption') }}</mat-label>
-            <textarea name="caption" ngModel matInput cdkTextareaAutosize></textarea>
+            <textarea [(ngModel)]="previewCaption" name="caption" ngModel matInput cdkTextareaAutosize></textarea>
           </mat-form-field>
         </mat-card-content>
       </mat-card>
