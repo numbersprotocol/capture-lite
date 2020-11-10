@@ -83,6 +83,8 @@
   "sendPostCapture": "Send PostCapture",
   "previewPostCapture": "Preview PostCapture",
   "preview": "Preview",
+  "activity": "Activity",
+  "accepted": "Accepted",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "verificationEmailSent": "A verification email has been sent to your email address.",
