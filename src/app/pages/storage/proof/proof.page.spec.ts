@@ -1,7 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -24,9 +26,11 @@ describe('ProofPage', () => {
         MatToolbarModule,
         MatButtonModule,
         MatIconModule,
+        MatIconTestingModule,
         MatListModule,
         MatSnackBarModule,
-        MatDialogModule
+        MatDialogModule,
+        MatBottomSheetModule
       ]
     }).compileComponents();
 

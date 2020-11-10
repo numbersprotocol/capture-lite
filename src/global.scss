@@ -35,6 +35,11 @@
 
 mat-toolbar {
   min-height: 56px;
+
+  span {
+    flex-grow: 1;
+    text-align: center;
+  }
 }
 
 // avoid overlapping with the status bar on most iOS devices

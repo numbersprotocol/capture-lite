@@ -12,8 +12,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TranslocoRootModule } from './transloco/transloco-root.module';
 
-
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

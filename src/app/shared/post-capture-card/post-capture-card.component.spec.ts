@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatListModule } from '@angular/material/list';
 import { IonicModule } from '@ionic/angular';
 import { Proof } from 'src/app/services/data/proof/proof';
@@ -24,6 +25,7 @@ describe('PostCaptureCardComponent', () => {
         MatCardModule,
         MatButtonModule,
         MatIconModule,
+        MatIconTestingModule,
         MatListModule,
         getTranslocoModule()
       ]
