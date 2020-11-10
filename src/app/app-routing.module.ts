@@ -34,7 +34,6 @@ const routes: Routes = [{
   loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule),
   canActivate: [AuthGuard]
 }];
-
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {

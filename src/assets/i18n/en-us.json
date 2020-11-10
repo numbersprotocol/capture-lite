@@ -83,6 +83,9 @@
   "sendPostCapture": "Send PostCapture",
   "previewPostCapture": "Preview PostCapture",
   "preview": "Preview",
+  "inbox": "Inbox",
+  "ignore": "Ignore",
+  "accept": "Accept",
   "activity": "Activity",
   "accepted": "Accepted",
   "message": {

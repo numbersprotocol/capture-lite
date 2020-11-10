@@ -83,6 +83,9 @@
   "sendPostCapture": "發送 PostCapture",
   "previewPostCapture": "預覽 PostCapture",
   "preview": "預覽",
+  "inbox": "收件匣",
+  "ignore": "忽略",
+  "accept": "接收",
   "activity": "活動紀錄",
   "accepted": "已接收",
   "message": {
