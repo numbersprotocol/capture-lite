@@ -86,6 +86,8 @@
   "inbox": "Inbox",
   "ignore": "Ignore",
   "accept": "Accept",
+  "activity": "Activity",
+  "accepted": "Accepted",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "verificationEmailSent": "A verification email has been sent to your email address.",
