@@ -5,7 +5,6 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <span>{{ userName$ | async }}</span>
-      <span class="toolbar-spacer"></span>
     </mat-toolbar>
 
     <mat-nav-list>
@@ -30,10 +29,10 @@
         <mat-icon>menu</mat-icon>
       </button>
       <span class="toolbar-spacer"></span>
-      <button mat-icon-button>
+      <button routerLink="activity" mat-icon-button>
         <mat-icon>history</mat-icon>
       </button>
-      <button mat-icon-button>
+      <button routerLink="inbox" mat-icon-button>
         <mat-icon>inbox</mat-icon>
       </button>
     </mat-toolbar>
@@ -45,7 +44,7 @@
             <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
             <mat-grid-list cols="3" gutterSize="8px">
               <mat-grid-tile class="square-image-tile" *ngFor="let assetWithRaw of assetsWithRaw"
-                [routerLink]="['asset', {hash: assetWithRaw.asset.proof_hash}]"
+                [routerLink]="['asset', {id: assetWithRaw.asset.id}]"
                 [style]="'background-image: url(data:image/*;base64,' + assetWithRaw.rawBase64 + ');'"></mat-grid-tile>
             </mat-grid-list>
           </ng-container>

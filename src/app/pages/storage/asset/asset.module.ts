@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,6 +16,7 @@ import { AssetPageRoutingModule } from './asset-routing.module';
 import { AssetPage } from './asset.page';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import { FriendInvitationDialogComponent } from './contact-selection-dialog/friend-invitation-dialog/friend-invitation-dialog.component';
+import { OptionsMenuComponent } from './options-menu/options-menu.component';
 
 @NgModule({
   imports: [
@@ -30,12 +32,14 @@ import { FriendInvitationDialogComponent } from './contact-selection-dialog/frie
     MatSnackBarModule,
     MatInputModule,
     MatDialogModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatBottomSheetModule
   ],
   declarations: [
     AssetPage,
     ContactSelectionDialogComponent,
-    FriendInvitationDialogComponent
+    FriendInvitationDialogComponent,
+    OptionsMenuComponent
   ]
 })
 export class AssetPageModule { }

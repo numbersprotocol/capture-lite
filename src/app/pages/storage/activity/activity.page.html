@@ -1,0 +1,38 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('activity') }}</span>
+</mat-toolbar>
+
+<div *transloco="let t" class="page-content">
+  <mat-list>
+    <mat-list-item>
+      <img matListAvatar src="https://picsum.photos/200/300">
+      <div mat-line>abcdef1234567890</div>
+      <div mat-line>2020-10-05 22:32:42</div>
+      <button class="accepted" mat-stroked-button disableRipple>{{ t('accepted') }}</button>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <img matListAvatar src="https://picsum.photos/200/300">
+      <div mat-line>abcdef1234567890</div>
+      <div mat-line>2020-10-05 22:32:42</div>
+      <button class="accepted" mat-stroked-button disableRipple>{{ t('accepted') }}</button>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <img matListAvatar src="https://picsum.photos/200/300">
+      <div mat-line>abcdef1234567890</div>
+      <div mat-line>2020-10-05 22:32:42</div>
+      <button class="accepted" mat-stroked-button disableRipple>{{ t('accepted') }}</button>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <img matListAvatar src="https://picsum.photos/200/300">
+      <div mat-line>abcdef1234567890</div>
+      <div mat-line>2020-10-05 22:32:42</div>
+      <button class="accepted" mat-stroked-button disableRipple>{{ t('accepted') }}</button>
+    </mat-list-item>
+  </mat-list>
+</div>

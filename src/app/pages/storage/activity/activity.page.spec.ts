@@ -1,40 +1,34 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatListModule } from '@angular/material/list';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { AssetPage } from './asset.page';
+import { ActivityPage } from './activity.page';
 
-describe('AssetPage', () => {
-  let component: AssetPage;
-  let fixture: ComponentFixture<AssetPage>;
+describe('ActivityPage', () => {
+  let component: ActivityPage;
+  let fixture: ComponentFixture<ActivityPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AssetPage],
+      declarations: [ActivityPage],
       imports: [
         IonicModule.forRoot(),
-        RouterTestingModule,
         getTranslocoModule(),
-        MatToolbarModule,
+        RouterTestingModule,
         MatButtonModule,
         MatIconModule,
-        MatIconTestingModule,
         MatListModule,
-        MatSnackBarModule,
-        MatDialogModule,
-        MatBottomSheetModule
+        MatToolbarModule,
+        MatDividerModule
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AssetPage);
+    fixture = TestBed.createComponent(ActivityPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

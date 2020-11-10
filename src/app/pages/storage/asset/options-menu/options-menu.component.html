@@ -1,0 +1,17 @@
+<mat-nav-list *transloco="let t">
+  <a mat-list-item (click)="openLink(options.Delete)">
+    <span mat-line>{{ t('delete') }}</span>
+  </a>
+
+  <a mat-list-item (click)="openLink()">
+    <span mat-line>{{ t('saveToLocal') }} (not implemented)</span>
+  </a>
+
+  <a mat-list-item (click)="openLink()">
+    <span mat-line>{{ t('copyCertificate') }} (not implemented)</span>
+  </a>
+
+  <a mat-list-item (click)="openLink()">
+    <span mat-line>{{ t('downloadCertificate') }} (not implemented)</span>
+  </a>
+</mat-nav-list>

@@ -1,6 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { Caption } from 'src/app/services/data/caption/caption';
@@ -28,13 +26,9 @@ export class PostCaptureCardComponent implements OnInit {
   proof$: Observable<Proof | undefined> = of(undefined);
 
   constructor(
-    iconRegistry: MatIconRegistry,
-    sanitizer: DomSanitizer,
     private readonly proofRepository: ProofRepository,
     private readonly captionRepository: CaptionRepository
-  ) {
-    iconRegistry.addSvgIcon('media-id', sanitizer.bypassSecurityTrustResourceUrl('/assets/icon/media-id.svg'));
-  }
+  ) { }
 
   ngOnInit() {
     this.proof$ = this.proofRepository.getByHash$(this.asset.proof_hash);
