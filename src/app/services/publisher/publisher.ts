@@ -7,7 +7,7 @@ import { NotificationService } from '../notification/notification.service';
 
 export abstract class Publisher {
 
-  abstract readonly name: string;
+  abstract readonly id: string;
 
   constructor(
     private readonly translocoService: TranslocoService,
@@ -19,14 +19,14 @@ export abstract class Publisher {
     this.notificationService.notify(
       notificationId,
       this.translocoService.translate('publishingProof'),
-      this.translocoService.translate('message.publishingProof', { hash: proof.hash, publisherName: this.name })
+      this.translocoService.translate('message.publishingProof', { hash: proof.hash, publisherName: this.id })
     );
     subscribeInBackground(
       this.run$(proof).pipe(
         tap(_ => this.notificationService.notify(
           notificationId,
           this.translocoService.translate('proofPublished'),
-          this.translocoService.translate('message.proofPublished', { hash: proof.hash, publisherName: this.name })
+          this.translocoService.translate('message.proofPublished', { hash: proof.hash, publisherName: this.id })
         ))
       ),
       error => this.notificationService.notifyError(notificationId, error)

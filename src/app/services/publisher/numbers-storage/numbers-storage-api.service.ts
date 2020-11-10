@@ -8,6 +8,7 @@ import { secret } from '../../../../environments/secret';
 import { Proof } from '../../data/proof/proof';
 import { Signature } from '../../data/signature/signature';
 import { SerializationService } from '../../serialization/serialization.service';
+import { Asset } from './data/asset/asset';
 
 export const enum TargetProvider {
   Numbers = 'Numbers'
@@ -97,7 +98,7 @@ export class NumbersStorageApi {
     );
   }
 
-  createMedia$(
+  createAsset$(
     rawFileBase64: string,
     proof: Proof,
     targetProvider: TargetProvider,
@@ -115,13 +116,14 @@ export class NumbersStorageApi {
       concatMap(([rawFile, information, authToken]) => {
         const headers = new HttpHeaders({ Authorization: authToken });
         const formData = new FormData();
-        formData.append('file', rawFile);
+        formData.append('asset_file', rawFile);
+        formData.append('asset_file_mime_type', proof.mimeType);
         formData.append('meta', information);
         formData.append('target_provider', targetProvider);
         formData.append('caption', caption);
         formData.append('signature', JSON.stringify(signatures));
         formData.append('tag', tag);
-        return this.httpClient.post(`${baseUrl}/api/v1/media/`, formData, { headers });
+        return this.httpClient.post<Asset>(`${baseUrl}/api/v2/assets/`, formData, { headers });
       })
     );
   }

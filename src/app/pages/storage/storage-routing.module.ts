@@ -6,8 +6,8 @@ const routes: Routes = [{
   path: '',
   component: StoragePage,
 }, {
-  path: 'proof',
-  loadChildren: () => import('./proof/proof.module').then(m => m.ProofPageModule)
+  path: 'asset',
+  loadChildren: () => import('./asset/asset.module').then(m => m.AssetPageModule)
 }];
 
 @NgModule({

@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ProofPage } from './proof.page';
+import { AssetPage } from './asset.page';
 
 const routes: Routes = [{
   path: '',
-  component: ProofPage
+  component: AssetPage
 }, {
   path: 'information',
   loadChildren: () => import('./information/information.module').then(m => m.InformationPageModule)
@@ -17,4 +17,4 @@ const routes: Routes = [{
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ProofPageRoutingModule { }
+export class AssetPageRoutingModule { }

@@ -11,17 +11,17 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
+import { AssetPageRoutingModule } from './asset-routing.module';
+import { AssetPage } from './asset.page';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import { FriendInvitationDialogComponent } from './contact-selection-dialog/friend-invitation-dialog/friend-invitation-dialog.component';
-import { ProofPageRoutingModule } from './proof-routing.module';
-import { ProofPage } from './proof.page';
 
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
-    ProofPageRoutingModule,
+    AssetPageRoutingModule,
     TranslocoModule,
     MatToolbarModule,
     MatButtonModule,
@@ -33,9 +33,9 @@ import { ProofPage } from './proof.page';
     MatFormFieldModule
   ],
   declarations: [
-    ProofPage,
+    AssetPage,
     ContactSelectionDialogComponent,
     FriendInvitationDialogComponent
   ]
 })
-export class ProofPageModule { }
+export class AssetPageModule { }

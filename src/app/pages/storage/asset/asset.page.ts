@@ -22,11 +22,11 @@ const { Clipboard } = Plugins;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'app-proof',
-  templateUrl: './proof.page.html',
-  styleUrls: ['./proof.page.scss'],
+  selector: 'app-asset',
+  templateUrl: './asset.page.html',
+  styleUrls: ['./asset.page.scss'],
 })
-export class ProofPage {
+export class AssetPage {
 
   readonly proof$ = this.route.paramMap.pipe(
     map(params => params.get('hash')),
