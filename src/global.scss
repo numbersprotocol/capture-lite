@@ -37,7 +37,11 @@
 mat-toolbar {
   min-height: 56px;
 }
-
+@media (min-width: 380px){
+  .ios mat-toolbar {
+    margin-top: 30px !important;
+  }
+}
 button.expand {
   width: calc(100vw - 16px);
   margin: 0 8px;
