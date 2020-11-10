@@ -28,7 +28,6 @@
 .ion-page {
   background-color: white;
 }
-
 .page-content {
   flex: 1 1 auto;
   overflow: auto;
@@ -36,8 +35,26 @@
 
 mat-toolbar {
   min-height: 56px;
+
+  span {
+    flex-grow: 1;
+    text-align: center;
+  }
 }
 
+// avoid overlapping with the status bar on most iOS devices
+@media (min-width: 380px) {
+  .ios mat-toolbar {
+    margin-top: 30px;
+  }
+}
+
+// avoid overlapping with the status bar on iPhone 12 mini
+@media (min-height: 810px) {
+  .ios mat-toolbar {
+    margin-top: 30px;
+  }
+}
 button.expand {
   width: calc(100vw - 16px);
   margin: 0 8px;

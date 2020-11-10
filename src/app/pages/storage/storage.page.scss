@@ -17,10 +17,10 @@ mat-sidenav-content {
 
 mat-toolbar {
   background: white;
-}
 
-.toolbar-spacer {
-  flex: 1 1 auto;
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
 }
 
 mat-tab-group {
@@ -30,21 +30,21 @@ mat-tab-group {
 .tab-content {
   padding: 16px;
   margin-bottom: 128px;
-}
 
-div.mat-title {
-  margin-top: 16px;
-}
+  div.mat-title {
+    margin-top: 16px;
+  }
 
-.square-image-tile {
-  border-radius: 4px;
-  background-position: center center;
-  background-size: cover;
-}
+  .square-image-tile {
+    border-radius: 4px;
+    background-position: center center;
+    background-size: cover;
+  }
 
-app-post-capture-card {
-  width: 100%;
-  margin: 8px auto;
+  app-post-capture-card {
+    width: 100%;
+    margin: 8px auto;
+  }
 }
 
 button[mat-fab] {

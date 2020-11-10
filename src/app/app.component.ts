@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -42,13 +44,16 @@ export class AppComponent {
     private readonly notificationService: NotificationService,
     private readonly numbersStorageApi: NumbersStorageApi,
     langaugeService: LanguageService,
-    private readonly cameraService: CameraService
+    private readonly cameraService: CameraService,
+    private readonly iconRegistry: MatIconRegistry,
+    private readonly sanitizer: DomSanitizer
   ) {
     this.restoreAppStatus();
     this.initializeApp();
     this.initializeCollector();
     this.initializePublisher();
     langaugeService.initialize$().pipe(untilDestroyed(this)).subscribe();
+    this.registerIcon();
   }
 
   restoreAppStatus() {
@@ -88,5 +93,9 @@ export class AppComponent {
         this.numbersStorageApi
       )
     );
+  }
+
+  registerIcon() {
+    this.iconRegistry.addSvgIcon('media-id', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/icon/media-id.svg'));
   }
 }

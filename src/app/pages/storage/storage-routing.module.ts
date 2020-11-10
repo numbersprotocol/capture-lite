@@ -8,6 +8,12 @@ const routes: Routes = [{
 }, {
   path: 'proof',
   loadChildren: () => import('./proof/proof.module').then(m => m.ProofPageModule)
+}, {
+  path: 'inbox',
+  loadChildren: () => import('./inbox/inbox.module').then(m => m.InboxPageModule)
+}, {
+  path: 'activity',
+  loadChildren: () => import('./activity/activity.module').then(m => m.ActivityPageModule)
 }];
 
 @NgModule({
