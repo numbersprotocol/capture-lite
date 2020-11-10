@@ -4,6 +4,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
+import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
@@ -14,10 +15,14 @@ import { isNonNullable } from 'src/app/utils/rx-operators';
 })
 export class SendingPostCapturePage {
 
-  readonly proof$ = this.route.paramMap.pipe(
-    map(params => params.get('hash')),
+  readonly asset$ = this.route.paramMap.pipe(
+    map(params => params.get('id')),
     isNonNullable(),
-    switchMap(hash => this.proofRepository.getByHash$(hash)),
+    switchMap(id => this.assetRepository.getById$(id)),
+    isNonNullable()
+  );
+  readonly proof$ = this.asset$.pipe(
+    switchMap(asset => this.proofRepository.getByHash$(asset.proof_hash)),
     isNonNullable()
   );
   readonly base64Src$ = this.proof$.pipe(
@@ -36,6 +41,7 @@ export class SendingPostCapturePage {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly assetRepository: AssetRepository,
     private readonly proofRepository: ProofRepository,
     private readonly captionRepository: CaptionRepository
   ) { }

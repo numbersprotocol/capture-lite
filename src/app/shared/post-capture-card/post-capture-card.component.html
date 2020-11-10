@@ -29,7 +29,7 @@
         <mat-icon mat-list-icon>place</mat-icon>
         <div mat-line>
           <span>{{ t('address') }}</span>
-          <span class="info-list-content">877 N Trinity St Eagle Pass, Texas(TX), 78852</span>
+          <span class="info-list-content">{{ location$ | async }}</span>
         </div>
       </mat-list-item>
     </mat-list>

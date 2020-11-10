@@ -28,7 +28,7 @@
   <!-- preview -->
 
   <ng-container *ngIf="isPreview">
-    <app-post-capture-card [userName]="userName$ | async" [proof]="proof$ | async" [imageSrc]="base64Src$ | async">
+    <app-post-capture-card [userName]="userName$ | async" [asset]="asset$ | async" [imageSrc]="base64Src$ | async">
     </app-post-capture-card>
 
     <button (click)="send()" class="send-button" mat-raised-button color="primary">
