@@ -8,11 +8,77 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
+$capture-primary: (
+  50: #ece6fe,
+  100: #ccc1fc,
+  200: #a898fb,
+  300: #7e6dfc,
+  400: #564dfc,
+  500: #002cfa,
+  600: #0029f4,
+  700: #0022ec,
+  800: #001ee7,
+  900: #0014d8,
+  A100: #ffffff,
+  A200: #ffffff,
+  A400: #cfceff,
+  A700: #b6b4ff,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $dark-primary-text,
+  ),
+);
+
+$capture-accent: (
+  50: #def8f5,
+  100: #aceee4,
+  200: #6ee4d2,
+  300: #14d7bf,
+  400: #00caaf,
+  500: #00bd9f,
+  600: #00af91,
+  700: #009d7f,
+  800: #008c70,
+  900: #006e52,
+  A100: #97ffec,
+  A200: #64ffe3,
+  A400: #31ffda,
+  A700: #18ffd5,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $dark-primary-text,
+  ),
+);
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$app-primary: mat-palette($mat-indigo);
-$app-accent: mat-palette($mat-teal, A200, A100, A400);
+$app-primary: mat-palette($capture-primary, 400);
+$app-accent: mat-palette($mat-teal, 200);
 
 // The warn palette is optional (defaults to red).
 $app-warn: mat-palette($mat-red);
