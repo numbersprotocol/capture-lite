@@ -6,14 +6,24 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatListModule } from '@angular/material/list';
 import { IonicModule } from '@ionic/angular';
-import { Proof } from 'src/app/services/data/proof/proof';
+import { Asset } from 'src/app/services/publisher/numbers-storage/data/asset/asset';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { PostCaptureCardComponent } from './post-capture-card.component';
 
 describe('PostCaptureCardComponent', () => {
   let component: PostCaptureCardComponent;
   let fixture: ComponentFixture<PostCaptureCardComponent>;
-  const expectedProof: Proof = { hash: '1234567890abcdef', timestamp: 1604473851208, mimeType: 'image/jpeg' };
+  const expectedAsset: Asset = {
+    id: 'abcd-efgh-ijkl',
+    proof_hash: 'abcdef1234567890',
+    owner: 'me',
+    asset_file: 'https://picsum.photos/200/300',
+    asset_file_thumbnail: 'https://picsum.photos/200/300',
+    meta: '',
+    signature: '',
+    caption: '',
+    uploaded_at: ''
+  };
   const expectedImageSrc = 'https://picsum.photos/200/300';
 
   beforeEach(async(() => {
@@ -33,7 +43,7 @@ describe('PostCaptureCardComponent', () => {
 
     fixture = TestBed.createComponent(PostCaptureCardComponent);
     component = fixture.componentInstance;
-    component.proof = expectedProof;
+    component.asset = expectedAsset;
     component.imageSrc = expectedImageSrc;
     fixture.detectChanges();
   }));

@@ -17,7 +17,7 @@
     <mat-list-item>
       <mat-icon mat-list-icon>person</mat-icon>
       <div mat-line>{{ t('owner') }}</div>
-      <div mat-line>{{ (asset$ | async).owner }}</div>
+      <div mat-line>{{ (asset$ | async)?.owner }}</div>
     </mat-list-item>
     <mat-list-item *ngIf="(caption$ | async)">
       <mat-icon mat-list-icon>sticky_note_2</mat-icon>
@@ -37,7 +37,7 @@
     <mat-list-item>
       <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
       <div mat-line>{{ t('mediaId') }}</div>
-      <div mat-line>{{ (asset$ | async).id }}</div>
+      <div mat-line>{{ (asset$ | async)?.id }}</div>
       <button *ngIf="'mid-here' as mediaId" (click)="copyToClipboard(mediaId)" mat-icon-button>
         <mat-icon>content_copy</mat-icon>
       </button>
