@@ -89,6 +89,9 @@
   "saveToLocal": "另存至本地",
   "copyCertificate": "複製證書",
   "downloadCertificate": "下載證書",
+  "inbox": "收件匣",
+  "ignore": "忽略",
+  "accept": "接收",
   "activity": "活動紀錄",
   "accepted": "已接收",
   "message": {

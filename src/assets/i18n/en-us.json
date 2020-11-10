@@ -89,6 +89,9 @@
   "saveToLocal": "Save to Local",
   "copyCertificate": "Copy Certificate",
   "downloadCertificate": "Download Certificate",
+  "inbox": "Inbox",
+  "ignore": "Ignore",
+  "accept": "Accept",
   "activity": "Activity",
   "accepted": "Accepted",
   "message": {
