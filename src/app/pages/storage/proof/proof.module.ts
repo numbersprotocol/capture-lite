@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,6 +14,7 @@ import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import { FriendInvitationDialogComponent } from './contact-selection-dialog/friend-invitation-dialog/friend-invitation-dialog.component';
+import { OptionsMenuComponent } from './options-menu/options-menu.component';
 import { ProofPageRoutingModule } from './proof-routing.module';
 import { ProofPage } from './proof.page';
 
@@ -30,12 +32,14 @@ import { ProofPage } from './proof.page';
     MatSnackBarModule,
     MatInputModule,
     MatDialogModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatBottomSheetModule
   ],
   declarations: [
     ProofPage,
     ContactSelectionDialogComponent,
-    FriendInvitationDialogComponent
+    FriendInvitationDialogComponent,
+    OptionsMenuComponent
   ]
 })
 export class ProofPageModule { }
