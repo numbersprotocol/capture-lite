@@ -20,6 +20,10 @@ mat-toolbar {
       max-height: 80px;
     }
 
+    button {
+      flex-shrink: 0;
+    }
+
     button.accepted {
       color: mediumseagreen;
       border-color: mediumseagreen;
