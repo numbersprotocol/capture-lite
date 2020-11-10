@@ -37,16 +37,18 @@
 mat-toolbar {
   min-height: 56px;
 }
-  @media (min-width: 380px){
-    .ios mat-toolbar {
-      margin-top: 30px !important;
-    }
+
+@media (min-width: 380px) {
+  .ios mat-toolbar {
+    margin-top: 30px ;
   }
-  @media (min-height: 810px){
-    .ios mat-toolbar {
-      margin-top: 30px !important;
-    }
+}
+
+@media (min-height: 810px) {
+  .ios mat-toolbar {
+    margin-top: 30px ;
   }
+}
 button.expand {
   width: calc(100vw - 16px);
   margin: 0 8px;
