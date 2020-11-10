@@ -38,12 +38,14 @@ mat-toolbar {
   min-height: 56px;
 }
 
+// avoid overlapping with the status bar on most iOS devices
 @media (min-width: 380px) {
   .ios mat-toolbar {
     margin-top: 30px;
   }
 }
 
+// avoid overlapping with the status bar on iPhone 12 mini
 @media (min-height: 810px) {
   .ios mat-toolbar {
     margin-top: 30px;
