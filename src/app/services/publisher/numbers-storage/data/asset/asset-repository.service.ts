@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { concatMap, concatMapTo, map, mapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, first, map, mapTo } from 'rxjs/operators';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
 import { Information } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
@@ -39,12 +39,6 @@ export class AssetRepository {
 
   add$(...assets: Asset[]) { return this.assetStorage.add$(...assets); }
 
-  remove$(asset: Asset) {
-    return this.assetStorage.remove$(asset).pipe(
-      concatMapTo(this.proofRepository.removeByHash$(asset.proof_hash))
-    );
-  }
-
   addFromNumbersStorage$(asset: Asset) {
     return this.add$(asset).pipe(
       concatMapTo(this.storeProofMedia$(asset)),
@@ -66,6 +60,19 @@ export class AssetRepository {
   private addProofAndInformationFromParsedInformation$(parsed: { proof: Proof, information: Information[]; }) {
     return this.proofRepository.add$(parsed.proof).pipe(
       concatMapTo(this.informationRepository.add$(...parsed.information))
+    );
+  }
+
+  remove$(asset: Asset) {
+    return this.assetStorage.remove$(asset).pipe(
+      concatMapTo(this.proofRepository.removeByHash$(asset.proof_hash))
+    );
+  }
+
+  removeAll$() {
+    return this.assetStorage.getAll$().pipe(
+      concatMap(assets => this.assetStorage.remove$(...assets)),
+      first()
     );
   }
 }

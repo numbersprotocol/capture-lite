@@ -85,8 +85,8 @@ export class NumbersStorageApi {
   logout$() {
     return preference.setBoolean$(PrefKeys.Enabled, false).pipe(
       concatMapTo(this.getHttpHeadersWithAuthToken$()),
-      concatMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, new FormData(), { headers })),
-      concatMap(() => zip(
+      concatMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, {}, { headers })),
+      concatMapTo(zip(
         preference.setString$(PrefKeys.UserName, 'has-logged-out'),
         preference.setString$(PrefKeys.Email, 'has-logged-out'),
         preference.setString$(PrefKeys.AuthToken, '')

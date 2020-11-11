@@ -2,7 +2,7 @@ import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, of, zip } from 'rxjs';
-import { concatMap, first, map, tap } from 'rxjs/operators';
+import { concatMap, first, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
@@ -20,9 +20,7 @@ import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
 })
 export class StoragePage {
 
-  private readonly assets$ = this.assetRepository.getAll$().pipe(
-    tap(v => console.log(v))
-  );
+  private readonly assets$ = this.assetRepository.getAll$();
   private readonly captures$ = this.assets$.pipe(
     map(assets => assets.filter(asset => asset.is_original_owner))
   );

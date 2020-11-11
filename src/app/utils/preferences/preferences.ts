@@ -43,7 +43,7 @@ export class Preferences {
 
   set$<T>(key: string, value: T, converter: (value: T) => string = JSON.stringify): Observable<T> {
     return defer(() => Storage.set({ key: `${this.name}_${key}`, value: converter(value) })).pipe(
-      mapTo(this.updateSubjects(key, value)),
+      tap(_ => this.updateSubjects(key, value)),
       mapTo(value)
     );
   }
