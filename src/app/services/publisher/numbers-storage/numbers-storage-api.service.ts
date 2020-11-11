@@ -54,7 +54,7 @@ export class NumbersStorageApi {
     formData.append('username', userName);
     formData.append('email', email);
     formData.append('password', password);
-    return this.httpClient.post<User>(`${baseUrl}/auth/users/`, formData);
+    return this.httpClient.post<UserResponse>(`${baseUrl}/auth/users/`, formData);
   }
 
   login$(
@@ -64,7 +64,7 @@ export class NumbersStorageApi {
     const formData = new FormData();
     formData.append('email', email);
     formData.append('password', password);
-    return this.httpClient.post<TokenCreate>(`${baseUrl}/auth/token/login/`, formData).pipe(
+    return this.httpClient.post<TokenCreateResponse>(`${baseUrl}/auth/token/login/`, formData).pipe(
       pluck('auth_token'),
       concatMap(authToken => preference.setString$(PrefKeys.AuthToken, `token ${authToken}`)),
       concatMapTo(this.getUserInformation$()),
@@ -77,18 +77,14 @@ export class NumbersStorageApi {
   }
 
   getUserInformation$() {
-    return preference.getString$(PrefKeys.AuthToken).pipe(
-      first(),
-      map(authToken => new HttpHeaders({ Authorization: authToken })),
-      concatMap(headers => this.httpClient.get<User>(`${baseUrl}/auth/users/me/`, { headers }))
+    return this.getHttpHeadersWithAuthToken$().pipe(
+      concatMap(headers => this.httpClient.get<UserResponse>(`${baseUrl}/auth/users/me/`, { headers }))
     );
   }
 
   logout$() {
     return preference.setBoolean$(PrefKeys.Enabled, false).pipe(
-      concatMapTo(preference.getString$(PrefKeys.AuthToken)),
-      first(),
-      map(authToken => new HttpHeaders({ Authorization: authToken })),
+      concatMapTo(this.getHttpHeadersWithAuthToken$()),
       concatMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, new FormData(), { headers })),
       concatMap(() => zip(
         preference.setString$(PrefKeys.UserName, 'has-logged-out'),
@@ -106,15 +102,13 @@ export class NumbersStorageApi {
     signatures: Signature[],
     tag: string
   ) {
-    return preference.getString$(PrefKeys.AuthToken).pipe(
-      first(),
-      concatMap(authToken => zip(
+    return this.getHttpHeadersWithAuthToken$().pipe(
+      concatMap(headers => zip(
         base64ToBlob$(rawFileBase64),
         this.serializationService.stringify$(proof),
-        of(authToken)
+        of(headers)
       )),
-      concatMap(([rawFile, information, authToken]) => {
-        const headers = new HttpHeaders({ Authorization: authToken });
+      concatMap(([rawFile, information, headers]) => {
         const formData = new FormData();
         formData.append('asset_file', rawFile);
         formData.append('asset_file_mime_type', proof.mimeType);
@@ -127,14 +121,59 @@ export class NumbersStorageApi {
       })
     );
   }
+
+  listTransactions$() {
+    return this.getHttpHeadersWithAuthToken$().pipe(
+      concatMap(headers => this.httpClient.get<TransactionListResponse>(`${baseUrl}/api/v2/transactions/`, { headers }))
+    );
+  }
+
+  createTransaction$(assetId: string, email: string, caption: string) {
+    return this.getHttpHeadersWithAuthToken$().pipe(
+      concatMap(headers => this.httpClient.post<TransactionCreateResponse>(
+        `${baseUrl}/api/v2/transactions/`,
+        { asset_id: assetId, email, caption },
+        { headers }
+      ))
+    );
+  }
+
+  private getHttpHeadersWithAuthToken$() {
+    return preference.getString$(PrefKeys.AuthToken).pipe(
+      first(),
+      map(authToken => new HttpHeaders({ Authorization: authToken }))
+    );
+  }
 }
 
-interface User {
+interface UserResponse {
   readonly username: string;
   readonly email: string;
   readonly id: number;
 }
 
-interface TokenCreate {
+interface TokenCreateResponse {
   readonly auth_token: string;
+}
+
+interface TransactionListResponse {
+  readonly results: Transaction[];
+}
+
+export interface Transaction {
+  asset: {
+    asset_file_thumbnail: string;
+    caption: string;
+    id: string;
+  };
+  created_at: string;
+  expired: boolean;
+  fulfilled_at?: null | string;
+}
+
+interface TransactionCreateResponse {
+  readonly id: string;
+  readonly asset_id: string;
+  readonly email: string;
+  readonly caption: string;
 }

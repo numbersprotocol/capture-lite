@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { LoadingOptions } from '@ionic/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { defer, Observable, of, zip } from 'rxjs';
 import { catchError, map, switchMap, switchMapTo } from 'rxjs/operators';
 
@@ -10,10 +11,14 @@ import { catchError, map, switchMap, switchMapTo } from 'rxjs/operators';
 export class BlockingActionService {
 
   constructor(
-    private readonly loadingController: LoadingController
+    private readonly loadingController: LoadingController,
+    private readonly translocoService: TranslocoService
   ) { }
 
-  run$<T>(action$: Observable<T>, opts: Partial<LoadingOptions>) {
+  run$<T>(
+    action$: Observable<T>,
+    opts: Partial<LoadingOptions> = { message: this.translocoService.translate('message.pleaseWait') }
+  ) {
     return defer(() => this.loadingController.create({
       mode: 'md',
       ...opts
