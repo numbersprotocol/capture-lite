@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,7 +23,8 @@ describe('InboxPage', () => {
         MatToolbarModule,
         MatButtonModule,
         MatIconModule,
-        MatListModule
+        MatListModule,
+        HttpClientTestingModule
       ]
     }).compileComponents();
 

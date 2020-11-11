@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { of, zip } from 'rxjs';
+import { Observable, of, zip } from 'rxjs';
 import { concatMap, first, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
@@ -23,42 +23,14 @@ import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
 export class StoragePage {
 
   private readonly assets$ = this.assetRepository.getAll$();
-
-  private readonly assetsWithRawAndDate$ = this.assets$.pipe(
-    concatMap(assets => forkJoinWithDefault(assets.map(asset => this.proofRepository.getByHash$(asset.proof_hash).pipe(
-      isNonNullable(),
-      first()
-    )))),
-    // tslint:disable-next-line: no-non-null-assertion
-    concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getThumbnail$(proof)))),
-    concatMap(base64Strings => zip(this.assets$, of(base64Strings))),
-    map(([assets, base64Strings]) => assets.map((asset, index) => ({
-      asset,
-      rawBase64: base64Strings[index],
-      date: formatDate(asset.uploaded_at, 'mediumDate', 'en-US')
-    }))),
-    map(assetsWithRawAndDate => assetsWithRawAndDate.sort(
-      (a, b) => Date.parse(b.asset.uploaded_at) - Date.parse(a.asset.uploaded_at)
-    )),
+  private readonly captures$ = this.assets$.pipe(
+    map(assets => assets.filter(asset => asset.is_original_owner))
   );
-
-  readonly assetsWithRawByDate$ = this.assetsWithRawAndDate$.pipe(
-    map(assetsWithRawBase64 => assetsWithRawBase64.reduce((groupedAssetsWithRawBase64, assetWithRawBase64) => {
-      const index = groupedAssetsWithRawBase64.findIndex(
-        processingAssetsWithRawBase64 =>
-          processingAssetsWithRawBase64[0].date
-          === assetWithRawBase64.date
-      );
-      if (index === -1) {
-        groupedAssetsWithRawBase64.push([assetWithRawBase64]);
-      }
-      else {
-        groupedAssetsWithRawBase64[index].push(assetWithRawBase64);
-      }
-      return groupedAssetsWithRawBase64;
-    }, [] as { asset: Asset, rawBase64: string, date: string; }[][])
-    ),
+  private readonly postCaptures$ = this.assets$.pipe(
+    map(assets => assets.filter(asset => !asset.is_original_owner))
   );
+  readonly capturesWithRawByDate$ = this.captures$.pipe(this.appendAssetsRawAndGroupedByDate$());
+  readonly postCapturesWithRawByDate$ = this.postCaptures$.pipe(this.appendAssetsRawAndGroupedByDate$());
 
   readonly userName$ = this.numbersStorageApi.getUserName$();
 
@@ -78,5 +50,40 @@ export class StoragePage {
       )),
       untilDestroyed(this)
     ).subscribe();
+  }
+
+  private appendAssetsRawAndGroupedByDate$() {
+    return (assets$: Observable<Asset[]>) => assets$.pipe(
+      concatMap(assets => forkJoinWithDefault(assets.map(asset => this.proofRepository.getByHash$(asset.proof_hash).pipe(
+        isNonNullable(),
+        first()
+      )))),
+      // tslint:disable-next-line: no-non-null-assertion
+      concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getThumbnail$(proof)))),
+      concatMap(base64Strings => zip(assets$, of(base64Strings))),
+      map(([assets, base64Strings]) => assets.map((asset, index) => ({
+        asset,
+        rawBase64: base64Strings[index],
+        date: formatDate(asset.uploaded_at, 'mediumDate', 'en-US')
+      }))),
+      map(assetsWithRawAndDate => assetsWithRawAndDate.sort(
+        (a, b) => Date.parse(b.asset.uploaded_at) - Date.parse(a.asset.uploaded_at)
+      )),
+      map(assetsWithRawBase64 => assetsWithRawBase64.reduce((groupedAssetsWithRawBase64, assetWithRawBase64) => {
+        const index = groupedAssetsWithRawBase64.findIndex(
+          processingAssetsWithRawBase64 =>
+            processingAssetsWithRawBase64[0].date
+            === assetWithRawBase64.date
+        );
+        if (index === -1) {
+          groupedAssetsWithRawBase64.push([assetWithRawBase64]);
+        }
+        else {
+          groupedAssetsWithRawBase64[index].push(assetWithRawBase64);
+        }
+        return groupedAssetsWithRawBase64;
+      }, [] as { asset: Asset, rawBase64: string, date: string; }[][])
+      )
+    );
   }
 }

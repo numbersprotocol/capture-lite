@@ -24,14 +24,15 @@ mat-toolbar {
       flex-shrink: 0;
     }
 
-    button.accepted {
-      color: green;
-      border-color: green;
-    }
-
+    button.accepted,
     button.delivered {
       color: mediumseagreen;
       border-color: mediumseagreen;
+    }
+
+    button.inProgress {
+      color: deepskyblue;
+      border-color: deepskyblue;
     }
 
     button.returned {

@@ -40,7 +40,7 @@
     <mat-tab-group mat-align-tabs="center">
       <mat-tab label="Capture">
         <div class="tab-content">
-          <ng-container *ngFor="let assetsWithRaw of assetsWithRawByDate$ | async">
+          <ng-container *ngFor="let assetsWithRaw of capturesWithRawByDate$ | async">
             <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
             <mat-grid-list cols="3" gutterSize="8px">
               <mat-grid-tile class="square-image-tile" *ngFor="let assetWithRaw of assetsWithRaw"
@@ -52,7 +52,7 @@
       </mat-tab>
       <mat-tab label="PostCapture">
         <div class="tab-content">
-          <ng-container *ngFor="let assetsWithRaw of assetsWithRawByDate$ | async">
+          <ng-container *ngFor="let assetsWithRaw of postCapturesWithRawByDate$ | async">
             <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
             <app-post-capture-card *ngFor="let assetWithRaw of assetsWithRaw" userName="User Name"
               [asset]="assetWithRaw.asset" [imageSrc]="'data:image/png;base64,' + assetWithRaw.rawBase64">

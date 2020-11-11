@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,7 +31,8 @@ describe('AssetPage', () => {
         MatListModule,
         MatSnackBarModule,
         MatDialogModule,
-        MatBottomSheetModule
+        MatBottomSheetModule,
+        HttpClientTestingModule
       ]
     }).compileComponents();
 

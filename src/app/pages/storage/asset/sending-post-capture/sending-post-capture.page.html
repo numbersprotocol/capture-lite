@@ -14,8 +14,9 @@
         <img mat-card-image [src]="base64Src$ | async">
         <mat-card-content>
           <mat-form-field appearance="outline">
-            <mat-label>{{ t('caption') }}</mat-label>
-            <textarea [(ngModel)]="previewCaption" name="caption" ngModel matInput cdkTextareaAutosize></textarea>
+            <mat-label>{{ t('.message') }}</mat-label>
+            <textarea [(ngModel)]="previewCaption" name="caption" ngModel matInput cdkTextareaAutosize
+              maxlength="300"></textarea>
           </mat-form-field>
         </mat-card-content>
       </mat-card>

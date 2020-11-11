@@ -34,16 +34,20 @@ mat-card-content {
 
 .info-list[dense] {
   display: none;
+
+  .info-list-content {
+    width: 60%;
+    float: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  mat-list-item {
+    height: 32px;
+  }
 }
 
 .info-list-show[dense] {
   display: block;
-}
-
-.info-list-content {
-  width: 60%;
-  float: right;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 }

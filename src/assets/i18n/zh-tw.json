@@ -95,7 +95,9 @@
   "activity": "活動紀錄",
   "accepted": "已接收",
   "delivered": "已送出",
+  "inProgress": "等待中",
   "returned": "已退回",
+  "sentFrom": "發送自",
   "message": {
     "areYouSure": "此操作不可撤銷。",
     "verificationEmailSent": "驗證電子郵件已發送到您的電子郵件地址。",

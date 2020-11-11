@@ -94,6 +94,12 @@ export class NumbersStorageApi {
     );
   }
 
+  readAsset$(id: string) {
+    return this.getHttpHeadersWithAuthToken$().pipe(
+      concatMap(headers => this.httpClient.get<Asset>(`${baseUrl}/api/v2/assets/${id}`, { headers }))
+    );
+  }
+
   createAsset$(
     rawFileBase64: string,
     proof: Proof,
@@ -138,6 +144,23 @@ export class NumbersStorageApi {
     );
   }
 
+  listInbox$() {
+    return this.getHttpHeadersWithAuthToken$().pipe(
+      concatMap(headers => this.httpClient.get<InboxReponse>(`${baseUrl}/api/v2/transactions/inbox/`, { headers }))
+    );
+  }
+
+  acceptTransaction$(id: string) {
+    return this.getHttpHeadersWithAuthToken$().pipe(
+      concatMap(headers => this.httpClient.post<Transaction>(`${baseUrl}/api/v2/transactions/${id}/accept/`, {}, { headers })),
+      concatMap(transaction => this.readAsset$(transaction.asset.id))
+    );
+  }
+
+  getImage$(url: string) {
+    return this.httpClient.get(url, { responseType: 'blob' });
+  }
+
   private getHttpHeadersWithAuthToken$() {
     return preference.getString$(PrefKeys.AuthToken).pipe(
       first(),
@@ -160,12 +183,18 @@ interface TransactionListResponse {
   readonly results: Transaction[];
 }
 
+interface InboxReponse {
+  readonly results: Transaction[];
+}
+
 export interface Transaction {
+  id: string;
   asset: {
     asset_file_thumbnail: string;
     caption: string;
     id: string;
   };
+  sender: string;
   created_at: string;
   expired: boolean;
   fulfilled_at?: null | string;
