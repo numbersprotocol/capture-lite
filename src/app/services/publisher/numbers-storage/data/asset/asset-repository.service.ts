@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { concatMap, concatMapTo, first, map, mapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, first, map } from 'rxjs/operators';
 import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
 import { Information } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
@@ -42,8 +42,7 @@ export class AssetRepository {
   addFromNumbersStorage$(asset: Asset) {
     return this.add$(asset).pipe(
       concatMapTo(this.storeProofMedia$(asset)),
-      mapTo(this.serializationService.parse(asset.information)),
-      concatMap(parsed => this.addProofAndInformationFromParsedInformation$(parsed)),
+      concatMapTo(this.addProofAndInformationFromParsedInformation$(this.serializationService.parse(asset.information))),
       concatMapTo(this.signatureRepository.add$(...asset.signature)),
       concatMapTo(this.captionRepository.addOrEdit$({ proofHash: asset.proof_hash, text: asset.caption }))
     );
