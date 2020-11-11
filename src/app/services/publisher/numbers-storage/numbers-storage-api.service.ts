@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of, zip } from 'rxjs';
 import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
-import { base64ToBlob$ } from 'src/app/utils/encoding/encoding';
+import { dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { secret } from '../../../../environments/secret';
 import { Proof } from '../../data/proof/proof';
@@ -110,7 +110,7 @@ export class NumbersStorageApi {
   ) {
     return this.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers => zip(
-        base64ToBlob$(rawFileBase64),
+        dataUrlWithBase64ToBlob$(rawFileBase64),
         this.serializationService.stringify$(proof),
         of(headers)
       )),

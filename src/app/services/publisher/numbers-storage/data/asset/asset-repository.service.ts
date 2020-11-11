@@ -7,7 +7,7 @@ import { Proof } from 'src/app/services/data/proof/proof';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
 import { SerializationService } from 'src/app/services/serialization/serialization.service';
-import { blobToBase64$ } from 'src/app/utils/encoding/encoding';
+import { blobToDataUrlWithBase64$ } from 'src/app/utils/encoding/encoding';
 import { Storage } from 'src/app/utils/storage/storage';
 import { NumbersStorageApi } from '../../numbers-storage-api.service';
 import { NumbersStoragePublisher } from '../../numbers-storage-publisher';
@@ -57,7 +57,8 @@ export class AssetRepository {
 
   private storeProofMedia$(asset: Asset) {
     return this.numbersStorageApi.getImage$(asset.asset_file).pipe(
-      concatMap(blob => blobToBase64$(blob)),
+      concatMap(blob => blobToDataUrlWithBase64$(blob)),
+      map(dataUrlWithBase64 => dataUrlWithBase64.split(',')[1]),
       concatMap(base64 => this.proofRepository.saveRawFile$(base64, asset.information.proof.mimeType))
     );
   }

@@ -1,6 +1,6 @@
 import { TranslocoService } from '@ngneat/transloco';
 import { Observable, zip } from 'rxjs';
-import { concatMap, first, mapTo, tap } from 'rxjs/operators';
+import { concatMap, first, mapTo } from 'rxjs/operators';
 import { CaptionRepository } from '../../data/caption/caption-repository.service';
 import { Proof } from '../../data/proof/proof';
 import { ProofRepository } from '../../data/proof/proof-repository.service';
@@ -47,7 +47,6 @@ export class NumbersStoragePublisher extends Publisher {
         signatures,
         'capture-lite'
       )),
-      tap(v => console.log(v)),
       concatMap(asset => this.assetRepository.add$(asset)),
       mapTo(void 0)
     );

@@ -12,7 +12,7 @@ import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/nu
 })
 export class InboxPage {
 
-  postCaptures$ = this.numbersStorageApi.listInbox$().pipe(pluck('results'), tap(v => console.log(v)));
+  postCaptures$ = this.numbersStorageApi.listInbox$().pipe(pluck('results'));
 
   constructor(
     private readonly numbersStorageApi: NumbersStorageApi,
@@ -21,7 +21,6 @@ export class InboxPage {
 
   accept(id: string) {
     this.numbersStorageApi.acceptTransaction$(id).pipe(
-      tap(v => console.log(v)),
       concatMap(asset => this.assetRepository.addFromNumbersStorage$(asset)),
       tap(_ => this.refresh()),
       untilDestroyed(this)
