@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { StoragePage } from './storage.page';
+import { HomePage } from './home.page';
 
 const routes: Routes = [{
   path: '',
-  component: StoragePage,
+  component: HomePage,
 }, {
   path: 'asset',
   loadChildren: () => import('./asset/asset.module').then(m => m.AssetPageModule)
@@ -20,4 +20,4 @@ const routes: Routes = [{
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class StoragePageRoutingModule { }
+export class HomePageRoutingModule { }

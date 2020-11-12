@@ -10,13 +10,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslocoModule } from '@ngneat/transloco';
 import { PostCaptureCardModule } from 'src/app/shared/post-capture-card/post-capture-card.module';
-import { StoragePageRoutingModule } from './storage-routing.module';
-import { StoragePage } from './storage.page';
+import { HomePageRoutingModule } from './home-routing.module';
+import { HomePage } from './home.page';
 
 @NgModule({
   imports: [
     CommonModule,
-    StoragePageRoutingModule,
+    HomePageRoutingModule,
     TranslocoModule,
     MatToolbarModule,
     MatIconModule,
@@ -28,6 +28,6 @@ import { StoragePage } from './storage.page';
     MatListModule,
     PostCaptureCardModule
   ],
-  declarations: [StoragePage]
+  declarations: [HomePage]
 })
-export class StoragePageModule { }
+export class HomePageModule { }

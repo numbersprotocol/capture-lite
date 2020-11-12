@@ -11,15 +11,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { StoragePage } from './storage.page';
+import { HomePage } from './home.page';
 
-describe('StoragePage', () => {
-  let component: StoragePage;
-  let fixture: ComponentFixture<StoragePage>;
+describe('HomePage', () => {
+  let component: HomePage;
+  let fixture: ComponentFixture<HomePage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [StoragePage],
+      declarations: [HomePage],
       imports: [
         RouterTestingModule,
         getTranslocoModule(),
@@ -35,7 +35,7 @@ describe('StoragePage', () => {
         MatListModule]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StoragePage);
+    fixture = TestBed.createComponent(HomePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

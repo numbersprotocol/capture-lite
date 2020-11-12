@@ -15,11 +15,11 @@ import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'app-storage',
-  templateUrl: 'storage.page.html',
-  styleUrls: ['storage.page.scss'],
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
 })
-export class StoragePage {
+export class HomePage {
 
   private readonly assets$ = this.assetRepository.getAll$();
   private readonly captures$ = this.assets$.pipe(
