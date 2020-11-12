@@ -1,0 +1,43 @@
+mat-toolbar {
+  background: white;
+}
+
+.page-content {
+  mat-list-item {
+    height: initial;
+    padding-top: 16px;
+    padding-bottom: 16px;
+
+    div[mat-line] {
+      margin: 4px 0;
+    }
+
+    img[matListAvatar] {
+      border-radius: 4px;
+      width: calc(100vw / 3);
+      height: calc(100vw / 5);
+      max-width: 150px;
+      max-height: 80px;
+    }
+
+    button {
+      flex-shrink: 0;
+    }
+
+    button.accepted,
+    button.delivered {
+      color: mediumseagreen;
+      border-color: mediumseagreen;
+    }
+
+    button.inProgress {
+      color: deepskyblue;
+      border-color: deepskyblue;
+    }
+
+    button.returned {
+      color: var(--ion-color-danger);
+      border-color: var(--ion-color-danger);
+    }
+  }
+}

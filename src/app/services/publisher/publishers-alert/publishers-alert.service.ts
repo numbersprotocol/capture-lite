@@ -22,27 +22,33 @@ export class PublishersAlert {
     this.publishers.push(publisher);
   }
 
-  present$(proof: Proof) {
+  presentOrPublish$(proof: Proof) {
     return this.getEnabledPublishers$().pipe(
-      switchMap(publishers => this.alertController.create({
-        header: this.translocoService.translate('selectAPublisher'),
-        inputs: publishers.map((publisher, index) => ({
-          name: publisher.name,
-          type: 'radio',
-          label: publisher.name,
-          value: publisher.name,
-          checked: index === 0
-        })),
-        buttons: [{
-          text: this.translocoService.translate('cancel'),
-          role: 'cancel'
-        }, {
-          text: this.translocoService.translate('ok'),
-          handler: (name) => this.getPublisherByName(name)?.publish(proof)
-        }],
-        mode: 'md'
-      })),
-      switchMap(alertElement => alertElement.present())
+      switchMap(publishers => {
+        if (publishers.length > 1) {
+          return this.alertController.create({
+            header: this.translocoService.translate('selectAPublisher'),
+            inputs: publishers.map((publisher, index) => ({
+              name: publisher.id,
+              type: 'radio',
+              label: publisher.id,
+              value: publisher.id,
+              checked: index === 0
+            })),
+            buttons: [{
+              text: this.translocoService.translate('cancel'),
+              role: 'cancel'
+            }, {
+              text: this.translocoService.translate('ok'),
+              handler: (name) => this.getPublisherByName(name)?.publish(proof)
+            }],
+            mode: 'md'
+          }).then(alertElement => alertElement.present());
+        } else {
+          publishers[0].publish(proof);
+          return of(void 0);
+        }
+      })
     );
   }
 
@@ -56,6 +62,6 @@ export class PublishersAlert {
   }
 
   private getPublisherByName(name: string) {
-    return this.publishers.find(publisher => publisher.name === name);
+    return this.publishers.find(publisher => publisher.id === name);
   }
 }

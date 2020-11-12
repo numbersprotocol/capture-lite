@@ -36,14 +36,14 @@ export function arrayBufferToString(arrayBuffer: ArrayBuffer) {
   return textDecoder.decode(arrayBuffer);
 }
 
-export function base64ToBlob$(base64: string) {
+export function dataUrlWithBase64ToBlob$(base64: string) {
   return defer(() => fetch(base64)).pipe(
     first(),
     switchMap(res => res.blob())
   );
 }
 
-export function blobToBase64$(blob: Blob) {
+export function blobToDataUrlWithBase64$(blob: Blob) {
   const fileReader = new FileReader();
   const subject$ = new Subject<string>();
   fileReader.onloadend = () => {

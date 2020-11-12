@@ -1,0 +1,55 @@
+mat-sidenav-container {
+  background: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+mat-sidenav {
+  width: 60%;
+}
+
+mat-sidenav-content {
+  overflow: hidden;
+}
+
+mat-toolbar {
+  background: white;
+
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
+}
+
+mat-tab-group {
+  height: 100%;
+}
+
+.tab-content {
+  padding: 16px;
+  margin-bottom: 128px;
+
+  div.mat-title {
+    margin-top: 16px;
+  }
+
+  .square-image-tile {
+    border-radius: 4px;
+    background-position: center center;
+    background-size: cover;
+  }
+
+  app-post-capture-card {
+    width: 100%;
+    margin: 8px auto;
+  }
+}
+
+button[mat-fab] {
+  z-index: 999;
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+}

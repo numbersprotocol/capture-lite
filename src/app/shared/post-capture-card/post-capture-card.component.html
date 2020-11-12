@@ -1,35 +1,32 @@
 <mat-card *transloco="let t">
   <mat-card-header>
     <div mat-card-avatar class="post-capture-avatar"></div>
-    <mat-card-title>{{ userName }}</mat-card-title>
-    <mat-card-subtitle>sent from n hours</mat-card-subtitle>
+    <mat-card-title>{{ asset.owner }}</mat-card-title>
+    <mat-card-subtitle>{{ asset.uploaded_at | date: 'short' }}</mat-card-subtitle>
     <span class="toolbar-spacer"></span>
-    <button mat-icon-button>
-      <mat-icon>more_vert</mat-icon>
-    </button>
   </mat-card-header>
   <img [src]="imageSrc" mat-card-image>
   <mat-card-content>
     <mat-list dense class="info-list" [class.info-list-show]="openMore">
       <mat-list-item>
+        <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
+        <div mat-line>
+          <span>{{ t('mediaId') }}</span>
+          <span class="info-list-content">{{ asset.id }}</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
         <mat-icon mat-list-icon>access_time</mat-icon>
         <div mat-line>
           <span>{{ t('timestamp') }}</span>
-          <span class="info-list-content">{{ proof.timestamp | date:'medium' }}</span>
+          <span class="info-list-content">{{ (proof$ | async)?.timestamp | date:'medium' }}</span>
         </div>
       </mat-list-item>
       <mat-list-item>
         <mat-icon mat-list-icon>place</mat-icon>
         <div mat-line>
           <span>{{ t('address') }}</span>
-          <span class="info-list-content">877 N Trinity St Eagle Pass, Texas(TX), 78852</span>
-        </div>
-      </mat-list-item>
-      <mat-list-item>
-        <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
-        <div mat-line>
-          <span>{{ t('mediaId') }}</span>
-          <span class="info-list-content">abcdef-abcdef-abcdef-abcdef-abcdef-abcdef-abcdef-abcdef-abcdef</span>
+          <span class="info-list-content">{{ location$ | async }}</span>
         </div>
       </mat-list-item>
     </mat-list>

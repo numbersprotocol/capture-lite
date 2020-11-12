@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.7.0 - 2020-11-12
+
+### Added
+
+- PostCapture MVP. #182, #170, #171
+- Add terms and policy links to singup page.
+
+### Changed
+
+#### UI/UX
+
+- Update UI design. #178
+
+### Fixed
+
+- Fix toolbars (headers) overlap on iOS devices. #179
+
 ## 0.6.0 - 2020-11-08
 
 ### Added
@@ -24,19 +41,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### UI/UX
 
 - Rebuild most pages with `@angular/material` library, including: #160
-    - rebuild `storage.page` with PostCapture tab
-    - rebuild `about.page`
-    - add `profile.page`
-    - add `privacy.page`
-    - rebuild `settings.page`
-    - rebuild `proof.page`
-    - rebuild `information.page` #142
-    - rebuild `signup.page`
-    - rebuild `login.page`
+  - rebuild `storage.page` with PostCapture tab
+  - rebuild `about.page`
+  - add `profile.page`
+  - add `privacy.page`
+  - rebuild `settings.page`
+  - rebuild `proof.page`
+  - rebuild `information.page` #142
+  - rebuild `signup.page`
+  - rebuild `login.page`
 - Remove unnecessary abstraction in UI:
-    - multiple publishers on `settings.page`
-    - multiple information providers on `information.page`
-    - multiple signatures on `information.page`
+  - multiple publishers on `settings.page`
+  - multiple information providers on `information.page`
+  - multiple signatures on `information.page`
 - Update Ionic color theme to be consistent with design and `@angular/material`.
 
 ### Fixed
@@ -56,7 +73,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add zh-Tw language support.
 - Add login and signup pages.
-
 
 ## 0.4.1 - 2020-09-24
 
@@ -91,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Display version on the settings page. #20
 - Implement the preferences for CapacitorProvider. #24
-- Implement numbers-storage publisher. [internal] #28 #25
+- Implement numbers-storage publisher. #28 #25
 - Add launcher icon and splash screen. #22
 
 ### Changed

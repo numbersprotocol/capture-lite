@@ -5,6 +5,7 @@
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+    <span class="mat-caption" [innerHTML]="t('message.clickingSignupToAgreePolicy')"></span>
     <button type="submit" [disabled]="!form.valid" mat-flat-button color="primary">{{ t('signup') }}</button>
   </form>
 

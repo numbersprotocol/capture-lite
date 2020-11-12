@@ -7,6 +7,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
 import { catchError, concatMapTo } from 'rxjs/operators';
+import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { BlockingActionService } from '../../services/blocking-action/blocking-action.service';
 import { WebCryptoApiProvider } from '../../services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
 import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
@@ -32,7 +33,8 @@ export class ProfilePage {
     private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
     private readonly snackBar: MatSnackBar,
-    private readonly numbersStorageApi: NumbersStorageApi
+    private readonly numbersStorageApi: NumbersStorageApi,
+    private readonly assetRepository: AssetRepository
   ) { }
 
   copyToClipboard(value: string) {
@@ -41,7 +43,8 @@ export class ProfilePage {
   }
 
   logout() {
-    const action$ = this.numbersStorageApi.logout$().pipe(
+    const action$ = this.assetRepository.removeAll$().pipe(
+      concatMapTo(this.numbersStorageApi.logout$()),
       concatMapTo(defer(() => this.router.navigate(['/login']))),
       catchError(err => this.toastController
         .create({ message: JSON.stringify(err.error), duration: 4000 })

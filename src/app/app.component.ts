@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -14,6 +16,7 @@ import { ProofRepository } from './services/data/proof/proof-repository.service'
 import { SignatureRepository } from './services/data/signature/signature-repository.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
+import { AssetRepository } from './services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-storage-api.service';
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
@@ -42,13 +45,17 @@ export class AppComponent {
     private readonly notificationService: NotificationService,
     private readonly numbersStorageApi: NumbersStorageApi,
     langaugeService: LanguageService,
-    private readonly cameraService: CameraService
+    private readonly cameraService: CameraService,
+    private readonly assetRepository: AssetRepository,
+    private readonly iconRegistry: MatIconRegistry,
+    private readonly sanitizer: DomSanitizer
   ) {
     this.restoreAppStatus();
     this.initializeApp();
     this.initializeCollector();
     this.initializePublisher();
     langaugeService.initialize$().pipe(untilDestroyed(this)).subscribe();
+    this.registerIcon();
   }
 
   restoreAppStatus() {
@@ -85,8 +92,13 @@ export class AppComponent {
         this.proofRepository,
         this.signatureRepository,
         this.captionRepository,
-        this.numbersStorageApi
+        this.numbersStorageApi,
+        this.assetRepository
       )
     );
+  }
+
+  registerIcon() {
+    this.iconRegistry.addSvgIcon('media-id', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/icon/media-id.svg'));
   }
 }

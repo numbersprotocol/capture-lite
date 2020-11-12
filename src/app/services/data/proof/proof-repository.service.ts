@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FilesystemDirectory, Plugins } from '@capacitor/core';
 import { defer, zip } from 'rxjs';
-import { map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
-import { base64ToBlob$, blobToBase64$ } from 'src/app/utils/encoding/encoding';
+import { blobToDataUrlWithBase64$, dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { getExtension, MimeType } from 'src/app/utils/mime-type';
-import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
+import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
 import { Storage } from 'src/app/utils/storage/storage';
 import { CaptionRepository } from '../caption/caption-repository.service';
 import { InformationRepository } from '../information/information-repository.service';
@@ -51,6 +51,13 @@ export class ProofRepository {
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.captionRepository.removeByProof$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.informationRepository.removeByProof$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.signatureRepository.removeByProof$(proof))))
+    );
+  }
+
+  removeByHash$(hash: string) {
+    return this.getByHash$(hash).pipe(
+      isNonNullable(),
+      concatMap(proof => this.remove$(proof))
     );
   }
 
@@ -102,9 +109,9 @@ export class ProofRepository {
   }
 
   private generateAndSaveThumbnailFile$(rawBase64: string, mimeType: MimeType) {
-    return base64ToBlob$(`data:${mimeType};base64,${rawBase64}`).pipe(
+    return dataUrlWithBase64ToBlob$(`data:${mimeType};base64,${rawBase64}`).pipe(
       switchMap(rawImageBlob => ImageBlobReduce.toBlob(rawImageBlob, { max: this.thumbnailSize })),
-      switchMap(thumbnailBlob => zip(blobToBase64$(thumbnailBlob as Blob), sha256WithBase64$(rawBase64))),
+      switchMap(thumbnailBlob => zip(blobToDataUrlWithBase64$(thumbnailBlob as Blob), sha256WithBase64$(rawBase64))),
       switchMap(([thumbnailBase64, hash]) => Filesystem.writeFile({
         path: `${this.thumbnailFileFolderName}/${hash}.${getExtension(mimeType)}`,
         data: thumbnailBase64,

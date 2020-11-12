@@ -1,0 +1,69 @@
+<mat-sidenav-container *transloco="let t">
+  <mat-sidenav #sidenav mode="over" autoFocus="false">
+    <mat-toolbar>
+      <button (click)="sidenav.toggle()" mat-icon-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span>{{ userName$ | async }}</span>
+    </mat-toolbar>
+
+    <mat-nav-list>
+      <mat-list-item>
+        <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>{{ t('profile') }}</a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>{{ t('settings') }}</a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/privacy" (click)="sidenav.close()" mat-list-item>{{ t('privacy') }}</a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/about" (click)="sidenav.close()" mat-list-item>{{ t('about') }}</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button (click)="sidenav.toggle()" mat-icon-button>
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-spacer"></span>
+      <button routerLink="activity" mat-icon-button>
+        <mat-icon>history</mat-icon>
+      </button>
+      <button routerLink="inbox" mat-icon-button>
+        <mat-icon>inbox</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <mat-tab-group (selectedTabChange)="onTapChanged($event)" mat-align-tabs="center">
+      <mat-tab label="Capture">
+        <div class="tab-content">
+          <ng-container *ngFor="let assetsWithRaw of capturesWithRawByDate$ | async">
+            <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
+            <mat-grid-list cols="3" gutterSize="8px">
+              <mat-grid-tile class="square-image-tile" *ngFor="let assetWithRaw of assetsWithRaw"
+                [routerLink]="['asset', {id: assetWithRaw.asset.id}]"
+                [style]="'background-image: url(data:image/*;base64,' + assetWithRaw.rawBase64 + ');'"></mat-grid-tile>
+            </mat-grid-list>
+          </ng-container>
+        </div>
+      </mat-tab>
+      <mat-tab label="PostCapture">
+        <div class="tab-content">
+          <ng-container *ngFor="let assetsWithRaw of postCapturesWithRawByDate$ | async">
+            <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
+            <app-post-capture-card *ngFor="let assetWithRaw of assetsWithRaw" userName="User Name"
+              [asset]="assetWithRaw.asset" [imageSrc]="'data:image/png;base64,' + assetWithRaw.rawBase64">
+            </app-post-capture-card>
+          </ng-container>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <button *ngIf="captureButtonShow" (click)="capture()" mat-fab color="primary">
+      <mat-icon>camera_alt</mat-icon>
+    </button>
+  </mat-sidenav-content>
+</mat-sidenav-container>

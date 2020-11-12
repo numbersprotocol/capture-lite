@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { EMPTY } from 'rxjs';
-import { catchError, map, pluck, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { catchError, concatMapTo, map, pluck, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
@@ -9,6 +9,7 @@ import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { Proof } from '../data/proof/proof';
 import { ProofRepository } from '../data/proof/proof-repository.service';
 import { NotificationService } from '../notification/notification.service';
+import { PublishersAlert } from '../publisher/publishers-alert/publishers-alert.service';
 import { InformationProvider } from './information/information-provider';
 import { SignatureProvider } from './signature/signature-provider';
 
@@ -23,14 +24,17 @@ export class CollectorService {
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly notificationService: NotificationService,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly publishersAlert: PublishersAlert
   ) { }
 
   storeAndCollect(rawBase64: string, mimeType: MimeType) {
     // Deliberately store proof and its media file in the foreground, so the app page can
     // correctly and continuously subscribe the Storage.getAll$().
     this.store$(rawBase64, mimeType).subscribe(proof => {
-      subscribeInBackground(this.collectAndSign$(proof));
+      subscribeInBackground(this.collectAndSign$(proof).pipe(
+        concatMapTo(this.publishersAlert.presentOrPublish$(proof))
+      ));
     });
   }
 

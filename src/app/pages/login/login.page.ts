@@ -77,7 +77,7 @@ export class LoginPage {
     ).pipe(
       untilDestroyed(this),
     ).subscribe(
-      () => this.router.navigate(['storage'], { replaceUrl: true }),
+      () => this.router.navigate(['home'], { replaceUrl: true }),
       err => {
         console.log(err);
         this.toastController.create({
