@@ -37,7 +37,7 @@
       </button>
     </mat-toolbar>
 
-    <mat-tab-group mat-align-tabs="center">
+    <mat-tab-group (selectedTabChange)="onTapChanged($event)" mat-align-tabs="center">
       <mat-tab label="Capture">
         <div class="tab-content">
           <ng-container *ngFor="let assetsWithRaw of capturesWithRawByDate$ | async">
@@ -62,7 +62,7 @@
       </mat-tab>
     </mat-tab-group>
 
-    <button (click)="capture()" mat-fab color="primary">
+    <button *ngIf="captureButtonShow" (click)="capture()" mat-fab color="primary">
       <mat-icon>camera_alt</mat-icon>
     </button>
   </mat-sidenav-content>

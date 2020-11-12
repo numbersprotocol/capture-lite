@@ -1,5 +1,6 @@
 import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, of, zip } from 'rxjs';
 import { concatMap, first, map } from 'rxjs/operators';
@@ -31,6 +32,7 @@ export class StoragePage {
   readonly postCapturesWithRawByDate$ = this.postCaptures$.pipe(this.appendAssetsRawAndGroupedByDate$());
 
   readonly userName$ = this.numbersStorageApi.getUserName$();
+  captureButtonShow = true;
 
   constructor(
     private readonly assetRepository: AssetRepository,
@@ -83,5 +85,9 @@ export class StoragePage {
       }, [] as { asset: Asset, rawBase64: string, date: string; }[][])
       )
     );
+  }
+
+  onTapChanged(event: MatTabChangeEvent) {
+    this.captureButtonShow = event.index === 0;
   }
 }
