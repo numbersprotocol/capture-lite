@@ -1,0 +1,24 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('inbox') }}</span>
+</mat-toolbar>
+
+<div *transloco="let t" class="page-content">
+  <mat-list>
+    <ng-container *ngFor="let postCapture of (postCaptures$ | async); last as isLast">
+      <mat-list-item>
+        <img matListAvatar [src]="postCapture.asset.asset_file_thumbnail">
+        <div mat-line>{{ postCapture.asset.id }}</div>
+        <div mat-line>{{ t('sentFrom') + ' ' + postCapture.sender }}</div>
+        <div mat-line>{{ postCapture.created_at | date:'short' }}</div>
+        <div class="action" mat-line>
+          <button mat-stroked-button color="primary">{{ t('ignore') }}</button>
+          <button (click)="accept(postCapture.id)" mat-flat-button color="primary">{{ t('accept') }}</button>
+        </div>
+      </mat-list-item>
+      <mat-divider *ngIf="!isLast"></mat-divider>
+    </ng-container>
+  </mat-list>
+</div>

@@ -1,34 +1,44 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { ActivityPage } from './activity.page';
+import { SendingPostCapturePage } from './sending-post-capture.page';
 
-describe('ActivityPage', () => {
-  let component: ActivityPage;
-  let fixture: ComponentFixture<ActivityPage>;
+describe('SendingPostCapturePage', () => {
+  let component: SendingPostCapturePage;
+  let fixture: ComponentFixture<SendingPostCapturePage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ActivityPage],
+      declarations: [SendingPostCapturePage],
       imports: [
         IonicModule.forRoot(),
         getTranslocoModule(),
         RouterTestingModule,
+        FormsModule,
+        HttpClientTestingModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
         MatButtonModule,
         MatIconModule,
         MatListModule,
-        MatToolbarModule,
-        MatDividerModule
+        MatCardModule,
+        MatInputModule,
+        MatFormFieldModule
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ActivityPage);
+    fixture = TestBed.createComponent(SendingPostCapturePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

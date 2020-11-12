@@ -7,6 +7,7 @@ import { InformationType } from 'src/app/services/data/information/information';
 import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
 import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/data/signature/signature-repository.service';
+import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
@@ -17,10 +18,14 @@ import { isNonNullable } from 'src/app/utils/rx-operators';
 })
 export class InformationPage {
 
-  readonly proof$ = this.route.paramMap.pipe(
-    map(params => params.get('hash')),
+  readonly asset$ = this.route.paramMap.pipe(
+    map(params => params.get('id')),
     isNonNullable(),
-    switchMap(hash => this.proofRepository.getByHash$(hash)),
+    switchMap(id => this.assetRepository.getById$(id)),
+    isNonNullable()
+  );
+  readonly proof$ = this.asset$.pipe(
+    switchMap(asset => this.proofRepository.getByHash$(asset.proof_hash)),
     isNonNullable()
   );
 
@@ -53,6 +58,7 @@ export class InformationPage {
     private readonly route: ActivatedRoute,
     private readonly proofRepository: ProofRepository,
     private readonly informationRepository: InformationRepository,
-    private readonly signatureRepository: SignatureRepository
+    private readonly signatureRepository: SignatureRepository,
+    private readonly assetRepository: AssetRepository
   ) { }
 }

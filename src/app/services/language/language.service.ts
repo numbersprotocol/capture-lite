@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { first, mapTo, switchMap } from 'rxjs/operators';
+import { first, mapTo, switchMap, tap } from 'rxjs/operators';
 import { defaultLanguage, languages } from 'src/app/transloco/transloco-root.module';
 import { PreferenceManager } from '../../utils/preferences/preference-manager';
 
@@ -32,7 +32,7 @@ export class LanguageService {
 
   setCurrentLanguage$(key: string) {
     return preferences.setString$(PrefKeys.Language, key).pipe(
-      mapTo(this.translocoService.setActiveLang(key)),
+      tap(_ => this.translocoService.setActiveLang(key)),
       mapTo(key)
     );
   }

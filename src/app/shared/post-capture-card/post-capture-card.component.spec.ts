@@ -19,10 +19,11 @@ describe('PostCaptureCardComponent', () => {
     owner: 'me',
     asset_file: 'https://picsum.photos/200/300',
     asset_file_thumbnail: 'https://picsum.photos/200/300',
-    meta: '',
-    signature: '',
+    information: { proof: { hash: '', timestamp: 0, mimeType: 'image/jpeg' }, information: [] },
+    signature: [],
     caption: '',
-    uploaded_at: ''
+    uploaded_at: '',
+    is_original_owner: true
   };
   const expectedImageSrc = 'https://picsum.photos/200/300';
 

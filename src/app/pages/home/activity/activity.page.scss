@@ -24,9 +24,20 @@ mat-toolbar {
       flex-shrink: 0;
     }
 
-    button.accepted {
+    button.accepted,
+    button.delivered {
       color: mediumseagreen;
       border-color: mediumseagreen;
+    }
+
+    button.inProgress {
+      color: deepskyblue;
+      border-color: deepskyblue;
+    }
+
+    button.returned {
+      color: var(--ion-color-danger);
+      border-color: var(--ion-color-danger);
     }
   }
 }

@@ -14,10 +14,10 @@ export class ConfirmAlert {
     private readonly translocoService: TranslocoService
   ) { }
 
-  present$(onConfirm: () => void) {
+  present$(onConfirm: () => void, message: string = this.translocoService.translate('message.areYouSure')) {
     return defer(() => this.alertController.create({
       header: this.translocoService.translate('areYouSure'),
-      message: this.translocoService.translate('message.areYouSure'),
+      message,
       buttons: [{
         text: this.translocoService.translate('cancel'),
         role: 'cancel'

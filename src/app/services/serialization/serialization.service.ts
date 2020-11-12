@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { first, map } from 'rxjs/operators';
-import { Information } from '../data/information/information';
+import { Importance, Information, InformationType } from '../data/information/information';
 import { InformationRepository } from '../data/information/information-repository.service';
 import { Proof } from '../data/proof/proof';
 
-type EssentialInformation = Pick<Information, 'provider' | 'name' | 'value'>;
+export type EssentialInformation = Pick<Information, 'provider' | 'name' | 'value'>;
 
-interface SortedProofInformation {
+export interface SortedProofInformation {
   readonly proof: Proof;
   readonly information: EssentialInformation[];
 }
@@ -41,5 +41,17 @@ export class SerializationService {
         return ({ proof, information: sortedInformation } as SortedProofInformation);
       })
     );
+  }
+
+  parse(sortedProofInformation: SortedProofInformation) {
+    return {
+      proof: sortedProofInformation.proof,
+      information: sortedProofInformation.information.map(info => ({
+        proofHash: sortedProofInformation.proof.hash,
+        importance: Importance.Low,
+        type: InformationType.Other,
+        ...info
+      } as Information))
+    };
   }
 }

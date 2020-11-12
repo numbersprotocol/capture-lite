@@ -94,6 +94,11 @@
   "accept": "接收",
   "activity": "活動紀錄",
   "accepted": "已接收",
+  "delivered": "已送出",
+  "inProgress": "等待中",
+  "returned": "已退回",
+  "sentFrom": "發送自",
+  ".message": "訊息",
   "message": {
     "areYouSure": "此操作不可撤銷。",
     "verificationEmailSent": "驗證電子郵件已發送到您的電子郵件地址。",
@@ -113,6 +118,7 @@
     "pleaseWait": "請稍候...",
     "copiedToClipboard": "已複製至剪貼簿。",
     "invitationEmail": "輸入好友電子信箱發送邀請。",
-    "clickingSignupToAgreePolicy": "點擊「註冊」即表示你同意我們的《<a href=\"https://docs.google.com/document/d/1ZtD-E4-zcnh8DxQCSgR1Efhb9UooJMr7fb7bzPENd24/edit?usp=sharing\" target=\"_blank\">服務條款</a>》和《<a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">資料政策</a>》。"
+    "clickingSignupToAgreePolicy": "點擊「註冊」即表示你同意我們的《<a href=\"https://docs.google.com/document/d/1ZtD-E4-zcnh8DxQCSgR1Efhb9UooJMr7fb7bzPENd24/edit?usp=sharing\" target=\"_blank\">服務條款</a>》和《<a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">資料政策</a>》。",
+    "sendPostCaptureAlert": "PostCapture 送出後，它的所有權將轉移至選定的朋友。您確定嗎？"
   }
 }

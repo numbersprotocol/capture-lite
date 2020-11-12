@@ -1,34 +1,36 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { InformationPage } from './information.page';
+import { ActivityPage } from './activity.page';
 
-describe('InformationPage', () => {
-  let component: InformationPage;
-  let fixture: ComponentFixture<InformationPage>;
+describe('ActivityPage', () => {
+  let component: ActivityPage;
+  let fixture: ComponentFixture<ActivityPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [InformationPage],
+      declarations: [ActivityPage],
       imports: [
         IonicModule.forRoot(),
-        RouterTestingModule,
         getTranslocoModule(),
-        MatToolbarModule,
+        RouterTestingModule,
+        HttpClientTestingModule,
         MatButtonModule,
         MatIconModule,
         MatListModule,
-        MatSnackBarModule
+        MatToolbarModule,
+        MatDividerModule
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(InformationPage);
+    fixture = TestBed.createComponent(ActivityPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

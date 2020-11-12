@@ -108,10 +108,7 @@ export class SignupPage {
     const defaultUsername = this.model.email.substring(0, this.model.email.lastIndexOf('@'));
     const action$ = this.numbersStorageApi.createUser$(defaultUsername, this.model.email, this.model.password);
 
-    this.blockingActionService.run$(
-      action$,
-      { message: this.translocoService.translate('message.pleaseWait') }
-    ).pipe(
+    this.blockingActionService.run$(action$).pipe(
       untilDestroyed(this),
     ).subscribe(
       () => this.router.navigate(['/signup/finished'], { replaceUrl: true }),

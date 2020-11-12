@@ -1,41 +1,34 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { IonicModule } from '@ionic/angular';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { StoragePage } from './storage.page';
+import { InboxPage } from './inbox.page';
 
-describe('StoragePage', () => {
-  let component: StoragePage;
-  let fixture: ComponentFixture<StoragePage>;
+describe('InboxPage', () => {
+  let component: InboxPage;
+  let fixture: ComponentFixture<InboxPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [StoragePage],
+      declarations: [InboxPage],
       imports: [
-        RouterTestingModule,
+        IonicModule.forRoot(),
         getTranslocoModule(),
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
+        RouterTestingModule,
         MatToolbarModule,
-        MatIconModule,
         MatButtonModule,
-        MatTabsModule,
-        MatGridListModule,
-        MatCardModule,
-        MatSidenavModule,
-        MatListModule]
+        MatIconModule,
+        MatListModule,
+        HttpClientTestingModule
+      ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StoragePage);
+    fixture = TestBed.createComponent(InboxPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

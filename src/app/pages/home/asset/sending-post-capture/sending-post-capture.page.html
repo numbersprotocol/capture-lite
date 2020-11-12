@@ -1,6 +1,6 @@
 <mat-toolbar *transloco="let t">
-  <button [routerLink]="isPreview ? null : '..'" [routerDirection]="isPreview ? null : 'back'"
-    (click)="isPreview ? isPreview = false : null" mat-icon-button>
+  <button [routerLink]="isPreview ? null : '..'" routerDirection="back" (click)="isPreview ? isPreview = false : null"
+    mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span>{{ t(isPreview ? 'previewPostCapture' : 'sendPostCapture') }}</span>
@@ -14,8 +14,9 @@
         <img mat-card-image [src]="base64Src$ | async">
         <mat-card-content>
           <mat-form-field appearance="outline">
-            <mat-label>{{ t('caption') }}</mat-label>
-            <textarea name="caption" ngModel matInput cdkTextareaAutosize></textarea>
+            <mat-label>{{ t('.message') }}</mat-label>
+            <textarea [(ngModel)]="previewCaption" name="caption" ngModel matInput cdkTextareaAutosize
+              maxlength="300"></textarea>
           </mat-form-field>
         </mat-card-content>
       </mat-card>
@@ -31,7 +32,7 @@
     <app-post-capture-card [userName]="userName$ | async" [asset]="asset$ | async" [imageSrc]="base64Src$ | async">
     </app-post-capture-card>
 
-    <button (click)="send()" class="send-button" mat-raised-button color="primary">
+    <button (click)="send(previewCaption)" class="send-button" mat-raised-button color="primary">
       <div class="send-button-wrapper">
         <div class="avatar"></div>
         <span>{{ contact$ | async }}</span>

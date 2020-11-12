@@ -1,42 +1,41 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule } from '@ionic/angular';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
-import { SendingPostCapturePage } from './sending-post-capture.page';
+import { HomePage } from './home.page';
 
-describe('SendingPostCapturePage', () => {
-  let component: SendingPostCapturePage;
-  let fixture: ComponentFixture<SendingPostCapturePage>;
+describe('HomePage', () => {
+  let component: HomePage;
+  let fixture: ComponentFixture<HomePage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SendingPostCapturePage],
+      declarations: [HomePage],
       imports: [
-        IonicModule.forRoot(),
-        getTranslocoModule(),
         RouterTestingModule,
-        FormsModule,
+        getTranslocoModule(),
+        HttpClientTestingModule,
         BrowserAnimationsModule,
         MatToolbarModule,
-        MatButtonModule,
         MatIconModule,
-        MatListModule,
+        MatButtonModule,
+        MatTabsModule,
+        MatGridListModule,
         MatCardModule,
-        MatInputModule,
-        MatFormFieldModule
-      ]
+        MatSidenavModule,
+        MatListModule]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SendingPostCapturePage);
+    fixture = TestBed.createComponent(HomePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
