@@ -144,7 +144,9 @@ android {
 }
 ```
 
-__Remember to write the changelog in `CHANGELOG.md`.__
+Run `npm i` to update `package-lock.json`.
+
+Write the changelog in `CHANGELOG.md`.
 
 When push to the `develop` branch with new version in the `package.json` file, GitHub Action would automatically do the following jobs:
 
