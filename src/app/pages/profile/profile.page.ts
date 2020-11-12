@@ -8,6 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
 import { catchError, concatMapTo } from 'rxjs/operators';
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
+import { IgnoredTransactionRepository } from 'src/app/services/publisher/numbers-storage/data/ignored-transaction/ignored-transaction-repository.service';
 import { BlockingActionService } from '../../services/blocking-action/blocking-action.service';
 import { WebCryptoApiProvider } from '../../services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
 import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
@@ -34,7 +35,8 @@ export class ProfilePage {
     private readonly translocoService: TranslocoService,
     private readonly snackBar: MatSnackBar,
     private readonly numbersStorageApi: NumbersStorageApi,
-    private readonly assetRepository: AssetRepository
+    private readonly assetRepository: AssetRepository,
+    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
   ) { }
 
   copyToClipboard(value: string) {
@@ -44,6 +46,7 @@ export class ProfilePage {
 
   logout() {
     const action$ = this.assetRepository.removeAll$().pipe(
+      concatMapTo(this.ignoredTransactionRepository.removeAll$()),
       concatMapTo(this.numbersStorageApi.logout$()),
       concatMapTo(defer(() => this.router.navigate(['/login']))),
       catchError(err => this.toastController
