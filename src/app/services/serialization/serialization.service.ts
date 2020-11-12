@@ -4,7 +4,7 @@ import { Importance, Information, InformationType } from '../data/information/in
 import { InformationRepository } from '../data/information/information-repository.service';
 import { Proof } from '../data/proof/proof';
 
-type EssentialInformation = Pick<Information, 'provider' | 'name' | 'value'>;
+export type EssentialInformation = Pick<Information, 'provider' | 'name' | 'value'>;
 
 export interface SortedProofInformation {
   readonly proof: Proof;
