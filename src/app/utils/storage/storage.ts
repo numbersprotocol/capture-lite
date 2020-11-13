@@ -109,6 +109,8 @@ export class Storage<T extends object> {
       concatMap(hash => Filesystem.deleteFile({
         path: `${this.name}/${hash}.json`,
         directory: this.directory
-      })));
+      })),
+      catchError((err: Error) => of(console.log(`err: ${err}, tuple: ${JSON.stringify(tuple)}`)))
+    );
   }
 }
