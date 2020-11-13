@@ -65,91 +65,91 @@ export class CapacitorProvider extends InformationProvider {
           informationList.push({
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('uuid'),
+            name: 'UUID',
             value: String(deviceInfo.uuid),
             importance: Importance.High,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('deviceName'),
+            name: 'Device Name',
             value: String(deviceInfo.name),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('deviceModel'),
+            name: 'Device Model',
             value: String(deviceInfo.model),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('devicePlatform'),
+            name: 'Device Platform',
             value: String(deviceInfo.platform),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('appVersion'),
+            name: 'App Version',
             value: String(deviceInfo.appVersion),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('appVersionCode'),
+            name: 'App VersionCode',
             value: String(deviceInfo.appBuild),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('operatingSystem'),
+            name: 'Operating System',
             value: String(deviceInfo.operatingSystem),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('osVersion'),
+            name: 'OS Version',
             value: String(deviceInfo.osVersion),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('deviceManufacturer'),
+            name: 'Device Manufacturer',
             value: String(deviceInfo.manufacturer),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('runningOnVm'),
+            name: 'Rrunning on VM',
             value: String(deviceInfo.isVirtual),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('usedMemory'),
+            name: 'Used Memory',
             value: String(deviceInfo.memUsed),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('freeDiskSpace'),
+            name: 'Free Disk Space',
             value: String(deviceInfo.diskFree),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('totalDiskSpace'),
+            name: 'Total Disk Space',
             value: String(deviceInfo.diskTotal),
             importance: Importance.Low,
             type: InformationType.Device
@@ -159,14 +159,14 @@ export class CapacitorProvider extends InformationProvider {
           informationList.push({
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('batteryLevel'),
+            name: 'Battery Level',
             value: String(batteryInfo.batteryLevel),
             importance: Importance.Low,
             type: InformationType.Device
           }, {
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('batteryCharging'),
+            name: 'Battery Charging',
             value: String(batteryInfo.isCharging),
             importance: Importance.Low,
             type: InformationType.Device
@@ -176,7 +176,7 @@ export class CapacitorProvider extends InformationProvider {
           informationList.push({
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('deviceLanguageCode'),
+            name: 'Device Language Code',
             value: String(languageCode.value),
             importance: Importance.Low,
             type: InformationType.Device
@@ -186,8 +186,15 @@ export class CapacitorProvider extends InformationProvider {
           informationList.push({
             proofHash: proof.hash,
             provider: this.id,
-            name: this.translocoService.translate('location'),
-            value: `(${geolocationPosition.coords.latitude}, ${geolocationPosition.coords.longitude})`,
+            name: 'Current GPS Latitude',
+            value: `${geolocationPosition.coords.latitude}`,
+            importance: Importance.High,
+            type: InformationType.Location
+          }, {
+            proofHash: proof.hash,
+            provider: this.id,
+            name: 'Current GPS Longitude',
+            value: `${geolocationPosition.coords.longitude}`,
             importance: Importance.High,
             type: InformationType.Location
           });

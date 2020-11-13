@@ -44,9 +44,15 @@ export class AssetPage {
     map(rawBase64 => `data:image/png;base64,${rawBase64}`)
   );
   readonly timestamp$ = this.proof$.pipe(pluck('timestamp'));
-  readonly location$ = this.proof$.pipe(
+  readonly latitude$ = this.proof$.pipe(
     switchMap(proof => this.informationRepository.getByProof$(proof)),
-    map(informationList => informationList.find(information => information.provider === CapacitorProvider.ID && information.name === 'Location')),
+    map(informationList => informationList.find(information => information.provider === CapacitorProvider.ID && information.name === 'Current GPS Latitude')),
+    isNonNullable(),
+    pluck('value')
+  );
+  readonly longitude$ = this.proof$.pipe(
+    switchMap(proof => this.informationRepository.getByProof$(proof)),
+    map(informationList => informationList.find(information => information.provider === CapacitorProvider.ID && information.name === 'Current GPS Longitude')),
     isNonNullable(),
     pluck('value')
   );
