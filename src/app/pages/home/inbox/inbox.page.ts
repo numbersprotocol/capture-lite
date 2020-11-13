@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
 import { concatMap, map, pluck, tap } from 'rxjs/operators';
+import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { IgnoredTransactionRepository } from 'src/app/services/publisher/numbers-storage/data/ignored-transaction/ignored-transaction-repository.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
@@ -19,7 +20,8 @@ export class InboxPage {
   constructor(
     private readonly numbersStorageApi: NumbersStorageApi,
     private readonly assetRepository: AssetRepository,
-    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
+    private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
+    private readonly blockingActionService: BlockingActionService
   ) { }
 
   private listInbox() {
@@ -35,9 +37,12 @@ export class InboxPage {
   }
 
   accept(id: string) {
-    this.numbersStorageApi.acceptTransaction$(id).pipe(
+    const action$ = this.numbersStorageApi.acceptTransaction$(id).pipe(
       concatMap(asset => this.assetRepository.addFromNumbersStorage$(asset)),
-      tap(_ => this.refresh()),
+      tap(_ => this.refresh())
+    );
+
+    this.blockingActionService.run$(action$).pipe(
       untilDestroyed(this)
     ).subscribe();
   }
