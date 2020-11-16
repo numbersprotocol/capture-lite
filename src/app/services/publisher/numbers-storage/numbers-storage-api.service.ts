@@ -96,7 +96,7 @@ export class NumbersStorageApi {
 
   readAsset$(id: string) {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => this.httpClient.get<Asset>(`${baseUrl}/api/v2/assets/${id}`, { headers }))
+      concatMap(headers => this.httpClient.get<Asset>(`${baseUrl}/api/v2/assets/${id}/`, { headers }))
     );
   }
 
