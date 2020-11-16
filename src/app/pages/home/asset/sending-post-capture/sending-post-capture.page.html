@@ -29,7 +29,8 @@
   <!-- preview -->
 
   <ng-container *ngIf="isPreview">
-    <app-post-capture-card [userName]="userName$ | async" [asset]="asset$ | async" [imageSrc]="base64Src$ | async">
+    <app-post-capture-card [transaction]="{ sender: (asset$ | async).owner, asset: { caption: previewCaption }}"
+      [asset]="asset$ | async">
     </app-post-capture-card>
 
     <button (click)="send(previewCaption)" class="send-button" mat-raised-button color="primary">

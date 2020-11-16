@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of, zip } from 'rxjs';
-import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
+import { concatMap, concatMapTo, first, map, pluck, tap } from 'rxjs/operators';
 import { dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { secret } from '../../../../environments/secret';
@@ -96,7 +96,8 @@ export class NumbersStorageApi {
 
   readAsset$(id: string) {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => this.httpClient.get<Asset>(`${baseUrl}/api/v2/assets/${id}/`, { headers }))
+      concatMap(headers => this.httpClient.get<Asset>(`${baseUrl}/api/v2/assets/${id}/`, { headers })),
+      tap(v => console.log(v))
     );
   }
 
