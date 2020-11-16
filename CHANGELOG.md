@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.7.4 - 2020-11-14
+
+### Fixed
+
+- Release APK connecting to prod-site.
+
+## 0.7.3 - 2020-11-13
+
+### Fixed
+
+- __Workaround__:  Catch Error from Capacitor.Filesystem.deleteFile on Android or iOS Devices. #193
+
+## 0.7.2 - 2020-11-13
+
+### Fixed
+
+- __Workaround__: fix different naming for information. Use constant string for the names of information.
+- Fix location cannot display on asset page in zh-tw. #187
+
+## 0.7.1 - 2020-11-13
+
+### Fixed
+
+- No response on clicking Ignore button the on inbox page. #184
+- The copy button of the media ID on the asset page only copy "mid-here" string to the clipboard. #185
+- The operations in `Plugin.BackgroundTask` from Capacitor is running outside of `ngZone`, which causes the change detection fails. #186
+
 ## 0.7.0 - 2020-11-12
 
 ### Added

@@ -23,7 +23,8 @@ export class PostCaptureCardComponent implements OnInit {
 
   proof$!: Observable<Proof>;
   caption$!: Observable<Caption>;
-  location$!: Observable<string>;
+  latitude$!: Observable<string>;
+  longitude$!: Observable<string>;
 
   openMore = false;
 
@@ -42,9 +43,15 @@ export class PostCaptureCardComponent implements OnInit {
       concatMap(proof => this.captionRepository.getByProof$(proof)),
       isNonNullable()
     );
-    this.location$ = this.proof$.pipe(
+    this.latitude$ = this.proof$.pipe(
       switchMap(proof => this.informationRepository.getByProof$(proof)),
-      map(informationList => informationList.find(information => information.provider === CapacitorProvider.ID && information.name === 'Location')),
+      map(informationList => informationList.find(information => information.provider === CapacitorProvider.ID && information.name === 'Current GPS Latitude')),
+      isNonNullable(),
+      pluck('value')
+    );
+    this.longitude$ = this.proof$.pipe(
+      switchMap(proof => this.informationRepository.getByProof$(proof)),
+      map(informationList => informationList.find(information => information.provider === CapacitorProvider.ID && information.name === 'Current GPS Longitude')),
       isNonNullable(),
       pluck('value')
     );

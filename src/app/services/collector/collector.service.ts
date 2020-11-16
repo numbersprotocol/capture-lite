@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { EMPTY } from 'rxjs';
-import { catchError, concatMapTo, map, pluck, switchMap, switchMapTo, tap } from 'rxjs/operators';
-import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
+import { catchError, concatMap, map, mapTo, pluck, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
@@ -29,13 +28,13 @@ export class CollectorService {
   ) { }
 
   storeAndCollect(rawBase64: string, mimeType: MimeType) {
-    // Deliberately store proof and its media file in the foreground, so the app page can
-    // correctly and continuously subscribe the Storage.getAll$().
-    this.store$(rawBase64, mimeType).subscribe(proof => {
-      subscribeInBackground(this.collectAndSign$(proof).pipe(
-        concatMapTo(this.publishersAlert.presentOrPublish$(proof))
-      ));
-    });
+    // Deliberately subscribe without untilDestroyed scope. Also, it is not feasible to use
+    // subsctibeInBackground() as it will move the execution out of ngZone, which will prevent
+    // the observables subscribed with async pipe from observing new values.
+    this.store$(rawBase64, mimeType).pipe(
+      concatMap(proof => this.collectAndSign$(proof)),
+      concatMap(proof => this.publishersAlert.presentOrPublish$(proof))
+    ).subscribe();
   }
 
   private store$(rawBase64: string, mimeType: MimeType) {
@@ -66,7 +65,8 @@ export class CollectorService {
       catchError(error => {
         this.notificationService.notifyError(notificationId, error);
         return EMPTY;
-      })
+      }),
+      mapTo(proof)
     );
   }
 
