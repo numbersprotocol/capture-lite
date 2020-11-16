@@ -52,12 +52,9 @@
       </mat-tab>
       <mat-tab label="PostCapture">
         <div class="tab-content">
-          <ng-container *ngFor="let assetsWithRaw of postCapturesWithRawByDate$ | async">
-            <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
-            <app-post-capture-card *ngFor="let assetWithRaw of assetsWithRaw" userName="User Name"
-              [asset]="assetWithRaw.asset" [imageSrc]="'data:image/png;base64,' + assetWithRaw.rawBase64">
-            </app-post-capture-card>
-          </ng-container>
+          <app-post-capture-card *ngFor="let postCapture of postCaptures$ | async"
+            [transaction]="postCapture.transaction" [asset]="postCapture.asset">
+          </app-post-capture-card>
         </div>
       </mat-tab>
     </mat-tab-group>

@@ -7,6 +7,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatListModule } from '@angular/material/list';
 import { IonicModule } from '@ionic/angular';
 import { Asset } from 'src/app/services/publisher/numbers-storage/data/asset/asset';
+import { Transaction } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { PostCaptureCardComponent } from './post-capture-card.component';
 
@@ -25,7 +26,14 @@ describe('PostCaptureCardComponent', () => {
     uploaded_at: '',
     is_original_owner: true
   };
-  const expectedImageSrc = 'https://picsum.photos/200/300';
+  const expectedTranasction: Transaction = {
+    id: '',
+    sender: '',
+    asset: expectedAsset,
+    created_at: '',
+    expired: false,
+    fulfilled_at: ''
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -45,7 +53,7 @@ describe('PostCaptureCardComponent', () => {
     fixture = TestBed.createComponent(PostCaptureCardComponent);
     component = fixture.componentInstance;
     component.asset = expectedAsset;
-    component.imageSrc = expectedImageSrc;
+    component.transaction = expectedTranasction;
     fixture.detectChanges();
   }));
 

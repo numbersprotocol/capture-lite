@@ -25,11 +25,8 @@ export class HomePage {
   private readonly captures$ = this.assets$.pipe(
     map(assets => assets.filter(asset => asset.is_original_owner))
   );
-  private readonly postCaptures$ = this.assets$.pipe(
-    map(assets => assets.filter(asset => !asset.is_original_owner))
-  );
+  postCaptures$ = this.getPostCaptures();
   readonly capturesWithRawByDate$ = this.captures$.pipe(this.appendAssetsRawAndGroupedByDate$());
-  readonly postCapturesWithRawByDate$ = this.postCaptures$.pipe(this.appendAssetsRawAndGroupedByDate$());
 
   readonly userName$ = this.numbersStorageApi.getUserName$();
   captureButtonShow = true;
@@ -41,6 +38,22 @@ export class HomePage {
     private readonly collectorService: CollectorService,
     private readonly numbersStorageApi: NumbersStorageApi
   ) { }
+
+  private getPostCaptures() {
+    return zip(this.numbersStorageApi.listTransactions$(), this.numbersStorageApi.getEmail$()).pipe(
+      map(([transactionListResponse, email]) => transactionListResponse.results.filter(
+        transaction => transaction.sender !== email && !transaction.expired && transaction.fulfilled_at
+      )),
+      concatMap(transactions => zip(
+        of(transactions),
+        forkJoinWithDefault(transactions.map(transaction => this.numbersStorageApi.readAsset$(transaction.asset.id)))
+      )),
+      map(([transactions, assets]) => transactions.map((transaction, index) => ({
+        transaction,
+        asset: assets[index]
+      })))
+    );
+  }
 
   capture() {
     this.cameraService.capture$().pipe(
@@ -58,7 +71,6 @@ export class HomePage {
         isNonNullable(),
         first()
       )))),
-      // tslint:disable-next-line: no-non-null-assertion
       concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getThumbnail$(proof)))),
       concatMap(base64Strings => zip(assets$, of(base64Strings))),
       map(([assets, base64Strings]) => assets.map((asset, index) => ({
@@ -71,16 +83,10 @@ export class HomePage {
       )),
       map(assetsWithRawBase64 => assetsWithRawBase64.reduce((groupedAssetsWithRawBase64, assetWithRawBase64) => {
         const index = groupedAssetsWithRawBase64.findIndex(
-          processingAssetsWithRawBase64 =>
-            processingAssetsWithRawBase64[0].date
-            === assetWithRawBase64.date
+          processingAssetsWithRawBase64 => processingAssetsWithRawBase64[0].date === assetWithRawBase64.date
         );
-        if (index === -1) {
-          groupedAssetsWithRawBase64.push([assetWithRawBase64]);
-        }
-        else {
-          groupedAssetsWithRawBase64[index].push(assetWithRawBase64);
-        }
+        if (index === -1) { groupedAssetsWithRawBase64.push([assetWithRawBase64]); }
+        else { groupedAssetsWithRawBase64[index].push(assetWithRawBase64); }
         return groupedAssetsWithRawBase64;
       }, [] as { asset: Asset, rawBase64: string, date: string; }[][])
       )
@@ -89,5 +95,6 @@ export class HomePage {
 
   onTapChanged(event: MatTabChangeEvent) {
     this.captureButtonShow = event.index === 0;
+    if (event.index === 1) { this.postCaptures$ = this.getPostCaptures(); }
   }
 }
