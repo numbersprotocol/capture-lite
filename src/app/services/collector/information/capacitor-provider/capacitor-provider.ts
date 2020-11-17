@@ -4,7 +4,7 @@ import { defer, Observable, of, zip } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { Importance, Information, InformationType } from 'src/app/services/repositories/information/information';
 import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
-import { Proof } from 'src/app/services/repositories/proof/proof';
+import { ProofOld } from 'src/app/services/repositories/proof/old-proof';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { InformationProvider } from '../information-provider';
 
@@ -44,7 +44,7 @@ export class CapacitorProvider extends InformationProvider {
     return preferences.setBoolean$(PrefKeys.CollectLocationInfo, enable);
   }
 
-  protected provide$(proof: Proof): Observable<Information[]> {
+  protected provide$(proof: ProofOld): Observable<Information[]> {
     return zip(
       CapacitorProvider.isDeviceInfoCollectionEnabled$(),
       CapacitorProvider.isLocationInfoCollectionEnabled$()

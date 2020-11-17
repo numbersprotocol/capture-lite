@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { pluck, switchMap } from 'rxjs/operators';
-import { Proof } from '../../repositories/proof/proof';
+import { ProofOld } from '../../repositories/proof/old-proof';
 import { Signature } from '../../repositories/signature/signature';
 import { SignatureRepository } from '../../repositories/signature/signature-repository.service';
 import { SerializationService } from '../../serialization/serialization.service';
@@ -14,7 +14,7 @@ export abstract class SignatureProvider {
     private readonly serializationService: SerializationService
   ) { }
 
-  signAndStore$(proof: Proof) {
+  signAndStore$(proof: ProofOld) {
     return this.serializationService.stringify$(proof).pipe(
       switchMap(serialized => this.provide$(proof, serialized)),
       switchMap(signature => this.signatureRepository.add$(signature)),
@@ -22,5 +22,5 @@ export abstract class SignatureProvider {
     );
   }
 
-  protected abstract provide$(proof: Proof, serialized: string): Observable<Signature>;
+  protected abstract provide$(proof: ProofOld, serialized: string): Observable<Signature>;
 }

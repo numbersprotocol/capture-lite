@@ -3,7 +3,7 @@ import { Observable, zip } from 'rxjs';
 import { concatMap, first, mapTo } from 'rxjs/operators';
 import { NotificationService } from '../../notification/notification.service';
 import { CaptionRepository } from '../../repositories/caption/caption-repository.service';
-import { Proof } from '../../repositories/proof/proof';
+import { ProofOld } from '../../repositories/proof/old-proof';
 import { ProofRepository } from '../../repositories/proof/proof-repository.service';
 import { SignatureRepository } from '../../repositories/signature/signature-repository.service';
 import { Publisher } from '../publisher';
@@ -32,7 +32,7 @@ export class NumbersStoragePublisher extends Publisher {
     return this.numbersStorageApi.isEnabled$();
   }
 
-  run$(proof: Proof): Observable<void> {
+  run$(proof: ProofOld): Observable<void> {
     return zip(
       this.proofRepository.getRawFile$(proof),
       this.signatureRepository.getByProof$(proof),

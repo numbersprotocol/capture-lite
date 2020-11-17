@@ -10,7 +10,7 @@ import { Database } from '../../database/database.service';
 import { CaptionRepository } from '../caption/caption-repository.service';
 import { InformationRepository } from '../information/information-repository.service';
 import { SignatureRepository } from '../signature/signature-repository.service';
-import { Proof } from './proof';
+import { ProofOld } from './old-proof';
 
 const { Filesystem } = Plugins;
 // @ts-ignore
@@ -22,7 +22,7 @@ const ImageBlobReduce = require('image-blob-reduce')();
 export class ProofRepository {
 
   private readonly id = 'proof';
-  private readonly table = this.database.getTable<Proof>(this.id);
+  private readonly table = this.database.getTable<ProofOld>(this.id);
   private readonly rawFileDir = FilesystemDirectory.Data;
   private readonly rawFileFolderName = 'raw';
   private readonly thumbnailFileDir = FilesystemDirectory.Data;
@@ -44,9 +44,9 @@ export class ProofRepository {
     );
   }
 
-  add$(...proofs: Proof[]) { return defer(() => this.table.insert(proofs)); }
+  add$(...proofs: ProofOld[]) { return defer(() => this.table.insert(proofs)); }
 
-  remove$(...proofs: Proof[]) {
+  remove$(...proofs: ProofOld[]) {
     return defer(() => this.table.delete(proofs)).pipe(
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.deleteRawFile$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.deleteThumbnail$(proof)))),
@@ -63,7 +63,7 @@ export class ProofRepository {
     );
   }
 
-  getRawFile$(proof: Proof) {
+  getRawFile$(proof: ProofOld) {
     return defer(() => Filesystem.readFile({
       path: `${this.rawFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.rawFileDir
@@ -96,14 +96,14 @@ export class ProofRepository {
     );
   }
 
-  private deleteRawFile$(proof: Proof) {
+  private deleteRawFile$(proof: ProofOld) {
     return defer(() => Filesystem.deleteFile({
       path: `${this.rawFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.rawFileDir
     }));
   }
 
-  getThumbnail$(proof: Proof) {
+  getThumbnail$(proof: ProofOld) {
     return defer(() => Filesystem.readFile({
       path: `${this.thumbnailFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.thumbnailFileDir
@@ -124,7 +124,7 @@ export class ProofRepository {
     );
   }
 
-  private deleteThumbnail$(proof: Proof) {
+  private deleteThumbnail$(proof: ProofOld) {
     return defer(() => Filesystem.deleteFile({
       path: `${this.thumbnailFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.thumbnailFileDir

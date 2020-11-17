@@ -2,7 +2,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { NotificationService } from '../notification/notification.service';
-import { Proof } from '../repositories/proof/proof';
+import { ProofOld } from '../repositories/proof/old-proof';
 
 export abstract class Publisher {
 
@@ -13,7 +13,7 @@ export abstract class Publisher {
     private readonly notificationService: NotificationService
   ) { }
 
-  publish(proof: Proof) {
+  publish(proof: ProofOld) {
     const notificationId = this.notificationService.createNotificationId();
     this.notificationService.notify(
       notificationId,
@@ -36,5 +36,5 @@ export abstract class Publisher {
 
   abstract isEnabled$(): Observable<boolean>;
 
-  protected abstract run$(proof: Proof): Observable<void>;
+  protected abstract run$(proof: ProofOld): Observable<void>;
 }

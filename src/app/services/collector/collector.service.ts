@@ -7,7 +7,7 @@ import { MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { NotificationService } from '../notification/notification.service';
 import { PublishersAlert } from '../publisher/publishers-alert/publishers-alert.service';
-import { Proof } from '../repositories/proof/proof';
+import { ProofOld } from '../repositories/proof/old-proof';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
 import { InformationProvider } from './information/information-provider';
 import { SignatureProvider } from './signature/signature-provider';
@@ -47,7 +47,7 @@ export class CollectorService {
     );
   }
 
-  private collectAndSign$(proof: Proof) {
+  private collectAndSign$(proof: ProofOld) {
     const notificationId = this.notificationService.createNotificationId();
     this.notificationService.notify(
       notificationId,

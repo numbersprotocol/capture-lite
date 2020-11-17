@@ -1,6 +1,6 @@
 import { Observable, of, zip } from 'rxjs';
 import { filter, first, map, switchMap, switchMapTo } from 'rxjs/operators';
-import { Proof } from 'src/app/services/repositories/proof/proof';
+import { ProofOld } from 'src/app/services/repositories/proof/old-proof';
 import { Signature } from 'src/app/services/repositories/signature/signature';
 import { createEcKeyPair$, signWithSha256AndEcdsa$ } from 'src/app/utils/crypto/crypto';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
@@ -40,7 +40,7 @@ export class WebCryptoApiProvider extends SignatureProvider {
     return preferences.getString$(PrefKeys.PrivateKey);
   }
 
-  protected provide$(proof: Proof, serialized: string): Observable<Signature> {
+  protected provide$(proof: ProofOld, serialized: string): Observable<Signature> {
     return WebCryptoApiProvider.getPrivateKey$().pipe(
       first(),
       switchMap(privateKeyHex => signWithSha256AndEcdsa$(serialized, privateKeyHex)),

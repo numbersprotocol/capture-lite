@@ -3,12 +3,12 @@ import { first, map } from 'rxjs/operators';
 import { Tuple } from '../database/table/table';
 import { Importance, Information, InformationType } from '../repositories/information/information';
 import { InformationRepository } from '../repositories/information/information-repository.service';
-import { Proof } from '../repositories/proof/proof';
+import { ProofOld } from '../repositories/proof/old-proof';
 
 export type EssentialInformation = Pick<Information, 'provider' | 'name' | 'value'>;
 
 export interface SortedProofInformation extends Tuple {
-  readonly proof: Proof;
+  readonly proof: ProofOld;
   readonly information: EssentialInformation[];
 }
 
@@ -21,13 +21,13 @@ export class SerializationService {
     private readonly informationRepository: InformationRepository
   ) { }
 
-  stringify$(proof: Proof) {
+  stringify$(proof: ProofOld) {
     return this.createSortedProofInformation$(proof).pipe(
       map(sortedProofInformation => JSON.stringify(sortedProofInformation))
     );
   }
 
-  private createSortedProofInformation$(proof: Proof) {
+  private createSortedProofInformation$(proof: ProofOld) {
     return this.informationRepository.getByProof$(proof).pipe(
       first(),
       map(informationList => {

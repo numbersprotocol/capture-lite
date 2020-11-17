@@ -5,7 +5,7 @@ import { Database } from 'src/app/services/database/database.service';
 import { CaptionRepository } from 'src/app/services/repositories/caption/caption-repository.service';
 import { Information } from 'src/app/services/repositories/information/information';
 import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
-import { Proof } from 'src/app/services/repositories/proof/proof';
+import { ProofOld } from 'src/app/services/repositories/proof/old-proof';
 import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
 import { SignatureRepository } from 'src/app/services/repositories/signature/signature-repository.service';
 import { SerializationService } from 'src/app/services/serialization/serialization.service';
@@ -60,7 +60,7 @@ export class AssetRepository {
     );
   }
 
-  private addProofAndInformationFromParsedInformation$(parsed: { proof: Proof, information: Information[]; }) {
+  private addProofAndInformationFromParsedInformation$(parsed: { proof: ProofOld, information: Information[]; }) {
     return this.proofRepository.add$(parsed.proof).pipe(
       concatMapTo(this.informationRepository.add$(...parsed.information))
     );

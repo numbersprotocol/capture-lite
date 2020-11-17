@@ -3,7 +3,7 @@ import { defer, of } from 'rxjs';
 import { concatMap, concatMapTo, first, map, switchMap } from 'rxjs/operators';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 import { Database } from '../../database/database.service';
-import { Proof } from '../proof/proof';
+import { ProofOld } from '../proof/old-proof';
 import { Caption } from './caption';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class CaptionRepository {
     private readonly database: Database
   ) { }
 
-  getByProof$(proof: Proof) {
+  getByProof$(proof: ProofOld) {
     return this.table.queryAll$().pipe(
       map(captions => captions.find(caption => caption.proofHash === proof.hash))
     );
@@ -36,7 +36,7 @@ export class CaptionRepository {
     );
   }
 
-  removeByProof$(proof: Proof) {
+  removeByProof$(proof: ProofOld) {
     return this.getByProof$(proof).pipe(
       first(),
       isNonNullable(),

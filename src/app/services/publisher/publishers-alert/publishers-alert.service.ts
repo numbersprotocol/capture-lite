@@ -3,7 +3,7 @@ import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { from, of, zip } from 'rxjs';
 import { filter, first, pluck, switchMap, toArray } from 'rxjs/operators';
-import { Proof } from '../../repositories/proof/proof';
+import { ProofOld } from '../../repositories/proof/old-proof';
 import { Publisher } from '../publisher';
 
 @Injectable({
@@ -22,7 +22,7 @@ export class PublishersAlert {
     this.publishers.push(publisher);
   }
 
-  presentOrPublish$(proof: Proof) {
+  presentOrPublish$(proof: ProofOld) {
     return this.getEnabledPublishers$().pipe(
       switchMap(publishers => {
         if (publishers.length > 1) {
