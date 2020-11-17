@@ -1,4 +1,4 @@
-import { Signature } from 'src/app/services/data/signature/signature';
+import { Signature } from 'src/app/services/repositories/signature/signature';
 import { SortedProofInformation } from 'src/app/services/serialization/serialization.service';
 
 export interface Asset {

@@ -3,7 +3,7 @@ import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { from, of, zip } from 'rxjs';
 import { filter, first, pluck, switchMap, toArray } from 'rxjs/operators';
-import { Proof } from '../../data/proof/proof';
+import { Proof } from '../../repositories/proof/proof';
 import { Publisher } from '../publisher';
 
 @Injectable({

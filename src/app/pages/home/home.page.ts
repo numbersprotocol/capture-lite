@@ -6,10 +6,10 @@ import { Observable, of, zip } from 'rxjs';
 import { concatMap, first, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
-import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { Asset } from 'src/app/services/publisher/numbers-storage/data/asset/asset';
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
+import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
 import { fromExtension } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
 

@@ -1,7 +1,7 @@
 import { Observable, of, zip } from 'rxjs';
 import { filter, first, map, switchMap, switchMapTo } from 'rxjs/operators';
-import { Proof } from 'src/app/services/data/proof/proof';
-import { Signature } from 'src/app/services/data/signature/signature';
+import { Proof } from 'src/app/services/repositories/proof/proof';
+import { Signature } from 'src/app/services/repositories/signature/signature';
 import { createEcKeyPair$, signWithSha256AndEcdsa$ } from 'src/app/utils/crypto/crypto';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { SignatureProvider } from '../signature-provider';

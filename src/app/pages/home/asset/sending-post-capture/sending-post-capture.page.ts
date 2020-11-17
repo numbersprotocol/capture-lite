@@ -6,10 +6,10 @@ import { defer, zip } from 'rxjs';
 import { concatMap, concatMapTo, first, map, switchMap, tap } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
-import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
-import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
+import { CaptionRepository } from 'src/app/services/repositories/caption/caption-repository.service';
+import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })

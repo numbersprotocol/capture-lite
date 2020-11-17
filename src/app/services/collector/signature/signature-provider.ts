@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { pluck, switchMap } from 'rxjs/operators';
-import { Proof } from '../../data/proof/proof';
-import { Signature } from '../../data/signature/signature';
-import { SignatureRepository } from '../../data/signature/signature-repository.service';
+import { Proof } from '../../repositories/proof/proof';
+import { Signature } from '../../repositories/signature/signature';
+import { SignatureRepository } from '../../repositories/signature/signature-repository.service';
 import { SerializationService } from '../../serialization/serialization.service';
 
 export abstract class SignatureProvider {
