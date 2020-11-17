@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { defer } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
-import { Storage } from 'src/app/utils/storage/storage';
+import { Database } from '../../database/database.service';
 import { Proof } from '../proof/proof';
 import { Information } from './information';
 
@@ -9,15 +10,20 @@ import { Information } from './information';
 })
 export class InformationRepository {
 
-  private readonly informationStorage = new Storage<Information>('information');
+  private readonly id = 'information';
+  private readonly table = this.database.getTable<Information>(this.id);
+
+  constructor(
+    private readonly database: Database
+  ) { }
 
   getByProof$(proof: Proof) {
-    return this.informationStorage.getAll$().pipe(
+    return this.table.queryAll$().pipe(
       map(informationList => informationList.filter(info => info.proofHash === proof.hash))
     );
   }
 
-  add$(...information: Information[]) { return this.informationStorage.add$(...information); }
+  add$(...information: Information[]) { return defer(() => this.table.insert(information)); }
 
   removeByProof$(proof: Proof) {
     return this.getByProof$(proof).pipe(
@@ -27,6 +33,6 @@ export class InformationRepository {
   }
 
   remove$(...information: Information[]) {
-    return this.informationStorage.remove$(...information);
+    return defer(() => this.table.delete(information));
   }
 }

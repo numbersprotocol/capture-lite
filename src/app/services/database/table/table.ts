@@ -8,6 +8,6 @@ export interface Table<T extends Tuple> {
   drop(): Promise<void>;
 }
 
-export type Tuple = Record<string, string | number>;
+export type Tuple = { [key: string]: boolean | number | string | Tuple | Tuple[] | undefined; };
 
-export const TABLE_IMPL = new InjectionToken<Type<Table<any>>>('Table');
+export const TABLE_IMPL = new InjectionToken<Type<Table<any>>>('TABLE_IMPL');

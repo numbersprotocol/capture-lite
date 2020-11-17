@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { defer } from 'rxjs';
 import { concatMap, concatMapTo, first, map } from 'rxjs/operators';
+import { Database } from 'src/app/services/database/database.service';
 import { CaptionRepository } from 'src/app/services/repositories/caption/caption-repository.service';
 import { Information } from 'src/app/services/repositories/information/information';
 import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
@@ -8,7 +10,7 @@ import { ProofRepository } from 'src/app/services/repositories/proof/proof-repos
 import { SignatureRepository } from 'src/app/services/repositories/signature/signature-repository.service';
 import { SerializationService } from 'src/app/services/serialization/serialization.service';
 import { blobToDataUrlWithBase64$ } from 'src/app/utils/encoding/encoding';
-import { Storage } from 'src/app/utils/storage/storage';
+import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { NumbersStorageApi } from '../../numbers-storage-api.service';
 import { NumbersStoragePublisher } from '../../numbers-storage-publisher';
 import { Asset } from './asset';
@@ -18,9 +20,11 @@ import { Asset } from './asset';
 })
 export class AssetRepository {
 
-  private readonly assetStorage = new Storage<Asset>(`${NumbersStoragePublisher.ID}_asset`);
+  private readonly id = `${NumbersStoragePublisher.ID}_asset`;
+  private readonly table = this.database.getTable<Asset>(this.id);
 
   constructor(
+    private readonly database: Database,
     private readonly numbersStorageApi: NumbersStorageApi,
     private readonly proofRepository: ProofRepository,
     private readonly informationRepository: InformationRepository,
@@ -29,7 +33,7 @@ export class AssetRepository {
     private readonly serializationService: SerializationService
   ) { }
 
-  getAll$() { return this.assetStorage.getAll$(); }
+  getAll$() { return this.table.queryAll$(); }
 
   getById$(id: string) {
     return this.getAll$().pipe(
@@ -37,7 +41,7 @@ export class AssetRepository {
     );
   }
 
-  add$(...assets: Asset[]) { return this.assetStorage.add$(...assets); }
+  add$(...assets: Asset[]) { return defer(() => this.table.insert(assets)); }
 
   addFromNumbersStorage$(asset: Asset) {
     return this.add$(asset).pipe(
@@ -63,14 +67,14 @@ export class AssetRepository {
   }
 
   remove$(asset: Asset) {
-    return this.assetStorage.remove$(asset).pipe(
+    return defer(() => this.table.delete([asset])).pipe(
       concatMapTo(this.proofRepository.removeByHash$(asset.proof_hash))
     );
   }
 
   removeAll$() {
-    return this.assetStorage.getAll$().pipe(
-      concatMap(assets => this.assetStorage.remove$(...assets)),
+    return this.table.queryAll$().pipe(
+      concatMap(assets => forkJoinWithDefault(assets.map(asset => this.remove$(asset)))),
       first()
     );
   }

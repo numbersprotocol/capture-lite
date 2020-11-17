@@ -1,15 +1,14 @@
 import { TestBed } from '@angular/core/testing';
+import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { Database } from './database.service';
-import { MemoryTableImpl } from './table/memory-table-impl/memory-table-impl';
-import { TABLE_IMPL } from './table/table';
 
 describe('Database', () => {
   let service: Database;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        { provide: TABLE_IMPL, useValue: MemoryTableImpl }
+      imports: [
+        SharedTestingModule
       ]
     });
     service = TestBed.inject(Database);

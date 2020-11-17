@@ -4,6 +4,38 @@ import { CapacitorFilesystemTableImpl } from './capacitor-filesystem-table-impl'
 describe('MemoryTableImpl', () => {
   let table: Table<TestTuple>;
   const tableId = 'tableId';
+  const testTuple1: TestTuple = {
+    id: 1,
+    name: 'Rick Sanchez',
+    happy: false,
+    skills: [{
+      name: 'Create Stuff',
+      level: Number.POSITIVE_INFINITY
+    }, {
+      name: 'Destroy Stuff',
+      level: Number.POSITIVE_INFINITY
+    }],
+    address: {
+      country: 'USA on Earth C-137',
+      city: 'Washington'
+    }
+  };
+  const testTuple2: TestTuple = {
+    id: 2,
+    name: 'Butter Robot',
+    happy: false,
+    skills: [{
+      name: 'Pass Butter',
+      level: 1
+    }, {
+      name: 'Oh My God',
+      level: Number.NEGATIVE_INFINITY
+    }],
+    address: {
+      country: 'USA on Earth C-137',
+      city: 'Washington'
+    }
+  };
 
   beforeEach(() => table = new CapacitorFilesystemTableImpl(tableId));
 
@@ -19,38 +51,33 @@ describe('MemoryTableImpl', () => {
   });
 
   it('should emit new query on inserting tuple', async (done) => {
-    const tuple1: TestTuple = { id: 1, name: 'one' };
-    const tuple2: TestTuple = { id: 2, name: 'two' };
 
-    await table.insert([tuple1]);
-    await table.insert([tuple2]);
+    await table.insert([testTuple1]);
+    await table.insert([testTuple2]);
 
     table.queryAll$().subscribe(tuples => {
-      expect(tuples).toEqual([tuple1, tuple2]);
+      expect(tuples).toEqual([testTuple1, testTuple2]);
       done();
     });
   });
 
   it('should throw on inserting same tuple', async () => {
-    const tuple: TestTuple = { id: 1, name: 'one' };
-    const sameTuple: TestTuple = { ...tuple };
+    const sameTuple: TestTuple = { ...testTuple1 };
 
-    await expectAsync(table.insert([tuple, sameTuple])).toBeRejected();
+    await expectAsync(table.insert([testTuple1, sameTuple])).toBeRejected();
   });
 
   it('should throw on inserting existed tuple', async () => {
-    const tuple: TestTuple = { id: 1, name: 'one' };
-    const sameTuple: TestTuple = { ...tuple };
-    await table.insert([tuple]);
+    const sameTuple: TestTuple = { ...testTuple1 };
+    await table.insert([testTuple1]);
 
     await expectAsync(table.insert([sameTuple])).toBeRejected();
   });
 
   it('should remove by tuple contents not reference', async (done) => {
-    const newTuple: TestTuple = { id: 5, name: 'five' };
-    const sameTuple: TestTuple = { ...newTuple };
+    const sameTuple: TestTuple = { ...testTuple1 };
 
-    await table.insert([newTuple]);
+    await table.insert([testTuple1]);
     await table.delete([sameTuple]);
 
     table.queryAll$().subscribe(tuples => {
@@ -60,26 +87,29 @@ describe('MemoryTableImpl', () => {
   });
 
   it('should not emit removed tuples', async (done) => {
-    const newTuple1: TestTuple = { id: 5, name: 'five' };
-    const sameTuple1: TestTuple = { ...newTuple1 };
-    const newTuple2: TestTuple = { id: 6, name: 'six' };
+    const sameTuple1: TestTuple = { ...testTuple1 };
 
-    await table.insert([newTuple1, newTuple2]);
+    await table.insert([testTuple1, testTuple2]);
     await table.delete([sameTuple1]);
 
     table.queryAll$().subscribe(tuples => {
-      expect(tuples).toEqual([newTuple2]);
+      expect(tuples).toEqual([testTuple2]);
       done();
     });
   });
 
   it('should throw on deleting non-existent tuples', async () => {
-    const tuple: TestTuple = { id: 5, name: 'five' };
-    await expectAsync(table.delete([tuple])).toBeRejected();
+    await expectAsync(table.delete([testTuple1])).toBeRejected();
   });
 
   it('inserts atomically', async (done) => {
-    const expectedTuples: TestTuple[] = [...Array(100).keys()].map(value => ({ id: value, name: `${value}` }));
+    const expectedTuples: TestTuple[] = [...Array(100).keys()].map(value => ({
+      id: value,
+      name: `${value}`,
+      happy: true,
+      skills: [],
+      address: { country: '', city: '' }
+    }));
 
     // tslint:disable-next-line: rxjs-no-unsafe-scope
     await Promise.all(expectedTuples.map(tuple => table.insert([tuple])));
@@ -91,7 +121,13 @@ describe('MemoryTableImpl', () => {
   });
 
   it('deletes atomically', async (done) => {
-    const sourceTuple: TestTuple[] = [...Array(100).keys()].map(value => ({ id: value, name: `${value}` }));
+    const sourceTuple: TestTuple[] = [...Array(100).keys()].map(value => ({
+      id: value,
+      name: `${value}`,
+      happy: true,
+      skills: [],
+      address: { country: '', city: '' }
+    }));
 
     await table.insert(sourceTuple);
 
@@ -108,4 +144,13 @@ describe('MemoryTableImpl', () => {
 interface TestTuple extends Tuple {
   id: number;
   name: string;
+  happy: boolean;
+  skills: {
+    name: string;
+    level: number;
+  }[];
+  address: {
+    country: string;
+    city: string;
+  };
 }

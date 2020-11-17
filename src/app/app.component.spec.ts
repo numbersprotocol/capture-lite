@@ -3,6 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { Platform } from '@ionic/angular';
 import { AppComponent } from './app.component';
+import { SharedTestingModule } from './shared/shared-testing.module';
 import { getTranslocoModule } from './transloco/transloco-root.module.spec';
 
 describe('AppComponent', () => {
@@ -17,7 +18,11 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [getTranslocoModule(), HttpClientTestingModule],
+      imports: [
+        SharedTestingModule,
+        getTranslocoModule(),
+        HttpClientTestingModule
+      ],
       providers: [
         { provide: Platform, useValue: platformSpy }
       ],

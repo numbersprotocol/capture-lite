@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { defer } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
-import { Storage } from 'src/app/utils/storage/storage';
+import { Database } from '../../database/database.service';
 import { Proof } from '../proof/proof';
 import { Signature } from './signature';
 
@@ -10,16 +10,21 @@ import { Signature } from './signature';
 })
 export class SignatureRepository {
 
-  private readonly signatureStorage = new Storage<Signature>('signature');
+  private readonly id = 'signature';
+  private readonly table = this.database.getTable<Signature>(this.id);
+
+  constructor(
+    private readonly database: Database
+  ) { }
 
   getByProof$(proof: Proof) {
-    return this.signatureStorage.getAll$().pipe(
+    return this.table.queryAll$().pipe(
       map(signatures => signatures.filter(info => info.proofHash === proof.hash))
     );
   }
 
-  add$(...signatures: Signature[]): Observable<Signature[]> {
-    return this.signatureStorage.add$(...signatures);
+  add$(...signatures: Signature[]) {
+    return defer(() => this.table.insert(signatures));
   }
 
   removeByProof$(proof: Proof) {
@@ -30,6 +35,6 @@ export class SignatureRepository {
   }
 
   remove$(...signatures: Signature[]) {
-    return this.signatureStorage.remove$(...signatures);
+    return defer(() => this.table.delete(signatures));
   }
 }

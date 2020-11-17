@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { defer, of } from 'rxjs';
 import { concatMap, concatMapTo, first, map, switchMap } from 'rxjs/operators';
 import { isNonNullable } from 'src/app/utils/rx-operators';
-import { Storage } from 'src/app/utils/storage/storage';
+import { Database } from '../../database/database.service';
 import { Proof } from '../proof/proof';
 import { Caption } from './caption';
 
@@ -11,23 +11,28 @@ import { Caption } from './caption';
 })
 export class CaptionRepository {
 
-  private readonly captionStorage = new Storage<Caption>('caption');
+  private readonly id = 'caption';
+  private readonly table = this.database.getTable<Caption>(this.id);
+
+  constructor(
+    private readonly database: Database
+  ) { }
 
   getByProof$(proof: Proof) {
-    return this.captionStorage.getAll$().pipe(
+    return this.table.queryAll$().pipe(
       map(captions => captions.find(caption => caption.proofHash === proof.hash))
     );
   }
 
   addOrEdit$(value: Caption) {
-    return this.captionStorage.getAll$().pipe(
+    return this.table.queryAll$().pipe(
       first(),
       map(captions => captions.find(caption => caption.proofHash === value.proofHash)),
       concatMap(found => {
         if (found) { return this.remove$(found); }
         return of(found);
       }),
-      concatMapTo(this.captionStorage.add$(value))
+      concatMapTo(defer(() => this.table.insert([value])))
     );
   }
 
@@ -40,6 +45,6 @@ export class CaptionRepository {
   }
 
   remove$(...captions: Caption[]) {
-    return this.captionStorage.remove$(...captions);
+    return defer(() => this.table.delete(captions));
   }
 }

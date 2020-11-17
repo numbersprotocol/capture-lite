@@ -6,7 +6,7 @@ import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
 import { blobToDataUrlWithBase64$, dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { getExtension, MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
-import { Storage } from 'src/app/utils/storage/storage';
+import { Database } from '../../database/database.service';
 import { CaptionRepository } from '../caption/caption-repository.service';
 import { InformationRepository } from '../information/information-repository.service';
 import { SignatureRepository } from '../signature/signature-repository.service';
@@ -21,7 +21,8 @@ const ImageBlobReduce = require('image-blob-reduce')();
 })
 export class ProofRepository {
 
-  private readonly proofStorage = new Storage<Proof>('proof');
+  private readonly id = 'proof';
+  private readonly table = this.database.getTable<Proof>(this.id);
   private readonly rawFileDir = FilesystemDirectory.Data;
   private readonly rawFileFolderName = 'raw';
   private readonly thumbnailFileDir = FilesystemDirectory.Data;
@@ -29,12 +30,13 @@ export class ProofRepository {
   private readonly thumbnailSize = 200;
 
   constructor(
+    private readonly database: Database,
     private readonly captionRepository: CaptionRepository,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository
   ) { }
 
-  getAll$() { return this.proofStorage.getAll$(); }
+  getAll$() { return this.table.queryAll$(); }
 
   getByHash$(hash: string) {
     return this.getAll$().pipe(
@@ -42,10 +44,10 @@ export class ProofRepository {
     );
   }
 
-  add$(...proofs: Proof[]) { return this.proofStorage.add$(...proofs); }
+  add$(...proofs: Proof[]) { return defer(() => this.table.insert(proofs)); }
 
   remove$(...proofs: Proof[]) {
-    return this.proofStorage.remove$(...proofs).pipe(
+    return defer(() => this.table.delete(proofs)).pipe(
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.deleteRawFile$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.deleteThumbnail$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.captionRepository.removeByProof$(proof)))),

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { first, map } from 'rxjs/operators';
+import { Tuple } from '../database/table/table';
 import { Importance, Information, InformationType } from '../repositories/information/information';
 import { InformationRepository } from '../repositories/information/information-repository.service';
 import { Proof } from '../repositories/proof/proof';
 
 export type EssentialInformation = Pick<Information, 'provider' | 'name' | 'value'>;
 
-export interface SortedProofInformation {
+export interface SortedProofInformation extends Tuple {
   readonly proof: Proof;
   readonly information: EssentialInformation[];
 }

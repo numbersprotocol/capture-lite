@@ -1,7 +1,8 @@
+import { Tuple } from 'src/app/services/database/table/table';
 import { Signature } from 'src/app/services/repositories/signature/signature';
 import { SortedProofInformation } from 'src/app/services/serialization/serialization.service';
 
-export interface Asset {
+export interface Asset extends Tuple {
   readonly id: string;
   readonly proof_hash: string;
   readonly owner: string;

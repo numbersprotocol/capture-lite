@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 import { NumbersStorageApi } from './numbers-storage-api.service';
 
 describe('NumbersStorageApi', () => {
@@ -7,7 +8,10 @@ describe('NumbersStorageApi', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [
+        SharedTestingModule,
+        HttpClientTestingModule
+      ]
     });
     service = TestBed.inject(NumbersStorageApi);
   });
