@@ -1,15 +1,23 @@
+// @ts-ignore
+import ImageBlobReduce from 'image-blob-reduce';
 import { OrderedMap } from 'immutable';
+import { blobToDataUrlWithBase64$, dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
+import { sha256WithString$ } from '../../../utils/crypto/crypto';
 import { MimeType } from '../../../utils/mime-type';
-/**
- * 1. A box containing self-verifiable info.
- * 2. Easy to serialize and deserialize for data persistence and interchange.
- * 3. Bundle all immutable information.
- * 4. GETTERs might NOT good idea as it might trigger infinite loop with Angular change detection
- */
 
+const imageBlobReduce = ImageBlobReduce();
+
+/**
+ * - A box containing self-verifiable data.
+ * - Easy to serialize and deserialize for data persistence and interchange.
+ * - Bundle all immutable information.
+ * - (TODO) GETTERs might NOT good idea as it might trigger infinite loop with Angular change detection
+ * - (TODO) Check if proof.assets has image. If true, generate single thumb. (Should We Cache?)
+ * - Generate ID from hash of stringified. (Should We Cache?)
+ */
 export class Proof {
 
-  constructor(
+  private constructor(
     readonly assets: Assets,
     readonly truth: Truth,
     readonly signatures: Signatures
@@ -36,6 +44,21 @@ export class Proof {
   static parse(json: string) {
     const parsed = JSON.parse(json) as SerializedProof;
     return new Proof(parsed.assets, parsed.truth, parsed.signatures);
+  }
+
+  static async from(assets: Assets, truth: Truth, signatures: Signatures) {
+    return new Proof(assets, truth, signatures);
+  }
+
+  async getId() { return sha256WithString$(this.stringify()).toPromise(); }
+
+  async getThumbnailDataUrl() {
+    const thumbnailSize = 200;
+    const imageAsset = Object.values(this.assets).find(asset => asset.mimeType.startsWith('image'));
+    if (imageAsset === undefined) { return undefined; }
+    const blob = await dataUrlWithBase64ToBlob$(`data:${imageAsset.mimeType};base64,${imageAsset.base64}`).toPromise();
+    const thumbnailBlob = await imageBlobReduce.toBlob(blob, { max: thumbnailSize });
+    return blobToDataUrlWithBase64$(thumbnailBlob).toPromise();
   }
 
   getFactValue(id: string) { return Object.values(this.truth.providers).find(fact => fact[id])?.[id]; }
@@ -72,15 +95,10 @@ export class Proof {
   }
 }
 
-export interface Assets { [hash: string]: BinaryAsset | UriAsset; }
+export interface Assets { [hash: string]: Asset; }
 
-export interface BinaryAsset {
-  readonly binary: string;
-  readonly mimeType: MimeType;
-}
-
-export interface UriAsset {
-  readonly uri: string;
+export interface Asset {
+  readonly base64: string;
   readonly mimeType: MimeType;
 }
 

@@ -1,6 +1,6 @@
 // MimeType should be the subset of string type so `JSON.stringify` can generate meaningful text to
 // other platform.
-export type MimeType = 'image/jpeg' | 'image/png';
+export type MimeType = 'image/jpeg' | 'image/png' | 'application/octet-stream';
 
 export function getExtension(mimeType: MimeType) {
   switch (mimeType) {
