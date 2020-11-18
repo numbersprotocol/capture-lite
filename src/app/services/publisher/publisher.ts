@@ -17,8 +17,8 @@ export abstract class Publisher {
     const notificationId = this.notificationService.createNotificationId();
     this.notificationService.notify(
       notificationId,
-      this.translocoService.translate('publishingProof'),
-      this.translocoService.translate('message.publishingProof', { hash: proof.hash, publisherName: this.id })
+      this.translocoService.translate('registeringAsset'),
+      this.translocoService.translate('message.registeringAsset', { hash: proof.hash, publisherName: this.id })
     );
 
     // Deliberately subscribe without untilDestroyed scope. Also, it is not feasible to use
@@ -27,8 +27,8 @@ export abstract class Publisher {
     this.run$(proof).pipe(
       tap(_ => this.notificationService.notify(
         notificationId,
-        this.translocoService.translate('proofPublished'),
-        this.translocoService.translate('message.proofPublished', { hash: proof.hash, publisherName: this.id })
+        this.translocoService.translate('assetRegistered'),
+        this.translocoService.translate('message.assetRegistered', { hash: proof.hash, publisherName: this.id })
       )),
       catchError((err: Error) => of(this.notificationService.notifyError(notificationId, err)))
     ).subscribe();

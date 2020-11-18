@@ -28,7 +28,7 @@ export class HomePage {
   postCaptures$ = this.getPostCaptures();
   readonly capturesWithRawByDate$ = this.captures$.pipe(this.appendAssetsRawAndGroupedByDate$());
 
-  readonly userName$ = this.numbersStorageApi.getUserName$();
+  readonly username$ = this.numbersStorageApi.getUsername$();
   captureButtonShow = true;
 
   constructor(
