@@ -6,7 +6,7 @@ import { WebCryptoApiProvider } from 'src/app/services/collector/signature/web-c
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { InformationType } from 'src/app/services/repositories/information/information';
 import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
-import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
+import { OldProofRepository } from 'src/app/services/repositories/proof/old-proof-repository.service';
 import { SignatureRepository } from 'src/app/services/repositories/signature/signature-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 
@@ -56,7 +56,7 @@ export class InformationPage {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly proofRepository: ProofRepository,
+    private readonly proofRepository: OldProofRepository,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
     private readonly assetRepository: AssetRepository

@@ -17,9 +17,7 @@ describe('Database', () => {
     service = TestBed.inject(Database);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+  it('should be created', () => expect(service).toBeTruthy());
 
   it('should get new table with new ID', () => {
     const id = 'newId';

@@ -9,7 +9,7 @@ import { CollectorService } from 'src/app/services/collector/collector.service';
 import { Asset } from 'src/app/services/publisher/numbers-storage/data/asset/asset';
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
-import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
+import { OldProofRepository } from 'src/app/services/repositories/proof/old-proof-repository.service';
 import { fromExtension } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
 
@@ -33,7 +33,7 @@ export class HomePage {
 
   constructor(
     private readonly assetRepository: AssetRepository,
-    private readonly proofRepository: ProofRepository,
+    private readonly proofRepository: OldProofRepository,
     private readonly cameraService: CameraService,
     private readonly collectorService: CollectorService,
     private readonly numbersStorageApi: NumbersStorageApi

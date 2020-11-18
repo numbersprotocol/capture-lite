@@ -4,7 +4,7 @@ import { concatMap, first, mapTo } from 'rxjs/operators';
 import { NotificationService } from '../../notification/notification.service';
 import { CaptionRepository } from '../../repositories/caption/caption-repository.service';
 import { ProofOld } from '../../repositories/proof/old-proof';
-import { ProofRepository } from '../../repositories/proof/proof-repository.service';
+import { OldProofRepository } from '../../repositories/proof/old-proof-repository.service';
 import { SignatureRepository } from '../../repositories/signature/signature-repository.service';
 import { Publisher } from '../publisher';
 import { AssetRepository } from './data/asset/asset-repository.service';
@@ -19,7 +19,7 @@ export class NumbersStoragePublisher extends Publisher {
   constructor(
     translocoService: TranslocoService,
     notificationService: NotificationService,
-    private readonly proofRepository: ProofRepository,
+    private readonly proofRepository: OldProofRepository,
     private readonly signatureRepository: SignatureRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly numbersStorageApi: NumbersStorageApi,

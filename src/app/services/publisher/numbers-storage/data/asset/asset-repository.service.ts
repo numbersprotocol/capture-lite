@@ -6,7 +6,7 @@ import { CaptionRepository } from 'src/app/services/repositories/caption/caption
 import { Information } from 'src/app/services/repositories/information/information';
 import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
 import { ProofOld } from 'src/app/services/repositories/proof/old-proof';
-import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
+import { OldProofRepository } from 'src/app/services/repositories/proof/old-proof-repository.service';
 import { SignatureRepository } from 'src/app/services/repositories/signature/signature-repository.service';
 import { SerializationService } from 'src/app/services/serialization/serialization.service';
 import { blobToDataUrlWithBase64$ } from 'src/app/utils/encoding/encoding';
@@ -26,7 +26,7 @@ export class AssetRepository {
   constructor(
     private readonly database: Database,
     private readonly numbersStorageApi: NumbersStorageApi,
-    private readonly proofRepository: ProofRepository,
+    private readonly proofRepository: OldProofRepository,
     private readonly informationRepository: InformationRepository,
     private readonly signatureRepository: SignatureRepository,
     private readonly captionRepository: CaptionRepository,

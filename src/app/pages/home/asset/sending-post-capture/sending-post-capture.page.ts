@@ -9,7 +9,7 @@ import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.servi
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 import { CaptionRepository } from 'src/app/services/repositories/caption/caption-repository.service';
-import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
+import { OldProofRepository } from 'src/app/services/repositories/proof/old-proof-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
@@ -48,7 +48,7 @@ export class SendingPostCapturePage {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly assetRepository: AssetRepository,
-    private readonly proofRepository: ProofRepository,
+    private readonly proofRepository: OldProofRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly confirmAlert: ConfirmAlert,
     private readonly translocoService: TranslocoService,

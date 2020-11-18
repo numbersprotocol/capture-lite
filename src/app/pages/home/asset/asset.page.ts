@@ -14,7 +14,7 @@ import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.servi
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { CaptionRepository } from 'src/app/services/repositories/caption/caption-repository.service';
 import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
-import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
+import { OldProofRepository } from 'src/app/services/repositories/proof/old-proof-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 import { ContactSelectionDialogComponent, SelectedContact } from './contact-selection-dialog/contact-selection-dialog.component';
 import { Option, OptionsMenuComponent } from './options-menu/options-menu.component';
@@ -63,7 +63,7 @@ export class AssetPage {
     private readonly translocoService: TranslocoService,
     private readonly confirmAlert: ConfirmAlert,
     private readonly assetRepository: AssetRepository,
-    private readonly proofRepository: ProofRepository,
+    private readonly proofRepository: OldProofRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly informationRepository: InformationRepository,
     private readonly blockingActionService: BlockingActionService,

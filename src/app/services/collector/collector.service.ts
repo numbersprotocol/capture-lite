@@ -8,7 +8,7 @@ import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { NotificationService } from '../notification/notification.service';
 import { PublishersAlert } from '../publisher/publishers-alert/publishers-alert.service';
 import { ProofOld } from '../repositories/proof/old-proof';
-import { ProofRepository } from '../repositories/proof/proof-repository.service';
+import { OldProofRepository } from '../repositories/proof/old-proof-repository.service';
 import { InformationProvider } from './information/information-provider';
 import { SignatureProvider } from './signature/signature-provider';
 
@@ -21,7 +21,7 @@ export class CollectorService {
   private readonly signatureProviders = new Set<SignatureProvider>();
 
   constructor(
-    private readonly proofRepository: ProofRepository,
+    private readonly proofRepository: OldProofRepository,
     private readonly notificationService: NotificationService,
     private readonly translocoService: TranslocoService,
     private readonly publishersAlert: PublishersAlert
