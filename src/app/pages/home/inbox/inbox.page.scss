@@ -3,6 +3,14 @@ mat-toolbar {
 }
 
 .page-content {
+  span.nothing-here {
+    display: flex;
+    width: 100%;
+    height: 80%;
+    align-items: center;
+    justify-content: center;
+  }
+
   mat-list-item {
     height: initial;
 
