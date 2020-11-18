@@ -1,8 +1,16 @@
+import { verifyWithSha256AndEcdsa$ } from 'src/app/utils/crypto/crypto';
 import { MimeType } from 'src/app/utils/mime-type';
 import { Assets, BinaryAsset, DefaultFactId, Proof, Signatures, Truth, UriAsset } from './proof';
 
 describe('Proof', () => {
   let proof: Proof;
+
+  beforeAll(() => Proof.registerSignatureProvider(
+    SIGNATURE_PROVIDER_ID,
+    { verify: (message, signature, publicKey) => verifyWithSha256AndEcdsa$(message, signature, publicKey).toPromise() }
+  ));
+
+  afterAll(() => Proof.unregisterSignatureProvider(SIGNATURE_PROVIDER_ID));
 
   it('should get the same assets with the constructor parameter', () => {
     proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
@@ -83,7 +91,7 @@ describe('Proof', () => {
         binary: ASSET1_BINARY
       }
     };
-    const TEST_TRUTH_DIFFERENT_ORDER: Truth = {
+    const TRUTH_DIFFERENT_ORDER: Truth = {
       providers: {
         [CAPACITOR]: {
           [HUMIDITY]: HUMIDITY_VALUE,
@@ -99,20 +107,10 @@ describe('Proof', () => {
       },
       timestamp: TIMESTAMP
     };
-    const TEST_SIGNATURES_VALID_DIFFERENT_ORDER: Signatures = {
-      [WEB_CRYPTO_API]: {
-        publicKey: WEB_CRYPTO_API_PUBLIC_KEY,
-        signature: WEB_CRYPTO_API_SIGNATURE
-      },
-      [ANDROID_OPEN_SSL]: {
-        publicKey: ANDROID_OPEN_SSL_PUBLIC_KEY,
-        signature: ANDROID_OPEN_SSL_SIGNATURE
-      }
-    };
     const proofWithDifferentContentsOrder = new Proof(
       ASSETS_DIFFERENT_ORDER,
-      TEST_TRUTH_DIFFERENT_ORDER,
-      TEST_SIGNATURES_VALID_DIFFERENT_ORDER
+      TRUTH_DIFFERENT_ORDER,
+      SIGNATURES_VALID
     );
     expect(proof.stringify()).toEqual(proofWithDifferentContentsOrder.stringify());
   });
@@ -127,14 +125,14 @@ describe('Proof', () => {
     expect(parsed.signatures).toEqual(SIGNATURES_VALID);
   });
 
-  fit('should be verified with valid signatures', () => {
+  it('should be verified with valid signatures', async () => {
     proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
-    expectAsync(proof.isVerified()).toBeResolved(true);
+    expect(await proof.isVerified()).toBeTrue();
   });
 
-  it('should not be verified with invalid signatures', () => {
+  it('should not be verified with invalid signatures', async () => {
     proof = new Proof(ASSETS, TRUTH, SIGNATURES_INVALID);
-    expectAsync(proof.isVerified()).toBeResolved(false);
+    expect(await proof.isVerified()).toBeFalse();
   });
 });
 
@@ -185,29 +183,19 @@ const TRUTH_EMPTY: Truth = {
   timestamp: TIMESTAMP,
   providers: {}
 };
-const ANDROID_OPEN_SSL = 'ANDROID_OPEN_SSL';
-const ANDROID_OPEN_SSL_SIGNATURE = 'MEUCIATCWO3PkNlHORgQ+vVeeaRZzygoBorOcvZrMNyad8YXAiEA8iJ7NUAgcaJKUFEg1ESgtMpksNwwz4keGGk1FTlffKk=';
-const ANDROID_OPEN_SSL_PUBLIC_KEY = 'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE4IbMQvBjEqvBTUXPmPpaD7gqksL4ZOFXwG7BD5FErKyLbpouzjt+cVFoHTvreoFH5qSsBAKPJezCeVKKC2NWzg==';
-const WEB_CRYPTO_API = 'WEB_CRYPTO_API';
-const WEB_CRYPTO_API_SIGNATURE = 'MEUCIATCWO3PkNlHORgQ+vVeeaRZzygoBorOcvZrMNyad8YXAiEA8iJ7NUAgcaJKUFEg1ESgtMpksNwwz4keGGk1FTlffKk=';
-const WEB_CRYPTO_API_PUBLIC_KEY = 'MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAE4IbMQvBjEqvBTUXPmPpaD7gqksL4ZOFXwG7BD5FErKyLbpouzjt+cVFoHTvreoFH5qSsBAKPJezCeVKKC2NWzg==';
+const SIGNATURE_PROVIDER_ID = 'CAPTURE';
+const VALID_SIGNATURE = '5660e245da3cef8c5de94d692cb1999559258223e7b65c6a82e9eedaccf5b3eb6e978bba5f0dcfadd4bdf932a9f69b4bf089229294f07d5f59f2bc5807e2c3d6';
+const PUBLIC_KEY = '3059301306072a8648ce3d020106082a8648ce3d030107034200049f30b0ad415a9b1f64520c6b558927fbdd9be598b2cf1ac675656cb3eee8bb553d2c38708f34bb7684fa19115d6e596c15413fa1704c61c1cb72728b287dea93';
 const SIGNATURES_VALID: Signatures = {
-  [ANDROID_OPEN_SSL]: {
-    signature: ANDROID_OPEN_SSL_SIGNATURE,
-    publicKey: ANDROID_OPEN_SSL_PUBLIC_KEY
-  },
-  [WEB_CRYPTO_API]: {
-    signature: WEB_CRYPTO_API_SIGNATURE,
-    publicKey: WEB_CRYPTO_API_PUBLIC_KEY
+  [SIGNATURE_PROVIDER_ID]: {
+    signature: VALID_SIGNATURE,
+    publicKey: PUBLIC_KEY
   }
 };
+const INVALID_SIGNATURE = '5d9192a66e2e2b4d22ce69dae407618eb6e052a86bb236bec11a7c154ffe20c0604e392378288340317d169219dfe063c504ed27ea2f47d9ec3868206b1d7f73';
 const SIGNATURES_INVALID: Signatures = {
-  [ANDROID_OPEN_SSL]: {
-    signature: ANDROID_OPEN_SSL_SIGNATURE,
-    publicKey: ANDROID_OPEN_SSL_PUBLIC_KEY
-  },
-  [WEB_CRYPTO_API]: {
-    signature: WEB_CRYPTO_API_SIGNATURE,
-    publicKey: WEB_CRYPTO_API_PUBLIC_KEY
+  [SIGNATURE_PROVIDER_ID]: {
+    signature: INVALID_SIGNATURE,
+    publicKey: PUBLIC_KEY
   }
 };

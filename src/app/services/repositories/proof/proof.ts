@@ -1,5 +1,4 @@
 import { OrderedMap } from 'immutable';
-import { verifyWithSha256AndEcdsa$ } from '../../../utils/crypto/crypto';
 import { MimeType } from '../../../utils/mime-type';
 /**
  * 1. A box containing self-verifiable info.
@@ -23,6 +22,16 @@ export class Proof {
   get geolocationLatitude() { return this.getFactValue(DefaultFactId.GEOLOCATION_LATITUDE); }
 
   get geolocationLongitude() { return this.getFactValue(DefaultFactId.GEOLOCATION_LONGITUDE); }
+
+  static signatureProviders = new Map<string, SignatureVerifier>();
+
+  static registerSignatureProvider(id: string, provider: SignatureVerifier) {
+    this.signatureProviders.set(id, provider);
+  }
+
+  static unregisterSignatureProvider(id: string) {
+    this.signatureProviders.delete(id);
+  }
 
   static parse(json: string) {
     const parsed = JSON.parse(json) as SerializedProof;
@@ -52,14 +61,14 @@ export class Proof {
       truth: this.truth
     };
     const serializedSignedTarget = JSON.stringify(this.sortObjectDeeplyByKey(signedTarget).toJSON());
-    const results = await Promise.all(Object.values(this.signatures)
-      .map(signature => verifyWithSha256AndEcdsa$(
+    const results = await Promise.all(Object.entries(this.signatures)
+      .map(([id, signature]) => Proof.signatureProviders.get(id)?.verify(
         serializedSignedTarget,
         signature.signature,
         signature.publicKey
-      ).toPromise())
+      ))
     );
-    return !results.includes(false);
+    return results.every(result => result);
   }
 }
 
@@ -104,3 +113,7 @@ interface SerializedProof {
 }
 
 type SignedTarget = Pick<SerializedProof, 'assets' | 'truth'>;
+
+interface SignatureVerifier {
+  verify(message: string, signature: string, publicKey: string): boolean | Promise<boolean>;
+}
