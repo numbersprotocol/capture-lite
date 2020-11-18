@@ -23,7 +23,7 @@ const { Clipboard } = Plugins;
 })
 export class ProfilePage {
 
-  readonly userName$ = this.numbersStorageApi.getUserName$();
+  readonly username$ = this.numbersStorageApi.getUsername$();
   readonly email$ = this.numbersStorageApi.getEmail$();
   readonly publicKey$ = WebCryptoApiProvider.getPublicKey$();
   readonly privateKey$ = WebCryptoApiProvider.getPrivateKey$();
