@@ -6,6 +6,7 @@
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
+  <span *ngIf="(postCaptures$ | async)?.length === 0" class="nothing-here">{{ t('nothingHere') }}</span>
   <mat-list>
     <ng-container *ngFor="let postCapture of (postCaptures$ | async); last as isLast">
       <mat-list-item>
