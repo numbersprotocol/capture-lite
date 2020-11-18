@@ -1,11 +1,11 @@
 import { TranslocoService } from '@ngneat/transloco';
 import { Observable, zip } from 'rxjs';
 import { concatMap, first, mapTo } from 'rxjs/operators';
-import { CaptionRepository } from '../../data/caption/caption-repository.service';
-import { Proof } from '../../data/proof/proof';
-import { ProofRepository } from '../../data/proof/proof-repository.service';
-import { SignatureRepository } from '../../data/signature/signature-repository.service';
 import { NotificationService } from '../../notification/notification.service';
+import { CaptionRepository } from '../../repositories/caption/caption-repository.service';
+import { Proof } from '../../repositories/proof/proof';
+import { ProofRepository } from '../../repositories/proof/proof-repository.service';
+import { SignatureRepository } from '../../repositories/signature/signature-repository.service';
 import { Publisher } from '../publisher';
 import { AssetRepository } from './data/asset/asset-repository.service';
 import { NumbersStorageApi, TargetProvider } from './numbers-storage-api.service';

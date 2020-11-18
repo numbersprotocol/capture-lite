@@ -5,8 +5,8 @@ import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
 import { dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { secret } from '../../../../environments/secret';
-import { Proof } from '../../data/proof/proof';
-import { Signature } from '../../data/signature/signature';
+import { Proof } from '../../repositories/proof/proof';
+import { Signature } from '../../repositories/signature/signature';
 import { SerializationService } from '../../serialization/serialization.service';
 import { Asset } from './data/asset/asset';
 

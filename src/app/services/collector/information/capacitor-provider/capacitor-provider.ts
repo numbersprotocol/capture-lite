@@ -2,9 +2,9 @@ import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { defer, Observable, of, zip } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
-import { Importance, Information, InformationType } from 'src/app/services/data/information/information';
-import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
-import { Proof } from 'src/app/services/data/proof/proof';
+import { Importance, Information, InformationType } from 'src/app/services/repositories/information/information';
+import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
+import { Proof } from 'src/app/services/repositories/proof/proof';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { InformationProvider } from '../information-provider';
 

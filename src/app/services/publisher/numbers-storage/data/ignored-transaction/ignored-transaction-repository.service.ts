@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { defer } from 'rxjs';
 import { concatMap, first } from 'rxjs/operators';
-import { Storage } from 'src/app/utils/storage/storage';
+import { Database } from 'src/app/services/database/database.service';
 import { NumbersStoragePublisher } from '../../numbers-storage-publisher';
 import { IgnoredTransaction } from './ignored-transaction';
 
@@ -9,15 +10,20 @@ import { IgnoredTransaction } from './ignored-transaction';
 })
 export class IgnoredTransactionRepository {
 
-  private readonly ignoredTransactionStorage = new Storage<IgnoredTransaction>(`${NumbersStoragePublisher.ID}_ignoredTransaction`);
+  private readonly id = `${NumbersStoragePublisher.ID}_ignoredTransaction`;
+  private readonly table = this.database.getTable<IgnoredTransaction>(this.id);
 
-  getAll$() { return this.ignoredTransactionStorage.getAll$(); }
+  constructor(
+    private readonly database: Database
+  ) { }
 
-  add$(...ignoredTransactions: IgnoredTransaction[]) { return this.ignoredTransactionStorage.add$(...ignoredTransactions); }
+  getAll$() { return this.table.queryAll$(); }
+
+  add$(...ignoredTransactions: IgnoredTransaction[]) { return defer(() => this.table.insert(ignoredTransactions)); }
 
   removeAll$() {
-    return this.ignoredTransactionStorage.getAll$().pipe(
-      concatMap(ignoredTransactions => this.ignoredTransactionStorage.remove$(...ignoredTransactions)),
+    return this.table.queryAll$().pipe(
+      concatMap(ignoredTransactions => defer(() => this.table.delete(ignoredTransactions))),
       first()
     );
   }

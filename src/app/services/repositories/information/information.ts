@@ -1,3 +1,5 @@
+import { Tuple } from '../../database/table/table';
+
 export const enum Importance {
   Low = 'low',
   High = 'high'
@@ -9,7 +11,7 @@ export const enum InformationType {
   Other = 'other'
 }
 
-export interface Information {
+export interface Information extends Tuple {
   readonly proofHash: string;
   readonly provider: string;
   readonly name: string;

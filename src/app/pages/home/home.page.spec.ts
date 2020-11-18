@@ -10,6 +10,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { HomePage } from './home.page';
 
@@ -21,6 +22,7 @@ describe('HomePage', () => {
     TestBed.configureTestingModule({
       declarations: [HomePage],
       imports: [
+        SharedTestingModule,
         RouterTestingModule,
         getTranslocoModule(),
         HttpClientTestingModule,
@@ -32,7 +34,8 @@ describe('HomePage', () => {
         MatGridListModule,
         MatCardModule,
         MatSidenavModule,
-        MatListModule]
+        MatListModule
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);

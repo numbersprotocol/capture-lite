@@ -5,10 +5,10 @@ import { catchError, concatMap, map, mapTo, pluck, switchMap, switchMapTo, tap }
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
 import { MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
-import { Proof } from '../data/proof/proof';
-import { ProofRepository } from '../data/proof/proof-repository.service';
 import { NotificationService } from '../notification/notification.service';
 import { PublishersAlert } from '../publisher/publishers-alert/publishers-alert.service';
+import { Proof } from '../repositories/proof/proof';
+import { ProofRepository } from '../repositories/proof/proof-repository.service';
 import { InformationProvider } from './information/information-provider';
 import { SignatureProvider } from './signature/signature-provider';
 

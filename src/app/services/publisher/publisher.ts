@@ -1,8 +1,8 @@
 import { TranslocoService } from '@ngneat/transloco';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Proof } from '../data/proof/proof';
 import { NotificationService } from '../notification/notification.service';
+import { Proof } from '../repositories/proof/proof';
 
 export abstract class Publisher {
 

@@ -11,6 +11,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { SendingPostCapturePage } from './sending-post-capture.page';
 
@@ -22,6 +23,7 @@ describe('SendingPostCapturePage', () => {
     TestBed.configureTestingModule({
       declarations: [SendingPostCapturePage],
       imports: [
+        SharedTestingModule,
         IonicModule.forRoot(),
         getTranslocoModule(),
         RouterTestingModule,

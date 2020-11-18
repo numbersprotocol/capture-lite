@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { Information } from '../../data/information/information';
-import { InformationRepository } from '../../data/information/information-repository.service';
-import { Proof } from '../../data/proof/proof';
+import { Information } from '../../repositories/information/information';
+import { InformationRepository } from '../../repositories/information/information-repository.service';
+import { Proof } from '../../repositories/proof/proof';
 
 export abstract class InformationProvider {
 
