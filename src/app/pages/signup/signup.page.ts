@@ -20,7 +20,7 @@ import { EMAIL_REGEXP } from 'src/app/utils/validation';
 export class SignupPage {
 
   form = new FormGroup({});
-  model: SignupFormModel = { email: '', userName: '', password: '', confirmPassword: '' };
+  model: SignupFormModel = { email: '', username: '', password: '', confirmPassword: '' };
   fields: FormlyFieldConfig[] = [];
 
   constructor(
@@ -32,12 +32,12 @@ export class SignupPage {
   ) {
     combineLatest([
       this.translocoService.selectTranslate('email'),
-      this.translocoService.selectTranslate('userName'),
+      this.translocoService.selectTranslate('username'),
       this.translocoService.selectTranslate('password'),
       this.translocoService.selectTranslate('confirmPassword'),
     ]).pipe(
-      tap(([emailTranslation, userNameTranlation, passwordTranslation, confirmPasswordTranslation]) => this.createFormFields(
-        emailTranslation, userNameTranlation, passwordTranslation, confirmPasswordTranslation
+      tap(([emailTranslation, usernameTranlation, passwordTranslation, confirmPasswordTranslation]) => this.createFormFields(
+        emailTranslation, usernameTranlation, passwordTranslation, confirmPasswordTranslation
       )),
       untilDestroyed(this)
     ).subscribe();
@@ -45,7 +45,7 @@ export class SignupPage {
 
   private createFormFields(
     emailTranslation: string,
-    userNameTranlation: string,
+    usernameTranlation: string,
     passwordTranslation: string,
     confirmPasswordTranslation: string
   ) {
@@ -78,11 +78,11 @@ export class SignupPage {
           }
         }
       }, {
-        key: 'userName',
+        key: 'username',
         type: 'input',
         templateOptions: {
           type: 'text',
-          placeholder: userNameTranlation,
+          placeholder: usernameTranlation,
           required: true,
           hideRequiredMarker: true
         }
@@ -120,7 +120,7 @@ export class SignupPage {
   }
 
   onSubmit() {
-    const action$ = this.numbersStorageApi.createUser$(this.model.userName, this.model.email, this.model.password);
+    const action$ = this.numbersStorageApi.createUser$(this.model.username, this.model.email, this.model.password);
 
     this.blockingActionService.run$(action$).pipe(
       untilDestroyed(this),
@@ -141,7 +141,7 @@ export class SignupPage {
 
 interface SignupFormModel {
   email: string;
-  userName: string;
+  username: string;
   password: string;
   confirmPassword: string;
 }

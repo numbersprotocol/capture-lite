@@ -38,7 +38,7 @@ export class SendingPostCapturePage {
     map(params => params.get('contact')),
     isNonNullable()
   );
-  readonly userName$ = this.contact$.pipe(
+  readonly username$ = this.contact$.pipe(
     map(contact => contact.substring(0, contact.lastIndexOf('@')))
   );
   previewCaption = '';
