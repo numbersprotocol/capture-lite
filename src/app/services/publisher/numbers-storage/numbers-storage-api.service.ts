@@ -19,7 +19,7 @@ const preference = PreferenceManager.NUMBERS_STORAGE_PUBLISHER_PREF;
 const enum PrefKeys {
   Enabled = 'enabled',
   AuthToken = 'authToken',
-  UserName = 'userName',
+  Username = 'username',
   Email = 'email'
 }
 
@@ -37,8 +37,8 @@ export class NumbersStorageApi {
     return preference.getBoolean$(PrefKeys.Enabled);
   }
 
-  getUserName$() {
-    return preference.getString$(PrefKeys.UserName);
+  getUsername$() {
+    return preference.getString$(PrefKeys.Username);
   }
 
   getEmail$() {
@@ -46,12 +46,12 @@ export class NumbersStorageApi {
   }
 
   createUser$(
-    userName: string,
+    username: string,
     email: string,
     password: string
   ) {
     const formData = new FormData();
-    formData.append('username', userName);
+    formData.append('username', username);
     formData.append('email', email);
     formData.append('password', password);
     return this.httpClient.post<UserResponse>(`${baseUrl}/auth/users/`, formData);
@@ -69,7 +69,7 @@ export class NumbersStorageApi {
       concatMap(authToken => preference.setString$(PrefKeys.AuthToken, `token ${authToken}`)),
       concatMapTo(this.getUserInformation$()),
       concatMap(user => zip(
-        preference.setString$(PrefKeys.UserName, user.username),
+        preference.setString$(PrefKeys.Username, user.username),
         preference.setString$(PrefKeys.Email, user.email)
       )),
       concatMapTo(preference.setBoolean$(PrefKeys.Enabled, true))
@@ -87,7 +87,7 @@ export class NumbersStorageApi {
       concatMapTo(this.getHttpHeadersWithAuthToken$()),
       concatMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, {}, { headers })),
       concatMapTo(zip(
-        preference.setString$(PrefKeys.UserName, 'has-logged-out'),
+        preference.setString$(PrefKeys.Username, 'has-logged-out'),
         preference.setString$(PrefKeys.Email, 'has-logged-out'),
         preference.setString$(PrefKeys.AuthToken, '')
       ))
