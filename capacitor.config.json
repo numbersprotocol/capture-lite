@@ -8,6 +8,13 @@
     "SplashScreen": {
       "androidScaleType": "CENTER_CROP",
       "launchAutoHide": false
+    },
+    "PushNotifications": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
     }
   },
   "cordova": {},

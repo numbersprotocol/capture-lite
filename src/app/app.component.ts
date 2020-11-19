@@ -20,6 +20,7 @@ import { AssetRepository } from './services/publisher/numbers-storage/data/asset
 import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-storage-api.service';
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
+import { PushNotificationService } from './services/push-notification/push-notification.service';
 import { SerializationService } from './services/serialization/serialization.service';
 import { fromExtension } from './utils/mime-type';
 
@@ -43,6 +44,7 @@ export class AppComponent {
     private readonly captionRepository: CaptionRepository,
     private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService,
+    private readonly pushNotificationService: PushNotificationService,
     private readonly numbersStorageApi: NumbersStorageApi,
     langaugeService: LanguageService,
     private readonly cameraService: CameraService,
