@@ -12,39 +12,39 @@ describe('Proof', () => {
 
   afterAll(() => Proof.unregisterSignatureProvider(SIGNATURE_PROVIDER_ID));
 
-  it('should get the same assets with the parameter of factory method', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should get the same assets with the parameter of factory method', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.assets).toEqual(ASSETS);
   });
 
-  it('should get the same truth with the parameter of factory method', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should get the same truth with the parameter of factory method', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.truth).toEqual(TRUTH);
   });
 
-  it('should get the same signatures with the parameter of factory method', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should get the same signatures with the parameter of factory method', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.signatures).toEqual(SIGNATURES_VALID);
   });
 
-  it('should get the same timestamp with the truth in the parameter of factory method', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should get the same timestamp with the truth in the parameter of factory method', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.timestamp).toEqual(TRUTH.timestamp);
   });
 
   it('should get same ID with same properties', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
-    const another = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
+    const another = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(await proof.getId()).toEqual(await another.getId());
   });
 
   it('should have thumbnail when its assets have binary images', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(await proof.getThumbnailDataUrl()).toBeTruthy();
   });
 
   it('should not have thumbnail when its assets do not have image', async () => {
-    proof = await Proof.from(
+    proof = new Proof(
       { [ASSET1_HASH]: { base64: 'aGVsbG8K', mimeType: 'application/octet-stream' } },
       TRUTH,
       SIGNATURES_VALID
@@ -52,58 +52,58 @@ describe('Proof', () => {
     expect(await proof.getThumbnailDataUrl()).toBeUndefined();
   });
 
-  it('should get any device name when exists', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should get any device name when exists', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(
       proof.deviceName === DEVICE_NAME_VALUE1
       || proof.deviceName === DEVICE_NAME_VALUE2
     ).toBeTrue();
   });
 
-  it('should get undefined when device name not exists', async () => {
-    proof = await Proof.from(ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
+  it('should get undefined when device name not exists', () => {
+    proof = new Proof(ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
     expect(proof.deviceName).toBeUndefined();
   });
 
-  it('should get any geolocation latitude when exists', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should get any geolocation latitude when exists', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(
       proof.geolocationLatitude === GEOLOCATION_LATITUDE1
       || proof.geolocationLatitude === GEOLOCATION_LATITUDE2
     ).toBeTrue();
   });
 
-  it('should get undefined when geolocation latitude not exists', async () => {
-    proof = await Proof.from(ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
+  it('should get undefined when geolocation latitude not exists', () => {
+    proof = new Proof(ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
     expect(proof.geolocationLatitude).toBeUndefined();
   });
 
-  it('should get any geolocation longitude name when exists', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should get any geolocation longitude name when exists', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(
       proof.geolocationLongitude === GEOLOCATION_LONGITUDE1
       || proof.geolocationLongitude === GEOLOCATION_LONGITUDE2
     ).toBeTrue();
   });
 
-  it('should get undefined when geolocation longitude not exists', async () => {
-    proof = await Proof.from(ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
+  it('should get undefined when geolocation longitude not exists', () => {
+    proof = new Proof(ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
     expect(proof.geolocationLongitude).toBeUndefined();
   });
 
-  it('should get existed fact with ID', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should get existed fact with ID', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.getFactValue(HUMIDITY)).toEqual(HUMIDITY_VALUE);
   });
 
-  it('should get undefined with nonexistent fact ID', async () => {
+  it('should get undefined with nonexistent fact ID', () => {
     const NONEXISTENT = 'NONEXISTENT';
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.getFactValue(NONEXISTENT)).toBeUndefined();
   });
 
-  it('should stringify to ordered JSON string', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should stringify to ordered JSON string', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     const ASSETS_DIFFERENT_ORDER: Assets = {
       [ASSET2_HASH]: ASSET2,
       [ASSET1_HASH]: {
@@ -127,7 +127,7 @@ describe('Proof', () => {
       },
       timestamp: TIMESTAMP
     };
-    const proofWithDifferentContentsOrder = await Proof.from(
+    const proofWithDifferentContentsOrder = new Proof(
       ASSETS_DIFFERENT_ORDER,
       TRUTH_DIFFERENT_ORDER,
       SIGNATURES_VALID
@@ -135,8 +135,8 @@ describe('Proof', () => {
     expect(proof.stringify()).toEqual(proofWithDifferentContentsOrder.stringify());
   });
 
-  it('should parse from stringified JSON string', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+  it('should parse from stringified JSON string', () => {
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
 
     const parsed = Proof.parse(proof.stringify());
 
@@ -146,12 +146,12 @@ describe('Proof', () => {
   });
 
   it('should be verified with valid signatures', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(await proof.isVerified()).toBeTrue();
   });
 
   it('should not be verified with invalid signatures', async () => {
-    proof = await Proof.from(ASSETS, TRUTH, SIGNATURES_INVALID);
+    proof = new Proof(ASSETS, TRUTH, SIGNATURES_INVALID);
     expect(await proof.isVerified()).toBeFalse();
   });
 });

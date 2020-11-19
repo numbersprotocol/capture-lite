@@ -22,7 +22,7 @@ const { Filesystem } = Plugins;
 })
 export class OldProofRepository {
 
-  private readonly id = 'proof';
+  private readonly id = 'old-proof';
   private readonly table = this.database.getTable<ProofOld>(this.id);
   private readonly rawFileDir = FilesystemDirectory.Data;
   private readonly rawFileFolderName = 'raw';

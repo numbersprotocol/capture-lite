@@ -17,7 +17,7 @@ const imageBlobReduce = ImageBlobReduce();
  */
 export class Proof {
 
-  private constructor(
+  constructor(
     readonly assets: Assets,
     readonly truth: Truth,
     readonly signatures: Signatures
@@ -44,10 +44,6 @@ export class Proof {
   static parse(json: string) {
     const parsed = JSON.parse(json) as SerializedProof;
     return new Proof(parsed.assets, parsed.truth, parsed.signatures);
-  }
-
-  static async from(assets: Assets, truth: Truth, signatures: Signatures) {
-    return new Proof(assets, truth, signatures);
   }
 
   async getId() { return sha256WithString$(this.stringify()).toPromise(); }
