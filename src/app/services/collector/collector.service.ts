@@ -11,6 +11,7 @@ import { PublishersAlert } from '../publisher/publishers-alert/publishers-alert.
 import { ProofOld } from '../repositories/proof/old-proof';
 import { OldProofRepository } from '../repositories/proof/old-proof-repository.service';
 import { Assets, Proof, Signatures, SignedTargets, Truth } from '../repositories/proof/proof';
+import { ProofRepository } from '../repositories/proof/proof-repository.service';
 import { FactsProvider, OldInformationProvider } from './information/information-provider';
 import { OldSignatureProvider, SignatureProvider } from './signature/signature-provider';
 
@@ -25,10 +26,11 @@ export class CollectorService {
   private readonly signatureProviders = new Set<SignatureProvider>();
 
   constructor(
-    private readonly proofRepository: OldProofRepository,
+    private readonly oldProofRepository: OldProofRepository,
     private readonly notificationService: NotificationService,
     private readonly translocoService: TranslocoService,
-    private readonly publishersAlert: PublishersAlert
+    private readonly publishersAlert: PublishersAlert,
+    private readonly proofRepository: ProofRepository
   ) { }
 
   storeAndCollect(rawBase64: string, mimeType: MimeType) {
@@ -42,11 +44,11 @@ export class CollectorService {
   }
 
   private store$(rawBase64: string, mimeType: MimeType) {
-    return this.proofRepository.saveRawFile$(rawBase64, mimeType).pipe(
+    return this.oldProofRepository.saveRawFile$(rawBase64, mimeType).pipe(
       // Get the proof hash from the uri.
       map(uri => fileNameWithoutExtension(uri)),
       // Store the media file.
-      switchMap(hash => this.proofRepository.add$({ hash, mimeType, timestamp: Date.now() })),
+      switchMap(hash => this.oldProofRepository.add$({ hash, mimeType, timestamp: Date.now() })),
       pluck(0)
     );
   }
@@ -83,7 +85,9 @@ export class CollectorService {
     );
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
-    return new Proof(assets, truth, signatures);
+    const proof = new Proof(assets, truth, signatures);
+    this.proofRepository.add(proof);
+    return proof;
   }
 
   private async collectTruth(assets: Assets): Promise<Truth> {

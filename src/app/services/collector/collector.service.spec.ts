@@ -3,21 +3,28 @@ import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { MimeType } from 'src/app/utils/mime-type';
 import { AssetMeta, Assets, DefaultFactId, Facts, Signature } from '../repositories/proof/proof';
+import { ProofRepository } from '../repositories/proof/proof-repository.service';
 import { CollectorService } from './collector.service';
 import { FactsProvider } from './information/information-provider';
 import { SignatureProvider } from './signature/signature-provider';
 
 describe('CollectorService', () => {
   let service: CollectorService;
+  let proofRepositorySpy: jasmine.SpyObj<ProofRepository>;
 
   beforeEach(() => {
+    const spy = jasmine.createSpyObj('ProofRepository', ['add']);
     TestBed.configureTestingModule({
       imports: [
         SharedTestingModule,
         getTranslocoModule()
+      ],
+      providers: [
+        { provide: ProofRepository, useValue: spy }
       ]
     });
     service = TestBed.inject(CollectorService);
+    proofRepositorySpy = TestBed.inject(ProofRepository) as jasmine.SpyObj<ProofRepository>;
   });
 
   it('should be created', () => expect(service).toBeTruthy());
@@ -55,6 +62,12 @@ describe('CollectorService', () => {
     service.addSignatureProvider(mockSignatureProvider);
     const proof = await service.runAndStore(ASSETS);
     expect(proof.signatures).toEqual({ [mockSignatureProvider.id]: SIGNATURE });
+  });
+
+  it('should store proof with ProofRepository', async () => {
+    const proof = await service.runAndStore(ASSETS);
+
+    expect(proofRepositorySpy.add).toHaveBeenCalledWith(proof);
   });
 });
 
