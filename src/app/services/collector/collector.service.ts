@@ -9,7 +9,8 @@ import { NotificationService } from '../notification/notification.service';
 import { PublishersAlert } from '../publisher/publishers-alert/publishers-alert.service';
 import { ProofOld } from '../repositories/proof/old-proof';
 import { OldProofRepository } from '../repositories/proof/old-proof-repository.service';
-import { InformationProvider } from './information/information-provider';
+import { Assets, Proof, Truth } from '../repositories/proof/proof';
+import { InformationProvider, OldInformationProvider } from './information/information-provider';
 import { SignatureProvider } from './signature/signature-provider';
 
 @Injectable({
@@ -17,8 +18,9 @@ import { SignatureProvider } from './signature/signature-provider';
 })
 export class CollectorService {
 
+  private readonly oldInformationProviders = new Set<OldInformationProvider>();
+  private readonly oldSignatureProviders = new Set<SignatureProvider>();
   private readonly informationProviders = new Set<InformationProvider>();
-  private readonly signatureProviders = new Set<SignatureProvider>();
 
   constructor(
     private readonly proofRepository: OldProofRepository,
@@ -54,13 +56,13 @@ export class CollectorService {
       this.translocoService.translate('collectingProof'),
       this.translocoService.translate('collectingInformation')
     );
-    return forkJoinWithDefault([...this.informationProviders].map(provider => provider.collectAndStore$(proof))).pipe(
+    return forkJoinWithDefault([...this.oldInformationProviders].map(provider => provider.collectAndStore$(proof))).pipe(
       tap(_ => this.notificationService.notify(
         notificationId,
         this.translocoService.translate('collectingProof'),
         this.translocoService.translate('signingProof')
       )),
-      switchMapTo(forkJoinWithDefault([...this.signatureProviders].map(provider => provider.signAndStore$(proof)))),
+      switchMapTo(forkJoinWithDefault([...this.oldSignatureProviders].map(provider => provider.signAndStore$(proof)))),
       tap(_ => this.notificationService.cancel(notificationId)),
       catchError(error => {
         this.notificationService.notifyError(notificationId, error);
@@ -70,19 +72,45 @@ export class CollectorService {
     );
   }
 
-  addInformationProvider(...providers: InformationProvider[]) {
-    providers.forEach(provider => this.informationProviders.add(provider));
+  async runAndStore(assets: Assets) {
+    const notificationId = this.notificationService.createNotificationId();
+    this.notificationService.notify(
+      notificationId,
+      this.translocoService.translate('collectingProof'),
+      this.translocoService.translate('collectingInformation')
+    );
+    const truth = await this.collectTruth(assets);
+    return new Proof(assets, truth, {});
   }
 
-  removeInformationProvider(...providers: InformationProvider[]) {
-    providers.forEach(provider => this.informationProviders.delete(provider));
+  private async collectTruth(assets: Assets): Promise<Truth> {
+    return {
+      timestamp: Date.now(),
+      providers: Object.fromEntries(
+        await Promise.all([...this.informationProviders].map(
+          async (provider) => [provider.id, await provider.provide(assets)]
+        ))
+      )
+    };
   }
 
-  addSignatureProvider(...providers: SignatureProvider[]) {
-    providers.forEach(provider => this.signatureProviders.add(provider));
+  addInformationProvider(provider: InformationProvider) { this.informationProviders.add(provider); }
+
+  removeInformationProvider(provider: InformationProvider) { this.informationProviders.delete(provider); }
+
+  oldAddInformationProvider(...providers: OldInformationProvider[]) {
+    providers.forEach(provider => this.oldInformationProviders.add(provider));
   }
 
-  removeSignatureProvider(...providers: SignatureProvider[]) {
-    providers.forEach(provider => this.signatureProviders.delete(provider));
+  oldRemoveInformationProvider(...providers: OldInformationProvider[]) {
+    providers.forEach(provider => this.oldInformationProviders.delete(provider));
+  }
+
+  oldAddSignatureProvider(...providers: SignatureProvider[]) {
+    providers.forEach(provider => this.oldSignatureProviders.add(provider));
+  }
+
+  oldRemoveSignatureProvider(...providers: SignatureProvider[]) {
+    providers.forEach(provider => this.oldSignatureProviders.delete(provider));
   }
 }

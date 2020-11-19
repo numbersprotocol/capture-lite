@@ -76,10 +76,10 @@ export class AppComponent {
 
   initializeCollector() {
     WebCryptoApiProvider.initialize$().pipe(untilDestroyed(this)).subscribe();
-    this.collectorService.addInformationProvider(
+    this.collectorService.oldAddInformationProvider(
       new CapacitorProvider(this.informationRepository, this.translocoService)
     );
-    this.collectorService.addSignatureProvider(
+    this.collectorService.oldAddSignatureProvider(
       new WebCryptoApiProvider(this.signatureRepository, this.serializationService)
     );
   }

@@ -12,7 +12,7 @@ const imageBlobReduce = ImageBlobReduce();
  * - Easy to serialize and deserialize for data persistence and interchange.
  * - Bundle all immutable information.
  * - (TODO) GETTERs might NOT good idea as it might trigger infinite loop with Angular change detection
- * - (TODO) Check if proof.assets has image. If true, generate single thumb. (Should We Cache?)
+ * - Check if proof.assets has image. If true, generate single thumb. (Should We Cache?)
  * - Generate ID from hash of stringified. (Should We Cache?)
  */
 export class Proof {
@@ -50,9 +50,9 @@ export class Proof {
 
   async getThumbnailDataUrl() {
     const thumbnailSize = 200;
-    const imageAsset = Object.values(this.assets).find(asset => asset.mimeType.startsWith('image'));
+    const imageAsset = Object.keys(this.assets).find(asset => this.assets[asset].mimeType.startsWith('image'));
     if (imageAsset === undefined) { return undefined; }
-    const blob = await dataUrlWithBase64ToBlob$(`data:${imageAsset.mimeType};base64,${imageAsset.base64}`).toPromise();
+    const blob = await dataUrlWithBase64ToBlob$(`data:${this.assets[imageAsset].mimeType};base64,${imageAsset}`).toPromise();
     const thumbnailBlob = await imageBlobReduce.toBlob(blob, { max: thumbnailSize });
     return blobToDataUrlWithBase64$(thumbnailBlob).toPromise();
   }
@@ -91,10 +91,9 @@ export class Proof {
   }
 }
 
-export interface Assets { [hash: string]: Asset; }
+export interface Assets { [base64: string]: AssetMeta; }
 
-export interface Asset {
-  readonly base64: string;
+export interface AssetMeta {
   readonly mimeType: MimeType;
 }
 
@@ -103,9 +102,9 @@ export interface Truth {
   readonly providers: TruthProviders;
 }
 
-interface TruthProviders { [id: string]: Fact; }
+interface TruthProviders { [id: string]: Facts; }
 
-type Fact = { [id in DefaultFactId | string]?: string | number | boolean; };
+export type Facts = { [id in DefaultFactId | string]?: string | number | boolean; };
 
 export const enum DefaultFactId {
   DEVICE_NAME = 'DEVICE_NAME',

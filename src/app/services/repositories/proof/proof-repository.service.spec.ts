@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 import { MimeType } from 'src/app/utils/mime-type';
-import { Asset, Assets, DefaultFactId, Proof, Signatures, Truth } from './proof';
+import { AssetMeta, Assets, DefaultFactId, Proof, Signatures, Truth } from './proof';
 import { ProofRepository } from './proof-repository.service';
 
 describe('ProofRepository', () => {
@@ -52,22 +52,14 @@ describe('ProofRepository', () => {
   });
 });
 
-const ASSET1_HASH = '0e87c3cdb045ae9c4a10f63cc615ee4bbf0f2ff9dca6201f045a4cb276cf3122';
 const ASSET1_MIMETYPE: MimeType = 'image/png';
-const ASSET1_BINARY = 'iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAABAaVRYdENyZWF0aW9uIFRpbWUAAAAAADIwMjDlubTljYHkuIDmnIgxMOaXpSAo6YCx5LqMKSAyMOaZgjU55YiGMzfnp5JnJvHNAAAAFUlEQVQImWM0MTH5z4AFMGETxCsBAHRhAaHOZzVQAAAAAElFTkSuQmCC';
-const ASSET1: Asset = {
-  base64: ASSET1_BINARY,
-  mimeType: ASSET1_MIMETYPE
-};
-const ASSET2_HASH = '6cb481cace19b70b1a2b927c4d3c504de810cba6f82c5372e58aee9259ba68d3';
+const ASSET1_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAABAaVRYdENyZWF0aW9uIFRpbWUAAAAAADIwMjDlubTljYHkuIDmnIgxMOaXpSAo6YCx5LqMKSAyMOaZgjU55YiGMzfnp5JnJvHNAAAAFUlEQVQImWM0MTH5z4AFMGETxCsBAHRhAaHOZzVQAAAAAElFTkSuQmCC';
+const ASSET1: AssetMeta = { mimeType: ASSET1_MIMETYPE };
 const ASSET2_MIMETYPE: MimeType = 'image/png';
-const ASSET2_BINARY = 'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABHNCSVQICAgIfAhkiAAAABZJREFUCJlj/Pnz538GJMDEgAYICwAAAbkD8p660MIAAAAASUVORK5CYII=';
-const ASSET2: Asset = {
-  base64: ASSET2_BINARY,
-  mimeType: ASSET2_MIMETYPE
-};
-const PROOF1_ASSETS: Assets = { [ASSET1_HASH]: ASSET1 };
-const PROOF2_ASSETS: Assets = { [ASSET2_HASH]: ASSET2 };
+const ASSET2_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABHNCSVQICAgIfAhkiAAAABZJREFUCJlj/Pnz538GJMDEgAYICwAAAbkD8p660MIAAAAASUVORK5CYII=';
+const ASSET2: AssetMeta = { mimeType: ASSET2_MIMETYPE };
+const PROOF1_ASSETS: Assets = { [ASSET1_BASE64]: ASSET1 };
+const PROOF2_ASSETS: Assets = { [ASSET2_BASE64]: ASSET2 };
 const INFO_SNAPSHOT = 'INFO_SNAPSHOT';
 const CAPACITOR = 'CAPACITOR';
 const GEOLOCATION_LATITUDE1 = 22.917923;

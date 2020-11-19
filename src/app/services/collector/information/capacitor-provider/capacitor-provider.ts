@@ -6,7 +6,7 @@ import { Importance, Information, InformationType } from 'src/app/services/repos
 import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
 import { ProofOld } from 'src/app/services/repositories/proof/old-proof';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
-import { InformationProvider } from '../information-provider';
+import { OldInformationProvider } from '../information-provider';
 
 const { Device, Geolocation } = Plugins;
 
@@ -16,7 +16,7 @@ const enum PrefKeys {
   CollectLocationInfo = 'collectLocationInfo'
 }
 
-export class CapacitorProvider extends InformationProvider {
+export class CapacitorProvider extends OldInformationProvider {
 
   static readonly ID = 'capacitor';
   readonly id = CapacitorProvider.ID;

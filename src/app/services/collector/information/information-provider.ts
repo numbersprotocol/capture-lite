@@ -3,8 +3,9 @@ import { switchMap } from 'rxjs/operators';
 import { Information } from '../../repositories/information/information';
 import { InformationRepository } from '../../repositories/information/information-repository.service';
 import { ProofOld } from '../../repositories/proof/old-proof';
+import { Assets, Facts } from '../../repositories/proof/proof';
 
-export abstract class InformationProvider {
+export abstract class OldInformationProvider {
 
   abstract readonly id: string;
 
@@ -19,4 +20,9 @@ export abstract class InformationProvider {
   }
 
   protected abstract provide$(proof: ProofOld): Observable<Information[]>;
+}
+
+export interface InformationProvider {
+  readonly id: string;
+  provide(assets: Assets): Promise<Facts>;
 }

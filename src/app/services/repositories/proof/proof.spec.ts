@@ -1,6 +1,6 @@
 import { verifyWithSha256AndEcdsa$ } from 'src/app/utils/crypto/crypto';
 import { MimeType } from 'src/app/utils/mime-type';
-import { Asset, Assets, DefaultFactId, Proof, Signatures, Truth } from './proof';
+import { AssetMeta, Assets, DefaultFactId, Proof, Signatures, Truth } from './proof';
 
 describe('Proof', () => {
   let proof: Proof;
@@ -38,14 +38,14 @@ describe('Proof', () => {
     expect(await proof.getId()).toEqual(await another.getId());
   });
 
-  it('should have thumbnail when its assets have binary images', async () => {
+  it('should have thumbnail when its assets have images', async () => {
     proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     expect(await proof.getThumbnailDataUrl()).toBeTruthy();
   });
 
   it('should not have thumbnail when its assets do not have image', async () => {
     proof = new Proof(
-      { [ASSET1_HASH]: { base64: 'aGVsbG8K', mimeType: 'application/octet-stream' } },
+      { aGVsbG8K: { mimeType: 'application/octet-stream' } },
       TRUTH,
       SIGNATURES_VALID
     );
@@ -105,11 +105,8 @@ describe('Proof', () => {
   it('should stringify to ordered JSON string', () => {
     proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
     const ASSETS_DIFFERENT_ORDER: Assets = {
-      [ASSET2_HASH]: ASSET2,
-      [ASSET1_HASH]: {
-        mimeType: ASSET1_MIMETYPE,
-        base64: ASSET1_BINARY
-      }
+      [ASSET2_BASE64]: ASSET2_META,
+      [ASSET1_BASE64]: { mimeType: ASSET1_MIMETYPE }
     };
     const TRUTH_DIFFERENT_ORDER: Truth = {
       providers: {
@@ -156,23 +153,15 @@ describe('Proof', () => {
   });
 });
 
-const ASSET1_HASH = '0e87c3cdb045ae9c4a10f63cc615ee4bbf0f2ff9dca6201f045a4cb276cf3122';
 const ASSET1_MIMETYPE: MimeType = 'image/png';
-const ASSET1_BINARY = 'iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAABAaVRYdENyZWF0aW9uIFRpbWUAAAAAADIwMjDlubTljYHkuIDmnIgxMOaXpSAo6YCx5LqMKSAyMOaZgjU55YiGMzfnp5JnJvHNAAAAFUlEQVQImWM0MTH5z4AFMGETxCsBAHRhAaHOZzVQAAAAAElFTkSuQmCC';
-const ASSET1: Asset = {
-  base64: ASSET1_BINARY,
-  mimeType: ASSET1_MIMETYPE
-};
-const ASSET2_HASH = '6cb481cace19b70b1a2b927c4d3c504de810cba6f82c5372e58aee9259ba68d3';
+const ASSET1_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAABAaVRYdENyZWF0aW9uIFRpbWUAAAAAADIwMjDlubTljYHkuIDmnIgxMOaXpSAo6YCx5LqMKSAyMOaZgjU55YiGMzfnp5JnJvHNAAAAFUlEQVQImWM0MTH5z4AFMGETxCsBAHRhAaHOZzVQAAAAAElFTkSuQmCC';
+const ASSET1_META: AssetMeta = { mimeType: ASSET1_MIMETYPE };
 const ASSET2_MIMETYPE: MimeType = 'image/png';
-const ASSET2_BINARY = 'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABHNCSVQICAgIfAhkiAAAABZJREFUCJlj/Pnz538GJMDEgAYICwAAAbkD8p660MIAAAAASUVORK5CYII=';
-const ASSET2: Asset = {
-  base64: ASSET2_BINARY,
-  mimeType: ASSET2_MIMETYPE
-};
+const ASSET2_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABHNCSVQICAgIfAhkiAAAABZJREFUCJlj/Pnz538GJMDEgAYICwAAAbkD8p660MIAAAAASUVORK5CYII=';
+const ASSET2_META: AssetMeta = { mimeType: ASSET2_MIMETYPE };
 const ASSETS: Assets = {
-  [ASSET1_HASH]: ASSET1,
-  [ASSET2_HASH]: ASSET2
+  [ASSET1_BASE64]: ASSET1_META,
+  [ASSET2_BASE64]: ASSET2_META
 };
 const INFO_SNAPSHOT = 'INFO_SNAPSHOT';
 const CAPACITOR = 'CAPACITOR';
@@ -206,8 +195,8 @@ const TRUTH_EMPTY: Truth = {
   providers: {}
 };
 const SIGNATURE_PROVIDER_ID = 'CAPTURE';
-const VALID_SIGNATURE = '7163c668f0a0210b2406045eb42c5e4c9cdc2bb5904dd852813fcb3aebeb6fafa1e3af6213724764b819f0240587f5fccfadc90b537f6c4b4948801c63331c6d';
-const PUBLIC_KEY = '3059301306072a8648ce3d020106082a8648ce3d0301070342000456103d481de5f8dfc854adfc4b6441d03a83f3689ac9ac85cd570293a69c321a6c11c3481db320a186c546dbc3aae62ee7783a13a7fde3e0d1f55fa0d1d79981';
+const VALID_SIGNATURE = '575cbd72438eec799ffc5d78b45d968b65fd4597744d2127cd21556ceb63dff4a94f409d87de8d1f554025efdf56b8445d8d18e661b79754a25f45d05f4e26ac';
+const PUBLIC_KEY = '3059301306072a8648ce3d020106082a8648ce3d03010703420004bc23d419027e59bf1eb94c18bfa4ab5fb6ca8ae83c94dbac5bfdfac39ac8ae16484e23b4d522906c4cd8c7cb1a34cd820fb8d065e1b32c8a28320a68fff243f8';
 const SIGNATURES_VALID: Signatures = {
   [SIGNATURE_PROVIDER_ID]: {
     signature: VALID_SIGNATURE,
