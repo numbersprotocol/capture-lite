@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { MimeType } from 'src/app/utils/mime-type';
-import { AssetMeta, Assets, DefaultFactId, Facts, Signature, SignedTarget } from '../repositories/proof/proof';
+import { AssetMeta, Assets, DefaultFactId, Facts, Signature } from '../repositories/proof/proof';
 import { CollectorService } from './collector.service';
 import { FactsProvider } from './information/information-provider';
 import { SignatureProvider } from './signature/signature-provider';
@@ -93,7 +93,7 @@ const SIGNATURE: Signature = {
 };
 class MockSignatureProvider implements SignatureProvider {
   readonly id = name;
-  async provide(_: SignedTarget) { return SIGNATURE; }
+  async provide(_: string) { return SIGNATURE; }
 }
 
 const mockSignatureProvider = new MockSignatureProvider();

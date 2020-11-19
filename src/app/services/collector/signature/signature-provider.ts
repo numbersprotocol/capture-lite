@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { pluck, switchMap } from 'rxjs/operators';
 import { ProofOld } from '../../repositories/proof/old-proof';
-import { Signature, SignedTarget } from '../../repositories/proof/proof';
+import { Signature } from '../../repositories/proof/proof';
 import { OldSignature } from '../../repositories/signature/signature';
 import { SignatureRepository } from '../../repositories/signature/signature-repository.service';
 import { SerializationService } from '../../serialization/serialization.service';
@@ -27,5 +27,5 @@ export abstract class OldSignatureProvider {
 
 export interface SignatureProvider {
   readonly id: string;
-  provide(signedTarget: SignedTarget): Promise<Signature>;
+  provide(serializedSortedSignTargets: string): Promise<Signature>;
 }

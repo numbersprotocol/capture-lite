@@ -1,7 +1,7 @@
 // @ts-ignore
 import ImageBlobReduce from 'image-blob-reduce';
-import { OrderedMap } from 'immutable';
 import { blobToDataUrlWithBase64$, dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
+import { sortObjectDeeplyByKey } from 'src/app/utils/immutable/immutable';
 import { sha256WithString$ } from '../../../utils/crypto/crypto';
 import { MimeType } from '../../../utils/mime-type';
 
@@ -65,24 +65,18 @@ export class Proof {
       truth: this.truth,
       signatures: this.signatures
     };
-    return JSON.stringify(this.sortObjectDeeplyByKey(proofProperties).toJSON());
-  }
-
-  private sortObjectDeeplyByKey(map: { [key: string]: any; }): OrderedMap<string, any> {
-    return OrderedMap(map)
-      .sortBy((_, key) => key)
-      .map(value => value instanceof Object ? this.sortObjectDeeplyByKey(value) : value);
+    return JSON.stringify(sortObjectDeeplyByKey(proofProperties as any).toJSON());
   }
 
   async isVerified() {
-    const signedTarget: SignedTarget = {
+    const signedTarget: SignedTargets = {
       assets: this.assets,
       truth: this.truth
     };
-    const serializedSignedTarget = JSON.stringify(this.sortObjectDeeplyByKey(signedTarget).toJSON());
+    const serializedSortedSignedTargets = JSON.stringify(sortObjectDeeplyByKey(signedTarget as any).toJSON());
     const results = await Promise.all(Object.entries(this.signatures)
       .map(([id, signature]) => Proof.signatureProviders.get(id)?.verify(
-        serializedSignedTarget,
+        serializedSortedSignedTargets,
         signature.signature,
         signature.publicKey
       ))
@@ -125,7 +119,7 @@ interface SerializedProof {
   signatures: Signatures;
 }
 
-export type SignedTarget = Pick<SerializedProof, 'assets' | 'truth'>;
+export type SignedTargets = Pick<SerializedProof, 'assets' | 'truth'>;
 
 interface SignatureVerifier {
   verify(message: string, signature: string, publicKey: string): boolean | Promise<boolean>;

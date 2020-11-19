@@ -3,13 +3,14 @@ import { TranslocoService } from '@ngneat/transloco';
 import { EMPTY } from 'rxjs';
 import { catchError, concatMap, map, mapTo, pluck, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { fileNameWithoutExtension } from 'src/app/utils/file/file';
+import { sortObjectDeeplyByKey } from 'src/app/utils/immutable/immutable';
 import { MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { NotificationService } from '../notification/notification.service';
 import { PublishersAlert } from '../publisher/publishers-alert/publishers-alert.service';
 import { ProofOld } from '../repositories/proof/old-proof';
 import { OldProofRepository } from '../repositories/proof/old-proof-repository.service';
-import { Assets, Proof, SignedTarget, Truth } from '../repositories/proof/proof';
+import { Assets, Proof, Signatures, SignedTargets, Truth } from '../repositories/proof/proof';
 import { FactsProvider, OldInformationProvider } from './information/information-provider';
 import { OldSignatureProvider, SignatureProvider } from './signature/signature-provider';
 
@@ -82,7 +83,7 @@ export class CollectorService {
     );
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
-    return new Proof(assets, truth, {});
+    return new Proof(assets, truth, signatures);
   }
 
   private async collectTruth(assets: Assets): Promise<Truth> {
@@ -96,7 +97,14 @@ export class CollectorService {
     };
   }
 
-  private async signTargets(target: SignedTarget) { }
+  private async signTargets(target: SignedTargets): Promise<Signatures> {
+    const serializedSortedSignTargets = JSON.stringify(sortObjectDeeplyByKey(target as any).toJSON());
+    return Object.fromEntries(
+      await Promise.all([...this.signatureProviders].map(
+        async (provider) => [provider.id, await provider.provide(serializedSortedSignTargets)]
+      ))
+    );
+  }
 
   addFactsProvider(provider: FactsProvider) { this.factsProviders.add(provider); }
 
