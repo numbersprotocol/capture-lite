@@ -114,7 +114,7 @@ export const enum DefaultFactId {
 
 export interface Signatures { [id: string]: Signature; }
 
-interface Signature {
+export interface Signature {
   readonly signature: string;
   readonly publicKey: string;
 }
@@ -125,7 +125,7 @@ interface SerializedProof {
   signatures: Signatures;
 }
 
-type SignedTarget = Pick<SerializedProof, 'assets' | 'truth'>;
+export type SignedTarget = Pick<SerializedProof, 'assets' | 'truth'>;
 
 interface SignatureVerifier {
   verify(message: string, signature: string, publicKey: string): boolean | Promise<boolean>;

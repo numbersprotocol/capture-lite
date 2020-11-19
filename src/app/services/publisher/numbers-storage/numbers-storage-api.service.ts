@@ -6,7 +6,7 @@ import { dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { secret } from '../../../../environments/secret';
 import { ProofOld } from '../../repositories/proof/old-proof';
-import { Signature } from '../../repositories/signature/signature';
+import { OldSignature } from '../../repositories/signature/signature';
 import { SerializationService } from '../../serialization/serialization.service';
 import { Asset } from './data/asset/asset';
 
@@ -105,7 +105,7 @@ export class NumbersStorageApi {
     proof: ProofOld,
     targetProvider: TargetProvider,
     caption: string,
-    signatures: Signature[],
+    signatures: OldSignature[],
     tag: string
   ) {
     return this.getHttpHeadersWithAuthToken$().pipe(

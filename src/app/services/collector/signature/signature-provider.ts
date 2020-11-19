@@ -1,11 +1,11 @@
 import { Observable } from 'rxjs';
 import { pluck, switchMap } from 'rxjs/operators';
 import { ProofOld } from '../../repositories/proof/old-proof';
-import { Signature } from '../../repositories/signature/signature';
+import { Signature, SignedTarget } from '../../repositories/proof/proof';
+import { OldSignature } from '../../repositories/signature/signature';
 import { SignatureRepository } from '../../repositories/signature/signature-repository.service';
 import { SerializationService } from '../../serialization/serialization.service';
-
-export abstract class SignatureProvider {
+export abstract class OldSignatureProvider {
 
   abstract readonly id: string;
 
@@ -22,5 +22,10 @@ export abstract class SignatureProvider {
     );
   }
 
-  protected abstract provide$(proof: ProofOld, serialized: string): Observable<Signature>;
+  protected abstract provide$(proof: ProofOld, serialized: string): Observable<OldSignature>;
+}
+
+export interface SignatureProvider {
+  readonly id: string;
+  provide(signedTarget: SignedTarget): Promise<Signature>;
 }

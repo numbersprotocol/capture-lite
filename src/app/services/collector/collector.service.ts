@@ -9,9 +9,9 @@ import { NotificationService } from '../notification/notification.service';
 import { PublishersAlert } from '../publisher/publishers-alert/publishers-alert.service';
 import { ProofOld } from '../repositories/proof/old-proof';
 import { OldProofRepository } from '../repositories/proof/old-proof-repository.service';
-import { Assets, Proof, Truth } from '../repositories/proof/proof';
-import { InformationProvider, OldInformationProvider } from './information/information-provider';
-import { SignatureProvider } from './signature/signature-provider';
+import { Assets, Proof, SignedTarget, Truth } from '../repositories/proof/proof';
+import { FactsProvider, OldInformationProvider } from './information/information-provider';
+import { OldSignatureProvider, SignatureProvider } from './signature/signature-provider';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,9 @@ import { SignatureProvider } from './signature/signature-provider';
 export class CollectorService {
 
   private readonly oldInformationProviders = new Set<OldInformationProvider>();
-  private readonly oldSignatureProviders = new Set<SignatureProvider>();
-  private readonly informationProviders = new Set<InformationProvider>();
+  private readonly oldSignatureProviders = new Set<OldSignatureProvider>();
+  private readonly factsProviders = new Set<FactsProvider>();
+  private readonly signatureProviders = new Set<SignatureProvider>();
 
   constructor(
     private readonly proofRepository: OldProofRepository,
@@ -80,6 +81,7 @@ export class CollectorService {
       this.translocoService.translate('collectingInformation')
     );
     const truth = await this.collectTruth(assets);
+    const signatures = await this.signTargets({ assets, truth });
     return new Proof(assets, truth, {});
   }
 
@@ -87,16 +89,22 @@ export class CollectorService {
     return {
       timestamp: Date.now(),
       providers: Object.fromEntries(
-        await Promise.all([...this.informationProviders].map(
+        await Promise.all([...this.factsProviders].map(
           async (provider) => [provider.id, await provider.provide(assets)]
         ))
       )
     };
   }
 
-  addInformationProvider(provider: InformationProvider) { this.informationProviders.add(provider); }
+  private async signTargets(target: SignedTarget) { }
 
-  removeInformationProvider(provider: InformationProvider) { this.informationProviders.delete(provider); }
+  addFactsProvider(provider: FactsProvider) { this.factsProviders.add(provider); }
+
+  removeFactsProvider(provider: FactsProvider) { this.factsProviders.delete(provider); }
+
+  addSignatureProvider(provider: SignatureProvider) { this.signatureProviders.add(provider); }
+
+  removeSignatureProvider(provider: SignatureProvider) { this.signatureProviders.delete(provider); }
 
   oldAddInformationProvider(...providers: OldInformationProvider[]) {
     providers.forEach(provider => this.oldInformationProviders.add(provider));
@@ -106,11 +114,11 @@ export class CollectorService {
     providers.forEach(provider => this.oldInformationProviders.delete(provider));
   }
 
-  oldAddSignatureProvider(...providers: SignatureProvider[]) {
+  oldAddSignatureProvider(...providers: OldSignatureProvider[]) {
     providers.forEach(provider => this.oldSignatureProviders.add(provider));
   }
 
-  oldRemoveSignatureProvider(...providers: SignatureProvider[]) {
+  oldRemoveSignatureProvider(...providers: OldSignatureProvider[]) {
     providers.forEach(provider => this.oldSignatureProviders.delete(provider));
   }
 }

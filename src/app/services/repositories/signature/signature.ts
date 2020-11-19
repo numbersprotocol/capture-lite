@@ -1,6 +1,6 @@
 import { Tuple } from '../../database/table/table';
 
-export interface Signature extends Tuple {
+export interface OldSignature extends Tuple {
   readonly proofHash: string;
   readonly provider: string;
   readonly signature: string;

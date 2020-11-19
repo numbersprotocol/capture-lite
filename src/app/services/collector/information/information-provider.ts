@@ -22,7 +22,7 @@ export abstract class OldInformationProvider {
   protected abstract provide$(proof: ProofOld): Observable<Information[]>;
 }
 
-export interface InformationProvider {
+export interface FactsProvider {
   readonly id: string;
   provide(assets: Assets): Promise<Facts>;
 }

@@ -3,7 +3,7 @@ import { defer } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
 import { ProofOld } from '../proof/old-proof';
-import { Signature } from './signature';
+import { OldSignature } from './signature';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ import { Signature } from './signature';
 export class SignatureRepository {
 
   private readonly id = 'signature';
-  private readonly table = this.database.getTable<Signature>(this.id);
+  private readonly table = this.database.getTable<OldSignature>(this.id);
 
   constructor(
     private readonly database: Database
@@ -23,7 +23,7 @@ export class SignatureRepository {
     );
   }
 
-  add$(...signatures: Signature[]) {
+  add$(...signatures: OldSignature[]) {
     return defer(() => this.table.insert(signatures));
   }
 
@@ -34,7 +34,7 @@ export class SignatureRepository {
     );
   }
 
-  remove$(...signatures: Signature[]) {
+  remove$(...signatures: OldSignature[]) {
     return defer(() => this.table.delete(signatures));
   }
 }

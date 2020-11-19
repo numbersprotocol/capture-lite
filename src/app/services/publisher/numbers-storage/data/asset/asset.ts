@@ -1,5 +1,5 @@
 import { Tuple } from 'src/app/services/database/table/table';
-import { Signature } from 'src/app/services/repositories/signature/signature';
+import { OldSignature } from 'src/app/services/repositories/signature/signature';
 import { SortedProofInformation } from 'src/app/services/serialization/serialization.service';
 
 export interface Asset extends Tuple {
@@ -9,7 +9,7 @@ export interface Asset extends Tuple {
   readonly asset_file: string;
   readonly asset_file_thumbnail: string;
   readonly information: SortedProofInformation;
-  readonly signature: Signature[];
+  readonly signature: OldSignature[];
   readonly caption: string;
   readonly uploaded_at: string;
   readonly is_original_owner: boolean;

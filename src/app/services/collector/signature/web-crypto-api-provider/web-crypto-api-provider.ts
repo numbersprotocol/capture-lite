@@ -1,10 +1,10 @@
 import { Observable, of, zip } from 'rxjs';
 import { filter, first, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { ProofOld } from 'src/app/services/repositories/proof/old-proof';
-import { Signature } from 'src/app/services/repositories/signature/signature';
+import { OldSignature } from 'src/app/services/repositories/signature/signature';
 import { createEcKeyPair$, signWithSha256AndEcdsa$ } from 'src/app/utils/crypto/crypto';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
-import { SignatureProvider } from '../signature-provider';
+import { OldSignatureProvider } from '../signature-provider';
 
 const preferences = PreferenceManager.WEB_CRYPTO_API_PROVIDER_PREF;
 const enum PrefKeys {
@@ -12,7 +12,7 @@ const enum PrefKeys {
   PrivateKey = 'privateKey'
 }
 
-export class WebCryptoApiProvider extends SignatureProvider {
+export class WebCryptoApiProvider extends OldSignatureProvider {
 
   static readonly ID = 'web-crypto-api';
   readonly id = WebCryptoApiProvider.ID;
@@ -40,7 +40,7 @@ export class WebCryptoApiProvider extends SignatureProvider {
     return preferences.getString$(PrefKeys.PrivateKey);
   }
 
-  protected provide$(proof: ProofOld, serialized: string): Observable<Signature> {
+  protected provide$(proof: ProofOld, serialized: string): Observable<OldSignature> {
     return WebCryptoApiProvider.getPrivateKey$().pipe(
       first(),
       switchMap(privateKeyHex => signWithSha256AndEcdsa$(serialized, privateKeyHex)),

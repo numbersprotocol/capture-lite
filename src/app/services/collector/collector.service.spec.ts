@@ -2,9 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { MimeType } from 'src/app/utils/mime-type';
-import { AssetMeta, Assets, DefaultFactId, Facts } from '../repositories/proof/proof';
+import { AssetMeta, Assets, DefaultFactId, Facts, Signature, SignedTarget } from '../repositories/proof/proof';
 import { CollectorService } from './collector.service';
-import { InformationProvider } from './information/information-provider';
+import { FactsProvider } from './information/information-provider';
+import { SignatureProvider } from './signature/signature-provider';
 
 describe('CollectorService', () => {
   let service: CollectorService;
@@ -26,19 +27,34 @@ describe('CollectorService', () => {
     expect(proof.assets).toEqual(ASSETS);
   });
 
-  it('should remove added information providers', async () => {
-    service.addInformationProvider(fakeInformationProvider);
-    service.removeInformationProvider(fakeInformationProvider);
+  it('should remove added truth providers', async () => {
+    service.addFactsProvider(mockFactsProvider);
+    service.removeFactsProvider(mockFactsProvider);
 
     const proof = await service.runAndStore(ASSETS);
 
     expect(proof.truth.providers).toEqual({});
   });
 
-  it('should get the stored proof with provided information', async () => {
-    service.addInformationProvider(fakeInformationProvider);
+  it('should remove added signature providers', async () => {
+    service.addSignatureProvider(mockSignatureProvider);
+    service.removeSignatureProvider(mockSignatureProvider);
+
     const proof = await service.runAndStore(ASSETS);
-    expect(proof.truth.providers).toEqual({ [fakeInformationProvider.id]: FACTS });
+
+    expect(proof.signatures).toEqual({});
+  });
+
+  it('should get the stored proof with provided facts', async () => {
+    service.addFactsProvider(mockFactsProvider);
+    const proof = await service.runAndStore(ASSETS);
+    expect(proof.truth.providers).toEqual({ [mockFactsProvider.id]: FACTS });
+  });
+
+  it('should get the stored proof with provided signature', async () => {
+    service.addSignatureProvider(mockSignatureProvider);
+    const proof = await service.runAndStore(ASSETS);
+    expect(proof.signatures).toEqual({ [mockSignatureProvider.id]: SIGNATURE });
   });
 });
 
@@ -62,9 +78,22 @@ const FACTS: Facts = {
   [DefaultFactId.DEVICE_NAME]: DEVICE_NAME_VALUE
 };
 
-class FakeInformationProvider implements InformationProvider {
+class MockFactsProvider implements FactsProvider {
   readonly id = name;
   async provide(_: Assets) { return FACTS; }
 }
 
-const fakeInformationProvider = new FakeInformationProvider();
+const mockFactsProvider = new MockFactsProvider();
+
+const SIGNATURE_VALUE = '575cbd72438eec799ffc5d78b45d968b65fd4597744d2127cd21556ceb63dff4a94f409d87de8d1f554025efdf56b8445d8d18e661b79754a25f45d05f4e26ac';
+const PUBLIC_KEY = '3059301306072a8648ce3d020106082a8648ce3d03010703420004bc23d419027e59bf1eb94c18bfa4ab5fb6ca8ae83c94dbac5bfdfac39ac8ae16484e23b4d522906c4cd8c7cb1a34cd820fb8d065e1b32c8a28320a68fff243f8';
+const SIGNATURE: Signature = {
+  signature: SIGNATURE_VALUE,
+  publicKey: PUBLIC_KEY
+};
+class MockSignatureProvider implements SignatureProvider {
+  readonly id = name;
+  async provide(_: SignedTarget) { return SIGNATURE; }
+}
+
+const mockSignatureProvider = new MockSignatureProvider();
