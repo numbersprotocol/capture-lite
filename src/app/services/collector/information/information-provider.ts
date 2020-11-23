@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Information } from '../../repositories/information/information';
-import { InformationRepository } from '../../repositories/information/information-repository.service';
-import { ProofOld } from '../../repositories/proof/old-proof';
+import { OldInformationRepository } from '../../repositories/information/information-repository.service';
+import { OldProof } from '../../repositories/proof/old-proof-adapter';
 import { Assets, Facts } from '../../repositories/proof/proof';
 
 export abstract class OldInformationProvider {
@@ -10,16 +10,16 @@ export abstract class OldInformationProvider {
   abstract readonly id: string;
 
   constructor(
-    private readonly informationRepository: InformationRepository
+    private readonly informationRepository: OldInformationRepository
   ) { }
 
-  collectAndStore$(proof: ProofOld) {
+  collectAndStore$(proof: OldProof) {
     return this.provide$(proof).pipe(
       switchMap(information => this.informationRepository.add$(...information))
     );
   }
 
-  protected abstract provide$(proof: ProofOld): Observable<Information[]>;
+  protected abstract provide$(proof: OldProof): Observable<Information[]>;
 }
 
 export interface FactsProvider {

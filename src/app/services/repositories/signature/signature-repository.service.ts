@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { defer } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
-import { ProofOld } from '../proof/old-proof';
+import { OldProof } from '../proof/old-proof-adapter';
 import { OldSignature } from './signature';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SignatureRepository {
+export class OldSignatureRepository {
 
   private readonly id = 'signature';
   private readonly table = this.database.getTable<OldSignature>(this.id);
@@ -17,7 +17,7 @@ export class SignatureRepository {
     private readonly database: Database
   ) { }
 
-  getByProof$(proof: ProofOld) {
+  getByProof$(proof: OldProof) {
     return this.table.queryAll$().pipe(
       map(signatures => signatures.filter(info => info.proofHash === proof.hash))
     );
@@ -27,7 +27,7 @@ export class SignatureRepository {
     return defer(() => this.table.insert(signatures));
   }
 
-  removeByProof$(proof: ProofOld) {
+  removeByProof$(proof: OldProof) {
     return this.getByProof$(proof).pipe(
       first(),
       switchMap(signatures => this.remove$(...signatures))

@@ -17,9 +17,9 @@ import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { CaptionRepository } from './services/repositories/caption/caption-repository.service';
-import { InformationRepository } from './services/repositories/information/information-repository.service';
+import { OldInformationRepository } from './services/repositories/information/information-repository.service';
 import { OldProofRepository } from './services/repositories/proof/old-proof-repository.service';
-import { SignatureRepository } from './services/repositories/signature/signature-repository.service';
+import { OldSignatureRepository } from './services/repositories/signature/signature-repository.service';
 import { SerializationService } from './services/serialization/serialization.service';
 import { fromExtension } from './utils/mime-type';
 
@@ -38,8 +38,8 @@ export class AppComponent {
     private readonly publishersAlert: PublishersAlert,
     private readonly serializationService: SerializationService,
     private readonly proofRepository: OldProofRepository,
-    private readonly informationRepository: InformationRepository,
-    private readonly signatureRepository: SignatureRepository,
+    private readonly informationRepository: OldInformationRepository,
+    private readonly signatureRepository: OldSignatureRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService,

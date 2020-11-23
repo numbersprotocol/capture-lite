@@ -13,7 +13,7 @@ import { CapacitorProvider } from 'src/app/services/collector/information/capaci
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { CaptionRepository } from 'src/app/services/repositories/caption/caption-repository.service';
-import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
+import { OldInformationRepository } from 'src/app/services/repositories/information/information-repository.service';
 import { OldProofRepository } from 'src/app/services/repositories/proof/old-proof-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 import { ContactSelectionDialogComponent, SelectedContact } from './contact-selection-dialog/contact-selection-dialog.component';
@@ -65,7 +65,7 @@ export class AssetPage {
     private readonly assetRepository: AssetRepository,
     private readonly proofRepository: OldProofRepository,
     private readonly captionRepository: CaptionRepository,
-    private readonly informationRepository: InformationRepository,
+    private readonly informationRepository: OldInformationRepository,
     private readonly blockingActionService: BlockingActionService,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,

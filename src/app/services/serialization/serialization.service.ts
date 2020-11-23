@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { first, map } from 'rxjs/operators';
 import { Tuple } from '../database/table/table';
 import { Importance, Information, InformationType } from '../repositories/information/information';
-import { InformationRepository } from '../repositories/information/information-repository.service';
-import { ProofOld } from '../repositories/proof/old-proof';
+import { OldInformationRepository } from '../repositories/information/information-repository.service';
+import { OldProof } from '../repositories/proof/old-proof-adapter';
 
 export type EssentialInformation = Pick<Information, 'provider' | 'name' | 'value'>;
 
 export interface SortedProofInformation extends Tuple {
-  readonly proof: ProofOld;
+  readonly proof: OldProof;
   readonly information: EssentialInformation[];
 }
 
@@ -18,16 +18,16 @@ export interface SortedProofInformation extends Tuple {
 export class SerializationService {
 
   constructor(
-    private readonly informationRepository: InformationRepository
+    private readonly informationRepository: OldInformationRepository
   ) { }
 
-  stringify$(proof: ProofOld) {
+  stringify$(proof: OldProof) {
     return this.createSortedProofInformation$(proof).pipe(
       map(sortedProofInformation => JSON.stringify(sortedProofInformation))
     );
   }
 
-  private createSortedProofInformation$(proof: ProofOld) {
+  private createSortedProofInformation$(proof: OldProof) {
     return this.informationRepository.getByProof$(proof).pipe(
       first(),
       map(informationList => {

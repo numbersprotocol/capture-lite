@@ -5,7 +5,7 @@ import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
 import { dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { secret } from '../../../../environments/secret';
-import { ProofOld } from '../../repositories/proof/old-proof';
+import { OldProof } from '../../repositories/proof/old-proof-adapter';
 import { OldSignature } from '../../repositories/signature/signature';
 import { SerializationService } from '../../serialization/serialization.service';
 import { Asset } from './data/asset/asset';
@@ -102,7 +102,7 @@ export class NumbersStorageApi {
 
   createAsset$(
     rawFileBase64: string,
-    proof: ProofOld,
+    proof: OldProof,
     targetProvider: TargetProvider,
     caption: string,
     signatures: OldSignature[],

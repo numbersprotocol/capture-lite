@@ -98,7 +98,7 @@ export interface Truth {
 
 interface TruthProviders { [id: string]: Facts; }
 
-export type Facts = { [id in DefaultFactId | string]?: string | number | boolean; };
+export type Facts = { [id in DefaultFactId | string]: string | number | boolean; };
 
 export const enum DefaultFactId {
   DEVICE_NAME = 'DEVICE_NAME',

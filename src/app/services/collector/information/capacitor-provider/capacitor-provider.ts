@@ -3,8 +3,8 @@ import { TranslocoService } from '@ngneat/transloco';
 import { defer, Observable, of, zip } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { Importance, Information, InformationType } from 'src/app/services/repositories/information/information';
-import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
-import { ProofOld } from 'src/app/services/repositories/proof/old-proof';
+import { OldInformationRepository } from 'src/app/services/repositories/information/information-repository.service';
+import { OldProof } from 'src/app/services/repositories/proof/old-proof-adapter';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { OldInformationProvider } from '../information-provider';
 
@@ -22,7 +22,7 @@ export class CapacitorProvider extends OldInformationProvider {
   readonly id = CapacitorProvider.ID;
 
   constructor(
-    informationRepository: InformationRepository,
+    informationRepository: OldInformationRepository,
     private readonly translocoService: TranslocoService
   ) {
     super(informationRepository);
@@ -44,7 +44,7 @@ export class CapacitorProvider extends OldInformationProvider {
     return preferences.setBoolean$(PrefKeys.CollectLocationInfo, enable);
   }
 
-  protected provide$(proof: ProofOld): Observable<Information[]> {
+  protected provide$(proof: OldProof): Observable<Information[]> {
     return zip(
       CapacitorProvider.isDeviceInfoCollectionEnabled$(),
       CapacitorProvider.isLocationInfoCollectionEnabled$()

@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { defer } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
-import { ProofOld } from '../proof/old-proof';
+import { OldProof } from '../proof/old-proof-adapter';
 import { Information } from './information';
 
 @Injectable({
   providedIn: 'root'
 })
-export class InformationRepository {
+export class OldInformationRepository {
 
   private readonly id = 'information';
   private readonly table = this.database.getTable<Information>(this.id);
@@ -17,7 +17,7 @@ export class InformationRepository {
     private readonly database: Database
   ) { }
 
-  getByProof$(proof: ProofOld) {
+  getByProof$(proof: OldProof) {
     return this.table.queryAll$().pipe(
       map(informationList => informationList.filter(info => info.proofHash === proof.hash))
     );
@@ -25,7 +25,7 @@ export class InformationRepository {
 
   add$(...information: Information[]) { return defer(() => this.table.insert(information)); }
 
-  removeByProof$(proof: ProofOld) {
+  removeByProof$(proof: OldProof) {
     return this.getByProof$(proof).pipe(
       first(),
       switchMap(informationList => this.remove$(...informationList))

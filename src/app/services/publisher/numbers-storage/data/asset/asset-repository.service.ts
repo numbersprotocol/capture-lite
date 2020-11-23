@@ -4,10 +4,10 @@ import { concatMap, concatMapTo, first, map } from 'rxjs/operators';
 import { Database } from 'src/app/services/database/database.service';
 import { CaptionRepository } from 'src/app/services/repositories/caption/caption-repository.service';
 import { Information } from 'src/app/services/repositories/information/information';
-import { InformationRepository } from 'src/app/services/repositories/information/information-repository.service';
-import { ProofOld } from 'src/app/services/repositories/proof/old-proof';
+import { OldInformationRepository } from 'src/app/services/repositories/information/information-repository.service';
+import { OldProof } from 'src/app/services/repositories/proof/old-proof-adapter';
 import { OldProofRepository } from 'src/app/services/repositories/proof/old-proof-repository.service';
-import { SignatureRepository } from 'src/app/services/repositories/signature/signature-repository.service';
+import { OldSignatureRepository } from 'src/app/services/repositories/signature/signature-repository.service';
 import { SerializationService } from 'src/app/services/serialization/serialization.service';
 import { blobToDataUrlWithBase64$ } from 'src/app/utils/encoding/encoding';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
@@ -27,8 +27,8 @@ export class AssetRepository {
     private readonly database: Database,
     private readonly numbersStorageApi: NumbersStorageApi,
     private readonly proofRepository: OldProofRepository,
-    private readonly informationRepository: InformationRepository,
-    private readonly signatureRepository: SignatureRepository,
+    private readonly informationRepository: OldInformationRepository,
+    private readonly signatureRepository: OldSignatureRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly serializationService: SerializationService
   ) { }
@@ -60,7 +60,7 @@ export class AssetRepository {
     );
   }
 
-  private addProofAndInformationFromParsedInformation$(parsed: { proof: ProofOld, information: Information[]; }) {
+  private addProofAndInformationFromParsedInformation$(parsed: { proof: OldProof, information: Information[]; }) {
     return this.proofRepository.add$(parsed.proof).pipe(
       concatMapTo(this.informationRepository.add$(...parsed.information))
     );

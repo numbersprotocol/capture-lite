@@ -8,7 +8,7 @@ import { MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 import { NotificationService } from '../notification/notification.service';
 import { PublishersAlert } from '../publisher/publishers-alert/publishers-alert.service';
-import { ProofOld } from '../repositories/proof/old-proof';
+import { OldProof } from '../repositories/proof/old-proof-adapter';
 import { OldProofRepository } from '../repositories/proof/old-proof-repository.service';
 import { Assets, Proof, Signatures, SignedTargets, Truth } from '../repositories/proof/proof';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
@@ -53,7 +53,7 @@ export class CollectorService {
     );
   }
 
-  private collectAndSign$(proof: ProofOld) {
+  private collectAndSign$(proof: OldProof) {
     const notificationId = this.notificationService.createNotificationId();
     this.notificationService.notify(
       notificationId,

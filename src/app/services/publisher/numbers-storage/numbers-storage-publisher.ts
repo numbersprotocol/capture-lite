@@ -3,9 +3,9 @@ import { Observable, zip } from 'rxjs';
 import { concatMap, first, mapTo } from 'rxjs/operators';
 import { NotificationService } from '../../notification/notification.service';
 import { CaptionRepository } from '../../repositories/caption/caption-repository.service';
-import { ProofOld } from '../../repositories/proof/old-proof';
+import { OldProof } from '../../repositories/proof/old-proof-adapter';
 import { OldProofRepository } from '../../repositories/proof/old-proof-repository.service';
-import { SignatureRepository } from '../../repositories/signature/signature-repository.service';
+import { OldSignatureRepository } from '../../repositories/signature/signature-repository.service';
 import { Publisher } from '../publisher';
 import { AssetRepository } from './data/asset/asset-repository.service';
 import { NumbersStorageApi, TargetProvider } from './numbers-storage-api.service';
@@ -19,8 +19,8 @@ export class NumbersStoragePublisher extends Publisher {
   constructor(
     translocoService: TranslocoService,
     notificationService: NotificationService,
-    private readonly proofRepository: OldProofRepository,
-    private readonly signatureRepository: SignatureRepository,
+    private readonly oldProofRepository: OldProofRepository,
+    private readonly signatureRepository: OldSignatureRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly numbersStorageApi: NumbersStorageApi,
     private readonly assetRepository: AssetRepository
@@ -32,9 +32,9 @@ export class NumbersStoragePublisher extends Publisher {
     return this.numbersStorageApi.isEnabled$();
   }
 
-  run$(proof: ProofOld): Observable<void> {
+  run$(proof: OldProof): Observable<void> {
     return zip(
-      this.proofRepository.getRawFile$(proof),
+      this.oldProofRepository.getRawFile$(proof),
       this.signatureRepository.getByProof$(proof),
       this.captionRepository.getByProof$(proof),
     ).pipe(

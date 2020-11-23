@@ -10,9 +10,9 @@ import { getExtension, MimeType } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
 import { Database } from '../../database/database.service';
 import { CaptionRepository } from '../caption/caption-repository.service';
-import { InformationRepository } from '../information/information-repository.service';
-import { SignatureRepository } from '../signature/signature-repository.service';
-import { ProofOld } from './old-proof';
+import { OldInformationRepository } from '../information/information-repository.service';
+import { OldSignatureRepository } from '../signature/signature-repository.service';
+import { OldProof } from './old-proof-adapter';
 
 const { Filesystem } = Plugins;
 
@@ -23,7 +23,7 @@ const { Filesystem } = Plugins;
 export class OldProofRepository {
 
   private readonly id = 'old-proof';
-  private readonly table = this.database.getTable<ProofOld>(this.id);
+  private readonly table = this.database.getTable<OldProof>(this.id);
   private readonly rawFileDir = FilesystemDirectory.Data;
   private readonly rawFileFolderName = 'raw';
   private readonly thumbnailFileDir = FilesystemDirectory.Data;
@@ -33,8 +33,8 @@ export class OldProofRepository {
   constructor(
     private readonly database: Database,
     private readonly captionRepository: CaptionRepository,
-    private readonly informationRepository: InformationRepository,
-    private readonly signatureRepository: SignatureRepository
+    private readonly oldInformationRepository: OldInformationRepository,
+    private readonly oldSignatureRepository: OldSignatureRepository
   ) { }
 
   getAll$() { return this.table.queryAll$(); }
@@ -45,15 +45,15 @@ export class OldProofRepository {
     );
   }
 
-  add$(...proofs: ProofOld[]) { return defer(() => this.table.insert(proofs)); }
+  add$(...proofs: OldProof[]) { return defer(() => this.table.insert(proofs)); }
 
-  remove$(...proofs: ProofOld[]) {
+  remove$(...proofs: OldProof[]) {
     return defer(() => this.table.delete(proofs)).pipe(
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.deleteRawFile$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.deleteThumbnail$(proof)))),
       switchMapTo(forkJoinWithDefault(proofs.map(proof => this.captionRepository.removeByProof$(proof)))),
-      switchMapTo(forkJoinWithDefault(proofs.map(proof => this.informationRepository.removeByProof$(proof)))),
-      switchMapTo(forkJoinWithDefault(proofs.map(proof => this.signatureRepository.removeByProof$(proof))))
+      switchMapTo(forkJoinWithDefault(proofs.map(proof => this.oldInformationRepository.removeByProof$(proof)))),
+      switchMapTo(forkJoinWithDefault(proofs.map(proof => this.oldSignatureRepository.removeByProof$(proof))))
     );
   }
 
@@ -64,7 +64,7 @@ export class OldProofRepository {
     );
   }
 
-  getRawFile$(proof: ProofOld) {
+  getRawFile$(proof: OldProof) {
     return defer(() => Filesystem.readFile({
       path: `${this.rawFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.rawFileDir
@@ -97,14 +97,14 @@ export class OldProofRepository {
     );
   }
 
-  private deleteRawFile$(proof: ProofOld) {
+  private deleteRawFile$(proof: OldProof) {
     return defer(() => Filesystem.deleteFile({
       path: `${this.rawFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.rawFileDir
     }));
   }
 
-  getThumbnail$(proof: ProofOld) {
+  getThumbnail$(proof: OldProof) {
     return defer(() => Filesystem.readFile({
       path: `${this.thumbnailFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.thumbnailFileDir
@@ -125,7 +125,7 @@ export class OldProofRepository {
     );
   }
 
-  private deleteThumbnail$(proof: ProofOld) {
+  private deleteThumbnail$(proof: OldProof) {
     return defer(() => Filesystem.deleteFile({
       path: `${this.thumbnailFileFolderName}/${proof.hash}.${getExtension(proof.mimeType)}`,
       directory: this.thumbnailFileDir
