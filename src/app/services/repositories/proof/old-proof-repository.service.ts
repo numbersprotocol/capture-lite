@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FilesystemDirectory, Plugins } from '@capacitor/core';
-// @ts-ignore
-import imageBlobReduce from 'image-blob-reduce';
+import ImageBlobReduce from 'image-blob-reduce';
 import { defer, zip } from 'rxjs';
 import { concatMap, map, pluck, switchMap, switchMapTo } from 'rxjs/operators';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
@@ -113,8 +112,8 @@ export class OldProofRepository {
 
   private generateAndSaveThumbnailFile$(rawBase64: string, mimeType: MimeType) {
     return dataUrlWithBase64ToBlob$(`data:${mimeType};base64,${rawBase64}`).pipe(
-      switchMap(rawImageBlob => imageBlobReduce().toBlob(rawImageBlob, { max: this.thumbnailSize })),
-      switchMap(thumbnailBlob => zip(blobToDataUrlWithBase64$(thumbnailBlob as Blob), sha256WithBase64$(rawBase64))),
+      switchMap(rawImageBlob => new ImageBlobReduce().toBlob(rawImageBlob, { max: this.thumbnailSize })),
+      switchMap(thumbnailBlob => zip(blobToDataUrlWithBase64$(thumbnailBlob), sha256WithBase64$(rawBase64))),
       switchMap(([thumbnailBase64, hash]) => Filesystem.writeFile({
         path: `${this.thumbnailFileFolderName}/${hash}.${getExtension(mimeType)}`,
         data: thumbnailBase64,

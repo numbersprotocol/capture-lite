@@ -1,11 +1,10 @@
-// @ts-ignore
 import ImageBlobReduce from 'image-blob-reduce';
 import { blobToDataUrlWithBase64$, dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { sortObjectDeeplyByKey } from 'src/app/utils/immutable/immutable';
 import { sha256WithString$ } from '../../../utils/crypto/crypto';
 import { MimeType } from '../../../utils/mime-type';
 
-const imageBlobReduce = ImageBlobReduce();
+const imageBlobReduce = new ImageBlobReduce();
 
 /**
  * - A box containing self-verifiable data.
