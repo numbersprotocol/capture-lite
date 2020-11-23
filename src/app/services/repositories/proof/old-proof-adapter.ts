@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { flow, groupBy, mapValues } from 'lodash/fp';
 import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
 import { blobToDataUrlWithBase64$ } from 'src/app/utils/encoding/encoding';
 import { MimeType } from 'src/app/utils/mime-type';
@@ -63,12 +63,15 @@ export async function getProof(
   oldSignatures: OldSignature[]): Promise<Proof> {
   const base64 = (await blobToDataUrlWithBase64$(raw).toPromise()).split(',')[1];
   const groupedByProvider = groupObjectsBy(sortedProofInformation.information, 'provider');
-  const providers = _.mapValues(groupedByProvider, values =>
-    _.mapValues(groupObjectsBy(values, 'name'), (v: { value: string; }[]) => toNumberOrBoolean(v[0].value))
-  );
-  const signatures = _.mapValues(groupObjectsBy(oldSignatures, 'provider'), (values: Signature[]) =>
-    ({ signature: values[0].signature, publicKey: values[0].publicKey })
-  );
+  const providers = flow(
+    mapValues((value: Record<string, string>[]) => groupObjectsBy(value, 'name')),
+    mapValues((value: Record<string, { value: string; }[]>) =>
+      mapValues((arr: { value: string; }[]) => toNumberOrBoolean(arr[0].value))(value)
+    ),
+  )(groupedByProvider);
+  const signatures = flow(
+    mapValues((values: Signature[]) => ({ signature: values[0].signature, publicKey: values[0].publicKey }))
+  )(groupObjectsBy(oldSignatures, 'provider'));
 
   return new Proof(
     { [base64]: { mimeType: raw.type as MimeType } },
@@ -80,11 +83,14 @@ export async function getProof(
 /**
  * Group by the key. The returned collection does not have the original key property.
  */
-function groupObjectsBy(obj: object, key: string) {
-  return _.mapValues(_.groupBy(obj, key), values => values.map(value => {
-    delete value[key];
-    return value;
-  }));
+function groupObjectsBy<T extends Record<string, any>>(objects: T[], key: string): Record<string, Partial<T>[]> {
+  return flow(
+    groupBy(key),
+    mapValues((values: T[]) => values.map(value => {
+      delete value[key];
+      return value;
+    }))
+  )(objects);
 }
 
 function toNumberOrBoolean(str: string) {
