@@ -13,19 +13,34 @@ mat-sidenav {
 
 mat-sidenav-content {
   overflow: hidden;
-}
-
-mat-toolbar {
-  background: white;
-
-  .toolbar-spacer {
-    flex: 1 1 auto;
+  
+  mat-toolbar {
+    button {
+      background: #564DFC;
+    }
   }
 }
 
-mat-tab-group {
-  height: 100%;
-}
+
+// mat-toolbar {
+//   background: #564DFC;
+
+//   .toolbar-spacer {
+//     flex: 1 1 auto;
+//   }
+// }
+
+
+// mat-tab-group {
+//   height: 100%;
+//   mat-tab-header {
+//     .mat-tab-labels {
+//       background: #564DFC;
+//     }
+    
+//   }
+ 
+// }
 
 .tab-content {
   padding: 16px;
