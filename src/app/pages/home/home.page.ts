@@ -1,6 +1,8 @@
+import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { groupBy } from 'lodash';
 import { combineLatest, of, zip } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
@@ -21,7 +23,9 @@ import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 })
 export class HomePage {
 
-  readonly captures$ = this.getCaptures$();
+  readonly capturesByDate$ = this.getCaptures$().pipe(
+    map(captures => groupBy(captures, c => formatDate(c.asset.uploaded_at, 'mediumDate', 'en-US')))
+  );
   postCaptures$ = this.getPostCaptures$();
   readonly username$ = this.numbersStorageApi.getUsername$();
   captureButtonShow = true;
