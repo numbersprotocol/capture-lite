@@ -17,6 +17,7 @@
       </mat-list-item>
       <mat-list-item>
         <mat-icon mat-list-icon>access_time</mat-icon>
+
         <div mat-line>
           <span>{{ t('timestamp') }}</span>
           <span class="info-list-content">{{ asset.uploaded_at | date:'medium' }}</span>
@@ -33,6 +34,6 @@
     <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">{{ transaction.asset.caption }}</p>
   </mat-card-content>
   <mat-card-actions [align]="'end'">
-    <button (click)="openMore = !openMore" mat-button>{{ t('viewAll') + '...' }}</button>
+    <button class="All_BTN" (click)="openMore = !openMore">{{ t('viewAll') + '...' }}</button>
   </mat-card-actions>
 </mat-card>
