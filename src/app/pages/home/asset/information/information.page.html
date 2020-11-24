@@ -24,25 +24,11 @@
       <div mat-line>{{ mimeType$ | async }}</div>
     </mat-list-item>
 
-    <div *ngIf="(locationInformation$ | async)?.length" mat-subheader>{{ t('location') }}</div>
-    <mat-list-item *ngFor="let information of (locationInformation$ | async)">
+    <div *ngIf="facts$ | async" mat-subheader>{{ t('other') }}</div>
+    <mat-list-item *ngFor="let fact of facts$ | async | keyvalue">
       <mat-icon mat-list-icon>information</mat-icon>
-      <div mat-line>{{ information.name }}</div>
-      <div mat-line>{{ information.value }}</div>
-    </mat-list-item>
-
-    <div *ngIf="(deviceInformation$ | async)?.length" mat-subheader>{{ t('device') }}</div>
-    <mat-list-item *ngFor="let information of (deviceInformation$ | async)">
-      <mat-icon mat-list-icon>information</mat-icon>
-      <div mat-line>{{ information.name }}</div>
-      <div mat-line>{{ information.value }}</div>
-    </mat-list-item>
-
-    <div *ngIf="(otherInformation$ | async)?.length" mat-subheader>{{ t('other') }}</div>
-    <mat-list-item *ngFor="let information of (otherInformation$ | async)">
-      <mat-icon mat-list-icon>information</mat-icon>
-      <div mat-line>{{ information.name }}</div>
-      <div mat-line>{{ information.value }}</div>
+      <div mat-line>{{ fact.key }}</div>
+      <div mat-line>{{ fact.value }}</div>
     </mat-list-item>
 
     <div mat-subheader>{{ t('signature') }}</div>

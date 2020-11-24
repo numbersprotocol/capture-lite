@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map, pluck, switchMap } from 'rxjs/operators';
-import { WebCryptoApiProvider } from 'src/app/services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
+import { combineLatest } from 'rxjs';
+import { concatMap, map, switchMap } from 'rxjs/operators';
 import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
-import { InformationType } from 'src/app/services/repositories/information/information';
-import { OldInformationRepository } from 'src/app/services/repositories/information/information-repository.service';
-import { OldProofRepository } from 'src/app/services/repositories/proof/old-proof-repository.service';
-import { OldSignatureRepository } from 'src/app/services/repositories/signature/signature-repository.service';
+import { getOldProof, getOldSignatures } from 'src/app/services/repositories/proof/old-proof-adapter';
+import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
@@ -24,41 +22,47 @@ export class InformationPage {
     switchMap(id => this.assetRepository.getById$(id)),
     isNonNullable()
   );
-  readonly proof$ = this.asset$.pipe(
-    switchMap(asset => this.proofRepository.getByHash$(asset.proof_hash)),
-    isNonNullable()
+  private readonly proofsWithOld$ = this.proofRepository.getAll$().pipe(
+    concatMap(proofs => Promise.all(proofs.map(async (proof) =>
+      ({ proof, oldProof: await getOldProof(proof) })
+    )))
+  );
+  readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
+    map(([asset, proofsWithThumbnailAndOld]) => ({
+      asset,
+      proofWithOld: proofsWithThumbnailAndOld.find(p => p.oldProof.hash === asset.proof_hash)
+    }))
+  );
+  readonly timestamp$ = this.capture$.pipe(
+    map(capture => capture.proofWithOld?.proof.timestamp)
+  );
+  readonly hash$ = this.capture$.pipe(
+    map(capture => capture.proofWithOld),
+    isNonNullable(),
+    concatMap(proofWithOld => proofWithOld.proof.getId())
+  );
+  readonly mimeType$ = this.capture$.pipe(
+    map(capture => capture.proofWithOld),
+    isNonNullable(),
+    map(proofWithOld => Object.values(proofWithOld.proof.assets)[0].mimeType)
   );
 
-  readonly timestamp$ = this.proof$.pipe(pluck('timestamp'));
-  readonly hash$ = this.proof$.pipe(pluck('hash'));
-  readonly mimeType$ = this.proof$.pipe(pluck('mimeType'));
-
-  readonly locationInformation$ = this.proof$.pipe(
-    switchMap(proof => this.informationRepository.getByProof$(proof)),
-    map(informationList => informationList.filter(information => information.type === InformationType.Location))
+  readonly facts$ = this.capture$.pipe(
+    map(capture => capture.proofWithOld),
+    isNonNullable(),
+    map(proofWithOld => Object.values(proofWithOld.proof.truth.providers)[0])
   );
 
-  readonly deviceInformation$ = this.proof$.pipe(
-    switchMap(proof => this.informationRepository.getByProof$(proof)),
-    map(informationList => informationList.filter(information => information.type === InformationType.Device))
-  );
-
-  readonly otherInformation$ = this.proof$.pipe(
-    switchMap(proof => this.informationRepository.getByProof$(proof)),
-    map(informationList => informationList.filter(information => information.type === InformationType.Other))
-  );
-
-  readonly signature$ = this.proof$.pipe(
-    switchMap(proof => this.signatureRepository.getByProof$(proof)),
-    map(signatures => signatures.find(signature => signature.provider === WebCryptoApiProvider.ID)),
-    isNonNullable()
+  readonly signature$ = this.capture$.pipe(
+    map(capture => capture.proofWithOld),
+    isNonNullable(),
+    concatMap(proofWithOld => getOldSignatures(proofWithOld.proof)),
+    map(oldSignatures => oldSignatures[0])
   );
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly proofRepository: OldProofRepository,
-    private readonly informationRepository: OldInformationRepository,
-    private readonly signatureRepository: OldSignatureRepository,
-    private readonly assetRepository: AssetRepository
+    private readonly assetRepository: AssetRepository,
+    private readonly proofRepository: ProofRepository
   ) { }
 }

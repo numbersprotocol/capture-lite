@@ -39,7 +39,7 @@ export class CollectorService {
     // the observables subscribed with async pipe from observing new values.
     this.store$(rawBase64, mimeType).pipe(
       concatMap(proof => this.collectAndSign$(proof)),
-      concatMap(proof => this.publishersAlert.presentOrPublish$(proof))
+      concatMap(proof => this.publishersAlert.oldPresentOrPublish$(proof))
     ).subscribe();
   }
 
@@ -86,7 +86,7 @@ export class CollectorService {
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
     const proof = new Proof(assets, truth, signatures);
-    this.proofRepository.add(proof);
+    await this.proofRepository.add(proof);
     return proof;
   }
 

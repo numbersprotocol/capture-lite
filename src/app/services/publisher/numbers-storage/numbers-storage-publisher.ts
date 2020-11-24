@@ -3,8 +3,9 @@ import { Observable, zip } from 'rxjs';
 import { concatMap, first, mapTo } from 'rxjs/operators';
 import { NotificationService } from '../../notification/notification.service';
 import { CaptionRepository } from '../../repositories/caption/caption-repository.service';
-import { OldProof } from '../../repositories/proof/old-proof-adapter';
+import { getOldProof, getOldSignatures, OldProof } from '../../repositories/proof/old-proof-adapter';
 import { OldProofRepository } from '../../repositories/proof/old-proof-repository.service';
+import { Proof } from '../../repositories/proof/proof';
 import { OldSignatureRepository } from '../../repositories/signature/signature-repository.service';
 import { Publisher } from '../publisher';
 import { AssetRepository } from './data/asset/asset-repository.service';
@@ -32,7 +33,7 @@ export class NumbersStoragePublisher extends Publisher {
     return this.numbersStorageApi.isEnabled$();
   }
 
-  run$(proof: OldProof): Observable<void> {
+  oldRun$(proof: OldProof): Observable<void> {
     return zip(
       this.oldProofRepository.getRawFile$(proof),
       this.signatureRepository.getByProof$(proof),
@@ -50,5 +51,20 @@ export class NumbersStoragePublisher extends Publisher {
       concatMap(asset => this.assetRepository.add$(asset)),
       mapTo(void 0)
     );
+  }
+
+  async run(proof: Proof) {
+    const oldProof = await getOldProof(proof);
+    const oldSignatures = await getOldSignatures(proof);
+    const assetResponse = await this.numbersStorageApi.createAsset$(
+      `data:${Object.values(proof.assets)[0].mimeType};base64,${Object.keys(proof.assets)[0]}`,
+      oldProof,
+      TargetProvider.Numbers,
+      'FIXME',
+      oldSignatures,
+      'capture-lite'
+    ).toPromise();
+    await this.assetRepository.add(assetResponse);
+    return proof;
   }
 }

@@ -40,14 +40,12 @@
     <mat-tab-group (selectedTabChange)="onTapChanged($event)" mat-align-tabs="center">
       <mat-tab label="Capture">
         <div class="tab-content">
-          <ng-container *ngFor="let assetsWithRaw of capturesWithRawByDate$ | async">
-            <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
-            <mat-grid-list cols="3" gutterSize="8px">
-              <mat-grid-tile class="square-image-tile" *ngFor="let assetWithRaw of assetsWithRaw"
-                [routerLink]="['asset', {id: assetWithRaw.asset.id}]"
-                [style]="'background-image: url(data:image/*;base64,' + assetWithRaw.rawBase64 + ');'"></mat-grid-tile>
-            </mat-grid-list>
-          </ng-container>
+          <mat-grid-list cols="3" gutterSize="8px">
+            <mat-grid-tile class="square-image-tile" *ngFor="let capture of captures$ | async"
+              [style]="'background-image: url(' + capture.proofWithThumbnailAndOld?.thumbnailDataUrl! + ');'"
+              [routerLink]="['asset', {id: capture.asset.id}]">
+            </mat-grid-tile>
+          </mat-grid-list>
         </div>
       </mat-tab>
       <mat-tab label="PostCapture">

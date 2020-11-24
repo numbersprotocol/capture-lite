@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { NotificationService } from '../notification/notification.service';
 import { OldProof } from '../repositories/proof/old-proof-adapter';
+import { Proof } from '../repositories/proof/proof';
 
 export abstract class Publisher {
 
@@ -13,7 +14,7 @@ export abstract class Publisher {
     private readonly notificationService: NotificationService
   ) { }
 
-  publish(proof: OldProof) {
+  oldPublish(proof: OldProof) {
     const notificationId = this.notificationService.createNotificationId();
     this.notificationService.notify(
       notificationId,
@@ -24,7 +25,7 @@ export abstract class Publisher {
     // Deliberately subscribe without untilDestroyed scope. Also, it is not feasible to use
     // subsctibeInBackground() as it will move the execution out of ngZone, which will prevent
     // the observables subscribed with async pipe from observing new values.
-    this.run$(proof).pipe(
+    this.oldRun$(proof).pipe(
       tap(_ => this.notificationService.notify(
         notificationId,
         this.translocoService.translate('assetRegistered'),
@@ -36,5 +37,30 @@ export abstract class Publisher {
 
   abstract isEnabled$(): Observable<boolean>;
 
-  protected abstract run$(proof: OldProof): Observable<void>;
+  protected abstract oldRun$(proof: OldProof): Observable<void>;
+
+  async publish(proof: Proof) {
+    const notificationId = this.notificationService.createNotificationId();
+    try {
+      this.notificationService.notify(
+        notificationId,
+        this.translocoService.translate('publishingProof'),
+        this.translocoService.translate('message.publishingProof', { hash: await proof.getId(), publisherName: this.id })
+      );
+
+      await this.run(proof);
+
+      this.notificationService.notify(
+        notificationId,
+        this.translocoService.translate('proofPublished'),
+        this.translocoService.translate('message.proofPublished', { hash: await proof.getId(), publisherName: this.id })
+      );
+
+      return proof;
+    } catch (e) {
+      this.notificationService.notifyError(notificationId, e);
+    }
+  }
+
+  protected abstract async run(proof: Proof): Promise<Proof>;
 }

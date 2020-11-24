@@ -43,6 +43,8 @@ export class AssetRepository {
 
   add$(...assets: Asset[]) { return defer(() => this.table.insert(assets)); }
 
+  async add(asset: Asset) { return this.table.insert([asset]); }
+
   addFromNumbersStorage$(asset: Asset) {
     return this.add$(asset).pipe(
       concatMapTo(this.storeProofMedia$(asset)),
