@@ -5,7 +5,9 @@
     <mat-card-subtitle>{{ asset.uploaded_at | date: 'short' }}</mat-card-subtitle>
     <span class="toolbar-spacer"></span>
   </mat-card-header>
-  <img [src]="asset.asset_file" mat-card-image>
+  <div class="instagram">
+    <img [src]="asset.asset_file" mat-card-image>
+  </div>
   <mat-card-content>
     <mat-list dense class="info-list" [class.info-list-show]="openMore">
       <mat-list-item>
