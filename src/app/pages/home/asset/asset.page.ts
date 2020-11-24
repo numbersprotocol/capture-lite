@@ -54,10 +54,10 @@ export class AssetPage {
     map(capture => capture.proofWithThumbnailAndOld?.proof.timestamp)
   );
   readonly latitude$ = this.capture$.pipe(
-    map(capture => capture.proofWithThumbnailAndOld?.proof.geolocationLatitude)
+    map(capture => `${capture.proofWithThumbnailAndOld?.proof.geolocationLatitude}`)
   );
   readonly longitude$ = this.capture$.pipe(
-    map(capture => capture.proofWithThumbnailAndOld?.proof.geolocationLongitude)
+    map(capture => `${capture.proofWithThumbnailAndOld?.proof.geolocationLongitude}`)
   );
 
   constructor(

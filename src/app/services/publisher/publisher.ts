@@ -1,8 +1,6 @@
 import { TranslocoService } from '@ngneat/transloco';
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { NotificationService } from '../notification/notification.service';
-import { OldProof } from '../repositories/proof/old-proof-adapter';
 import { Proof } from '../repositories/proof/proof';
 
 export abstract class Publisher {
@@ -14,30 +12,7 @@ export abstract class Publisher {
     private readonly notificationService: NotificationService
   ) { }
 
-  oldPublish(proof: OldProof) {
-    const notificationId = this.notificationService.createNotificationId();
-    this.notificationService.notify(
-      notificationId,
-      this.translocoService.translate('registeringAsset'),
-      this.translocoService.translate('message.registeringAsset', { hash: proof.hash, publisherName: this.id })
-    );
-
-    // Deliberately subscribe without untilDestroyed scope. Also, it is not feasible to use
-    // subsctibeInBackground() as it will move the execution out of ngZone, which will prevent
-    // the observables subscribed with async pipe from observing new values.
-    this.oldRun$(proof).pipe(
-      tap(_ => this.notificationService.notify(
-        notificationId,
-        this.translocoService.translate('assetRegistered'),
-        this.translocoService.translate('message.assetRegistered', { hash: proof.hash, publisherName: this.id })
-      )),
-      catchError((err: Error) => of(this.notificationService.notifyError(notificationId, err)))
-    ).subscribe();
-  }
-
   abstract isEnabled$(): Observable<boolean>;
-
-  protected abstract oldRun$(proof: OldProof): Observable<void>;
 
   async publish(proof: Proof) {
     const notificationId = this.notificationService.createNotificationId();

@@ -16,9 +16,6 @@ import { AssetRepository } from './services/publisher/numbers-storage/data/asset
 import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-storage-api.service';
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
-import { CaptionRepository } from './services/repositories/caption/caption-repository.service';
-import { OldProofRepository } from './services/repositories/proof/old-proof-repository.service';
-import { OldSignatureRepository } from './services/repositories/signature/signature-repository.service';
 import { fromExtension } from './utils/mime-type';
 
 const { SplashScreen } = Plugins;
@@ -34,9 +31,6 @@ export class AppComponent {
     private readonly platform: Platform,
     private readonly collectorService: CollectorService,
     private readonly publishersAlert: PublishersAlert,
-    private readonly proofRepository: OldProofRepository,
-    private readonly signatureRepository: OldSignatureRepository,
-    private readonly captionRepository: CaptionRepository,
     private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService,
     private readonly numbersStorageApi: NumbersStorageApi,
@@ -80,9 +74,6 @@ export class AppComponent {
       new NumbersStoragePublisher(
         this.translocoService,
         this.notificationService,
-        this.proofRepository,
-        this.signatureRepository,
-        this.captionRepository,
         this.numbersStorageApi,
         this.assetRepository
       )

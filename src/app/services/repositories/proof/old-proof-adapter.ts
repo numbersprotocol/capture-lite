@@ -3,8 +3,6 @@ import { sha256WithBase64$ } from 'src/app/utils/crypto/crypto';
 import { blobToDataUrlWithBase64$ } from 'src/app/utils/encoding/encoding';
 import { MimeType } from 'src/app/utils/mime-type';
 import { Tuple } from '../../database/table/table';
-import { Information } from '../information/information';
-import { OldSignature } from '../signature/signature';
 import { Proof, Signature } from './proof';
 
 /**
@@ -106,9 +104,36 @@ export interface OldProof extends Tuple {
   readonly timestamp: number;
 }
 
-export type EssentialInformation = Pick<Information, 'provider' | 'name' | 'value'>;
+export type EssentialInformation = Pick<OldInformation, 'provider' | 'name' | 'value'>;
 
 export interface SortedProofInformation extends Tuple {
   readonly proof: OldProof;
   readonly information: EssentialInformation[];
+}
+
+export const enum OldInformationImportance {
+  Low = 'low',
+  High = 'high'
+}
+
+export const enum OldInformationType {
+  Device = 'device',
+  Location = 'location',
+  Other = 'other'
+}
+
+export interface OldInformation extends Tuple {
+  readonly proofHash: string;
+  readonly provider: string;
+  readonly name: string;
+  readonly value: string;
+  readonly importance: OldInformationImportance;
+  readonly type: OldInformationType;
+}
+
+export interface OldSignature extends Tuple {
+  readonly proofHash: string;
+  readonly provider: string;
+  readonly signature: string;
+  readonly publicKey: string;
 }

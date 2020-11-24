@@ -5,9 +5,8 @@ import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
 import { dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { secret } from '../../../../environments/secret';
-import { OldProof } from '../../repositories/proof/old-proof-adapter';
-import { OldSignature } from '../../repositories/signature/signature';
-import { SerializationService } from '../../serialization/serialization.service';
+import { getSortedProofInformation, OldSignature } from '../../repositories/proof/old-proof-adapter';
+import { Proof } from '../../repositories/proof/proof';
 import { Asset } from './data/asset/asset';
 
 export const enum TargetProvider {
@@ -29,8 +28,7 @@ const enum PrefKeys {
 export class NumbersStorageApi {
 
   constructor(
-    private readonly httpClient: HttpClient,
-    private readonly serializationService: SerializationService
+    private readonly httpClient: HttpClient
   ) { }
 
   isEnabled$() {
@@ -102,7 +100,7 @@ export class NumbersStorageApi {
 
   createAsset$(
     rawFileBase64: string,
-    proof: OldProof,
+    proof: Proof,
     targetProvider: TargetProvider,
     caption: string,
     signatures: OldSignature[],
@@ -111,14 +109,14 @@ export class NumbersStorageApi {
     return this.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers => zip(
         dataUrlWithBase64ToBlob$(rawFileBase64),
-        this.serializationService.stringify$(proof),
+        getSortedProofInformation(proof),
         of(headers)
       )),
-      concatMap(([rawFile, information, headers]) => {
+      concatMap(([rawFile, sortedProofInformation, headers]) => {
         const formData = new FormData();
         formData.append('asset_file', rawFile);
-        formData.append('asset_file_mime_type', proof.mimeType);
-        formData.append('meta', information);
+        formData.append('asset_file_mime_type', Object.values(proof.assets)[0].mimeType);
+        formData.append('meta', JSON.stringify(sortedProofInformation));
         formData.append('target_provider', targetProvider);
         formData.append('caption', caption);
         formData.append('signature', JSON.stringify(signatures));
