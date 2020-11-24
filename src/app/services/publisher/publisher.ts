@@ -19,16 +19,16 @@ export abstract class Publisher {
     try {
       this.notificationService.notify(
         notificationId,
-        this.translocoService.translate('publishingProof'),
-        this.translocoService.translate('message.publishingProof', { hash: await proof.getId(), publisherName: this.id })
+        this.translocoService.translate('registeringAsset'),
+        this.translocoService.translate('message.registeringAsset', { hash: await proof.getId(), publisherName: this.id })
       );
 
       await this.run(proof);
 
       this.notificationService.notify(
         notificationId,
-        this.translocoService.translate('proofPublished'),
-        this.translocoService.translate('message.proofPublished', { hash: await proof.getId(), publisherName: this.id })
+        this.translocoService.translate('assetRegistered'),
+        this.translocoService.translate('message.assetRegistered', { hash: await proof.getId(), publisherName: this.id })
       );
 
       return proof;
