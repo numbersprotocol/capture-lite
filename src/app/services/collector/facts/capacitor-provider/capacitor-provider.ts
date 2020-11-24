@@ -45,9 +45,13 @@ export class CapacitorProvider implements FactsProvider {
           timeout: 10 * 1000
         })) : of(undefined))),
       map(([deviceInfo, geolocationPosition]) => ({
-        [DefaultFactId.DEVICE_NAME]: deviceInfo?.name,
+        [DefaultFactId.DEVICE_NAME]: deviceInfo?.model,
         [DefaultFactId.GEOLOCATION_LATITUDE]: geolocationPosition?.coords.latitude,
-        [DefaultFactId.GEOLOCATION_LONGITUDE]: geolocationPosition?.coords.longitude
+        [DefaultFactId.GEOLOCATION_LONGITUDE]: geolocationPosition?.coords.longitude,
+        UUID: deviceInfo?.uuid,
+        PLATFORM: deviceInfo?.platform,
+        OPERATING_SYSTEM: deviceInfo?.operatingSystem,
+        OS_VERSION: deviceInfo?.osVersion
       } as Facts))
     ).toPromise();
   }

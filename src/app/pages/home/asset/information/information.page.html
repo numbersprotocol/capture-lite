@@ -24,7 +24,7 @@
       <div mat-line>{{ mimeType$ | async }}</div>
     </mat-list-item>
 
-    <div *ngIf="facts$ | async" mat-subheader>{{ t('other') }}</div>
+    <div *ngIf="facts$ | async" mat-subheader>{{ t('information') }}</div>
     <mat-list-item *ngFor="let fact of facts$ | async | keyvalue">
       <mat-icon mat-list-icon>information</mat-icon>
       <div mat-line>{{ fact.key }}</div>
