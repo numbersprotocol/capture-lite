@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Capacitor, Plugins, PushNotification, PushNotificationActionPerformed, PushNotificationToken } from '@capacitor/core';
-import { NotificationService } from '../notification/notification.service';
+import { defer } from 'rxjs';
+import { concatMap, tap } from 'rxjs/operators';
+import { NumbersStorageApi } from '../publisher/numbers-storage/numbers-storage-api.service';
 
-const { PushNotifications } = Plugins;
+const { Device, PushNotifications } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +12,32 @@ const { PushNotifications } = Plugins;
 export class PushNotificationService {
 
   constructor(
-    private readonly notificationService: NotificationService,
-  ) {
-    this.configure();
-  }
+    private readonly numbersStorageApi: NumbersStorageApi,
+  ) { }
 
-  private configure(): void {
+  configure(): void {
     if (Capacitor.platform === 'web') {
       return;
     }
     this.requestPermission();
     this.addRegisterListener(
-      (token) => { console.log(`Push registration success, token: ${token.value}`); },
+      (token) => {
+        this.uploadToken$(token.value).subscribe(() => console.log(`token ${token.value} uploaded`));
+        console.log(`Push registration success, token: ${token.value}`);
+      },
       (error) => { throw Error(`Error on registration: ${JSON.stringify(error)}`); }
     );
     // Received -> when push notification received
     this.addReceivedListener((notification) => { console.log(`notification: ${notification}`); });
     // ActionPerformed -> when click on push notification
     this.addActionPerformedListener((notification) => { console.log(`notification: ${notification}`); });
+  }
+
+  private uploadToken$(token: string) {
+    return defer(() => Device.getInfo()).pipe(
+      concatMap(deviceInfo => this.numbersStorageApi.createOrUpdateDevice$(deviceInfo.platform, deviceInfo.uuid, token)),
+      tap(() => console.log('Token Uploaded!')),
+    );
   }
 
   private requestPermission(): void {

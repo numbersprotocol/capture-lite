@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, of, zip } from 'rxjs';
@@ -12,6 +12,7 @@ import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 import { fromExtension } from 'src/app/utils/mime-type';
 import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
+import { PushNotificationService } from '../../services/push-notification/push-notification.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -19,7 +20,7 @@ import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
   private readonly assets$ = this.assetRepository.getAll$();
   private readonly captures$ = this.assets$.pipe(
@@ -36,8 +37,13 @@ export class HomePage {
     private readonly proofRepository: ProofRepository,
     private readonly cameraService: CameraService,
     private readonly collectorService: CollectorService,
-    private readonly numbersStorageApi: NumbersStorageApi
+    private readonly numbersStorageApi: NumbersStorageApi,
+    private readonly pushNotificationService: PushNotificationService,
   ) { }
+
+  ngOnInit() {
+    this.pushNotificationService.configure();
+  }
 
   private getPostCaptures() {
     return zip(this.numbersStorageApi.listTransactions$(), this.numbersStorageApi.getEmail$()).pipe(
