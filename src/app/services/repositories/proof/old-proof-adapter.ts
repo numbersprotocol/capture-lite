@@ -38,7 +38,7 @@ function createSortedProofInformation(proof: Proof) {
       provider: providerId,
       name: id,
       value: `${value}`
-    } as EssentialInformation))).sort((a, b) => {
+    } as OldEssentialInformation))).sort((a, b) => {
       const providerCompared = a.provider.localeCompare(b.provider);
       const nameCompared = a.name.localeCompare(b.name);
       const valueCompared = a.value.localeCompare(b.value);
@@ -104,11 +104,11 @@ export interface OldProof extends Tuple {
   readonly timestamp: number;
 }
 
-export type EssentialInformation = Pick<OldInformation, 'provider' | 'name' | 'value'>;
+export type OldEssentialInformation = Pick<OldInformation, 'provider' | 'name' | 'value'>;
 
 export interface SortedProofInformation extends Tuple {
   readonly proof: OldProof;
-  readonly information: EssentialInformation[];
+  readonly information: OldEssentialInformation[];
 }
 
 export const enum OldInformationImportance {
@@ -129,6 +129,12 @@ export interface OldInformation extends Tuple {
   readonly value: string;
   readonly importance: OldInformationImportance;
   readonly type: OldInformationType;
+}
+
+export const enum OldDefaultInformationName {
+  DEVICE_NAME = 'Device Name',
+  GEOLOCATION_LATITUDE = 'Current GPS Latitude',
+  GEOLOCATION_LONGITUDE = 'Current GPS Longitude'
 }
 
 export interface OldSignature extends Tuple {

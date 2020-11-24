@@ -31,7 +31,7 @@ export class NumbersStoragePublisher extends Publisher {
       `data:${Object.values(proof.assets)[0].mimeType};base64,${Object.keys(proof.assets)[0]}`,
       proof,
       TargetProvider.Numbers,
-      'FIXME',
+      '',
       oldSignatures,
       'capture-lite'
     ).toPromise();

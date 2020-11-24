@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, of, zip } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { concatMap, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
@@ -21,9 +21,7 @@ import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 })
 export class HomePage {
 
-  readonly captures$ = this.getCaptures$().pipe(
-    tap(v => console.log(v))
-  );
+  readonly captures$ = this.getCaptures$();
   postCaptures$ = this.getPostCaptures$();
   readonly username$ = this.numbersStorageApi.getUsername$();
   captureButtonShow = true;

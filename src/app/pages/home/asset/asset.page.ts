@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer } from 'rxjs';
+import { combineLatest, defer, forkJoin, zip } from 'rxjs';
 import { concatMap, map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
@@ -99,8 +99,12 @@ export class AssetPage {
 
   private remove() {
     const onConfirm = () => this.blockingActionService.run$(
-      this.asset$.pipe(
-        switchMap(asset => this.assetRepository.remove$(asset)),
+      zip(this.asset$, this.capture$).pipe(
+        concatMap(([asset, capture]) => forkJoin([
+          this.assetRepository.remove$(asset),
+          // tslint:disable-next-line: no-non-null-assertion
+          this.proofRepository.remove(capture.proofWithThumbnailAndOld!.proof)
+        ])),
         switchMapTo(defer(() => this.router.navigate(['..'])))
       ),
       { message: this.translocoService.translate('processing') }
