@@ -1,6 +1,7 @@
 
 
 .page-content {
+  
   span.nothing-here {
     display: flex;
     width: 100%;
@@ -9,19 +10,21 @@
     justify-content: center;
   }
 
+
   mat-list-item {
     height: initial;
-
     div[mat-line] {
       margin: 4px 0;
     }
 
     img[matListAvatar] {
+      width: 100%;
       border-radius: 4px;
       width: calc(100vw / 3);
       height: calc(100vw / 3);
       max-width: 150px;
       max-height: 150px;
+      
     }
 
     .action {

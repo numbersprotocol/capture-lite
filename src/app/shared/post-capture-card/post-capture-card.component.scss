@@ -6,12 +6,20 @@
   flex: 1 1 auto;
 }
 
+mat-icon {
+  color: #000  ;
+}
+
 mat-card img {
   max-width: initial;
+  max-height: 50px;
 }
 
 mat-card-content {
   margin-bottom: 0;
+}
+mat-card-title {
+  font-size: 16px !important;
 }
 
 .post-capture-avatar {
@@ -34,20 +42,28 @@ mat-card-content {
 
 .info-list[dense] {
   display: none;
-
   .info-list-content {
-    width: 60%;
+    width: 70%;
     float: right;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
   }
-
   mat-list-item {
-    height: 32px;
+    height: 28px;
   }
 }
 
 .info-list-show[dense] {
   display: block;
+}
+
+.All_BTN {
+  align-items: center;
+  padding: 0px 30px;
+  height: 24px;
+  border: 1px solid #564DFC;
+  background-color: #fff;
+  box-sizing: border-box;
+  border-radius: 13px;
 }

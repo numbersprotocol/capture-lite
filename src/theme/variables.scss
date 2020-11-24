@@ -11,31 +11,35 @@
 .mat-toolbar {
   background: #564DFC !important;
   color: #ffffff  !important;
+
   .mat-icon {
-    color: #ffffff  !important;
+    color: #ffffff  ;
   }
+
   .span {
-    color: #ffffff  !important;
+    color: #ffffff  ;
   }
 }
+
 .mat-tab-labels {
   background: #564DFC;
+
   .mat-tab-label-content {
     color: #ffffff;
   }
+
   .mat-icon {
     color: #ffffff;
     background-color: #ffffff;
   }
 }
+
 .mat-sidenav-content {
-  .mat-icon {
+  button .mat-icon {
     color: #ffffff;
-    // background-color: #ffffff;
   }
 }
 
-// 
 
 
 $capture-primary: (
