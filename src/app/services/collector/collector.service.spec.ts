@@ -5,7 +5,7 @@ import { MimeType } from 'src/app/utils/mime-type';
 import { AssetMeta, Assets, DefaultFactId, Facts, Signature } from '../repositories/proof/proof';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
 import { CollectorService } from './collector.service';
-import { FactsProvider } from './information/information-provider';
+import { FactsProvider } from './facts/facts-provider';
 import { SignatureProvider } from './signature/signature-provider';
 
 describe('CollectorService', () => {

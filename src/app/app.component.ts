@@ -5,7 +5,7 @@ import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { map } from 'rxjs/operators';
+import { concatMap } from 'rxjs/operators';
 import { CameraService } from './services/camera/camera.service';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorProvider } from './services/collector/facts/capacitor-provider/capacitor-provider';
@@ -56,10 +56,9 @@ export class AppComponent {
 
   restoreAppStatus() {
     this.cameraService.restoreKilledAppResult$().pipe(
-      map(cameraPhoto => this.collectorService.storeAndCollect(
-        cameraPhoto.base64String,
-        fromExtension(cameraPhoto.format)
-      )),
+      concatMap(cameraPhoto => this.collectorService.runAndStore({
+        [cameraPhoto.base64String]: { mimeType: fromExtension(cameraPhoto.format) }
+      })),
       untilDestroyed(this)
     ).subscribe();
   }

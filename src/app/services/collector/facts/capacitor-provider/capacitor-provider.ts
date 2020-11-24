@@ -31,7 +31,7 @@ export class CapacitorProvider implements FactsProvider {
     return preferences.setBoolean$(PrefKeys.CollectLocationInfo, enable);
   }
 
-  async provide(assets: Assets) {
+  async provide(_: Assets) {
     return zip(
       CapacitorProvider.isDeviceInfoCollectionEnabled$(),
       CapacitorProvider.isLocationInfoCollectionEnabled$()
