@@ -8,7 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map } from 'rxjs/operators';
 import { CameraService } from './services/camera/camera.service';
 import { CollectorService } from './services/collector/collector.service';
-import { CapacitorProvider } from './services/collector/information/capacitor-provider/capacitor-provider';
+import { CapacitorProvider } from './services/collector/facts/capacitor-provider/capacitor-provider';
 import { WebCryptoApiProvider } from './services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
@@ -17,10 +17,8 @@ import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { CaptionRepository } from './services/repositories/caption/caption-repository.service';
-import { OldInformationRepository } from './services/repositories/information/information-repository.service';
 import { OldProofRepository } from './services/repositories/proof/old-proof-repository.service';
 import { OldSignatureRepository } from './services/repositories/signature/signature-repository.service';
-import { SerializationService } from './services/serialization/serialization.service';
 import { fromExtension } from './utils/mime-type';
 
 const { SplashScreen } = Plugins;
@@ -36,9 +34,7 @@ export class AppComponent {
     private readonly platform: Platform,
     private readonly collectorService: CollectorService,
     private readonly publishersAlert: PublishersAlert,
-    private readonly serializationService: SerializationService,
     private readonly proofRepository: OldProofRepository,
-    private readonly informationRepository: OldInformationRepository,
     private readonly signatureRepository: OldSignatureRepository,
     private readonly captionRepository: CaptionRepository,
     private readonly translocoService: TranslocoService,
@@ -76,12 +72,8 @@ export class AppComponent {
 
   initializeCollector() {
     WebCryptoApiProvider.initialize$().pipe(untilDestroyed(this)).subscribe();
-    this.collectorService.oldAddInformationProvider(
-      new CapacitorProvider(this.informationRepository, this.translocoService)
-    );
-    this.collectorService.oldAddSignatureProvider(
-      new WebCryptoApiProvider(this.signatureRepository, this.serializationService)
-    );
+    this.collectorService.addFactsProvider(new CapacitorProvider());
+    this.collectorService.addSignatureProvider(new WebCryptoApiProvider());
   }
 
   initializePublisher() {

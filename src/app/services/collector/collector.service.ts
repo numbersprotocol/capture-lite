@@ -12,7 +12,8 @@ import { OldProof } from '../repositories/proof/old-proof-adapter';
 import { OldProofRepository } from '../repositories/proof/old-proof-repository.service';
 import { Assets, Proof, Signatures, SignedTargets, Truth } from '../repositories/proof/proof';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
-import { FactsProvider, OldInformationProvider } from './information/information-provider';
+import { FactsProvider } from './facts/facts-provider';
+import { OldInformationProvider } from './information/information-provider';
 import { OldSignatureProvider, SignatureProvider } from './signature/signature-provider';
 
 @Injectable({
