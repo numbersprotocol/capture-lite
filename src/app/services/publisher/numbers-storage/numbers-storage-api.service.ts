@@ -7,7 +7,7 @@ import { PreferenceManager } from 'src/app/utils/preferences/preference-manager'
 import { secret } from '../../../../environments/secret';
 import { getSortedProofInformation, OldSignature } from '../../repositories/proof/old-proof-adapter';
 import { Proof } from '../../repositories/proof/proof';
-import { Asset } from './data/asset/asset';
+import { Asset } from './repositories/asset/asset';
 
 export const enum TargetProvider {
   Numbers = 'Numbers'

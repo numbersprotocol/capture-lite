@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Asset } from 'src/app/services/publisher/numbers-storage/data/asset/asset';
 import { Transaction } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
+import { Asset } from 'src/app/services/publisher/numbers-storage/repositories/asset/asset';
 
 @Component({
   selector: 'app-post-capture-card',

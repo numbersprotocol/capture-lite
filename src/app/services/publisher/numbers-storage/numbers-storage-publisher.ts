@@ -3,8 +3,8 @@ import { NotificationService } from '../../notification/notification.service';
 import { getOldSignatures } from '../../repositories/proof/old-proof-adapter';
 import { Proof } from '../../repositories/proof/proof';
 import { Publisher } from '../publisher';
-import { AssetRepository } from './data/asset/asset-repository.service';
 import { NumbersStorageApi, TargetProvider } from './numbers-storage-api.service';
+import { AssetRepository } from './repositories/asset/asset-repository.service';
 
 export class NumbersStoragePublisher extends Publisher {
 

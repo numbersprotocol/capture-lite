@@ -10,7 +10,7 @@ import { combineLatest, defer } from 'rxjs';
 import { concatMap, map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from 'src/app/services/confirm-alert/confirm-alert.service';
-import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
+import { AssetRepository } from 'src/app/services/publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { getOldProof } from 'src/app/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';

@@ -12,9 +12,9 @@ import { CapacitorProvider } from './services/collector/facts/capacitor-provider
 import { WebCryptoApiProvider } from './services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
-import { AssetRepository } from './services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-storage-api.service';
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
+import { AssetRepository } from './services/publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { fromExtension } from './utils/mime-type';
 

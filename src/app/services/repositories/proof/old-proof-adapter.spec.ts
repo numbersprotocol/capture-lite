@@ -1,8 +1,7 @@
 import { dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { MimeType } from '../../../utils/mime-type';
 import { AssetMeta, Assets, DefaultFactId, Proof, Signatures, Truth } from '../proof/proof';
-import { OldSignature } from '../signature/signature';
-import { getOldProof, getOldSignatures, getProof, getSortedProofInformation, SortedProofInformation } from './old-proof-adapter';
+import { getOldProof, getOldSignatures, getProof, getSortedProofInformation, OldSignature, SortedProofInformation } from './old-proof-adapter';
 
 describe('old-proof-adapter', () => {
   let proof: Proof;

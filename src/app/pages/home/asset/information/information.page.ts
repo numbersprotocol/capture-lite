@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { concatMap, map, switchMap } from 'rxjs/operators';
-import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
+import { AssetRepository } from 'src/app/services/publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { getOldProof, getOldSignatures } from 'src/app/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
 import { isNonNullable } from 'src/app/utils/rx-operators';
