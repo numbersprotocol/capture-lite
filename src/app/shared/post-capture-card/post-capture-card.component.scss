@@ -7,21 +7,21 @@
 }
 
 mat-icon {
-  color: #000  ;
+  color: #000;
 }
 
-mat-card  {
-  padding-right: 0px;
-  padding-left: 0px;
-  width: 100%;    
+mat-card {
+  padding-right: 0;
+  padding-left: 0;
+  width: 100%;
 }
 
 mat-card .instagram {
-  background-color: #564DFC;
+  background-color: #564dfc;
   max-width: 100vw;
   width: 100vw;
   height: 100vw;
-  overflow:hidden;//超過隱藏
+  overflow: hidden;//超過隱藏
   /// 4:5 , 16:9 , 1:1
 }
 
@@ -44,15 +44,14 @@ mat-card-actions {
 mat-card-content {
   margin-bottom: 0;
   padding-right: 16px;
-  padding-left: 0px;
+  padding-left: 0;
 }
 
 mat-card-title {
   font-size: 16px !important;
-  padding-left: 0px;
+  padding-left: 0;
   padding-right: 16px;
 }
-
 
 .post-capture-avatar {
   background-image: url("https://gravatar.com/avatar/8db683da3c728970bb776f6cc4048fd2?s=400&d=mp&r=x");
@@ -94,9 +93,9 @@ mat-card-title {
 
 .All_BTN {
   align-items: center;
-  padding: 0px 30px;
+  padding: 0 30px;
   height: 24px;
-  border: 1px solid #564DFC;
+  border: 1px solid #564dfc;
   background-color: #fff;
   box-sizing: border-box;
   border-radius: 13px;

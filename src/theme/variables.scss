@@ -9,21 +9,21 @@
 @include mat-core();
 
 .mat-toolbar {
-  background: #564DFC !important;
-  color: #ffffff  !important;
+  background: #564dfc !important;
+  color: #ffffff !important;
 
   .mat-icon {
-    color: #ffffff  ;
+    color: #ffffff;
   }
 
   span {
-    color: #ffffff  ;
-    padding-right: 40px!important;
+    color: #ffffff;
+    padding-right: 40px !important;
   }
 }
 
 .mat-tab-labels {
-  background: #564DFC;
+  background: #564dfc;
 
   .mat-tab-label-content {
     color: #ffffff;
@@ -40,8 +40,6 @@
     color: #ffffff;
   }
 }
-
-
 
 $capture-primary: (
   50: #ece6fe,
@@ -140,13 +138,13 @@ $app-theme: mat-light-theme(
 
 /** Ionic CSS Variables **/
 :root {
-    /**  capture **/
-    --ion-color-capture: #564DFC;
-    --ion-color-capture-rgb: 63, 81, 181;
-    --ion-color-capture-contrast: #ffffff;
-    --ion-color-capture-contrast-rgb: 255, 255, 255;
-    --ion-color-capture-shade: #303f9f;
-    --ion-color-capture-tint: #7986cb;
+  /**  capture **/
+  --ion-color-capture: #564dfc;
+  --ion-color-capture-rgb: 63, 81, 181;
+  --ion-color-capture-contrast: #ffffff;
+  --ion-color-capture-contrast-rgb: 255, 255, 255;
+  --ion-color-capture-shade: #303f9f;
+  --ion-color-capture-tint: #7986cb;
 
   /** primary **/
   --ion-color-primary: #3f51b5;
