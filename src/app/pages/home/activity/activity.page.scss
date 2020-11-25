@@ -1,5 +1,15 @@
 mat-toolbar {
-  background: white;
+  background: #564dfc;
+  color: #ffffff;
+
+  .mat-icon {
+    color: #ffffff;
+  }
+
+  span {
+    color: #ffffff;
+    padding-right: 40px;
+  }
 }
 
 .page-content {
@@ -40,7 +50,6 @@ mat-toolbar {
     }
 
     button.returned {
-      // color: var(--ion-color-danger);
       color: #fff;
       border-color: var(--ion-color-danger);
       background-color: #e31587;

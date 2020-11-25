@@ -1,5 +1,3 @@
-
-
 .page-content {
   
   span.nothing-here {
@@ -34,5 +32,19 @@
         flex-grow: 1;
       }
     }
+  }
+}
+
+mat-toolbar {
+  background: #564dfc;
+  color: #ffffff;
+
+  .mat-icon {
+    color: #ffffff;
+  }
+
+  span {
+    color: #ffffff;
+    padding-right: 40px;
   }
 }

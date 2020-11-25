@@ -7,12 +7,12 @@
   </mat-card-header>
   <div class="instagram" [ngStyle]="{
       'height':
-        myIdentifier.offsetHeight === myIdentifier.offsetWidth
+        igIMG.offsetHeight === igIMG.offsetWidth
           ? '100vw'
-          : myIdentifier.offsetHeight > myIdentifier.offsetWidth
+          : igIMG.offsetHeight > igIMG.offsetWidth
             ? 'calc(100vw / 4 * 5)'
             : 'calc(100vw / 16 * 9)'}">
-    <img #myIdentifier id="image" [src]="asset.asset_file" mat-card-image>
+    <img #igIMG id="image" [src]="asset.asset_file" mat-card-image>
   </div>
   <mat-card-content>
     <mat-list dense class="info-list" [class.info-list-show]="openMore">
@@ -41,6 +41,6 @@
     <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">{{ transaction.asset.caption }}</p>
   </mat-card-content>
   <mat-card-actions [align]="'end'">
-    <button class="All_BTN" (click)="openMore = !openMore">{{ t('viewAll') + '...' }}</button>
+    <button class="all-btn" (click)="openMore = !openMore">{{ t('viewAll') + '...' }}</button>
   </mat-card-actions>
 </mat-card>

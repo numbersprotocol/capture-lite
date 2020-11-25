@@ -9,8 +9,8 @@
 @include mat-core();
 
 .mat-toolbar {
-  background: #564dfc !important;
-  color: #ffffff !important;
+  background: #564dfc;
+  color: #ffffff;
 
   .mat-icon {
     color: #ffffff;
@@ -18,7 +18,7 @@
 
   span {
     color: #ffffff;
-    padding-right: 40px !important;
+    padding-right: 40px;
   }
 }
 

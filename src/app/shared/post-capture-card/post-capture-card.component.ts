@@ -10,8 +10,8 @@ export class PostCaptureCardComponent implements OnInit {
 
   @Input() transaction!: Transaction;
   @Input() asset!: Asset;
-  @ViewChild('myIdentifier')
-  myIdentifier!: ElementRef;
+  @ViewChild('igIMG')
+  igIMG!: ElementRef;
 
   latitude!: string;
   longitude!: string;
@@ -21,6 +21,4 @@ export class PostCaptureCardComponent implements OnInit {
     this.latitude = this.asset.information.information.find(info => info.name === 'Current GPS Latitude')?.value || 'unknown';
     this.longitude = this.asset.information.information.find(info => info.name === 'Current GPS Longitude')?.value || 'unknown';
   }
-
-
 }

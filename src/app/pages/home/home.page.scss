@@ -13,11 +13,19 @@ mat-sidenav {
 
 mat-sidenav-content {
   overflow: hidden;
-  
-  mat-toolbar {
-    button {
-      background: #564dfc;
-    }
+}
+
+mat-toolbar {
+  background: #564dfc;
+  color: #ffffff;
+
+  .mat-icon {
+    color: #ffffff;
+  }
+
+  span {
+    color: #ffffff;
+    padding-right: 40px;
   }
 }
 
@@ -28,7 +36,7 @@ mat-sidenav-content {
   margin-bottom: 128px;
 
   div.mat-title {
-    margin:26px 0 0 0; 
+    margin: 26px 0 0 0; 
     font-size: larger;
   }
 
