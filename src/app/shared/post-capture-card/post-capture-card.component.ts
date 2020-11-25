@@ -10,9 +10,8 @@ export class PostCaptureCardComponent implements OnInit {
 
   @Input() transaction!: Transaction;
   @Input() asset!: Asset;
-  @ViewChild('igIMG')
-  igIMG!: ElementRef;
-
+  @ViewChild('ratioImg')
+  ratioImg!: ElementRef;
   latitude!: string;
   longitude!: string;
   openMore = false;

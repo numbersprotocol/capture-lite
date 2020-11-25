@@ -7,12 +7,12 @@
   </mat-card-header>
   <div class="fixed-ratio" [ngStyle]="{
       'height':
-        igIMG.offsetHeight === igIMG.offsetWidth
+      ratioImg.offsetHeight === ratioImg.offsetWidth
           ? '100vw'
-          : igIMG.offsetHeight > igIMG.offsetWidth
+          : ratioImg.offsetHeight > ratioImg.offsetWidth
             ? 'calc(100vw / 4 * 5)'
             : 'calc(100vw / 16 * 9)'}">
-    <img #igIMG id="image" [src]="asset.asset_file" mat-card-image>
+    <img #ratioImg id="image" [src]="asset.asset_file" mat-card-image>
   </div>
   <mat-card-content>
     <mat-list dense class="info-list" [class.info-list-show]="openMore">
