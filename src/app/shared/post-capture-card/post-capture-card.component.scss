@@ -1,6 +1,24 @@
+@use "sass:map";
+
 :host {
   display: block;
 }
+$primary: var(--ts-img);
+
+:root {
+  --img:expression(document.getElementById('image').style.height);
+  --height:var(--img.height)
+}
+$scss-img: expression(document.getElementById('image'));
+// $scss-height:map.get($scss-img, 'height');
+$theme-colors: (
+  "success": #28a745,
+  "info": #17a2b8,
+  "warning": #ffc107,
+);
+
+$theme-background-color: map.get($theme-colors, "warning");
+
 
 .toolbar-spacer {
   flex: 1 1 auto;
@@ -25,10 +43,54 @@ mat-card .instagram {
   max-width: 100vw;
   // max-height: 50px; 
   width: 100vw;
+
+  
+
+  // if (img.x > img.y){
+  //   // height: calc(100vw / 16*9);
+  // }
+  // if (img.x < img.y){
+  //   // height: calc(100vw / 4 *5);
+  // }else {
+  //    // height: calc(100vw / 1);
+  // }
+
   // height: calc(100vw / 4 *5);
   // height: calc(100vw / 1);
-  height: calc(100vw / 16*9);
-  overflow: hidden;   /* 添加的 */
+  height: 100vw;
+  // width:expression(document.getElementById('image').height);//圖片的判斷式，設定超過120就縮放
+  // width: expression(document.getElementById('image').width );//圖片的判斷式，設定超過120就縮放
+  // width: expression(clientHeight);
+  // calc(var(--ion-padding, 9px) / 3);
+  @function property-value() {
+    $result: var(--img);
+
+    // $result: calc(#{height} * 1.778);
+    // $result: expression(document.getElementById('image'));
+    // document.getElementById('image').style.height
+    @return $result;
+
+  }
+  // @function pow($base, $exponent) {
+  //   $result: 1;
+  //   @for $_ from 1 through $exponent {
+  //     $result: $result * $base;
+  //   }
+  //   @return $result;
+  // }
+
+  // @if property-value()>100vw {
+  //   height: calc(100vw / 4 *5);
+  // }
+  // @else if 100vw<property-value() {
+  //   height: calc(100vw / 16*9);
+  // }
+  // @else {
+  //   height: calc(100vw / 1);
+  // }
+
+
+  overflow:hidden;//超過隱藏
   // border-color: var(--ion-color-danger);     
 }
 
@@ -39,6 +101,7 @@ mat-card img {
   padding: 0;
   margin: 0;
   width: 100%;
+ 
   // height: calc(100vw / 4 *5);
   // height: calc(100vw / 1);
   // height: calc(100vw / 16*9);
