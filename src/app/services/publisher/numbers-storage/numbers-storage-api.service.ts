@@ -5,10 +5,9 @@ import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
 import { dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { secret } from '../../../../environments/secret';
-import { Proof } from '../../repositories/proof/proof';
-import { Signature } from '../../repositories/signature/signature';
-import { SerializationService } from '../../serialization/serialization.service';
-import { Asset } from './data/asset/asset';
+import { getSortedProofInformation, OldDefaultInformationName, OldSignature, SortedProofInformation } from '../../repositories/proof/old-proof-adapter';
+import { DefaultFactId, Proof } from '../../repositories/proof/proof';
+import { Asset } from './repositories/asset/asset';
 
 export const enum TargetProvider {
   Numbers = 'Numbers'
@@ -29,8 +28,7 @@ const enum PrefKeys {
 export class NumbersStorageApi {
 
   constructor(
-    private readonly httpClient: HttpClient,
-    private readonly serializationService: SerializationService
+    private readonly httpClient: HttpClient
   ) { }
 
   isEnabled$() {
@@ -105,20 +103,21 @@ export class NumbersStorageApi {
     proof: Proof,
     targetProvider: TargetProvider,
     caption: string,
-    signatures: Signature[],
+    signatures: OldSignature[],
     tag: string
   ) {
     return this.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers => zip(
         dataUrlWithBase64ToBlob$(rawFileBase64),
-        this.serializationService.stringify$(proof),
+        getSortedProofInformation(proof),
         of(headers)
       )),
-      concatMap(([rawFile, information, headers]) => {
+      concatMap(([rawFile, sortedProofInformation, headers]) => {
+        const oldSortedProofInformation = this.replaceDefaultFactIdWithOldDefaultInformationName(sortedProofInformation);
         const formData = new FormData();
         formData.append('asset_file', rawFile);
-        formData.append('asset_file_mime_type', proof.mimeType);
-        formData.append('meta', information);
+        formData.append('asset_file_mime_type', Object.values(proof.assets)[0].mimeType);
+        formData.append('meta', JSON.stringify(oldSortedProofInformation));
         formData.append('target_provider', targetProvider);
         formData.append('caption', caption);
         formData.append('signature', JSON.stringify(signatures));
@@ -126,6 +125,24 @@ export class NumbersStorageApi {
         return this.httpClient.post<Asset>(`${baseUrl}/api/v2/assets/`, formData, { headers });
       })
     );
+  }
+
+  private replaceDefaultFactIdWithOldDefaultInformationName(sortedProofInformation: SortedProofInformation): SortedProofInformation {
+    return {
+      proof: sortedProofInformation.proof,
+      information: sortedProofInformation.information.map(info => {
+        if (info.name === DefaultFactId.DEVICE_NAME) {
+          return { provider: info.provider, value: info.value, name: OldDefaultInformationName.DEVICE_NAME };
+        }
+        if (info.name === DefaultFactId.GEOLOCATION_LATITUDE) {
+          return { provider: info.provider, value: info.value, name: OldDefaultInformationName.GEOLOCATION_LATITUDE };
+        }
+        if (info.name === DefaultFactId.GEOLOCATION_LONGITUDE) {
+          return { provider: info.provider, value: info.value, name: OldDefaultInformationName.GEOLOCATION_LONGITUDE };
+        }
+        return info;
+      })
+    };
   }
 
   listTransactions$() {
@@ -152,8 +169,7 @@ export class NumbersStorageApi {
 
   acceptTransaction$(id: string) {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => this.httpClient.post<Transaction>(`${baseUrl}/api/v2/transactions/${id}/accept/`, {}, { headers })),
-      concatMap(transaction => this.readAsset$(transaction.asset.id))
+      concatMap(headers => this.httpClient.post<Transaction>(`${baseUrl}/api/v2/transactions/${id}/accept/`, {}, { headers }))
     );
   }
 

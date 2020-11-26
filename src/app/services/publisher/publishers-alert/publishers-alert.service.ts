@@ -22,34 +22,32 @@ export class PublishersAlert {
     this.publishers.push(publisher);
   }
 
-  presentOrPublish$(proof: Proof) {
-    return this.getEnabledPublishers$().pipe(
-      switchMap(publishers => {
-        if (publishers.length > 1) {
-          return this.alertController.create({
-            header: this.translocoService.translate('selectAPublisher'),
-            inputs: publishers.map((publisher, index) => ({
-              name: publisher.id,
-              type: 'radio',
-              label: publisher.id,
-              value: publisher.id,
-              checked: index === 0
-            })),
-            buttons: [{
-              text: this.translocoService.translate('cancel'),
-              role: 'cancel'
-            }, {
-              text: this.translocoService.translate('ok'),
-              handler: (name) => this.getPublisherByName(name)?.publish(proof)
-            }],
-            mode: 'md'
-          }).then(alertElement => alertElement.present());
-        } else {
-          publishers[0].publish(proof);
-          return of(void 0);
-        }
-      })
-    );
+  async presentOrPublish(proof: Proof) {
+    const publishers = await this.getEnabledPublishers$().toPromise();
+
+    if (publishers.length > 1) {
+      const alert = await this.alertController.create({
+        header: this.translocoService.translate('selectAPublisher'),
+        inputs: publishers.map((publisher, index) => ({
+          name: publisher.id,
+          type: 'radio',
+          label: publisher.id,
+          value: publisher.id,
+          checked: index === 0
+        })),
+        buttons: [{
+          text: this.translocoService.translate('cancel'),
+          role: 'cancel'
+        }, {
+          text: this.translocoService.translate('ok'),
+          handler: name => this.getPublisherByName(name)?.publish(proof)
+        }],
+        mode: 'md'
+      });
+      alert.present();
+    } else {
+      return publishers[0].publish(proof);
+    }
   }
 
   private getEnabledPublishers$() {

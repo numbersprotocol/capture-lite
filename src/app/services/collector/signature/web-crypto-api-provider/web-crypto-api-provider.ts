@@ -1,7 +1,6 @@
-import { Observable, of, zip } from 'rxjs';
+import { of, zip } from 'rxjs';
 import { filter, first, map, switchMap, switchMapTo } from 'rxjs/operators';
-import { Proof } from 'src/app/services/repositories/proof/proof';
-import { Signature } from 'src/app/services/repositories/signature/signature';
+import { Signature } from 'src/app/services/repositories/proof/proof';
 import { createEcKeyPair$, signWithSha256AndEcdsa$ } from 'src/app/utils/crypto/crypto';
 import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
 import { SignatureProvider } from '../signature-provider';
@@ -12,10 +11,8 @@ const enum PrefKeys {
   PrivateKey = 'privateKey'
 }
 
-export class WebCryptoApiProvider extends SignatureProvider {
-
-  static readonly ID = 'web-crypto-api';
-  readonly id = WebCryptoApiProvider.ID;
+export class WebCryptoApiProvider implements SignatureProvider {
+  readonly id = name;
 
   static initialize$() {
     return zip(
@@ -40,18 +37,16 @@ export class WebCryptoApiProvider extends SignatureProvider {
     return preferences.getString$(PrefKeys.PrivateKey);
   }
 
-  protected provide$(proof: Proof, serialized: string): Observable<Signature> {
+  async provide(serializedSortedSignTargets: string) {
     return WebCryptoApiProvider.getPrivateKey$().pipe(
       first(),
-      switchMap(privateKeyHex => signWithSha256AndEcdsa$(serialized, privateKeyHex)),
+      switchMap(privateKeyHex => signWithSha256AndEcdsa$(serializedSortedSignTargets, privateKeyHex)),
       switchMap(signatureHex => zip(of(signatureHex), WebCryptoApiProvider.getPublicKey$())),
       first(),
       map(([signatureHex, publicKeyHex]) => ({
-        proofHash: proof.hash,
-        provider: this.id,
         signature: signatureHex,
         publicKey: publicKeyHex
-      }))
-    );
+      } as Signature))
+    ).toPromise();
   }
 }

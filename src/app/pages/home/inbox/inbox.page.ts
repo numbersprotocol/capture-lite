@@ -3,8 +3,8 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
 import { concatMap, map, pluck, tap } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
-import { IgnoredTransactionRepository } from 'src/app/services/publisher/numbers-storage/data/ignored-transaction/ignored-transaction-repository.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
+import { IgnoredTransactionRepository } from 'src/app/services/publisher/numbers-storage/repositories/ignored-transaction/ignored-transaction-repository.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { equals } from 'lodash/fp';
 import { BehaviorSubject } from 'rxjs';
 import { Table, Tuple } from '../table';
 
@@ -23,7 +23,7 @@ export class MemoryTableImpl<T extends Tuple> implements Table<T> {
     const conflicted: T[] = [];
     tuples.forEach((a, index) => {
       for (let bIndex = index + 1; bIndex < tuples.length; bIndex++) {
-        if (_.isEqual(a, tuples[bIndex])) { conflicted.push(a); }
+        if (equals(a)(tuples[bIndex])) { conflicted.push(a); }
       }
     });
     if (conflicted.length !== 0) { throw new Error(`Tuples duplicated: ${conflicted}`); }
@@ -39,7 +39,7 @@ export class MemoryTableImpl<T extends Tuple> implements Table<T> {
     const afterDeletion = this.tuples$.value.filter(
       tuple => !tuples
         // tslint:disable-next-line: rxjs-no-unsafe-scope
-        .map(t => _.isEqual(tuple, t))
+        .map(t => equals(tuple)(t))
         .includes(true)
     );
     this.tuples$.next(afterDeletion);
@@ -48,7 +48,7 @@ export class MemoryTableImpl<T extends Tuple> implements Table<T> {
 
   private assertTuplesExist(tuples: T[]) {
     // tslint:disable-next-line: rxjs-no-unsafe-scope
-    const nonexistent = tuples.filter(tuple => !this.tuples$.value.find(t => _.isEqual(tuple, t)));
+    const nonexistent = tuples.filter(tuple => !this.tuples$.value.find(t => equals(tuple)(t)));
     if (nonexistent.length !== 0) { throw new Error(`Cannot delete nonexistent tuples: ${nonexistent}`); }
   }
 
@@ -57,5 +57,5 @@ export class MemoryTableImpl<T extends Tuple> implements Table<T> {
 
 function intersaction<T>(list1: T[], list2: T[]) {
   // tslint:disable-next-line: rxjs-no-unsafe-scope
-  return list1.filter(tuple1 => list2.find(tuple2 => _.isEqual(tuple1, tuple2)));
+  return list1.filter(tuple1 => list2.find(tuple2 => equals(tuple1)(tuple2)));
 }
