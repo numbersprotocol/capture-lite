@@ -85,7 +85,7 @@ Before running the app with Android Studio, build and sync the dependencies and 
 
 ``` bash
 npm run build
-npx cap sync
+npx cap sync android
 ```
 
 Open the project in Android Studio.
