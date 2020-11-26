@@ -4,13 +4,18 @@ mat-toolbar {
 
   .mat-icon {
     color: #ffffff;
+    margin-left: 10px;
   }
 
-  span {
+  span .title {
     color: #ffffff;
-    padding-left: 80px;
   }
 }
+
+.title {
+  margin-left: 80px;
+}
+
 .toolbar-spacer {
   flex: 1 1 auto;
 }
