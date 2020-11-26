@@ -100,6 +100,25 @@
     "no-outputs-metadata-property": true,
     "no-queries-metadata-property": true,
     "pipe-prefix": true,
-    "prefer-inline-decorator": true
+    "prefer-inline-decorator": true,
+    "rxjs-finnish": true,
+    "rxjs-no-async-subscribe": true,
+    "rxjs-no-compat": true,
+    "rxjs-no-create": true,
+    "rxjs-no-explicit-generics": true,
+    "rxjs-no-exposed-subjects": true,
+    "rxjs-no-ignored-observable": true,
+    "rxjs-no-index": true,
+    "rxjs-no-internal": true,
+    "rxjs-no-nested-subscribe": true,
+    "rxjs-no-redundant-notify": true,
+    "rxjs-no-sharereplay": true,
+    "rxjs-no-subclass": true,
+    "rxjs-no-unbound-methods": true,
+    "rxjs-no-unsafe-catch": true,
+    "rxjs-no-unsafe-first": true,
+    "rxjs-no-unsafe-subject-next": true,
+    "rxjs-no-unsafe-switchmap": true,
+    "rxjs-no-unsafe-takeuntil": true
   }
 }
