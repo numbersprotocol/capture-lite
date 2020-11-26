@@ -17,14 +17,20 @@ mat-toolbar {
 
 .page-content {
   padding-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh; 
 }
 
 button.center {
-  display: block;
-  margin: 0 auto;
-  position: relative;
-  top: 25%;
-  height: 50px;
+  height: 36px;
+  width: 186px;
+  margin: auto;
+  left: 0;
+  bottom: 0;
+  color:#fff;
+  background-color: #564dfc;
 }
 
 .proof-image {
