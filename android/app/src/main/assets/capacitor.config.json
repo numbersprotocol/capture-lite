@@ -8,6 +8,10 @@
     "SplashScreen": {
       "androidScaleType": "CENTER_CROP",
       "launchAutoHide": false
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_capture_lite",
+      "iconColor": "#564dfc"
     }
   },
   "cordova": {},

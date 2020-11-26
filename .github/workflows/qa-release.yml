@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  github-release:
+  release:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -44,13 +44,43 @@ jobs:
         npm install
         npm run test-ci
         npm run build
-    
-    - name: Build Android debug APK
+
+    - name: Build Android debug APK for GitHub Release asset
       if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
       run: |
         npx cap sync android
         cd android/
         ./gradlew assembleDebug
+
+    - name: Build Android release bundle (AAB) for Google Play Console
+      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
+      run: |
+        npx cap sync android
+        cd android/
+        ./gradlew bundleRelease
+
+    - name: Sign release AAB
+      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
+      uses: r0adkll/sign-android-release@v1.0.4
+      with:
+        releaseDirectory: ./android/app/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE_FILE }}
+        alias: ${{ secrets.ANDROID_KEY_ALIAS }}
+        keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+    - name: Create service_account.json
+      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
+      run: echo '${{ secrets.PLAY_CONSOLE_SERVICE_ACCOUNT_JSON }}' > service_account.json
+
+    - name: Deploy to Play Store (closed alpha track)
+      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJson: service_account.json
+        packageName: io.numbersprotocol.capturelite
+        releaseFile: ./android/app/build/outputs/bundle/release/app-release.aab
+        track: alpha
 
     - name: Create GitHub prerelease
       id: create_release
@@ -109,73 +139,6 @@ jobs:
           - This message is automatically sent from GitHub Action.
         SLACK_TITLE: Capture Lite QA Release
         SLACK_USERNAME: GitHub Action
-
-  android-google-play-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Extract branch name
-        id: extract_branch
-        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
-
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 10
-
-      - name: Check if version has been updated
-        id: version_check
-        uses: EndBug/version-check@v1
-        with:
-          diff-search: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up JDK
-        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
-      - name: Build Ionic
-        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        env:
-          NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
-        run: |
-          npm install -g @angular/cli
-          npm install -g @ionic/cli
-          npm install
-          npm run test-ci
-          npm run build
-
-      - name: Build Android release bundle (AAB)
-        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        run: |
-          npx cap sync android
-          cd android/
-          ./gradlew bundleRelease
-
-      - name: Sign release AAB
-        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        uses: r0adkll/sign-android-release@21072f7435f485b65555103ff2c60e86560b759e
-        with:
-          releaseDirectory: ./android/app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE_FILE }}
-          alias: ${{ secrets.ANDROID_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
-
-      - name: Create service_account.json
-        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        run: echo '${{ secrets.PLAY_CONSOLE_SERVICE_ACCOUNT_JSON }}' > service_account.json
-
-      - name: Deploy to Play Store (closed alpha track)
-        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: service_account.json
-          packageName: io.numbersprotocol.capturelite
-          releaseFile: ./android/app/build/outputs/bundle/release/app-release.aab
-          track: alpha
 
   android-google-drive-upload:
     runs-on: ubuntu-latest

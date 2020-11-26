@@ -5,7 +5,15 @@
     <mat-card-subtitle>{{ asset.uploaded_at | date: 'short' }}</mat-card-subtitle>
     <span class="toolbar-spacer"></span>
   </mat-card-header>
-  <img [src]="asset.asset_file" mat-card-image>
+  <div class="fixed-ratio" [ngStyle]="{
+      'height':
+      ratioImg.offsetHeight === ratioImg.offsetWidth
+          ? '100vw'
+          : ratioImg.offsetHeight > ratioImg.offsetWidth
+            ? 'calc(100vw / 4 * 5)'
+            : 'calc(100vw / 16 * 9)'}">
+    <img #ratioImg id="image" [src]="asset.asset_file" mat-card-image>
+  </div>
   <mat-card-content>
     <mat-list dense class="info-list" [class.info-list-show]="openMore">
       <mat-list-item>
@@ -33,6 +41,6 @@
     <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">{{ transaction.asset.caption }}</p>
   </mat-card-content>
   <mat-card-actions [align]="'end'">
-    <button (click)="openMore = !openMore" mat-button>{{ t('viewAll') + '...' }}</button>
+    <button class="all-btn" (click)="openMore = !openMore">{{ t('viewAll') + '...' }}</button>
   </mat-card-actions>
 </mat-card>

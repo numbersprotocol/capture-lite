@@ -25,8 +25,6 @@ export class NotificationService {
     return this.currentId;
   }
 
-  // TODO: Add on-going configurations when this PR got merged and released:
-  //       https://github.com/ionic-team/capacitor/pull/3165
   notify(id: number, title: string, body: string) {
     console.log(`${title}: ${body}`);
     subscribeInBackground(defer(() => LocalNotifications.schedule({

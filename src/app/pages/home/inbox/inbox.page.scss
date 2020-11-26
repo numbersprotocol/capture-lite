@@ -1,8 +1,5 @@
-mat-toolbar {
-  background: white;
-}
-
 .page-content {
+  
   span.nothing-here {
     display: flex;
     width: 100%;
@@ -13,12 +10,12 @@ mat-toolbar {
 
   mat-list-item {
     height: initial;
-
     div[mat-line] {
       margin: 4px 0;
     }
 
     img[matListAvatar] {
+      width: 100%;
       border-radius: 4px;
       width: calc(100vw / 3);
       height: calc(100vw / 3);
@@ -34,5 +31,19 @@ mat-toolbar {
         flex-grow: 1;
       }
     }
+  }
+}
+
+mat-toolbar {
+  background: #564dfc;
+  color: #ffffff;
+
+  .mat-icon {
+    color: #ffffff;
+  }
+
+  span {
+    color: #ffffff;
+    padding-right: 40px;
   }
 }

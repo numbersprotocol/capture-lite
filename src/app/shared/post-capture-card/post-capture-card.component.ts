@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Transaction } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
 import { Asset } from 'src/app/services/publisher/numbers-storage/repositories/asset/asset';
 import { OldDefaultInformationName } from 'src/app/services/repositories/proof/old-proof-adapter';
-
 @Component({
   selector: 'app-post-capture-card',
   templateUrl: './post-capture-card.component.html',
@@ -12,10 +11,10 @@ export class PostCaptureCardComponent implements OnInit {
 
   @Input() transaction!: Transaction;
   @Input() asset!: Asset;
-
+  @ViewChild('ratioImg')
+  ratioImg!: ElementRef;
   latitude!: string;
   longitude!: string;
-
   openMore = false;
 
   ngOnInit() {
