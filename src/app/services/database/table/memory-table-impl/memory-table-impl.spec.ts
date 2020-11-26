@@ -108,15 +108,17 @@ describe('MemoryTableImpl', () => {
   });
 
   it('inserts atomically', async done => {
-    const expectedTuples: TestTuple[] = [...Array(100).keys()].map(value => ({
-      id: value,
-      name: `${value}`,
-      happy: true,
-      skills: [],
-      address: { country: '', city: '' },
-    }));
+    const tupleCount = 100;
+    const expectedTuples: TestTuple[] = [...Array(tupleCount).keys()].map(
+      value => ({
+        id: value,
+        name: `${value}`,
+        happy: true,
+        skills: [],
+        address: { country: '', city: '' },
+      })
+    );
 
-    // tslint:disable-next-line: rxjs-no-unsafe-scope
     await Promise.all(expectedTuples.map(tuple => table.insert([tuple])));
 
     table.queryAll$().subscribe(tuples => {
@@ -126,17 +128,19 @@ describe('MemoryTableImpl', () => {
   });
 
   it('deletes atomically', async done => {
-    const sourceTuple: TestTuple[] = [...Array(100).keys()].map(value => ({
-      id: value,
-      name: `${value}`,
-      happy: true,
-      skills: [],
-      address: { country: '', city: '' },
-    }));
+    const tupleCount = 100;
+    const sourceTuple: TestTuple[] = [...Array(tupleCount).keys()].map(
+      value => ({
+        id: value,
+        name: `${value}`,
+        happy: true,
+        skills: [],
+        address: { country: '', city: '' },
+      })
+    );
 
     await table.insert(sourceTuple);
 
-    // tslint:disable-next-line: rxjs-no-unsafe-scope
     await Promise.all(sourceTuple.map(tuple => table.delete([tuple])));
 
     table.queryAll$().subscribe(tuples => {

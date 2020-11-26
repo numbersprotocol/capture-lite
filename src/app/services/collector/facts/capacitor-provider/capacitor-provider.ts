@@ -19,23 +19,9 @@ const enum PrefKeys {
 export class CapacitorProvider implements FactsProvider {
   readonly id = name;
 
-  static isDeviceInfoCollectionEnabled$() {
-    return preferences.getBoolean$(PrefKeys.CollectDeviceInfo, true);
-  }
-
-  static setDeviceInfoCollection$(enable: boolean) {
-    return preferences.setBoolean$(PrefKeys.CollectDeviceInfo, enable);
-  }
-
-  static isLocationInfoCollectionEnabled$() {
-    return preferences.getBoolean$(PrefKeys.CollectLocationInfo, true);
-  }
-
-  static setLocationInfoCollection$(enable: boolean) {
-    return preferences.setBoolean$(PrefKeys.CollectLocationInfo, enable);
-  }
-
   async provide(_: Assets) {
+    const defaultGeolocationAge = 600000;
+    const defaultGeolocationTimeout = 10000;
     return zip(
       CapacitorProvider.isDeviceInfoCollectionEnabled$(),
       CapacitorProvider.isLocationInfoCollectionEnabled$()
@@ -52,8 +38,8 @@ export class CapacitorProvider implements FactsProvider {
                 ? defer(() =>
                     Geolocation.getCurrentPosition({
                       enableHighAccuracy: true,
-                      maximumAge: 10 * 60 * 1000,
-                      timeout: 10 * 1000,
+                      maximumAge: defaultGeolocationAge,
+                      timeout: defaultGeolocationTimeout,
                     })
                   )
                 : of(undefined)
@@ -74,5 +60,21 @@ export class CapacitorProvider implements FactsProvider {
         )
       )
       .toPromise();
+  }
+
+  static isDeviceInfoCollectionEnabled$() {
+    return preferences.getBoolean$(PrefKeys.CollectDeviceInfo, true);
+  }
+
+  static setDeviceInfoCollection$(enable: boolean) {
+    return preferences.setBoolean$(PrefKeys.CollectDeviceInfo, enable);
+  }
+
+  static isLocationInfoCollectionEnabled$() {
+    return preferences.getBoolean$(PrefKeys.CollectLocationInfo, true);
+  }
+
+  static setLocationInfoCollection$(enable: boolean) {
+    return preferences.setBoolean$(PrefKeys.CollectLocationInfo, enable);
   }
 }

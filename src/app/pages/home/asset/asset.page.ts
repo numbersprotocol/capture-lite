@@ -135,8 +135,8 @@ export class AssetPage {
             concatMap(([asset, capture]) =>
               forkJoin([
                 this.assetRepository.remove$(asset),
-                // tslint:disable-next-line: no-non-null-assertion
                 this.proofRepository.remove(
+                  // tslint:disable-next-line: no-non-null-assertion
                   capture.proofWithThumbnailAndOld!.proof
                 ),
               ])

@@ -7,6 +7,8 @@ const enum RepositoryName {
   NumbersStoragePublisher = 'numbersStoragePublisher',
 }
 
+// TODO: Remove this unnecessary class after refactor the preference utils.
+// tslint:disable-next-line: no-unnecessary-class
 export class PreferenceManager {
   static readonly LANGUAGE_PREF = new Preferences(RepositoryName.Language);
   static readonly CAPACITOR_PROVIDER_PREF = new Preferences(

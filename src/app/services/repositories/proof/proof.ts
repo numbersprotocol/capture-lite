@@ -40,21 +40,6 @@ export class Proof {
     return this.getFactValue(DefaultFactId.GEOLOCATION_LONGITUDE);
   }
 
-  static signatureProviders = new Map<string, SignatureVerifier>();
-
-  static registerSignatureProvider(id: string, provider: SignatureVerifier) {
-    this.signatureProviders.set(id, provider);
-  }
-
-  static unregisterSignatureProvider(id: string) {
-    this.signatureProviders.delete(id);
-  }
-
-  static parse(json: string) {
-    const parsed = JSON.parse(json) as SerializedProof;
-    return new Proof(parsed.assets, parsed.truth, parsed.signatures);
-  }
-
   async getId() {
     return sha256WithString$(this.stringify()).toPromise();
   }
@@ -111,6 +96,21 @@ export class Proof {
       )
     );
     return results.every(result => result);
+  }
+
+  static signatureProviders = new Map<string, SignatureVerifier>();
+
+  static registerSignatureProvider(id: string, provider: SignatureVerifier) {
+    Proof.signatureProviders.set(id, provider);
+  }
+
+  static unregisterSignatureProvider(id: string) {
+    Proof.signatureProviders.delete(id);
+  }
+
+  static parse(json: string) {
+    const parsed = JSON.parse(json) as SerializedProof;
+    return new Proof(parsed.assets, parsed.truth, parsed.signatures);
   }
 }
 

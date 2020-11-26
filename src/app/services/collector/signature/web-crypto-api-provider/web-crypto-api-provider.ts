@@ -17,8 +17,30 @@ const enum PrefKeys {
 export class WebCryptoApiProvider implements SignatureProvider {
   readonly id = name;
 
+  async provide(serializedSortedSignTargets: string): Promise<Signature> {
+    return WebCryptoApiProvider.getPrivateKey$()
+      .pipe(
+        first(),
+        switchMap(privateKeyHex =>
+          signWithSha256AndEcdsa$(serializedSortedSignTargets, privateKeyHex)
+        ),
+        switchMap(signatureHex =>
+          zip(of(signatureHex), WebCryptoApiProvider.getPublicKey$())
+        ),
+        first(),
+        map(([signatureHex, publicKeyHex]) => ({
+          signature: signatureHex,
+          publicKey: publicKeyHex,
+        }))
+      )
+      .toPromise();
+  }
+
   static initialize$() {
-    return zip(this.getPublicKey$(), this.getPrivateKey$()).pipe(
+    return zip(
+      WebCryptoApiProvider.getPublicKey$(),
+      WebCryptoApiProvider.getPrivateKey$()
+    ).pipe(
       first(),
       filter(
         ([publicKey, privateKey]) =>
@@ -40,24 +62,5 @@ export class WebCryptoApiProvider implements SignatureProvider {
 
   static getPrivateKey$() {
     return preferences.getString$(PrefKeys.PrivateKey);
-  }
-
-  async provide(serializedSortedSignTargets: string): Promise<Signature> {
-    return WebCryptoApiProvider.getPrivateKey$()
-      .pipe(
-        first(),
-        switchMap(privateKeyHex =>
-          signWithSha256AndEcdsa$(serializedSortedSignTargets, privateKeyHex)
-        ),
-        switchMap(signatureHex =>
-          zip(of(signatureHex), WebCryptoApiProvider.getPublicKey$())
-        ),
-        first(),
-        map(([signatureHex, publicKeyHex]) => ({
-          signature: signatureHex,
-          publicKey: publicKeyHex,
-        }))
-      )
-      .toPromise();
   }
 }

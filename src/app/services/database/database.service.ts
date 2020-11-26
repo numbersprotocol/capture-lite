@@ -12,8 +12,8 @@ export class Database {
   ) {}
 
   getTable<T extends Tuple>(id: string): Table<T> {
-    // tslint:disable-next-line: no-non-null-assertion
     if (this.tables.has(id)) {
+      // tslint:disable-next-line: no-non-null-assertion
       return this.tables.get(id)!;
     }
     return this.createTable(id);

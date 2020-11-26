@@ -70,6 +70,7 @@ describe('CollectorService', () => {
   it('should store proof with ProofRepository', async () => {
     const proof = await service.runAndStore(ASSETS);
 
+    // tslint:disable-next-line: no-unbound-method
     expect(proofRepositorySpy.add).toHaveBeenCalledWith(proof);
   });
 });

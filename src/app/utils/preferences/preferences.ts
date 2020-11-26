@@ -5,13 +5,15 @@ import { concatMapTo, map, mapTo, pluck, switchMap, tap } from 'rxjs/operators';
 const { Storage } = Plugins;
 
 export class Preferences {
-  constructor(readonly name: string) {}
-
   private readonly subjects = new Map<string, BehaviorSubject<any>>();
+
+  constructor(readonly name: string) {}
 
   get$<T>(
     key: string,
     defaultValue: T,
+    // TODO: Avoid using JSON.parse after refactor the preference utils.
+    // tslint:disable-next-line: no-unbound-method
     converter: (str: string) => T = JSON.parse
   ): Observable<T> {
     return defer(() => of(this.subjects.has(key))).pipe(
@@ -40,21 +42,23 @@ export class Preferences {
     );
   }
 
-  getBoolean$(key: string, defaultValue: boolean = false) {
+  getBoolean$(key: string, defaultValue = false) {
     return this.get$(key, defaultValue, v => v === 'true');
   }
 
-  getNumber$(key: string, defaultValue: number = 0) {
+  getNumber$(key: string, defaultValue = 0) {
     return this.get$(key, defaultValue, Number);
   }
 
-  getString$(key: string, defaultValue: string = '') {
+  getString$(key: string, defaultValue = '') {
     return this.get$(key, defaultValue, v => v);
   }
 
   set$<T>(
     key: string,
     value: T,
+    // TODO: Avoid using JSON.stringify after refactor preference utils.
+    // tslint:disable-next-line: no-unbound-method
     converter: (value: T) => string = JSON.stringify
   ): Observable<T> {
     return defer(() =>

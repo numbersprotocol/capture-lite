@@ -10,8 +10,6 @@ import {
 import { AssetRepository } from './repositories/asset/asset-repository.service';
 
 export class NumbersStoragePublisher extends Publisher {
-  static readonly ID = 'Numbers Storage';
-
   readonly id = NumbersStoragePublisher.ID;
 
   constructor(
@@ -44,4 +42,6 @@ export class NumbersStoragePublisher extends Publisher {
     await this.assetRepository.add(assetResponse);
     return proof;
   }
+
+  static readonly ID = 'Numbers Storage';
 }

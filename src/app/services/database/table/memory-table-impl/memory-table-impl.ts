@@ -42,18 +42,13 @@ export class MemoryTableImpl<T extends Tuple> implements Table<T> {
   async delete(tuples: T[]) {
     this.assertTuplesExist(tuples);
     const afterDeletion = this.tuples$.value.filter(
-      tuple =>
-        !tuples
-          // tslint:disable-next-line: rxjs-no-unsafe-scope
-          .map(t => equals(tuple)(t))
-          .includes(true)
+      tuple => !tuples.map(t => equals(tuple)(t)).includes(true)
     );
     this.tuples$.next(afterDeletion);
     return tuples;
   }
 
   private assertTuplesExist(tuples: T[]) {
-    // tslint:disable-next-line: rxjs-no-unsafe-scope
     const nonexistent = tuples.filter(
       tuple => !this.tuples$.value.find(t => equals(tuple)(t))
     );
@@ -68,6 +63,5 @@ export class MemoryTableImpl<T extends Tuple> implements Table<T> {
 }
 
 function intersaction<T>(list1: T[], list2: T[]) {
-  // tslint:disable-next-line: rxjs-no-unsafe-scope
   return list1.filter(tuple1 => list2.find(tuple2 => equals(tuple1)(tuple2)));
 }
