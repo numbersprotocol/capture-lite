@@ -9,12 +9,12 @@
 
   mat-list-item {
     height: initial;
+
     div[mat-line] {
       margin: 4px 0;
     }
 
     img[matListAvatar] {
-      width: 100%;
       border-radius: 4px;
       width: calc(100vw / 3);
       height: calc(100vw / 3);
@@ -35,14 +35,14 @@
 
 mat-toolbar {
   background: #564dfc;
-  color: #ffffff;
+  color: white;
 
   .mat-icon {
-    color: #ffffff;
+    color: white;
   }
 
   span {
-    color: #ffffff;
+    color: white;
     padding-right: 40px;
   }
 }

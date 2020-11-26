@@ -66,6 +66,7 @@ cordova-res android --skip-config --copy
 
 ### Contribution
 
+- Run `npm run lint` before each commit.
 - The committed codes should pass all GitHub checks.
 - Use [Visual Studio Code](https://code.visualstudio.com/) with workspace settings for consistent coding style.
 - Use [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to auto format on save.
