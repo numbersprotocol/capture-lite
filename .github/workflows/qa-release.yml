@@ -170,7 +170,7 @@ jobs:
 
       - name: Deploy to Play Store (closed alpha track)
         if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        uses: r0adkll/upload-google-play@v1.0.4
+        uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: service_account.json
           packageName: io.numbersprotocol.capturelite
