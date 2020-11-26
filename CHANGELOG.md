@@ -44,13 +44,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- __Workaround__:  Catch Error from Capacitor.Filesystem.deleteFile on Android or iOS Devices. #193
+- **Workaround**: Catch Error from Capacitor.Filesystem.deleteFile on Android or iOS Devices. #193
 
 ## 0.7.2 - 2020-11-13
 
 ### Fixed
 
-- __Workaround__: fix different naming for information. Use constant string for the names of information.
+- **Workaround**: fix different naming for information. Use constant string for the names of information.
 - Fix location cannot display on asset page in zh-tw. #187
 
 ## 0.7.1 - 2020-11-13

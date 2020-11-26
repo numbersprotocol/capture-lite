@@ -20,8 +20,8 @@ import { InformationPage } from './information.page';
     MatButtonModule,
     MatIconModule,
     MatListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
-  declarations: [InformationPage]
+  declarations: [InformationPage],
 })
-export class InformationPageModule { }
+export class InformationPageModule {}

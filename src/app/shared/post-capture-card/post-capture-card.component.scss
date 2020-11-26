@@ -57,7 +57,7 @@ mat-card-title {
 }
 
 .post-capture-avatar {
-  background-image: url("https://gravatar.com/avatar/8db683da3c728970bb776f6cc4048fd2?s=400&d=mp&r=x");
+  background-image: url('https://gravatar.com/avatar/8db683da3c728970bb776f6cc4048fd2?s=400&d=mp&r=x');
   background-size: cover;
 }
 
@@ -66,7 +66,6 @@ mat-card-title {
   overflow: hidden;
   white-space: nowrap;
   padding-left: 16px;
-
 }
 
 .caption-full {

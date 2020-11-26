@@ -20,8 +20,8 @@ import { SettingsPage } from './settings.page';
     MatButtonModule,
     MatIconModule,
     MatListModule,
-    MatSelectModule
+    MatSelectModule,
   ],
-  declarations: [SettingsPage]
+  declarations: [SettingsPage],
 })
-export class SettingsPageModule { }
+export class SettingsPageModule {}

@@ -2,15 +2,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of, zip } from 'rxjs';
 import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
-import { dataUrlWithBase64ToBlob$ } from 'src/app/utils/encoding/encoding';
-import { PreferenceManager } from 'src/app/utils/preferences/preference-manager';
+import { dataUrlWithBase64ToBlob$ } from '../../../utils/encoding/encoding';
+import { PreferenceManager } from '../../../utils/preferences/preference-manager';
 import { secret } from '../../../../environments/secret';
-import { getSortedProofInformation, OldDefaultInformationName, OldSignature, SortedProofInformation } from '../../repositories/proof/old-proof-adapter';
+import {
+  getSortedProofInformation,
+  OldDefaultInformationName,
+  OldSignature,
+  SortedProofInformation,
+} from '../../repositories/proof/old-proof-adapter';
 import { DefaultFactId, Proof } from '../../repositories/proof/proof';
 import { Asset } from './repositories/asset/asset';
 
 export const enum TargetProvider {
-  Numbers = 'Numbers'
+  Numbers = 'Numbers',
 }
 
 const baseUrl = secret.numbersStorageBaseUrl;
@@ -19,17 +24,14 @@ const enum PrefKeys {
   Enabled = 'enabled',
   AuthToken = 'authToken',
   Username = 'username',
-  Email = 'email'
+  Email = 'email',
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NumbersStorageApi {
-
-  constructor(
-    private readonly httpClient: HttpClient
-  ) { }
+  constructor(private readonly httpClient: HttpClient) {}
 
   isEnabled$() {
     return preference.getBoolean$(PrefKeys.Enabled);
@@ -43,58 +45,72 @@ export class NumbersStorageApi {
     return preference.getString$(PrefKeys.Email);
   }
 
-  createUser$(
-    username: string,
-    email: string,
-    password: string
-  ) {
+  createUser$(username: string, email: string, password: string) {
     const formData = new FormData();
     formData.append('username', username);
     formData.append('email', email);
     formData.append('password', password);
-    return this.httpClient.post<UserResponse>(`${baseUrl}/auth/users/`, formData);
+    return this.httpClient.post<UserResponse>(
+      `${baseUrl}/auth/users/`,
+      formData
+    );
   }
 
-  login$(
-    email: string,
-    password: string
-  ) {
+  login$(email: string, password: string) {
     const formData = new FormData();
     formData.append('email', email);
     formData.append('password', password);
-    return this.httpClient.post<TokenCreateResponse>(`${baseUrl}/auth/token/login/`, formData).pipe(
-      pluck('auth_token'),
-      concatMap(authToken => preference.setString$(PrefKeys.AuthToken, `token ${authToken}`)),
-      concatMapTo(this.getUserInformation$()),
-      concatMap(user => zip(
-        preference.setString$(PrefKeys.Username, user.username),
-        preference.setString$(PrefKeys.Email, user.email)
-      )),
-      concatMapTo(preference.setBoolean$(PrefKeys.Enabled, true))
-    );
+    return this.httpClient
+      .post<TokenCreateResponse>(`${baseUrl}/auth/token/login/`, formData)
+      .pipe(
+        pluck('auth_token'),
+        concatMap(authToken =>
+          preference.setString$(PrefKeys.AuthToken, `token ${authToken}`)
+        ),
+        concatMapTo(this.getUserInformation$()),
+        concatMap(user =>
+          zip(
+            preference.setString$(PrefKeys.Username, user.username),
+            preference.setString$(PrefKeys.Email, user.email)
+          )
+        ),
+        concatMapTo(preference.setBoolean$(PrefKeys.Enabled, true))
+      );
   }
 
   getUserInformation$() {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => this.httpClient.get<UserResponse>(`${baseUrl}/auth/users/me/`, { headers }))
+      concatMap(headers =>
+        this.httpClient.get<UserResponse>(`${baseUrl}/auth/users/me/`, {
+          headers,
+        })
+      )
     );
   }
 
   logout$() {
     return preference.setBoolean$(PrefKeys.Enabled, false).pipe(
       concatMapTo(this.getHttpHeadersWithAuthToken$()),
-      concatMap(headers => this.httpClient.post(`${baseUrl}/auth/token/logout/`, {}, { headers })),
-      concatMapTo(zip(
-        preference.setString$(PrefKeys.Username, 'has-logged-out'),
-        preference.setString$(PrefKeys.Email, 'has-logged-out'),
-        preference.setString$(PrefKeys.AuthToken, '')
-      ))
+      concatMap(headers =>
+        this.httpClient.post(`${baseUrl}/auth/token/logout/`, {}, { headers })
+      ),
+      concatMapTo(
+        zip(
+          preference.setString$(PrefKeys.Username, 'has-logged-out'),
+          preference.setString$(PrefKeys.Email, 'has-logged-out'),
+          preference.setString$(PrefKeys.AuthToken, '')
+        )
+      )
     );
   }
 
   readAsset$(id: string) {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => this.httpClient.get<Asset>(`${baseUrl}/api/v2/assets/${id}/`, { headers }))
+      concatMap(headers =>
+        this.httpClient.get<Asset>(`${baseUrl}/api/v2/assets/${id}/`, {
+          headers,
+        })
+      )
     );
   }
 
@@ -107,69 +123,112 @@ export class NumbersStorageApi {
     tag: string
   ) {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => zip(
-        dataUrlWithBase64ToBlob$(rawFileBase64),
-        getSortedProofInformation(proof),
-        of(headers)
-      )),
+      concatMap(headers =>
+        zip(
+          dataUrlWithBase64ToBlob$(rawFileBase64),
+          getSortedProofInformation(proof),
+          of(headers)
+        )
+      ),
       concatMap(([rawFile, sortedProofInformation, headers]) => {
-        const oldSortedProofInformation = this.replaceDefaultFactIdWithOldDefaultInformationName(sortedProofInformation);
+        const oldSortedProofInformation = this.replaceDefaultFactIdWithOldDefaultInformationName(
+          sortedProofInformation
+        );
         const formData = new FormData();
         formData.append('asset_file', rawFile);
-        formData.append('asset_file_mime_type', Object.values(proof.assets)[0].mimeType);
+        formData.append(
+          'asset_file_mime_type',
+          Object.values(proof.assets)[0].mimeType
+        );
         formData.append('meta', JSON.stringify(oldSortedProofInformation));
         formData.append('target_provider', targetProvider);
         formData.append('caption', caption);
         formData.append('signature', JSON.stringify(signatures));
         formData.append('tag', tag);
-        return this.httpClient.post<Asset>(`${baseUrl}/api/v2/assets/`, formData, { headers });
+        return this.httpClient.post<Asset>(
+          `${baseUrl}/api/v2/assets/`,
+          formData,
+          { headers }
+        );
       })
     );
   }
 
-  private replaceDefaultFactIdWithOldDefaultInformationName(sortedProofInformation: SortedProofInformation): SortedProofInformation {
+  private replaceDefaultFactIdWithOldDefaultInformationName(
+    sortedProofInformation: SortedProofInformation
+  ): SortedProofInformation {
     return {
       proof: sortedProofInformation.proof,
       information: sortedProofInformation.information.map(info => {
         if (info.name === DefaultFactId.DEVICE_NAME) {
-          return { provider: info.provider, value: info.value, name: OldDefaultInformationName.DEVICE_NAME };
+          return {
+            provider: info.provider,
+            value: info.value,
+            name: OldDefaultInformationName.DEVICE_NAME,
+          };
         }
         if (info.name === DefaultFactId.GEOLOCATION_LATITUDE) {
-          return { provider: info.provider, value: info.value, name: OldDefaultInformationName.GEOLOCATION_LATITUDE };
+          return {
+            provider: info.provider,
+            value: info.value,
+            name: OldDefaultInformationName.GEOLOCATION_LATITUDE,
+          };
         }
         if (info.name === DefaultFactId.GEOLOCATION_LONGITUDE) {
-          return { provider: info.provider, value: info.value, name: OldDefaultInformationName.GEOLOCATION_LONGITUDE };
+          return {
+            provider: info.provider,
+            value: info.value,
+            name: OldDefaultInformationName.GEOLOCATION_LONGITUDE,
+          };
         }
         return info;
-      })
+      }),
     };
   }
 
   listTransactions$() {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => this.httpClient.get<TransactionListResponse>(`${baseUrl}/api/v2/transactions/`, { headers }))
+      concatMap(headers =>
+        this.httpClient.get<TransactionListResponse>(
+          `${baseUrl}/api/v2/transactions/`,
+          { headers }
+        )
+      )
     );
   }
 
   createTransaction$(assetId: string, email: string, caption: string) {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => this.httpClient.post<TransactionCreateResponse>(
-        `${baseUrl}/api/v2/transactions/`,
-        { asset_id: assetId, email, caption },
-        { headers }
-      ))
+      concatMap(headers =>
+        this.httpClient.post<TransactionCreateResponse>(
+          `${baseUrl}/api/v2/transactions/`,
+          { asset_id: assetId, email, caption },
+          { headers }
+        )
+      )
     );
   }
 
   listInbox$() {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => this.httpClient.get<InboxReponse>(`${baseUrl}/api/v2/transactions/inbox/`, { headers }))
+      concatMap(headers =>
+        this.httpClient.get<InboxReponse>(
+          `${baseUrl}/api/v2/transactions/inbox/`,
+          { headers }
+        )
+      )
     );
   }
 
   acceptTransaction$(id: string) {
     return this.getHttpHeadersWithAuthToken$().pipe(
-      concatMap(headers => this.httpClient.post<Transaction>(`${baseUrl}/api/v2/transactions/${id}/accept/`, {}, { headers }))
+      concatMap(headers =>
+        this.httpClient.post<Transaction>(
+          `${baseUrl}/api/v2/transactions/${id}/accept/`,
+          {},
+          { headers }
+        )
+      )
     );
   }
 

@@ -17,8 +17,8 @@ import { PostCaptureCardComponent } from './post-capture-card.component';
     MatCardModule,
     MatListModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
   ],
-  exports: [PostCaptureCardComponent]
+  exports: [PostCaptureCardComponent],
 })
-export class PostCaptureCardModule { }
+export class PostCaptureCardModule {}

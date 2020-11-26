@@ -1,6 +1,11 @@
-import { defer, of, zip } from 'rxjs';
+import { defer, Observable, of, zip } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { arrayBufferToHex, base64ToArrayBuffer, hexToArrayBuffer, stringToArrayBuffer } from '../encoding/encoding';
+import {
+  arrayBufferToHex,
+  base64ToArrayBuffer,
+  hexToArrayBuffer,
+  stringToArrayBuffer,
+} from '../encoding/encoding';
 
 const subtle = crypto.subtle;
 const SHA_256 = 'SHA-256';
@@ -8,11 +13,11 @@ const ECDSA = 'ECDSA';
 const SECP256R1 = 'P-256';
 const enum Usage {
   Sign = 'sign',
-  Verify = 'verify'
+  Verify = 'verify',
 }
 const enum Format {
   PKCS8 = 'pkcs8',
-  SubjectPublicKeyInfo = 'spki'
+  SubjectPublicKeyInfo = 'spki',
 }
 
 interface KeyPair {
@@ -44,35 +49,54 @@ export function sha256WithBase64$(base64: string) {
   );
 }
 
-export function createEcKeyPair$() {
-  return defer(() => subtle.generateKey(
-    {
-      name: ECDSA,
-      namedCurve: SECP256R1
-    },
-    true,
-    [Usage.Sign, Usage.Verify]
-  )).pipe(
-    switchMap(({ publicKey, privateKey }) => zip(exportEcdsaPublicKey$(publicKey), exportEcdsaPrivateKey$(privateKey))),
-    map(([publicKey, privateKey]) => ({ publicKey, privateKey } as KeyPair))
+export function createEcKeyPair$(): Observable<KeyPair> {
+  return defer(() =>
+    subtle.generateKey(
+      {
+        name: ECDSA,
+        namedCurve: SECP256R1,
+      },
+      true,
+      [Usage.Sign, Usage.Verify]
+    )
+  ).pipe(
+    switchMap(({ publicKey, privateKey }) =>
+      zip(exportEcdsaPublicKey$(publicKey), exportEcdsaPrivateKey$(privateKey))
+    ),
+    map(([publicKey, privateKey]) => ({ publicKey, privateKey }))
   );
 }
 
-export function signWithSha256AndEcdsa$(message: string, privateKeyHex: string) {
+export function signWithSha256AndEcdsa$(
+  message: string,
+  privateKeyHex: string
+) {
   return importEcdsaPrivateKey$(privateKeyHex).pipe(
-    switchMap(key => subtle.sign({ name: ECDSA, hash: SHA_256 }, key, stringToArrayBuffer(message))),
+    switchMap(key =>
+      subtle.sign(
+        { name: ECDSA, hash: SHA_256 },
+        key,
+        stringToArrayBuffer(message)
+      )
+    ),
     map(signature => arrayBufferToHex(signature))
   );
 }
 
-export function verifyWithSha256AndEcdsa$(message: string, signatureHex: string, publicKeyHex: string) {
+export function verifyWithSha256AndEcdsa$(
+  message: string,
+  signatureHex: string,
+  publicKeyHex: string
+) {
   return importEcdsaPublicKey$(publicKeyHex).pipe(
-    switchMap(key => subtle.verify(
-      { name: ECDSA, hash: SHA_256 },
-      key,
-      hexToArrayBuffer(signatureHex),
-      stringToArrayBuffer(message)
-    ))
+    switchMap(key =>
+      subtle.verify(
+        { name: ECDSA, hash: SHA_256 },
+        key,
+        hexToArrayBuffer(signatureHex),
+        stringToArrayBuffer(message)
+      )
+    )
   );
 }
 
@@ -89,29 +113,33 @@ function exportEcdsaPrivateKey$(key: CryptoKey) {
 }
 
 function importEcdsaPublicKey$(keyHex: string) {
-  return defer(() => subtle.importKey(
-    Format.SubjectPublicKeyInfo,
-    hexToArrayBuffer(keyHex),
-    {
-      name: ECDSA,
-      hash: SHA_256,
-      namedCurve: SECP256R1
-    },
-    true,
-    [Usage.Verify]
-  ));
+  return defer(() =>
+    subtle.importKey(
+      Format.SubjectPublicKeyInfo,
+      hexToArrayBuffer(keyHex),
+      {
+        name: ECDSA,
+        hash: SHA_256,
+        namedCurve: SECP256R1,
+      },
+      true,
+      [Usage.Verify]
+    )
+  );
 }
 
 function importEcdsaPrivateKey$(keyHex: string) {
-  return defer(() => subtle.importKey(
-    Format.PKCS8,
-    hexToArrayBuffer(keyHex),
-    {
-      name: ECDSA,
-      hash: SHA_256,
-      namedCurve: SECP256R1
-    },
-    true,
-    [Usage.Sign]
-  ));
+  return defer(() =>
+    subtle.importKey(
+      Format.PKCS8,
+      hexToArrayBuffer(keyHex),
+      {
+        name: ECDSA,
+        hash: SHA_256,
+        namedCurve: SECP256R1,
+      },
+      true,
+      [Usage.Sign]
+    )
+  );
 }

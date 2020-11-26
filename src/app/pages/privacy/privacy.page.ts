@@ -9,19 +9,18 @@ import { CapacitorProvider } from '../../services/collector/facts/capacitor-prov
   styleUrls: ['./privacy.page.scss'],
 })
 export class PrivacyPage {
-
   readonly isDeviceInfoCollectionEnabled$ = CapacitorProvider.isDeviceInfoCollectionEnabled$();
   readonly isLocationInfoCollectionEnabled$ = CapacitorProvider.isLocationInfoCollectionEnabled$();
 
   setDeviceInfoCollection(enable: boolean) {
-    CapacitorProvider.setDeviceInfoCollection$(enable).pipe(
-      untilDestroyed(this)
-    ).subscribe();
+    CapacitorProvider.setDeviceInfoCollection$(enable)
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 
   setLocationInfoCollection(enable: boolean) {
-    CapacitorProvider.setLocationInfoCollection$(enable).pipe(
-      untilDestroyed(this)
-    ).subscribe();
+    CapacitorProvider.setLocationInfoCollection$(enable)
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 }

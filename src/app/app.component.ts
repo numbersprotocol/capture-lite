@@ -24,7 +24,7 @@ const { SplashScreen } = Plugins;
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
   constructor(
@@ -49,12 +49,19 @@ export class AppComponent {
   }
 
   restoreAppStatus() {
-    this.cameraService.restoreKilledAppResult$().pipe(
-      concatMap(cameraPhoto => this.collectorService.runAndStore({
-        [cameraPhoto.base64String]: { mimeType: fromExtension(cameraPhoto.format) }
-      })),
-      untilDestroyed(this)
-    ).subscribe();
+    this.cameraService
+      .restoreKilledAppResult$()
+      .pipe(
+        concatMap(cameraPhoto =>
+          this.collectorService.runAndStore({
+            [cameraPhoto.base64String]: {
+              mimeType: fromExtension(cameraPhoto.format),
+            },
+          })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   initializeApp() {
@@ -81,6 +88,9 @@ export class AppComponent {
   }
 
   registerIcon() {
-    this.iconRegistry.addSvgIcon('media-id', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/icon/media-id.svg'));
+    this.iconRegistry.addSvgIcon(
+      'media-id',
+      this.sanitizer.bypassSecurityTrustResourceUrl('/assets/icon/media-id.svg')
+    );
   }
 }

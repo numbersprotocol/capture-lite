@@ -7,12 +7,11 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
   styleUrls: ['./options-menu.component.scss'],
 })
 export class OptionsMenuComponent {
-
   readonly options = Option;
 
   constructor(
     private readonly bottomSheetRef: MatBottomSheetRef<OptionsMenuComponent>
-  ) { }
+  ) {}
 
   openLink(option: Option) {
     this.bottomSheetRef.dismiss(option);
@@ -20,5 +19,5 @@ export class OptionsMenuComponent {
 }
 
 export enum Option {
-  Delete
+  Delete,
 }
