@@ -69,6 +69,37 @@
         "require-const-for-all-caps",
         "allow-pascal-case"
       ]
-    }
+    },
+    "contextual-decorator": true,
+    "contextual-lifecycle": true,
+    "no-attribute-decorator": true,
+    "no-lifecycle-call": true,
+    "no-output-native": true,
+    "no-pipe-impure": true,
+    "template-banana-in-box": true,
+    "template-no-any": true,
+    "template-no-negated-async": true,
+    "use-lifecycle-interface": true,
+    "no-conflicting-lifecycle": true,
+    "no-forward-ref": true,
+    "no-input-prefix": true,
+    "no-input-rename": true,
+    "no-unused-css": true,
+    "prefer-output-readonly": true,
+    "relative-url-prefix": true,
+    "use-component-selector": true,
+    "use-component-view-encapsulation": true,
+    "use-pipe-decorator": true,
+    "use-pipe-transform-interface": true,
+    "component-class-suffix": [true, "Component", "View", "Page"],
+    "component-selector": [true, "element", "app", "kebab-case"],
+    "directive-class-suffix": true,
+    "directive-selector": [true, "attribute", "app", "camelCase"],
+    "no-host-metadata-property": true,
+    "no-inputs-metadata-property": true,
+    "no-outputs-metadata-property": true,
+    "no-queries-metadata-property": true,
+    "pipe-prefix": true,
+    "prefer-inline-decorator": true
   }
 }

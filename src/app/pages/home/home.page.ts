@@ -18,8 +18,8 @@ import { forkJoinWithDefault } from '../../utils/rx-operators';
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
   readonly capturesByDate$ = this.getCaptures$().pipe(

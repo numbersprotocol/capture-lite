@@ -6,18 +6,18 @@
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
-  <span *ngIf="(postCaptures$ | async)?.length === 0" class="nothing-here"
-    >{{ t('nothingHere') }}</span
-  >
+  <span *ngIf="(postCaptures$ | async)?.length === 0" class="nothing-here">{{
+    t('nothingHere')
+  }}</span>
   <mat-list>
     <ng-container
-      *ngFor="let postCapture of (postCaptures$ | async); last as isLast"
+      *ngFor="let postCapture of postCaptures$ | async; last as isLast"
     >
       <mat-list-item>
         <img matListAvatar [src]="postCapture.asset.asset_file_thumbnail" />
         <div mat-line>{{ postCapture.asset.id }}</div>
         <div mat-line>{{ t('sentFrom') + ' ' + postCapture.sender }}</div>
-        <div mat-line>{{ postCapture.created_at | date:'short' }}</div>
+        <div mat-line>{{ postCapture.created_at | date: 'short' }}</div>
         <div class="action" mat-line>
           <button
             (click)="ignore(postCapture.id)"

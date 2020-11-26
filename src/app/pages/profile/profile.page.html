@@ -24,7 +24,7 @@
       <div mat-line>{{ t('publicKey') }}</div>
       <div mat-line>{{ publicKey$ | async }}</div>
       <button
-        *ngIf="(publicKey$ | async) as publicKey"
+        *ngIf="publicKey$ | async as publicKey"
         (click)="copyToClipboard(publicKey)"
         mat-icon-button
       >
@@ -36,7 +36,7 @@
       <div mat-line>{{ t('privateKey') }}</div>
       <div mat-line>{{ privateKey$ | async }}</div>
       <button
-        *ngIf="(privateKey$ | async) as privateKey"
+        *ngIf="privateKey$ | async as privateKey"
         (click)="copyToClipboard(privateKey)"
         mat-icon-button
       >
