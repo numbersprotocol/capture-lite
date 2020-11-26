@@ -2,9 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of, zip } from 'rxjs';
 import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
+import { secret } from '../../../../environments/secret';
 import { dataUrlWithBase64ToBlob$ } from '../../../utils/encoding/encoding';
 import { PreferenceManager } from '../../../utils/preferences/preference-manager';
-import { secret } from '../../../../environments/secret';
 import {
   getSortedProofInformation,
   OldDefaultInformationName,
@@ -32,18 +32,6 @@ const enum PrefKeys {
 })
 export class NumbersStorageApi {
   constructor(private readonly httpClient: HttpClient) {}
-
-  isEnabled$() {
-    return preference.getBoolean$(PrefKeys.Enabled);
-  }
-
-  getUsername$() {
-    return preference.getString$(PrefKeys.Username);
-  }
-
-  getEmail$() {
-    return preference.getString$(PrefKeys.Email);
-  }
 
   createUser$(username: string, email: string, password: string) {
     const formData = new FormData();
@@ -79,7 +67,7 @@ export class NumbersStorageApi {
   }
 
   getUserInformation$() {
-    return this.getHttpHeadersWithAuthToken$().pipe(
+    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers =>
         this.httpClient.get<UserResponse>(`${baseUrl}/auth/users/me/`, {
           headers,
@@ -90,7 +78,7 @@ export class NumbersStorageApi {
 
   logout$() {
     return preference.setBoolean$(PrefKeys.Enabled, false).pipe(
-      concatMapTo(this.getHttpHeadersWithAuthToken$()),
+      concatMapTo(NumbersStorageApi.getHttpHeadersWithAuthToken$()),
       concatMap(headers =>
         this.httpClient.post(`${baseUrl}/auth/token/logout/`, {}, { headers })
       ),
@@ -105,7 +93,7 @@ export class NumbersStorageApi {
   }
 
   readAsset$(id: string) {
-    return this.getHttpHeadersWithAuthToken$().pipe(
+    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers =>
         this.httpClient.get<Asset>(`${baseUrl}/api/v2/assets/${id}/`, {
           headers,
@@ -122,7 +110,7 @@ export class NumbersStorageApi {
     signatures: OldSignature[],
     tag: string
   ) {
-    return this.getHttpHeadersWithAuthToken$().pipe(
+    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers =>
         zip(
           dataUrlWithBase64ToBlob$(rawFileBase64),
@@ -131,7 +119,7 @@ export class NumbersStorageApi {
         )
       ),
       concatMap(([rawFile, sortedProofInformation, headers]) => {
-        const oldSortedProofInformation = this.replaceDefaultFactIdWithOldDefaultInformationName(
+        const oldSortedProofInformation = replaceDefaultFactIdWithOldDefaultInformationName(
           sortedProofInformation
         );
         const formData = new FormData();
@@ -154,40 +142,8 @@ export class NumbersStorageApi {
     );
   }
 
-  private replaceDefaultFactIdWithOldDefaultInformationName(
-    sortedProofInformation: SortedProofInformation
-  ): SortedProofInformation {
-    return {
-      proof: sortedProofInformation.proof,
-      information: sortedProofInformation.information.map(info => {
-        if (info.name === DefaultFactId.DEVICE_NAME) {
-          return {
-            provider: info.provider,
-            value: info.value,
-            name: OldDefaultInformationName.DEVICE_NAME,
-          };
-        }
-        if (info.name === DefaultFactId.GEOLOCATION_LATITUDE) {
-          return {
-            provider: info.provider,
-            value: info.value,
-            name: OldDefaultInformationName.GEOLOCATION_LATITUDE,
-          };
-        }
-        if (info.name === DefaultFactId.GEOLOCATION_LONGITUDE) {
-          return {
-            provider: info.provider,
-            value: info.value,
-            name: OldDefaultInformationName.GEOLOCATION_LONGITUDE,
-          };
-        }
-        return info;
-      }),
-    };
-  }
-
   listTransactions$() {
-    return this.getHttpHeadersWithAuthToken$().pipe(
+    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers =>
         this.httpClient.get<TransactionListResponse>(
           `${baseUrl}/api/v2/transactions/`,
@@ -198,7 +154,7 @@ export class NumbersStorageApi {
   }
 
   createTransaction$(assetId: string, email: string, caption: string) {
-    return this.getHttpHeadersWithAuthToken$().pipe(
+    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers =>
         this.httpClient.post<TransactionCreateResponse>(
           `${baseUrl}/api/v2/transactions/`,
@@ -210,7 +166,7 @@ export class NumbersStorageApi {
   }
 
   listInbox$() {
-    return this.getHttpHeadersWithAuthToken$().pipe(
+    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers =>
         this.httpClient.get<InboxReponse>(
           `${baseUrl}/api/v2/transactions/inbox/`,
@@ -221,7 +177,7 @@ export class NumbersStorageApi {
   }
 
   acceptTransaction$(id: string) {
-    return this.getHttpHeadersWithAuthToken$().pipe(
+    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
       concatMap(headers =>
         this.httpClient.post<Transaction>(
           `${baseUrl}/api/v2/transactions/${id}/accept/`,
@@ -236,12 +192,57 @@ export class NumbersStorageApi {
     return this.httpClient.get(url, { responseType: 'blob' });
   }
 
-  private getHttpHeadersWithAuthToken$() {
+  // TODO: Avoid using static method after refactor preference utils.
+  private static getHttpHeadersWithAuthToken$() {
     return preference.getString$(PrefKeys.AuthToken).pipe(
       first(),
       map(authToken => new HttpHeaders({ Authorization: authToken }))
     );
   }
+
+  static isEnabled$() {
+    return preference.getBoolean$(PrefKeys.Enabled);
+  }
+
+  static getUsername$() {
+    return preference.getString$(PrefKeys.Username);
+  }
+
+  static getEmail$() {
+    return preference.getString$(PrefKeys.Email);
+  }
+}
+
+function replaceDefaultFactIdWithOldDefaultInformationName(
+  sortedProofInformation: SortedProofInformation
+): SortedProofInformation {
+  return {
+    proof: sortedProofInformation.proof,
+    information: sortedProofInformation.information.map(info => {
+      if (info.name === DefaultFactId.DEVICE_NAME) {
+        return {
+          provider: info.provider,
+          value: info.value,
+          name: OldDefaultInformationName.DEVICE_NAME,
+        };
+      }
+      if (info.name === DefaultFactId.GEOLOCATION_LATITUDE) {
+        return {
+          provider: info.provider,
+          value: info.value,
+          name: OldDefaultInformationName.GEOLOCATION_LATITUDE,
+        };
+      }
+      if (info.name === DefaultFactId.GEOLOCATION_LONGITUDE) {
+        return {
+          provider: info.provider,
+          value: info.value,
+          name: OldDefaultInformationName.GEOLOCATION_LONGITUDE,
+        };
+      }
+      return info;
+    }),
+  };
 }
 
 interface UserResponse {

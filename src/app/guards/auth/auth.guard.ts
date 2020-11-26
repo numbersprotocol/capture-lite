@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.numbersStorageApi.isEnabled$().pipe(
+    return NumbersStorageApi.isEnabled$().pipe(
       map(isEnabled => {
         if (isEnabled) {
           return true;

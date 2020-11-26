@@ -25,23 +25,23 @@ export class BlockingActionService {
         mode: 'md',
         ...opts,
       })
-    ).pipe(switchMap(loading => this._run$(action$, loading)));
+    ).pipe(switchMap(loading => run$(action$, loading)));
   }
+}
 
-  private _run$<T>(action$: Observable<T>, loading: HTMLIonLoadingElement) {
-    return defer(() => loading.present()).pipe(
-      switchMapTo(action$),
-      catchError(err => {
-        loading.dismiss();
-        throw err;
-      }),
-      switchMap(result =>
-        zip(
-          defer(() => loading.dismiss()),
-          of(result)
-        )
-      ),
-      map(([_, result]) => result)
-    );
-  }
+function run$<T>(action$: Observable<T>, loading: HTMLIonLoadingElement) {
+  return defer(() => loading.present()).pipe(
+    switchMapTo(action$),
+    catchError(err => {
+      loading.dismiss();
+      throw err;
+    }),
+    switchMap(result =>
+      zip(
+        defer(() => loading.dismiss()),
+        of(result)
+      )
+    ),
+    map(([_, result]) => result)
+  );
 }

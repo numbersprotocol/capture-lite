@@ -99,6 +99,7 @@ const FACTS: Facts = {
 
 class MockFactsProvider implements FactsProvider {
   readonly id = name;
+  // tslint:disable-next-line: prefer-function-over-method
   async provide(_: Assets) {
     return FACTS;
   }
@@ -116,6 +117,7 @@ const SIGNATURE: Signature = {
 };
 class MockSignatureProvider implements SignatureProvider {
   readonly id = name;
+  // tslint:disable-next-line: prefer-function-over-method
   async provide(_: string) {
     return SIGNATURE;
   }

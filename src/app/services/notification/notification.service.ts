@@ -19,10 +19,12 @@ export class NotificationService {
   }
 
   createNotificationId() {
-    this.currentId++;
+    this.currentId += 1;
     return this.currentId;
   }
 
+  // TODO: Create new notification instance containing ID itself.
+  // tslint:disable-next-line: prefer-function-over-method
   notify(id: number, title: string, body: string) {
     // tslint:disable-next-line: no-console
     console.log(`${title}: ${body}`);
@@ -43,6 +45,8 @@ export class NotificationService {
     );
   }
 
+  // TODO: Create new notification instance containing ID itself.
+  // tslint:disable-next-line: prefer-function-over-method
   cancel(id: number) {
     subscribeInBackground(
       defer(() =>

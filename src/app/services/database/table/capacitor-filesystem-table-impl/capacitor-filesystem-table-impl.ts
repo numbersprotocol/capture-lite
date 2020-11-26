@@ -76,27 +76,13 @@ export class CapacitorFilesystemTableImpl<T extends Tuple> implements Table<T> {
 
   async insert(tuples: T[]) {
     return this.withLock(async () => {
-      this.assertNoDuplicatedTuples(tuples);
+      assertNoDuplicatedTuples(tuples);
       this.assertNoConflictWithExistedTuples(tuples);
       await this.initialize();
       this.tuples$.next([...this.tuples$.value, ...tuples]);
       await this.dumpJson();
       return tuples;
     });
-  }
-
-  private assertNoDuplicatedTuples(tuples: T[]) {
-    const conflicted: T[] = [];
-    tuples.forEach((a, index) => {
-      for (let bIndex = index + 1; bIndex < tuples.length; bIndex++) {
-        if (equals(a)(tuples[bIndex])) {
-          conflicted.push(a);
-        }
-      }
-    });
-    if (conflicted.length !== 0) {
-      throw new Error(`Tuples duplicated: ${conflicted}`);
-    }
   }
 
   private assertNoConflictWithExistedTuples(tuples: T[]) {
@@ -157,6 +143,20 @@ export class CapacitorFilesystemTableImpl<T extends Tuple> implements Table<T> {
     } finally {
       release();
     }
+  }
+}
+
+function assertNoDuplicatedTuples<T>(tuples: T[]) {
+  const conflicted: T[] = [];
+  tuples.forEach((a, index) => {
+    for (let bIndex = index + 1; bIndex < tuples.length; bIndex += 1) {
+      if (equals(a)(tuples[bIndex])) {
+        conflicted.push(a);
+      }
+    }
+  });
+  if (conflicted.length !== 0) {
+    throw new Error(`Tuples duplicated: ${conflicted}`);
   }
 }
 

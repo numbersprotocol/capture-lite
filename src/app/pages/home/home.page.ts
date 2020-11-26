@@ -5,13 +5,13 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
 import { combineLatest, of, zip } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
-import { CameraService } from '../../services/camera/camera.service';
 import { CollectorService } from '../../services/collector/collector.service';
 import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
 import { AssetRepository } from '../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { PublishersAlert } from '../../services/publisher/publishers-alert/publishers-alert.service';
 import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
+import { capture$ } from '../../utils/camera';
 import { fromExtension } from '../../utils/mime-type';
 import { forkJoinWithDefault } from '../../utils/rx-operators';
 
@@ -30,13 +30,12 @@ export class HomePage {
     )
   );
   postCaptures$ = this.getPostCaptures$();
-  readonly username$ = this.numbersStorageApi.getUsername$();
+  readonly username$ = NumbersStorageApi.getUsername$();
   captureButtonShow = true;
 
   constructor(
     private readonly assetRepository: AssetRepository,
     private readonly proofRepository: ProofRepository,
-    private readonly cameraService: CameraService,
     private readonly collectorService: CollectorService,
     private readonly publishersAlert: PublishersAlert,
     private readonly numbersStorageApi: NumbersStorageApi
@@ -77,7 +76,7 @@ export class HomePage {
   private getPostCaptures$() {
     return zip(
       this.numbersStorageApi.listTransactions$(),
-      this.numbersStorageApi.getEmail$()
+      NumbersStorageApi.getEmail$()
     ).pipe(
       map(([transactionListResponse, email]) =>
         transactionListResponse.results.filter(
@@ -107,8 +106,7 @@ export class HomePage {
   }
 
   capture() {
-    this.cameraService
-      .capture$()
+    capture$()
       .pipe(
         concatMap(cameraPhoto =>
           this.collectorService.runAndStore({

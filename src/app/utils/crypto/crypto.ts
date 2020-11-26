@@ -30,22 +30,20 @@ interface KeyPair {
  * @param object The target object. Note that the order of the object properties is sensitive.
  */
 export function sha256$<T extends object>(object: T) {
-  return of(JSON.stringify(object)).pipe(
-    switchMap(json => sha256WithString$(json))
-  );
+  return of(JSON.stringify(object)).pipe(switchMap(sha256WithString$));
 }
 
 export function sha256WithString$(str: string) {
   return of(new TextEncoder().encode(str).buffer).pipe(
     switchMap(arrayBuffer => subtle.digest(SHA_256, arrayBuffer)),
-    map(digested => arrayBufferToHex(digested))
+    map(arrayBufferToHex)
   );
 }
 
 export function sha256WithBase64$(base64: string) {
   return of(base64ToArrayBuffer(base64)).pipe(
     switchMap(arrayBuffer => subtle.digest(SHA_256, arrayBuffer)),
-    map(digested => arrayBufferToHex(digested))
+    map(arrayBufferToHex)
   );
 }
 
@@ -79,7 +77,7 @@ export function signWithSha256AndEcdsa$(
         stringToArrayBuffer(message)
       )
     ),
-    map(signature => arrayBufferToHex(signature))
+    map(arrayBufferToHex)
   );
 }
 
@@ -102,13 +100,13 @@ export function verifyWithSha256AndEcdsa$(
 
 function exportEcdsaPublicKey$(key: CryptoKey) {
   return defer(() => subtle.exportKey(Format.SubjectPublicKeyInfo, key)).pipe(
-    map(arrayBuffer => arrayBufferToHex(arrayBuffer))
+    map(arrayBufferToHex)
   );
 }
 
 function exportEcdsaPrivateKey$(key: CryptoKey) {
   return defer(() => subtle.exportKey(Format.PKCS8, key)).pipe(
-    map(arrayBuffer => arrayBufferToHex(arrayBuffer))
+    map(arrayBufferToHex)
   );
 }
 

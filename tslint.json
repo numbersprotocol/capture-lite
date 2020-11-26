@@ -47,6 +47,28 @@
     "invalid-void": true,
     "max-classes-per-file": false,
     "no-default-export": true,
-    "prefer-readonly": true
+    "prefer-readonly": true,
+    "arrow-return-shorthand": true,
+    "binary-expression-operand-order": true,
+    "file-name-casing": [true, "kebab-case"],
+    "increment-decrement": true,
+    "interface-over-type-literal": true,
+    "no-boolean-literal-compare": true,
+    "no-redundant-jsdoc": true,
+    "no-unnecessary-callback-wrapper": true,
+    "no-unnecessary-qualifier": true,
+    "ordered-imports": true,
+    "prefer-function-over-method": true,
+    "prefer-method-signature": true,
+    "prefer-template": true,
+    "unnecessary-else": true,
+    "variable-name": {
+      "options": [
+        "ban-keywords",
+        "check-format",
+        "require-const-for-all-caps",
+        "allow-pascal-case"
+      ]
+    }
   }
 }

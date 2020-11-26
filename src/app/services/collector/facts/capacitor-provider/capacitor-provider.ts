@@ -19,6 +19,9 @@ const enum PrefKeys {
 export class CapacitorProvider implements FactsProvider {
   readonly id = name;
 
+  // TODO: Avoid using static methods `isDeviceInfoCollectionEnabled$` and
+  //       `isLocationInfoCollectionEnabled$` after refactor preference utils.
+  // tslint:disable-next-line: prefer-function-over-method
   async provide(_: Assets) {
     const defaultGeolocationAge = 600000;
     const defaultGeolocationTimeout = 10000;

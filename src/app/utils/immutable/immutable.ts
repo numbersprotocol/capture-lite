@@ -10,4 +10,6 @@ export function sortObjectDeeplyByKey(
     );
 }
 
-type SortableMap = { [key: string]: boolean | number | string | SortableMap };
+interface SortableMap {
+  [key: string]: boolean | number | string | SortableMap;
+}

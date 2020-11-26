@@ -1,5 +1,9 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": true,
+    "source.organizeImports": true
+  },
   "typescript.preferences.importModuleSpecifier": "relative"
 }

@@ -6,7 +6,6 @@ import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { concatMap } from 'rxjs/operators';
-import { CameraService } from './services/camera/camera.service';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorProvider } from './services/collector/facts/capacitor-provider/capacitor-provider';
 import { WebCryptoApiProvider } from './services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
@@ -16,6 +15,7 @@ import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { AssetRepository } from './services/publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
+import { restoreKilledAppResult$ } from './utils/camera';
 import { fromExtension } from './utils/mime-type';
 
 const { SplashScreen } = Plugins;
@@ -35,7 +35,6 @@ export class AppComponent {
     private readonly notificationService: NotificationService,
     private readonly numbersStorageApi: NumbersStorageApi,
     langaugeService: LanguageService,
-    private readonly cameraService: CameraService,
     private readonly assetRepository: AssetRepository,
     private readonly iconRegistry: MatIconRegistry,
     private readonly sanitizer: DomSanitizer
@@ -49,8 +48,7 @@ export class AppComponent {
   }
 
   restoreAppStatus() {
-    this.cameraService
-      .restoreKilledAppResult$()
+    restoreKilledAppResult$()
       .pipe(
         concatMap(cameraPhoto =>
           this.collectorService.runAndStore({

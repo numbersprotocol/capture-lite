@@ -21,8 +21,10 @@ export class NumbersStoragePublisher extends Publisher {
     super(translocoService, notificationService);
   }
 
+  // TODO: Avoid using static method after refactor preference utils.
+  // tslint:disable-next-line: prefer-function-over-method
   isEnabled$() {
-    return this.numbersStorageApi.isEnabled$();
+    return NumbersStorageApi.isEnabled$();
   }
 
   async run(proof: Proof) {

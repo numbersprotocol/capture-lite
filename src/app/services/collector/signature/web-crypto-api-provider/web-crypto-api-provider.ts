@@ -17,6 +17,9 @@ const enum PrefKeys {
 export class WebCryptoApiProvider implements SignatureProvider {
   readonly id = name;
 
+  // TODO: Avoid using static methods `getPrivateKey$` and `getPublicKey$` after
+  //       refactor preference utils.
+  // tslint:disable-next-line: prefer-function-over-method
   async provide(serializedSortedSignTargets: string): Promise<Signature> {
     return WebCryptoApiProvider.getPrivateKey$()
       .pipe(

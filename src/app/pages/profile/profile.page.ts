@@ -7,11 +7,11 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
 import { catchError, concatMapTo } from 'rxjs/operators';
-import { AssetRepository } from '../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
-import { IgnoredTransactionRepository } from '../../services/publisher/numbers-storage/repositories/ignored-transaction/ignored-transaction-repository.service';
 import { BlockingActionService } from '../../services/blocking-action/blocking-action.service';
 import { WebCryptoApiProvider } from '../../services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
 import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
+import { AssetRepository } from '../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
+import { IgnoredTransactionRepository } from '../../services/publisher/numbers-storage/repositories/ignored-transaction/ignored-transaction-repository.service';
 
 const { Clipboard } = Plugins;
 
@@ -22,8 +22,8 @@ const { Clipboard } = Plugins;
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage {
-  readonly username$ = this.numbersStorageApi.getUsername$();
-  readonly email$ = this.numbersStorageApi.getEmail$();
+  readonly username$ = NumbersStorageApi.getUsername$();
+  readonly email$ = NumbersStorageApi.getEmail$();
   readonly publicKey$ = WebCryptoApiProvider.getPublicKey$();
   readonly privateKey$ = WebCryptoApiProvider.getPrivateKey$();
 
