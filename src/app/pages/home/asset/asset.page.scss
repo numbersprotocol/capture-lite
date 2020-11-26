@@ -1,11 +1,16 @@
 mat-toolbar {
-  background: white;
+  background: #564dfc;
+  color: #ffffff;
+
+  .mat-icon {
+    color: #ffffff;
+  }
 
   span {
-    margin-left: 40px;
+    color: #ffffff;
+    padding-right: 40px;
   }
 }
-
 .toolbar-spacer {
   flex: 1 1 auto;
 }
@@ -17,8 +22,16 @@ mat-toolbar {
 button.center {
   display: block;
   margin: 0 auto;
+  position: relative;
+  top: 25%;
+  height: 50px;
 }
 
 .proof-image {
   width: 100%;
+}
+
+.mat-list-base .mat-list-item.mat-list-item-with-avatar {
+  height: 40px;
+  padding: 0 20px;
 }

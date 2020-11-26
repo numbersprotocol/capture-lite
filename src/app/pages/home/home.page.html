@@ -33,13 +33,13 @@
         <mat-icon>history</mat-icon>
       </button>
       <button routerLink="inbox" mat-icon-button>
-        <mat-icon>inbox</mat-icon>
+        <mat-icon>all_inbox</mat-icon>
       </button>
     </mat-toolbar>
 
     <mat-tab-group (selectedTabChange)="onTapChanged($event)" mat-align-tabs="center">
       <mat-tab label="Capture">
-        <div class="tab-content">
+        <div class="tab-content-capture">
           <ng-container *ngFor="let assetsWithRaw of capturesWithRawByDate$ | async">
             <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
             <mat-grid-list cols="3" gutterSize="8px">
@@ -51,14 +51,13 @@
         </div>
       </mat-tab>
       <mat-tab label="PostCapture">
-        <div class="tab-content">
+        <div class="tab-content-post">
           <app-post-capture-card *ngFor="let postCapture of postCaptures$ | async"
             [transaction]="postCapture.transaction" [asset]="postCapture.asset">
           </app-post-capture-card>
         </div>
       </mat-tab>
     </mat-tab-group>
-
     <button *ngIf="captureButtonShow" (click)="capture()" mat-fab color="primary">
       <mat-icon>camera_alt</mat-icon>
     </button>
