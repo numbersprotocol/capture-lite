@@ -1,14 +1,10 @@
 import { TranslocoService } from '@ngneat/transloco';
-import { Observable, zip } from 'rxjs';
-import { concatMap, first, mapTo } from 'rxjs/operators';
-import { CaptionRepository } from '../../data/caption/caption-repository.service';
-import { Proof } from '../../data/proof/proof';
-import { ProofRepository } from '../../data/proof/proof-repository.service';
-import { SignatureRepository } from '../../data/signature/signature-repository.service';
 import { NotificationService } from '../../notification/notification.service';
+import { getOldSignatures } from '../../repositories/proof/old-proof-adapter';
+import { Proof } from '../../repositories/proof/proof';
 import { Publisher } from '../publisher';
-import { AssetRepository } from './data/asset/asset-repository.service';
 import { NumbersStorageApi, TargetProvider } from './numbers-storage-api.service';
+import { AssetRepository } from './repositories/asset/asset-repository.service';
 
 export class NumbersStoragePublisher extends Publisher {
 
@@ -19,9 +15,6 @@ export class NumbersStoragePublisher extends Publisher {
   constructor(
     translocoService: TranslocoService,
     notificationService: NotificationService,
-    private readonly proofRepository: ProofRepository,
-    private readonly signatureRepository: SignatureRepository,
-    private readonly captionRepository: CaptionRepository,
     private readonly numbersStorageApi: NumbersStorageApi,
     private readonly assetRepository: AssetRepository
   ) {
@@ -32,23 +25,17 @@ export class NumbersStoragePublisher extends Publisher {
     return this.numbersStorageApi.isEnabled$();
   }
 
-  run$(proof: Proof): Observable<void> {
-    return zip(
-      this.proofRepository.getRawFile$(proof),
-      this.signatureRepository.getByProof$(proof),
-      this.captionRepository.getByProof$(proof),
-    ).pipe(
-      first(),
-      concatMap(([rawFileBase64, signatures, caption]) => this.numbersStorageApi.createAsset$(
-        `data:${proof.mimeType};base64,${rawFileBase64}`,
-        proof,
-        TargetProvider.Numbers,
-        JSON.stringify(caption ? caption : ''),
-        signatures,
-        'capture-lite'
-      )),
-      concatMap(asset => this.assetRepository.add$(asset)),
-      mapTo(void 0)
-    );
+  async run(proof: Proof) {
+    const oldSignatures = await getOldSignatures(proof);
+    const assetResponse = await this.numbersStorageApi.createAsset$(
+      `data:${Object.values(proof.assets)[0].mimeType};base64,${Object.keys(proof.assets)[0]}`,
+      proof,
+      TargetProvider.Numbers,
+      '',
+      oldSignatures,
+      'capture-lite'
+    ).toPromise();
+    await this.assetRepository.add(assetResponse);
+    return proof;
   }
 }

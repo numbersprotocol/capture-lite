@@ -1,11 +1,19 @@
 <mat-card *transloco="let t">
   <mat-card-header>
     <div mat-card-avatar class="post-capture-avatar"></div>
-    <mat-card-title>{{ asset.owner }}</mat-card-title>
+    <mat-card-title>{{ transaction.sender }}</mat-card-title>
     <mat-card-subtitle>{{ asset.uploaded_at | date: 'short' }}</mat-card-subtitle>
     <span class="toolbar-spacer"></span>
   </mat-card-header>
-  <img [src]="imageSrc" mat-card-image>
+  <div class="fixed-ratio" [ngStyle]="{
+      'height':
+      ratioImg.offsetHeight === ratioImg.offsetWidth
+          ? '100vw'
+          : ratioImg.offsetHeight > ratioImg.offsetWidth
+            ? 'calc(100vw / 4 * 5)'
+            : 'calc(100vw / 16 * 9)'}">
+    <img #ratioImg id="image" [src]="asset.asset_file" mat-card-image>
+  </div>
   <mat-card-content>
     <mat-list dense class="info-list" [class.info-list-show]="openMore">
       <mat-list-item>
@@ -19,20 +27,20 @@
         <mat-icon mat-list-icon>access_time</mat-icon>
         <div mat-line>
           <span>{{ t('timestamp') }}</span>
-          <span class="info-list-content">{{ (proof$ | async)?.timestamp | date:'medium' }}</span>
+          <span class="info-list-content">{{ asset.uploaded_at | date:'medium' }}</span>
         </div>
       </mat-list-item>
       <mat-list-item>
         <mat-icon mat-list-icon>place</mat-icon>
         <div mat-line>
           <span>{{ t('location') }}</span>
-          <div mat-line>{{ (latitude$ | async) + ', ' + (longitude$ | async) }}</div>
+          <span class="info-list-content" mat-line>{{ latitude + ', ' + longitude }}</span>
         </div>
       </mat-list-item>
     </mat-list>
-    <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">{{ (caption$ | async)?.text }}</p>
+    <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">{{ transaction.asset.caption }}</p>
   </mat-card-content>
   <mat-card-actions [align]="'end'">
-    <button (click)="openMore = !openMore" mat-button>{{ t('viewAll') + '...' }}</button>
+    <button class="all-btn" (click)="openMore = !openMore">{{ t('viewAll') + '...' }}</button>
   </mat-card-actions>
 </mat-card>

@@ -2,16 +2,18 @@ import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Observable, of, zip } from 'rxjs';
-import { concatMap, first, map } from 'rxjs/operators';
+import { groupBy } from 'lodash';
+import { combineLatest, of, zip } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { CollectorService } from 'src/app/services/collector/collector.service';
-import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
-import { Asset } from 'src/app/services/publisher/numbers-storage/data/asset/asset';
-import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
+import { AssetRepository } from 'src/app/services/publisher/numbers-storage/repositories/asset/asset-repository.service';
+import { PublishersAlert } from 'src/app/services/publisher/publishers-alert/publishers-alert.service';
+import { getOldProof } from 'src/app/services/repositories/proof/old-proof-adapter';
+import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
 import { fromExtension } from 'src/app/utils/mime-type';
-import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
+import { forkJoinWithDefault } from 'src/app/utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -21,17 +23,11 @@ import { forkJoinWithDefault, isNonNullable } from 'src/app/utils/rx-operators';
 })
 export class HomePage {
 
-  private readonly assets$ = this.assetRepository.getAll$();
-  private readonly captures$ = this.assets$.pipe(
-    map(assets => assets.filter(asset => asset.is_original_owner))
+  readonly capturesByDate$ = this.getCaptures$().pipe(
+    map(captures => groupBy(captures, c => formatDate(c.asset.uploaded_at, 'mediumDate', 'en-US')))
   );
-  private readonly postCaptures$ = this.assets$.pipe(
-    map(assets => assets.filter(asset => !asset.is_original_owner))
-  );
-  readonly capturesWithRawByDate$ = this.captures$.pipe(this.appendAssetsRawAndGroupedByDate$());
-  readonly postCapturesWithRawByDate$ = this.postCaptures$.pipe(this.appendAssetsRawAndGroupedByDate$());
-
-  readonly userName$ = this.numbersStorageApi.getUserName$();
+  postCaptures$ = this.getPostCaptures$();
+  readonly username$ = this.numbersStorageApi.getUsername$();
   captureButtonShow = true;
 
   constructor(
@@ -39,55 +35,57 @@ export class HomePage {
     private readonly proofRepository: ProofRepository,
     private readonly cameraService: CameraService,
     private readonly collectorService: CollectorService,
+    private readonly publishersAlert: PublishersAlert,
     private readonly numbersStorageApi: NumbersStorageApi
   ) { }
 
+  private getCaptures$() {
+    const originallyOwnedAssets$ = this.assetRepository.getAll$().pipe(
+      map(assets => assets.filter(asset => asset.is_original_owner))
+    );
+
+    const proofsWithThumbnailAndOld$ = this.proofRepository.getAll$().pipe(
+      concatMap(proofs => Promise.all(proofs.map(async (proof) =>
+        ({ proof, thumbnailDataUrl: await proof.getThumbnailDataUrl(), oldProof: await getOldProof(proof) })
+      )))
+    );
+
+    return combineLatest([originallyOwnedAssets$, proofsWithThumbnailAndOld$]).pipe(
+      map(([assets, proofsWithThumbnailAndOld]) => assets.map(asset => ({
+        asset,
+        proofWithThumbnailAndOld: proofsWithThumbnailAndOld.find(p => p.oldProof.hash === asset.proof_hash)
+      })))
+    );
+  }
+
+  private getPostCaptures$() {
+    return zip(this.numbersStorageApi.listTransactions$(), this.numbersStorageApi.getEmail$()).pipe(
+      map(([transactionListResponse, email]) => transactionListResponse.results.filter(
+        transaction => transaction.sender !== email && !transaction.expired && transaction.fulfilled_at
+      )),
+      concatMap(transactions => zip(
+        of(transactions),
+        forkJoinWithDefault(transactions.map(transaction => this.numbersStorageApi.readAsset$(transaction.asset.id)))
+      )),
+      map(([transactions, assets]) => transactions.map((transaction, index) => ({
+        transaction,
+        asset: assets[index]
+      })))
+    );
+  }
+
   capture() {
     this.cameraService.capture$().pipe(
-      map(cameraPhoto => this.collectorService.storeAndCollect(
-        cameraPhoto.base64String,
-        fromExtension(cameraPhoto.format)
-      )),
+      concatMap(cameraPhoto => this.collectorService.runAndStore({
+        [cameraPhoto.base64String]: { mimeType: fromExtension(cameraPhoto.format) }
+      })),
+      concatMap(proof => this.publishersAlert.presentOrPublish(proof)),
       untilDestroyed(this)
     ).subscribe();
   }
 
-  private appendAssetsRawAndGroupedByDate$() {
-    return (assets$: Observable<Asset[]>) => assets$.pipe(
-      concatMap(assets => forkJoinWithDefault(assets.map(asset => this.proofRepository.getByHash$(asset.proof_hash).pipe(
-        isNonNullable(),
-        first()
-      )))),
-      // tslint:disable-next-line: no-non-null-assertion
-      concatMap(proofs => forkJoinWithDefault(proofs.map(proof => this.proofRepository.getThumbnail$(proof)))),
-      concatMap(base64Strings => zip(assets$, of(base64Strings))),
-      map(([assets, base64Strings]) => assets.map((asset, index) => ({
-        asset,
-        rawBase64: base64Strings[index],
-        date: formatDate(asset.uploaded_at, 'mediumDate', 'en-US')
-      }))),
-      map(assetsWithRawAndDate => assetsWithRawAndDate.sort(
-        (a, b) => Date.parse(b.asset.uploaded_at) - Date.parse(a.asset.uploaded_at)
-      )),
-      map(assetsWithRawBase64 => assetsWithRawBase64.reduce((groupedAssetsWithRawBase64, assetWithRawBase64) => {
-        const index = groupedAssetsWithRawBase64.findIndex(
-          processingAssetsWithRawBase64 =>
-            processingAssetsWithRawBase64[0].date
-            === assetWithRawBase64.date
-        );
-        if (index === -1) {
-          groupedAssetsWithRawBase64.push([assetWithRawBase64]);
-        }
-        else {
-          groupedAssetsWithRawBase64[index].push(assetWithRawBase64);
-        }
-        return groupedAssetsWithRawBase64;
-      }, [] as { asset: Asset, rawBase64: string, date: string; }[][])
-      )
-    );
-  }
-
   onTapChanged(event: MatTabChangeEvent) {
     this.captureButtonShow = event.index === 0;
+    if (event.index === 1) { this.postCaptures$ = this.getPostCaptures$(); }
   }
 }

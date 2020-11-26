@@ -1,15 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { concatMap, map, pluck, switchMap } from 'rxjs/operators';
-import { CapacitorProvider } from 'src/app/services/collector/information/capacitor-provider/capacitor-provider';
-import { Caption } from 'src/app/services/data/caption/caption';
-import { CaptionRepository } from 'src/app/services/data/caption/caption-repository.service';
-import { InformationRepository } from 'src/app/services/data/information/information-repository.service';
-import { Proof } from 'src/app/services/data/proof/proof';
-import { ProofRepository } from 'src/app/services/data/proof/proof-repository.service';
-import { Asset } from 'src/app/services/publisher/numbers-storage/data/asset/asset';
-import { isNonNullable } from 'src/app/utils/rx-operators';
-
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Transaction } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
+import { Asset } from 'src/app/services/publisher/numbers-storage/repositories/asset/asset';
+import { OldDefaultInformationName } from 'src/app/services/repositories/proof/old-proof-adapter';
 @Component({
   selector: 'app-post-capture-card',
   templateUrl: './post-capture-card.component.html',
@@ -17,43 +9,18 @@ import { isNonNullable } from 'src/app/utils/rx-operators';
 })
 export class PostCaptureCardComponent implements OnInit {
 
-  @Input() userName!: string;
+  @Input() transaction!: Transaction;
   @Input() asset!: Asset;
-  @Input() imageSrc!: string;
-
-  proof$!: Observable<Proof>;
-  caption$!: Observable<Caption>;
-  latitude$!: Observable<string>;
-  longitude$!: Observable<string>;
-
+  @ViewChild('ratioImg')
+  ratioImg!: ElementRef;
+  latitude!: string;
+  longitude!: string;
   openMore = false;
 
-  constructor(
-    private readonly proofRepository: ProofRepository,
-    private readonly informationRepository: InformationRepository,
-    private readonly captionRepository: CaptionRepository
-  ) { }
-
   ngOnInit() {
-    this.proof$ = this.proofRepository.getByHash$(this.asset.proof_hash).pipe(
-      isNonNullable()
-    );
-    this.caption$ = this.proof$.pipe(
-      isNonNullable(),
-      concatMap(proof => this.captionRepository.getByProof$(proof)),
-      isNonNullable()
-    );
-    this.latitude$ = this.proof$.pipe(
-      switchMap(proof => this.informationRepository.getByProof$(proof)),
-      map(informationList => informationList.find(information => information.provider === CapacitorProvider.ID && information.name === 'Current GPS Latitude')),
-      isNonNullable(),
-      pluck('value')
-    );
-    this.longitude$ = this.proof$.pipe(
-      switchMap(proof => this.informationRepository.getByProof$(proof)),
-      map(informationList => informationList.find(information => information.provider === CapacitorProvider.ID && information.name === 'Current GPS Longitude')),
-      isNonNullable(),
-      pluck('value')
-    );
+    this.latitude = this.asset.information.information
+      .find(info => info.name === OldDefaultInformationName.GEOLOCATION_LATITUDE)?.value || 'unknown';
+    this.longitude = this.asset.information.information
+      .find(info => info.name === OldDefaultInformationName.GEOLOCATION_LONGITUDE)?.value || 'unknown';
   }
 }

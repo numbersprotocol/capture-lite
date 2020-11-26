@@ -1,8 +1,7 @@
 import { TranslocoService } from '@ngneat/transloco';
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { Proof } from '../data/proof/proof';
+import { Observable } from 'rxjs';
 import { NotificationService } from '../notification/notification.service';
+import { Proof } from '../repositories/proof/proof';
 
 export abstract class Publisher {
 
@@ -13,28 +12,30 @@ export abstract class Publisher {
     private readonly notificationService: NotificationService
   ) { }
 
-  publish(proof: Proof) {
-    const notificationId = this.notificationService.createNotificationId();
-    this.notificationService.notify(
-      notificationId,
-      this.translocoService.translate('publishingProof'),
-      this.translocoService.translate('message.publishingProof', { hash: proof.hash, publisherName: this.id })
-    );
-
-    // Deliberately subscribe without untilDestroyed scope. Also, it is not feasible to use
-    // subsctibeInBackground() as it will move the execution out of ngZone, which will prevent
-    // the observables subscribed with async pipe from observing new values.
-    this.run$(proof).pipe(
-      tap(_ => this.notificationService.notify(
-        notificationId,
-        this.translocoService.translate('proofPublished'),
-        this.translocoService.translate('message.proofPublished', { hash: proof.hash, publisherName: this.id })
-      )),
-      catchError((err: Error) => of(this.notificationService.notifyError(notificationId, err)))
-    ).subscribe();
-  }
-
   abstract isEnabled$(): Observable<boolean>;
 
-  protected abstract run$(proof: Proof): Observable<void>;
+  async publish(proof: Proof) {
+    const notificationId = this.notificationService.createNotificationId();
+    try {
+      this.notificationService.notify(
+        notificationId,
+        this.translocoService.translate('registeringAsset'),
+        this.translocoService.translate('message.registeringAsset', { hash: await proof.getId(), publisherName: this.id })
+      );
+
+      await this.run(proof);
+
+      this.notificationService.notify(
+        notificationId,
+        this.translocoService.translate('assetRegistered'),
+        this.translocoService.translate('message.assetRegistered', { hash: await proof.getId(), publisherName: this.id })
+      );
+
+      return proof;
+    } catch (e) {
+      this.notificationService.notifyError(notificationId, e);
+    }
+  }
+
+  protected abstract async run(proof: Proof): Promise<Proof>;
 }

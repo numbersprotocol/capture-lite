@@ -16,23 +16,27 @@ mat-sidenav-content {
 }
 
 mat-toolbar {
-  background: white;
+  background: #564dfc;
+  color: #ffffff;
 
-  .toolbar-spacer {
-    flex: 1 1 auto;
+  .mat-icon {
+    color: #ffffff;
+  }
+
+  span {
+    color: #ffffff;
+    padding-right: 40px;
   }
 }
 
-mat-tab-group {
-  height: 100%;
-}
-
-.tab-content {
-  padding: 16px;
+.tab-content-capture {
+  padding-left: 16px;
+  padding-right: 16px;
   margin-bottom: 128px;
 
   div.mat-title {
-    margin-top: 16px;
+    margin: 26px 0 0 0;
+    font-size: larger;
   }
 
   .square-image-tile {
@@ -44,6 +48,25 @@ mat-tab-group {
   app-post-capture-card {
     width: 100%;
     margin: 8px auto;
+  }
+}
+
+.tab-content-post {
+  margin-bottom: 128px;
+
+  div.mat-title {
+    margin-top: 16px;
+    padding: 16px;
+  }
+
+  .square-image-tile {
+    border-radius: 4px;
+    background-position: center center;
+    background-size: cover;
+  }
+
+  app-post-capture-card {
+    width: 100%;
   }
 }
 

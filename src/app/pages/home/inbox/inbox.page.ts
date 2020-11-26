@@ -3,9 +3,8 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
 import { concatMap, map, pluck, tap } from 'rxjs/operators';
 import { BlockingActionService } from 'src/app/services/blocking-action/blocking-action.service';
-import { AssetRepository } from 'src/app/services/publisher/numbers-storage/data/asset/asset-repository.service';
-import { IgnoredTransactionRepository } from 'src/app/services/publisher/numbers-storage/data/ignored-transaction/ignored-transaction-repository.service';
 import { NumbersStorageApi } from 'src/app/services/publisher/numbers-storage/numbers-storage-api.service';
+import { IgnoredTransactionRepository } from 'src/app/services/publisher/numbers-storage/repositories/ignored-transaction/ignored-transaction-repository.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -19,7 +18,6 @@ export class InboxPage {
 
   constructor(
     private readonly numbersStorageApi: NumbersStorageApi,
-    private readonly assetRepository: AssetRepository,
     private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
     private readonly blockingActionService: BlockingActionService
   ) { }
@@ -38,7 +36,6 @@ export class InboxPage {
 
   accept(id: string) {
     const action$ = this.numbersStorageApi.acceptTransaction$(id).pipe(
-      concatMap(asset => this.assetRepository.addFromNumbersStorage$(asset)),
       tap(_ => this.refresh())
     );
 

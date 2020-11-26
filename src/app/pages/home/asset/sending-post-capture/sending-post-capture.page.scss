@@ -1,11 +1,16 @@
 mat-toolbar {
-  background: white;
+  background: #564dfc;
+  color: #ffffff;
+
+  .mat-icon {
+    color: #ffffff;
+  }
 
   span {
-    margin-right: 40px;
+    color: #ffffff;
+    padding-right: 40px;
   }
 }
-
 .page-content {
   padding: 0 16px 16px;
 

@@ -8,6 +8,39 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
+.mat-toolbar {
+  background: #564dfc;
+  color: #ffffff;
+
+  .mat-icon {
+    color: #ffffff;
+  }
+
+  span {
+    color: #ffffff;
+    padding-right: 40px;
+  }
+}
+
+.mat-tab-labels {
+  background: #564dfc;
+
+  .mat-tab-label-content {
+    color: #ffffff;
+  }
+
+  .mat-icon {
+    color: #ffffff;
+    background-color: #ffffff;
+  }
+}
+
+.mat-sidenav-content {
+  button .mat-icon {
+    color: #ffffff;
+  }
+}
+
 $capture-primary: (
   50: #ece6fe,
   100: #ccc1fc,
@@ -105,6 +138,14 @@ $app-theme: mat-light-theme(
 
 /** Ionic CSS Variables **/
 :root {
+  /**  capture **/
+  --ion-color-capture: #564dfc;
+  --ion-color-capture-rgb: 63, 81, 181;
+  --ion-color-capture-contrast: #ffffff;
+  --ion-color-capture-contrast-rgb: 255, 255, 255;
+  --ion-color-capture-shade: #303f9f;
+  --ion-color-capture-tint: #7986cb;
+
   /** primary **/
   --ion-color-primary: #3f51b5;
   --ion-color-primary-rgb: 63, 81, 181;

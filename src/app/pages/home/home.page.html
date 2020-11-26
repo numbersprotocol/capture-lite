@@ -4,7 +4,7 @@
       <button (click)="sidenav.toggle()" mat-icon-button>
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <span>{{ userName$ | async }}</span>
+      <span>{{ username$ | async }}</span>
     </mat-toolbar>
 
     <mat-nav-list>
@@ -33,35 +33,32 @@
         <mat-icon>history</mat-icon>
       </button>
       <button routerLink="inbox" mat-icon-button>
-        <mat-icon>inbox</mat-icon>
+        <mat-icon>all_inbox</mat-icon>
       </button>
     </mat-toolbar>
 
     <mat-tab-group (selectedTabChange)="onTapChanged($event)" mat-align-tabs="center">
       <mat-tab label="Capture">
-        <div class="tab-content">
-          <ng-container *ngFor="let assetsWithRaw of capturesWithRawByDate$ | async">
-            <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
+        <div class="tab-content-capture">
+          <ng-container *ngFor="let captureByDate of capturesByDate$ | async | keyvalue">
+            <div class="mat-title">{{ captureByDate.key }}</div>
             <mat-grid-list cols="3" gutterSize="8px">
-              <mat-grid-tile class="square-image-tile" *ngFor="let assetWithRaw of assetsWithRaw"
-                [routerLink]="['asset', {id: assetWithRaw.asset.id}]"
-                [style]="'background-image: url(data:image/*;base64,' + assetWithRaw.rawBase64 + ');'"></mat-grid-tile>
+              <mat-grid-tile *ngFor="let capture of captureByDate.value" class="square-image-tile"
+                [style]="'background-image: url(' + capture.proofWithThumbnailAndOld?.thumbnailDataUrl! + ');'"
+                [routerLink]="['asset', {id: capture.asset.id}]">
+              </mat-grid-tile>
             </mat-grid-list>
           </ng-container>
         </div>
       </mat-tab>
       <mat-tab label="PostCapture">
-        <div class="tab-content">
-          <ng-container *ngFor="let assetsWithRaw of postCapturesWithRawByDate$ | async">
-            <div class="mat-title">{{ assetsWithRaw[0].date }}</div>
-            <app-post-capture-card *ngFor="let assetWithRaw of assetsWithRaw" userName="User Name"
-              [asset]="assetWithRaw.asset" [imageSrc]="'data:image/png;base64,' + assetWithRaw.rawBase64">
-            </app-post-capture-card>
-          </ng-container>
+        <div class="tab-content-post">
+          <app-post-capture-card *ngFor="let postCapture of postCaptures$ | async"
+            [transaction]="postCapture.transaction" [asset]="postCapture.asset">
+          </app-post-capture-card>
         </div>
       </mat-tab>
     </mat-tab-group>
-
     <button *ngIf="captureButtonShow" (click)="capture()" mat-fab color="primary">
       <mat-icon>camera_alt</mat-icon>
     </button>

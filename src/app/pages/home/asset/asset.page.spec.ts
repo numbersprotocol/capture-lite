@@ -10,6 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
 import { AssetPage } from './asset.page';
 
@@ -21,6 +22,7 @@ describe('AssetPage', () => {
     TestBed.configureTestingModule({
       declarations: [AssetPage],
       imports: [
+        SharedTestingModule,
         IonicModule.forRoot(),
         RouterTestingModule,
         getTranslocoModule(),
