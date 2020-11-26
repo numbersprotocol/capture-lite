@@ -156,7 +156,7 @@ jobs:
 
       - name: Sign release AAB
         if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        uses: r0adkll/sign-android-release@21072f7435f485b65555103ff2c60e86560b759e
+        uses: r0adkll/sign-android-release@v1.0.4
         with:
           releaseDirectory: ./android/app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE_FILE }}
@@ -170,7 +170,7 @@ jobs:
 
       - name: Deploy to Play Store (closed alpha track)
         if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.0.4
         with:
           serviceAccountJson: service_account.json
           packageName: io.numbersprotocol.capturelite
