@@ -11,7 +11,7 @@
     "build-android": "npm run build && cap sync android && cap open android",
     "test": "npm run preconfig && ng test",
     "test-ci": "npm run preconfig && ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
-    "lint": "npm run preconfig && ng lint",
+    "lint": "npm run preconfig && npx prettier --check . && ng lint",
     "e2e": "npm run preconfig && ng e2e"
   },
   "private": true,
