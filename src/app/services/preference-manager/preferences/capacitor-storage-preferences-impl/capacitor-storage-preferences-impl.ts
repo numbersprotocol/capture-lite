@@ -31,6 +31,25 @@ export class CapacitorStoragePreferencesImpl implements Preferences {
     );
   }
 
+  async getBoolean(key: string, defaultValue = true) {
+    return this.get(key, defaultValue);
+  }
+  async getNumber(key: string, defaultValue = 0) {
+    return this.get(key, defaultValue);
+  }
+  async getString(key: string, defaultValue = '') {
+    return this.get(key, defaultValue);
+  }
+
+  private async get<T extends boolean | number | string>(
+    key: string,
+    defaultValue: T
+  ) {
+    await this.initializeValue(key, defaultValue);
+    // tslint:disable-next-line: no-non-null-assertion
+    return this.subjects.get(key)!.value as T;
+  }
+
   private async initializeValue(
     key: string,
     defaultValue: boolean | number | string

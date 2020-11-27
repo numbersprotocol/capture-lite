@@ -68,7 +68,8 @@
         "ban-keywords",
         "check-format",
         "require-const-for-all-caps",
-        "allow-pascal-case"
+        "allow-pascal-case",
+        "allow-leading-underscore"
       ]
     },
     "contextual-decorator": true,

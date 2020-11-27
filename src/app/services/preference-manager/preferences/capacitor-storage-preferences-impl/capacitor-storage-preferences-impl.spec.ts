@@ -14,7 +14,7 @@ describe('MemoryPreferencesImpl', () => {
   it('should get the same ID set in constructor', () =>
     expect(preferences.id).toEqual(id));
 
-  it('should get the default boolean value if not set previously', done => {
+  it('should get the default boolean Observable if not set previously', done => {
     const notExistedKey = 'unknown';
     const defaultValue = true;
     preferences.getBoolean$(notExistedKey, defaultValue).subscribe(result => {
@@ -23,7 +23,46 @@ describe('MemoryPreferencesImpl', () => {
     });
   });
 
-  it('should get the same boolean set previously', async done => {
+  it('should get the default number Observable if not set previously', done => {
+    const notExistedKey = 'unknown';
+    const defaultValue = 999;
+    preferences.getNumber$(notExistedKey, defaultValue).subscribe(result => {
+      expect(result).toEqual(defaultValue);
+      done();
+    });
+  });
+
+  it('should get the default string Observable if not set previously', done => {
+    const notExistedKey = 'unknown';
+    const defaultValue = 'default';
+    preferences.getString$(notExistedKey, defaultValue).subscribe(result => {
+      expect(result).toEqual(defaultValue);
+      done();
+    });
+  });
+
+  it('should get the default boolean value if not set previously', async () => {
+    const notExistedKey = 'unknown';
+    const defaultValue = true;
+    const bool = await preferences.getBoolean(notExistedKey, defaultValue);
+    expect(bool).toEqual(defaultValue);
+  });
+
+  it('should get the default number value if not set previously', async () => {
+    const notExistedKey = 'unknown';
+    const defaultValue = 999;
+    const num = await preferences.getNumber(notExistedKey, defaultValue);
+    expect(num).toEqual(defaultValue);
+  });
+
+  it('should get the default string value if not set previously', async () => {
+    const notExistedKey = 'unknown';
+    const defaultValue = 'default';
+    const str = await preferences.getString(notExistedKey, defaultValue);
+    expect(str).toEqual(defaultValue);
+  });
+
+  it('should get the same boolean Observable set previously', async done => {
     const key = 'key';
     const value = true;
     await preferences.setBoolean(key, value);
@@ -34,16 +73,7 @@ describe('MemoryPreferencesImpl', () => {
     });
   });
 
-  it('should get the default number value if not set previously', done => {
-    const notExistedKey = 'unknown';
-    const defaultValue = 999;
-    preferences.getNumber$(notExistedKey, defaultValue).subscribe(result => {
-      expect(result).toEqual(defaultValue);
-      done();
-    });
-  });
-
-  it('should get the same number set previously', async done => {
+  it('should get the same number Observable set previously', async done => {
     const key = 'key';
     const value = 99;
     await preferences.setNumber(key, value);
@@ -54,16 +84,7 @@ describe('MemoryPreferencesImpl', () => {
     });
   });
 
-  it('should get the default string value if not set previously', done => {
-    const notExistedKey = 'unknown';
-    const defaultValue = 'default';
-    preferences.getString$(notExistedKey, defaultValue).subscribe(result => {
-      expect(result).toEqual(defaultValue);
-      done();
-    });
-  });
-
-  it('should get the same string set previously', async done => {
+  it('should get the same string Observable set previously', async done => {
     const key = 'key';
     const value = 'value';
     await preferences.setString(key, value);
@@ -72,6 +93,33 @@ describe('MemoryPreferencesImpl', () => {
       expect(result).toEqual(value);
       done();
     });
+  });
+
+  it('should get the same boolean value set previously', async () => {
+    const key = 'key';
+    const value = true;
+    await preferences.setBoolean(key, value);
+
+    const result = await preferences.getBoolean(key);
+    expect(result).toEqual(value);
+  });
+
+  it('should get the same number value set previously', async () => {
+    const key = 'key';
+    const value = 99;
+    await preferences.setNumber(key, value);
+
+    const result = await preferences.getNumber(key);
+    expect(result).toEqual(value);
+  });
+
+  it('should get the same string value set previously', async () => {
+    const key = 'key';
+    const value = 'value';
+    await preferences.setString(key, value);
+
+    const result = await preferences.getString(key);
+    expect(result).toEqual(value);
   });
 
   it('should set boolean atomically', async done => {

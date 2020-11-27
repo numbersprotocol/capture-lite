@@ -8,7 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
 import { catchError, concatMapTo } from 'rxjs/operators';
 import { BlockingActionService } from '../../services/blocking-action/blocking-action.service';
-import { WebCryptoApiProvider } from '../../services/collector/signature/web-crypto-api-provider/web-crypto-api-provider';
+import { WebCryptoApiSignatureProvider } from '../../services/collector/signature/web-crypto-api-provider/web-crypto-api-signature-provider.service';
 import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
 import { AssetRepository } from '../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { IgnoredTransactionRepository } from '../../services/publisher/numbers-storage/repositories/ignored-transaction/ignored-transaction-repository.service';
@@ -22,10 +22,10 @@ const { Clipboard } = Plugins;
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage {
-  readonly username$ = NumbersStorageApi.getUsername$();
-  readonly email$ = NumbersStorageApi.getEmail$();
-  readonly publicKey$ = WebCryptoApiProvider.getPublicKey$();
-  readonly privateKey$ = WebCryptoApiProvider.getPrivateKey$();
+  readonly username$ = this.numbersStorageApi.getUsername$();
+  readonly email$ = this.numbersStorageApi.getEmail$();
+  readonly publicKey$ = this.webCryptoApiSignatureProvider.getPublicKey$();
+  readonly privateKey$ = this.webCryptoApiSignatureProvider.getPrivateKey$();
 
   constructor(
     private readonly router: Router,
@@ -35,7 +35,8 @@ export class ProfilePage {
     private readonly snackBar: MatSnackBar,
     private readonly numbersStorageApi: NumbersStorageApi,
     private readonly assetRepository: AssetRepository,
-    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
+    private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
+    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider
   ) {}
 
   copyToClipboard(value: string) {

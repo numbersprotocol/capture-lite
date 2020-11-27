@@ -19,11 +19,37 @@ export class MemoryPreferencesImpl implements Preferences {
   }
 
   get$<T extends boolean | number | string>(key: string, defaultValue: T) {
+    this.initializeValue(key, defaultValue);
+    // tslint:disable-next-line: no-non-null-assertion
+    return this.subjects.get(key)!.asObservable() as Observable<T>;
+  }
+
+  async getBoolean(key: string, defaultValue = true) {
+    return this.get(key, defaultValue);
+  }
+  async getNumber(key: string, defaultValue = 0) {
+    return this.get(key, defaultValue);
+  }
+  async getString(key: string, defaultValue = '') {
+    return this.get(key, defaultValue);
+  }
+
+  private get<T extends boolean | number | string>(
+    key: string,
+    defaultValue: T
+  ) {
+    this.initializeValue(key, defaultValue);
+    // tslint:disable-next-line: no-non-null-assertion
+    return this.subjects.get(key)!.value as T;
+  }
+
+  private initializeValue(
+    key: string,
+    defaultValue: boolean | number | string
+  ) {
     if (!this.subjects.has(key)) {
       this.subjects.set(key, new BehaviorSubject(defaultValue));
     }
-    // tslint:disable-next-line: no-non-null-assertion
-    return this.subjects.get(key)!.asObservable() as Observable<T>;
   }
 
   async setBoolean(key: string, value: boolean) {

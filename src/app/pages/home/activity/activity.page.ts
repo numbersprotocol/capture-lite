@@ -24,7 +24,7 @@ export class ActivityPage {
         zip(
           of(activities),
           forkJoinWithDefault(
-            activities.map(activity => ActivityPage.getStatus$(activity))
+            activities.map(activity => this.getStatus$(activity))
           )
         )
       ),
@@ -38,8 +38,8 @@ export class ActivityPage {
 
   constructor(private readonly numbersStorageApi: NumbersStorageApi) {}
 
-  private static getStatus$(activity: Transaction) {
-    return NumbersStorageApi.getEmail$().pipe(
+  private getStatus$(activity: Transaction) {
+    return this.numbersStorageApi.getEmail$().pipe(
       map(email => {
         if (activity.expired) {
           return Status.Returned;
