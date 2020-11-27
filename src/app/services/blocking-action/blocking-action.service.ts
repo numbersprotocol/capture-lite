@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { LoadingOptions } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { defer, Observable, of, zip } from 'rxjs';
-import { catchError, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { defer, Observable } from 'rxjs';
+import { concatMap, concatMapTo, finalize } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -21,27 +21,14 @@ export class BlockingActionService {
     }
   ) {
     return defer(() =>
-      this.loadingController.create({
-        mode: 'md',
-        ...opts,
-      })
-    ).pipe(switchMap(loading => run$(action$, loading)));
+      this.loadingController.create({ mode: 'md', ...opts })
+    ).pipe(concatMap(loading => run$(action$, loading)));
   }
 }
 
 function run$<T>(action$: Observable<T>, loading: HTMLIonLoadingElement) {
   return defer(() => loading.present()).pipe(
-    switchMapTo(action$),
-    catchError(err => {
-      loading.dismiss();
-      throw err;
-    }),
-    switchMap(result =>
-      zip(
-        defer(() => loading.dismiss()),
-        of(result)
-      )
-    ),
-    map(([_, result]) => result)
+    concatMapTo(action$),
+    finalize(loading.dismiss)
   );
 }
