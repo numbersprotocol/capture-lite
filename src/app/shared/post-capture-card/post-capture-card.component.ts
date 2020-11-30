@@ -10,7 +10,7 @@ import { OldDefaultInformationName } from '../../services/repositories/proof/old
 export class PostCaptureCardComponent implements OnInit {
   @Input() transaction!: Transaction;
   @Input() asset!: Asset;
-  @ViewChild('ratioImg') ratioImg!: ElementRef;
+  @ViewChild('ratioImg', { static: true }) ratioImg!: ElementRef;
   latitude!: string;
   longitude!: string;
   openMore = false;

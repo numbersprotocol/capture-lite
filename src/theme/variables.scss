@@ -8,20 +8,6 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
-.mat-toolbar {
-  background: #564dfc;
-  color: white;
-
-  .mat-icon {
-    color: white;
-  }
-
-  span {
-    color: white;
-    padding-right: 40px;
-  }
-}
-
 .mat-tab-labels {
   background: #564dfc;
 
