@@ -12,11 +12,13 @@ mat-toolbar {
 }
 
 .page-content {
-  padding: 0 16px 16px;
+  padding: 0 0 16px 0;
 
   button.send-button {
-    margin-top: 8px;
-    width: 100%;
+    width: 90vw;
+    margin-top: 16px;
+    margin-left: 5vw;
+    margin-right: 5vw;
 
     .send-button-wrapper {
       display: flex;
@@ -37,7 +39,8 @@ mat-toolbar {
 }
 
 mat-card img {
-  max-width: initial;
+  max-width: 100%;
+  width: 100%;
 }
 
 form mat-form-field {
