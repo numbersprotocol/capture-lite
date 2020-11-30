@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Capacitor, Plugins, PushNotification, PushNotificationActionPerformed, PushNotificationToken } from '@capacitor/core';
+import {
+  Capacitor,
+  Plugins,
+  PushNotification,
+  PushNotificationActionPerformed,
+  PushNotificationToken,
+} from '@capacitor/core';
 import { defer } from 'rxjs';
 import { concatMap, tap } from 'rxjs/operators';
 import { NumbersStorageApi } from '../publisher/numbers-storage/numbers-storage-api.service';
@@ -7,13 +13,10 @@ import { NumbersStorageApi } from '../publisher/numbers-storage/numbers-storage-
 const { Device, PushNotifications } = Plugins;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PushNotificationService {
-
-  constructor(
-    private readonly numbersStorageApi: NumbersStorageApi,
-  ) { }
+  constructor(private readonly numbersStorageApi: NumbersStorageApi) {}
 
   configure(): void {
     if (Capacitor.platform === 'web') {
@@ -21,25 +24,45 @@ export class PushNotificationService {
     }
     this.requestPermission();
     this.addRegisterListener(
-      (token) => {
-        this.uploadToken$(token.value).subscribe(() => console.log(`token ${token.value} uploaded`));
+      token => {
+        this.uploadToken$(token.value).subscribe(() =>
+          // tslint:disable-next-line: no-console
+          console.log(`token ${token.value} uploaded`)
+        );
+        // tslint:disable-next-line: no-console
         console.log(`Push registration success, token: ${token.value}`);
       },
-      (error) => { throw Error(`Error on registration: ${JSON.stringify(error)}`); }
+      error => {
+        throw Error(`Error on registration: ${JSON.stringify(error)}`);
+      }
     );
     // Received -> when push notification received
-    this.addReceivedListener((notification) => { console.log(`notification: ${notification}`); });
+    this.addReceivedListener(notification => {
+      // tslint:disable-next-line: no-console
+      console.log(`notification: ${notification}`);
+    });
     // ActionPerformed -> when click on push notification
-    this.addActionPerformedListener((notification) => { console.log(`notification: ${notification}`); });
+    this.addActionPerformedListener(notification => {
+      // tslint:disable-next-line: no-console
+      console.log(`notification: ${notification}`);
+    });
   }
 
   private uploadToken$(token: string) {
     return defer(() => Device.getInfo()).pipe(
-      concatMap(deviceInfo => this.numbersStorageApi.createOrUpdateDevice$(deviceInfo.platform, deviceInfo.uuid, token)),
-      tap(() => console.log('Token Uploaded!')),
+      concatMap(deviceInfo =>
+        this.numbersStorageApi.createOrUpdateDevice$(
+          deviceInfo.platform,
+          deviceInfo.uuid,
+          token
+        )
+      ),
+      // tslint:disable-next-line: no-console
+      tap(() => console.log('Token Uploaded!'))
     );
   }
 
+  // tslint:disable-next-line: prefer-function-over-method
   private requestPermission(): void {
     // Request permission to use push notifications
     // iOS will prompt user and return if they granted permission or not
@@ -54,17 +77,26 @@ export class PushNotificationService {
     });
   }
 
-  private addRegisterListener(onSuccess: (token: PushNotificationToken) => void, onError: (error: any) => void): void {
+  // tslint:disable-next-line: prefer-function-over-method
+  private addRegisterListener(
+    onSuccess: (token: PushNotificationToken) => void,
+    onError: (error: any) => void
+  ): void {
     PushNotifications.addListener('registration', onSuccess);
     PushNotifications.addListener('registrationError', onError);
   }
 
-  private addReceivedListener(callback: (notification: PushNotification) => void): void {
+  // tslint:disable-next-line: prefer-function-over-method
+  private addReceivedListener(
+    callback: (notification: PushNotification) => void
+  ): void {
     PushNotifications.addListener('pushNotificationReceived', callback);
   }
 
-  private addActionPerformedListener(callback: (notification: PushNotificationActionPerformed) => void): void {
+  // tslint:disable-next-line: prefer-function-over-method
+  private addActionPerformedListener(
+    callback: (notification: PushNotificationActionPerformed) => void
+  ): void {
     PushNotifications.addListener('pushNotificationActionPerformed', callback);
   }
-
 }
