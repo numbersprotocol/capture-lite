@@ -22,8 +22,8 @@ import { ActivityPage } from './activity.page';
     MatButtonModule,
     MatIconModule,
     MatListModule,
-    MatDividerModule
+    MatDividerModule,
   ],
-  declarations: [ActivityPage]
+  declarations: [ActivityPage],
 })
-export class ActivityPageModule { }
+export class ActivityPageModule {}

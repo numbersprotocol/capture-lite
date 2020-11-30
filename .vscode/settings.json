@@ -1,27 +1,9 @@
 {
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.tslint": true
-    },
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "typescript.format.semicolons": "insert",
-    "javascript.format.semicolons": "insert",
-    "javascript.preferences.quoteStyle": "single",
-    "typescript.preferences.quoteStyle": "single",
-    "[typescript]": {
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true
-        },
-        "editor.tabSize": 2,
-        "editor.detectIndentation": false
-    },
-    "[html]": {
-        "editor.tabSize": 2,
-        "editor.detectIndentation": false
-    },
-    "[scss]": {
-        "editor.tabSize": 2,
-        "editor.detectIndentation": false
-    }
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": true,
+    "source.organizeImports": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative"
 }

@@ -11,7 +11,7 @@ export function getTranslocoModule(config: Partial<TranslocoConfig> = {}) {
       defaultLang: defaultLanguage[0],
       fallbackLang: defaultLanguage[0],
       missingHandler: { useFallbackTranslation: true },
-      ...config
+      ...config,
     }
   );
 }

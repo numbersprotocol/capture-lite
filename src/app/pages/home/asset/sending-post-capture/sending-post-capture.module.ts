@@ -10,7 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
-import { PostCaptureCardModule } from 'src/app/shared/post-capture-card/post-capture-card.module';
+import { PostCaptureCardModule } from '../../../../shared/post-capture-card/post-capture-card.module';
 import { SendingPostCapturePageRoutingModule } from './sending-post-capture-routing.module';
 import { SendingPostCapturePage } from './sending-post-capture.page';
 
@@ -28,8 +28,8 @@ import { SendingPostCapturePage } from './sending-post-capture.page';
     MatCardModule,
     MatInputModule,
     MatFormFieldModule,
-    PostCaptureCardModule
+    PostCaptureCardModule,
   ],
-  declarations: [SendingPostCapturePage]
+  declarations: [SendingPostCapturePage],
 })
-export class SendingPostCapturePageModule { }
+export class SendingPostCapturePageModule {}

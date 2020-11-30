@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -7,8 +10,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
-import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { SharedTestingModule } from '../../shared/shared-testing.module';
+import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
 import { SignupPage } from './signup.page';
 
 describe('SignupPage', () => {
@@ -29,8 +32,8 @@ describe('SignupPage', () => {
         FormlyModule.forRoot(),
         FormlyMaterialModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule
-      ]
+        BrowserAnimationsModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SignupPage);

@@ -3,8 +3,6 @@ import { MemoryTableImpl } from '../services/database/table/memory-table-impl/me
 import { TABLE_IMPL } from '../services/database/table/table';
 
 @NgModule({
-  providers: [
-    { provide: TABLE_IMPL, useValue: MemoryTableImpl }
-  ]
+  providers: [{ provide: TABLE_IMPL, useValue: MemoryTableImpl }],
 })
-export class SharedTestingModule { }
+export class SharedTestingModule {}

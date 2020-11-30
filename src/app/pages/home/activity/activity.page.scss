@@ -1,12 +1,12 @@
 mat-toolbar {
-  color: #ffffff;
+  color: white;
 
   .mat-icon {
-    color: #ffffff;
+    color: white;
   }
 
   span {
-    color: #ffffff;
+    color: white;
     padding-right: 40px;
   }
 }
@@ -34,10 +34,11 @@ mat-toolbar {
     }
 
     button.accepted {
-      color: #fff;
+      color: white;
       border-color: #4cd964;
       background-color: #4cd964;
     }
+
     button.delivered {
       color: mediumseagreen;
       border-color: mediumseagreen;
@@ -49,7 +50,7 @@ mat-toolbar {
     }
 
     button.returned {
-      color: #fff;
+      color: white;
       border-color: var(--ion-color-danger);
       background-color: #e31587;
     }

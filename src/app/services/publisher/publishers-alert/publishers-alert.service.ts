@@ -7,16 +7,15 @@ import { Proof } from '../../repositories/proof/proof';
 import { Publisher } from '../publisher';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PublishersAlert {
-
   private readonly publishers: Publisher[] = [];
 
   constructor(
     private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService
-  ) { }
+  ) {}
 
   addPublisher(publisher: Publisher) {
     this.publishers.push(publisher);
@@ -33,16 +32,19 @@ export class PublishersAlert {
           type: 'radio',
           label: publisher.id,
           value: publisher.id,
-          checked: index === 0
+          checked: index === 0,
         })),
-        buttons: [{
-          text: this.translocoService.translate('cancel'),
-          role: 'cancel'
-        }, {
-          text: this.translocoService.translate('ok'),
-          handler: name => this.getPublisherByName(name)?.publish(proof)
-        }],
-        mode: 'md'
+        buttons: [
+          {
+            text: this.translocoService.translate('cancel'),
+            role: 'cancel',
+          },
+          {
+            text: this.translocoService.translate('ok'),
+            handler: name => this.getPublisherByName(name)?.publish(proof),
+          },
+        ],
+        mode: 'md',
       });
       alert.present();
     } else {
@@ -52,7 +54,9 @@ export class PublishersAlert {
 
   private getEnabledPublishers$() {
     return from(this.publishers).pipe(
-      switchMap(publisher => zip(of(publisher), publisher.isEnabled$().pipe(first()))),
+      switchMap(publisher =>
+        zip(of(publisher), publisher.isEnabled$().pipe(first()))
+      ),
       filter(([_, isEnabled]) => isEnabled),
       pluck(0),
       toArray()

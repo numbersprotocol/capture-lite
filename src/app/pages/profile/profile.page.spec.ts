@@ -7,8 +7,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
-import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { SharedTestingModule } from '../../shared/shared-testing.module';
+import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
 import { ProfilePage } from './profile.page';
 
 describe('ProfilePage', () => {
@@ -28,8 +28,8 @@ describe('ProfilePage', () => {
         MatButtonModule,
         MatIconModule,
         MatListModule,
-        MatSnackBarModule
-      ]
+        MatSnackBarModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfilePage);

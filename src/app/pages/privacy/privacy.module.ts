@@ -20,8 +20,8 @@ import { PrivacyPage } from './privacy.page';
     MatButtonModule,
     MatIconModule,
     MatListModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
-  declarations: [PrivacyPage]
+  declarations: [PrivacyPage],
 })
-export class PrivacyPageModule { }
+export class PrivacyPageModule {}

@@ -1,14 +1,14 @@
 # Capture Lite
 
-| branch  | build | coverage | quality |
-|:-------:|:-----:|:--------:|:-------:|
-| master  | [![build](https://github.com/numbersprotocol/capture-lite/workflows/build/badge.svg)](https://github.com/numbersprotocol/capture-lite/actions?query=workflow%3Abuild) | [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/45ae18aaa6a7474497e0efd818452a46)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Coverage) | [![Codacy Badge](https://app.codacy.com/project/badge/Grade/45ae18aaa6a7474497e0efd818452a46)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=numbersprotocol/capture-lite&amp;utm_campaign=Badge_Grade) |
-| develop | [![build](https://github.com/numbersprotocol/capture-lite/workflows/build/badge.svg?branch=develop)](https://github.com/numbersprotocol/capture-lite/actions?query=workflow%3Abuild) | [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/45ae18aaa6a7474497e0efd818452a46?branch=develop)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Coverage) | [![Codacy Badge](https://app.codacy.com/project/badge/Grade/45ae18aaa6a7474497e0efd818452a46?branch=develop)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=numbersprotocol/capture-lite&amp;utm_campaign=Badge_Grade)
+| branch  |                                                                                        build                                                                                         |                                                                                                                                        coverage                                                                                                                                         |                                                                                                                                      quality                                                                                                                                      |
+| :-----: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| master  |        [![build](https://github.com/numbersprotocol/capture-lite/workflows/build/badge.svg)](https://github.com/numbersprotocol/capture-lite/actions?query=workflow%3Abuild)         |        [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/45ae18aaa6a7474497e0efd818452a46)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Coverage)         |        [![Codacy Badge](https://app.codacy.com/project/badge/Grade/45ae18aaa6a7474497e0efd818452a46)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Grade)         |
+| develop | [![build](https://github.com/numbersprotocol/capture-lite/workflows/build/badge.svg?branch=develop)](https://github.com/numbersprotocol/capture-lite/actions?query=workflow%3Abuild) | [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/45ae18aaa6a7474497e0efd818452a46?branch=develop)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Coverage) | [![Codacy Badge](https://app.codacy.com/project/badge/Grade/45ae18aaa6a7474497e0efd818452a46?branch=develop)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Grade) |
 
 ## Highlight Features
 
-* Generate digital proofs on media assets created.
-* WIP: Publish digital proofs to decentralized networks.
+- Generate digital proofs on media assets created.
+- WIP: Publish digital proofs to decentralized networks.
 
 ## Getting Started
 
@@ -16,19 +16,19 @@ Node.js 10.16.0+ is required.
 
 Install the dependencies.
 
-``` bash
+```bash
 npm i
 ```
 
 Set the system environment variable `NUMBERS_STORAGE_BASE_URL` before build the app by appending the following string in `~/.profile`:
 
-``` txt
+```txt
 export NUMBERS_STORAGE_BASE_URL="THE PRIVATE BASE URL"
 ```
 
 Preview the app in web browser.
 
-``` bash
+```bash
 npm run serve
 ```
 
@@ -36,38 +36,40 @@ npm run serve
 
 Start a local dev server for app dev/testing.
 
-``` bash
+```bash
 npm run serve
 ```
 
 Run tests.
 
-``` bash
+```bash
 npm run test
 ```
 
 Run tests in headless mode.
 
-``` bash
+```bash
 npm run test-ci
 ```
 
 Lint the projects.
 
-``` bash
+```bash
 npm run lint
 ```
 
 [Update `cordova-res` (splash screens and launcher icons)](https://capacitorjs.com/docs/guides/splash-screens-and-icons).
 
-``` bash
+```bash
 cordova-res android --skip-config --copy
 ```
 
 ### Contribution
 
-* The committed codes should pass all GitHub workflows.
-* Avoid using getters/setters in TypeScript so [the linter for RxJS can correctly identify the unsafe scope](https://github.com/cartant/rxjs-tslint-rules#rxjs-no-unsafe-scope).
+- Run `npm run lint` before each commit.
+- The committed codes should pass all GitHub checks.
+- Use [Visual Studio Code](https://code.visualstudio.com/) with workspace settings for consistent coding style.
+- Use [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to auto format on save.
 
 ### Platform
 
@@ -75,7 +77,7 @@ cordova-res android --skip-config --copy
 
 If your operating system is Linux, set the `linuxAndroidStudioPath` in `capacitor.config.json`. For example,
 
-``` json
+```json
 {
   "linuxAndroidStudioPath": "/home/username/android-studio/bin/studio.sh"
 }
@@ -83,33 +85,33 @@ If your operating system is Linux, set the `linuxAndroidStudioPath` in `capacito
 
 Before running the app with Android Studio, build and sync the dependencies and web assets.
 
-``` bash
+```bash
 npm run build
 npx cap sync android
 ```
 
 Open the project in Android Studio.
 
-``` bash
+```bash
 npx cap open android
 ```
 
 The script does the same thing for you.
 
-``` bash
+```bash
 npm run build-android
 ```
 
 ### Caveat
 
-* This app is still in the experimental stage.
-* This app uses raw file system to save proofs, and thus the performance is not optimized.
+- This app is still in the experimental stage.
+- This app uses raw file system to save proofs, and thus the performance is not optimized.
 
 ### Release
 
 Bump version in `package.json`.
 
-``` json
+```json
 {
   "version": "a.b.c"
 }
@@ -117,7 +119,7 @@ Bump version in `package.json`.
 
 Bump version in `android/app/build.gradle`.
 
-``` gradle
+```gradle
 android {
     defaultConfig {
         versionCode <versionCode++>

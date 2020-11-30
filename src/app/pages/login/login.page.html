@@ -5,8 +5,17 @@
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
-    <button type="submit" [disabled]="!form.valid" mat-flat-button color="primary">{{ t('login') }}</button>
+    <button
+      type="submit"
+      [disabled]="!form.valid"
+      mat-flat-button
+      color="primary"
+    >
+      {{ t('login') }}
+    </button>
   </form>
 
-  <button routerLink="/signup" replaceUrl mat-stroked-button color="primary">{{ t('createAnAccount') }}</button>
+  <button routerLink="/signup" replaceUrl mat-stroked-button color="primary">
+    {{ t('createAnAccount') }}
+  </button>
 </div>
