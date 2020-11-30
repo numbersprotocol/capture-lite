@@ -27,16 +27,18 @@ export class CollectorService {
   ) {}
 
   async runAndStore(assets: Assets) {
-    const notificationId = this.notificationService.createNotificationId();
-    this.notificationService.notify(
-      notificationId,
-      this.translocoService.translate('collectingProof'),
-      this.translocoService.translate('collectingInformation')
+    const simplifiedHashLength = 6;
+    const notification = await this.notificationService.notify(
+      this.translocoService.translate('storingAssets'),
+      this.translocoService.translate('message.storingAssets', {
+        hash: Object.keys(assets)[0].substr(0, simplifiedHashLength),
+      })
     );
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
     const proof = new Proof(assets, truth, signatures);
     await this.proofRepository.add(proof);
+    notification.cancel();
     return proof;
   }
 

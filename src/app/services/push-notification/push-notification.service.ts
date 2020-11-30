@@ -34,23 +34,15 @@ export class PushNotificationService {
           console.log(`token ${token.value} uploaded`)
         );
         const message = `Push registration success, token: ${token.value}`;
-        // tslint:disable-next-line: no-console
-        console.log(message);
-        const id = this.notificationService.createNotificationId();
-        this.notificationService.notify(id, message, message);
+        this.notificationService.notify(message, message);
       },
       error => {
-        const id = this.notificationService.createNotificationId();
-        this.notificationService.notifyError(id, error);
+        this.notificationService.error(error);
       }
     );
     // Received -> when push notification received
     this.addReceivedListener(notification => {
-      // tslint:disable-next-line: no-console
-      console.log(`notification: ${notification}`);
-      const id = this.notificationService.createNotificationId();
       this.notificationService.notify(
-        id,
         JSON.stringify(notification),
         JSON.stringify(notification)
       );
@@ -59,9 +51,7 @@ export class PushNotificationService {
     this.addActionPerformedListener(notification => {
       // tslint:disable-next-line: no-console
       console.log(`notification: ${notification}`);
-      const id = this.notificationService.createNotificationId();
       this.notificationService.notify(
-        id,
         JSON.stringify(notification),
         JSON.stringify(notification)
       );
