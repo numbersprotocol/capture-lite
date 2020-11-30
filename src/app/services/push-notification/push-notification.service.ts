@@ -7,8 +7,10 @@ import {
 } from '@capacitor/core';
 import { defer } from 'rxjs';
 import { concatMap, tap } from 'rxjs/operators';
-import { NotificationService } from '../notification/notification.service';
 import { NumbersStorageApi } from '../publisher/numbers-storage/numbers-storage-api.service';
+import { AssetRepository } from '../publisher/numbers-storage/repositories/asset/asset-repository.service';
+import { getProof } from '../repositories/proof/old-proof-adapter';
+import { ProofRepository } from '../repositories/proof/proof-repository.service';
 
 const { Device, PushNotifications } = Plugins;
 
@@ -22,7 +24,8 @@ const { Device, PushNotifications } = Plugins;
 export class PushNotificationService {
   constructor(
     private readonly numbersStorageApi: NumbersStorageApi,
-    private readonly notificationService: NotificationService
+    private readonly proofRepository: ProofRepository,
+    private readonly assetRepository: AssetRepository
   ) {}
 
   configure(): void {
@@ -41,8 +44,11 @@ export class PushNotificationService {
         console.log(message);
       },
       error => {
-        this.notificationService.error(error);
+        throw error;
       }
+    );
+    this.addReceivedListener(notification =>
+      this.storeExpiredPostCapture(notification)
     );
   }
 
@@ -90,6 +96,21 @@ export class PushNotificationService {
   ): void {
     PushNotifications.addListener('pushNotificationReceived', callback);
   }
+
+  private async storeExpiredPostCapture(pushNotification: PushNotification) {
+    const data: NumbersStorageNotification = pushNotification.data;
+    if (data.app_message_type !== 'transaction_expired') {
+      return;
+    }
+
+    const asset = await this.numbersStorageApi.readAsset$(data.id).toPromise();
+    await this.assetRepository.add(asset);
+    const rawImage = await this.numbersStorageApi
+      .getImage$(asset.asset_file)
+      .toPromise();
+    const proof = await getProof(rawImage, asset.information, asset.signature);
+    await this.proofRepository.add(proof);
+  }
 }
 
 interface NumbersStorageNotification {
@@ -97,4 +118,5 @@ interface NumbersStorageNotification {
     | 'transaction_received'
     | 'transaction_accepted'
     | 'transaction_expired';
+  id: string;
 }

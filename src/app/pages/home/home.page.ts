@@ -34,7 +34,7 @@ export class HomePage implements OnInit {
   postCaptures$ = this.getPostCaptures$();
   readonly username$ = this.numbersStorageApi.getUsername$();
   captureButtonShow = true;
-  inboxCount$ = this.pollingInbox().pipe(
+  inboxCount$ = this.pollingInbox$().pipe(
     map(transactions => transactions.length)
   );
 
@@ -142,7 +142,7 @@ export class HomePage implements OnInit {
   /**
    * TODO: Use repository pattern to cache the inbox data.
    */
-  private pollingInbox() {
+  private pollingInbox$() {
     // tslint:disable-next-line: no-magic-numbers
     return interval(10000).pipe(
       concatMapTo(this.numbersStorageApi.listInbox$()),
