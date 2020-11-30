@@ -3,8 +3,6 @@ import { CapacitorFilesystemTableImpl } from '../services/database/table/capacit
 import { TABLE_IMPL } from '../services/database/table/table';
 
 @NgModule({
-  providers: [
-    { provide: TABLE_IMPL, useValue: CapacitorFilesystemTableImpl }
-  ]
+  providers: [{ provide: TABLE_IMPL, useValue: CapacitorFilesystemTableImpl }],
 })
-export class SharedModule { }
+export class SharedModule {}

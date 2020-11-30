@@ -1,7 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
-import { MimeType } from 'src/app/utils/mime-type';
-import { AssetMeta, Assets, DefaultFactId, Proof, Signatures, Truth } from './proof';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
+import { MimeType } from '../../../utils/mime-type';
+import {
+  AssetMeta,
+  Assets,
+  DefaultFactId,
+  Proof,
+  Signatures,
+  Truth,
+} from './proof';
 import { ProofRepository } from './proof-repository.service';
 
 describe('ProofRepository', () => {
@@ -11,9 +18,7 @@ describe('ProofRepository', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        SharedTestingModule
-      ]
+      imports: [SharedTestingModule],
     });
     repo = TestBed.inject(ProofRepository);
     proof1 = new Proof(PROOF1_ASSETS, PROOF1_TRUTH, PROOF1_SIGNATURES_VALID);
@@ -29,7 +34,7 @@ describe('ProofRepository', () => {
     });
   });
 
-  it('should emit new query on adding proof', async (done) => {
+  it('should emit new query on adding proof', async done => {
     await repo.add(proof1);
 
     repo.getAll$().subscribe(proofs => {
@@ -38,10 +43,14 @@ describe('ProofRepository', () => {
     });
   });
 
-  it('should not emit removed proofs', async (done) => {
+  it('should not emit removed proofs', async done => {
     await repo.add(proof1);
     await repo.add(proof2);
-    const sameProof1 = new Proof(PROOF1_ASSETS, PROOF1_TRUTH, PROOF1_SIGNATURES_VALID);
+    const sameProof1 = new Proof(
+      PROOF1_ASSETS,
+      PROOF1_TRUTH,
+      PROOF1_SIGNATURES_VALID
+    );
 
     await repo.remove(sameProof1);
 
@@ -53,10 +62,12 @@ describe('ProofRepository', () => {
 });
 
 const ASSET1_MIMETYPE: MimeType = 'image/png';
-const ASSET1_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAABAaVRYdENyZWF0aW9uIFRpbWUAAAAAADIwMjDlubTljYHkuIDmnIgxMOaXpSAo6YCx5LqMKSAyMOaZgjU55YiGMzfnp5JnJvHNAAAAFUlEQVQImWM0MTH5z4AFMGETxCsBAHRhAaHOZzVQAAAAAElFTkSuQmCC';
+const ASSET1_BASE64 =
+  'iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAABAaVRYdENyZWF0aW9uIFRpbWUAAAAAADIwMjDlubTljYHkuIDmnIgxMOaXpSAo6YCx5LqMKSAyMOaZgjU55YiGMzfnp5JnJvHNAAAAFUlEQVQImWM0MTH5z4AFMGETxCsBAHRhAaHOZzVQAAAAAElFTkSuQmCC';
 const ASSET1: AssetMeta = { mimeType: ASSET1_MIMETYPE };
 const ASSET2_MIMETYPE: MimeType = 'image/png';
-const ASSET2_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABHNCSVQICAgIfAhkiAAAABZJREFUCJlj/Pnz538GJMDEgAYICwAAAbkD8p660MIAAAAASUVORK5CYII=';
+const ASSET2_BASE64 =
+  'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABHNCSVQICAgIfAhkiAAAABZJREFUCJlj/Pnz538GJMDEgAYICwAAAbkD8p660MIAAAAASUVORK5CYII=';
 const ASSET2: AssetMeta = { mimeType: ASSET2_MIMETYPE };
 const PROOF1_ASSETS: Assets = { [ASSET1_BASE64]: ASSET1 };
 const PROOF2_ASSETS: Assets = { [ASSET2_BASE64]: ASSET2 };
@@ -77,33 +88,36 @@ const PROOF1_TRUTH: Truth = {
     [INFO_SNAPSHOT]: {
       [DefaultFactId.GEOLOCATION_LATITUDE]: GEOLOCATION_LATITUDE1,
       [DefaultFactId.GEOLOCATION_LONGITUDE]: GEOLOCATION_LONGITUDE1,
-      [DefaultFactId.DEVICE_NAME]: DEVICE_NAME_VALUE1
+      [DefaultFactId.DEVICE_NAME]: DEVICE_NAME_VALUE1,
     },
     [CAPACITOR]: {
       [DefaultFactId.GEOLOCATION_LATITUDE]: GEOLOCATION_LATITUDE2,
       [DefaultFactId.GEOLOCATION_LONGITUDE]: GEOLOCATION_LONGITUDE2,
       [DefaultFactId.DEVICE_NAME]: DEVICE_NAME_VALUE2,
-      [HUMIDITY]: HUMIDITY_VALUE
-    }
-  }
+      [HUMIDITY]: HUMIDITY_VALUE,
+    },
+  },
 };
 const PROOF2_TRUTH: Truth = {
   timestamp: TIMESTAMP,
-  providers: {}
+  providers: {},
 };
 const SIGNATURE_PROVIDER_ID = 'CAPTURE';
-const VALID_SIGNATURE = '7163c668f0a0210b2406045eb42c5e4c9cdc2bb5904dd852813fcb3aebeb6fafa1e3af6213724764b819f0240587f5fccfadc90b537f6c4b4948801c63331c6d';
-const PUBLIC_KEY = '3059301306072a8648ce3d020106082a8648ce3d0301070342000456103d481de5f8dfc854adfc4b6441d03a83f3689ac9ac85cd570293a69c321a6c11c3481db320a186c546dbc3aae62ee7783a13a7fde3e0d1f55fa0d1d79981';
+const VALID_SIGNATURE =
+  '7163c668f0a0210b2406045eb42c5e4c9cdc2bb5904dd852813fcb3aebeb6fafa1e3af6213724764b819f0240587f5fccfadc90b537f6c4b4948801c63331c6d';
+const PUBLIC_KEY =
+  '3059301306072a8648ce3d020106082a8648ce3d0301070342000456103d481de5f8dfc854adfc4b6441d03a83f3689ac9ac85cd570293a69c321a6c11c3481db320a186c546dbc3aae62ee7783a13a7fde3e0d1f55fa0d1d79981';
 const PROOF1_SIGNATURES_VALID: Signatures = {
   [SIGNATURE_PROVIDER_ID]: {
     signature: VALID_SIGNATURE,
-    publicKey: PUBLIC_KEY
-  }
+    publicKey: PUBLIC_KEY,
+  },
 };
-const INVALID_SIGNATURE = '5d9192a66e2e2b4d22ce69dae407618eb6e052a86bb236bec11a7c154ffe20c0604e392378288340317d169219dfe063c504ed27ea2f47d9ec3868206b1d7f73';
+const INVALID_SIGNATURE =
+  '5d9192a66e2e2b4d22ce69dae407618eb6e052a86bb236bec11a7c154ffe20c0604e392378288340317d169219dfe063c504ed27ea2f47d9ec3868206b1d7f73';
 const PROOF2_SIGNATURES_INVALID: Signatures = {
   [SIGNATURE_PROVIDER_ID]: {
     signature: INVALID_SIGNATURE,
-    publicKey: PUBLIC_KEY
-  }
+    publicKey: PUBLIC_KEY,
+  },
 };

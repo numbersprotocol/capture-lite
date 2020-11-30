@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
+import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
 import { IgnoredTransactionRepository } from './ignored-transaction-repository.service';
 
 describe('IgnoredTransactionRepository', () => {
@@ -7,9 +7,7 @@ describe('IgnoredTransactionRepository', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        SharedTestingModule
-      ]
+      imports: [SharedTestingModule],
     });
     service = TestBed.inject(IgnoredTransactionRepository);
   });

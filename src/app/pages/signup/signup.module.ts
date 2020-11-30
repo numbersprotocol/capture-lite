@@ -18,8 +18,8 @@ import { SignupPage } from './signup.page';
     ReactiveFormsModule,
     FormlyModule.forRoot({ extras: { lazyRender: true } }),
     FormlyMaterialModule,
-    MatButtonModule
+    MatButtonModule,
   ],
-  declarations: [SignupPage]
+  declarations: [SignupPage],
 })
-export class SignupPageModule { }
+export class SignupPageModule {}

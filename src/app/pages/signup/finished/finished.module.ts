@@ -16,8 +16,8 @@ import { FinishedPage } from './finished.page';
     TranslocoModule,
     MatIconModule,
     MatButtonModule,
-    MatToolbarModule
+    MatToolbarModule,
   ],
-  declarations: [FinishedPage]
+  declarations: [FinishedPage],
 })
-export class FinishedPageModule { }
+export class FinishedPageModule {}

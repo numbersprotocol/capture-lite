@@ -9,12 +9,8 @@ describe('Database', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        SharedTestingModule
-      ],
-      providers: [
-        { provide: TABLE_IMPL, useValue: MemoryTableImpl }
-      ]
+      imports: [SharedTestingModule],
+      providers: [{ provide: TABLE_IMPL, useValue: MemoryTableImpl }],
     });
     service = TestBed.inject(Database);
   });

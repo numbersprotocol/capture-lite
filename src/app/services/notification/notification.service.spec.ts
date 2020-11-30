@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { TranslocoModule } from '@ngneat/transloco';
 import { NotificationService } from './notification.service';
 
-
 describe('NotificationService', () => {
   let service: NotificationService;
 

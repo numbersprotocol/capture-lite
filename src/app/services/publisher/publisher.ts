@@ -4,13 +4,12 @@ import { NotificationService } from '../notification/notification.service';
 import { Proof } from '../repositories/proof/proof';
 
 export abstract class Publisher {
-
   abstract readonly id: string;
 
   constructor(
     private readonly translocoService: TranslocoService,
     private readonly notificationService: NotificationService
-  ) { }
+  ) {}
 
   abstract isEnabled$(): Observable<boolean>;
 
@@ -20,7 +19,10 @@ export abstract class Publisher {
       this.notificationService.notify(
         notificationId,
         this.translocoService.translate('registeringAsset'),
-        this.translocoService.translate('message.registeringAsset', { hash: await proof.getId(), publisherName: this.id })
+        this.translocoService.translate('message.registeringAsset', {
+          hash: await proof.getId(),
+          publisherName: this.id,
+        })
       );
 
       await this.run(proof);
@@ -28,7 +30,10 @@ export abstract class Publisher {
       this.notificationService.notify(
         notificationId,
         this.translocoService.translate('assetRegistered'),
-        this.translocoService.translate('message.assetRegistered', { hash: await proof.getId(), publisherName: this.id })
+        this.translocoService.translate('message.assetRegistered', {
+          hash: await proof.getId(),
+          publisherName: this.id,
+        })
       );
 
       return proof;

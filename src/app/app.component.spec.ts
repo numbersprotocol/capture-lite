@@ -7,7 +7,6 @@ import { SharedTestingModule } from './shared/shared-testing.module';
 import { getTranslocoModule } from './transloco/transloco-root.module.spec';
 
 describe('AppComponent', () => {
-
   let platformReadySpy: Promise<void>;
   let platformSpy: Platform;
 
@@ -21,11 +20,9 @@ describe('AppComponent', () => {
       imports: [
         SharedTestingModule,
         getTranslocoModule(),
-        HttpClientTestingModule
+        HttpClientTestingModule,
       ],
-      providers: [
-        { provide: Platform, useValue: platformSpy }
-      ],
+      providers: [{ provide: Platform, useValue: platformSpy }],
     }).compileComponents();
   }));
 
@@ -37,6 +34,7 @@ describe('AppComponent', () => {
 
   it('should initialize the app', async () => {
     TestBed.createComponent(AppComponent);
+    // tslint:disable-next-line: no-unbound-method
     expect(platformSpy.ready).toHaveBeenCalled();
     await platformReadySpy;
   });

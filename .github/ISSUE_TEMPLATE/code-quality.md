@@ -4,7 +4,6 @@ about: Improve code quality or project architecture
 title: ''
 labels: code
 assignees: ''
-
 ---
 
 ## Suggestion

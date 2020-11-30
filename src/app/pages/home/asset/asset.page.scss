@@ -1,16 +1,17 @@
 mat-toolbar {
   background: #564dfc;
-  color: #ffffff;
+  color: white;
 
   .mat-icon {
-    color: #ffffff;
+    color: white;
   }
 
   span {
-    color: #ffffff;
+    color: white;
     padding-right: 40px;
   }
 }
+
 .toolbar-spacer {
   flex: 1 1 auto;
 }

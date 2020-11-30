@@ -9,16 +9,24 @@
 
     <mat-nav-list>
       <mat-list-item>
-        <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>{{ t('profile') }}</a>
+        <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>{{
+          t('profile')
+        }}</a>
       </mat-list-item>
       <mat-list-item>
-        <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>{{ t('settings') }}</a>
+        <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>{{
+          t('settings')
+        }}</a>
       </mat-list-item>
       <mat-list-item>
-        <a routerLink="/privacy" (click)="sidenav.close()" mat-list-item>{{ t('privacy') }}</a>
+        <a routerLink="/privacy" (click)="sidenav.close()" mat-list-item>{{
+          t('privacy')
+        }}</a>
       </mat-list-item>
       <mat-list-item>
-        <a routerLink="/about" (click)="sidenav.close()" mat-list-item>{{ t('about') }}</a>
+        <a routerLink="/about" (click)="sidenav.close()" mat-list-item>{{
+          t('about')
+        }}</a>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
@@ -37,15 +45,27 @@
       </button>
     </mat-toolbar>
 
-    <mat-tab-group (selectedTabChange)="onTapChanged($event)" mat-align-tabs="center">
+    <mat-tab-group
+      (selectedTabChange)="onTapChanged($event)"
+      mat-align-tabs="center"
+    >
       <mat-tab label="Capture">
         <div class="tab-content-capture">
-          <ng-container *ngFor="let captureByDate of capturesByDate$ | async | keyvalue">
+          <ng-container
+            *ngFor="let captureByDate of capturesByDate$ | async | keyvalue"
+          >
             <div class="mat-title">{{ captureByDate.key }}</div>
             <mat-grid-list cols="3" gutterSize="8px">
-              <mat-grid-tile *ngFor="let capture of captureByDate.value" class="square-image-tile"
-                [style]="'background-image: url(' + capture.proofWithThumbnailAndOld?.thumbnailDataUrl! + ');'"
-                [routerLink]="['asset', {id: capture.asset.id}]">
+              <mat-grid-tile
+                *ngFor="let capture of captureByDate.value"
+                class="square-image-tile"
+                [style]="
+                  'background-image: url(' +
+                  capture.proofWithThumbnailAndOld?.thumbnailDataUrl! +
+                  ');'
+                "
+                [routerLink]="['asset', { id: capture.asset.id }]"
+              >
               </mat-grid-tile>
             </mat-grid-list>
           </ng-container>
@@ -53,13 +73,21 @@
       </mat-tab>
       <mat-tab label="PostCapture">
         <div class="tab-content-post">
-          <app-post-capture-card *ngFor="let postCapture of postCaptures$ | async"
-            [transaction]="postCapture.transaction" [asset]="postCapture.asset">
+          <app-post-capture-card
+            *ngFor="let postCapture of postCaptures$ | async"
+            [transaction]="postCapture.transaction"
+            [asset]="postCapture.asset"
+          >
           </app-post-capture-card>
         </div>
       </mat-tab>
     </mat-tab-group>
-    <button *ngIf="captureButtonShow" (click)="capture()" mat-fab color="primary">
+    <button
+      *ngIf="captureButtonShow"
+      (click)="capture()"
+      mat-fab
+      color="primary"
+    >
       <mat-icon>camera_alt</mat-icon>
     </button>
   </mat-sidenav-content>

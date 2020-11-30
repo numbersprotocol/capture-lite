@@ -18,8 +18,8 @@ import { InboxPage } from './inbox.page';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
   ],
-  declarations: [InboxPage]
+  declarations: [InboxPage],
 })
-export class InboxPageModule { }
+export class InboxPageModule {}
