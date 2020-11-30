@@ -7,8 +7,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { getTranslocoModule } from '../../services/transloco/transloco-root-testing.module';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
-import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
 import { ProfilePage } from './profile.page';
 
 describe('ProfilePage', () => {

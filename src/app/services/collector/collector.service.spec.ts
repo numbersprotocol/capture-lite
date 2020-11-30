@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
-import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
 import { MimeType } from '../../utils/mime-type';
 import {
   AssetMeta,
@@ -10,6 +9,7 @@ import {
   Signature,
 } from '../repositories/proof/proof';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
+import { getTranslocoModule } from '../transloco/transloco-root-testing.module';
 import { CollectorService } from './collector.service';
 import { FactsProvider } from './facts/facts-provider';
 import { SignatureProvider } from './signature/signature-provider';

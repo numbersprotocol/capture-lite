@@ -8,7 +8,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from '../../../../transloco/transloco-root.module.spec';
+import { getTranslocoModule } from '../../../../services/transloco/transloco-root-testing.module';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog.component';
 
 describe('ContactSelectionDialogComponent', () => {

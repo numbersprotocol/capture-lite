@@ -8,7 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { IonicModule } from '@ionic/angular';
 import { Transaction } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
 import { Asset } from '../../services/publisher/numbers-storage/repositories/asset/asset';
-import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
+import { getTranslocoModule } from '../../services/transloco/transloco-root-testing.module';
 import { PostCaptureCardComponent } from './post-capture-card.component';
 
 describe('PostCaptureCardComponent', () => {

@@ -9,7 +9,7 @@ import {
   TRANSLOCO_CONFIG,
   TRANSLOCO_LOADER,
 } from '@ngneat/transloco';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 export const languages: { [key: string]: string } = {
   'en-us': 'English (United State)',
@@ -40,7 +40,6 @@ export class TranslocoHttpLoader implements TranslocoLoader {
         defaultLang: defaultLanguage[0],
         fallbackLang: defaultLanguage[0],
         missingHandler: { useFallbackTranslation: true },
-        // Remove this option if your application doesn't support changing language in runtime.
         reRenderOnLangChange: true,
         prodMode: environment.production,
       }),

@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from '../../../transloco/transloco-root.module.spec';
+import { getTranslocoModule } from '../../../services/transloco/transloco-root-testing.module';
 import { FinishedPage } from './finished.page';
 
 describe('FinishedPage', () => {

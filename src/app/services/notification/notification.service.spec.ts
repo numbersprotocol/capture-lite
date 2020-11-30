@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
-import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
+import { getTranslocoModule } from '../transloco/transloco-root-testing.module';
 import { NotificationService } from './notification.service';
 
 describe('NotificationService', () => {
