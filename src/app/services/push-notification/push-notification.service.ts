@@ -3,7 +3,6 @@ import {
   Capacitor,
   Plugins,
   PushNotification,
-  PushNotificationActionPerformed,
   PushNotificationToken,
 } from '@capacitor/core';
 import { defer } from 'rxjs';
@@ -12,6 +11,10 @@ import { NotificationService } from '../notification/notification.service';
 import { NumbersStorageApi } from '../publisher/numbers-storage/numbers-storage-api.service';
 
 const { Device, PushNotifications } = Plugins;
+
+/**
+ * TODO: Refactor this class. Decouple from DIA Backend.
+ */
 
 @Injectable({
   providedIn: 'root',
@@ -34,28 +37,13 @@ export class PushNotificationService {
           console.log(`token ${token.value} uploaded`)
         );
         const message = `Push registration success, token: ${token.value}`;
-        this.notificationService.notify(message, message);
+        // tslint:disable-next-line: no-console
+        console.log(message);
       },
       error => {
         this.notificationService.error(error);
       }
     );
-    // Received -> when push notification received
-    this.addReceivedListener(notification => {
-      this.notificationService.notify(
-        JSON.stringify(notification),
-        JSON.stringify(notification)
-      );
-    });
-    // ActionPerformed -> when click on push notification
-    this.addActionPerformedListener(notification => {
-      // tslint:disable-next-line: no-console
-      console.log(`notification: ${notification}`);
-      this.notificationService.notify(
-        JSON.stringify(notification),
-        JSON.stringify(notification)
-      );
-    });
   }
 
   private uploadToken$(token: string) {
@@ -102,11 +90,11 @@ export class PushNotificationService {
   ): void {
     PushNotifications.addListener('pushNotificationReceived', callback);
   }
+}
 
-  // tslint:disable-next-line: prefer-function-over-method
-  private addActionPerformedListener(
-    callback: (notification: PushNotificationActionPerformed) => void
-  ): void {
-    PushNotifications.addListener('pushNotificationActionPerformed', callback);
-  }
+interface NumbersStorageNotification {
+  app_message_type:
+    | 'transaction_received'
+    | 'transaction_accepted'
+    | 'transaction_expired';
 }

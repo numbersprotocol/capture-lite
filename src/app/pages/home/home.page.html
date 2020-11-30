@@ -41,7 +41,12 @@
         <mat-icon>history</mat-icon>
       </button>
       <button routerLink="inbox" mat-icon-button>
-        <mat-icon>all_inbox</mat-icon>
+        <mat-icon
+          [matBadge]="inboxCount$ | async"
+          [matBadgeHidden]="!(inboxCount$ | async)"
+          matBadgeColor="warn"
+          >all_inbox</mat-icon
+        >
       </button>
     </mat-toolbar>
 
