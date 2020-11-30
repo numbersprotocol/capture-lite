@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { LanguageService } from '../../services/language/language.service';
 
 @UntilDestroy({ checkProperties: true })
@@ -14,10 +14,7 @@ export class SettingsPage {
 
   constructor(private readonly languageService: LanguageService) {}
 
-  setCurrentLanguage(languageKey: string) {
-    this.languageService
-      .setCurrentLanguage$(languageKey)
-      .pipe(untilDestroyed(this))
-      .subscribe();
+  async setCurrentLanguage(languageKey: string) {
+    return this.languageService.setCurrentLanguage(languageKey);
   }
 }
