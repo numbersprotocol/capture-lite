@@ -2,6 +2,7 @@ import { InjectionToken, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Table<T extends Tuple> {
+  readonly id: string;
   queryAll$(): Observable<T[]>;
   insert(tuples: T[]): Promise<T[]>;
   delete(tuples: T[]): Promise<T[]>;

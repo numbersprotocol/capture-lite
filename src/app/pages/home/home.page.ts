@@ -30,7 +30,7 @@ export class HomePage {
     )
   );
   postCaptures$ = this.getPostCaptures$();
-  readonly username$ = NumbersStorageApi.getUsername$();
+  readonly username$ = this.numbersStorageApi.getUsername$();
   captureButtonShow = true;
 
   constructor(
@@ -76,7 +76,7 @@ export class HomePage {
   private getPostCaptures$() {
     return zip(
       this.numbersStorageApi.listTransactions$(),
-      NumbersStorageApi.getEmail$()
+      this.numbersStorageApi.getEmail$()
     ).pipe(
       map(([transactionListResponse, email]) =>
         transactionListResponse.results.filter(

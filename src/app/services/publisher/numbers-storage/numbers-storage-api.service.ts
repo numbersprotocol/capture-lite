@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of, zip } from 'rxjs';
-import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
+import { defer, of, zip } from 'rxjs';
+import { concatMap, concatMapTo, pluck } from 'rxjs/operators';
 import { secret } from '../../../../environments/secret';
 import { dataUrlWithBase64ToBlob$ } from '../../../utils/encoding/encoding';
-import { PreferenceManager } from '../../../utils/preferences/preference-manager';
+import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import {
   getSortedProofInformation,
   OldDefaultInformationName,
@@ -14,24 +14,16 @@ import {
 import { DefaultFactId, Proof } from '../../repositories/proof/proof';
 import { Asset } from './repositories/asset/asset';
 
-export const enum TargetProvider {
-  Numbers = 'Numbers',
-}
-
-const baseUrl = secret.numbersStorageBaseUrl;
-const preference = PreferenceManager.NUMBERS_STORAGE_PUBLISHER_PREF;
-const enum PrefKeys {
-  Enabled = 'enabled',
-  AuthToken = 'authToken',
-  Username = 'username',
-  Email = 'email',
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class NumbersStorageApi {
-  constructor(private readonly httpClient: HttpClient) {}
+  private readonly preferences = this.preferenceManager.getPreferences(name);
+
+  constructor(
+    private readonly httpClient: HttpClient,
+    private readonly preferenceManager: PreferenceManager
+  ) {}
 
   createUser$(username: string, email: string, password: string) {
     const formData = new FormData();
@@ -52,22 +44,17 @@ export class NumbersStorageApi {
       .post<TokenCreateResponse>(`${baseUrl}/auth/token/login/`, formData)
       .pipe(
         pluck('auth_token'),
-        concatMap(authToken =>
-          preference.setString$(PrefKeys.AuthToken, `token ${authToken}`)
-        ),
+        concatMap(authToken => this.storeAuthToken(`token ${authToken}`)),
         concatMapTo(this.getUserInformation$()),
         concatMap(user =>
-          zip(
-            preference.setString$(PrefKeys.Username, user.username),
-            preference.setString$(PrefKeys.Email, user.email)
-          )
+          zip(this.setUsername(user.username), this.setEmail(user.email))
         ),
-        concatMapTo(preference.setBoolean$(PrefKeys.Enabled, true))
+        concatMapTo(defer(() => this.setEnabled(true)))
       );
   }
 
   getUserInformation$() {
-    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
+    return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         this.httpClient.get<UserResponse>(`${baseUrl}/auth/users/me/`, {
           headers,
@@ -77,23 +64,23 @@ export class NumbersStorageApi {
   }
 
   logout$() {
-    return preference.setBoolean$(PrefKeys.Enabled, false).pipe(
-      concatMapTo(NumbersStorageApi.getHttpHeadersWithAuthToken$()),
+    return defer(() => this.setEnabled(false)).pipe(
+      concatMapTo(defer(() => this.getHttpHeadersWithAuthToken())),
       concatMap(headers =>
         this.httpClient.post(`${baseUrl}/auth/token/logout/`, {}, { headers })
       ),
       concatMapTo(
         zip(
-          preference.setString$(PrefKeys.Username, 'has-logged-out'),
-          preference.setString$(PrefKeys.Email, 'has-logged-out'),
-          preference.setString$(PrefKeys.AuthToken, '')
+          this.setUsername('has-logged-out'),
+          this.setEmail('has-logged-out'),
+          this.storeAuthToken('')
         )
       )
     );
   }
 
   readAsset$(id: string) {
-    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
+    return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         this.httpClient.get<Asset>(`${baseUrl}/api/v2/assets/${id}/`, {
           headers,
@@ -110,7 +97,7 @@ export class NumbersStorageApi {
     signatures: OldSignature[],
     tag: string
   ) {
-    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
+    return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         zip(
           dataUrlWithBase64ToBlob$(rawFileBase64),
@@ -143,7 +130,7 @@ export class NumbersStorageApi {
   }
 
   listTransactions$() {
-    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
+    return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         this.httpClient.get<TransactionListResponse>(
           `${baseUrl}/api/v2/transactions/`,
@@ -154,7 +141,7 @@ export class NumbersStorageApi {
   }
 
   createTransaction$(assetId: string, email: string, caption: string) {
-    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
+    return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         this.httpClient.post<TransactionCreateResponse>(
           `${baseUrl}/api/v2/transactions/`,
@@ -166,7 +153,7 @@ export class NumbersStorageApi {
   }
 
   listInbox$() {
-    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
+    return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         this.httpClient.get<InboxReponse>(
           `${baseUrl}/api/v2/transactions/inbox/`,
@@ -177,7 +164,7 @@ export class NumbersStorageApi {
   }
 
   acceptTransaction$(id: string) {
-    return NumbersStorageApi.getHttpHeadersWithAuthToken$().pipe(
+    return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         this.httpClient.post<Transaction>(
           `${baseUrl}/api/v2/transactions/${id}/accept/`,
@@ -192,24 +179,37 @@ export class NumbersStorageApi {
     return this.httpClient.get(url, { responseType: 'blob' });
   }
 
-  // TODO: Avoid using static method after refactor preference utils.
-  private static getHttpHeadersWithAuthToken$() {
-    return preference.getString$(PrefKeys.AuthToken).pipe(
-      first(),
-      map(authToken => new HttpHeaders({ Authorization: authToken }))
-    );
+  private async getHttpHeadersWithAuthToken() {
+    const authToken = await this.preferences.getString(PrefKeys.AUTH_TOKEN);
+    return new HttpHeaders({ Authorization: authToken });
   }
 
-  static isEnabled$() {
-    return preference.getBoolean$(PrefKeys.Enabled);
+  private async storeAuthToken(value: string) {
+    return this.preferences.setString(PrefKeys.AUTH_TOKEN, value);
   }
 
-  static getUsername$() {
-    return preference.getString$(PrefKeys.Username);
+  isEnabled$() {
+    return this.preferences.getBoolean$(PrefKeys.ENABLED);
   }
 
-  static getEmail$() {
-    return preference.getString$(PrefKeys.Email);
+  async setEnabled(value: boolean) {
+    return this.preferences.setBoolean(PrefKeys.ENABLED, value);
+  }
+
+  getUsername$() {
+    return this.preferences.getString$(PrefKeys.USERNAME);
+  }
+
+  async setUsername(value: string) {
+    return this.preferences.setString(PrefKeys.USERNAME, value);
+  }
+
+  getEmail$() {
+    return this.preferences.getString$(PrefKeys.EMAIL);
+  }
+
+  async setEmail(value: string) {
+    return this.preferences.setString(PrefKeys.EMAIL, value);
   }
 }
 
@@ -243,6 +243,12 @@ function replaceDefaultFactIdWithOldDefaultInformationName(
       return info;
     }),
   };
+}
+
+const baseUrl = secret.numbersStorageBaseUrl;
+
+export const enum TargetProvider {
+  Numbers = 'Numbers',
 }
 
 interface UserResponse {
@@ -281,4 +287,11 @@ interface TransactionCreateResponse {
   readonly asset_id: string;
   readonly email: string;
   readonly caption: string;
+}
+
+const enum PrefKeys {
+  ENABLED = 'ENABLED',
+  AUTH_TOKEN = 'AUTH_TOKEN',
+  USERNAME = 'USERNAME',
+  EMAIL = 'EMAIL',
 }

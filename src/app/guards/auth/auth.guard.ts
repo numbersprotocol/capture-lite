@@ -20,14 +20,14 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    _route: ActivatedRouteSnapshot,
+    _state: RouterStateSnapshot
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return NumbersStorageApi.isEnabled$().pipe(
+    return this.numbersStorageApi.isEnabled$().pipe(
       map(isEnabled => {
         if (isEnabled) {
           return true;
