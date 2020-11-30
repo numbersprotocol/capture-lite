@@ -8,6 +8,7 @@ import {
 } from '@capacitor/core';
 import { defer } from 'rxjs';
 import { concatMap, tap } from 'rxjs/operators';
+import { NotificationService } from '../notification/notification.service';
 import { NumbersStorageApi } from '../publisher/numbers-storage/numbers-storage-api.service';
 
 const { Device, PushNotifications } = Plugins;
@@ -16,7 +17,10 @@ const { Device, PushNotifications } = Plugins;
   providedIn: 'root',
 })
 export class PushNotificationService {
-  constructor(private readonly numbersStorageApi: NumbersStorageApi) {}
+  constructor(
+    private readonly numbersStorageApi: NumbersStorageApi,
+    private readonly notificationService: NotificationService
+  ) {}
 
   configure(): void {
     if (Capacitor.platform === 'web') {
@@ -29,22 +33,38 @@ export class PushNotificationService {
           // tslint:disable-next-line: no-console
           console.log(`token ${token.value} uploaded`)
         );
+        const message = `Push registration success, token: ${token.value}`;
         // tslint:disable-next-line: no-console
-        console.log(`Push registration success, token: ${token.value}`);
+        console.log(message);
+        const id = this.notificationService.createNotificationId();
+        this.notificationService.notify(id, message, message);
       },
       error => {
-        throw Error(`Error on registration: ${JSON.stringify(error)}`);
+        const id = this.notificationService.createNotificationId();
+        this.notificationService.notifyError(id, error);
       }
     );
     // Received -> when push notification received
     this.addReceivedListener(notification => {
       // tslint:disable-next-line: no-console
       console.log(`notification: ${notification}`);
+      const id = this.notificationService.createNotificationId();
+      this.notificationService.notify(
+        id,
+        JSON.stringify(notification),
+        JSON.stringify(notification)
+      );
     });
     // ActionPerformed -> when click on push notification
     this.addActionPerformedListener(notification => {
       // tslint:disable-next-line: no-console
       console.log(`notification: ${notification}`);
+      const id = this.notificationService.createNotificationId();
+      this.notificationService.notify(
+        id,
+        JSON.stringify(notification),
+        JSON.stringify(notification)
+      );
     });
   }
 

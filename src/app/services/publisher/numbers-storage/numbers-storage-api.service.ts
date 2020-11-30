@@ -70,10 +70,12 @@ export class NumbersStorageApi {
         this.httpClient.post(`${baseUrl}/auth/token/logout/`, {}, { headers })
       ),
       concatMapTo(
-        zip(
-          this.setUsername('has-logged-out'),
-          this.setEmail('has-logged-out'),
-          this.storeAuthToken('')
+        defer(() =>
+          Promise.all([
+            this.setUsername('has-logged-out'),
+            this.setEmail('has-logged-out'),
+            this.storeAuthToken(''),
+          ])
         )
       )
     );

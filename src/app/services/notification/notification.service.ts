@@ -6,6 +6,13 @@ import { subscribeInBackground } from '../../utils/background-task/background-ta
 
 const { LocalNotifications } = Plugins;
 
+/**
+ * 0. (TODO) Unit tests.
+ * 1. (TODO) Create `Notification` instance to hold the id.
+ * 2. (TODO) Simplify method to notify immediately without created `Notification` instance before.
+ * 3. (TODO) Better error notification.
+ */
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,6 +23,10 @@ export class NotificationService {
     /**
      * TODO: Check if the notification permission is granted in constructor.
      */
+    LocalNotifications.requestPermission().then(result =>
+      // tslint:disable-next-line: no-console
+      console.log(`Notification permission request result: ${result.granted}`)
+    );
   }
 
   createNotificationId() {
