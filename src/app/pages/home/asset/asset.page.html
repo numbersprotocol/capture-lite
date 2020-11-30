@@ -28,16 +28,9 @@
       <mat-icon mat-list-icon>access_time</mat-icon>
       <div mat-line>{{ timestamp$ | async | date: 'long' }}</div>
     </mat-list-item>
-    <mat-list-item>
+    <mat-list-item (click)="openDashboardLink()">
       <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
       <div mat-line>{{ (asset$ | async)?.id }}</div>
-      <button
-        *ngIf="(asset$ | async)?.id as mediaId"
-        (click)="copyToClipboard(mediaId)"
-        mat-icon-button
-      >
-        <mat-icon>content_copy</mat-icon>
-      </button>
     </mat-list-item>
   </mat-list>
   <button
