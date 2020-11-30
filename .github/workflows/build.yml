@@ -4,46 +4,45 @@ on: [push, pull_request]
 
 jobs:
   android:
-
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 10
-    
-    - name: Install Angular CLI
-      run: npm install -g @angular/cli
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
 
-    - name: Install Ionic CLI
-      run: npm install -g @ionic/cli
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli
 
-    - name: Lint
-      run: npm run lint
+      - name: Install dependencies
+        run: npm install
 
-    - name: Test
-      run: npm run test-ci
+      - name: Lint
+        run: npm run lint
 
-    - name: Upload coverage reports
-      uses: codacy/codacy-coverage-reporter-action@master
-      with:
-        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: ./coverage/cobertura-coverage.xml
+      - name: Test
+        run: npm run test-ci
 
-    - name: Build Ionic
-      env:
-        NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
-      run: npm run build
+      - name: Upload coverage reports
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: ./coverage/cobertura-coverage.xml
 
-    - name: Build Android
-      run: |
-        npx cap sync android
-        cd android/
-        ./gradlew assembleDebug
+      - name: Build Ionic
+        env:
+          NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
+        run: npm run build
+
+      - name: Build Android
+        run: |
+          npx cap sync android
+          cd android/
+          ./gradlew assembleDebug

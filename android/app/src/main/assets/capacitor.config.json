@@ -10,11 +10,11 @@
       "launchAutoHide": false
     },
     "PushNotifications": {
-      "presentationOptions": [
-        "badge",
-        "sound",
-        "alert"
-      ]
+      "presentationOptions": ["badge", "sound", "alert"]
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_capture_lite",
+      "iconColor": "#564dfc"
     }
   },
   "cordova": {},

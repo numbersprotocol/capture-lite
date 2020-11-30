@@ -10,12 +10,14 @@ import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SharedModule } from './shared/shared.module';
 import { TranslocoRootModule } from './transloco/transloco-root.module';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    SharedModule,
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
@@ -25,13 +27,18 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     ReactiveFormsModule,
     FormlyModule.forRoot({ extras: { lazyRender: true } }),
     FormlyMaterialModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
-  providers: [{
-    provide: RouteReuseStrategy, useClass: IonicRouteStrategy
-  }, {
-    provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 }
-  }],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy,
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: { duration: 2500 },
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -6,7 +6,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
+import { getTranslocoModule } from '../../../transloco/transloco-root.module.spec';
 import { InboxPage } from './inbox.page';
 
 describe('InboxPage', () => {
@@ -17,6 +18,7 @@ describe('InboxPage', () => {
     TestBed.configureTestingModule({
       declarations: [InboxPage],
       imports: [
+        SharedTestingModule,
         IonicModule.forRoot(),
         getTranslocoModule(),
         RouterTestingModule,
@@ -24,8 +26,8 @@ describe('InboxPage', () => {
         MatButtonModule,
         MatIconModule,
         MatListModule,
-        HttpClientTestingModule
-      ]
+        HttpClientTestingModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InboxPage);

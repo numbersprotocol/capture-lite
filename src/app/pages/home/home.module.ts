@@ -9,7 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslocoModule } from '@ngneat/transloco';
-import { PostCaptureCardModule } from 'src/app/shared/post-capture-card/post-capture-card.module';
+import { PostCaptureCardModule } from '../../shared/post-capture-card/post-capture-card.module';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 
@@ -26,8 +26,8 @@ import { HomePage } from './home.page';
     MatCardModule,
     MatSidenavModule,
     MatListModule,
-    PostCaptureCardModule
+    PostCaptureCardModule,
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
 })
-export class HomePageModule { }
+export class HomePageModule {}

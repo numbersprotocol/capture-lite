@@ -20,8 +20,8 @@ import { ProfilePage } from './profile.page';
     MatButtonModule,
     MatIconModule,
     MatListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
-  declarations: [ProfilePage]
+  declarations: [ProfilePage],
 })
-export class ProfilePageModule { }
+export class ProfilePageModule {}

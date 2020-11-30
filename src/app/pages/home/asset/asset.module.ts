@@ -33,13 +33,13 @@ import { OptionsMenuComponent } from './options-menu/options-menu.component';
     MatInputModule,
     MatDialogModule,
     MatFormFieldModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
   ],
   declarations: [
     AssetPage,
     ContactSelectionDialogComponent,
     FriendInvitationDialogComponent,
-    OptionsMenuComponent
-  ]
+    OptionsMenuComponent,
+  ],
 })
-export class AssetPageModule { }
+export class AssetPageModule {}

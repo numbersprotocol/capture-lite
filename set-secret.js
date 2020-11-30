@@ -9,6 +9,11 @@ const envConfigFile = `export const secret = {
 };
 `;
 fs.writeFile(targetPath, envConfigFile, err => {
-  if (err) { throw console.error(err); }
-  else { console.log(`Angular secrets.ts file generated correctly at ${targetPath} \n`); }
+  if (err) {
+    throw console.error(err);
+  } else {
+    console.log(
+      `Angular secrets.ts file generated correctly at ${targetPath} \n`
+    );
+  }
 });

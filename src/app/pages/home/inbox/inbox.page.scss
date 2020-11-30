@@ -1,7 +1,3 @@
-mat-toolbar {
-  background: white;
-}
-
 .page-content {
   span.nothing-here {
     display: flex;
@@ -34,5 +30,18 @@ mat-toolbar {
         flex-grow: 1;
       }
     }
+  }
+}
+
+mat-toolbar {
+  color: white;
+
+  .mat-icon {
+    color: white;
+  }
+
+  span {
+    color: white;
+    padding-right: 40px;
   }
 }

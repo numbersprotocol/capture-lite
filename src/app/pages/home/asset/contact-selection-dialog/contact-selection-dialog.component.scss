@@ -1,5 +1,14 @@
 mat-toolbar {
-  background: white;
+  color: white;
+
+  .mat-icon {
+    color: white;
+  }
+
+  span {
+    color: white;
+    padding-right: 40px;
+  }
 }
 
 .example-header-image {

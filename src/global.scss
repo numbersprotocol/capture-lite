@@ -10,13 +10,13 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "~@ionic/angular/css/core.css";
+@import '~@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-@import "~@ionic/angular/css/normalize.css";
-@import "~@ionic/angular/css/structure.css";
-@import "~@ionic/angular/css/typography.css";
-@import "~@ionic/angular/css/display.css";
+@import '~@ionic/angular/css/normalize.css';
+@import '~@ionic/angular/css/structure.css';
+@import '~@ionic/angular/css/typography.css';
+@import '~@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
 // @import "~@ionic/angular/css/padding.css";
@@ -28,6 +28,7 @@
 .ion-page {
   background-color: white;
 }
+
 .page-content {
   flex: 1 1 auto;
   overflow: auto;
@@ -55,6 +56,7 @@ mat-toolbar {
     margin-top: 30px;
   }
 }
+
 button.expand {
   width: calc(100vw - 16px);
   margin: 0 8px;

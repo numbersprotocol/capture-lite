@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.8.1 - 2020-11-26
+
+### Fixed
+
+- Update `r0adkll/upload-google-play` from v1.0.4 to v1 to avoid using deprecated `set-env` command in Action.
+
+## 0.8.0 - 2020-11-26
+
+### Changed
+
+#### UI/UX
+
+- Require user name on sign-up page. #224
+- Show "Nothing here" on inbox page when no item to show. #222
+- Rename "publishing proof" to "registering asset" #223, #208
+- Update UI components and color scheme to follow the Figma design. #255, #228, #218, #219, #235
+- Change the notification small icon to launcher icon. #237
+
+#### Code Quality
+
+- Improve stability and reliability of data persistence. #227
+
 ## 0.7.5 - 2020-11-16
 
 ### Fixed
@@ -22,13 +44,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- __Workaround__:  Catch Error from Capacitor.Filesystem.deleteFile on Android or iOS Devices. #193
+- **Workaround**: Catch Error from Capacitor.Filesystem.deleteFile on Android or iOS Devices. #193
 
 ## 0.7.2 - 2020-11-13
 
 ### Fixed
 
-- __Workaround__: fix different naming for information. Use constant string for the names of information.
+- **Workaround**: fix different naming for information. Use constant string for the names of information.
 - Fix location cannot display on asset page in zh-tw. #187
 
 ## 0.7.1 - 2020-11-13

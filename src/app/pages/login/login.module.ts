@@ -21,8 +21,8 @@ import { LoginPage } from './login.page';
     FormlyModule.forRoot({ extras: { lazyRender: true } }),
     FormlyMaterialModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
-  declarations: [LoginPage]
+  declarations: [LoginPage],
 })
-export class LoginPageModule { }
+export class LoginPageModule {}

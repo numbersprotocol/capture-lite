@@ -1,8 +1,8 @@
-<mat-toolbar *transloco="let t">
+<mat-toolbar color="primary" *transloco="let t">
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <span>{{ t('captureDetails') }}</span>
+  <span class="title">{{ t('captureDetails') }}</span>
   <button (click)="openContactSelectionDialog()" mat-icon-button>
     <mat-icon>send</mat-icon>
   </button>
@@ -12,31 +12,40 @@
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
-  <img class="proof-image" [src]="base64Src$ | async">
+  <img class="proof-image" [src]="base64Src$ | async" />
   <mat-list>
     <mat-list-item>
       <mat-icon mat-list-icon>person</mat-icon>
-      <div mat-line>{{ t('owner') }}</div>
       <div mat-line>{{ (asset$ | async)?.owner }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>place</mat-icon>
-      <div mat-line>{{ t('location') }}</div>
-      <div mat-line>{{ (latitude$ | async) + ', ' + (longitude$ | async) }}</div>
+      <div mat-line>
+        {{ (latitude$ | async) + ', ' + (longitude$ | async) }}
+      </div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>access_time</mat-icon>
-      <div mat-line>{{ t('timestamp') }}</div>
-      <div mat-line>{{ timestamp$ | async | date:'long' }}</div>
+      <div mat-line>{{ timestamp$ | async | date: 'long' }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
-      <div mat-line>{{ t('mediaId') }}</div>
       <div mat-line>{{ (asset$ | async)?.id }}</div>
-      <button *ngIf="(asset$ | async)?.id as mediaId" (click)="copyToClipboard(mediaId)" mat-icon-button>
+      <button
+        *ngIf="(asset$ | async)?.id as mediaId"
+        (click)="copyToClipboard(mediaId)"
+        mat-icon-button
+      >
         <mat-icon>content_copy</mat-icon>
       </button>
     </mat-list-item>
   </mat-list>
-  <button routerLink="information" class="center" mat-stroked-button color="primary">{{ t('viewAll') }}</button>
+  <button
+    routerLink="information"
+    class="center"
+    mat-stroked-button
+    color="primary"
+  >
+    {{ t('viewAll') }}
+  </button>
 </div>

@@ -2,43 +2,56 @@ import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { defer } from 'rxjs';
-import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
+import { subscribeInBackground } from '../../utils/background-task/background-task';
 
 const { LocalNotifications } = Plugins;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
-
   private currentId = 1;
 
-  constructor(
-    private readonly translocoService: TranslocoService
-  ) {
-    LocalNotifications.requestPermission()
-      .then(result => console.log(`Notification permission request result: ${result.granted}`));
+  constructor(private readonly translocoService: TranslocoService) {
+    /**
+     * TODO: Check if the notification permission is granted in constructor.
+     */
   }
 
   createNotificationId() {
-    this.currentId++;
+    this.currentId += 1;
     return this.currentId;
   }
 
-  // TODO: Add on-going configurations when this PR got merged and released:
-  //       https://github.com/ionic-team/capacitor/pull/3165
+  // TODO: Create new notification instance containing ID itself.
+  // tslint:disable-next-line: prefer-function-over-method
   notify(id: number, title: string, body: string) {
+    // tslint:disable-next-line: no-console
     console.log(`${title}: ${body}`);
-    subscribeInBackground(defer(() => LocalNotifications.schedule({
-      notifications: [{ title, body, id }]
-    })));
+    subscribeInBackground(
+      defer(() =>
+        LocalNotifications.schedule({
+          notifications: [{ title, body, id }],
+        })
+      )
+    );
   }
 
   notifyError(id: number, error: Error) {
-    this.notify(id, this.translocoService.translate('unknownError'), JSON.stringify(error));
+    this.notify(
+      id,
+      this.translocoService.translate('unknownError'),
+      JSON.stringify(error)
+    );
   }
 
+  // TODO: Create new notification instance containing ID itself.
+  // tslint:disable-next-line: prefer-function-over-method
   cancel(id: number) {
-    subscribeInBackground(defer(() => LocalNotifications.cancel({ notifications: [{ id: String(id) }] })));
+    subscribeInBackground(
+      defer(() =>
+        LocalNotifications.cancel({ notifications: [{ id: String(id) }] })
+      )
+    );
   }
 }

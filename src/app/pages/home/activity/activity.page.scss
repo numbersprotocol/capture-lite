@@ -1,5 +1,14 @@
 mat-toolbar {
-  background: white;
+  color: white;
+
+  .mat-icon {
+    color: white;
+  }
+
+  span {
+    color: white;
+    padding-right: 40px;
+  }
 }
 
 .page-content {
@@ -14,8 +23,8 @@ mat-toolbar {
 
     img[matListAvatar] {
       border-radius: 4px;
-      width: calc(100vw / 3);
-      height: calc(100vw / 5);
+      width: calc(100vw / 5);
+      height: calc(100vw / 8);
       max-width: 150px;
       max-height: 80px;
     }
@@ -24,7 +33,12 @@ mat-toolbar {
       flex-shrink: 0;
     }
 
-    button.accepted,
+    button.accepted {
+      color: white;
+      border-color: #4cd964;
+      background-color: #4cd964;
+    }
+
     button.delivered {
       color: mediumseagreen;
       border-color: mediumseagreen;
@@ -36,8 +50,9 @@ mat-toolbar {
     }
 
     button.returned {
-      color: var(--ion-color-danger);
+      color: white;
       border-color: var(--ion-color-danger);
+      background-color: #e31587;
     }
   }
 }

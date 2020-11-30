@@ -6,7 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
 import { AboutPage } from './about.page';
 
 describe('AboutPage', () => {
@@ -24,8 +24,8 @@ describe('AboutPage', () => {
         MatToolbarModule,
         MatButtonModule,
         MatIconModule,
-        MatListModule
-      ]
+        MatListModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AboutPage);

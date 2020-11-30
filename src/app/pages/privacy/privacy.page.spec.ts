@@ -6,7 +6,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { SharedTestingModule } from '../../shared/shared-testing.module';
+import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
 import { PrivacyPage } from './privacy.page';
 
 describe('PrivacyPage', () => {
@@ -17,6 +18,7 @@ describe('PrivacyPage', () => {
     TestBed.configureTestingModule({
       declarations: [PrivacyPage],
       imports: [
+        SharedTestingModule,
         IonicModule.forRoot(),
         RouterTestingModule,
         getTranslocoModule(),
@@ -24,8 +26,8 @@ describe('PrivacyPage', () => {
         MatButtonModule,
         MatIconModule,
         MatListModule,
-        MatSlideToggleModule
-      ]
+        MatSlideToggleModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PrivacyPage);

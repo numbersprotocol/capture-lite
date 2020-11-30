@@ -7,11 +7,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./friend-invitation-dialog.component.scss'],
 })
 export class FriendInvitationDialogComponent {
-
   constructor(
     private readonly dialogRef: MatDialogRef<FriendInvitationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SubmittedFriendInvitation
-  ) { }
+  ) {}
 
   onCancelClicked() {
     this.dialogRef.close();

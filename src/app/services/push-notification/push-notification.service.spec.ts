@@ -1,13 +1,20 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { PushNotificationService } from './push-notification.service';
 
 describe('PushNotificationService', () => {
   let service: PushNotificationService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [getTranslocoModule(), HttpClientTestingModule] });
+    TestBed.configureTestingModule({
+      imports: [
+        SharedTestingModule,
+        getTranslocoModule(),
+        HttpClientTestingModule,
+      ],
+    });
     service = TestBed.inject(PushNotificationService);
   });
 

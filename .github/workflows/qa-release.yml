@@ -6,112 +6,10 @@ on:
       - develop
 
 jobs:
-  github-release:
+  release:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Extract branch name
-      id: extract_branch
-      run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
-
-    - uses: actions/setup-node@v1
-      with:
-        node-version: 10
-
-    - name: Check if version has been updated
-      id: version_check
-      uses: EndBug/version-check@v1
-      with:
-        diff-search: true
-        token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Set up JDK
-      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
-
-    - name: Build Ionic
-      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-      env:
-        NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
-      run: |
-        npm install -g @angular/cli
-        npm install -g @ionic/cli
-        npm install
-        npm run test-ci
-        npm run build
-    
-    - name: Build Android debug APK
-      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-      run: |
-        npx cap sync android
-        cd android/
-        ./gradlew assembleDebug
-
-    - name: Create GitHub prerelease
-      id: create_release
-      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.version_check.outputs.version }}
-        release_name: ${{ steps.version_check.outputs.version }}
-        body: Thanks for following along! For more information check out the [CHANGELOG](https://github.com/numbersprotocol/capture-lite/blob/develop/CHANGELOG.md).
-        prerelease: true
-
-    - name: Upload debug APK to release assets
-      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./android/app/build/outputs/apk/debug/app-debug.apk
-        asset_name: app-debug.apk
-        asset_content_type: application/vnd.android.package-archive
-
-    - name: Upload debug metadata.json to release assets
-      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./android/app/build/outputs/apk/debug/output-metadata.json
-        asset_name: output-metadata-debug.json
-        asset_content_type: application/json
-
-    - name: Send Slack notification
-      if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-      uses: rtCamp/action-slack-notify@master
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_CHANNEL: reminder-releases
-        SLACK_COLOR: '#6EE4D3'
-        SLACK_ICON: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-        SLACK_MESSAGE: |
-          Version: ${{ steps.version_check.outputs.version }}
-          <https://github.com/numbersprotocol/capture-lite/releases/tag/${{ steps.version_check.outputs.version }}|GitHub Release Note>
-          
-          APKs
-          
-          - <https://drive.google.com/drive/folders/1NH-4mruBBubxHMfXF6VXaKRCQ76Ldg_n?usp=sharing|Google Drive (debug)>
-          - <https://play.google.com/apps/testing/io.numbersprotocol.capturelite|Google Play Closed Alpha Testing (release)>
-          
-          Notes
-          
-          - Publishing process usually requires some time to complete, and thus the link provided above might still display the old version of the app. Please check the app version before download and install the app.
-          - This message is automatically sent from GitHub Action.
-        SLACK_TITLE: Capture Lite QA Release
-        SLACK_USERNAME: GitHub Action
-
-  android-google-play-deploy:
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -147,7 +45,14 @@ jobs:
           npm run test-ci
           npm run build
 
-      - name: Build Android release bundle (AAB)
+      - name: Build Android debug APK for GitHub Release asset
+        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
+        run: |
+          npx cap sync android
+          cd android/
+          ./gradlew assembleDebug
+
+      - name: Build Android release bundle (AAB) for Google Play Console
         if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
         run: |
           npx cap sync android
@@ -156,7 +61,7 @@ jobs:
 
       - name: Sign release AAB
         if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
-        uses: r0adkll/sign-android-release@21072f7435f485b65555103ff2c60e86560b759e
+        uses: r0adkll/sign-android-release@v1.0.4
         with:
           releaseDirectory: ./android/app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE_FILE }}
@@ -176,6 +81,64 @@ jobs:
           packageName: io.numbersprotocol.capturelite
           releaseFile: ./android/app/build/outputs/bundle/release/app-release.aab
           track: alpha
+
+      - name: Create GitHub prerelease
+        id: create_release
+        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version_check.outputs.version }}
+          release_name: ${{ steps.version_check.outputs.version }}
+          body: Thanks for following along! For more information check out the [CHANGELOG](https://github.com/numbersprotocol/capture-lite/blob/develop/CHANGELOG.md).
+          prerelease: true
+
+      - name: Upload debug APK to release assets
+        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./android/app/build/outputs/apk/debug/app-debug.apk
+          asset_name: app-debug.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      - name: Upload debug metadata.json to release assets
+        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./android/app/build/outputs/apk/debug/output-metadata.json
+          asset_name: output-metadata-debug.json
+          asset_content_type: application/json
+
+      - name: Send Slack notification
+        if: steps.version_check.outputs.changed == 'true' && steps.extract_branch.outputs.branch == 'develop'
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: reminder-releases
+          SLACK_COLOR: '#6EE4D3'
+          SLACK_ICON: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          SLACK_MESSAGE: |
+            Version: ${{ steps.version_check.outputs.version }}
+            <https://github.com/numbersprotocol/capture-lite/releases/tag/${{ steps.version_check.outputs.version }}|GitHub Release Note>
+
+            APKs
+
+            - <https://drive.google.com/drive/folders/1NH-4mruBBubxHMfXF6VXaKRCQ76Ldg_n?usp=sharing|Google Drive (debug)>
+            - <https://play.google.com/apps/testing/io.numbersprotocol.capturelite|Google Play Closed Alpha Testing (release)>
+
+            Notes
+
+            - Publishing process usually requires some time to complete, and thus the link provided above might still display the old version of the app. Please check the app version before download and install the app.
+            - This message is automatically sent from GitHub Action.
+          SLACK_TITLE: Capture Lite QA Release
+          SLACK_USERNAME: GitHub Action
 
   android-google-drive-upload:
     runs-on: ubuntu-latest

@@ -1,9 +1,14 @@
 mat-toolbar {
-  background: white;
+  color: white;
 
-  span {
-    margin-left: 40px;
+  .mat-icon {
+    color: white;
   }
+}
+
+.title {
+  color: white;
+  margin-left: 40px;
 }
 
 .toolbar-spacer {
@@ -12,13 +17,27 @@ mat-toolbar {
 
 .page-content {
   padding-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 button.center {
-  display: block;
-  margin: 0 auto;
+  height: 36px;
+  width: 186px;
+  margin: auto;
+  left: 0;
+  bottom: 0;
+  color: white;
+  background-color: #564dfc;
 }
 
 .proof-image {
   width: 100%;
+}
+
+.mat-list-base .mat-list-item.mat-list-item-with-avatar {
+  height: 40px;
+  padding: 0 20px;
 }

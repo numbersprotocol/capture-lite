@@ -18,8 +18,8 @@ import { AboutPage } from './about.page';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
   ],
-  declarations: [AboutPage]
+  declarations: [AboutPage],
 })
-export class AboutPageModule { }
+export class AboutPageModule {}

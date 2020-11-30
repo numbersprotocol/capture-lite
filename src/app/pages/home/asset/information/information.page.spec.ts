@@ -7,7 +7,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { SharedTestingModule } from '../../../../shared/shared-testing.module';
+import { getTranslocoModule } from '../../../../transloco/transloco-root.module.spec';
 import { InformationPage } from './information.page';
 
 describe('InformationPage', () => {
@@ -18,6 +19,7 @@ describe('InformationPage', () => {
     TestBed.configureTestingModule({
       declarations: [InformationPage],
       imports: [
+        SharedTestingModule,
         IonicModule.forRoot(),
         RouterTestingModule,
         getTranslocoModule(),
@@ -26,8 +28,8 @@ describe('InformationPage', () => {
         MatIconModule,
         MatListModule,
         MatSnackBarModule,
-        HttpClientTestingModule
-      ]
+        HttpClientTestingModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InformationPage);

@@ -7,7 +7,7 @@ const textDecoder = new TextDecoder();
 export function base64ToArrayBuffer(base64: string) {
   const binaryString = atob(base64);
   const bytes = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
+  for (let i = 0; i < binaryString.length; i += 1) {
     bytes[i] = binaryString.charCodeAt(i);
   }
   return bytes.buffer;
@@ -25,7 +25,8 @@ export function arrayBufferToHex(arrayBuffer: ArrayBuffer) {
 
 export function hexToArrayBuffer(hex: string) {
   // tslint:disable-next-line: no-non-null-assertion
-  return new Uint8Array(hex.match(/[\da-f]{2}/gi)!.map(h => parseInt(h, 16))).buffer;
+  return new Uint8Array(hex.match(/[\da-f]{2}/gi)!.map(h => parseInt(h, 16)))
+    .buffer;
 }
 
 export function stringToArrayBuffer(str: string) {

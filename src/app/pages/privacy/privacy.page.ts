@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { CapacitorProvider } from '../../services/collector/information/capacitor-provider/capacitor-provider';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { CapacitorFactsProvider } from '../../services/collector/facts/capacitor-provider/capacitor-facts-provider.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -9,19 +9,18 @@ import { CapacitorProvider } from '../../services/collector/information/capacito
   styleUrls: ['./privacy.page.scss'],
 })
 export class PrivacyPage {
+  readonly isDeviceInfoCollectionEnabled$ = this.capacitorFactsProvider.isDeviceInfoCollectionEnabled$();
+  readonly isLocationInfoCollectionEnabled$ = this.capacitorFactsProvider.isLocationInfoCollectionEnabled$();
 
-  readonly isDeviceInfoCollectionEnabled$ = CapacitorProvider.isDeviceInfoCollectionEnabled$();
-  readonly isLocationInfoCollectionEnabled$ = CapacitorProvider.isLocationInfoCollectionEnabled$();
+  constructor(
+    private readonly capacitorFactsProvider: CapacitorFactsProvider
+  ) {}
 
-  setDeviceInfoCollection(enable: boolean) {
-    CapacitorProvider.setDeviceInfoCollection$(enable).pipe(
-      untilDestroyed(this)
-    ).subscribe();
+  async setDeviceInfoCollection(enable: boolean) {
+    return this.capacitorFactsProvider.setDeviceInfoCollection(enable);
   }
 
-  setLocationInfoCollection(enable: boolean) {
-    CapacitorProvider.setLocationInfoCollection$(enable).pipe(
-      untilDestroyed(this)
-    ).subscribe();
+  async setLocationInfoCollection(enable: boolean) {
+    return this.capacitorFactsProvider.setLocationInfoCollection(enable);
   }
 }

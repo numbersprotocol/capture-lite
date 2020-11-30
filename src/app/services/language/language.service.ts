@@ -1,39 +1,44 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { first, mapTo, switchMap, tap } from 'rxjs/operators';
-import { defaultLanguage, languages } from 'src/app/transloco/transloco-root.module';
-import { PreferenceManager } from '../../utils/preferences/preference-manager';
-
-const preferences = PreferenceManager.LANGUAGE_PREF;
-const enum PrefKeys {
-  Language = 'language'
-}
+import {
+  defaultLanguage,
+  languages,
+} from '../../transloco/transloco-root.module';
+import { PreferenceManager } from '../preference-manager/preference-manager.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LanguageService {
-
+  private readonly preferences = this.preferenceManager.getPreferences(name);
   readonly languages = languages;
   readonly defaultLanguage = defaultLanguage;
-  readonly currentLanguageKey$ = preferences.getString$(PrefKeys.Language, defaultLanguage[0]);
+  readonly currentLanguageKey$ = this.preferences.getString$(
+    PrefKeys.LANGUAGE,
+    defaultLanguage[0]
+  );
 
   constructor(
+    private readonly preferenceManager: PreferenceManager,
     private readonly translocoService: TranslocoService
-  ) { }
+  ) {}
 
-  initialize$() {
+  async initialize() {
     this.translocoService.setDefaultLang(defaultLanguage[0]);
-    return this.currentLanguageKey$.pipe(
-      first(),
-      switchMap(key => this.setCurrentLanguage$(key))
-    );
+    this.setCurrentLanguage(await this.getCurrentLanguageKey());
   }
 
-  setCurrentLanguage$(key: string) {
-    return preferences.setString$(PrefKeys.Language, key).pipe(
-      tap(_ => this.translocoService.setActiveLang(key)),
-      mapTo(key)
-    );
+  async getCurrentLanguageKey() {
+    return this.preferences.getString(PrefKeys.LANGUAGE, defaultLanguage[0]);
   }
+
+  async setCurrentLanguage(key: string) {
+    await this.preferences.setString(PrefKeys.LANGUAGE, key);
+    this.translocoService.setActiveLang(key);
+    return key;
+  }
+}
+
+const enum PrefKeys {
+  LANGUAGE = 'LANGUAGE',
 }
