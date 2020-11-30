@@ -41,6 +41,7 @@ export class AppComponent {
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     langaugeService: LanguageService
   ) {
+    notificationService.requestPermission();
     langaugeService.initialize();
     this.restoreAppStatus();
     this.initializeApp();

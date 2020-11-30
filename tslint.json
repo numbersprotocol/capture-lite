@@ -24,6 +24,7 @@
     "promise-function-async": true,
     "await-promise": true,
     "ban-comma-operator": true,
+    "curly": true,
     "import-blacklist": [true, "rxjs/Rx"],
     "no-async-without-await": true,
     "no-console": [true, "log", "info", "debug"],

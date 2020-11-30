@@ -12,6 +12,11 @@ export class NotificationTestingService extends NotificationService {
     super(translocoService);
   }
 
+  // tslint:disable-next-line: prefer-function-over-method
+  async requestPermission(): Promise<NotificationPermissionResponse> {
+    return { granted: true };
+  }
+
   createNotification() {
     return new MockNotificationItem(
       this.getNewNotificationId(),
@@ -25,10 +30,6 @@ export class NotificationTestingService extends NotificationService {
 
   async error(error: Error) {
     return this.createNotification().error(error);
-  }
-
-  static async requestPermissions(): Promise<NotificationPermissionResponse> {
-    return { granted: true };
   }
 }
 

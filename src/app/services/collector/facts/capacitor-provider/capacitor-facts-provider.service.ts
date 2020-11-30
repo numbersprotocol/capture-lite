@@ -45,7 +45,9 @@ export class CapacitorFactsProvider implements FactsProvider {
     const defaultGeolocationAge = 600000;
     const defaultGeolocationTimeout = 10000;
     const isLocationInfoCollectionEnabled = await this.isLocationInfoCollectionEnabled();
-    if (!isLocationInfoCollectionEnabled) return;
+    if (!isLocationInfoCollectionEnabled) {
+      return;
+    }
     return Geolocation.getCurrentPosition({
       enableHighAccuracy: true,
       maximumAge: defaultGeolocationAge,

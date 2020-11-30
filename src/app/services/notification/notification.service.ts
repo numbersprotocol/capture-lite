@@ -13,6 +13,11 @@ export class NotificationService {
 
   constructor(protected readonly translocoService: TranslocoService) {}
 
+  // tslint:disable-next-line: prefer-function-over-method
+  async requestPermission() {
+    return LocalNotifications.requestPermission();
+  }
+
   createNotification() {
     return new NotificationItem(
       this.getNewNotificationId(),
@@ -31,9 +36,5 @@ export class NotificationService {
 
   async error(error: Error) {
     return this.createNotification().error(error);
-  }
-
-  static async requestPermissions() {
-    return LocalNotifications.requestPermission();
   }
 }
