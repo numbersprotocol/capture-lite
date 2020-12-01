@@ -1,7 +1,7 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Preferences } from '../preferences';
 
-export class MemoryPreferencesImpl implements Preferences {
+export class MemoryPreferences implements Preferences {
   private readonly subjects = new Map<string, BehaviorSubject<any>>();
 
   constructor(readonly id: string) {}

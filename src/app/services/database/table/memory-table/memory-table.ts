@@ -2,7 +2,7 @@ import { equals } from 'lodash/fp';
 import { BehaviorSubject } from 'rxjs';
 import { Table, Tuple } from '../table';
 
-export class MemoryTableImpl<T extends Tuple> implements Table<T> {
+export class MemoryTable<T extends Tuple> implements Table<T> {
   private readonly tuples$ = new BehaviorSubject<T[]>([]);
 
   constructor(readonly id: string) {}

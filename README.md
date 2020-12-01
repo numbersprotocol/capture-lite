@@ -70,6 +70,8 @@ cordova-res android --skip-config --copy
 - The committed codes should pass all GitHub checks.
 - Use [Visual Studio Code](https://code.visualstudio.com/) with workspace settings for consistent coding style.
 - Use [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to auto format on save.
+- Prefer `Promise` than `Observable` when only emitting one value. See [issue #233](https://github.com/numbersprotocol/capture-lite/issues/233).
+- Avoid using `toPromise()` to convert `Observable` to `Promise` as [it is an anti-pattern](https://stackoverflow.com/a/49596716/8789738).
 
 ### Platform
 

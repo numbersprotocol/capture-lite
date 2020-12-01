@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Signature } from '../../../../services/repositories/proof/proof';
 import {
-  createEcKeyPair$,
-  signWithSha256AndEcdsa$,
+  createEcKeyPair,
+  signWithSha256AndEcdsa,
 } from '../../../../utils/crypto/crypto';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import { SignatureProvider } from '../signature-provider';
@@ -18,10 +18,10 @@ export class WebCryptoApiSignatureProvider implements SignatureProvider {
 
   async provide(serializedSortedSignTargets: string): Promise<Signature> {
     const privateKey = await this.getPrivateKey();
-    const signature = await signWithSha256AndEcdsa$(
+    const signature = await signWithSha256AndEcdsa(
       serializedSortedSignTargets,
       privateKey
-    ).toPromise();
+    );
     const publicKey = await this.getPublicKey();
     return { signature, publicKey };
   }
@@ -30,7 +30,7 @@ export class WebCryptoApiSignatureProvider implements SignatureProvider {
     const originalPublicKey = await this.getPublicKey();
     const originalPrivateKey = await this.getPrivateKey();
     if (originalPublicKey.length === 0 || originalPrivateKey.length === 0) {
-      const { publicKey, privateKey } = await createEcKeyPair$().toPromise();
+      const { publicKey, privateKey } = await createEcKeyPair();
       await this.preferences.setString(PrefKeys.PUBLIC_KEY, publicKey);
       await this.preferences.setString(PrefKeys.PRIVATE_KEY, privateKey);
     }

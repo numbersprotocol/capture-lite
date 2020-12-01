@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { defer, of, zip } from 'rxjs';
 import { concatMap, concatMapTo, pluck } from 'rxjs/operators';
 import { secret } from '../../../../environments/secret';
-import { dataUrlWithBase64ToBlob$ } from '../../../utils/encoding/encoding';
+import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import {
   getSortedProofInformation,
@@ -119,10 +119,11 @@ export class NumbersStorageApi {
     signatures: OldSignature[],
     tag: string
   ) {
+    const proofMimeType = Object.values(proof.assets)[0].mimeType;
     return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         zip(
-          dataUrlWithBase64ToBlob$(rawFileBase64),
+          defer(() => base64ToBlob(rawFileBase64, proofMimeType)),
           getSortedProofInformation(proof),
           of(headers)
         )
@@ -133,10 +134,7 @@ export class NumbersStorageApi {
         );
         const formData = new FormData();
         formData.append('asset_file', rawFile);
-        formData.append(
-          'asset_file_mime_type',
-          Object.values(proof.assets)[0].mimeType
-        );
+        formData.append('asset_file_mime_type', proofMimeType);
         formData.append('meta', JSON.stringify(oldSortedProofInformation));
         formData.append('target_provider', targetProvider);
         formData.append('caption', caption);

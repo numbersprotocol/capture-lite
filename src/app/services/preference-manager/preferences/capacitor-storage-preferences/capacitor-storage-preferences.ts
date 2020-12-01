@@ -6,7 +6,7 @@ import { Preferences } from '../preferences';
 
 const { Storage } = Plugins;
 
-export class CapacitorStoragePreferencesImpl implements Preferences {
+export class CapacitorStoragePreferences implements Preferences {
   private readonly subjects = new Map<string, BehaviorSubject<any>>();
   private readonly mutex = new Mutex();
 

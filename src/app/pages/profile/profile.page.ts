@@ -39,8 +39,8 @@ export class ProfilePage {
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider
   ) {}
 
-  copyToClipboard(value: string) {
-    Clipboard.write({ string: value });
+  async copyToClipboard(value: string) {
+    await Clipboard.write({ string: value });
     this.snackBar.open(
       this.translocoService.translate('message.copiedToClipboard')
     );

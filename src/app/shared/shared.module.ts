@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
-import { CapacitorFilesystemTableImpl } from '../services/database/table/capacitor-filesystem-table-impl/capacitor-filesystem-table-impl';
+import { CapacitorFilesystemTable } from '../services/database/table/capacitor-filesystem-table/capacitor-filesystem-table';
 import { TABLE_IMPL } from '../services/database/table/table';
-import { CapacitorStoragePreferencesImpl } from '../services/preference-manager/preferences/capacitor-storage-preferences-impl/capacitor-storage-preferences-impl';
+import { CapacitorStoragePreferences } from '../services/preference-manager/preferences/capacitor-storage-preferences/capacitor-storage-preferences';
 import { PREFERENCES_IMPL } from '../services/preference-manager/preferences/preferences';
 
 @NgModule({
   providers: [
     {
       provide: TABLE_IMPL,
-      useValue: CapacitorFilesystemTableImpl,
+      useValue: CapacitorFilesystemTable,
     },
     {
       provide: PREFERENCES_IMPL,
-      useValue: CapacitorStoragePreferencesImpl,
+      useValue: CapacitorStoragePreferences,
     },
   ],
 })

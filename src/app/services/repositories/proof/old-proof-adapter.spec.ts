@@ -1,4 +1,4 @@
-import { dataUrlWithBase64ToBlob$ } from '../../../utils/encoding/encoding';
+import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { MimeType } from '../../../utils/mime-type';
 import {
   AssetMeta,
@@ -57,9 +57,7 @@ describe('old-proof-adapter', () => {
   });
 
   it('should convert SortedProofInformation with raw Blob to Proof', async () => {
-    const blob = await dataUrlWithBase64ToBlob$(
-      `data:${ASSET1_MIMETYPE};base64,${ASSET1_BASE64}`
-    ).toPromise();
+    const blob = await base64ToBlob(ASSET1_BASE64, ASSET1_MIMETYPE);
     const convertedProof = await getProof(
       blob,
       SORTED_PROOF_INFORMATION,

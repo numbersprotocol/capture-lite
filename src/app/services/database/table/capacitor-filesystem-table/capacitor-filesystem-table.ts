@@ -11,9 +11,9 @@ import { Table, Tuple } from '../table';
 
 const { Filesystem } = Plugins;
 
-export class CapacitorFilesystemTableImpl<T extends Tuple> implements Table<T> {
+export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   private readonly directory = FilesystemDirectory.Data;
-  private readonly rootDir = CapacitorFilesystemTableImpl.name;
+  private readonly rootDir = CapacitorFilesystemTable.name;
   private readonly tuples$ = new BehaviorSubject<T[]>([]);
   private hasInitialized = false;
   private readonly mutex = new Mutex();

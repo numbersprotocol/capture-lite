@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
 import { combineLatest, interval, of, zip } from 'rxjs';
 import { concatMap, concatMapTo, map, pluck } from 'rxjs/operators';
@@ -13,8 +13,7 @@ import { PublishersAlert } from '../../services/publisher/publishers-alert/publi
 import { PushNotificationService } from '../../services/push-notification/push-notification.service';
 import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
-import { capture$ } from '../../utils/camera';
-import { fromExtension } from '../../utils/mime-type';
+import { capture } from '../../utils/camera';
 import { forkJoinWithDefault } from '../../utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
@@ -116,20 +115,12 @@ export class HomePage implements OnInit {
     );
   }
 
-  capture() {
-    capture$()
-      .pipe(
-        concatMap(cameraPhoto =>
-          this.collectorService.runAndStore({
-            [cameraPhoto.base64String]: {
-              mimeType: fromExtension(cameraPhoto.format),
-            },
-          })
-        ),
-        concatMap(proof => this.publishersAlert.presentOrPublish(proof)),
-        untilDestroyed(this)
-      )
-      .subscribe();
+  async capture() {
+    const photo = await capture();
+    const proof = await this.collectorService.runAndStore({
+      [photo.base64]: { mimeType: photo.mimeType },
+    });
+    return this.publishersAlert.presentOrPublish(proof);
   }
 
   onTapChanged(event: MatTabChangeEvent) {

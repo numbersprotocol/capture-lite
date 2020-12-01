@@ -1,4 +1,4 @@
-import { verifyWithSha256AndEcdsa$ } from '../../../utils/crypto/crypto';
+import { verifyWithSha256AndEcdsa } from '../../../utils/crypto/crypto';
 import { MimeType } from '../../../utils/mime-type';
 import {
   AssetMeta,
@@ -14,8 +14,7 @@ describe('Proof', () => {
 
   beforeAll(() =>
     Proof.registerSignatureProvider(SIGNATURE_PROVIDER_ID, {
-      verify: (message, signature, publicKey) =>
-        verifyWithSha256AndEcdsa$(message, signature, publicKey).toPromise(),
+      verify: verifyWithSha256AndEcdsa,
     })
   );
 

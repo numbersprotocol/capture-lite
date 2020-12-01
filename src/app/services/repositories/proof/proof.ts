@@ -1,9 +1,6 @@
 import ImageBlobReduce from 'image-blob-reduce';
-import { sha256WithString$ } from '../../../utils/crypto/crypto';
-import {
-  blobToDataUrlWithBase64$,
-  dataUrlWithBase64ToBlob$,
-} from '../../../utils/encoding/encoding';
+import { sha256WithString } from '../../../utils/crypto/crypto';
+import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
 import { sortObjectDeeplyByKey } from '../../../utils/immutable/immutable';
 import { MimeType } from '../../../utils/mime-type';
 
@@ -41,7 +38,7 @@ export class Proof {
   }
 
   async getId() {
-    return sha256WithString$(this.stringify()).toPromise();
+    return sha256WithString(this.stringify());
   }
 
   async getThumbnailDataUrl() {
@@ -52,13 +49,14 @@ export class Proof {
     if (imageAsset === undefined) {
       return undefined;
     }
-    const blob = await dataUrlWithBase64ToBlob$(
-      `data:${this.assets[imageAsset].mimeType};base64,${imageAsset}`
-    ).toPromise();
+    const blob = await base64ToBlob(
+      imageAsset,
+      this.assets[imageAsset].mimeType
+    );
     const thumbnailBlob = await imageBlobReduce.toBlob(blob, {
       max: thumbnailSize,
     });
-    return blobToDataUrlWithBase64$(thumbnailBlob).toPromise();
+    return blobToBase64(thumbnailBlob);
   }
 
   getFactValue(id: string) {

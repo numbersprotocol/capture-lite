@@ -4,8 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { concatMap } from 'rxjs/operators';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorFactsProvider } from './services/collector/facts/capacitor-provider/capacitor-facts-provider.service';
 import { WebCryptoApiSignatureProvider } from './services/collector/signature/web-crypto-api-provider/web-crypto-api-signature-provider.service';
@@ -15,8 +14,7 @@ import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-
 import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
 import { AssetRepository } from './services/publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
-import { restoreKilledAppResult$ } from './utils/camera';
-import { fromExtension } from './utils/mime-type';
+import { restoreKilledCapture } from './utils/camera';
 
 const { SplashScreen } = Plugins;
 
@@ -50,25 +48,17 @@ export class AppComponent {
     this.registerIcon();
   }
 
-  restoreAppStatus() {
-    restoreKilledAppResult$()
-      .pipe(
-        concatMap(cameraPhoto =>
-          this.collectorService.runAndStore({
-            [cameraPhoto.base64String]: {
-              mimeType: fromExtension(cameraPhoto.format),
-            },
-          })
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
+  async restoreAppStatus() {
+    const photo = await restoreKilledCapture();
+    const proof = await this.collectorService.runAndStore({
+      [photo.base64]: { mimeType: photo.mimeType },
+    });
+    return this.publishersAlert.presentOrPublish(proof);
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      SplashScreen.hide();
-    });
+  async initializeApp() {
+    await this.platform.ready();
+    await SplashScreen.hide();
   }
 
   initializeCollector() {

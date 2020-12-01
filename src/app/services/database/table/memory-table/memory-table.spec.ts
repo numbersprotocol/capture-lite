@@ -1,10 +1,10 @@
 import { Table, Tuple } from '../table';
-import { CapacitorFilesystemTableImpl } from './capacitor-filesystem-table-impl';
+import { MemoryTable } from './memory-table';
 
-describe('MemoryTableImpl', () => {
+describe('MemoryTable', () => {
   let table: Table<TestTuple>;
   const tableId = 'tableId';
-  const testTuple1: TestTuple = {
+  const tuple1: TestTuple = {
     id: 1,
     name: 'Rick Sanchez',
     happy: false,
@@ -23,7 +23,7 @@ describe('MemoryTableImpl', () => {
       city: 'Washington',
     },
   };
-  const testTuple2: TestTuple = {
+  const tuple2: TestTuple = {
     id: 2,
     name: 'Butter Robot',
     happy: false,
@@ -43,7 +43,7 @@ describe('MemoryTableImpl', () => {
     },
   };
 
-  beforeEach(() => (table = new CapacitorFilesystemTableImpl(tableId)));
+  beforeEach(() => (table = new MemoryTable(tableId)));
 
   afterEach(async () => table.drop());
 
@@ -57,32 +57,32 @@ describe('MemoryTableImpl', () => {
   });
 
   it('should emit new query on inserting tuple', async done => {
-    await table.insert([testTuple1]);
-    await table.insert([testTuple2]);
+    await table.insert([tuple1]);
+    await table.insert([tuple2]);
 
     table.queryAll$().subscribe(tuples => {
-      expect(tuples).toEqual([testTuple1, testTuple2]);
+      expect(tuples).toEqual([tuple1, tuple2]);
       done();
     });
   });
 
   it('should throw on inserting same tuple', async () => {
-    const sameTuple: TestTuple = { ...testTuple1 };
+    const sameTuple: TestTuple = { ...tuple1 };
 
-    await expectAsync(table.insert([testTuple1, sameTuple])).toBeRejected();
+    await expectAsync(table.insert([tuple1, sameTuple])).toBeRejected();
   });
 
   it('should throw on inserting existed tuple', async () => {
-    const sameTuple: TestTuple = { ...testTuple1 };
-    await table.insert([testTuple1]);
+    const sameTuple: TestTuple = { ...tuple1 };
+    await table.insert([tuple1]);
 
     await expectAsync(table.insert([sameTuple])).toBeRejected();
   });
 
   it('should remove by tuple contents not reference', async done => {
-    const sameTuple: TestTuple = { ...testTuple1 };
+    const sameTuple: TestTuple = { ...tuple1 };
 
-    await table.insert([testTuple1]);
+    await table.insert([tuple1]);
     await table.delete([sameTuple]);
 
     table.queryAll$().subscribe(tuples => {
@@ -92,19 +92,19 @@ describe('MemoryTableImpl', () => {
   });
 
   it('should not emit removed tuples', async done => {
-    const sameTuple1: TestTuple = { ...testTuple1 };
+    const sameTuple1: TestTuple = { ...tuple1 };
 
-    await table.insert([testTuple1, testTuple2]);
+    await table.insert([tuple1, tuple2]);
     await table.delete([sameTuple1]);
 
     table.queryAll$().subscribe(tuples => {
-      expect(tuples).toEqual([testTuple2]);
+      expect(tuples).toEqual([tuple2]);
       done();
     });
   });
 
   it('should throw on deleting non-existent tuples', async () => {
-    await expectAsync(table.delete([testTuple1])).toBeRejected();
+    await expectAsync(table.delete([tuple1])).toBeRejected();
   });
 
   it('inserts atomically', async done => {

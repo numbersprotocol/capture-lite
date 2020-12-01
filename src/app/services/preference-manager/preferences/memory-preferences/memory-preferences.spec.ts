@@ -1,13 +1,13 @@
 import { zip } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { Preferences } from '../preferences';
-import { CapacitorStoragePreferencesImpl } from './capacitor-storage-preferences-impl';
+import { MemoryPreferences } from './memory-preferences';
 
-describe('MemoryPreferencesImpl', () => {
+describe('MemoryPreferences', () => {
   let preferences: Preferences;
   const id = 'id';
 
-  beforeEach(() => (preferences = new CapacitorStoragePreferencesImpl(id)));
+  beforeEach(() => (preferences = new MemoryPreferences(id)));
 
   it('should be created', () => expect(preferences).toBeTruthy());
 
