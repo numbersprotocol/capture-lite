@@ -6,5 +6,12 @@
   },
   "files": ["src/main.ts", "src/polyfills.ts"],
   "include": ["src/**/*.ts", "src/**/*.d.ts"],
-  "exclude": ["src/**/*.spec.ts"]
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*-testing.*.ts",
+    "src/test.ts",
+    "src/environments/environment.prod.ts",
+    "src/**/memory-table.ts",
+    "src/**/memory-preferences.ts"
+  ]
 }
