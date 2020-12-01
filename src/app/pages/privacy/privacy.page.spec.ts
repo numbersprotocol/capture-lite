@@ -4,8 +4,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule } from '@ionic/angular';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { PrivacyPage } from './privacy.page';
 
@@ -18,8 +16,6 @@ describe('PrivacyPage', () => {
       declarations: [PrivacyPage],
       imports: [
         SharedTestingModule,
-        IonicModule.forRoot(),
-        RouterTestingModule,
         MatToolbarModule,
         MatButtonModule,
         MatIconModule,

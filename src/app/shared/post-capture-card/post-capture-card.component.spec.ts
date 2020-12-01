@@ -1,11 +1,9 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatListModule } from '@angular/material/list';
-import { IonicModule } from '@ionic/angular';
 import { Transaction } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
 import { Asset } from '../../services/publisher/numbers-storage/repositories/asset/asset';
 import { SharedTestingModule } from '../shared-testing.module';
@@ -46,8 +44,6 @@ describe('PostCaptureCardComponent', () => {
       declarations: [PostCaptureCardComponent],
       imports: [
         SharedTestingModule,
-        IonicModule.forRoot(),
-        HttpClientTestingModule,
         MatCardModule,
         MatButtonModule,
         MatIconModule,

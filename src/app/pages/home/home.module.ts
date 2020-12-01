@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,16 +8,15 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { TranslocoModule } from '@ngneat/transloco';
 import { PostCaptureCardModule } from '../../shared/post-capture-card/post-capture-card.module';
+import { SharedModule } from '../../shared/shared.module';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 
 @NgModule({
   imports: [
-    CommonModule,
+    SharedModule,
     HomePageRoutingModule,
-    TranslocoModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,

@@ -1,6 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,9 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule } from '@ionic/angular';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { SendingPostCapturePage } from './sending-post-capture.page';
 
@@ -23,11 +18,6 @@ describe('SendingPostCapturePage', () => {
       declarations: [SendingPostCapturePage],
       imports: [
         SharedTestingModule,
-        IonicModule.forRoot(),
-        RouterTestingModule,
-        FormsModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
         MatToolbarModule,
         MatButtonModule,
         MatIconModule,

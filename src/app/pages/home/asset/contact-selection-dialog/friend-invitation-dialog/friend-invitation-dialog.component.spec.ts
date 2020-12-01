@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogModule,
@@ -9,8 +8,6 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IonicModule } from '@ionic/angular';
 import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
 import { FriendInvitationDialogComponent } from './friend-invitation-dialog.component';
 
@@ -23,14 +20,11 @@ describe('FriendInvitationDialogComponent', () => {
       declarations: [FriendInvitationDialogComponent],
       imports: [
         SharedTestingModule,
-        IonicModule.forRoot(),
-        FormsModule,
         MatFormFieldModule,
         MatInputModule,
         MatIconModule,
         MatButtonModule,
         MatDialogModule,
-        BrowserAnimationsModule,
       ],
       providers: [
         { provide: MatDialogRef, useValue: {} },

@@ -7,7 +7,6 @@ import {
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { IonicModule } from '@ionic/angular';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog.component';
 
@@ -20,7 +19,6 @@ describe('ContactSelectionDialogComponent', () => {
       declarations: [ContactSelectionDialogComponent],
       imports: [
         SharedTestingModule,
-        IonicModule.forRoot(),
         MatDialogModule,
         MatListModule,
         MatIconModule,

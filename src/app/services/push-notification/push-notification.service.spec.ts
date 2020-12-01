@@ -1,4 +1,3 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { PushNotificationService } from './push-notification.service';
@@ -8,7 +7,7 @@ describe('PushNotificationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SharedTestingModule, HttpClientTestingModule],
+      imports: [SharedTestingModule],
     });
     service = TestBed.inject(PushNotificationService);
   });

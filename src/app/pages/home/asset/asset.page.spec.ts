@@ -1,4 +1,3 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,8 +7,6 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule } from '@ionic/angular';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { AssetPage } from './asset.page';
 
@@ -22,8 +19,6 @@ describe('AssetPage', () => {
       declarations: [AssetPage],
       imports: [
         SharedTestingModule,
-        IonicModule.forRoot(),
-        RouterTestingModule,
         MatToolbarModule,
         MatButtonModule,
         MatIconModule,
@@ -32,7 +27,6 @@ describe('AssetPage', () => {
         MatSnackBarModule,
         MatDialogModule,
         MatBottomSheetModule,
-        HttpClientTestingModule,
       ],
     }).compileComponents();
 
