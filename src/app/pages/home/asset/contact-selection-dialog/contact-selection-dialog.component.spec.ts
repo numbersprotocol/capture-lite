@@ -8,7 +8,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from '../../../../services/transloco/transloco-root-testing.module';
+import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog.component';
 
 describe('ContactSelectionDialogComponent', () => {
@@ -19,8 +19,8 @@ describe('ContactSelectionDialogComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ContactSelectionDialogComponent],
       imports: [
+        SharedTestingModule,
         IonicModule.forRoot(),
-        getTranslocoModule(),
         MatDialogModule,
         MatListModule,
         MatIconModule,

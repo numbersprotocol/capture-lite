@@ -11,7 +11,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from '../../../../services/transloco/transloco-root-testing.module';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { SendingPostCapturePage } from './sending-post-capture.page';
 
@@ -25,7 +24,6 @@ describe('SendingPostCapturePage', () => {
       imports: [
         SharedTestingModule,
         IonicModule.forRoot(),
-        getTranslocoModule(),
         RouterTestingModule,
         FormsModule,
         HttpClientTestingModule,

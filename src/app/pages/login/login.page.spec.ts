@@ -12,7 +12,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { getTranslocoModule } from '../../services/transloco/transloco-root-testing.module';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { LoginPage } from './login.page';
 
@@ -29,7 +28,6 @@ describe('LoginPage', () => {
         SharedTestingModule,
         IonicModule.forRoot(),
         RouterTestingModule,
-        getTranslocoModule(),
         HttpClientTestingModule,
         FormlyModule.forRoot(),
         FormlyMaterialModule,

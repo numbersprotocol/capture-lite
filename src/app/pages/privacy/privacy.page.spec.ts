@@ -6,7 +6,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from '../../services/transloco/transloco-root-testing.module';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { PrivacyPage } from './privacy.page';
 
@@ -21,7 +20,6 @@ describe('PrivacyPage', () => {
         SharedTestingModule,
         IonicModule.forRoot(),
         RouterTestingModule,
-        getTranslocoModule(),
         MatToolbarModule,
         MatButtonModule,
         MatIconModule,

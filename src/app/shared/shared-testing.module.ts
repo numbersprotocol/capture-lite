@@ -5,8 +5,10 @@ import { NotificationTestingService } from '../services/notification/notificatio
 import { NotificationService } from '../services/notification/notification.service';
 import { MemoryPreferences } from '../services/preference-manager/preferences/memory-preferences/memory-preferences';
 import { PREFERENCES_IMPL } from '../services/preference-manager/preferences/preferences';
+import { getTranslocoTestingModule } from '../services/transloco/transloco-testing.module';
 
 @NgModule({
+  imports: [getTranslocoTestingModule()],
   providers: [
     { provide: TABLE_IMPL, useValue: MemoryTable },
     { provide: PREFERENCES_IMPL, useValue: MemoryPreferences },

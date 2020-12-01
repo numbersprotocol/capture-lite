@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { getTranslocoModule } from '../transloco/transloco-root-testing.module';
+import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { ConfirmAlert } from './confirm-alert.service';
 
 describe('ConfirmAlert', () => {
@@ -7,7 +7,7 @@ describe('ConfirmAlert', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [getTranslocoModule()],
+      imports: [SharedTestingModule],
     });
     service = TestBed.inject(ConfirmAlert);
   });

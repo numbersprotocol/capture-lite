@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { getTranslocoModule } from '../../transloco/transloco-root-testing.module';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { PublishersAlert } from './publishers-alert.service';
 
 describe('PublishersAlert', () => {
@@ -7,7 +7,7 @@ describe('PublishersAlert', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [getTranslocoModule()],
+      imports: [SharedTestingModule],
     });
     service = TestBed.inject(PublishersAlert);
   });

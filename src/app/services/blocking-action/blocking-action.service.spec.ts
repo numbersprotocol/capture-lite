@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { LoadingController } from '@ionic/angular';
 import { of } from 'rxjs';
 import { map, toArray } from 'rxjs/operators';
-import { getTranslocoModule } from '../transloco/transloco-root-testing.module';
+import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { BlockingActionService } from './blocking-action.service';
 
 describe('BlockingActionService', () => {
@@ -20,7 +20,7 @@ describe('BlockingActionService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [getTranslocoModule()],
+      imports: [SharedTestingModule],
     });
     service = TestBed.inject(BlockingActionService);
     const loadingController = TestBed.inject(LoadingController);

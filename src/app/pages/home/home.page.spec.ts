@@ -11,7 +11,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { getTranslocoModule } from '../../services/transloco/transloco-root-testing.module';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { HomePage } from './home.page';
 
@@ -25,7 +24,6 @@ describe('HomePage', () => {
       imports: [
         SharedTestingModule,
         RouterTestingModule,
-        getTranslocoModule(),
         HttpClientTestingModule,
         BrowserAnimationsModule,
         MatToolbarModule,

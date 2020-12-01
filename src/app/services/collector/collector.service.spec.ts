@@ -9,7 +9,6 @@ import {
   Signature,
 } from '../repositories/proof/proof';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
-import { getTranslocoModule } from '../transloco/transloco-root-testing.module';
 import { CollectorService } from './collector.service';
 import { FactsProvider } from './facts/facts-provider';
 import { SignatureProvider } from './signature/signature-provider';
@@ -21,7 +20,7 @@ describe('CollectorService', () => {
   beforeEach(() => {
     const spy = jasmine.createSpyObj('ProofRepository', ['add']);
     TestBed.configureTestingModule({
-      imports: [SharedTestingModule, getTranslocoModule()],
+      imports: [SharedTestingModule],
       providers: [{ provide: ProofRepository, useValue: spy }],
     });
     service = TestBed.inject(CollectorService);

@@ -6,7 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from '../../services/transloco/transloco-root-testing.module';
+import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { AboutPage } from './about.page';
 
 describe('AboutPage', () => {
@@ -17,9 +17,9 @@ describe('AboutPage', () => {
     TestBed.configureTestingModule({
       declarations: [AboutPage],
       imports: [
+        SharedTestingModule,
         IonicModule.forRoot(),
         RouterTestingModule,
-        getTranslocoModule(),
         HttpClientTestingModule,
         MatToolbarModule,
         MatButtonModule,

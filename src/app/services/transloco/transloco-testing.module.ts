@@ -3,7 +3,9 @@ import enUs from '../../../assets/i18n/en-us.json';
 import zhTw from '../../../assets/i18n/zh-tw.json';
 import { defaultLanguage, languages } from './transloco-root.module';
 
-export function getTranslocoModule(config: Partial<TranslocoConfig> = {}) {
+export function getTranslocoTestingModule(
+  config: Partial<TranslocoConfig> = {}
+) {
   return TranslocoTestingModule.withLangs(
     { enUs, zhTw },
     {

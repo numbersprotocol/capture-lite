@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
-import { getTranslocoModule } from '../transloco/transloco-root-testing.module';
 import { NotificationService } from './notification.service';
 
 describe('NotificationService', () => {
@@ -8,7 +7,7 @@ describe('NotificationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SharedTestingModule, getTranslocoModule()],
+      imports: [SharedTestingModule],
     });
     service = TestBed.inject(NotificationService);
   });
