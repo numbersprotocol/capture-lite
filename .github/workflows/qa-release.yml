@@ -79,7 +79,7 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: io.numbersprotocol.capturelite
-          releaseFile: ./android/app/build/outputs/bundle/release/app-release.aab
+          releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: alpha
 
       - name: Create GitHub prerelease
