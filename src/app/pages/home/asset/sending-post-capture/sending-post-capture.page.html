@@ -12,7 +12,7 @@
 
 <div *transloco="let t" class="page-content">
   <ng-container *ngIf="!isPreview">
-    <form #form="ngForm">
+    <form #form="ngForm" (ngSubmit)="preview(form.value.caption)">
       <mat-card class="example-card">
         <img mat-card-image [src]="base64Src$ | async" />
         <mat-card-content>
@@ -31,10 +31,10 @@
       </mat-card>
 
       <button
-        (click)="preview(form.value.caption)"
         class="send-button"
         mat-raised-button
         color="primary"
+        type="submit"
       >
         {{ t('preview') }}
       </button>
