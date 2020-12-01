@@ -22,7 +22,7 @@
     "no-unnecessary-type-assertion": true,
     "no-var-requires": true,
     "promise-function-async": true,
-    "await-promise": true,
+    "await-promise": [true, "PromiseLike"],
     "ban-comma-operator": true,
     "curly": true,
     "import-blacklist": [true, "rxjs/Rx"],
