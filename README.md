@@ -12,7 +12,7 @@
 
 ## Getting Started
 
-Node.js 10.16.0+ is required.
+Node 14.15.1+ is required.
 
 Install the dependencies.
 
