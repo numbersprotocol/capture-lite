@@ -53,6 +53,16 @@ mat-card-actions {
   }
 }
 
+.view-all-button {
+  align-items: center;
+  padding: 0 30px;
+  height: 24px;
+  border: 1px solid #564dfc;
+  background-color: white;
+  box-sizing: border-box;
+  border-radius: 13px;
+}
+
 mat-card-content {
   margin-bottom: 0;
   padding-right: 16px;
