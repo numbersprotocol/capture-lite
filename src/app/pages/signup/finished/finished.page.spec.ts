@@ -1,7 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { FinishedPage } from './finished.page';
 
@@ -12,12 +9,7 @@ describe('FinishedPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [FinishedPage],
-      imports: [
-        SharedTestingModule,
-        MatIconModule,
-        MatButtonModule,
-        MatToolbarModule,
-      ],
+      imports: [SharedTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FinishedPage);

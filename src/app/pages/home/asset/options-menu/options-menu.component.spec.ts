@@ -3,7 +3,6 @@ import {
   MatBottomSheetModule,
   MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
-import { MatListModule } from '@angular/material/list';
 import { OptionsMenuComponent } from './options-menu.component';
 
 describe('OptionsMenuComponent', () => {
@@ -13,7 +12,7 @@ describe('OptionsMenuComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [OptionsMenuComponent],
-      imports: [MatBottomSheetModule, MatListModule],
+      imports: [MatBottomSheetModule],
       providers: [{ provide: MatBottomSheetRef, useValue: {} }],
     }).compileComponents();
 

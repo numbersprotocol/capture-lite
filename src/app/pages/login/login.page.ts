@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -28,8 +27,7 @@ export class LoginPage {
     private readonly numbersStorageApi: NumbersStorageApi,
     private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
-    private readonly router: Router,
-    private readonly snackBar: MatSnackBar
+    private readonly router: Router
   ) {
     combineLatest([
       this.translocoService.selectTranslate('email'),

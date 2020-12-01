@@ -8,6 +8,7 @@ import { CapacitorFilesystemTable } from '../services/database/table/capacitor-f
 import { TABLE_IMPL } from '../services/database/table/table';
 import { CapacitorStoragePreferences } from '../services/preference-manager/preferences/capacitor-storage-preferences/capacitor-storage-preferences';
 import { PREFERENCES_IMPL } from '../services/preference-manager/preferences/preferences';
+import { MaterialModule } from './material/material.module';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { PREFERENCES_IMPL } from '../services/preference-manager/preferences/pre
     ReactiveFormsModule,
     HttpClientModule,
     TranslocoModule,
+    MaterialModule,
   ],
   providers: [
     { provide: TABLE_IMPL, useValue: CapacitorFilesystemTable },
@@ -28,6 +30,7 @@ import { PREFERENCES_IMPL } from '../services/preference-manager/preferences/pre
     FormsModule,
     ReactiveFormsModule,
     TranslocoModule,
+    MaterialModule,
   ],
 })
 export class SharedModule {}

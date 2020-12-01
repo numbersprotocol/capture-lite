@@ -61,7 +61,7 @@ export class HomePage implements OnInit {
         Promise.all(
           proofs.map(async proof => ({
             proof,
-            thumbnailDataUrl: await proof.getThumbnailDataUrl(),
+            thumbnailDataUrl: `data:image/*;base64,${await proof.getThumbnailBase64()}`,
             oldProof: await getOldProof(proof),
           }))
         )

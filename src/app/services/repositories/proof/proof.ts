@@ -41,7 +41,7 @@ export class Proof {
     return sha256WithString(this.stringify());
   }
 
-  async getThumbnailDataUrl() {
+  async getThumbnailBase64() {
     const thumbnailSize = 200;
     const imageAsset = Object.keys(this.assets).find(asset =>
       this.assets[asset].mimeType.startsWith('image')

@@ -1,13 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material/button';
-import {
-  MatDialogModule,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
 import { FriendInvitationDialogComponent } from './friend-invitation-dialog.component';
 
@@ -18,14 +10,7 @@ describe('FriendInvitationDialogComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [FriendInvitationDialogComponent],
-      imports: [
-        SharedTestingModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatDialogModule,
-      ],
+      imports: [SharedTestingModule],
       providers: [
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: {} },

@@ -48,7 +48,7 @@ describe('Proof', () => {
 
   it('should have thumbnail when its assets have images', async () => {
     proof = new Proof(ASSETS, TRUTH, SIGNATURES_VALID);
-    expect(await proof.getThumbnailDataUrl()).toBeTruthy();
+    expect(await proof.getThumbnailBase64()).toBeTruthy();
   });
 
   it('should not have thumbnail when its assets do not have image', async () => {
@@ -57,7 +57,7 @@ describe('Proof', () => {
       TRUTH,
       SIGNATURES_VALID
     );
-    expect(await proof.getThumbnailDataUrl()).toBeUndefined();
+    expect(await proof.getThumbnailBase64()).toBeUndefined();
   });
 
   it('should get any device name when exists', () => {

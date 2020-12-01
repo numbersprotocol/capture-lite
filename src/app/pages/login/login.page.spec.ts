@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { HttpTestingController } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
@@ -21,8 +19,6 @@ describe('LoginPage', () => {
         SharedTestingModule,
         FormlyModule.forRoot(),
         FormlyMaterialModule,
-        MatButtonModule,
-        MatSnackBarModule,
       ],
     }).compileComponents();
 

@@ -1,12 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { MatListModule } from '@angular/material/list';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { AssetPage } from './asset.page';
 
@@ -17,17 +9,7 @@ describe('AssetPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AssetPage],
-      imports: [
-        SharedTestingModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatIconModule,
-        MatIconTestingModule,
-        MatListModule,
-        MatSnackBarModule,
-        MatDialogModule,
-        MatBottomSheetModule,
-      ],
+      imports: [SharedTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AssetPage);
