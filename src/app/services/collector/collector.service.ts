@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { sortObjectDeeplyByKey } from 'src/app/utils/immutable/immutable';
+import { sortObjectDeeplyByKey } from '../../utils/immutable/immutable';
 import { NotificationService } from '../notification/notification.service';
-import { Assets, Proof, Signatures, SignedTargets, Truth } from '../repositories/proof/proof';
+import {
+  Assets,
+  Proof,
+  Signatures,
+  SignedTargets,
+  Truth,
+} from '../repositories/proof/proof';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
 import { FactsProvider } from './facts/facts-provider';
 import { SignatureProvider } from './signature/signature-provider';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CollectorService {
-
   private readonly factsProviders = new Set<FactsProvider>();
   private readonly signatureProviders = new Set<SignatureProvider>();
 
@@ -19,19 +24,21 @@ export class CollectorService {
     private readonly notificationService: NotificationService,
     private readonly translocoService: TranslocoService,
     private readonly proofRepository: ProofRepository
-  ) { }
+  ) {}
 
   async runAndStore(assets: Assets) {
-    const notificationId = this.notificationService.createNotificationId();
-    this.notificationService.notify(
-      notificationId,
-      this.translocoService.translate('collectingProof'),
-      this.translocoService.translate('collectingInformation')
+    const simplifiedHashLength = 6;
+    const notification = await this.notificationService.notify(
+      this.translocoService.translate('storingAssets'),
+      this.translocoService.translate('message.storingAssets', {
+        hash: Object.keys(assets)[0].substr(0, simplifiedHashLength),
+      })
     );
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
     const proof = new Proof(assets, truth, signatures);
     await this.proofRepository.add(proof);
+    notification.cancel();
     return proof;
   }
 
@@ -39,27 +46,43 @@ export class CollectorService {
     return {
       timestamp: Date.now(),
       providers: Object.fromEntries(
-        await Promise.all([...this.factsProviders].map(
-          async (provider) => [provider.id, await provider.provide(assets)]
-        ))
-      )
+        await Promise.all(
+          [...this.factsProviders].map(async provider => [
+            provider.id,
+            await provider.provide(assets),
+          ])
+        )
+      ),
     };
   }
 
   private async signTargets(target: SignedTargets): Promise<Signatures> {
-    const serializedSortedSignTargets = JSON.stringify(sortObjectDeeplyByKey(target as any).toJSON());
+    const serializedSortedSignTargets = JSON.stringify(
+      sortObjectDeeplyByKey(target as any).toJSON()
+    );
     return Object.fromEntries(
-      await Promise.all([...this.signatureProviders].map(
-        async (provider) => [provider.id, await provider.provide(serializedSortedSignTargets)]
-      ))
+      await Promise.all(
+        [...this.signatureProviders].map(async provider => [
+          provider.id,
+          await provider.provide(serializedSortedSignTargets),
+        ])
+      )
     );
   }
 
-  addFactsProvider(provider: FactsProvider) { this.factsProviders.add(provider); }
+  addFactsProvider(provider: FactsProvider) {
+    this.factsProviders.add(provider);
+  }
 
-  removeFactsProvider(provider: FactsProvider) { this.factsProviders.delete(provider); }
+  removeFactsProvider(provider: FactsProvider) {
+    this.factsProviders.delete(provider);
+  }
 
-  addSignatureProvider(provider: SignatureProvider) { this.signatureProviders.add(provider); }
+  addSignatureProvider(provider: SignatureProvider) {
+    this.signatureProviders.add(provider);
+  }
 
-  removeSignatureProvider(provider: SignatureProvider) { this.signatureProviders.delete(provider); }
+  removeSignatureProvider(provider: SignatureProvider) {
+    this.signatureProviders.delete(provider);
+  }
 }

@@ -1,4 +1,4 @@
-<mat-toolbar *transloco="let t">
+<mat-toolbar color="primary" *transloco="let t">
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -11,7 +11,7 @@
     <mat-list-item>
       <mat-icon mat-list-icon>access_time</mat-icon>
       <div mat-line>{{ t('timestamp') }}</div>
-      <div mat-line>{{ timestamp$ | async | date:'long' }}</div>
+      <div mat-line>{{ timestamp$ | async | date: 'long' }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>code</mat-icon>

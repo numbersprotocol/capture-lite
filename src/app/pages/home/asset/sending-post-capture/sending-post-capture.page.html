@@ -1,39 +1,65 @@
-<mat-toolbar *transloco="let t">
-  <button [routerLink]="isPreview ? null : '..'" routerDirection="back" (click)="isPreview ? isPreview = false : null"
-    mat-icon-button>
+<mat-toolbar color="primary" *transloco="let t">
+  <button
+    [routerLink]="isPreview ? null : '..'"
+    routerDirection="back"
+    (click)="isPreview ? (isPreview = false) : null"
+    mat-icon-button
+  >
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span>{{ t(isPreview ? 'previewPostCapture' : 'sendPostCapture') }}</span>
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
-
   <ng-container *ngIf="!isPreview">
     <form #form="ngForm">
       <mat-card class="example-card">
-        <img mat-card-image [src]="base64Src$ | async">
+        <img mat-card-image [src]="base64Src$ | async" />
         <mat-card-content>
           <mat-form-field appearance="outline">
             <mat-label>{{ t('.message') }}</mat-label>
-            <textarea [(ngModel)]="previewCaption" name="caption" ngModel matInput cdkTextareaAutosize
-              maxlength="300"></textarea>
+            <textarea
+              [(ngModel)]="previewCaption"
+              name="caption"
+              ngModel
+              matInput
+              cdkTextareaAutosize
+              maxlength="300"
+            ></textarea>
           </mat-form-field>
         </mat-card-content>
       </mat-card>
 
-      <button (click)="preview(form.value.caption)" class="send-button" mat-raised-button
-        color="primary">{{ t('preview') }}</button>
+      <button
+        (click)="preview(form.value.caption)"
+        class="send-button"
+        mat-raised-button
+        color="primary"
+      >
+        {{ t('preview') }}
+      </button>
     </form>
   </ng-container>
 
   <!-- preview -->
 
   <ng-container *ngIf="isPreview">
-    <app-post-capture-card *ngIf="asset$ | async; let asset"
-      [transaction]="{ sender: asset.owner, asset: { caption: previewCaption }}" [asset]="asset">
+    <app-post-capture-card
+      *ngIf="asset$ | async; let asset"
+      [transaction]="{
+        sender: asset.owner,
+        asset: { caption: previewCaption }
+      }"
+      [asset]="asset"
+    >
     </app-post-capture-card>
 
-    <button (click)="send(previewCaption)" class="send-button" mat-raised-button color="primary">
+    <button
+      (click)="send(previewCaption)"
+      class="send-button"
+      mat-raised-button
+      color="primary"
+    >
       <div class="send-button-wrapper">
         <div class="avatar"></div>
         <span>{{ contact$ | async }}</span>

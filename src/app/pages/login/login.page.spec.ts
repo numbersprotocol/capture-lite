@@ -1,16 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule } from '@ionic/angular';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
-import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { LoginPage } from './login.page';
 
 describe('LoginPage', () => {
@@ -24,17 +17,9 @@ describe('LoginPage', () => {
       declarations: [LoginPage],
       imports: [
         SharedTestingModule,
-        IonicModule.forRoot(),
-        RouterTestingModule,
-        getTranslocoModule(),
-        HttpClientTestingModule,
         FormlyModule.forRoot(),
         FormlyMaterialModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatSnackBarModule
-      ]
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginPage);

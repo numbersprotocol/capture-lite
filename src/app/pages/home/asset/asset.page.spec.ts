@@ -1,17 +1,5 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { MatListModule } from '@angular/material/list';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule } from '@ionic/angular';
-import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
-import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { AssetPage } from './asset.page';
 
 describe('AssetPage', () => {
@@ -21,21 +9,7 @@ describe('AssetPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AssetPage],
-      imports: [
-        SharedTestingModule,
-        IonicModule.forRoot(),
-        RouterTestingModule,
-        getTranslocoModule(),
-        MatToolbarModule,
-        MatButtonModule,
-        MatIconModule,
-        MatIconTestingModule,
-        MatListModule,
-        MatSnackBarModule,
-        MatDialogModule,
-        MatBottomSheetModule,
-        HttpClientTestingModule
-      ]
+      imports: [SharedTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AssetPage);

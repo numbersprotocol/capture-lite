@@ -1,42 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { defer } from 'rxjs';
-import { subscribeInBackground } from 'src/app/utils/background-task/background-task';
+import { NotificationItem } from './notification-item';
 
 const { LocalNotifications } = Plugins;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
+  protected currentId = 1;
 
-  private currentId = 1;
+  constructor(protected readonly translocoService: TranslocoService) {}
 
-  constructor(
-    private readonly translocoService: TranslocoService
-  ) {
-    LocalNotifications.requestPermission()
-      .then(result => console.log(`Notification permission request result: ${result.granted}`));
+  // tslint:disable-next-line: prefer-function-over-method
+  async requestPermission() {
+    return LocalNotifications.requestPermission();
   }
 
-  createNotificationId() {
-    this.currentId++;
+  createNotification() {
+    return new NotificationItem(
+      this.getNewNotificationId(),
+      this.translocoService
+    );
+  }
+
+  protected getNewNotificationId() {
+    this.currentId += 1;
     return this.currentId;
   }
 
-  notify(id: number, title: string, body: string) {
-    console.log(`${title}: ${body}`);
-    subscribeInBackground(defer(() => LocalNotifications.schedule({
-      notifications: [{ title, body, id }]
-    })));
+  async notify(title: string, body: string) {
+    return this.createNotification().notify(title, body);
   }
 
-  notifyError(id: number, error: Error) {
-    this.notify(id, this.translocoService.translate('unknownError'), JSON.stringify(error));
-  }
-
-  cancel(id: number) {
-    subscribeInBackground(defer(() => LocalNotifications.cancel({ notifications: [{ id: String(id) }] })));
+  async error(error: Error) {
+    return this.createNotification().error(error);
   }
 }

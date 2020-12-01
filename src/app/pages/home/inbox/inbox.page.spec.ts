@@ -1,13 +1,5 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule } from '@ionic/angular';
-import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
-import { getTranslocoModule } from 'src/app/transloco/transloco-root.module.spec';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { InboxPage } from './inbox.page';
 
 describe('InboxPage', () => {
@@ -17,17 +9,7 @@ describe('InboxPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [InboxPage],
-      imports: [
-        SharedTestingModule,
-        IonicModule.forRoot(),
-        getTranslocoModule(),
-        RouterTestingModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatIconModule,
-        MatListModule,
-        HttpClientTestingModule
-      ]
+      imports: [SharedTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InboxPage);

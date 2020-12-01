@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
-import { first, pluck } from 'rxjs/operators';
+import { pluck } from 'rxjs/operators';
 
 const { Device } = Plugins;
 
@@ -14,7 +14,7 @@ const { Device } = Plugins;
 })
 export class AboutPage {
   readonly version$ = defer(() => Device.getInfo()).pipe(
-    first(),
-    pluck('appVersion')
+    pluck('appVersion'),
+    untilDestroyed(this)
   );
 }

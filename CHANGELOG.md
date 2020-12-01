@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.9.1 - 2020-12-01
+
+### Changed
+
+#### Code Quality
+
+- Use `SharedModule` and `SharedTestingModule` to import all common module at once. #253
+
+### Fixed
+
+- Unable to display captures.
+
+## 0.9.0 - 2020-12-01
+
+### Added
+
+- WORKAROUND: Store expired PostCapture with a very fragile implementation. #229
+- WORKAROUND: Polling to get inbox badge count. #190
+- Crop image with fixed ratio. #235
+- Open dashboard link on clicking asset ID. #197
+
+### Changed
+
+#### UI/UX
+
+- Update UI and color theme. #228
+- Remove notification after a proof published or collected.
+
+#### Code Quality
+
+- Create GitHub Release page only if deploy on Play Console successfully.
+- Refactor `Proof` class. #252
+- Add formatter and linters. #180
+- Refactor `NotificationService` with mock for test. #236
+- Use `Promise` to replace `Observable` only emitting once. #233
+
+### Fixed
+
+- Fix PostCapture UI. #276
+- Align title in header to center. #260
+- Update style of the "View-All" button on the capture details page. #260
+- Fix the ripple effects for buttons. #260
+- Fix the scrolling on PostCapture tab. #260
+- Fix warning: `ExpressionChangedAfterItHasBeenCheckedError` #260
+
+### Docs
+
+- Remove demo app section on README.
+
 ## 0.8.1 - 2020-11-26
 
 ### Fixed
@@ -44,13 +93,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- __Workaround__:  Catch Error from Capacitor.Filesystem.deleteFile on Android or iOS Devices. #193
+- **Workaround**: Catch Error from Capacitor.Filesystem.deleteFile on Android or iOS Devices. #193
 
 ## 0.7.2 - 2020-11-13
 
 ### Fixed
 
-- __Workaround__: fix different naming for information. Use constant string for the names of information.
+- **Workaround**: fix different naming for information. Use constant string for the names of information.
 - Fix location cannot display on asset page in zh-tw. #187
 
 ## 0.7.1 - 2020-11-13

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "549594343019",
+    "firebase_url": "https://capture-push-notification-dev.firebaseio.com",
+    "project_id": "capture-push-notification-dev",
+    "storage_bucket": "capture-push-notification-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549594343019:android:696255faaa8829154b332e",
+        "android_client_info": {
+          "package_name": "io.numbersprotocol.capturelite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549594343019-2nnhn1apr7n1ie8l2tbbuhpelp5mul9v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIQANqkPRKssGr4AShQEQAV68cad1pUro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "549594343019-2nnhn1apr7n1ie8l2tbbuhpelp5mul9v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatBottomSheetModule, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { MatListModule } from '@angular/material/list';
-import { IonicModule } from '@ionic/angular';
+import {
+  MatBottomSheetModule,
+  MatBottomSheetRef,
+} from '@angular/material/bottom-sheet';
 import { OptionsMenuComponent } from './options-menu.component';
 
 describe('OptionsMenuComponent', () => {
@@ -11,14 +12,8 @@ describe('OptionsMenuComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [OptionsMenuComponent],
-      imports: [
-        IonicModule.forRoot(),
-        MatBottomSheetModule,
-        MatListModule
-      ],
-      providers: [
-        { provide: MatBottomSheetRef, useValue: {} }
-      ]
+      imports: [MatBottomSheetModule],
+      providers: [{ provide: MatBottomSheetRef, useValue: {} }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(OptionsMenuComponent);

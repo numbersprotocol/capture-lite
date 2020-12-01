@@ -1,5 +1,8 @@
-import { Tuple } from 'src/app/services/database/table/table';
-import { OldSignature, SortedProofInformation } from 'src/app/services/repositories/proof/old-proof-adapter';
+import { Tuple } from '../../../../../services/database/table/table';
+import {
+  OldSignature,
+  SortedProofInformation,
+} from '../../../../../services/repositories/proof/old-proof-adapter';
 
 export interface Asset extends Tuple {
   readonly id: string;

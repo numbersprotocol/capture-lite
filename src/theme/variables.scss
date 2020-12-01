@@ -1,6 +1,6 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import "~@angular/material/theming";
+@import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -8,36 +8,22 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
-.mat-toolbar {
-  background: #564dfc;
-  color: #ffffff;
-
-  .mat-icon {
-    color: #ffffff;
-  }
-
-  span {
-    color: #ffffff;
-    padding-right: 40px;
-  }
-}
-
 .mat-tab-labels {
   background: #564dfc;
 
   .mat-tab-label-content {
-    color: #ffffff;
+    color: white;
   }
 
   .mat-icon {
-    color: #ffffff;
-    background-color: #ffffff;
+    color: white;
+    background-color: white;
   }
 }
 
 .mat-sidenav-content {
   button .mat-icon {
-    color: #ffffff;
+    color: white;
   }
 }
 
@@ -52,8 +38,8 @@ $capture-primary: (
   700: #0022ec,
   800: #001ee7,
   900: #0014d8,
-  A100: #ffffff,
-  A200: #ffffff,
+  A100: white,
+  A200: white,
   A400: #cfceff,
   A700: #b6b4ff,
   contrast: (
@@ -141,7 +127,7 @@ $app-theme: mat-light-theme(
   /**  capture **/
   --ion-color-capture: #564dfc;
   --ion-color-capture-rgb: 63, 81, 181;
-  --ion-color-capture-contrast: #ffffff;
+  --ion-color-capture-contrast: white;
   --ion-color-capture-contrast-rgb: 255, 255, 255;
   --ion-color-capture-shade: #303f9f;
   --ion-color-capture-tint: #7986cb;
@@ -149,7 +135,7 @@ $app-theme: mat-light-theme(
   /** primary **/
   --ion-color-primary: #3f51b5;
   --ion-color-primary-rgb: 63, 81, 181;
-  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast: white;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #303f9f;
   --ion-color-primary-tint: #7986cb;
@@ -157,7 +143,7 @@ $app-theme: mat-light-theme(
   /** secondary **/
   --ion-color-secondary: #80cbc4;
   --ion-color-secondary-rgb: 128, 203, 196;
-  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast: black;
   --ion-color-secondary-contrast-rgb: 0, 0, 0;
   --ion-color-secondary-shade: #26a69a;
   --ion-color-secondary-tint: #b2dfdb;
@@ -165,7 +151,7 @@ $app-theme: mat-light-theme(
   /** tertiary **/
   --ion-color-tertiary: #3f51b5;
   --ion-color-tertiary-rgb: 63, 81, 181;
-  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast: white;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
   --ion-color-tertiary-shade: #303f9f;
   --ion-color-tertiary-tint: #7986cb;
@@ -173,7 +159,7 @@ $app-theme: mat-light-theme(
   /** success **/
   --ion-color-success: #2dd36f;
   --ion-color-success-rgb: 45, 211, 111;
-  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast: white;
   --ion-color-success-contrast-rgb: 255, 255, 255;
   --ion-color-success-shade: #28ba62;
   --ion-color-success-tint: #42d77d;
@@ -181,7 +167,7 @@ $app-theme: mat-light-theme(
   /** warning **/
   --ion-color-warning: #ffc409;
   --ion-color-warning-rgb: 255, 196, 9;
-  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast: black;
   --ion-color-warning-contrast-rgb: 0, 0, 0;
   --ion-color-warning-shade: #e0ac08;
   --ion-color-warning-tint: #ffca22;
@@ -189,7 +175,7 @@ $app-theme: mat-light-theme(
   /** danger **/
   --ion-color-danger: #eb445a;
   --ion-color-danger-rgb: 235, 68, 90;
-  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast: white;
   --ion-color-danger-contrast-rgb: 255, 255, 255;
   --ion-color-danger-shade: #cf3c4f;
   --ion-color-danger-tint: #ed576b;
@@ -197,7 +183,7 @@ $app-theme: mat-light-theme(
   /** dark **/
   --ion-color-dark: #222428;
   --ion-color-dark-rgb: 34, 36, 40;
-  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast: white;
   --ion-color-dark-contrast-rgb: 255, 255, 255;
   --ion-color-dark-shade: #1e2023;
   --ion-color-dark-tint: #383a3e;
@@ -205,7 +191,7 @@ $app-theme: mat-light-theme(
   /** medium **/
   --ion-color-medium: #92949c;
   --ion-color-medium-rgb: 146, 148, 156;
-  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast: white;
   --ion-color-medium-contrast-rgb: 255, 255, 255;
   --ion-color-medium-shade: #808289;
   --ion-color-medium-tint: #9d9fa6;
@@ -213,7 +199,7 @@ $app-theme: mat-light-theme(
   /** light **/
   --ion-color-light: #f4f5f8;
   --ion-color-light-rgb: 244, 245, 248;
-  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast: black;
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
@@ -228,63 +214,55 @@ $app-theme: mat-light-theme(
   body {
     --ion-color-primary: #3f51b5;
     --ion-color-primary-rgb: 63, 81, 181;
-    --ion-color-primary-contrast: #ffffff;
+    --ion-color-primary-contrast: white;
     --ion-color-primary-contrast-rgb: 255, 255, 255;
     --ion-color-primary-shade: #303f9f;
     --ion-color-primary-tint: #7986cb;
-
     --ion-color-secondary: #80cbc4;
     --ion-color-secondary-rgb: 128, 203, 196;
-    --ion-color-secondary-contrast: #000000;
+    --ion-color-secondary-contrast: black;
     --ion-color-secondary-contrast-rgb: 0, 0, 0;
     --ion-color-secondary-shade: #26a69a;
     --ion-color-secondary-tint: #b2dfdb;
-
     --ion-color-tertiary: #3f51b5;
     --ion-color-tertiary-rgb: 63, 81, 181;
-    --ion-color-tertiary-contrast: #ffffff;
+    --ion-color-tertiary-contrast: white;
     --ion-color-tertiary-contrast-rgb: 255, 255, 255;
     --ion-color-tertiary-shade: #303f9f;
     --ion-color-tertiary-tint: #7986cb;
-
     --ion-color-success: #2fdf75;
     --ion-color-success-rgb: 47, 223, 117;
-    --ion-color-success-contrast: #000000;
+    --ion-color-success-contrast: black;
     --ion-color-success-contrast-rgb: 0, 0, 0;
     --ion-color-success-shade: #29c467;
     --ion-color-success-tint: #44e283;
-
     --ion-color-warning: #ffd534;
     --ion-color-warning-rgb: 255, 213, 52;
-    --ion-color-warning-contrast: #000000;
+    --ion-color-warning-contrast: black;
     --ion-color-warning-contrast-rgb: 0, 0, 0;
     --ion-color-warning-shade: #e0bb2e;
     --ion-color-warning-tint: #ffd948;
-
     --ion-color-danger: #ff4961;
     --ion-color-danger-rgb: 255, 73, 97;
-    --ion-color-danger-contrast: #ffffff;
+    --ion-color-danger-contrast: white;
     --ion-color-danger-contrast-rgb: 255, 255, 255;
     --ion-color-danger-shade: #e04055;
     --ion-color-danger-tint: #ff5b71;
-
     --ion-color-dark: #f4f5f8;
     --ion-color-dark-rgb: 244, 245, 248;
-    --ion-color-dark-contrast: #000000;
+    --ion-color-dark-contrast: black;
     --ion-color-dark-contrast-rgb: 0, 0, 0;
     --ion-color-dark-shade: #d7d8da;
     --ion-color-dark-tint: #f5f6f9;
-
     --ion-color-medium: #989aa2;
     --ion-color-medium-rgb: 152, 154, 162;
-    --ion-color-medium-contrast: #000000;
+    --ion-color-medium-contrast: black;
     --ion-color-medium-contrast-rgb: 0, 0, 0;
     --ion-color-medium-shade: #86888f;
     --ion-color-medium-tint: #a2a4ab;
-
     --ion-color-light: #222428;
     --ion-color-light-rgb: 34, 36, 40;
-    --ion-color-light-contrast: #ffffff;
+    --ion-color-light-contrast: white;
     --ion-color-light-contrast-rgb: 255, 255, 255;
     --ion-color-light-shade: #1e2023;
     --ion-color-light-tint: #383a3e;
@@ -296,35 +274,31 @@ $app-theme: mat-light-theme(
    */
 
   .ios body {
-    --ion-background-color: #000000;
+    --ion-background-color: black;
     --ion-background-color-rgb: 0, 0, 0;
-
-    --ion-text-color: #ffffff;
+    --ion-text-color: white;
     --ion-text-color-rgb: 255, 255, 255;
-
     --ion-color-step-50: #0d0d0d;
     --ion-color-step-100: #1a1a1a;
     --ion-color-step-150: #262626;
-    --ion-color-step-200: #333333;
+    --ion-color-step-200: #333;
     --ion-color-step-250: #404040;
     --ion-color-step-300: #4d4d4d;
     --ion-color-step-350: #595959;
-    --ion-color-step-400: #666666;
+    --ion-color-step-400: #666;
     --ion-color-step-450: #737373;
-    --ion-color-step-500: #808080;
+    --ion-color-step-500: gray;
     --ion-color-step-550: #8c8c8c;
-    --ion-color-step-600: #999999;
+    --ion-color-step-600: #999;
     --ion-color-step-650: #a6a6a6;
     --ion-color-step-700: #b3b3b3;
     --ion-color-step-750: #bfbfbf;
-    --ion-color-step-800: #cccccc;
+    --ion-color-step-800: #ccc;
     --ion-color-step-850: #d9d9d9;
     --ion-color-step-900: #e6e6e6;
     --ion-color-step-950: #f2f2f2;
-
     --ion-toolbar-background: #0d0d0d;
-
-    --ion-item-background: #000000;
+    --ion-item-background: black;
   }
 
   /*
@@ -335,12 +309,9 @@ $app-theme: mat-light-theme(
   .md body {
     --ion-background-color: #121212;
     --ion-background-color-rgb: 18, 18, 18;
-
-    --ion-text-color: #ffffff;
+    --ion-text-color: white;
     --ion-text-color-rgb: 255, 255, 255;
-
-    --ion-border-color: #222222;
-
+    --ion-border-color: #222;
     --ion-color-step-50: #1e1e1e;
     --ion-color-step-100: #2a2a2a;
     --ion-color-step-150: #363636;
@@ -360,11 +331,8 @@ $app-theme: mat-light-theme(
     --ion-color-step-850: #dbdbdb;
     --ion-color-step-900: #e7e7e7;
     --ion-color-step-950: #f3f3f3;
-
     --ion-item-background: #1e1e1e;
-
     --ion-toolbar-background: #1f1f1f;
-
     --ion-tab-bar-background: #1f1f1f;
   }
 }
@@ -376,5 +344,5 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }

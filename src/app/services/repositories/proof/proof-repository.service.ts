@@ -5,21 +5,22 @@ import { Tuple } from '../../database/table/table';
 import { Proof } from './proof';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProofRepository {
-
   private readonly id = 'proof';
   private readonly table = this.database.getTable<StringifiedProof>(this.id);
 
-  constructor(
-    private readonly database: Database
-  ) { }
+  constructor(private readonly database: Database) {}
 
   getAll$() {
     return this.table.queryAll$().pipe(
-      map(stringifiedProofs => stringifiedProofs.map(({ stringified }) => stringified)),
-      map(stringifieds => stringifieds.map(stringified => Proof.parse(stringified)))
+      map(stringifiedProofs =>
+        stringifiedProofs.map(({ stringified }) => stringified)
+      ),
+      map(stringifieds =>
+        stringifieds.map(stringified => Proof.parse(stringified))
+      )
     );
   }
 

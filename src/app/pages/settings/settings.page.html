@@ -1,4 +1,4 @@
-<mat-toolbar *transloco="let t">
+<mat-toolbar color="primary" *transloco="let t">
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -10,8 +10,14 @@
     <mat-list-item>
       <mat-icon mat-list-icon>language</mat-icon>
       <div mat-line>{{ t('languages') }}</div>
-      <mat-select [value]="currentLanguageKey$ | async" (selectionChange)="setCurrentLanguage($event.value)">
-        <mat-option *ngFor="let language of langauges | keyvalue" [value]="language.key">
+      <mat-select
+        [value]="currentLanguageKey$ | async"
+        (selectionChange)="setCurrentLanguage($event.value)"
+      >
+        <mat-option
+          *ngFor="let language of langauges | keyvalue"
+          [value]="language.key"
+        >
           {{ language.value }}
         </mat-option>
       </mat-select>

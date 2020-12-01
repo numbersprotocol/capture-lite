@@ -1,5 +1,4 @@
-import { defer, Subject } from 'rxjs';
-import { first, switchMap } from 'rxjs/operators';
+import { MimeType } from '../mime-type';
 
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
@@ -7,7 +6,7 @@ const textDecoder = new TextDecoder();
 export function base64ToArrayBuffer(base64: string) {
   const binaryString = atob(base64);
   const bytes = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
+  for (let i = 0; i < binaryString.length; i += 1) {
     bytes[i] = binaryString.charCodeAt(i);
   }
   return bytes.buffer;
@@ -25,7 +24,8 @@ export function arrayBufferToHex(arrayBuffer: ArrayBuffer) {
 
 export function hexToArrayBuffer(hex: string) {
   // tslint:disable-next-line: no-non-null-assertion
-  return new Uint8Array(hex.match(/[\da-f]{2}/gi)!.map(h => parseInt(h, 16))).buffer;
+  return new Uint8Array(hex.match(/[\da-f]{2}/gi)!.map(h => parseInt(h, 16)))
+    .buffer;
 }
 
 export function stringToArrayBuffer(str: string) {
@@ -36,20 +36,17 @@ export function arrayBufferToString(arrayBuffer: ArrayBuffer) {
   return textDecoder.decode(arrayBuffer);
 }
 
-export function dataUrlWithBase64ToBlob$(base64: string) {
-  return defer(() => fetch(base64)).pipe(
-    first(),
-    switchMap(res => res.blob())
-  );
+export async function base64ToBlob(base64: string, mimeType: MimeType) {
+  const dataUrl = `data:${mimeType};base64,${base64}`;
+  const response = await fetch(dataUrl);
+  return response.blob();
 }
 
-export function blobToDataUrlWithBase64$(blob: Blob) {
-  const fileReader = new FileReader();
-  const subject$ = new Subject<string>();
-  fileReader.onloadend = () => {
-    subject$.next(fileReader.result as string);
-    subject$.complete();
-  };
-  fileReader.readAsDataURL(blob);
-  return subject$.asObservable();
+export async function blobToBase64(blob: Blob) {
+  return new Promise<string>(resolve => {
+    const fileReader = new FileReader();
+    fileReader.onloadend = () =>
+      resolve((fileReader.result as string).split(',')[1]);
+    fileReader.readAsDataURL(blob);
+  });
 }

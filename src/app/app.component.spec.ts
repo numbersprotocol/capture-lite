@@ -1,13 +1,10 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { Platform } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { SharedTestingModule } from './shared/shared-testing.module';
-import { getTranslocoModule } from './transloco/transloco-root.module.spec';
 
 describe('AppComponent', () => {
-
   let platformReadySpy: Promise<void>;
   let platformSpy: Platform;
 
@@ -18,14 +15,8 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [
-        SharedTestingModule,
-        getTranslocoModule(),
-        HttpClientTestingModule
-      ],
-      providers: [
-        { provide: Platform, useValue: platformSpy }
-      ],
+      imports: [SharedTestingModule],
+      providers: [{ provide: Platform, useValue: platformSpy }],
     }).compileComponents();
   }));
 
@@ -37,6 +28,7 @@ describe('AppComponent', () => {
 
   it('should initialize the app', async () => {
     TestBed.createComponent(AppComponent);
+    // tslint:disable-next-line: no-unbound-method
     expect(platformSpy.ready).toHaveBeenCalled();
     await platformReadySpy;
   });

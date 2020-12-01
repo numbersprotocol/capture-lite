@@ -9,6 +9,9 @@
       "androidScaleType": "CENTER_CROP",
       "launchAutoHide": false
     },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    },
     "LocalNotifications": {
       "smallIcon": "ic_capture_lite",
       "iconColor": "#564dfc"

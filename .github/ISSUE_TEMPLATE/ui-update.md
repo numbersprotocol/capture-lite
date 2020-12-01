@@ -4,7 +4,6 @@ about: Create a new UI update
 title: ''
 labels: uiux
 assignees: ''
-
 ---
 
 ## Update Purpose

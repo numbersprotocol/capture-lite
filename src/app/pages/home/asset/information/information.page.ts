@@ -3,10 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { concatMap, map, switchMap } from 'rxjs/operators';
-import { AssetRepository } from 'src/app/services/publisher/numbers-storage/repositories/asset/asset-repository.service';
-import { getOldProof, getOldSignatures } from 'src/app/services/repositories/proof/old-proof-adapter';
-import { ProofRepository } from 'src/app/services/repositories/proof/proof-repository.service';
-import { isNonNullable } from 'src/app/utils/rx-operators';
+import { AssetRepository } from '../../../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
+import {
+  getOldProof,
+  getOldSignatures,
+} from '../../../../services/repositories/proof/old-proof-adapter';
+import { ProofRepository } from '../../../../services/repositories/proof/proof-repository.service';
+import { isNonNullable } from '../../../../utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -15,7 +18,6 @@ import { isNonNullable } from 'src/app/utils/rx-operators';
   styleUrls: ['./information.page.scss'],
 })
 export class InformationPage {
-
   readonly asset$ = this.route.paramMap.pipe(
     map(params => params.get('id')),
     isNonNullable(),
@@ -23,14 +25,21 @@ export class InformationPage {
     isNonNullable()
   );
   private readonly proofsWithOld$ = this.proofRepository.getAll$().pipe(
-    concatMap(proofs => Promise.all(proofs.map(async (proof) =>
-      ({ proof, oldProof: await getOldProof(proof) })
-    )))
+    concatMap(proofs =>
+      Promise.all(
+        proofs.map(async proof => ({
+          proof,
+          oldProof: await getOldProof(proof),
+        }))
+      )
+    )
   );
   readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
     map(([asset, proofsWithThumbnailAndOld]) => ({
       asset,
-      proofWithOld: proofsWithThumbnailAndOld.find(p => p.oldProof.hash === asset.proof_hash)
+      proofWithOld: proofsWithThumbnailAndOld.find(
+        p => p.oldProof.hash === asset.proof_hash
+      ),
     }))
   );
   readonly timestamp$ = this.capture$.pipe(
@@ -64,5 +73,5 @@ export class InformationPage {
     private readonly route: ActivatedRoute,
     private readonly assetRepository: AssetRepository,
     private readonly proofRepository: ProofRepository
-  ) { }
+  ) {}
 }

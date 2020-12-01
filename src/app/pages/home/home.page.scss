@@ -12,19 +12,20 @@ mat-sidenav {
 }
 
 mat-sidenav-content {
-  overflow: hidden;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 mat-toolbar {
-  background: #564dfc;
-  color: #ffffff;
+  color: white;
 
   .mat-icon {
-    color: #ffffff;
+    color: white;
   }
 
   span {
-    color: #ffffff;
+    color: white;
     padding-right: 40px;
   }
 }
@@ -35,7 +36,7 @@ mat-toolbar {
   margin-bottom: 128px;
 
   div.mat-title {
-    margin: 26px 0 0 0;
+    margin: 26px 0 0;
     font-size: larger;
   }
 
