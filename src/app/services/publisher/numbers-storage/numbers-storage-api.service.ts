@@ -70,10 +70,32 @@ export class NumbersStorageApi {
         this.httpClient.post(`${baseUrl}/auth/token/logout/`, {}, { headers })
       ),
       concatMapTo(
-        zip(
-          this.setUsername('has-logged-out'),
-          this.setEmail('has-logged-out'),
-          this.storeAuthToken('')
+        defer(() =>
+          Promise.all([
+            this.setUsername('has-logged-out'),
+            this.setEmail('has-logged-out'),
+            this.storeAuthToken(''),
+          ])
+        )
+      )
+    );
+  }
+
+  createOrUpdateDevice$(
+    platform: string,
+    deviceIdentifier: string,
+    fcmToken: string
+  ) {
+    const formData = new FormData();
+    formData.append('platform', platform);
+    formData.append('device_identifier', deviceIdentifier);
+    formData.append('fcm_token', fcmToken);
+    return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
+      concatMap(headers =>
+        this.httpClient.post<DeviceResponse>(
+          `${baseUrl}/auth/devices/`,
+          formData,
+          { headers }
         )
       )
     );
@@ -287,6 +309,15 @@ interface TransactionCreateResponse {
   readonly asset_id: string;
   readonly email: string;
   readonly caption: string;
+}
+
+interface DeviceResponse {
+  readonly id: string;
+  readonly owner: string;
+  readonly platform: string;
+  readonly device_identifier: string;
+  readonly registered_at: string;
+  readonly last_updated_at: string;
 }
 
 const enum PrefKeys {

@@ -1,6 +1,6 @@
 {
   "appId": "io.numbersprotocol.capturelite",
-  "appName": "Capture Lite",
+  "appName": "Capture",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
@@ -8,6 +8,13 @@
     "SplashScreen": {
       "androidScaleType": "CENTER_CROP",
       "launchAutoHide": false
+    },
+    "PushNotifications": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
     }
   },
   "cordova": {},

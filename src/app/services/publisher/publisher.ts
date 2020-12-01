@@ -14,31 +14,22 @@ export abstract class Publisher {
   abstract isEnabled$(): Observable<boolean>;
 
   async publish(proof: Proof) {
-    const notificationId = this.notificationService.createNotificationId();
+    const simplifiedIdLength = 6;
+    const notification = this.notificationService.createNotification();
     try {
-      this.notificationService.notify(
-        notificationId,
-        this.translocoService.translate('registeringAsset'),
-        this.translocoService.translate('message.registeringAsset', {
-          hash: await proof.getId(),
+      notification.notify(
+        this.translocoService.translate('registeringProof'),
+        this.translocoService.translate('message.registeringProof', {
+          id: (await proof.getId()).substr(0, simplifiedIdLength),
           publisherName: this.id,
         })
       );
 
       await this.run(proof);
-
-      this.notificationService.notify(
-        notificationId,
-        this.translocoService.translate('assetRegistered'),
-        this.translocoService.translate('message.assetRegistered', {
-          hash: await proof.getId(),
-          publisherName: this.id,
-        })
-      );
-
+      notification.cancel();
       return proof;
     } catch (e) {
-      this.notificationService.notifyError(notificationId, e);
+      this.notificationService.error(e);
     }
   }
 

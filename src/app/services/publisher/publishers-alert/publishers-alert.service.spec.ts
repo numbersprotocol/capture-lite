@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { getTranslocoModule } from '../../../transloco/transloco-root.module.spec';
+import { getTranslocoModule } from '../../transloco/transloco-root-testing.module';
 import { PublishersAlert } from './publishers-alert.service';
 
 describe('PublishersAlert', () => {

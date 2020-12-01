@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { LoadingController } from '@ionic/angular';
 import { of } from 'rxjs';
 import { map, toArray } from 'rxjs/operators';
-import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
+import { getTranslocoModule } from '../transloco/transloco-root-testing.module';
 import { BlockingActionService } from './blocking-action.service';
 
 describe('BlockingActionService', () => {

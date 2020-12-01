@@ -10,8 +10,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
+import { getTranslocoModule } from '../../services/transloco/transloco-root-testing.module';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
-import { getTranslocoModule } from '../../transloco/transloco-root.module.spec';
 import { SignupPage } from './signup.page';
 
 describe('SignupPage', () => {

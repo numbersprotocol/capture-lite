@@ -14,16 +14,13 @@ import { AssetRepository } from '../../../services/publisher/numbers-storage/rep
 import { getOldProof } from '../../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../services/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../utils/rx-operators';
-import {
-  ContactSelectionDialogComponent,
-  SelectedContact,
-} from './contact-selection-dialog/contact-selection-dialog.component';
+import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import {
   Option,
   OptionsMenuComponent,
 } from './options-menu/options-menu.component';
 
-const { Clipboard } = Plugins;
+const { Browser } = Plugins;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -154,10 +151,16 @@ export class AssetPage {
       .subscribe();
   }
 
-  copyToClipboard(value: string) {
-    Clipboard.write({ string: value });
-    this.snackBar.open(
-      this.translocoService.translate('message.copiedToClipboard')
-    );
+  openDashboardLink() {
+    this.asset$
+      .pipe(
+        tap(asset =>
+          Browser.open({
+            url: `https://authmedia.net/dia-certificate?mid=${asset.id}`,
+          })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 }

@@ -29,6 +29,6 @@ export class BlockingActionService {
 function run$<T>(action$: Observable<T>, loading: HTMLIonLoadingElement) {
   return defer(() => loading.present()).pipe(
     concatMapTo(action$),
-    finalize(loading.dismiss)
+    finalize(() => loading.dismiss())
   );
 }

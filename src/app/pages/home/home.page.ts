@@ -1,14 +1,16 @@
 import { formatDate } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
-import { combineLatest, of, zip } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { combineLatest, interval, of, zip } from 'rxjs';
+import { concatMap, concatMapTo, map, pluck } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
 import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
 import { AssetRepository } from '../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
+import { IgnoredTransactionRepository } from '../../services/publisher/numbers-storage/repositories/ignored-transaction/ignored-transaction-repository.service';
 import { PublishersAlert } from '../../services/publisher/publishers-alert/publishers-alert.service';
+import { PushNotificationService } from '../../services/push-notification/push-notification.service';
 import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
 import { capture$ } from '../../utils/camera';
@@ -21,7 +23,7 @@ import { forkJoinWithDefault } from '../../utils/rx-operators';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   readonly capturesByDate$ = this.getCaptures$().pipe(
     map(captures =>
       groupBy(captures, c =>
@@ -32,14 +34,23 @@ export class HomePage {
   postCaptures$ = this.getPostCaptures$();
   readonly username$ = this.numbersStorageApi.getUsername$();
   captureButtonShow = true;
+  inboxCount$ = this.pollingInbox$().pipe(
+    map(transactions => transactions.length)
+  );
 
   constructor(
     private readonly assetRepository: AssetRepository,
     private readonly proofRepository: ProofRepository,
     private readonly collectorService: CollectorService,
     private readonly publishersAlert: PublishersAlert,
-    private readonly numbersStorageApi: NumbersStorageApi
+    private readonly numbersStorageApi: NumbersStorageApi,
+    private readonly pushNotificationService: PushNotificationService,
+    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
   ) {}
+
+  ngOnInit() {
+    this.pushNotificationService.configure();
+  }
 
   private getCaptures$() {
     const originallyOwnedAssets$ = this.assetRepository
@@ -126,5 +137,27 @@ export class HomePage {
     if (event.index === 1) {
       this.postCaptures$ = this.getPostCaptures$();
     }
+  }
+
+  /**
+   * TODO: Use repository pattern to cache the inbox data.
+   */
+  private pollingInbox$() {
+    // tslint:disable-next-line: no-magic-numbers
+    return interval(10000).pipe(
+      concatMapTo(this.numbersStorageApi.listInbox$()),
+      pluck('results'),
+      concatMap(postCaptures =>
+        zip(of(postCaptures), this.ignoredTransactionRepository.getAll$())
+      ),
+      map(([postCaptures, ignoredTransactions]) =>
+        postCaptures.filter(
+          postcapture =>
+            !ignoredTransactions
+              .map(transaction => transaction.id)
+              .includes(postcapture.id)
+        )
+      )
+    );
   }
 }

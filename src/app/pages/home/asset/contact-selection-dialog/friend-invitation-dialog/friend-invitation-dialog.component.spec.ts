@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IonicModule } from '@ionic/angular';
-import { getTranslocoModule } from '../../../../../transloco/transloco-root.module.spec';
+import { getTranslocoModule } from '../../../../../services/transloco/transloco-root-testing.module';
 import { FriendInvitationDialogComponent } from './friend-invitation-dialog.component';
 
 describe('FriendInvitationDialogComponent', () => {
