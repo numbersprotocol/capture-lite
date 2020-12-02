@@ -16,16 +16,6 @@ export class WebCryptoApiSignatureProvider implements SignatureProvider {
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
 
-  async provide(serializedSortedSignTargets: string): Promise<Signature> {
-    const privateKey = await this.getPrivateKey();
-    const signature = await signWithSha256AndEcdsa(
-      serializedSortedSignTargets,
-      privateKey
-    );
-    const publicKey = await this.getPublicKey();
-    return { signature, publicKey };
-  }
-
   async initialize() {
     const originalPublicKey = await this.getPublicKey();
     const originalPrivateKey = await this.getPrivateKey();
@@ -34,6 +24,17 @@ export class WebCryptoApiSignatureProvider implements SignatureProvider {
       await this.preferences.setString(PrefKeys.PUBLIC_KEY, publicKey);
       await this.preferences.setString(PrefKeys.PRIVATE_KEY, privateKey);
     }
+  }
+
+  async provide(serializedSortedSignedTargets: string): Promise<Signature> {
+    await this.initialize();
+    const privateKey = await this.getPrivateKey();
+    const signature = await signWithSha256AndEcdsa(
+      serializedSortedSignedTargets,
+      privateKey
+    );
+    const publicKey = await this.getPublicKey();
+    return { signature, publicKey };
   }
 
   getPublicKey$() {

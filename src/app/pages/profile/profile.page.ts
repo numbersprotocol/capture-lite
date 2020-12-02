@@ -8,7 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
 import { catchError, concatMapTo } from 'rxjs/operators';
 import { BlockingActionService } from '../../services/blocking-action/blocking-action.service';
-import { WebCryptoApiSignatureProvider } from '../../services/collector/signature/web-crypto-api-provider/web-crypto-api-signature-provider.service';
+import { WebCryptoApiSignatureProvider } from '../../services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
 import { AssetRepository } from '../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { IgnoredTransactionRepository } from '../../services/publisher/numbers-storage/repositories/ignored-transaction/ignored-transaction-repository.service';

@@ -6,6 +6,7 @@ import {
   DefaultFactId,
   Facts,
   isFacts,
+  isSignature,
   Proof,
   Signatures,
   Truth,
@@ -174,6 +175,21 @@ describe('Proof utils', () => {
     expect(isFacts(2)).toBeFalse();
     expect(isFacts('a')).toBeFalse();
     expect(isFacts({ a: { a: 1 } })).toBeFalse();
+  });
+
+  it('should check is Signature', () => {
+    expect(isSignature({})).toBeFalse();
+    expect(
+      isSignature({ signature: VALID_SIGNATURE, publicKey: PUBLIC_KEY })
+    ).toBeTrue();
+    expect(
+      isSignature({ signature: INVALID_SIGNATURE, publicKey: PUBLIC_KEY })
+    ).toBeTrue();
+    expect(isSignature({ signature: INVALID_SIGNATURE })).toBeFalse();
+    expect(isSignature({ publicKey: PUBLIC_KEY })).toBeFalse();
+    expect(isSignature(true)).toBeFalse();
+    expect(isSignature(2)).toBeFalse();
+    expect(isSignature('a')).toBeFalse();
   });
 });
 

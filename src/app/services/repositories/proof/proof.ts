@@ -166,6 +166,21 @@ export interface Signature {
   readonly publicKey: string;
 }
 
+export function isSignature(value: any): value is Signature {
+  if (!(value instanceof Object)) {
+    return false;
+  }
+  if (
+    !value.signature ||
+    !value.publicKey ||
+    typeof value.signature !== 'string' ||
+    typeof value.publicKey !== 'string'
+  ) {
+    return false;
+  }
+  return true;
+}
+
 interface SerializedProof {
   assets: Assets;
   truth: Truth;

@@ -7,7 +7,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorFactsProvider } from './services/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
-import { WebCryptoApiSignatureProvider } from './services/collector/signature/web-crypto-api-provider/web-crypto-api-signature-provider.service';
+import { WebCryptoApiSignatureProvider } from './services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
 import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-storage-api.service';

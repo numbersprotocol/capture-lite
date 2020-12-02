@@ -57,14 +57,14 @@ export class CollectorService {
   }
 
   private async signTargets(target: SignedTargets): Promise<Signatures> {
-    const serializedSortedSignTargets = JSON.stringify(
+    const serializedSortedSignedTargets = JSON.stringify(
       sortObjectDeeplyByKey(target as any).toJSON()
     );
     return Object.fromEntries(
       await Promise.all(
         [...this.signatureProviders].map(async provider => [
           provider.id,
-          await provider.provide(serializedSortedSignTargets),
+          await provider.provide(serializedSortedSignedTargets),
         ])
       )
     );
