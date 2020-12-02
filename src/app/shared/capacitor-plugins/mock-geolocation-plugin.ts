@@ -1,3 +1,4 @@
+// tslint:disable: prefer-function-over-method no-async-without-await
 import {
   GeolocationOptions,
   GeolocationPlugin,
@@ -7,7 +8,6 @@ import {
 } from '@capacitor/core';
 
 export class MockGeolocationPlugin implements GeolocationPlugin {
-  // tslint:disable-next-line: prefer-function-over-method
   async getCurrentPosition(
     _options?: GeolocationOptions
   ): Promise<GeolocationPosition> {
@@ -21,7 +21,6 @@ export class MockGeolocationPlugin implements GeolocationPlugin {
     };
   }
 
-  // tslint:disable-next-line: prefer-function-over-method
   watchPosition(
     _options: GeolocationOptions,
     _callback: GeolocationWatchCallback
@@ -29,12 +28,10 @@ export class MockGeolocationPlugin implements GeolocationPlugin {
     throw new Error('Method not implemented.');
   }
 
-  // tslint:disable-next-line: prefer-function-over-method promise-function-async
-  clearWatch(_options: { id: string }): Promise<void> {
+  async clearWatch(_options: { id: string }): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  // tslint:disable-next-line: prefer-function-over-method
   addListener(
     _eventName: string,
     _listenerFunc: () => any
