@@ -54,6 +54,7 @@ export class CollectorService {
   }
 
   private async signTargets(target: SignedTargets): Promise<Signatures> {
+    // TODO: extract getSerializedSortedSignedTarget() to proot.ts
     const serializedSortedSignedTargets = JSON.stringify(
       sortObjectDeeplyByKey(target as any).toJSON()
     );

@@ -8,7 +8,7 @@ export function isNonNullable<T>() {
     );
 }
 
-// TODO: Remove this function.
+// TODO: Remove this function as we have promisify most utils methods. See #233.
 export function forkJoinWithDefault<T>(
   sources: Observable<T>[],
   defaultValue: T[] = []
