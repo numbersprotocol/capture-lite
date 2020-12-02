@@ -1,5 +1,8 @@
+import { Plugins } from '@capacitor/core';
 import { Table, Tuple } from '../table';
 import { CapacitorFilesystemTable } from './capacitor-filesystem-table';
+
+const { Filesystem } = Plugins;
 
 describe('CapacitorFilesystemTable', () => {
   let table: Table<TestTuple>;
@@ -43,7 +46,7 @@ describe('CapacitorFilesystemTable', () => {
     },
   };
 
-  beforeEach(() => (table = new CapacitorFilesystemTable(tableId)));
+  beforeEach(() => (table = new CapacitorFilesystemTable(tableId, Filesystem)));
 
   afterEach(async () => table.drop());
 

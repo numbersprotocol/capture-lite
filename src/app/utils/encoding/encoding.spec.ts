@@ -41,7 +41,7 @@ describe('encoding', () => {
     expect(await blobToBase64(blob)).toEqual(base64);
   });
 
-  it('should convert between string and base64', async () => {
+  it('should convert between string and base64', () => {
     const str = 'hello';
 
     const base64 = stringToBase64(str);

@@ -3,8 +3,6 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { MemoryTable } from '../services/database/table/memory-table/memory-table';
-import { TABLE_IMPL } from '../services/database/table/table';
 import { NotificationTestingService } from '../services/notification/notification-testing.service';
 import { NotificationService } from '../services/notification/notification.service';
 import { MemoryPreferences } from '../services/preference-manager/preferences/memory-preferences/memory-preferences';
@@ -26,7 +24,6 @@ import { SharedModule } from './shared.module';
     CapacitorPluginsTestingModule,
   ],
   providers: [
-    { provide: TABLE_IMPL, useValue: MemoryTable },
     { provide: PREFERENCES_IMPL, useValue: MemoryPreferences },
     { provide: NotificationService, useClass: NotificationTestingService },
   ],
