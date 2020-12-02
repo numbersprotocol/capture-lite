@@ -14,8 +14,8 @@ const { Device, Geolocation } = Plugins;
   providedIn: 'root',
 })
 export class CapacitorFactsProvider implements FactsProvider {
-  private readonly preferences = this.preferenceManager.getPreferences(name);
-  readonly id = name;
+  readonly id = CapacitorFactsProvider.name;
+  private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
 

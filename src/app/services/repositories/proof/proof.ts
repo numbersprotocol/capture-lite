@@ -130,8 +130,26 @@ interface TruthProviders {
 }
 
 export type Facts = {
-  [id in DefaultFactId | string]: string | number | boolean | undefined;
+  [id in DefaultFactId | string]: boolean | number | string | undefined;
 };
+
+export function isFacts(value: any): value is Facts {
+  if (!(value instanceof Object)) {
+    return false;
+  }
+  if (
+    Object.values(value).some(
+      v =>
+        typeof v !== 'boolean' &&
+        typeof v !== 'number' &&
+        typeof v !== 'string' &&
+        typeof v !== 'undefined'
+    )
+  ) {
+    return false;
+  }
+  return true;
+}
 
 export const enum DefaultFactId {
   DEVICE_NAME = 'DEVICE_NAME',

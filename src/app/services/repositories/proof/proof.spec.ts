@@ -4,6 +4,8 @@ import {
   AssetMeta,
   Assets,
   DefaultFactId,
+  Facts,
+  isFacts,
   Proof,
   Signatures,
   Truth,
@@ -163,6 +165,18 @@ describe('Proof', () => {
   });
 });
 
+describe('Proof utils', () => {
+  it('should check is Facts', () => {
+    expect(isFacts({})).toBeTrue();
+    expect(isFacts(FACTS_INFO_SNAPSHOT)).toBeTrue();
+    expect(isFacts({ a: undefined })).toBeTrue();
+    expect(isFacts(true)).toBeFalse();
+    expect(isFacts(2)).toBeFalse();
+    expect(isFacts('a')).toBeFalse();
+    expect(isFacts({ a: { a: 1 } })).toBeFalse();
+  });
+});
+
 const ASSET1_MIMETYPE: MimeType = 'image/png';
 const ASSET1_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAABAaVRYdENyZWF0aW9uIFRpbWUAAAAAADIwMjDlubTljYHkuIDmnIgxMOaXpSAo6YCx5LqMKSAyMOaZgjU55YiGMzfnp5JnJvHNAAAAFUlEQVQImWM0MTH5z4AFMGETxCsBAHRhAaHOZzVQAAAAAElFTkSuQmCC';
@@ -186,14 +200,15 @@ const DEVICE_NAME_VALUE2 = 'xperia1';
 const HUMIDITY = 'HUMIDITY';
 const HUMIDITY_VALUE = 0.8;
 const TIMESTAMP = 1605013013193;
+const FACTS_INFO_SNAPSHOT: Facts = {
+  [DefaultFactId.GEOLOCATION_LATITUDE]: GEOLOCATION_LATITUDE1,
+  [DefaultFactId.GEOLOCATION_LONGITUDE]: GEOLOCATION_LONGITUDE1,
+  [DefaultFactId.DEVICE_NAME]: DEVICE_NAME_VALUE1,
+};
 const TRUTH: Truth = {
   timestamp: TIMESTAMP,
   providers: {
-    [INFO_SNAPSHOT]: {
-      [DefaultFactId.GEOLOCATION_LATITUDE]: GEOLOCATION_LATITUDE1,
-      [DefaultFactId.GEOLOCATION_LONGITUDE]: GEOLOCATION_LONGITUDE1,
-      [DefaultFactId.DEVICE_NAME]: DEVICE_NAME_VALUE1,
-    },
+    [INFO_SNAPSHOT]: FACTS_INFO_SNAPSHOT,
     [CAPACITOR]: {
       [DefaultFactId.GEOLOCATION_LATITUDE]: GEOLOCATION_LATITUDE2,
       [DefaultFactId.GEOLOCATION_LONGITUDE]: GEOLOCATION_LONGITUDE2,

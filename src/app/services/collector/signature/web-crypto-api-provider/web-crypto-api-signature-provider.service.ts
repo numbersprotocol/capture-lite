@@ -11,8 +11,8 @@ import { SignatureProvider } from '../signature-provider';
   providedIn: 'root',
 })
 export class WebCryptoApiSignatureProvider implements SignatureProvider {
-  private readonly preferences = this.preferenceManager.getPreferences(name);
-  readonly id = name;
+  readonly id = WebCryptoApiSignatureProvider.name;
+  private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
 

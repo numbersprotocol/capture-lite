@@ -28,5 +28,6 @@ import { SharedModule } from './shared.module';
     { provide: PREFERENCES_IMPL, useValue: MemoryPreferences },
     { provide: NotificationService, useClass: NotificationTestingService },
   ],
+  exports: [MaterialTestingModule],
 })
 export class SharedTestingModule {}

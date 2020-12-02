@@ -8,7 +8,7 @@ import { Proof } from './proof';
   providedIn: 'root',
 })
 export class ProofRepository {
-  private readonly id = 'proof';
+  private readonly id = ProofRepository.name;
   private readonly table = this.database.getTable<StringifiedProof>(this.id);
 
   constructor(private readonly database: Database) {}

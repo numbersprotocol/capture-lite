@@ -18,7 +18,9 @@ import { Asset } from './repositories/asset/asset';
   providedIn: 'root',
 })
 export class NumbersStorageApi {
-  private readonly preferences = this.preferenceManager.getPreferences(name);
+  private readonly preferences = this.preferenceManager.getPreferences(
+    NumbersStorageApi.name
+  );
 
   constructor(
     private readonly httpClient: HttpClient,
