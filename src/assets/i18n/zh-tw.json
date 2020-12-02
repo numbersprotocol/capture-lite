@@ -91,7 +91,7 @@
     "ifYouNotReceiveEmail": "如果您在10分鐘內仍未收到驗證電子郵件，請單擊下面的按鈕重新發送驗證電子郵件。",
     "emailOrPasswordIsInvalid": "您輸入的電子郵件地址或密碼無效。",
     "tooManyRetries": "您輸入無效的電子郵件或密碼的次數過多。請稍後再試。",
-    "storingAssets": "正在保存拍攝：{{ hash }}",
+    "storingAssets": "正在蒐集環境資料、簽章並保存拍攝...",
     "registeringProof": "正在將影像資產 {{ hash }} 註冊至 {{ publisherName }}。",
     "forbiddenAllNumeric": "密碼不能只有數字。",
     "isNotEmail": "電子郵件格式不符。",

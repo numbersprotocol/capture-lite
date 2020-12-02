@@ -27,12 +27,9 @@ export class CollectorService {
   ) {}
 
   async runAndStore(assets: Assets) {
-    const simplifiedHashLength = 6;
     const notification = await this.notificationService.notify(
       this.translocoService.translate('storingAssets'),
-      this.translocoService.translate('message.storingAssets', {
-        hash: Object.keys(assets)[0].substr(0, simplifiedHashLength),
-      })
+      this.translocoService.translate('message.storingAssets')
     );
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
