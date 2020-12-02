@@ -8,6 +8,7 @@ import { CapacitorFilesystemTable } from '../services/database/table/capacitor-f
 import { TABLE_IMPL } from '../services/database/table/table';
 import { CapacitorStoragePreferences } from '../services/preference-manager/preferences/capacitor-storage-preferences/capacitor-storage-preferences';
 import { PREFERENCES_IMPL } from '../services/preference-manager/preferences/preferences';
+import { CapacitorPluginsModule } from './capacitor-plugins/capacitor-plugins.module';
 import { MaterialModule } from './material/material.module';
 
 @NgModule({
@@ -19,6 +20,7 @@ import { MaterialModule } from './material/material.module';
     HttpClientModule,
     TranslocoModule,
     MaterialModule,
+    CapacitorPluginsModule,
   ],
   providers: [
     { provide: TABLE_IMPL, useValue: CapacitorFilesystemTable },

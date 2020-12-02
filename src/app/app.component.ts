@@ -6,7 +6,7 @@ import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CollectorService } from './services/collector/collector.service';
-import { CapacitorFactsProvider } from './services/collector/facts/capacitor-provider/capacitor-facts-provider.service';
+import { CapacitorFactsProvider } from './services/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 import { WebCryptoApiSignatureProvider } from './services/collector/signature/web-crypto-api-provider/web-crypto-api-signature-provider.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';

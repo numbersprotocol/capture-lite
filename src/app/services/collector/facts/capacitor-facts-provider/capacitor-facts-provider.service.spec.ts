@@ -47,17 +47,19 @@ describe('CapacitorFactsProvider', () => {
   it('should get if collecting location info enabled by value', async () => {
     const expected = true;
 
-    await provider.setLocationInfoCollection(expected);
+    await provider.setGeolocationInfoCollection(expected);
 
-    expect(await provider.isLocationInfoCollectionEnabled()).toEqual(expected);
+    expect(await provider.isGeolocationInfoCollectionEnabled()).toEqual(
+      expected
+    );
   });
 
   it('should get if collecting location info enabled by Observable', async done => {
     const expected = true;
 
-    await provider.setLocationInfoCollection(expected);
+    await provider.setGeolocationInfoCollection(expected);
 
-    provider.isLocationInfoCollectionEnabled$().subscribe(result => {
+    provider.isGeolocationInfoCollectionEnabled$().subscribe(result => {
       expect(result).toEqual(expected);
       done();
     });

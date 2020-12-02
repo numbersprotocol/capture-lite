@@ -103,7 +103,6 @@
     "no-outputs-metadata-property": true,
     "no-queries-metadata-property": true,
     "pipe-prefix": true,
-    "prefer-inline-decorator": true,
     "rxjs-finnish": true,
     "rxjs-no-async-subscribe": true,
     "rxjs-no-compat": true,
