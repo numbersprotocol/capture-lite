@@ -8,7 +8,7 @@
     "preconfig": "node set-secret.js",
     "serve": "npm run preconfig && ionic serve",
     "build": "npm run preconfig && ionic build",
-    "build-android": "npm run build && cap sync android && cap open android",
+    "build-android": "npm run build && cap sync android",
     "test": "npm run preconfig && ng test",
     "test-ci": "npm run preconfig && ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "lint": "npm run preconfig && prettier --check . && stylelint \"**/*.{css,scss,sass}\" && ng lint",
