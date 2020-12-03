@@ -47,6 +47,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
       await this.filesystemPlugin.mkdir({
         directory: this.directory,
         path: this.rootDir,
+        recursive: true,
       });
     }
     const files = await this.filesystemPlugin.readdir({
