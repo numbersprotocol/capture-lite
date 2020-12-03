@@ -8,11 +8,6 @@ const routes: Routes = [
     component: ActivityPage,
   },
   {
-    path: 'detail',
-    loadChildren: () =>
-      import('./detail/detail.module').then(m => m.DetailPageModule),
-  },
-  {
     path: 'transaction-details',
     loadChildren: () =>
       import('./transaction-details/transaction-details.module').then(
