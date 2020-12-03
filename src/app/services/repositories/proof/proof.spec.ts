@@ -184,6 +184,34 @@ describe('Proof', () => {
     proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_INVALID);
     expect(await proof.isVerified()).toBeFalse();
   });
+
+  it('should get indexed Proof view', async () => {
+    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    const indexedProofView = proof.getIndexedProofView();
+
+    expect(indexedProofView.indexedAssets).toBeTruthy();
+    expect(indexedProofView.truth).toEqual(TRUTH);
+    expect(indexedProofView.signatures).toEqual(SIGNATURES_VALID);
+  });
+
+  it('should create Proof from indexed Proof view', async () => {
+    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    const indexedProofView = proof.getIndexedProofView();
+
+    const anotherProof = Proof.fromIndexedProofView(
+      fileStore,
+      indexedProofView
+    );
+
+    expect(await proof.stringify()).toEqual(await anotherProof.stringify());
+  });
+
+  it('should release resource after destroy', async () => {
+    const spy = spyOn(fileStore, 'delete');
+    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    await proof.destroy();
+    expect(spy).toHaveBeenCalled();
+  });
 });
 
 describe('Proof utils', () => {

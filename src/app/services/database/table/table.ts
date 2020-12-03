@@ -9,5 +9,5 @@ export interface Table<T extends Tuple> {
 }
 
 export interface Tuple {
-  [key: string]: boolean | number | string | Tuple | Tuple[];
+  [key: string]: boolean | number | string | undefined | Tuple | Tuple[];
 }

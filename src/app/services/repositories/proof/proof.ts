@@ -3,6 +3,7 @@ import { sha256WithString } from '../../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
 import { sortObjectDeeplyByKey } from '../../../utils/immutable/immutable';
 import { MimeType } from '../../../utils/mime-type';
+import { Tuple } from '../../database/table/table';
 import { FileStore } from '../../file-store/file-store.service';
 
 const imageBlobReduce = new ImageBlobReduce();
@@ -44,8 +45,14 @@ export class Proof {
       const index = await this.fileStore.write(base64);
       indexedAssetEntries.push([index, meta]);
     }
+
+    this.setIndexedAssets(Object.fromEntries(indexedAssetEntries));
+  }
+
+  private setIndexedAssets(indexedAssets: IndexedAssets) {
     // @ts-ignore
-    this.indexedAssets = Object.fromEntries(indexedAssetEntries);
+    this.indexedAssets = indexedAssets;
+    return indexedAssets;
   }
 
   async getId() {
@@ -83,6 +90,10 @@ export class Proof {
     return Object.values(this.truth.providers).find(fact => fact[id])?.[id];
   }
 
+  /**
+   * Return the stringified Proof following the schema:
+   * https://github.com/numbersprotocol/capture-lite/wiki/High-Level-Proof-Schema
+   */
   async stringify() {
     const proofProperties: SerializedProof = {
       assets: await this.getAssets(),
@@ -116,6 +127,20 @@ export class Proof {
     return results.every(result => result);
   }
 
+  getIndexedProofView(): IndexedProofView {
+    return {
+      indexedAssets: this.indexedAssets,
+      truth: this.truth,
+      signatures: this.signatures,
+    };
+  }
+
+  async destroy() {
+    for (const index of Object.keys(this.indexedAssets)) {
+      await this.fileStore.delete(index);
+    }
+  }
+
   static signatureProviders = new Map<string, SignatureVerifier>();
 
   static async from(
@@ -126,6 +151,26 @@ export class Proof {
   ) {
     const proof = new Proof(fileStore, truth, signatures);
     await proof.setAssets(assets);
+    return proof;
+  }
+
+  /**
+   * Create a Proof from IndexedProofView. This method should only be used when
+   * you sure the Proof has already store its raw assets to FileStore by calling
+   * Proof.from() or Proof.parse() before.
+   * @param fileStore The singleton FileStore service.
+   * @param indexedProofView The view without assets with base64.
+   */
+  static fromIndexedProofView(
+    fileStore: FileStore,
+    indexedProofView: IndexedProofView
+  ) {
+    const proof = new Proof(
+      fileStore,
+      indexedProofView.truth,
+      indexedProofView.signatures
+    );
+    proof.setIndexedAssets(indexedProofView.indexedAssets);
     return proof;
   }
 
@@ -149,26 +194,26 @@ export interface Assets {
   [base64: string]: AssetMeta;
 }
 
-interface IndexedAssets {
+interface IndexedAssets extends Tuple {
   [index: string]: AssetMeta;
 }
 
-export interface AssetMeta {
+export interface AssetMeta extends Tuple {
   readonly mimeType: MimeType;
 }
 
-export interface Truth {
+export interface Truth extends Tuple {
   readonly timestamp: number;
   readonly providers: TruthProviders;
 }
 
-interface TruthProviders {
+interface TruthProviders extends Tuple {
   [id: string]: Facts;
 }
 
-export type Facts = {
-  [id in DefaultFactId | string]: boolean | number | string | undefined;
-};
+export interface Facts extends Tuple {
+  [id: string]: boolean | number | string | undefined;
+}
 
 export function isFacts(value: any): value is Facts {
   if (!(value instanceof Object)) {
@@ -194,11 +239,11 @@ export const enum DefaultFactId {
   GEOLOCATION_LONGITUDE = 'GEOLOCATION_LONGITUDE',
 }
 
-export interface Signatures {
+export interface Signatures extends Tuple {
   [id: string]: Signature;
 }
 
-export interface Signature {
+export interface Signature extends Tuple {
   readonly signature: string;
   readonly publicKey: string;
 }
@@ -236,4 +281,10 @@ interface SignatureVerifier {
     signature: string,
     publicKey: string
   ): boolean | Promise<boolean>;
+}
+
+export interface IndexedProofView extends Tuple {
+  indexedAssets: IndexedAssets;
+  truth: Truth;
+  signatures: Signatures;
 }
