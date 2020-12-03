@@ -65,8 +65,8 @@
                 *ngFor="let capture of captureByDate.value"
                 class="square-image-tile"
                 [style]="
-                  'background-image: url(' +
-                  capture.proofWithThumbnailAndOld?.thumbnailDataUrl! +
+                  'background-image: url(data:image/*;base64,' +
+                  (capture.proofWithThumbnail.thumbnailBase64 | async)! +
                   ');'
                 "
                 [routerLink]="['asset', { id: capture.asset.id }]"

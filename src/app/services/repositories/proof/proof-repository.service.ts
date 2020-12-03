@@ -1,40 +1,40 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
-import { Tuple } from '../../database/table/table';
-import { Proof } from './proof';
+import { FileStore } from '../../file-store/file-store.service';
+import { IndexedProofView, Proof } from './proof';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProofRepository {
-  private readonly id = 'proof';
-  private readonly table = this.database.getTable<StringifiedProof>(this.id);
+  private readonly id = ProofRepository.name;
+  private readonly table = this.database.getTable<IndexedProofView>(this.id);
 
-  constructor(private readonly database: Database) {}
+  constructor(
+    private readonly database: Database,
+    private readonly fileStore: FileStore
+  ) {}
 
   getAll$() {
     return this.table.queryAll$().pipe(
-      map(stringifiedProofs =>
-        stringifiedProofs.map(({ stringified }) => stringified)
-      ),
-      map(stringifieds =>
-        stringifieds.map(stringified => Proof.parse(stringified))
-      )
+      map(indexedProofViews => {
+        return indexedProofViews.map(view =>
+          Proof.fromIndexedProofView(this.fileStore, view)
+        );
+      })
     );
   }
 
   async add(proof: Proof) {
-    await this.table.insert([{ stringified: proof.stringify() }]);
+    await this.table.insert([proof.getIndexedProofView()]);
     return proof;
   }
 
   async remove(proof: Proof) {
-    await this.table.delete([{ stringified: proof.stringify() }]);
-    return proof;
+    await Promise.all([
+      this.table.delete([proof.getIndexedProofView()]),
+      proof.destroy(),
+    ]);
   }
-}
-
-interface StringifiedProof extends Tuple {
-  stringified: string;
 }

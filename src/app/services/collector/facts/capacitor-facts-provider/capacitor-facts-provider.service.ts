@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { Inject, Injectable } from '@angular/core';
+import { GeolocationPlugin, Plugins } from '@capacitor/core';
+import { GEOLOCATION_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import {
   Assets,
@@ -8,16 +9,20 @@ import {
 } from '../../../repositories/proof/proof';
 import { FactsProvider } from '../facts-provider';
 
-const { Device, Geolocation } = Plugins;
+const { Device } = Plugins;
 
 @Injectable({
   providedIn: 'root',
 })
 export class CapacitorFactsProvider implements FactsProvider {
-  private readonly preferences = this.preferenceManager.getPreferences(name);
-  readonly id = name;
+  readonly id = CapacitorFactsProvider.name;
+  private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
-  constructor(private readonly preferenceManager: PreferenceManager) {}
+  constructor(
+    @Inject(GEOLOCATION_PLUGIN)
+    private readonly geolocationPlugin: GeolocationPlugin,
+    private readonly preferenceManager: PreferenceManager
+  ) {}
 
   async provide(_: Assets): Promise<Facts> {
     const deviceInfo = await this.collectDeviceInfo();
@@ -44,11 +49,11 @@ export class CapacitorFactsProvider implements FactsProvider {
   private async collectLocationInfo() {
     const defaultGeolocationAge = 600000;
     const defaultGeolocationTimeout = 10000;
-    const isLocationInfoCollectionEnabled = await this.isLocationInfoCollectionEnabled();
+    const isLocationInfoCollectionEnabled = await this.isGeolocationInfoCollectionEnabled();
     if (!isLocationInfoCollectionEnabled) {
       return;
     }
-    return Geolocation.getCurrentPosition({
+    return this.geolocationPlugin.getCurrentPosition({
       enableHighAccuracy: true,
       maximumAge: defaultGeolocationAge,
       timeout: defaultGeolocationTimeout,
@@ -67,15 +72,15 @@ export class CapacitorFactsProvider implements FactsProvider {
     return this.preferences.setBoolean(PrefKeys.COLLECT_DEVICE_INFO, enable);
   }
 
-  isLocationInfoCollectionEnabled$() {
+  isGeolocationInfoCollectionEnabled$() {
     return this.preferences.getBoolean$(PrefKeys.COLLECT_LOCATION_INFO, true);
   }
 
-  async isLocationInfoCollectionEnabled() {
+  async isGeolocationInfoCollectionEnabled() {
     return this.preferences.getBoolean(PrefKeys.COLLECT_LOCATION_INFO, true);
   }
 
-  async setLocationInfoCollection(enable: boolean) {
+  async setGeolocationInfoCollection(enable: boolean) {
     return this.preferences.setBoolean(PrefKeys.COLLECT_LOCATION_INFO, enable);
   }
 }

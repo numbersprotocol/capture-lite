@@ -1,5 +1,8 @@
-import { Inject, Injectable, Type } from '@angular/core';
-import { Table, TABLE_IMPL, Tuple } from './table/table';
+import { Inject, Injectable } from '@angular/core';
+import { FilesystemPlugin } from '@capacitor/core';
+import { FILESYSTEM_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
+import { CapacitorFilesystemTable } from './table/capacitor-filesystem-table/capacitor-filesystem-table';
+import { Table, Tuple } from './table/table';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +11,8 @@ export class Database {
   private readonly tables = new Map<string, Table<any>>();
 
   constructor(
-    @Inject(TABLE_IMPL) private readonly TableImpl: Type<Table<any>>
+    @Inject(FILESYSTEM_PLUGIN)
+    private readonly filesystemPlugin: FilesystemPlugin
   ) {}
 
   getTable<T extends Tuple>(id: string): Table<T> {
@@ -20,7 +24,7 @@ export class Database {
   }
 
   private createTable<T extends Tuple>(id: string): Table<T> {
-    const created = new this.TableImpl(id);
+    const created = new CapacitorFilesystemTable<T>(id, this.filesystemPlugin);
     this.tables.set(id, created);
     return created;
   }

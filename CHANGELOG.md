@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.9.3 - 2020-12-03
+
+### Changed
+
+#### UI/UX
+
+- Remove confusing hash on collecting notifications.
+
+#### Code Quality
+
+- Migrate to Node 14.x. #279
+- Add tests for `CapacitorFactsProvider`.
+- Add tests for `WebCryptoApiSignatureProvider`.
+- Remove `MemoryTable` by mocking Capacitor `Filesystem` plugin. #42
+- Implement `FileStore` to randomly and safely store files with base64 string.
+- Extract `serializeSortedSignedTargets` method from `Proof` class and `CollectorService`.
+
+### Fixed
+
+- Fix warning: Form Submission Canceled. #251
+- Fix captures cannot be stored on mobile devices. #283
+  - Extract binary (base64) string from `Proof.assets` property.
+  - Remove the proof after sending the PostCapture.
+  - Improve the performance of Proof saving and loading.
+  - Reduce the memory use with the operations on `Proof` instances.
+  - Use `async` pipe to resolve `Proof` thumbnail independently.
+  - Refresh captures on home page only when a `Proof` get published.
+- Fix `CapacitorFilesystemTable.initialize` may cause a race condition.
+
 ## 0.9.2 - 2020-12-02
 
 ### Changed
@@ -27,8 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- WORKAROUND: Store expired PostCapture with a very fragile implementation. #229
-- WORKAROUND: Polling to get inbox badge count. #190
+- **WORKAROUND**: Store expired PostCapture with a very fragile implementation. #229
+- **WORKAROUND**: Polling to get inbox badge count. #190
 - Crop image with fixed ratio. #235
 - Open dashboard link on clicking asset ID. #197
 
