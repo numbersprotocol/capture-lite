@@ -28,14 +28,18 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   private async initialize() {
-    if (this.hasInitialized) {
-      return;
-    }
-    if (!(await this.hasCreatedJson())) {
-      await this.createEmptyJson();
-    }
-    await this.loadJson();
-    this.hasInitialized = true;
+    return CapacitorFilesystemTable.initializationMutex.runExclusive(
+      async () => {
+        if (this.hasInitialized) {
+          return;
+        }
+        if (!(await this.hasCreatedJson())) {
+          await this.createEmptyJson();
+        }
+        await this.loadJson();
+        this.hasInitialized = true;
+      }
+    );
   }
 
   private async hasCreatedJson() {
@@ -77,7 +81,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   async insert(tuples: T[]) {
-    return this.withLock(async () => {
+    return this.mutex.runExclusive(async () => {
       assertNoDuplicatedTuples(tuples);
       this.assertNoConflictWithExistedTuples(tuples);
       await this.initialize();
@@ -95,7 +99,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   async delete(tuples: T[]) {
-    return this.withLock(async () => {
+    return this.mutex.runExclusive(async () => {
       this.assertTuplesExist(tuples);
       await this.initialize();
       const afterDeletion = this.tuples$.value.filter(
@@ -137,15 +141,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     return this.tuples$.complete();
   }
 
-  private async withLock<K>(action: () => Promise<K>) {
-    const release = await this.mutex.acquire();
-    try {
-      // Await for the action to finish before releasing the lock.
-      return await action();
-    } finally {
-      release();
-    }
-  }
+  private static readonly initializationMutex = new Mutex();
 }
 
 function assertNoDuplicatedTuples<T>(tuples: T[]) {

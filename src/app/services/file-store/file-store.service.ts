@@ -19,21 +19,23 @@ export class FileStore {
   ) {}
 
   private async initialize() {
-    if (this.hasInitialized) {
-      return;
-    }
-    const dirs = await this.filesystemPlugin.readdir({
-      directory: this.directory,
-      path: '',
-    });
-    if (!dirs.files.includes(this.rootDir)) {
-      await this.filesystemPlugin.mkdir({
+    return this.mutex.runExclusive(async () => {
+      if (this.hasInitialized) {
+        return;
+      }
+      const dirs = await this.filesystemPlugin.readdir({
         directory: this.directory,
-        path: this.rootDir,
-        recursive: true,
+        path: '',
       });
-    }
-    this.hasInitialized = true;
+      if (!dirs.files.includes(this.rootDir)) {
+        await this.filesystemPlugin.mkdir({
+          directory: this.directory,
+          path: this.rootDir,
+          recursive: true,
+        });
+      }
+      this.hasInitialized = true;
+    });
   }
 
   async read(index: string) {
@@ -47,8 +49,8 @@ export class FileStore {
 
   async write(base64: string) {
     const index = await sha256WithBase64(base64);
-    return this.withLock(async () => {
-      await this.initialize();
+    await this.initialize();
+    return this.mutex.runExclusive(async () => {
       await this.filesystemPlugin.writeFile({
         directory: this.directory,
         path: `${this.rootDir}/${index}`,
@@ -60,8 +62,8 @@ export class FileStore {
   }
 
   async delete(index: string) {
-    return this.withLock(async () => {
-      await this.initialize();
+    await this.initialize();
+    return this.mutex.runExclusive(async () => {
       await this.filesystemPlugin.deleteFile({
         directory: this.directory,
         path: `${this.rootDir}/${index}`,
@@ -80,7 +82,7 @@ export class FileStore {
 
   async clear() {
     await this.initialize();
-    return this.withLock(async () => {
+    return this.mutex.runExclusive(async () => {
       this.hasInitialized = false;
       await this.filesystemPlugin.rmdir({
         directory: this.directory,
@@ -88,15 +90,5 @@ export class FileStore {
         recursive: true,
       });
     });
-  }
-
-  private async withLock<K>(action: () => Promise<K>) {
-    const release = await this.mutex.acquire();
-    try {
-      // Await for the action to finish before releasing the lock.
-      return await action();
-    } finally {
-      release();
-    }
   }
 }
