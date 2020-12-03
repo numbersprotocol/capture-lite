@@ -49,6 +49,12 @@ mat-toolbar {
       border-color: deepskyblue;
     }
 
+    button.inSendProgress {
+      color: white;
+      border-color: deepskyblue;
+      background-color: deepskyblue;
+    }
+
     button.returned {
       color: white;
       border-color: var(--ion-color-danger);

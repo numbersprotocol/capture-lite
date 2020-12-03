@@ -45,7 +45,10 @@ export class ActivityPage {
           return Status.Returned;
         }
         if (!activity.fulfilled_at) {
-          return Status.InProgress;
+          if (activity.receiver_email === email) {
+            return Status.InProgress;
+          }
+          return Status.InSendProgress;
         }
         if (activity.sender === email) {
           return Status.Delivered;
@@ -58,6 +61,7 @@ export class ActivityPage {
 }
 
 enum Status {
+  InSendProgress = 'inSendProgress',
   InProgress = 'inProgress',
   Returned = 'returned',
   Delivered = 'delivered',
