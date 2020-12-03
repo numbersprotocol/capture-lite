@@ -297,6 +297,7 @@ export interface Transaction {
     id: string;
   };
   sender: string;
+  receiver_email: string;
   created_at: string;
   expired: boolean;
   fulfilled_at?: null | string;
