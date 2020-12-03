@@ -1,0 +1,115 @@
+mat-toolbar {
+  color: white;
+
+  .mat-icon {
+    color: white;
+  }
+
+  span {
+    color: white;
+    padding-right: 40px;
+  }
+}
+.page-content {
+  padding: 0 0 16px 0;
+
+  .top-time {
+    width: 90vw;
+    margin-top: 16px;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    text-align: center;
+  }
+
+  button.send-button {
+    width: 90vw;
+    margin-top: 16px;
+    margin-left: 5vw;
+    margin-right: 5vw;
+
+    .send-button-wrapper {
+      display: flex;
+      align-items: center;
+
+      .avatar {
+        height: 32px;
+        width: 32px;
+        margin: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        object-fit: cover;
+        background-image: url('https://gravatar.com/avatar/8db683da3c728970bb776f6cc4048fd2?s=400&d=mp&r=x');
+        background-size: cover;
+      }
+    }
+  }
+
+  button {
+    flex-shrink: 0;
+  }
+
+  button.accepted {
+    color: white;
+    border-color: #4cd964;
+    background-color: #4cd964;
+  }
+
+  button.delivered {
+    color: mediumseagreen;
+    border-color: mediumseagreen;
+  }
+
+  button.inProgress {
+    color: deepskyblue;
+    border-color: deepskyblue;
+  }
+
+  button.inSendProgress {
+    color: white;
+    border-color: deepskyblue;
+    background-color: deepskyblue;
+  }
+
+  button.returned {
+    color: white;
+    border-color: var(--ion-color-danger);
+    background-color: #e31587;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.transaction-card {
+  width: 90vw;
+  margin-top: 16px;
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+mat-card img {
+  // max-width: 100%;
+  // width: 100%;
+  width: 50%;
+  margin: 10% 25%;
+}
+
+form mat-form-field {
+  width: 100%;
+  height: 100%;
+
+  textarea {
+    overflow: hidden;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
