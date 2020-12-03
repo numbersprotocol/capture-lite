@@ -5,9 +5,11 @@ import {
   arrayBufferToString,
   base64ToArrayBuffer,
   base64ToBlob,
+  base64ToString,
   blobToBase64,
   hexToArrayBuffer,
   stringToArrayBuffer,
+  stringToBase64,
 } from './encoding';
 
 describe('encoding', () => {
@@ -37,5 +39,12 @@ describe('encoding', () => {
 
     const blob = await base64ToBlob(base64, mimeType);
     expect(await blobToBase64(blob)).toEqual(base64);
+  });
+
+  it('should convert between string and base64', () => {
+    const str = 'hello';
+
+    const base64 = stringToBase64(str);
+    expect(base64ToString(base64)).toEqual(str);
   });
 });

@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { MimeType } from '../../../utils/mime-type';
+import { FileStore } from '../../file-store/file-store.service';
 import {
   AssetMeta,
   Assets,
@@ -15,14 +16,26 @@ describe('ProofRepository', () => {
   let repo: ProofRepository;
   let proof1: Proof;
   let proof2: Proof;
+  let fileStore: FileStore;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
+    fileStore = TestBed.inject(FileStore);
     repo = TestBed.inject(ProofRepository);
-    proof1 = new Proof(PROOF1_ASSETS, PROOF1_TRUTH, PROOF1_SIGNATURES_VALID);
-    proof2 = new Proof(PROOF2_ASSETS, PROOF2_TRUTH, PROOF2_SIGNATURES_INVALID);
+    proof1 = await Proof.from(
+      fileStore,
+      PROOF1_ASSETS,
+      PROOF1_TRUTH,
+      PROOF1_SIGNATURES_VALID
+    );
+    proof2 = await Proof.from(
+      fileStore,
+      PROOF2_ASSETS,
+      PROOF2_TRUTH,
+      PROOF2_SIGNATURES_INVALID
+    );
   });
 
   it('should be created', () => expect(repo).toBeTruthy());
@@ -46,7 +59,8 @@ describe('ProofRepository', () => {
   it('should not emit removed proofs', async done => {
     await repo.add(proof1);
     await repo.add(proof2);
-    const sameProof1 = new Proof(
+    const sameProof1 = await Proof.from(
+      fileStore,
       PROOF1_ASSETS,
       PROOF1_TRUTH,
       PROOF1_SIGNATURES_VALID

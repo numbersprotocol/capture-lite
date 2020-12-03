@@ -1,15 +1,13 @@
 import {
   FilesystemDirectory,
   FilesystemEncoding,
-  Plugins,
+  FilesystemPlugin,
 } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
 import { equals } from 'lodash/fp';
 import { BehaviorSubject, defer } from 'rxjs';
 import { concatMapTo } from 'rxjs/operators';
 import { Table, Tuple } from '../table';
-
-const { Filesystem } = Plugins;
 
 export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   private readonly directory = FilesystemDirectory.Data;
@@ -18,7 +16,10 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   private hasInitialized = false;
   private readonly mutex = new Mutex();
 
-  constructor(readonly id: string) {}
+  constructor(
+    readonly id: string,
+    private readonly filesystemPlugin: FilesystemPlugin
+  ) {}
 
   queryAll$() {
     return defer(() => this.initialize()).pipe(
@@ -27,28 +28,33 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   private async initialize() {
-    if (this.hasInitialized) {
-      return;
-    }
-    if (!(await this.hasCreatedJson())) {
-      await this.createEmptyJson();
-    }
-    await this.loadJson();
-    this.hasInitialized = true;
+    return CapacitorFilesystemTable.initializationMutex.runExclusive(
+      async () => {
+        if (this.hasInitialized) {
+          return;
+        }
+        if (!(await this.hasCreatedJson())) {
+          await this.createEmptyJson();
+        }
+        await this.loadJson();
+        this.hasInitialized = true;
+      }
+    );
   }
 
   private async hasCreatedJson() {
-    const dirs = await Filesystem.readdir({
+    const dirs = await this.filesystemPlugin.readdir({
       directory: this.directory,
       path: '',
     });
     if (!dirs.files.includes(this.rootDir)) {
-      await Filesystem.mkdir({
+      await this.filesystemPlugin.mkdir({
         directory: this.directory,
         path: this.rootDir,
+        recursive: true,
       });
     }
-    const files = await Filesystem.readdir({
+    const files = await this.filesystemPlugin.readdir({
       directory: this.directory,
       path: this.rootDir,
     });
@@ -56,7 +62,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   private async createEmptyJson() {
-    return Filesystem.writeFile({
+    return this.filesystemPlugin.writeFile({
       directory: this.directory,
       path: `${this.rootDir}/${this.id}.json`,
       data: JSON.stringify([]),
@@ -66,7 +72,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   private async loadJson() {
-    const result = await Filesystem.readFile({
+    const result = await this.filesystemPlugin.readFile({
       directory: this.directory,
       path: `${this.rootDir}/${this.id}.json`,
       encoding: FilesystemEncoding.UTF8,
@@ -75,7 +81,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   async insert(tuples: T[]) {
-    return this.withLock(async () => {
+    return this.mutex.runExclusive(async () => {
       assertNoDuplicatedTuples(tuples);
       this.assertNoConflictWithExistedTuples(tuples);
       await this.initialize();
@@ -93,7 +99,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   async delete(tuples: T[]) {
-    return this.withLock(async () => {
+    return this.mutex.runExclusive(async () => {
       this.assertTuplesExist(tuples);
       await this.initialize();
       const afterDeletion = this.tuples$.value.filter(
@@ -115,7 +121,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   private async dumpJson() {
-    return Filesystem.writeFile({
+    return this.filesystemPlugin.writeFile({
       directory: this.directory,
       path: `${this.rootDir}/${this.id}.json`,
       data: JSON.stringify(this.tuples$.value),
@@ -127,7 +133,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   async drop() {
     this.hasInitialized = false;
     if (await this.hasCreatedJson()) {
-      await Filesystem.deleteFile({
+      await this.filesystemPlugin.deleteFile({
         directory: this.directory,
         path: `${this.rootDir}/${this.id}.json`,
       });
@@ -135,15 +141,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     return this.tuples$.complete();
   }
 
-  private async withLock<K>(action: () => Promise<K>) {
-    const release = await this.mutex.acquire();
-    try {
-      // Await for the action to finish before releasing the lock.
-      return await action();
-    } finally {
-      release();
-    }
-  }
+  private static readonly initializationMutex = new Mutex();
 }
 
 function assertNoDuplicatedTuples<T>(tuples: T[]) {

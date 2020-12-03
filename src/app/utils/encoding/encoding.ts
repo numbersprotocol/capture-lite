@@ -50,3 +50,23 @@ export async function blobToBase64(blob: Blob) {
     fileReader.readAsDataURL(blob);
   });
 }
+
+export function stringToBase64(str: string) {
+  return btoa(
+    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+      String.fromCharCode(parseInt(`0x${p1}`, 16))
+    )
+  );
+}
+
+export function base64ToString(base64: string) {
+  return decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(c => {
+        // tslint:disable-next-line: no-magic-numbers
+        return `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`;
+      })
+      .join('')
+  );
+}

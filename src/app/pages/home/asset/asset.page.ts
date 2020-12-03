@@ -35,49 +35,40 @@ export class AssetPage {
     switchMap(id => this.assetRepository.getById$(id)),
     isNonNullable()
   );
-  private readonly proofsWithOld$ = this.proofRepository.getAll$().pipe(
-    concatMap(proofs =>
-      Promise.all(
-        proofs.map(async proof => ({
-          proof,
-          oldProof: await getOldProof(proof),
-        }))
+  private readonly proofsWithOld$ = this.proofRepository
+    .getAll$()
+    .pipe(
+      map(proofs =>
+        proofs.map(proof => ({ proof, oldProof: getOldProof(proof) }))
       )
-    )
-  );
+    );
   readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
-    map(([asset, proofsWithThumbnailAndOld]) => ({
+    map(([asset, proofsWithOld]) => ({
       asset,
-      proofWithThumbnailAndOld: proofsWithThumbnailAndOld.find(
+      proofWithOld: proofsWithOld.find(
         p => p.oldProof.hash === asset.proof_hash
       ),
     })),
     isNonNullable()
   );
   readonly base64Src$ = this.capture$.pipe(
-    map(capture => capture.proofWithThumbnailAndOld),
+    map(capture => capture.proofWithOld),
     isNonNullable(),
-    map(
-      p =>
-        `data:${Object.values(p.proof.assets)[0].mimeType};base64,${
-          Object.keys(p.proof.assets)[0]
-        }`
-    )
+    concatMap(async p => {
+      const assets = await p.proof.getAssets();
+      return `data:${Object.values(assets)[0].mimeType};base64,${
+        Object.keys(assets)[0]
+      }`;
+    })
   );
   readonly timestamp$ = this.capture$.pipe(
-    map(capture => capture.proofWithThumbnailAndOld?.proof.timestamp)
+    map(capture => capture.proofWithOld?.proof.timestamp)
   );
   readonly latitude$ = this.capture$.pipe(
-    map(
-      capture =>
-        `${capture.proofWithThumbnailAndOld?.proof.geolocationLatitude}`
-    )
+    map(capture => `${capture.proofWithOld?.proof.geolocationLatitude}`)
   );
   readonly longitude$ = this.capture$.pipe(
-    map(
-      capture =>
-        `${capture.proofWithThumbnailAndOld?.proof.geolocationLongitude}`
-    )
+    map(capture => `${capture.proofWithOld?.proof.geolocationLongitude}`)
   );
 
   constructor(
@@ -134,7 +125,7 @@ export class AssetPage {
                 this.assetRepository.remove$(asset),
                 this.proofRepository.remove(
                   // tslint:disable-next-line: no-non-null-assertion
-                  capture.proofWithThumbnailAndOld!.proof
+                  capture.proofWithOld!.proof
                 ),
               ])
             ),

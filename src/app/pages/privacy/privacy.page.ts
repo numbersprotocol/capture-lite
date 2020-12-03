@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { CapacitorFactsProvider } from '../../services/collector/facts/capacitor-provider/capacitor-facts-provider.service';
+import { CapacitorFactsProvider } from '../../services/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -10,7 +10,7 @@ import { CapacitorFactsProvider } from '../../services/collector/facts/capacitor
 })
 export class PrivacyPage {
   readonly isDeviceInfoCollectionEnabled$ = this.capacitorFactsProvider.isDeviceInfoCollectionEnabled$();
-  readonly isLocationInfoCollectionEnabled$ = this.capacitorFactsProvider.isLocationInfoCollectionEnabled$();
+  readonly isLocationInfoCollectionEnabled$ = this.capacitorFactsProvider.isGeolocationInfoCollectionEnabled$();
 
   constructor(
     private readonly capacitorFactsProvider: CapacitorFactsProvider
@@ -21,6 +21,6 @@ export class PrivacyPage {
   }
 
   async setLocationInfoCollection(enable: boolean) {
-    return this.capacitorFactsProvider.setLocationInfoCollection(enable);
+    return this.capacitorFactsProvider.setGeolocationInfoCollection(enable);
   }
 }

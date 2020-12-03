@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { sortObjectDeeplyByKey } from '../../utils/immutable/immutable';
+import { FileStore } from '../file-store/file-store.service';
 import { NotificationService } from '../notification/notification.service';
 import {
   Assets,
+  getSerializedSortedSignedTargets,
   Proof,
   Signatures,
   SignedTargets,
@@ -23,20 +24,18 @@ export class CollectorService {
   constructor(
     private readonly notificationService: NotificationService,
     private readonly translocoService: TranslocoService,
-    private readonly proofRepository: ProofRepository
+    private readonly proofRepository: ProofRepository,
+    private readonly fileStore: FileStore
   ) {}
 
   async runAndStore(assets: Assets) {
-    const simplifiedHashLength = 6;
     const notification = await this.notificationService.notify(
       this.translocoService.translate('storingAssets'),
-      this.translocoService.translate('message.storingAssets', {
-        hash: Object.keys(assets)[0].substr(0, simplifiedHashLength),
-      })
+      this.translocoService.translate('message.storingAssets')
     );
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
-    const proof = new Proof(assets, truth, signatures);
+    const proof = await Proof.from(this.fileStore, assets, truth, signatures);
     await this.proofRepository.add(proof);
     notification.cancel();
     return proof;
@@ -56,15 +55,15 @@ export class CollectorService {
     };
   }
 
-  private async signTargets(target: SignedTargets): Promise<Signatures> {
-    const serializedSortedSignTargets = JSON.stringify(
-      sortObjectDeeplyByKey(target as any).toJSON()
+  private async signTargets(targets: SignedTargets): Promise<Signatures> {
+    const serializedSortedSignedTargets = getSerializedSortedSignedTargets(
+      targets
     );
     return Object.fromEntries(
       await Promise.all(
         [...this.signatureProviders].map(async provider => [
           provider.id,
-          await provider.provide(serializedSortedSignTargets),
+          await provider.provide(serializedSortedSignedTargets),
         ])
       )
     );

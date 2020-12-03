@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, zip } from 'rxjs';
+import { combineLatest, defer, forkJoin, zip } from 'rxjs';
 import { concatMap, concatMapTo, first, map, switchMap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../services/confirm-alert/confirm-alert.service';
@@ -25,16 +25,13 @@ export class SendingPostCapturePage {
     switchMap(id => this.assetRepository.getById$(id)),
     isNonNullable()
   );
-  private readonly proofsWithOld$ = this.proofRepository.getAll$().pipe(
-    concatMap(proofs =>
-      Promise.all(
-        proofs.map(async proof => ({
-          proof,
-          oldProof: await getOldProof(proof),
-        }))
+  private readonly proofsWithOld$ = this.proofRepository
+    .getAll$()
+    .pipe(
+      map(proofs =>
+        proofs.map(proof => ({ proof, oldProof: getOldProof(proof) }))
       )
-    )
-  );
+    );
   readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
     map(([asset, proofsWithThumbnailAndOld]) => ({
       asset,
@@ -47,12 +44,12 @@ export class SendingPostCapturePage {
   readonly base64Src$ = this.capture$.pipe(
     map(capture => capture.proofWithThumbnailAndOld),
     isNonNullable(),
-    map(
-      p =>
-        `data:${Object.values(p.proof.assets)[0].mimeType};base64,${
-          Object.keys(p.proof.assets)[0]
-        }`
-    )
+    concatMap(async p => {
+      const assets = await p.proof.getAssets();
+      return `data:${Object.values(assets)[0].mimeType};base64,${
+        Object.keys(assets)[0]
+      }`;
+    })
   );
   readonly contact$ = this.route.paramMap.pipe(
     map(params => params.get('contact')),
@@ -112,8 +109,15 @@ export class SendingPostCapturePage {
   }
 
   private removeAsset$() {
-    return this.asset$.pipe(
-      concatMap(asset => this.assetRepository.remove$(asset))
+    return zip(this.asset$, this.capture$).pipe(
+      first(),
+      concatMap(([asset, capture]) =>
+        forkJoin([
+          this.assetRepository.remove$(asset),
+          // tslint:disable-next-line: no-non-null-assertion
+          this.proofRepository.remove(capture.proofWithThumbnailAndOld!.proof),
+        ])
+      )
     );
   }
 }

@@ -91,7 +91,7 @@ export class CapacitorStoragePreferences implements Preferences {
   }
 
   async set<T extends boolean | number | string>(key: string, value: T) {
-    return this.withLock(async () => {
+    return this.mutex.runExclusive(async () => {
       await this.storeValue(key, value);
       if (!this.subjects.has(key)) {
         this.subjects.set(key, new BehaviorSubject(value));
@@ -117,15 +117,5 @@ export class CapacitorStoragePreferences implements Preferences {
 
   private toStorageKey(key: string) {
     return `${this.id}_${key}`;
-  }
-
-  private async withLock<K>(action: () => Promise<K>) {
-    const release = await this.mutex.acquire();
-    try {
-      // Await for the action to finish before releasing the lock.
-      return await action();
-    } finally {
-      release();
-    }
   }
 }
