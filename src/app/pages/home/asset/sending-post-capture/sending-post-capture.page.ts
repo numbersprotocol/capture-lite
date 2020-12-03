@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, zip } from 'rxjs';
+import { combineLatest, defer, forkJoin, zip } from 'rxjs';
 import { concatMap, concatMapTo, first, map, switchMap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../services/confirm-alert/confirm-alert.service';
@@ -112,8 +112,15 @@ export class SendingPostCapturePage {
   }
 
   private removeAsset$() {
-    return this.asset$.pipe(
-      concatMap(asset => this.assetRepository.remove$(asset))
+    return zip(this.asset$, this.capture$).pipe(
+      first(),
+      concatMap(([asset, capture]) =>
+        forkJoin([
+          this.assetRepository.remove$(asset),
+          // tslint:disable-next-line: no-non-null-assertion
+          this.proofRepository.remove(capture.proofWithThumbnailAndOld!.proof),
+        ])
+      )
     );
   }
 }
