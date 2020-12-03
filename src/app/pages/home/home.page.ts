@@ -4,7 +4,13 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
 import { combineLatest, interval, of, zip } from 'rxjs';
-import { concatMap, concatMapTo, map, pluck } from 'rxjs/operators';
+import {
+  concatMap,
+  concatMapTo,
+  distinctUntilChanged,
+  map,
+  pluck,
+} from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
 import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
 import { AssetRepository } from '../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
@@ -56,27 +62,30 @@ export class HomePage implements OnInit {
       .getAll$()
       .pipe(map(assets => assets.filter(asset => asset.is_original_owner)));
 
-    const proofsWithThumbnailAndOld$ = this.proofRepository.getAll$().pipe(
+    const proofsWithThumbnail$ = this.proofRepository.getAll$().pipe(
       map(proofs =>
         proofs.map(proof => ({
           proof,
           thumbnailBase64: proof.getThumbnailBase64(),
-          oldProof: getOldProof(proof),
         }))
       )
     );
 
-    return combineLatest([
-      originallyOwnedAssets$,
-      proofsWithThumbnailAndOld$,
-    ]).pipe(
-      map(([assets, proofsWithThumbnailAndOld]) =>
+    return combineLatest([originallyOwnedAssets$, proofsWithThumbnail$]).pipe(
+      map(([assets, proofsWithThumbnail]) =>
         assets.map(asset => ({
           asset,
-          proofWithThumbnailAndOld: proofsWithThumbnailAndOld.find(
-            p => p.oldProof.hash === asset.proof_hash
+          proofWithThumbnail: proofsWithThumbnail.find(
+            p => getOldProof(p.proof).hash === asset.proof_hash
           ),
         }))
+      ),
+      // WORKAROUND: Use the lax comparison for now. We will redefine the flow
+      // to save and show Proofs first, and then publish to DIA backend. See
+      // #212:
+      // https://github.com/numbersprotocol/capture-lite/issues/212
+      distinctUntilChanged(
+        (captures1, captures2) => captures1.length === captures2.length
       )
     );
   }
