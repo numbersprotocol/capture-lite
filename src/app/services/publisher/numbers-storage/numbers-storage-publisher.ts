@@ -26,7 +26,7 @@ export class NumbersStoragePublisher extends Publisher {
   }
 
   async run(proof: Proof) {
-    const oldSignatures = await getOldSignatures(proof);
+    const oldSignatures = getOldSignatures(proof);
     const assetResponse = await this.numbersStorageApi
       .createAsset$(
         Object.keys(await proof.getAssets())[0],

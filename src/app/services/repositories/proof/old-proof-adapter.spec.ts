@@ -32,8 +32,8 @@ describe('old-proof-adapter', () => {
     proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES);
   });
 
-  it('should convert Proof to OldProof', async () => {
-    const oldProof = await getOldProof(proof);
+  it('should convert Proof to OldProof', () => {
+    const oldProof = getOldProof(proof);
 
     expect(oldProof.hash).toEqual(ASSET1_SHA256);
     expect(oldProof.mimeType).toEqual(ASSET1_MIMETYPE);
@@ -56,8 +56,8 @@ describe('old-proof-adapter', () => {
     });
   });
 
-  it('should convert Proof to OldSignatures', async () => {
-    const oldSignatures = await getOldSignatures(proof);
+  it('should convert Proof to OldSignatures', () => {
+    const oldSignatures = getOldSignatures(proof);
 
     expect(oldSignatures.length).toEqual(1);
     expect(oldSignatures[0].proofHash).toEqual(ASSET1_SHA256);

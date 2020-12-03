@@ -1,5 +1,4 @@
 import { flow, groupBy, mapValues } from 'lodash/fp';
-import { sha256WithBase64 } from '../../../utils/crypto/crypto';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
 import { MimeType } from '../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
@@ -17,12 +16,11 @@ import { Proof, Signature } from './proof';
  *   5. EssentialInformation List
  */
 
-export async function getOldProof(proof: Proof): Promise<OldProof> {
-  const oldProofData = Object.entries(await proof.getAssets())[0];
+export function getOldProof(proof: Proof): OldProof {
   return {
-    mimeType: oldProofData[1].mimeType,
+    mimeType: Object.values(proof.indexedAssets)[0].mimeType,
     timestamp: proof.timestamp,
-    hash: await sha256WithBase64(oldProofData[0]),
+    hash: Object.keys(proof.indexedAssets)[0],
   };
 }
 
@@ -30,7 +28,7 @@ export async function getSortedProofInformation(
   proof: Proof
 ): Promise<SortedProofInformation> {
   return {
-    proof: await getOldProof(proof),
+    proof: getOldProof(proof),
     information: createSortedEssentialInformation(proof),
   };
 }
@@ -61,10 +59,8 @@ function createSortedEssentialInformation(
     });
 }
 
-export async function getOldSignatures(proof: Proof): Promise<OldSignature[]> {
-  const assetHash = await sha256WithBase64(
-    Object.entries(await proof.getAssets())[0][0]
-  );
+export function getOldSignatures(proof: Proof): OldSignature[] {
+  const assetHash = Object.keys(proof.indexedAssets)[0];
   return Object.entries(proof.signatures).map(
     ([provider, { signature, publicKey }]) => ({
       provider,

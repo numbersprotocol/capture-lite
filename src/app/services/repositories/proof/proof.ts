@@ -32,6 +32,7 @@ export class Proof {
     return this.getFactValue(DefaultFactId.GEOLOCATION_LONGITUDE);
   }
   readonly indexedAssets: IndexedAssets = {};
+  private readonly thumbnailIndex?: string = undefined;
 
   private constructor(
     private readonly fileStore: FileStore,
@@ -55,6 +56,12 @@ export class Proof {
     return indexedAssets;
   }
 
+  private setThumbnailIndex(thumbnailIndex?: string) {
+    // @ts-ignore
+    this.thumbnailIndex = thumbnailIndex;
+    return thumbnailIndex;
+  }
+
   async getId() {
     return sha256WithString(await this.stringify());
   }
@@ -69,6 +76,9 @@ export class Proof {
   }
 
   async getThumbnailBase64() {
+    if (this.thumbnailIndex) {
+      return this.fileStore.read(this.thumbnailIndex);
+    }
     const thumbnailSize = 200;
     const imageAssetIndex = Object.keys(this.indexedAssets).find(index =>
       this.indexedAssets[index].mimeType.startsWith('image')
@@ -83,7 +93,9 @@ export class Proof {
     const thumbnailBlob = await imageBlobReduce.toBlob(blob, {
       max: thumbnailSize,
     });
-    return blobToBase64(thumbnailBlob);
+    const thumbnailBase64 = await blobToBase64(thumbnailBlob);
+    this.setThumbnailIndex(await this.fileStore.write(thumbnailBase64));
+    return thumbnailBase64;
   }
 
   getFactValue(id: string) {
@@ -132,12 +144,19 @@ export class Proof {
       indexedAssets: this.indexedAssets,
       truth: this.truth,
       signatures: this.signatures,
+      thumbnailIndex: this.thumbnailIndex,
     };
   }
 
   async destroy() {
-    for (const index of Object.keys(this.indexedAssets)) {
-      await this.fileStore.delete(index);
+    await Promise.all(
+      Object.keys(this.indexedAssets).map(index => this.fileStore.delete(index))
+    );
+    if (
+      this.thumbnailIndex &&
+      (await this.fileStore.exists(this.thumbnailIndex))
+    ) {
+      await this.fileStore.delete(this.thumbnailIndex);
     }
   }
 
@@ -171,6 +190,7 @@ export class Proof {
       indexedProofView.signatures
     );
     proof.setIndexedAssets(indexedProofView.indexedAssets);
+    proof.setThumbnailIndex(indexedProofView.thumbnailIndex);
     return proof;
   }
 
@@ -287,4 +307,5 @@ export interface IndexedProofView extends Tuple {
   indexedAssets: IndexedAssets;
   truth: Truth;
   signatures: Signatures;
+  thumbnailIndex?: string;
 }

@@ -35,16 +35,13 @@ export class AssetPage {
     switchMap(id => this.assetRepository.getById$(id)),
     isNonNullable()
   );
-  private readonly proofsWithOld$ = this.proofRepository.getAll$().pipe(
-    concatMap(proofs =>
-      Promise.all(
-        proofs.map(async proof => ({
-          proof,
-          oldProof: await getOldProof(proof),
-        }))
+  private readonly proofsWithOld$ = this.proofRepository
+    .getAll$()
+    .pipe(
+      map(proofs =>
+        proofs.map(proof => ({ proof, oldProof: getOldProof(proof) }))
       )
-    )
-  );
+    );
   readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
     map(([asset, proofsWithThumbnailAndOld]) => ({
       asset,
