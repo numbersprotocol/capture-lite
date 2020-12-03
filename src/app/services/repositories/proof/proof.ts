@@ -75,12 +75,12 @@ export class Proof {
   }
 
   async isVerified() {
-    const signedTarget: SignedTargets = {
+    const signedTargets: SignedTargets = {
       assets: this.assets,
       truth: this.truth,
     };
-    const serializedSortedSignedTargets = JSON.stringify(
-      sortObjectDeeplyByKey(signedTarget as any).toJSON()
+    const serializedSortedSignedTargets = getSerializedSortedSignedTargets(
+      signedTargets
     );
     const results = await Promise.all(
       Object.entries(this.signatures).map(([id, signature]) =>
@@ -188,6 +188,10 @@ interface SerializedProof {
 }
 
 export type SignedTargets = Pick<SerializedProof, 'assets' | 'truth'>;
+
+export function getSerializedSortedSignedTargets(signedTargets: SignedTargets) {
+  return JSON.stringify(sortObjectDeeplyByKey(signedTargets as any).toJSON());
+}
 
 interface SignatureVerifier {
   verify(

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { sortObjectDeeplyByKey } from '../../utils/immutable/immutable';
 import { NotificationService } from '../notification/notification.service';
 import {
   Assets,
+  getSerializedSortedSignedTargets,
   Proof,
   Signatures,
   SignedTargets,
@@ -53,10 +53,9 @@ export class CollectorService {
     };
   }
 
-  private async signTargets(target: SignedTargets): Promise<Signatures> {
-    // TODO: extract getSerializedSortedSignedTarget() to proot.ts
-    const serializedSortedSignedTargets = JSON.stringify(
-      sortObjectDeeplyByKey(target as any).toJSON()
+  private async signTargets(targets: SignedTargets): Promise<Signatures> {
+    const serializedSortedSignedTargets = getSerializedSortedSignedTargets(
+      targets
     );
     return Object.fromEntries(
       await Promise.all(

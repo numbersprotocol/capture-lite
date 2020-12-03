@@ -5,10 +5,12 @@ import {
   Assets,
   DefaultFactId,
   Facts,
+  getSerializedSortedSignedTargets,
   isFacts,
   isSignature,
   Proof,
   Signatures,
+  SignedTargets,
   Truth,
 } from './proof';
 
@@ -190,6 +192,15 @@ describe('Proof utils', () => {
     expect(isSignature(true)).toBeFalse();
     expect(isSignature(2)).toBeFalse();
     expect(isSignature('a')).toBeFalse();
+  });
+
+  it('should get serialized sorted SignedTargets', () => {
+    const signedTargets: SignedTargets = {
+      assets: ASSETS,
+      truth: TRUTH,
+    };
+    const expected = `{"assets":{"${ASSET2_BASE64}":{"mimeType":"${ASSET2_MIMETYPE}"},"${ASSET1_BASE64}":{"mimeType":"${ASSET1_MIMETYPE}"}},"truth":{"providers":{"${CAPACITOR}":{"${DefaultFactId.DEVICE_NAME}":"${DEVICE_NAME_VALUE2}","${DefaultFactId.GEOLOCATION_LATITUDE}":${GEOLOCATION_LATITUDE2},"${DefaultFactId.GEOLOCATION_LONGITUDE}":${GEOLOCATION_LONGITUDE2},"${HUMIDITY}":${HUMIDITY_VALUE}},"${INFO_SNAPSHOT}":{"${DefaultFactId.DEVICE_NAME}":"${DEVICE_NAME_VALUE1}","${DefaultFactId.GEOLOCATION_LATITUDE}":${GEOLOCATION_LATITUDE1},"${DefaultFactId.GEOLOCATION_LONGITUDE}":${GEOLOCATION_LONGITUDE1}}},"timestamp":${TIMESTAMP}}}`;
+    expect(getSerializedSortedSignedTargets(signedTargets)).toEqual(expected);
   });
 });
 
