@@ -121,7 +121,7 @@ export class NumbersStorageApi {
     signatures: OldSignature[],
     tag: string
   ) {
-    const proofMimeType = Object.values(proof.assets)[0].mimeType;
+    const proofMimeType = Object.values(proof.indexedAssets)[0].mimeType;
     return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         zip(

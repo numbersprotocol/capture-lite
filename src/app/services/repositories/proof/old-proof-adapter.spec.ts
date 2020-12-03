@@ -1,5 +1,8 @@
+import { TestBed } from '@angular/core/testing';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { MimeType } from '../../../utils/mime-type';
+import { FileStore } from '../../file-store/file-store.service';
 import {
   AssetMeta,
   Assets,
@@ -19,8 +22,15 @@ import {
 
 describe('old-proof-adapter', () => {
   let proof: Proof;
+  let fileStore: FileStore;
 
-  beforeEach(() => (proof = new Proof(ASSETS, TRUTH, SIGNATURES)));
+  beforeEach(async () => {
+    TestBed.configureTestingModule({
+      imports: [SharedTestingModule],
+    });
+    fileStore = TestBed.inject(FileStore);
+    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES);
+  });
 
   it('should convert Proof to OldProof', async () => {
     const oldProof = await getOldProof(proof);
@@ -59,12 +69,13 @@ describe('old-proof-adapter', () => {
   it('should convert SortedProofInformation with raw Blob to Proof', async () => {
     const blob = await base64ToBlob(ASSET1_BASE64, ASSET1_MIMETYPE);
     const convertedProof = await getProof(
+      fileStore,
       blob,
       SORTED_PROOF_INFORMATION,
       OLD_SIGNATURES
     );
 
-    const assetEntries = Object.entries(convertedProof.assets);
+    const assetEntries = Object.entries(await convertedProof.getAssets());
     expect(assetEntries.length).toEqual(1);
     expect(assetEntries[0][0]).toEqual(ASSET1_BASE64);
     expect(assetEntries[0][1].mimeType).toEqual(ASSET1_MIMETYPE);

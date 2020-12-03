@@ -36,57 +36,57 @@ export class FileStore {
     this.hasInitialized = true;
   }
 
-  async read(hash: string) {
+  async read(index: string) {
     await this.initialize();
     const result = await this.filesystemPlugin.readFile({
       directory: this.directory,
-      path: `${this.rootDir}/${hash}`,
+      path: `${this.rootDir}/${index}`,
     });
     return result.data;
   }
 
   async write(base64: string) {
-    const hash = await sha256WithBase64(base64);
-    await this.initialize();
+    const index = await sha256WithBase64(base64);
     return this.withLock(async () => {
+      await this.initialize();
       await this.filesystemPlugin.writeFile({
         directory: this.directory,
-        path: `${this.rootDir}/${hash}`,
+        path: `${this.rootDir}/${index}`,
         data: base64,
         recursive: true,
       });
-      return hash;
+      return index;
     });
   }
 
-  async delete(hash: string) {
-    await this.initialize();
+  async delete(index: string) {
     return this.withLock(async () => {
+      await this.initialize();
       await this.filesystemPlugin.deleteFile({
         directory: this.directory,
-        path: `${this.rootDir}/${hash}`,
+        path: `${this.rootDir}/${index}`,
       });
     });
   }
 
-  async exists(hash: string) {
+  async exists(index: string) {
     await this.initialize();
     const result = await this.filesystemPlugin.readdir({
       directory: this.directory,
       path: `${this.rootDir}`,
     });
-    return result.files.includes(hash);
+    return result.files.includes(index);
   }
 
   async clear() {
     await this.initialize();
     return this.withLock(async () => {
+      this.hasInitialized = false;
       await this.filesystemPlugin.rmdir({
         directory: this.directory,
         path: this.rootDir,
         recursive: true,
       });
-      this.hasInitialized = false;
     });
   }
 

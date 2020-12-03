@@ -47,12 +47,12 @@ export class SendingPostCapturePage {
   readonly base64Src$ = this.capture$.pipe(
     map(capture => capture.proofWithThumbnailAndOld),
     isNonNullable(),
-    map(
-      p =>
-        `data:${Object.values(p.proof.assets)[0].mimeType};base64,${
-          Object.keys(p.proof.assets)[0]
-        }`
-    )
+    concatMap(async p => {
+      const assets = await p.proof.getAssets();
+      return `data:${Object.values(assets)[0].mimeType};base64,${
+        Object.keys(assets)[0]
+      }`;
+    })
   );
   readonly contact$ = this.route.paramMap.pipe(
     map(params => params.get('contact')),

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
+import { FileStore } from '../file-store/file-store.service';
 import { NotificationService } from '../notification/notification.service';
 import {
   Assets,
@@ -23,7 +24,8 @@ export class CollectorService {
   constructor(
     private readonly notificationService: NotificationService,
     private readonly translocoService: TranslocoService,
-    private readonly proofRepository: ProofRepository
+    private readonly proofRepository: ProofRepository,
+    private readonly fileStore: FileStore
   ) {}
 
   async runAndStore(assets: Assets) {
@@ -33,7 +35,7 @@ export class CollectorService {
     );
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
-    const proof = new Proof(assets, truth, signatures);
+    const proof = await Proof.from(this.fileStore, assets, truth, signatures);
     await this.proofRepository.add(proof);
     notification.cancel();
     return proof;

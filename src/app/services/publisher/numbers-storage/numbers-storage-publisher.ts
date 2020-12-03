@@ -29,7 +29,7 @@ export class NumbersStoragePublisher extends Publisher {
     const oldSignatures = await getOldSignatures(proof);
     const assetResponse = await this.numbersStorageApi
       .createAsset$(
-        Object.keys(proof.assets)[0],
+        Object.keys(await proof.getAssets())[0],
         proof,
         TargetProvider.Numbers,
         '',

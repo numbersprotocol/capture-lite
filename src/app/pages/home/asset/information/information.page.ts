@@ -53,7 +53,10 @@ export class InformationPage {
   readonly mimeType$ = this.capture$.pipe(
     map(capture => capture.proofWithOld),
     isNonNullable(),
-    map(proofWithOld => Object.values(proofWithOld.proof.assets)[0].mimeType)
+    map(
+      proofWithOld =>
+        Object.values(proofWithOld.proof.indexedAssets)[0].mimeType
+    )
   );
 
   readonly facts$ = this.capture$.pipe(

@@ -33,7 +33,7 @@ describe('CollectorService', () => {
 
   it('should get the stored proof after run', async () => {
     const proof = await service.runAndStore(ASSETS);
-    expect(proof.assets).toEqual(ASSETS);
+    expect(await proof.getAssets()).toEqual(ASSETS);
   });
 
   it('should remove added truth providers', async () => {

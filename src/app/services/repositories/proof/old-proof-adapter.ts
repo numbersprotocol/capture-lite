@@ -3,6 +3,7 @@ import { sha256WithBase64 } from '../../../utils/crypto/crypto';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
 import { MimeType } from '../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
+import { FileStore } from '../../file-store/file-store.service';
 import { Proof, Signature } from './proof';
 
 /**
@@ -17,7 +18,7 @@ import { Proof, Signature } from './proof';
  */
 
 export async function getOldProof(proof: Proof): Promise<OldProof> {
-  const oldProofData = Object.entries(proof.assets)[0];
+  const oldProofData = Object.entries(await proof.getAssets())[0];
   return {
     mimeType: oldProofData[1].mimeType,
     timestamp: proof.timestamp,
@@ -61,7 +62,9 @@ function createSortedEssentialInformation(
 }
 
 export async function getOldSignatures(proof: Proof): Promise<OldSignature[]> {
-  const assetHash = await sha256WithBase64(Object.entries(proof.assets)[0][0]);
+  const assetHash = await sha256WithBase64(
+    Object.entries(await proof.getAssets())[0][0]
+  );
   return Object.entries(proof.signatures).map(
     ([provider, { signature, publicKey }]) => ({
       provider,
@@ -73,6 +76,7 @@ export async function getOldSignatures(proof: Proof): Promise<OldSignature[]> {
 }
 
 export async function getProof(
+  fileStore: FileStore,
   raw: Blob,
   sortedProofInformation: SortedProofInformation,
   oldSignatures: OldSignature[]
@@ -99,7 +103,8 @@ export async function getProof(
     }))
   )(groupObjectsBy(oldSignatures, 'provider'));
 
-  return new Proof(
+  return Proof.from(
+    fileStore,
     { [base64]: { mimeType: raw.type as MimeType } },
     { timestamp: sortedProofInformation.proof.timestamp, providers },
     signatures
