@@ -57,15 +57,12 @@ export class HomePage implements OnInit {
       .pipe(map(assets => assets.filter(asset => asset.is_original_owner)));
 
     const proofsWithThumbnailAndOld$ = this.proofRepository.getAll$().pipe(
-      concatMap(proofs =>
-        Promise.all(
-          proofs.map(async proof => ({
-            proof,
-            // FIXME: do not await async, use async pipe
-            thumbnailDataUrl: `data:image/*;base64,${await proof.getThumbnailBase64()}`,
-            oldProof: getOldProof(proof),
-          }))
-        )
+      map(proofs =>
+        proofs.map(proof => ({
+          proof,
+          thumbnailBase64: proof.getThumbnailBase64(),
+          oldProof: getOldProof(proof),
+        }))
       )
     );
 
