@@ -11,20 +11,10 @@ import { SignatureProvider } from '../signature-provider';
   providedIn: 'root',
 })
 export class WebCryptoApiSignatureProvider implements SignatureProvider {
-  private readonly preferences = this.preferenceManager.getPreferences(name);
-  readonly id = name;
+  readonly id = WebCryptoApiSignatureProvider.name;
+  private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
-
-  async provide(serializedSortedSignTargets: string): Promise<Signature> {
-    const privateKey = await this.getPrivateKey();
-    const signature = await signWithSha256AndEcdsa(
-      serializedSortedSignTargets,
-      privateKey
-    );
-    const publicKey = await this.getPublicKey();
-    return { signature, publicKey };
-  }
 
   async initialize() {
     const originalPublicKey = await this.getPublicKey();
@@ -34,6 +24,17 @@ export class WebCryptoApiSignatureProvider implements SignatureProvider {
       await this.preferences.setString(PrefKeys.PUBLIC_KEY, publicKey);
       await this.preferences.setString(PrefKeys.PRIVATE_KEY, privateKey);
     }
+  }
+
+  async provide(serializedSortedSignedTargets: string): Promise<Signature> {
+    await this.initialize();
+    const privateKey = await this.getPrivateKey();
+    const signature = await signWithSha256AndEcdsa(
+      serializedSortedSignedTargets,
+      privateKey
+    );
+    const publicKey = await this.getPublicKey();
+    return { signature, publicKey };
   }
 
   getPublicKey$() {

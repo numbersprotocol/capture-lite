@@ -24,16 +24,13 @@ export class InformationPage {
     switchMap(id => this.assetRepository.getById$(id)),
     isNonNullable()
   );
-  private readonly proofsWithOld$ = this.proofRepository.getAll$().pipe(
-    concatMap(proofs =>
-      Promise.all(
-        proofs.map(async proof => ({
-          proof,
-          oldProof: await getOldProof(proof),
-        }))
+  private readonly proofsWithOld$ = this.proofRepository
+    .getAll$()
+    .pipe(
+      map(proofs =>
+        proofs.map(proof => ({ proof, oldProof: getOldProof(proof) }))
       )
-    )
-  );
+    );
   readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
     map(([asset, proofsWithThumbnailAndOld]) => ({
       asset,
@@ -53,7 +50,10 @@ export class InformationPage {
   readonly mimeType$ = this.capture$.pipe(
     map(capture => capture.proofWithOld),
     isNonNullable(),
-    map(proofWithOld => Object.values(proofWithOld.proof.assets)[0].mimeType)
+    map(
+      proofWithOld =>
+        Object.values(proofWithOld.proof.indexedAssets)[0].mimeType
+    )
   );
 
   readonly facts$ = this.capture$.pipe(
@@ -65,8 +65,7 @@ export class InformationPage {
   readonly signature$ = this.capture$.pipe(
     map(capture => capture.proofWithOld),
     isNonNullable(),
-    concatMap(proofWithOld => getOldSignatures(proofWithOld.proof)),
-    map(oldSignatures => oldSignatures[0])
+    map(proofWithOld => getOldSignatures(proofWithOld.proof)[0])
   );
 
   constructor(

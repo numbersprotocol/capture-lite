@@ -1,5 +1,8 @@
+import { Plugins } from '@capacitor/core';
 import { Table, Tuple } from '../table';
 import { CapacitorFilesystemTable } from './capacitor-filesystem-table';
+
+const { Filesystem } = Plugins;
 
 describe('CapacitorFilesystemTable', () => {
   let table: Table<TestTuple>;
@@ -43,7 +46,7 @@ describe('CapacitorFilesystemTable', () => {
     },
   };
 
-  beforeEach(() => (table = new CapacitorFilesystemTable(tableId)));
+  beforeEach(() => (table = new CapacitorFilesystemTable(tableId, Filesystem)));
 
   afterEach(async () => table.drop());
 
@@ -107,7 +110,7 @@ describe('CapacitorFilesystemTable', () => {
     await expectAsync(table.delete([testTuple1])).toBeRejected();
   });
 
-  it('inserts atomically', async done => {
+  it('should insert atomically', async done => {
     const tupleCount = 100;
     const expectedTuples: TestTuple[] = [...Array(tupleCount).keys()].map(
       value => ({
@@ -127,7 +130,7 @@ describe('CapacitorFilesystemTable', () => {
     });
   });
 
-  it('deletes atomically', async done => {
+  it('should delete atomically', async done => {
     const tupleCount = 100;
     const sourceTuple: TestTuple[] = [...Array(tupleCount).keys()].map(
       value => ({

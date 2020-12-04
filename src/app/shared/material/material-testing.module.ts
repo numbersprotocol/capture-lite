@@ -6,5 +6,6 @@ const modules = [MatIconTestingModule];
 
 @NgModule({
   imports: [MaterialModule, ...modules],
+  exports: [MaterialModule, ...modules],
 })
 export class MaterialTestingModule {}

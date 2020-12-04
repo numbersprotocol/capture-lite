@@ -18,7 +18,9 @@ import { Asset } from './repositories/asset/asset';
   providedIn: 'root',
 })
 export class NumbersStorageApi {
-  private readonly preferences = this.preferenceManager.getPreferences(name);
+  private readonly preferences = this.preferenceManager.getPreferences(
+    NumbersStorageApi.name
+  );
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -119,7 +121,7 @@ export class NumbersStorageApi {
     signatures: OldSignature[],
     tag: string
   ) {
-    const proofMimeType = Object.values(proof.assets)[0].mimeType;
+    const proofMimeType = Object.values(proof.indexedAssets)[0].mimeType;
     return defer(() => this.getHttpHeadersWithAuthToken()).pipe(
       concatMap(headers =>
         zip(

@@ -1,8 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatBottomSheetModule,
-  MatBottomSheetRef,
-} from '@angular/material/bottom-sheet';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { OptionsMenuComponent } from './options-menu.component';
 
 describe('OptionsMenuComponent', () => {
@@ -12,7 +10,7 @@ describe('OptionsMenuComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [OptionsMenuComponent],
-      imports: [MatBottomSheetModule],
+      imports: [SharedTestingModule],
       providers: [{ provide: MatBottomSheetRef, useValue: {} }],
     }).compileComponents();
 

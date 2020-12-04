@@ -7,6 +7,7 @@ import {
 } from '@capacitor/core';
 import { defer } from 'rxjs';
 import { concatMap, tap } from 'rxjs/operators';
+import { FileStore } from '../file-store/file-store.service';
 import { NumbersStorageApi } from '../publisher/numbers-storage/numbers-storage-api.service';
 import { AssetRepository } from '../publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { getProof } from '../repositories/proof/old-proof-adapter';
@@ -25,7 +26,8 @@ export class PushNotificationService {
   constructor(
     private readonly numbersStorageApi: NumbersStorageApi,
     private readonly proofRepository: ProofRepository,
-    private readonly assetRepository: AssetRepository
+    private readonly assetRepository: AssetRepository,
+    private readonly fileStore: FileStore
   ) {}
 
   configure(): void {
@@ -108,7 +110,12 @@ export class PushNotificationService {
     const rawImage = await this.numbersStorageApi
       .getImage$(asset.asset_file)
       .toPromise();
-    const proof = await getProof(rawImage, asset.information, asset.signature);
+    const proof = await getProof(
+      this.fileStore,
+      rawImage,
+      asset.information,
+      asset.signature
+    );
     await this.proofRepository.add(proof);
   }
 }

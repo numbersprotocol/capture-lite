@@ -167,7 +167,7 @@ export class SignupPage {
       .subscribe(
         () => this.router.navigate(['/signup/finished'], { replaceUrl: true }),
         err => {
-          // FIXME: The actual error type can't be determined from response. Fix this after API updates error messages.
+          // TODO: The actual error type can't be determined from response. Fix this after API updates error messages.
           console.error(err);
           this.toastController
             .create({
