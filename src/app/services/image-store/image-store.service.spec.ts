@@ -3,26 +3,28 @@ import { Plugins } from '@capacitor/core';
 import { FILESYSTEM_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { stringToBase64 } from '../../utils/encoding/encoding';
-import { FileStore } from './file-store.service';
+import { MimeType } from '../../utils/mime-type';
+import { ImageStore } from './image-store.service';
 
 const { Filesystem } = Plugins;
 
-describe('FileStore', () => {
-  let store: FileStore;
+describe('ImageStore', () => {
+  let store: ImageStore;
   const sampleFile =
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
   const sampleIndex =
     '93ae7d494fad0fb30cbf3ae746a39c4bc7a0f8bbf87fbb587a3f3c01f3c5ce20';
+  const sampleMimeType: MimeType = 'image/png';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
       providers: [{ provide: FILESYSTEM_PLUGIN, useValue: Filesystem }],
     });
-    store = TestBed.inject(FileStore);
+    store = TestBed.inject(ImageStore);
   });
 
-  afterEach(async () => store.clear());
+  afterEach(async () => store.drop());
 
   it('should be created', () => expect(store).toBeTruthy());
 
@@ -48,13 +50,22 @@ describe('FileStore', () => {
     expect(await store.exists(index)).toBeFalse();
   });
 
-  it('should remove all files after clear', async () => {
+  it('should delete file with index and thumbnail', async () => {
+    const index = await store.write(sampleFile);
+    await store.readThumbnail(index, sampleMimeType);
+
+    await store.delete(index);
+
+    expect(await store.exists(index)).toBeFalse();
+  });
+
+  it('should remove all files after drop', async () => {
     const index1 = await store.write(sampleFile);
     const anotherFile =
       'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=';
     const index2 = await store.write(anotherFile);
 
-    await store.clear();
+    await store.drop();
 
     expect(await store.exists(index1)).toBeFalse();
     expect(await store.exists(index2)).toBeFalse();
@@ -89,5 +100,11 @@ describe('FileStore', () => {
     for (const index of indexes) {
       expect(await store.exists(index)).toBeFalse();
     }
+  });
+
+  it('should read thumbnail', async () => {
+    const index = await store.write(sampleFile);
+    const thumbnailFile = await store.readThumbnail(index, sampleMimeType);
+    expect(thumbnailFile).toBeTruthy();
   });
 });

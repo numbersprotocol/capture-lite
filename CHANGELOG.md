@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add tests for `CapacitorFactsProvider`.
 - Add tests for `WebCryptoApiSignatureProvider`.
 - Remove `MemoryTable` by mocking Capacitor `Filesystem` plugin. #42
-- Implement `FileStore` to randomly and safely store files with base64 string.
+- Implement `ImageStore` to randomly and safely store files with base64 string.
 - Extract `serializeSortedSignedTargets` method from `Proof` class and `CollectorService`.
 
 ### Fixed

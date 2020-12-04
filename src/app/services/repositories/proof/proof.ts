@@ -1,18 +1,14 @@
-import ImageBlobReduce from 'image-blob-reduce';
 import { sha256WithString } from '../../../utils/crypto/crypto';
-import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
 import { sortObjectDeeplyByKey } from '../../../utils/immutable/immutable';
 import { MimeType } from '../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
-import { FileStore } from '../../file-store/file-store.service';
-
-const imageBlobReduce = new ImageBlobReduce();
+import { ImageStore } from '../../image-store/image-store.service';
 
 /**
  * - A box containing self-verifiable data.
  * - Easy to serialize and deserialize for data persistence and interchange.
  * - Bundle all immutable information.
- * - Check if proof.assets has image. If true, generate single thumb. (Should We Cache?)
+ * - Check if proof.assets has image. If true, generate and cache single thumb.
  * - Generate and ID from hash of stringified.
  */
 export class Proof {
@@ -32,10 +28,9 @@ export class Proof {
     return this.getFactValue(DefaultFactId.GEOLOCATION_LONGITUDE);
   }
   readonly indexedAssets: IndexedAssets = {};
-  private readonly thumbnailIndex?: string = undefined;
 
   private constructor(
-    private readonly fileStore: FileStore,
+    private readonly imageStore: ImageStore,
     readonly truth: Truth,
     readonly signatures: Signatures
   ) {}
@@ -43,7 +38,7 @@ export class Proof {
   private async setAssets(assets: Assets) {
     const indexedAssetEntries: [string, AssetMeta][] = [];
     for (const [base64, meta] of Object.entries(assets)) {
-      const index = await this.fileStore.write(base64);
+      const index = await this.imageStore.write(base64);
       indexedAssetEntries.push([index, meta]);
     }
 
@@ -56,12 +51,6 @@ export class Proof {
     return indexedAssets;
   }
 
-  private setThumbnailIndex(thumbnailIndex?: string) {
-    // @ts-ignore
-    this.thumbnailIndex = thumbnailIndex;
-    return thumbnailIndex;
-  }
-
   async getId() {
     return sha256WithString(await this.stringify());
   }
@@ -69,33 +58,21 @@ export class Proof {
   async getAssets() {
     const assetEntries: [string, AssetMeta][] = [];
     for (const [index, meta] of Object.entries(this.indexedAssets)) {
-      const base64 = await this.fileStore.read(index);
+      const base64 = await this.imageStore.read(index);
       assetEntries.push([base64, meta]);
     }
     return Object.fromEntries(assetEntries);
   }
 
   async getThumbnailBase64() {
-    if (this.thumbnailIndex) {
-      return this.fileStore.read(this.thumbnailIndex);
-    }
-    const thumbnailSize = 200;
-    const imageAssetIndex = Object.keys(this.indexedAssets).find(index =>
-      this.indexedAssets[index].mimeType.startsWith('image')
+    const imageAsset = Object.entries(this.indexedAssets).find(([_, meta]) =>
+      meta.mimeType.startsWith('image')
     );
-    if (imageAssetIndex === undefined) {
+    if (imageAsset === undefined) {
       return undefined;
     }
-    const blob = await base64ToBlob(
-      await this.fileStore.read(imageAssetIndex),
-      this.indexedAssets[imageAssetIndex].mimeType
-    );
-    const thumbnailBlob = await imageBlobReduce.toBlob(blob, {
-      max: thumbnailSize,
-    });
-    const thumbnailBase64 = await blobToBase64(thumbnailBlob);
-    this.setThumbnailIndex(await this.fileStore.write(thumbnailBase64));
-    return thumbnailBase64;
+    const [index, assetMeta] = imageAsset;
+    return this.imageStore.readThumbnail(index, assetMeta.mimeType);
   }
 
   getFactValue(id: string) {
@@ -144,53 +121,47 @@ export class Proof {
       indexedAssets: this.indexedAssets,
       truth: this.truth,
       signatures: this.signatures,
-      thumbnailIndex: this.thumbnailIndex,
     };
   }
 
   async destroy() {
     await Promise.all(
-      Object.keys(this.indexedAssets).map(index => this.fileStore.delete(index))
+      Object.keys(this.indexedAssets).map(index =>
+        this.imageStore.delete(index)
+      )
     );
-    if (
-      this.thumbnailIndex &&
-      (await this.fileStore.exists(this.thumbnailIndex))
-    ) {
-      await this.fileStore.delete(this.thumbnailIndex);
-    }
   }
 
   static signatureProviders = new Map<string, SignatureVerifier>();
 
   static async from(
-    fileStore: FileStore,
+    imageStore: ImageStore,
     assets: Assets,
     truth: Truth,
     signatures: Signatures
   ) {
-    const proof = new Proof(fileStore, truth, signatures);
+    const proof = new Proof(imageStore, truth, signatures);
     await proof.setAssets(assets);
     return proof;
   }
 
   /**
    * Create a Proof from IndexedProofView. This method should only be used when
-   * you sure the Proof has already store its raw assets to FileStore by calling
+   * you sure the Proof has already store its raw assets to ImageStore by calling
    * Proof.from() or Proof.parse() before.
-   * @param fileStore The singleton FileStore service.
+   * @param imageStore The singleton ImageStore service.
    * @param indexedProofView The view without assets with base64.
    */
   static fromIndexedProofView(
-    fileStore: FileStore,
+    imageStore: ImageStore,
     indexedProofView: IndexedProofView
   ) {
     const proof = new Proof(
-      fileStore,
+      imageStore,
       indexedProofView.truth,
       indexedProofView.signatures
     );
     proof.setIndexedAssets(indexedProofView.indexedAssets);
-    proof.setThumbnailIndex(indexedProofView.thumbnailIndex);
     return proof;
   }
 
@@ -202,9 +173,9 @@ export class Proof {
     Proof.signatureProviders.delete(id);
   }
 
-  static async parse(fileStore: FileStore, json: string) {
+  static async parse(imageStore: ImageStore, json: string) {
     const parsed = JSON.parse(json) as SerializedProof;
-    const proof = new Proof(fileStore, parsed.truth, parsed.signatures);
+    const proof = new Proof(imageStore, parsed.truth, parsed.signatures);
     await proof.setAssets(parsed.assets);
     return proof;
   }
@@ -307,5 +278,4 @@ export interface IndexedProofView extends Tuple {
   indexedAssets: IndexedAssets;
   truth: Truth;
   signatures: Signatures;
-  thumbnailIndex?: string;
 }

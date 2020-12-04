@@ -2,7 +2,7 @@ import { flow, groupBy, mapValues } from 'lodash/fp';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
 import { MimeType } from '../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
-import { FileStore } from '../../file-store/file-store.service';
+import { ImageStore } from '../../image-store/image-store.service';
 import { Proof, Signature } from './proof';
 
 /**
@@ -72,7 +72,7 @@ export function getOldSignatures(proof: Proof): OldSignature[] {
 }
 
 export async function getProof(
-  fileStore: FileStore,
+  imageStore: ImageStore,
   raw: Blob,
   sortedProofInformation: SortedProofInformation,
   oldSignatures: OldSignature[]
@@ -100,7 +100,7 @@ export async function getProof(
   )(groupObjectsBy(oldSignatures, 'provider'));
 
   return Proof.from(
-    fileStore,
+    imageStore,
     { [base64]: { mimeType: raw.type as MimeType } },
     { timestamp: sortedProofInformation.proof.timestamp, providers },
     signatures

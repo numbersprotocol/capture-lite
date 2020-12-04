@@ -52,11 +52,16 @@ describe('CapacitorFilesystemTable', () => {
 
   it('should be created', () => expect(table).toBeTruthy());
 
-  it('should emit empty array on initial query', done => {
+  it('should emit empty array with Observable on initial query', done => {
     table.queryAll$().subscribe(tuples => {
       expect(tuples).toEqual([]);
       done();
     });
+  });
+
+  it('should emit empty array with Promise on initial query', async () => {
+    const tuples = await table.queryAll();
+    expect(tuples).toEqual([]);
   });
 
   it('should emit new query on inserting tuple', async done => {
