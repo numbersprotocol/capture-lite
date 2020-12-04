@@ -66,7 +66,7 @@
                 class="square-image-tile"
                 [style]="
                   'background-image: url(data:image/*;base64,' +
-                  (capture.proofWithThumbnail.thumbnailBase64 | async)! +
+                  (capture.proofWithThumbnail.thumbnailBase64$ | async)! +
                   ');'
                 "
                 [routerLink]="['asset', { id: capture.asset.id }]"

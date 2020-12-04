@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
-import { FileStore } from '../../file-store/file-store.service';
+import { ImageStore } from '../../image-store/image-store.service';
 import { IndexedProofView, Proof } from './proof';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProofRepository {
-  private readonly id = ProofRepository.name;
-  private readonly table = this.database.getTable<IndexedProofView>(this.id);
+  private readonly table = this.database.getTable<IndexedProofView>(
+    ProofRepository.name
+  );
 
   constructor(
     private readonly database: Database,
-    private readonly fileStore: FileStore
+    private readonly imageStore: ImageStore
   ) {}
 
   getAll$() {
     return this.table.queryAll$().pipe(
       map(indexedProofViews => {
         return indexedProofViews.map(view =>
-          Proof.fromIndexedProofView(this.fileStore, view)
+          Proof.fromIndexedProofView(this.imageStore, view)
         );
       })
     );

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { MimeType } from '../../../utils/mime-type';
-import { FileStore } from '../../file-store/file-store.service';
+import { ImageStore } from '../../image-store/image-store.service';
 import {
   AssetMeta,
   Assets,
@@ -16,22 +16,22 @@ describe('ProofRepository', () => {
   let repo: ProofRepository;
   let proof1: Proof;
   let proof2: Proof;
-  let fileStore: FileStore;
+  let imageStore: ImageStore;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
-    fileStore = TestBed.inject(FileStore);
+    imageStore = TestBed.inject(ImageStore);
     repo = TestBed.inject(ProofRepository);
     proof1 = await Proof.from(
-      fileStore,
+      imageStore,
       PROOF1_ASSETS,
       PROOF1_TRUTH,
       PROOF1_SIGNATURES_VALID
     );
     proof2 = await Proof.from(
-      fileStore,
+      imageStore,
       PROOF2_ASSETS,
       PROOF2_TRUTH,
       PROOF2_SIGNATURES_INVALID
@@ -60,7 +60,7 @@ describe('ProofRepository', () => {
     await repo.add(proof1);
     await repo.add(proof2);
     const sameProof1 = await Proof.from(
-      fileStore,
+      imageStore,
       PROOF1_ASSETS,
       PROOF1_TRUTH,
       PROOF1_SIGNATURES_VALID
