@@ -23,7 +23,6 @@ export class TransactionDetailsPage {
     this.route.paramMap
       .pipe(map(() => window.history.state))
       .subscribe(details => {
-        console.log('details', details);
         this.details = details;
       });
   }
