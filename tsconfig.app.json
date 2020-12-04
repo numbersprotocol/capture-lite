@@ -9,9 +9,8 @@
   "exclude": [
     "src/**/*.spec.ts",
     "src/**/*-testing.*.ts",
+    "src/**/mock-*.ts",
     "src/test.ts",
-    "src/environments/environment.prod.ts",
-    "src/**/memory-table.ts",
-    "src/**/memory-preferences.ts"
+    "src/environments/environment.prod.ts"
   ]
 }

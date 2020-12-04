@@ -1,6 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { Plugins } from '@capacitor/core';
+import { LOCAL_NOTIFICATIONS_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
+import { NotificationItem } from './notification-item';
 import { NotificationService } from './notification.service';
+
+const { LocalNotifications } = Plugins;
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -8,6 +13,9 @@ describe('NotificationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
+      providers: [
+        { provide: LOCAL_NOTIFICATIONS_PLUGIN, useValue: LocalNotifications },
+      ],
     });
     service = TestBed.inject(NotificationService);
   });
@@ -15,9 +23,15 @@ describe('NotificationService', () => {
   it('should be created', () => expect(service).toBeTruthy());
 
   it('should create notification', () =>
-    expect(service.createNotification()).toBeTruthy());
+    expect(service.createNotification()).toBeInstanceOf(NotificationItem));
 
-  it('should notify', () => expect(service.notify('', '')).toBeTruthy());
+  it('should be able to notify', async () => {
+    spyOn(console, 'log');
+    expect(await service.notify('', '')).toBeInstanceOf(NotificationItem);
+  });
 
-  it('should error', () => expect(service.error(new Error())).toBeTruthy());
+  it('should be able to notify error', async () => {
+    spyOn(console, 'error');
+    expect(await service.error(new Error())).toBeInstanceOf(NotificationItem);
+  });
 });
