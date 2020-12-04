@@ -26,8 +26,10 @@ describe('NotificationItem', () => {
   it('should be created', () => expect(item).toBeTruthy());
 
   it('should be able to notify', async () => {
-    spyOn(console, 'log');
-    expect(await item.notify('', '')).toBeInstanceOf(NotificationItem);
+    spyOn(console, 'info');
+    expect(await item.notify('SAMPLE_TITLE', 'SAMPLE_MESSAGE')).toBeInstanceOf(
+      NotificationItem
+    );
   });
 
   it('should be able to notify error', async () => {
@@ -36,6 +38,7 @@ describe('NotificationItem', () => {
   });
 
   it('should be able to cancel itself', async () => {
+    spyOn(console, 'log');
     expect(await item.cancel()).toBeInstanceOf(NotificationItem);
   });
 });

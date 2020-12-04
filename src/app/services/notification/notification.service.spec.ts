@@ -26,8 +26,10 @@ describe('NotificationService', () => {
     expect(service.createNotification()).toBeInstanceOf(NotificationItem));
 
   it('should be able to notify', async () => {
-    spyOn(console, 'log');
-    expect(await service.notify('', '')).toBeInstanceOf(NotificationItem);
+    spyOn(console, 'info');
+    expect(
+      await service.notify('SAMPLE_TITLE', 'SAMPLE_MESSAGE')
+    ).toBeInstanceOf(NotificationItem);
   });
 
   it('should be able to notify error', async () => {
