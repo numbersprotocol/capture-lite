@@ -12,7 +12,8 @@ describe('ConfirmAlert', () => {
     service = TestBed.inject(ConfirmAlert);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+  it('should be created', () => expect(service).toBeTruthy());
+
+  it('should be able to present alert', () =>
+    expect(service.present()).toBeTruthy());
 });

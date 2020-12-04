@@ -76,7 +76,7 @@ export class SendingPostCapturePage {
     this.isPreview = true;
   }
 
-  send(captionText: string) {
+  async send(captionText: string) {
     const action$ = zip(this.asset$, this.contact$).pipe(
       first(),
       concatMap(([asset, contact]) =>
@@ -92,20 +92,16 @@ export class SendingPostCapturePage {
       )
     );
 
-    const onConfirm = () => {
+    const result = await this.confirmAlert.present(
+      this.translocoService.translate('message.sendPostCaptureAlert')
+    );
+
+    if (result) {
       this.blockingActionService
         .run$(action$)
         .pipe(untilDestroyed(this))
         .subscribe();
-    };
-
-    this.confirmAlert
-      .present$(
-        onConfirm,
-        this.translocoService.translate('message.sendPostCaptureAlert')
-      )
-      .pipe(untilDestroyed(this))
-      .subscribe();
+    }
   }
 
   private removeAsset$() {
