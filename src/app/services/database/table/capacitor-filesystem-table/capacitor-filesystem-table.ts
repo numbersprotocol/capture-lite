@@ -27,6 +27,11 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     );
   }
 
+  async queryAll() {
+    await this.initialize();
+    return this.tuples$.value;
+  }
+
   private async initialize() {
     return CapacitorFilesystemTable.initializationMutex.runExclusive(
       async () => {

@@ -1,21 +1,32 @@
 import { Inject, Injectable } from '@angular/core';
 import { FilesystemDirectory, FilesystemPlugin } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
+import ImageBlobReduce from 'image-blob-reduce';
 import { FILESYSTEM_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
 import { sha256WithBase64 } from '../../utils/crypto/crypto';
+import { base64ToBlob, blobToBase64 } from '../../utils/encoding/encoding';
+import { MimeType } from '../../utils/mime-type';
+import { Database } from '../database/database.service';
+import { Tuple } from '../database/table/table';
+
+const imageBlobReduce = new ImageBlobReduce();
 
 @Injectable({
   providedIn: 'root',
 })
-export class FileStore {
+export class ImageStore {
   private readonly directory = FilesystemDirectory.Data;
-  private readonly rootDir = FileStore.name;
+  private readonly rootDir = ImageStore.name;
   private readonly mutex = new Mutex();
   private hasInitialized = false;
+  private readonly thumbnailTable = this.database.getTable<Thumbnail>(
+    `${ImageStore.name}_thumbnail`
+  );
 
   constructor(
     @Inject(FILESYSTEM_PLUGIN)
-    private readonly filesystemPlugin: FilesystemPlugin
+    private readonly filesystemPlugin: FilesystemPlugin,
+    private readonly database: Database
   ) {}
 
   private async initialize() {
@@ -63,8 +74,9 @@ export class FileStore {
 
   async delete(index: string) {
     await this.initialize();
+    await this.deleteThumbnail(index);
     return this.mutex.runExclusive(async () => {
-      await this.filesystemPlugin.deleteFile({
+      return this.filesystemPlugin.deleteFile({
         directory: this.directory,
         path: `${this.rootDir}/${index}`,
       });
@@ -80,8 +92,49 @@ export class FileStore {
     return result.files.includes(index);
   }
 
-  async clear() {
+  async readThumbnail(index: string, mimeType: MimeType) {
+    const thumbnail = await this.getThumbnail(index);
+
+    if (thumbnail) {
+      return this.read(thumbnail.thumbnailIndex);
+    }
+    const thumbnailSize = 200;
+    const blob = await base64ToBlob(await this.read(index), mimeType);
+    const thumbnailBlob = await imageBlobReduce.toBlob(blob, {
+      max: thumbnailSize,
+    });
+    const thumbnailBase64 = await blobToBase64(thumbnailBlob);
+    this.thumbnailTable.insert([
+      {
+        imageIndex: index,
+        thumbnailIndex: await this.write(thumbnailBase64),
+      },
+    ]);
+    return thumbnailBase64;
+  }
+
+  private async deleteThumbnail(index: string) {
+    const thumbnail = await this.getThumbnail(index);
+
+    if (!thumbnail) {
+      return index;
+    }
+
+    await Promise.all([
+      this.delete(thumbnail.thumbnailIndex),
+      this.thumbnailTable.delete([thumbnail]),
+    ]);
+    return index;
+  }
+
+  private async getThumbnail(index: string) {
+    const thumbnails = await this.thumbnailTable.queryAll();
+    return thumbnails.find(thumb => thumb.imageIndex === index);
+  }
+
+  async drop() {
     await this.initialize();
+    await this.thumbnailTable.drop();
     return this.mutex.runExclusive(async () => {
       this.hasInitialized = false;
       await this.filesystemPlugin.rmdir({
@@ -91,4 +144,9 @@ export class FileStore {
       });
     });
   }
+}
+
+interface Thumbnail extends Tuple {
+  imageIndex: string;
+  thumbnailIndex: string;
 }

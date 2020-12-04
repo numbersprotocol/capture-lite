@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { MimeType } from '../../../utils/mime-type';
-import { FileStore } from '../../file-store/file-store.service';
+import { ImageStore } from '../../image-store/image-store.service';
 import {
   AssetMeta,
   Assets,
@@ -22,14 +22,14 @@ import {
 
 describe('old-proof-adapter', () => {
   let proof: Proof;
-  let fileStore: FileStore;
+  let imageStore: ImageStore;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
-    fileStore = TestBed.inject(FileStore);
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES);
+    imageStore = TestBed.inject(ImageStore);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES);
   });
 
   it('should convert Proof to OldProof', () => {
@@ -69,7 +69,7 @@ describe('old-proof-adapter', () => {
   it('should convert SortedProofInformation with raw Blob to Proof', async () => {
     const blob = await base64ToBlob(ASSET1_BASE64, ASSET1_MIMETYPE);
     const convertedProof = await getProof(
-      fileStore,
+      imageStore,
       blob,
       SORTED_PROOF_INFORMATION,
       OLD_SIGNATURES

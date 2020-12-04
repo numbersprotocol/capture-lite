@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { verifyWithSha256AndEcdsa } from '../../../utils/crypto/crypto';
 import { MimeType } from '../../../utils/mime-type';
-import { FileStore } from '../../file-store/file-store.service';
+import { ImageStore } from '../../image-store/image-store.service';
 import {
   AssetMeta,
   Assets,
@@ -19,7 +19,7 @@ import {
 
 describe('Proof', () => {
   let proof: Proof;
-  let fileStore: FileStore;
+  let imageStore: ImageStore;
 
   beforeAll(() => {
     Proof.registerSignatureProvider(SIGNATURE_PROVIDER_ID, {
@@ -33,33 +33,33 @@ describe('Proof', () => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
-    fileStore = TestBed.inject(FileStore);
+    imageStore = TestBed.inject(ImageStore);
   });
 
   it('should get the same assets with the parameter of factory method', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(await proof.getAssets()).toEqual(ASSETS);
   });
 
   it('should get the same truth with the parameter of factory method', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.truth).toEqual(TRUTH);
   });
 
   it('should get the same signatures with the parameter of factory method', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.signatures).toEqual(SIGNATURES_VALID);
   });
 
   it('should get the same timestamp with the truth in the parameter of factory method', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.timestamp).toEqual(TRUTH.timestamp);
   });
 
   it('should get same ID with same properties', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     const another = await Proof.from(
-      fileStore,
+      imageStore,
       ASSETS,
       TRUTH,
       SIGNATURES_VALID
@@ -68,13 +68,13 @@ describe('Proof', () => {
   });
 
   it('should have thumbnail when its assets have images', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(await proof.getThumbnailBase64()).toBeTruthy();
   });
 
   it('should not have thumbnail when its assets do not have image', async () => {
     proof = await Proof.from(
-      fileStore,
+      imageStore,
       { aGVsbG8K: { mimeType: 'application/octet-stream' } },
       TRUTH,
       SIGNATURES_VALID
@@ -83,7 +83,7 @@ describe('Proof', () => {
   });
 
   it('should get any device name when exists', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(
       proof.deviceName === DEVICE_NAME_VALUE1 ||
         proof.deviceName === DEVICE_NAME_VALUE2
@@ -91,12 +91,12 @@ describe('Proof', () => {
   });
 
   it('should get undefined when device name not exists', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
     expect(proof.deviceName).toBeUndefined();
   });
 
   it('should get any geolocation latitude when exists', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(
       proof.geolocationLatitude === GEOLOCATION_LATITUDE1 ||
         proof.geolocationLatitude === GEOLOCATION_LATITUDE2
@@ -104,12 +104,12 @@ describe('Proof', () => {
   });
 
   it('should get undefined when geolocation latitude not exists', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
     expect(proof.geolocationLatitude).toBeUndefined();
   });
 
   it('should get any geolocation longitude name when exists', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(
       proof.geolocationLongitude === GEOLOCATION_LONGITUDE1 ||
         proof.geolocationLongitude === GEOLOCATION_LONGITUDE2
@@ -117,23 +117,23 @@ describe('Proof', () => {
   });
 
   it('should get undefined when geolocation longitude not exists', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH_EMPTY, SIGNATURES_VALID);
     expect(proof.geolocationLongitude).toBeUndefined();
   });
 
   it('should get existed fact with ID', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.getFactValue(HUMIDITY)).toEqual(HUMIDITY_VALUE);
   });
 
   it('should get undefined with nonexistent fact ID', async () => {
     const NONEXISTENT = 'NONEXISTENT';
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(proof.getFactValue(NONEXISTENT)).toBeUndefined();
   });
 
   it('should stringify to ordered JSON string', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     const ASSETS_DIFFERENT_ORDER: Assets = {
       [ASSET2_BASE64]: ASSET2_META,
       [ASSET1_BASE64]: { mimeType: ASSET1_MIMETYPE },
@@ -155,7 +155,7 @@ describe('Proof', () => {
       timestamp: TIMESTAMP,
     };
     const proofWithDifferentContentsOrder = await Proof.from(
-      fileStore,
+      imageStore,
       ASSETS_DIFFERENT_ORDER,
       TRUTH_DIFFERENT_ORDER,
       SIGNATURES_VALID
@@ -166,9 +166,9 @@ describe('Proof', () => {
   });
 
   it('should parse from stringified JSON string', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
 
-    const parsed = await Proof.parse(fileStore, await proof.stringify());
+    const parsed = await Proof.parse(imageStore, await proof.stringify());
 
     expect(await parsed.getAssets()).toEqual(ASSETS);
     expect(parsed.truth).toEqual(TRUTH);
@@ -176,17 +176,17 @@ describe('Proof', () => {
   });
 
   it('should be verified with valid signatures', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     expect(await proof.isVerified()).toBeTrue();
   });
 
   it('should not be verified with invalid signatures', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_INVALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_INVALID);
     expect(await proof.isVerified()).toBeFalse();
   });
 
   it('should get indexed Proof view', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     const indexedProofView = proof.getIndexedProofView();
 
     expect(indexedProofView.indexedAssets).toBeTruthy();
@@ -195,11 +195,11 @@ describe('Proof', () => {
   });
 
   it('should create Proof from indexed Proof view', async () => {
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     const indexedProofView = proof.getIndexedProofView();
 
     const anotherProof = Proof.fromIndexedProofView(
-      fileStore,
+      imageStore,
       indexedProofView
     );
 
@@ -207,8 +207,8 @@ describe('Proof', () => {
   });
 
   it('should release resource after destroy', async () => {
-    const spy = spyOn(fileStore, 'delete');
-    proof = await Proof.from(fileStore, ASSETS, TRUTH, SIGNATURES_VALID);
+    const spy = spyOn(imageStore, 'delete');
+    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     await proof.destroy();
     expect(spy).toHaveBeenCalled();
   });

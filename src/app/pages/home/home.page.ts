@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
-import { combineLatest, interval, of, zip } from 'rxjs';
+import { combineLatest, defer, interval, of, zip } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -66,7 +66,7 @@ export class HomePage implements OnInit {
       map(proofs =>
         proofs.map(proof => ({
           proof,
-          thumbnailBase64: proof.getThumbnailBase64(),
+          thumbnailBase64$: defer(() => proof.getThumbnailBase64()),
         }))
       )
     );

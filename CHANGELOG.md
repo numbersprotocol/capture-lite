@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.9.4 - 2020-12-04
+
+### Changed
+
+#### Code Quality
+
+- Rename `FileStore` to `ImageStore` for self-explanatory naming.
+
+### Fixed
+
+- Lazily generate thumbnail and cache it to reduce memory use. #287, #288
+
 ## 0.9.3 - 2020-12-03
 
 ### Changed
@@ -19,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add tests for `CapacitorFactsProvider`.
 - Add tests for `WebCryptoApiSignatureProvider`.
 - Remove `MemoryTable` by mocking Capacitor `Filesystem` plugin. #42
-- Implement `FileStore` to randomly and safely store files with base64 string.
+- Implement `ImageStore` to randomly and safely store files with base64 string.
 - Extract `serializeSortedSignedTargets` method from `Proof` class and `CollectorService`.
 
 ### Fixed
