@@ -1,13 +1,19 @@
 import { Component } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, defer, forkJoin, zip } from 'rxjs';
-import { concatMap, map, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import {
+  concatMap,
+  first,
+  map,
+  switchMap,
+  switchMapTo,
+  tap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../services/confirm-alert/confirm-alert.service';
 import { AssetRepository } from '../../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
@@ -79,7 +85,6 @@ export class AssetPage {
     private readonly assetRepository: AssetRepository,
     private readonly proofRepository: ProofRepository,
     private readonly blockingActionService: BlockingActionService,
-    private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
     private readonly bottomSheet: MatBottomSheet
   ) {}
@@ -115,31 +120,27 @@ export class AssetPage {
       .subscribe();
   }
 
-  private remove() {
-    const onConfirm = () =>
-      this.blockingActionService
-        .run$(
-          zip(this.asset$, this.capture$).pipe(
-            concatMap(([asset, capture]) =>
-              forkJoin([
-                this.assetRepository.remove$(asset),
-                this.proofRepository.remove(
-                  // tslint:disable-next-line: no-non-null-assertion
-                  capture.proofWithOld!.proof
-                ),
-              ])
-            ),
-            switchMapTo(defer(() => this.router.navigate(['..'])))
+  private async remove() {
+    const action$ = zip(this.asset$, this.capture$).pipe(
+      first(),
+      concatMap(([asset, capture]) =>
+        forkJoin([
+          this.assetRepository.remove$(asset),
+          this.proofRepository.remove(
+            // tslint:disable-next-line: no-non-null-assertion
+            capture.proofWithOld!.proof
           ),
-          { message: this.translocoService.translate('processing') }
-        )
+        ])
+      ),
+      switchMapTo(defer(() => this.router.navigate(['..'])))
+    );
+    const result = await this.confirmAlert.present();
+    if (result) {
+      this.blockingActionService
+        .run$(action$)
         .pipe(untilDestroyed(this))
         .subscribe();
-
-    return this.confirmAlert
-      .present$(onConfirm)
-      .pipe(untilDestroyed(this))
-      .subscribe();
+    }
   }
 
   openDashboardLink() {

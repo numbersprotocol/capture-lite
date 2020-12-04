@@ -1,19 +1,20 @@
-import { Plugins } from '@capacitor/core';
+import { Inject } from '@angular/core';
+import { LocalNotificationsPlugin } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
-
-const { LocalNotifications } = Plugins;
+import { LOCAL_NOTIFICATIONS_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
 
 export class NotificationItem {
   constructor(
     private readonly id: number,
+    @Inject(LOCAL_NOTIFICATIONS_PLUGIN)
+    private readonly localNotificationsPlugin: LocalNotificationsPlugin,
     private readonly translocoService: TranslocoService
   ) {}
 
   async notify(title: string, body: string): Promise<NotificationItem> {
-    // tslint:disable-next-line: no-console
-    console.log(`${title}: ${body}`);
+    console.info(`${title}: ${body}`);
 
-    await LocalNotifications.schedule({
+    await this.localNotificationsPlugin.schedule({
       notifications: [{ title, body, id: this.id }],
     });
     return this;
@@ -22,7 +23,7 @@ export class NotificationItem {
   async error(error: Error): Promise<NotificationItem> {
     console.error(error);
 
-    await LocalNotifications.schedule({
+    await this.localNotificationsPlugin.schedule({
       notifications: [
         {
           title: this.translocoService.translate('unknownError'),
@@ -35,7 +36,9 @@ export class NotificationItem {
   }
 
   async cancel(): Promise<NotificationItem> {
-    LocalNotifications.cancel({ notifications: [{ id: String(this.id) }] });
+    this.localNotificationsPlugin.cancel({
+      notifications: [{ id: String(this.id) }],
+    });
     return this;
   }
 }

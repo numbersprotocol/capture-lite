@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
-import { defer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -13,26 +11,28 @@ export class ConfirmAlert {
     private readonly translocoService: TranslocoService
   ) {}
 
-  present$(
-    onConfirm: () => void,
+  async present(
     message: string = this.translocoService.translate('message.areYouSure')
   ) {
-    return defer(() =>
-      this.alertController.create({
-        header: this.translocoService.translate('areYouSure'),
-        message,
-        buttons: [
-          {
-            text: this.translocoService.translate('cancel'),
-            role: 'cancel',
-          },
-          {
-            text: this.translocoService.translate('ok'),
-            handler: onConfirm,
-          },
-        ],
-        mode: 'md',
-      })
-    ).pipe(switchMap(alertElement => alertElement.present()));
+    return new Promise<boolean>(resolve => {
+      this.alertController
+        .create({
+          header: this.translocoService.translate('areYouSure'),
+          message,
+          buttons: [
+            {
+              text: this.translocoService.translate('cancel'),
+              role: 'cancel',
+              handler: () => resolve(false),
+            },
+            {
+              text: this.translocoService.translate('ok'),
+              handler: () => resolve(true),
+            },
+          ],
+          mode: 'md',
+        })
+        .then(alertElement => alertElement.present());
+    });
   }
 }

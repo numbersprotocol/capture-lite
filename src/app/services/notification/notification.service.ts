@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { Inject, Injectable } from '@angular/core';
+import { LocalNotificationsPlugin } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
+import { LOCAL_NOTIFICATIONS_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
 import { NotificationItem } from './notification-item';
-
-const { LocalNotifications } = Plugins;
 
 @Injectable({
   providedIn: 'root',
@@ -11,16 +10,21 @@ const { LocalNotifications } = Plugins;
 export class NotificationService {
   protected currentId = 1;
 
-  constructor(protected readonly translocoService: TranslocoService) {}
+  constructor(
+    @Inject(LOCAL_NOTIFICATIONS_PLUGIN)
+    private readonly localNotificationsPlugin: LocalNotificationsPlugin,
+    private readonly translocoService: TranslocoService
+  ) {}
 
   // tslint:disable-next-line: prefer-function-over-method
   async requestPermission() {
-    return LocalNotifications.requestPermission();
+    return this.localNotificationsPlugin.requestPermission();
   }
 
   createNotification() {
     return new NotificationItem(
       this.getNewNotificationId(),
+      this.localNotificationsPlugin,
       this.translocoService
     );
   }

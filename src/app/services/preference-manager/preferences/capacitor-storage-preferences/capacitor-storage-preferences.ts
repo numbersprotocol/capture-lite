@@ -1,16 +1,17 @@
-import { Plugins } from '@capacitor/core';
+import { StoragePlugin } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
 import { BehaviorSubject, defer, Observable } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { Preferences } from '../preferences';
 
-const { Storage } = Plugins;
-
 export class CapacitorStoragePreferences implements Preferences {
   private readonly subjects = new Map<string, BehaviorSubject<any>>();
   private readonly mutex = new Mutex();
 
-  constructor(readonly id: string) {}
+  constructor(
+    readonly id: string,
+    private readonly storagePlugin: StoragePlugin
+  ) {}
 
   getBoolean$(key: string, defaultValue = false) {
     return this.get$(key, defaultValue);
@@ -65,7 +66,9 @@ export class CapacitorStoragePreferences implements Preferences {
     key: string,
     defaultValue: boolean | number | string
   ) {
-    const rawValue = (await Storage.get({ key: this.toStorageKey(key) })).value;
+    const rawValue = (
+      await this.storagePlugin.get({ key: this.toStorageKey(key) })
+    ).value;
     if (!rawValue) {
       return defaultValue;
     }
@@ -104,12 +107,15 @@ export class CapacitorStoragePreferences implements Preferences {
   }
 
   private async storeValue(key: string, value: boolean | number | string) {
-    return Storage.set({ key: this.toStorageKey(key), value: `${value}` });
+    return this.storagePlugin.set({
+      key: this.toStorageKey(key),
+      value: `${value}`,
+    });
   }
 
   async clear() {
     for (const key of this.subjects.keys()) {
-      await Storage.remove({ key: this.toStorageKey(key) });
+      await this.storagePlugin.remove({ key: this.toStorageKey(key) });
     }
     this.subjects.clear();
     return this;

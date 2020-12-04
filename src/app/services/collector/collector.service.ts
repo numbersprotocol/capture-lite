@@ -37,7 +37,7 @@ export class CollectorService {
     const signatures = await this.signTargets({ assets, truth });
     const proof = await Proof.from(this.imageStore, assets, truth, signatures);
     await this.proofRepository.add(proof);
-    notification.cancel();
+    await notification.cancel();
     return proof;
   }
 
