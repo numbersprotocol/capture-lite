@@ -1,13 +1,26 @@
+import { TestBed } from '@angular/core/testing';
+import { Plugins } from '@capacitor/core';
 import { zip } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { STORAGE_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
+import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { Preferences } from '../preferences';
 import { CapacitorStoragePreferences } from './capacitor-storage-preferences';
+
+const { Storage } = Plugins;
 
 describe('CapacitorStoragePreferences', () => {
   let preferences: Preferences;
   const id = 'id';
 
-  beforeEach(() => (preferences = new CapacitorStoragePreferences(id)));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [SharedTestingModule],
+      providers: [{ provide: STORAGE_PLUGIN, useValue: Storage }],
+    });
+    const storagePlugin = TestBed.inject(STORAGE_PLUGIN);
+    preferences = new CapacitorStoragePreferences(id, storagePlugin);
+  });
 
   it('should be created', () => expect(preferences).toBeTruthy());
 

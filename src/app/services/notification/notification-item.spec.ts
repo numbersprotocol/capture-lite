@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { LocalNotificationsPlugin, Plugins } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { LOCAL_NOTIFICATIONS_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
@@ -10,8 +10,6 @@ const { LocalNotifications } = Plugins;
 describe('NotificationItem', () => {
   let item: NotificationItem;
   const id = 2;
-  let localNotificationsPlugin: LocalNotificationsPlugin;
-  let translocoService: TranslocoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -20,9 +18,9 @@ describe('NotificationItem', () => {
         { provide: LOCAL_NOTIFICATIONS_PLUGIN, useValue: LocalNotifications },
       ],
     });
-    localNotificationsPlugin = TestBed.inject(LOCAL_NOTIFICATIONS_PLUGIN);
-    translocoService = TestBed.inject(TranslocoService);
-    item = new NotificationItem(2, localNotificationsPlugin, translocoService);
+    const localNotificationsPlugin = TestBed.inject(LOCAL_NOTIFICATIONS_PLUGIN);
+    const translocoService = TestBed.inject(TranslocoService);
+    item = new NotificationItem(id, localNotificationsPlugin, translocoService);
   });
 
   it('should be created', () => expect(item).toBeTruthy());
