@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { map } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { Transaction } from '../../../../services/publisher/numbers-storage/numb
   templateUrl: './transaction-details.page.html',
   styleUrls: ['./transaction-details.page.scss'],
 })
-export class TransactionDetailsPage {
+export class TransactionDetailsPage implements OnInit {
   details!: Transaction;
   readonly status = Status;
 
