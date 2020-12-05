@@ -5,18 +5,17 @@ import { ConfirmAlert } from './confirm-alert.service';
 
 describe('ConfirmAlert', () => {
   let service: ConfirmAlert;
-  let alertController: AlertController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
     service = TestBed.inject(ConfirmAlert);
-    alertController = TestBed.inject(AlertController);
+    const alertController = TestBed.inject(AlertController);
     const htmlIonAlertElementSpy = jasmine.createSpyObj('HTMLIonAlertElement', {
       present: new Promise(resolve => resolve()),
     });
-    spyOn(alertController, 'create').and.returnValue(htmlIonAlertElementSpy);
+    spyOn(alertController, 'create').and.resolveTo(htmlIonAlertElementSpy);
   });
 
   it('should be created', () => {
