@@ -12,7 +12,7 @@
 
 <div *transloco="let t" class="page-content">
   <ng-container *ngIf="!isPreview">
-    <form #form="ngForm" (ngSubmit)="preview(form.value.caption)">
+    <form #form="ngForm" (ngSubmit)="preview()">
       <mat-card class="example-card">
         <img mat-card-image [src]="base64Src$ | async" />
         <mat-card-content>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
+import { defer } from 'rxjs';
 import { ImageStore } from '../image-store/image-store.service';
 import { NotificationService } from '../notification/notification.service';
 import {
@@ -29,16 +30,18 @@ export class CollectorService {
   ) {}
 
   async runAndStore(assets: Assets) {
-    const notification = await this.notificationService.notify(
+    return this.notificationService.notifyOnGoing(
+      defer(() => this._runAndStore(assets)),
       this.translocoService.translate('storingAssets'),
       this.translocoService.translate('message.storingAssets')
     );
+  }
+
+  private async _runAndStore(assets: Assets) {
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
     const proof = await Proof.from(this.imageStore, assets, truth, signatures);
-    await this.proofRepository.add(proof);
-    await notification.cancel();
-    return proof;
+    return this.proofRepository.add(proof);
   }
 
   private async collectTruth(assets: Assets): Promise<Truth> {

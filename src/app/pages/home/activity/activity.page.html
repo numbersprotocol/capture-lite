@@ -14,8 +14,12 @@
         <img matListAvatar [src]="activity.asset.asset_file_thumbnail" />
         <div mat-line>{{ activity.asset.id }}</div>
         <div mat-line>{{ activity.created_at | date: 'short' }}</div>
-        <button [class]="activity.status" mat-stroked-button disableRipple>
-          {{ t(activity.status) }}
+        <button
+          [class]="activity.status | async"
+          mat-stroked-button
+          disableRipple
+        >
+          {{ t(activity.status | async) }}
         </button>
       </mat-list-item>
       <mat-divider *ngIf="!isLast"></mat-divider>

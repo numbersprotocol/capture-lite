@@ -11,5 +11,5 @@ export function sortObjectDeeplyByKey(
 }
 
 interface SortableMap {
-  [key: string]: boolean | number | string | SortableMap;
+  readonly [key: string]: boolean | number | string | SortableMap;
 }

@@ -9,9 +9,7 @@ import { defer } from 'rxjs';
 import { catchError, concatMapTo } from 'rxjs/operators';
 import { BlockingActionService } from '../../services/blocking-action/blocking-action.service';
 import { WebCryptoApiSignatureProvider } from '../../services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
-import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
-import { AssetRepository } from '../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
-import { IgnoredTransactionRepository } from '../../services/publisher/numbers-storage/repositories/ignored-transaction/ignored-transaction-repository.service';
+import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
 
 const { Clipboard } = Plugins;
 
@@ -22,8 +20,8 @@ const { Clipboard } = Plugins;
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage {
-  readonly username$ = this.numbersStorageApi.getUsername$();
-  readonly email$ = this.numbersStorageApi.getEmail$();
+  readonly username$ = this.diaBackendAuthService.getUsername$();
+  readonly email$ = this.diaBackendAuthService.getEmail$();
   readonly publicKey$ = this.webCryptoApiSignatureProvider.getPublicKey$();
   readonly privateKey$ = this.webCryptoApiSignatureProvider.getPrivateKey$();
 
@@ -33,9 +31,7 @@ export class ProfilePage {
     private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
     private readonly snackBar: MatSnackBar,
-    private readonly numbersStorageApi: NumbersStorageApi,
-    private readonly assetRepository: AssetRepository,
-    private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider
   ) {}
 
@@ -47,9 +43,7 @@ export class ProfilePage {
   }
 
   logout() {
-    const action$ = this.assetRepository.removeAll$().pipe(
-      concatMapTo(this.ignoredTransactionRepository.removeAll$()),
-      concatMapTo(this.numbersStorageApi.logout$()),
+    const action$ = this.diaBackendAuthService.logout$().pipe(
       concatMapTo(defer(() => this.router.navigate(['/login']))),
       catchError(err =>
         this.toastController

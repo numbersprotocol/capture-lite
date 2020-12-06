@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { IgnoredTransactionRepository } from './ignored-transaction-repository.service';
 
 describe('IgnoredTransactionRepository', () => {
-  let service: IgnoredTransactionRepository;
+  let repository: IgnoredTransactionRepository;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
-    service = TestBed.inject(IgnoredTransactionRepository);
+    repository = TestBed.inject(IgnoredTransactionRepository);
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(repository).toBeTruthy();
   });
 });

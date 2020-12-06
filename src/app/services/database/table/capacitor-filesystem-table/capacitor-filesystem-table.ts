@@ -99,7 +99,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   private assertNoConflictWithExistedTuples(tuples: T[]) {
     const conflicted = intersaction(tuples, this.tuples$.value);
     if (conflicted.length !== 0) {
-      throw new Error(`Tuples existed: ${conflicted}`);
+      throw new Error(`Tuples existed: ${JSON.stringify(conflicted)}`);
     }
   }
 
@@ -121,7 +121,11 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
       tuple => !this.tuples$.value.find(t => equals(tuple)(t))
     );
     if (nonexistent.length !== 0) {
-      throw new Error(`Cannot delete nonexistent tuples: ${nonexistent}`);
+      console.error(JSON.stringify(this.tuples$.value));
+
+      throw new Error(
+        `Cannot delete nonexistent tuples: ${JSON.stringify(nonexistent)}`
+      );
     }
   }
 
@@ -159,7 +163,7 @@ function assertNoDuplicatedTuples<T>(tuples: T[]) {
     }
   });
   if (conflicted.length !== 0) {
-    throw new Error(`Tuples duplicated: ${conflicted}`);
+    throw new Error(`Tuples duplicated: ${JSON.stringify(conflicted)}`);
   }
 }
 

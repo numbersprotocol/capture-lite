@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { of, zip } from 'rxjs';
-import { concatMap, first, map, pluck } from 'rxjs/operators';
+import { map, pluck } from 'rxjs/operators';
+import { DiaBackendAuthService } from '../../../services/dia-backend/auth/dia-backend-auth.service';
 import {
-  NumbersStorageApi,
-  Transaction,
-} from '../../../services/publisher/numbers-storage/numbers-storage-api.service';
-import { forkJoinWithDefault } from '../../../utils/rx-operators';
+  DiaBackendTransaction,
+  DiaBackendTransactionRepository,
+} from '../../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -16,44 +15,35 @@ import { forkJoinWithDefault } from '../../../utils/rx-operators';
 })
 export class ActivityPage {
   readonly status = Status;
-  readonly activitiesWithStatus$ = this.numbersStorageApi
-    .listTransactions$()
+  readonly activitiesWithStatus$ = this.diaBackendTransactionRepository
+    .getAll$()
     .pipe(
       pluck('results'),
-      concatMap(activities =>
-        zip(
-          of(activities),
-          forkJoinWithDefault(
-            activities.map(activity => this.getStatus$(activity))
-          )
-        )
-      ),
-      map(([activities, statusList]) =>
-        activities.map((activity, index) => ({
+      map(activities =>
+        activities.map(activity => ({
           ...activity,
-          status: statusList[index],
+          status: this.getStatus(activity),
         }))
       )
     );
 
-  constructor(private readonly numbersStorageApi: NumbersStorageApi) {}
+  constructor(
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository
+  ) {}
 
-  private getStatus$(activity: Transaction) {
-    return this.numbersStorageApi.getEmail$().pipe(
-      map(email => {
-        if (activity.expired) {
-          return Status.Returned;
-        }
-        if (!activity.fulfilled_at) {
-          return Status.InProgress;
-        }
-        if (activity.sender === email) {
-          return Status.Delivered;
-        }
-        return Status.Accepted;
-      }),
-      first()
-    );
+  private async getStatus(activity: DiaBackendTransaction) {
+    const email = await this.diaBackendAuthService.getEmail();
+    if (activity.expired) {
+      return Status.Returned;
+    }
+    if (!activity.fulfilled_at) {
+      return Status.InProgress;
+    }
+    if (activity.sender === email) {
+      return Status.Delivered;
+    }
+    return Status.Accepted;
   }
 }
 
