@@ -60,7 +60,7 @@ export class ActivityPage {
   }
 }
 
-enum Status {
+export enum Status {
   InSendProgress = 'inSendProgress',
   InProgress = 'inProgress',
   Returned = 'returned',
