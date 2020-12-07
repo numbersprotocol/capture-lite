@@ -12,8 +12,8 @@
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
-  <img class="proof-image" [src]="base64Src$ | async" />
   <mat-list>
+    <img class="proof-image" [src]="base64Src$ | async" />
     <mat-list-item>
       <mat-icon mat-list-icon>person</mat-icon>
       <div mat-line>{{ (asset$ | async)?.owner }}</div>

@@ -6,6 +6,10 @@ mat-toolbar {
   }
 }
 
+img {
+  height: 100px;
+}
+
 .title {
   color: white;
   margin-left: 40px;
@@ -20,7 +24,7 @@ mat-toolbar {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 100vh;
+  overflow: auto;
 }
 
 button.center {
