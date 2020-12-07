@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Transaction } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
-import { Asset } from '../../services/publisher/numbers-storage/repositories/asset/asset';
+import { DiaBackendAsset } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendTransaction } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { SharedTestingModule } from '../shared-testing.module';
 import { PostCaptureCardComponent } from './post-capture-card.component';
 
 describe('PostCaptureCardComponent', () => {
   let component: PostCaptureCardComponent;
   let fixture: ComponentFixture<PostCaptureCardComponent>;
-  const expectedAsset: Asset = {
+  const expectedAsset: DiaBackendAsset = {
     id: 'abcd-efgh-ijkl',
     proof_hash: 'abcdef1234567890',
     owner: 'me',
@@ -21,9 +21,10 @@ describe('PostCaptureCardComponent', () => {
     uploaded_at: '',
     is_original_owner: true,
   };
-  const expectedTranasction: Transaction = {
+  const expectedTranasction: DiaBackendTransaction = {
     id: '',
     sender: '',
+    receiver_email: '',
     asset: {
       asset_file_thumbnail: 'https://picsum.photos/200/300',
       caption: '',

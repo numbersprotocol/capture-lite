@@ -8,7 +8,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 import { combineLatest } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../services/blocking-action/blocking-action.service';
-import { NumbersStorageApi } from '../../services/publisher/numbers-storage/numbers-storage-api.service';
+import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
 import { EMAIL_REGEXP } from '../../utils/validation';
 
 @UntilDestroy({ checkProperties: true })
@@ -29,7 +29,7 @@ export class SignupPage {
 
   constructor(
     private readonly blockingActionService: BlockingActionService,
-    private readonly numbersStorageApi: NumbersStorageApi,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
     private readonly router: Router
@@ -155,7 +155,7 @@ export class SignupPage {
   }
 
   onSubmit() {
-    const action$ = this.numbersStorageApi.createUser$(
+    const action$ = this.diaBackendAuthService.createUser$(
       this.model.username,
       this.model.email,
       this.model.password

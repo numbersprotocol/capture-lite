@@ -94,7 +94,7 @@
     "emailOrPasswordIsInvalid": "The email address or password you entered is invalid.",
     "tooManyRetries": "You have entered the invalid email or password too many times. Please try again later.",
     "storingAssets": "Collecting environment variables, signing and storing assets...",
-    "registeringProof": "Registering asset {{ id }} to {{ publisherName }}.",
+    "registeringProof": "Registering the asset to Numbers DIA.",
     "forbiddenAllNumeric": "Cannot contain only numbers.",
     "isNotEmail": "Does not follow email format.",
     "pleaseWait": "Please wait...",

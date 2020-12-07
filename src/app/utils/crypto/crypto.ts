@@ -25,8 +25,8 @@ const enum Format {
 }
 
 interface KeyPair {
-  publicKey: string;
-  privateKey: string;
+  readonly publicKey: string;
+  readonly privateKey: string;
 }
 
 export async function sha256WithString(str: string) {

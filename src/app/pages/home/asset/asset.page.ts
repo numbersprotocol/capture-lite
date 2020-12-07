@@ -3,7 +3,6 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, defer, forkJoin, zip } from 'rxjs';
 import {
@@ -16,7 +15,7 @@ import {
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../../services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../services/confirm-alert/confirm-alert.service';
-import { AssetRepository } from '../../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
+import { DiaBackendAssetRepository } from '../../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { getOldProof } from '../../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../services/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../utils/rx-operators';
@@ -38,7 +37,7 @@ export class AssetPage {
   readonly asset$ = this.route.paramMap.pipe(
     map(params => params.get('id')),
     isNonNullable(),
-    switchMap(id => this.assetRepository.getById$(id)),
+    switchMap(id => this.diaBackendAssetRepository.getById$(id)),
     isNonNullable()
   );
   private readonly proofsWithOld$ = this.proofRepository
@@ -51,9 +50,10 @@ export class AssetPage {
   readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
     map(([asset, proofsWithOld]) => ({
       asset,
+      // tslint:disable-next-line: no-non-null-assertion
       proofWithOld: proofsWithOld.find(
         p => p.oldProof.hash === asset.proof_hash
-      ),
+      )!,
     })),
     isNonNullable()
   );
@@ -80,9 +80,8 @@ export class AssetPage {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly translocoService: TranslocoService,
     private readonly confirmAlert: ConfirmAlert,
-    private readonly assetRepository: AssetRepository,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly proofRepository: ProofRepository,
     private readonly blockingActionService: BlockingActionService,
     private readonly dialog: MatDialog,
@@ -125,11 +124,8 @@ export class AssetPage {
       first(),
       concatMap(([asset, capture]) =>
         forkJoin([
-          this.assetRepository.remove$(asset),
-          this.proofRepository.remove(
-            // tslint:disable-next-line: no-non-null-assertion
-            capture.proofWithOld!.proof
-          ),
+          this.diaBackendAssetRepository.remove(asset),
+          this.proofRepository.remove(capture.proofWithOld.proof),
         ])
       ),
       switchMapTo(defer(() => this.router.navigate(['..'])))

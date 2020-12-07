@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { LocalNotificationsPlugin } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
+import { Observable } from 'rxjs';
 import { LOCAL_NOTIFICATIONS_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
 import { NotificationItem } from './notification-item';
 
@@ -16,7 +17,6 @@ export class NotificationService {
     private readonly translocoService: TranslocoService
   ) {}
 
-  // tslint:disable-next-line: prefer-function-over-method
   async requestPermission() {
     return this.localNotificationsPlugin.requestPermission();
   }
@@ -40,5 +40,9 @@ export class NotificationService {
 
   async error(error: Error) {
     return this.createNotification().error(error);
+  }
+
+  async notifyOnGoing<T>(action$: Observable<T>, title: string, body: string) {
+    return this.createNotification().notifyOnGoing(action$, title, body);
   }
 }
