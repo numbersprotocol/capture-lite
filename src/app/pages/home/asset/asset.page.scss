@@ -6,10 +6,6 @@ mat-toolbar {
   }
 }
 
-img {
-  height: 100px;
-}
-
 .title {
   color: white;
   margin-left: 40px;
@@ -25,6 +21,23 @@ img {
   flex-direction: column;
   justify-content: center;
   overflow: auto;
+}
+
+.page-container {
+  padding-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: auto;
+}
+
+.content {
+  flex: 1;
+}
+
+.end-button {
+  flex: 1;
+  flex-grow: 1;
 }
 
 button.center {
