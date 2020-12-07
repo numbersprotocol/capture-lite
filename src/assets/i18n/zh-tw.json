@@ -78,6 +78,7 @@
   "sentFrom": "發送自",
   ".message": "訊息",
   "location": "位置",
+  "locationNotProvided": "沒有位置資訊",
   "message": {
     "areYouSure": "此操作不可撤銷。",
     "verificationEmailSent": "驗證電子郵件已發送到您的電子郵件地址。",
