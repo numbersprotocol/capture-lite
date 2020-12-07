@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { map } from 'rxjs/operators';
 import { Transaction } from '../../../../services/publisher/numbers-storage/numbers-storage-api.service';
-import { Status } from '../activity.page';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -13,7 +12,6 @@ import { Status } from '../activity.page';
 })
 export class TransactionDetailsPage implements OnInit {
   details!: Transaction;
-  readonly status = Status;
 
   constructor(
     private readonly router: Router,
