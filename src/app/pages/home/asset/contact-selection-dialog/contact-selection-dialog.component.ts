@@ -1,14 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DiaBackendContactRepository } from '../../../../services/dia-backend/contact/dia-backend-contact-repository.service';
 import { isNonNullable } from '../../../../utils/rx-operators';
-import {
-  FriendInvitationDialogComponent,
-  SubmittedFriendInvitation,
-} from './friend-invitation-dialog/friend-invitation-dialog.component';
+import { FriendInvitationDialogComponent } from './friend-invitation-dialog/friend-invitation-dialog.component';
 
 @Component({
   selector: 'app-contact-selection-dialog',
@@ -16,10 +10,12 @@ import {
   styleUrls: ['./contact-selection-dialog.component.scss'],
 })
 export class ContactSelectionDialogComponent {
+  readonly contacts$ = this.diaBackendContactRepository.getAll$();
+
   constructor(
     private readonly dialog: MatDialog,
     private readonly dialogRef: MatDialogRef<ContactSelectionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: SelectedContact
+    private readonly diaBackendContactRepository: DiaBackendContactRepository
   ) {}
 
   openFriendInvitationDialog() {
@@ -36,8 +32,4 @@ export class ContactSelectionDialogComponent {
   onCancelClicked() {
     this.dialogRef.close();
   }
-}
-
-export interface SelectedContact {
-  email?: string;
 }
