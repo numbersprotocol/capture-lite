@@ -5,22 +5,18 @@
   <span>{{ t('TransactionDetails') }}</span>
 </mat-toolbar>
 <div *transloco="let t" class="page-content">
-  <ng-container>
-    <h4 class="top-time">{{ details.created_at | date: 'short' }}</h4>
-    <mat-card class="transaction-card">
-      <mat-card-content class="row">
-        <mat-label> {{ details.asset.id }}</mat-label>
-        <button [class]="details.status" mat-stroked-button disableRipple>
-          {{ details.status }}
-        </button>
-      </mat-card-content>
-      <img [src]="details.asset.asset_file_thumbnail" />
-      <mat-card-content class="column">
-        <mat-label>{{ t('sentFrom') }} : {{ details.sender }}</mat-label>
-        <mat-label
-          >{{ t('receiver') }} : {{ details.receiver_email }}</mat-label
-        >
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
+  <h4 class="top-time">{{ details.created_at | date: 'short' }}</h4>
+  <mat-card class="transaction-card">
+    <mat-card-content class="row">
+      <mat-label> {{ details.asset.id }}</mat-label>
+      <button [class]="details.status" mat-stroked-button disableRipple>
+        {{ details.status }}
+      </button>
+    </mat-card-content>
+    <img [src]="details.asset.asset_file_thumbnail" />
+    <mat-card-content class="column">
+      <mat-label>{{ t('sentFrom') }} : {{ details.sender }}</mat-label>
+      <mat-label>{{ t('receiver') }} : {{ details.receiver_email }}</mat-label>
+    </mat-card-content>
+  </mat-card>
 </div>
