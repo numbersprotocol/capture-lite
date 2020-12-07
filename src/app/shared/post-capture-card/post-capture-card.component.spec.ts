@@ -30,7 +30,6 @@ describe('PostCaptureCardComponent', () => {
       caption: '',
       id: 'abcd-efgh-ijkl',
     },
-    receiver_email: '',
     created_at: '',
     expired: false,
     fulfilled_at: '',
