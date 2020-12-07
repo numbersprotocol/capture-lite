@@ -48,7 +48,7 @@ export class ActivityPage {
           if (activity.receiver_email === email) {
             return Status.InProgress;
           }
-          return Status.InSendProgress;
+          return Status.waitingToBeAccepted;
         }
         if (activity.sender === email) {
           return Status.Delivered;
@@ -61,7 +61,7 @@ export class ActivityPage {
 }
 
 export enum Status {
-  InSendProgress = 'inSendProgress',
+  waitingToBeAccepted = 'waitingToBeAccepted',
   InProgress = 'inProgress',
   Returned = 'returned',
   Delivered = 'delivered',
