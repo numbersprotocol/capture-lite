@@ -1,6 +1,10 @@
 <h1 *transloco="let t" mat-dialog-title>{{ t('selectContact') }}</h1>
 
 <div *transloco="let t" mat-dialog-content>
+  <mat-spinner
+    *ngIf="(contacts$ | async)?.length === 0 && isFetching$ | async"
+    diameter="24"
+  ></mat-spinner>
   <mat-action-list>
     <mat-list-item
       *ngFor="let contact of contacts$ | async"

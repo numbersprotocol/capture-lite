@@ -11,6 +11,7 @@ import { FriendInvitationDialogComponent } from './friend-invitation-dialog/frie
 })
 export class ContactSelectionDialogComponent {
   readonly contacts$ = this.diaBackendContactRepository.getAll$();
+  readonly isFetching$ = this.diaBackendContactRepository.isFetching$();
 
   constructor(
     private readonly dialog: MatDialog,

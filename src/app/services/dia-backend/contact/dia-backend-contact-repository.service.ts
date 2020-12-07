@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { isEqual } from 'lodash';
-import { defer, merge } from 'rxjs';
+import { BehaviorSubject, defer, merge, of } from 'rxjs';
 import {
   concatMap,
+  concatMapTo,
   distinctUntilChanged,
   pluck,
   switchMapTo,
+  tap,
 } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy, Tuple } from '../../database/table/table';
@@ -17,6 +19,7 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendContactRepository {
+  private readonly _isFetching$ = new BehaviorSubject(false);
   private readonly table = this.database.getTable<DiaBackendContact>(
     DiaBackendContactRepository.name
   );
@@ -46,8 +49,13 @@ export class DiaBackendContactRepository {
     );
   }
 
+  isFetching$() {
+    return this._isFetching$.asObservable();
+  }
+
   private fetchAll$() {
-    return defer(() => this.authService.getAuthHeaders()).pipe(
+    return of(this._isFetching$.next(true)).pipe(
+      concatMapTo(defer(() => this.authService.getAuthHeaders())),
       concatMap(headers =>
         this.httpClient.get<ListContactResponse>(
           `${BASE_URL}/api/v2/contacts/`,
@@ -57,7 +65,8 @@ export class DiaBackendContactRepository {
       pluck('results'),
       concatMap(contacts =>
         this.table.insert(contacts, OnConflictStrategy.IGNORE)
-      )
+      ),
+      tap(() => this._isFetching$.next(false))
     );
   }
 }
