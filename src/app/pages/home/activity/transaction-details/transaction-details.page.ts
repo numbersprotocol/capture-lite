@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-transaction-details',
@@ -9,7 +9,10 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./transaction-details.page.scss'],
 })
 export class TransactionDetailsPage {
-  details$ = this.route.paramMap.pipe(map(() => history.state));
+  details$ = this.route.paramMap.pipe(
+    map(() => history.state),
+    tap(whatever => console.log(whatever))
+  );
 
   constructor(
     private readonly router: Router,

@@ -9,11 +9,15 @@
   <mat-card class="transaction-card">
     <mat-card-content class="row">
       <mat-label> {{ (details$ | async)?.asset.id }}</mat-label>
-      <button [class]="details.status" mat-stroked-button disableRipple>
-        {{ (details$ | async)?.status }}
+      <button
+        [class]="(details$ | async)?.status.__zone_symbol__value"
+        mat-stroked-button
+        disableRipple
+      >
+        {{ (details$ | async)?.status.__zone_symbol__value }}
       </button>
     </mat-card-content>
-    <img [src]="details.asset.asset_file_thumbnail" />
+    <img [src]="(details$ | async)?.asset.asset_file_thumbnail" />
     <mat-card-content class="column">
       <mat-label
         >{{ t('sentFrom') }} : {{ (details$ | async)?.sender }}</mat-label
