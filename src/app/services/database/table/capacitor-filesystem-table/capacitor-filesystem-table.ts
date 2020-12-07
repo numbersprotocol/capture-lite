@@ -4,10 +4,10 @@ import {
   FilesystemPlugin,
 } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
-import { equals } from 'lodash/fp';
+import { differenceWith, intersectionWith, isEqual, uniqWith } from 'lodash';
 import { BehaviorSubject, defer } from 'rxjs';
 import { concatMapTo } from 'rxjs/operators';
-import { Table, Tuple } from '../table';
+import { OnConflictStrategy, Table, Tuple } from '../table';
 
 export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   private readonly directory = FilesystemDirectory.Data;
@@ -85,19 +85,25 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     this.tuples$.next(JSON.parse(result.data));
   }
 
-  async insert(tuples: T[]) {
+  async insert(tuples: T[], onConflict = OnConflictStrategy.ABORT) {
     return this.mutex.runExclusive(async () => {
       assertNoDuplicatedTuples(tuples);
-      this.assertNoConflictWithExistedTuples(tuples);
       await this.initialize();
-      this.tuples$.next([...this.tuples$.value, ...tuples]);
+      if (onConflict === OnConflictStrategy.ABORT) {
+        this.assertNoConflictWithExistedTuples(tuples);
+        this.tuples$.next([...this.tuples$.value, ...tuples]);
+      } else if (onConflict === OnConflictStrategy.IGNORE) {
+        this.tuples$.next(
+          uniqWith([...this.tuples$.value, ...tuples], isEqual)
+        );
+      }
       await this.dumpJson();
       return tuples;
     });
   }
 
   private assertNoConflictWithExistedTuples(tuples: T[]) {
-    const conflicted = intersaction(tuples, this.tuples$.value);
+    const conflicted = intersectionWith(tuples, this.tuples$.value, isEqual);
     if (conflicted.length !== 0) {
       throw new Error(`Tuples existed: ${JSON.stringify(conflicted)}`);
     }
@@ -108,7 +114,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
       this.assertTuplesExist(tuples);
       await this.initialize();
       const afterDeletion = this.tuples$.value.filter(
-        tuple => !tuples.map(t => equals(tuple)(t)).includes(true)
+        tuple => !tuples.map(t => isEqual(tuple, t)).includes(true)
       );
       this.tuples$.next(afterDeletion);
       await this.dumpJson();
@@ -118,11 +124,9 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
 
   private assertTuplesExist(tuples: T[]) {
     const nonexistent = tuples.filter(
-      tuple => !this.tuples$.value.find(t => equals(tuple)(t))
+      tuple => !this.tuples$.value.find(t => isEqual(tuple, t))
     );
     if (nonexistent.length !== 0) {
-      console.error(JSON.stringify(this.tuples$.value));
-
       throw new Error(
         `Cannot delete nonexistent tuples: ${JSON.stringify(nonexistent)}`
       );
@@ -154,19 +158,9 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
 }
 
 function assertNoDuplicatedTuples<T>(tuples: T[]) {
-  const conflicted: T[] = [];
-  tuples.forEach((a, index) => {
-    for (let bIndex = index + 1; bIndex < tuples.length; bIndex += 1) {
-      if (equals(a)(tuples[bIndex])) {
-        conflicted.push(a);
-      }
-    }
-  });
-  if (conflicted.length !== 0) {
+  const unique = uniqWith(tuples, isEqual);
+  if (tuples.length !== unique.length) {
+    const conflicted = differenceWith(tuples, unique, isEqual);
     throw new Error(`Tuples duplicated: ${JSON.stringify(conflicted)}`);
   }
-}
-
-function intersaction<T>(list1: T[], list2: T[]) {
-  return list1.filter(tuple1 => list2.find(tuple2 => equals(tuple1)(tuple2)));
 }

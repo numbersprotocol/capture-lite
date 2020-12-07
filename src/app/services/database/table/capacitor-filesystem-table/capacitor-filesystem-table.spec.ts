@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core';
-import { Table, Tuple } from '../table';
+import { OnConflictStrategy, Table, Tuple } from '../table';
 import { CapacitorFilesystemTable } from './capacitor-filesystem-table';
 
 const { Filesystem } = Plugins;
@@ -85,6 +85,16 @@ describe('CapacitorFilesystemTable', () => {
     await table.insert([testTuple1]);
 
     await expectAsync(table.insert([sameTuple])).toBeRejected();
+  });
+
+  it('should ignore on inserting existed tuple if the conflict strategy is IGNORE', async () => {
+    const sameTuple: TestTuple = { ...testTuple1 };
+    await table.insert([testTuple1]);
+
+    await table.insert([sameTuple, testTuple2], OnConflictStrategy.IGNORE);
+
+    const all = await table.queryAll();
+    expect(all).toEqual([testTuple1, testTuple2]);
   });
 
   it('should remove by tuple contents not reference', async done => {

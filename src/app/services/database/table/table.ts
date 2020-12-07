@@ -4,7 +4,7 @@ export interface Table<T extends Tuple> {
   readonly id: string;
   queryAll$(): Observable<T[]>;
   queryAll(): Promise<T[]>;
-  insert(tuples: T[]): Promise<T[]>;
+  insert(tuples: T[], onConflict?: OnConflictStrategy): Promise<T[]>;
   delete(tuples: T[]): Promise<T[]>;
   drop(): Promise<void>;
 }
@@ -15,6 +15,12 @@ export interface Tuple {
     | number
     | string
     | undefined
+    | null
     | Tuple
     | Tuple[];
+}
+
+export const enum OnConflictStrategy {
+  ABORT,
+  IGNORE,
 }
