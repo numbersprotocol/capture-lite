@@ -2,7 +2,7 @@
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <span>{{ t('TransactionDetails') }}</span>
+  <span>{{ t('transactionDetails') }}</span>
 </mat-toolbar>
 <div *transloco="let t" class="page-content">
   <h4 class="top-time">{{ details.created_at | date: 'short' }}</h4>
