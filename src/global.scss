@@ -52,7 +52,7 @@ mat-toolbar {
 // avoid overlapping with the status bar on iPhone 12 mini
 @media (min-height: 736px) and (max-width: 750px) {
   .ios mat-toolbar {
-    padding-top: 0px;
+    padding-top: 0;
   }
 }
 
