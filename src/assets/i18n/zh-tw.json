@@ -77,6 +77,7 @@
   "waitingToBeAccepted": "等待對方接收中",
   "returned": "已退回",
   "sentFrom": "發送自",
+  "receiver": "收件人",
   ".message": "訊息",
   "location": "位置",
   "message": {

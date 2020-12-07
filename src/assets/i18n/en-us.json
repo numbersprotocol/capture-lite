@@ -77,6 +77,7 @@
   "inProgress": "In Progress",
   "waitingToBeAccepted": "WaitingToBeAccepted",
   "sentFrom": "Sent from",
+  "receiver": "receiver",
   ".message": "Message",
   "location": "Location",
   "message": {

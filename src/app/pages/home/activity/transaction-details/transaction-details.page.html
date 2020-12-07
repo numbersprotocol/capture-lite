@@ -16,8 +16,10 @@
       </mat-card-content>
       <img [src]="details.asset.asset_file_thumbnail" />
       <mat-card-content class="column">
-        <mat-label>From : {{ details.sender }}</mat-label>
-        <mat-label>To : {{ details.receiver_email }}</mat-label>
+        <mat-label>{{ t('sentFrom') }} : {{ details.sender }}</mat-label>
+        <mat-label
+          >{{ t('receiver') }} : {{ details.receiver_email }}</mat-label
+        >
       </mat-card-content>
     </mat-card>
   </ng-container>
