@@ -85,16 +85,20 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     this.tuples$.next(JSON.parse(result.data));
   }
 
-  async insert(tuples: T[], onConflict = OnConflictStrategy.ABORT) {
+  async insert(
+    tuples: T[],
+    onConflict = OnConflictStrategy.ABORT,
+    comparator = isEqual
+  ) {
     return this.mutex.runExclusive(async () => {
-      assertNoDuplicatedTuples(tuples);
+      assertNoDuplicatedTuples(tuples, comparator);
       await this.initialize();
       if (onConflict === OnConflictStrategy.ABORT) {
-        this.assertNoConflictWithExistedTuples(tuples);
+        this.assertNoConflictWithExistedTuples(tuples, comparator);
         this.tuples$.next([...this.tuples$.value, ...tuples]);
       } else if (onConflict === OnConflictStrategy.IGNORE) {
         this.tuples$.next(
-          uniqWith([...this.tuples$.value, ...tuples], isEqual)
+          uniqWith([...this.tuples$.value, ...tuples], comparator)
         );
       }
       await this.dumpJson();
@@ -102,8 +106,11 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     });
   }
 
-  private assertNoConflictWithExistedTuples(tuples: T[]) {
-    const conflicted = intersectionWith(tuples, this.tuples$.value, isEqual);
+  private assertNoConflictWithExistedTuples(
+    tuples: T[],
+    comparator: (x: T, y: T) => boolean
+  ) {
+    const conflicted = intersectionWith(tuples, this.tuples$.value, comparator);
     if (conflicted.length !== 0) {
       throw new Error(`Tuples existed: ${JSON.stringify(conflicted)}`);
     }
@@ -157,10 +164,13 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   private static readonly initializationMutex = new Mutex();
 }
 
-function assertNoDuplicatedTuples<T>(tuples: T[]) {
-  const unique = uniqWith(tuples, isEqual);
+function assertNoDuplicatedTuples<T>(
+  tuples: T[],
+  comparator: (x: T, y: T) => boolean
+) {
+  const unique = uniqWith(tuples, comparator);
   if (tuples.length !== unique.length) {
-    const conflicted = differenceWith(tuples, unique, isEqual);
+    const conflicted = differenceWith(tuples, unique, comparator);
     throw new Error(`Tuples duplicated: ${JSON.stringify(conflicted)}`);
   }
 }

@@ -6,47 +6,11 @@ const { Filesystem } = Plugins;
 
 describe('CapacitorFilesystemTable', () => {
   let table: Table<TestTuple>;
-  const tableId = 'tableId';
-  const testTuple1: TestTuple = {
-    id: 1,
-    name: 'Rick Sanchez',
-    happy: false,
-    skills: [
-      {
-        name: 'Create Stuff',
-        level: Number.POSITIVE_INFINITY,
-      },
-      {
-        name: 'Destroy Stuff',
-        level: Number.POSITIVE_INFINITY,
-      },
-    ],
-    address: {
-      country: 'USA on Earth C-137',
-      city: 'Washington',
-    },
-  };
-  const testTuple2: TestTuple = {
-    id: 2,
-    name: 'Butter Robot',
-    happy: false,
-    skills: [
-      {
-        name: 'Pass Butter',
-        level: 1,
-      },
-      {
-        name: 'Oh My God',
-        level: Number.NEGATIVE_INFINITY,
-      },
-    ],
-    address: {
-      country: 'USA on Earth C-137',
-      city: 'Washington',
-    },
-  };
 
-  beforeEach(() => (table = new CapacitorFilesystemTable(tableId, Filesystem)));
+  beforeEach(() => {
+    const tableId = 'tableId';
+    table = new CapacitorFilesystemTable(tableId, Filesystem);
+  });
 
   afterEach(async () => table.drop());
 
@@ -65,42 +29,81 @@ describe('CapacitorFilesystemTable', () => {
   });
 
   it('should emit new query on inserting tuple', async done => {
-    await table.insert([testTuple1]);
-    await table.insert([testTuple2]);
+    await table.insert([TUPLE1]);
+    await table.insert([TUPLE2]);
 
     table.queryAll$().subscribe(tuples => {
-      expect(tuples).toEqual([testTuple1, testTuple2]);
+      expect(tuples).toEqual([TUPLE1, TUPLE2]);
       done();
     });
   });
 
   it('should throw on inserting same tuple', async () => {
-    const sameTuple: TestTuple = { ...testTuple1 };
+    const sameTuple: TestTuple = { ...TUPLE1 };
 
-    await expectAsync(table.insert([testTuple1, sameTuple])).toBeRejected();
+    await expectAsync(table.insert([TUPLE1, sameTuple])).toBeRejected();
+  });
+
+  it('should throw on inserting same tuple with comparator', async () => {
+    const sameIdTuple: TestTuple = { ...TUPLE2, id: TUPLE1_ID };
+
+    await expectAsync(
+      table.insert(
+        [TUPLE1, sameIdTuple],
+        OnConflictStrategy.ABORT,
+        (x, y) => x.id === y.id
+      )
+    ).toBeRejected();
   });
 
   it('should throw on inserting existed tuple', async () => {
-    const sameTuple: TestTuple = { ...testTuple1 };
-    await table.insert([testTuple1]);
+    const sameTuple: TestTuple = { ...TUPLE1 };
+    await table.insert([TUPLE1]);
 
     await expectAsync(table.insert([sameTuple])).toBeRejected();
   });
 
-  it('should ignore on inserting existed tuple if the conflict strategy is IGNORE', async () => {
-    const sameTuple: TestTuple = { ...testTuple1 };
-    await table.insert([testTuple1]);
+  it('should throw on inserting existed tuple with comparator', async () => {
+    const sameIdTuple: TestTuple = { ...TUPLE2, id: TUPLE1_ID };
+    await table.insert([TUPLE1]);
 
-    await table.insert([sameTuple, testTuple2], OnConflictStrategy.IGNORE);
+    await expectAsync(
+      table.insert(
+        [sameIdTuple],
+        OnConflictStrategy.ABORT,
+        (x, y) => x.id === y.id
+      )
+    ).toBeRejected();
+  });
+
+  it('should ignore on inserting existed tuple if the conflict strategy is IGNORE', async () => {
+    const sameTuple: TestTuple = { ...TUPLE1 };
+    await table.insert([TUPLE1]);
+
+    await table.insert([sameTuple, TUPLE2], OnConflictStrategy.IGNORE);
 
     const all = await table.queryAll();
-    expect(all).toEqual([testTuple1, testTuple2]);
+    expect(all).toEqual([TUPLE1, TUPLE2]);
+  });
+
+  it('should ignore on inserting existed tuple with comparator if the conflict strategy is IGNORE', async () => {
+    const sameIdTuple: TestTuple = { ...TUPLE2, id: TUPLE1_ID };
+    await table.insert([TUPLE1]);
+
+    await table.insert(
+      [sameIdTuple, TUPLE2],
+      OnConflictStrategy.IGNORE,
+      (x, y) => x.id === y.id
+    );
+
+    const all = await table.queryAll();
+    expect(all).toEqual([TUPLE1, TUPLE2]);
   });
 
   it('should remove by tuple contents not reference', async done => {
-    const sameTuple: TestTuple = { ...testTuple1 };
+    const sameTuple: TestTuple = { ...TUPLE1 };
 
-    await table.insert([testTuple1]);
+    await table.insert([TUPLE1]);
     await table.delete([sameTuple]);
 
     table.queryAll$().subscribe(tuples => {
@@ -110,19 +113,19 @@ describe('CapacitorFilesystemTable', () => {
   });
 
   it('should not emit removed tuples', async done => {
-    const sameTuple1: TestTuple = { ...testTuple1 };
+    const sameTuple1: TestTuple = { ...TUPLE1 };
 
-    await table.insert([testTuple1, testTuple2]);
+    await table.insert([TUPLE1, TUPLE2]);
     await table.delete([sameTuple1]);
 
     table.queryAll$().subscribe(tuples => {
-      expect(tuples).toEqual([testTuple2]);
+      expect(tuples).toEqual([TUPLE2]);
       done();
     });
   });
 
   it('should throw on deleting non-existent tuples', async () => {
-    await expectAsync(table.delete([testTuple1])).toBeRejected();
+    await expectAsync(table.delete([TUPLE1])).toBeRejected();
   });
 
   it('should insert atomically', async done => {
@@ -181,3 +184,44 @@ interface TestTuple extends Tuple {
     city: string;
   };
 }
+
+const TUPLE1_ID = 1;
+const TUPLE1: TestTuple = {
+  id: TUPLE1_ID,
+  name: 'Rick Sanchez',
+  happy: false,
+  skills: [
+    {
+      name: 'Create Stuff',
+      level: Number.POSITIVE_INFINITY,
+    },
+    {
+      name: 'Destroy Stuff',
+      level: Number.POSITIVE_INFINITY,
+    },
+  ],
+  address: {
+    country: 'USA on Earth C-137',
+    city: 'Washington',
+  },
+};
+const TUPLE2_ID = 2;
+const TUPLE2: TestTuple = {
+  id: TUPLE2_ID,
+  name: 'Butter Robot',
+  happy: false,
+  skills: [
+    {
+      name: 'Pass Butter',
+      level: 1,
+    },
+    {
+      name: 'Oh My God',
+      level: Number.NEGATIVE_INFINITY,
+    },
+  ],
+  address: {
+    country: 'USA on Earth C-137',
+    city: 'Washington',
+  },
+};
