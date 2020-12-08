@@ -100,6 +100,30 @@ describe('CapacitorFilesystemTable', () => {
     expect(all).toEqual([TUPLE1, TUPLE2]);
   });
 
+  it('should replace on inserting existed tuple if the conflict strategy is REPLACE', async () => {
+    const sameTuple: TestTuple = { ...TUPLE1 };
+    await table.insert([TUPLE1]);
+
+    await table.insert([sameTuple, TUPLE2], OnConflictStrategy.REPLACE);
+
+    const all = await table.queryAll();
+    expect(all).toEqual([sameTuple, TUPLE2]);
+  });
+
+  it('should replace on inserting existed tuple with comparator if the conflict strategy is REPLACE', async () => {
+    const sameIdTuple: TestTuple = { ...TUPLE2, id: TUPLE1_ID };
+    await table.insert([TUPLE1]);
+
+    await table.insert(
+      [sameIdTuple, TUPLE2],
+      OnConflictStrategy.REPLACE,
+      (x, y) => x.id === y.id
+    );
+
+    const all = await table.queryAll();
+    expect(all).toEqual([sameIdTuple, TUPLE2]);
+  });
+
   it('should remove by tuple contents not reference', async done => {
     const sameTuple: TestTuple = { ...TUPLE1 };
 

@@ -27,4 +27,5 @@ export interface Tuple {
 export const enum OnConflictStrategy {
   ABORT,
   IGNORE,
+  REPLACE,
 }
