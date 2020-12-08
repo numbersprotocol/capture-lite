@@ -8,10 +8,10 @@
   <mat-action-list>
     <mat-list-item
       *ngFor="let contact of contacts$ | async"
-      [mat-dialog-close]="contact.contact || contact.fake_contact_email"
+      [mat-dialog-close]="contact.contact_email"
     >
       <mat-icon mat-list-icon>person</mat-icon>
-      <div mat-line>{{ contact.contact || contact.fake_contact_email }}</div>
+      <div mat-line>{{ contact.contact_name || contact.contact_email }}</div>
     </mat-list-item>
     <mat-list-item (click)="openFriendInvitationDialog()">
       <mat-icon mat-list-icon>share</mat-icon>

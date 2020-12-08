@@ -24,12 +24,6 @@ xdescribe('DiaBackendContactRepository', () => {
     // tslint:disable-next-line: no-console
     repository.getAll$().subscribe(result => console.log(result));
   });
-
-  it('should invite new contact', done => {
-    const inviteEmail = 'invite@test.com';
-    // tslint:disable-next-line: no-console
-    repository.invite$(inviteEmail).subscribe(result => console.log(result));
-  });
 });
 
 const EMAIL = 'sean@numbersprotocol.io';

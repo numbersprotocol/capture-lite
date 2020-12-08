@@ -7,7 +7,6 @@ import {
   concatMapTo,
   distinctUntilChanged,
   pluck,
-  switchMapTo,
   tap,
 } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
@@ -36,19 +35,6 @@ export class DiaBackendContactRepository {
     );
   }
 
-  invite$(email: string) {
-    return defer(() => this.authService.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.post<InviteContactResponse>(
-          `${BASE_URL}/api/v2/contacts/invite/`,
-          { email },
-          { headers }
-        )
-      ),
-      switchMapTo(this.fetchAll$())
-    );
-  }
-
   isFetching$() {
     return this._isFetching$.asObservable();
   }
@@ -64,7 +50,11 @@ export class DiaBackendContactRepository {
       ),
       pluck('results'),
       concatMap(contacts =>
-        this.table.insert(contacts, OnConflictStrategy.IGNORE)
+        this.table.insert(
+          contacts,
+          OnConflictStrategy.REPLACE,
+          (x, y) => x.contact_email === y.contact_email
+        )
       ),
       tap(() => this._isFetching$.next(false))
     );
@@ -72,8 +62,8 @@ export class DiaBackendContactRepository {
 }
 
 interface DiaBackendContact extends Tuple {
-  readonly contact: string | null;
-  readonly fake_contact_email: string | null;
+  readonly contact_email: string;
+  readonly contact_name: string;
 }
 
 interface ListContactResponse {
