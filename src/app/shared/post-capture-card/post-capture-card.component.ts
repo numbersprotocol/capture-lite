@@ -15,7 +15,7 @@ export class PostCaptureCardComponent implements OnInit {
   location!: string;
   openMore = false;
 
-  constructor(private readonly translocoService: TranslocoService) { }
+  constructor(private readonly translocoService: TranslocoService) {}
 
   ngOnInit() {
     const latitude = this.findOldInformation(
