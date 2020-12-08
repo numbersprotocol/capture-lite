@@ -26,5 +26,5 @@ xdescribe('DiaBackendContactRepository', () => {
   });
 });
 
-const EMAIL = 'sean@numbersprotocol.io';
+const EMAIL = 'test@test.com';
 const PASSWORD = 'testpassword';
