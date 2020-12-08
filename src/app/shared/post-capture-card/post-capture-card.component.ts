@@ -13,11 +13,9 @@ export class PostCaptureCardComponent implements OnInit {
   @Input() asset!: DiaBackendAsset;
   @ViewChild('ratioImg', { static: true }) ratioImg!: ElementRef;
   location!: string;
-  latitude!: string;
-  longitude!: string;
   openMore = false;
 
-  constructor(private readonly translocoService: TranslocoService) {}
+  constructor(private readonly translocoService: TranslocoService) { }
 
   ngOnInit() {
     const latitude = this.findOldInformation(
