@@ -64,26 +64,7 @@ export class CapacitorFactsProvider implements FactsProvider {
         timeout: defaultGeolocationTimeout,
       })
       .catch((err: GeolocationPositionError) => {
-        let message = '';
-        switch (err.code) {
-          case GeolocationPositionErrorCode.PERMISSION_DENIED:
-            message = this.translocoService.translate(
-              'error.locationPermissionDenied'
-            );
-            break;
-          case GeolocationPositionErrorCode.POSITION_UNAVAILABLE:
-            message = this.translocoService.translate(
-              'error.locationPositionUnavailable'
-            );
-            break;
-          case GeolocationPositionErrorCode.TIMEOUT:
-            message = this.translocoService.translate('error.locationTimeout');
-            break;
-          default:
-            message = err.message;
-            break;
-        }
-        this.snackBar.open(message, '', { duration: 4000 });
+        this.showGeolocationPostiionErrorMessage(err);
         return undefined;
       });
   }
@@ -110,6 +91,29 @@ export class CapacitorFactsProvider implements FactsProvider {
 
   async setGeolocationInfoCollection(enable: boolean) {
     return this.preferences.setBoolean(PrefKeys.COLLECT_LOCATION_INFO, enable);
+  }
+
+  private showGeolocationPostiionErrorMessage(error: GeolocationPositionError) {
+    let message = '';
+    switch (error.code) {
+      case GeolocationPositionErrorCode.PERMISSION_DENIED:
+        message = this.translocoService.translate(
+          'error.locationPermissionDenied'
+        );
+        break;
+      case GeolocationPositionErrorCode.POSITION_UNAVAILABLE:
+        message = this.translocoService.translate(
+          'error.locationPositionUnavailable'
+        );
+        break;
+      case GeolocationPositionErrorCode.TIMEOUT:
+        message = this.translocoService.translate('error.locationTimeout');
+        break;
+      default:
+        message = error.message;
+        break;
+    }
+    this.snackBar.open(message, '', { duration: 4000 });
   }
 }
 
