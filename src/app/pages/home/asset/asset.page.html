@@ -21,7 +21,7 @@
     <mat-list-item>
       <mat-icon mat-list-icon>place</mat-icon>
       <div mat-line>
-        {{ (latitude$ | async) + ', ' + (longitude$ | async) }}
+        {{ location$ | async }}
       </div>
     </mat-list-item>
     <mat-list-item>
