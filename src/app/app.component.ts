@@ -11,6 +11,7 @@ import { CapacitorFactsProvider } from './services/collector/facts/capacitor-fac
 import { WebCryptoApiSignatureProvider } from './services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { DiaBackendAssetRepository } from './services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from './services/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendNotificationService } from './services/dia-backend/notification/dia-backend-notification.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
 import { PushNotificationService } from './services/push-notification/push-notification.service';
@@ -36,12 +37,17 @@ export class AppComponent {
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
-    diaBackendAuthService: DiaBackendAuthService
+    diaBackendAuthService: DiaBackendAuthService,
+    diaBackendNotificationService: DiaBackendNotificationService
   ) {
     notificationService.requestPermission();
     pushNotificationService.register();
     langaugeService.initialize();
-    diaBackendAuthService.initialize$().subscribe();
+    diaBackendAuthService.initialize$().pipe(untilDestroyed(this)).subscribe();
+    diaBackendNotificationService
+      .initialize$()
+      .pipe(untilDestroyed(this))
+      .subscribe();
     this.restoreAppStatus();
     this.initializeApp();
     this.initializeCollector();
