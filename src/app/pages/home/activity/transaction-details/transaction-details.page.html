@@ -1,0 +1,31 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('transactionDetails') }}</span>
+</mat-toolbar>
+<div *transloco="let t" class="page-content">
+  <h4 class="top-time">{{ (details$ | async)?.created_at | date: 'short' }}</h4>
+  <mat-card class="transaction-card">
+    <mat-card-content class="row">
+      <mat-label> {{ (details$ | async)?.asset.id }}</mat-label>
+      <button
+        [class]="(details$ | async)?.status"
+        mat-stroked-button
+        disableRipple
+      >
+        {{ t((details$ | async)?.status) }}
+      </button>
+    </mat-card-content>
+    <img [src]="(details$ | async)?.asset.asset_file_thumbnail" />
+    <mat-card-content class="column">
+      <mat-label
+        >{{ t('sentFrom') }} : {{ (details$ | async)?.sender }}</mat-label
+      >
+      <mat-label
+        >{{ t('receiver') }} :
+        {{ (details$ | async)?.receiver_email }}</mat-label
+      >
+    </mat-card-content>
+  </mat-card>
+</div>

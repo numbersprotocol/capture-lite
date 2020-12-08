@@ -7,6 +7,13 @@ const routes: Routes = [
     path: '',
     component: ActivityPage,
   },
+  {
+    path: 'transaction-details',
+    loadChildren: () =>
+      import('./transaction-details/transaction-details.module').then(
+        m => m.TransactionDetailsPageModule
+      ),
+  },
 ];
 
 @NgModule({

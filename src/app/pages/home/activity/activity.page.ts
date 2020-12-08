@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map, pluck } from 'rxjs/operators';
+import { concatMap, pluck } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../services/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendTransaction,
@@ -19,11 +19,13 @@ export class ActivityPage {
     .getAll$()
     .pipe(
       pluck('results'),
-      map(activities =>
-        activities.map(activity => ({
-          ...activity,
-          status: this.getStatus(activity),
-        }))
+      concatMap(activities =>
+        Promise.all(
+          activities.map(async activity => ({
+            ...activity,
+            status: await this.getStatus(activity),
+          }))
+        )
       )
     );
 
@@ -38,7 +40,10 @@ export class ActivityPage {
       return Status.Returned;
     }
     if (!activity.fulfilled_at) {
-      return Status.InProgress;
+      if (activity.receiver_email === email) {
+        return Status.InProgress;
+      }
+      return Status.waitingToBeAccepted;
     }
     if (activity.sender === email) {
       return Status.Delivered;
@@ -47,7 +52,8 @@ export class ActivityPage {
   }
 }
 
-enum Status {
+export enum Status {
+  waitingToBeAccepted = 'waitingToBeAccepted',
   InProgress = 'inProgress',
   Returned = 'returned',
   Delivered = 'delivered',
