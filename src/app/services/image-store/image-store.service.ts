@@ -9,6 +9,10 @@ import { MimeType } from '../../utils/mime-type';
 import { Database } from '../database/database.service';
 import { Tuple } from '../database/table/table';
 
+// TODO: Implement a CacheStore service to cache the thumb and other files, such
+//       as the image thumb from backend. User should be able to clear the cache
+//       freely. Finally, extract ImageStore.thumbnailTable to CacheStore.
+
 const imageBlobReduce = new ImageBlobReduce();
 
 @Injectable({
@@ -147,6 +151,6 @@ export class ImageStore {
 }
 
 interface Thumbnail extends Tuple {
-  imageIndex: string;
-  thumbnailIndex: string;
+  readonly imageIndex: string;
+  readonly thumbnailIndex: string;
 }

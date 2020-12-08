@@ -3,11 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { NotificationTestingService } from '../services/notification/notification-testing.service';
-import { NotificationService } from '../services/notification/notification.service';
-import { MemoryPreferences } from '../services/preference-manager/preferences/memory-preferences/memory-preferences';
-import { PREFERENCES_IMPL } from '../services/preference-manager/preferences/preferences';
-import { getTranslocoTestingModule } from '../services/transloco/transloco-testing.module';
+import { getTranslocoTestingModule } from '../services/language/transloco/transloco-testing.module';
 import { CapacitorPluginsTestingModule } from './capacitor-plugins/capacitor-plugins-testing.module';
 import { MaterialTestingModule } from './material/material-testing.module';
 import { SharedModule } from './shared.module';
@@ -22,10 +18,6 @@ import { SharedModule } from './shared.module';
     getTranslocoTestingModule(),
     MaterialTestingModule,
     CapacitorPluginsTestingModule,
-  ],
-  providers: [
-    { provide: PREFERENCES_IMPL, useValue: MemoryPreferences },
-    { provide: NotificationService, useClass: NotificationTestingService },
   ],
   exports: [MaterialTestingModule],
 })

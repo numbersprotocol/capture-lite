@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import {
-  defaultLanguage,
-  languages,
-} from '../../services/transloco/transloco-root.module';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
+import { defaultLanguage, languages } from './transloco/transloco-root.module';
 
 @Injectable({
   providedIn: 'root',

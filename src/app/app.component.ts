@@ -3,17 +3,15 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
-import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { defer } from 'rxjs';
+import { concatMap, first } from 'rxjs/operators';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorFactsProvider } from './services/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 import { WebCryptoApiSignatureProvider } from './services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { DiaBackendAssetRepository } from './services/dia-backend/asset/dia-backend-asset-repository.service';
 import { LanguageService } from './services/language/language.service';
 import { NotificationService } from './services/notification/notification.service';
-import { NumbersStorageApi } from './services/publisher/numbers-storage/numbers-storage-api.service';
-import { NumbersStoragePublisher } from './services/publisher/numbers-storage/numbers-storage-publisher';
-import { AssetRepository } from './services/publisher/numbers-storage/repositories/asset/asset-repository.service';
-import { PublishersAlert } from './services/publisher/publishers-alert/publishers-alert.service';
 import { restoreKilledCapture } from './utils/camera';
 
 const { SplashScreen } = Plugins;
@@ -28,15 +26,12 @@ export class AppComponent {
   constructor(
     private readonly platform: Platform,
     private readonly collectorService: CollectorService,
-    private readonly publishersAlert: PublishersAlert,
-    private readonly translocoService: TranslocoService,
-    private readonly notificationService: NotificationService,
-    private readonly numbersStorageApi: NumbersStorageApi,
-    private readonly assetRepository: AssetRepository,
     private readonly iconRegistry: MatIconRegistry,
     private readonly sanitizer: DomSanitizer,
     private readonly capacitorFactsProvider: CapacitorFactsProvider,
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    notificationService: NotificationService,
     langaugeService: LanguageService
   ) {
     notificationService.requestPermission();
@@ -44,16 +39,22 @@ export class AppComponent {
     this.restoreAppStatus();
     this.initializeApp();
     this.initializeCollector();
-    this.initializePublisher();
     this.registerIcon();
   }
 
-  async restoreAppStatus() {
-    const photo = await restoreKilledCapture();
-    const proof = await this.collectorService.runAndStore({
-      [photo.base64]: { mimeType: photo.mimeType },
-    });
-    return this.publishersAlert.presentOrPublish(proof);
+  restoreAppStatus() {
+    return defer(restoreKilledCapture)
+      .pipe(
+        concatMap(photo =>
+          this.collectorService.runAndStore({
+            [photo.base64]: { mimeType: photo.mimeType },
+          })
+        ),
+        concatMap(proof => this.diaBackendAssetRepository.add(proof)),
+        first(),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   async initializeApp() {
@@ -66,17 +67,6 @@ export class AppComponent {
     this.collectorService.addFactsProvider(this.capacitorFactsProvider);
     this.collectorService.addSignatureProvider(
       this.webCryptoApiSignatureProvider
-    );
-  }
-
-  initializePublisher() {
-    this.publishersAlert.addPublisher(
-      new NumbersStoragePublisher(
-        this.translocoService,
-        this.notificationService,
-        this.numbersStorageApi,
-        this.assetRepository
-      )
     );
   }
 

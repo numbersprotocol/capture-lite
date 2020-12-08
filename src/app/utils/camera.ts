@@ -42,6 +42,6 @@ export async function restoreKilledCapture() {
 }
 
 interface Photo {
-  mimeType: MimeType;
-  base64: string;
+  readonly mimeType: MimeType;
+  readonly base64: string;
 }

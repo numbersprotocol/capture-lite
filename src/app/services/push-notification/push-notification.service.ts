@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   Capacitor,
@@ -5,11 +6,10 @@ import {
   PushNotification,
   PushNotificationToken,
 } from '@capacitor/core';
-import { defer } from 'rxjs';
-import { concatMap, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { DiaBackendAssetRepository } from '../dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../dia-backend/auth/dia-backend-auth.service';
 import { ImageStore } from '../image-store/image-store.service';
-import { NumbersStorageApi } from '../publisher/numbers-storage/numbers-storage-api.service';
-import { AssetRepository } from '../publisher/numbers-storage/repositories/asset/asset-repository.service';
 import { getProof } from '../repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
 
@@ -24,9 +24,10 @@ const { Device, PushNotifications } = Plugins;
 })
 export class PushNotificationService {
   constructor(
-    private readonly numbersStorageApi: NumbersStorageApi,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly proofRepository: ProofRepository,
-    private readonly assetRepository: AssetRepository,
+    private readonly httpClient: HttpClient,
     private readonly imageStore: ImageStore
   ) {}
 
@@ -55,14 +56,7 @@ export class PushNotificationService {
   }
 
   private uploadToken$(token: string) {
-    return defer(() => Device.getInfo()).pipe(
-      concatMap(deviceInfo =>
-        this.numbersStorageApi.createOrUpdateDevice$(
-          deviceInfo.platform,
-          deviceInfo.uuid,
-          token
-        )
-      ),
+    return this.diaBackendAuthService.createDevice$(token).pipe(
       // tslint:disable-next-line: no-console
       tap(() => console.log('Token Uploaded!'))
     );
@@ -105,10 +99,12 @@ export class PushNotificationService {
       return;
     }
 
-    const asset = await this.numbersStorageApi.readAsset$(data.id).toPromise();
-    await this.assetRepository.add(asset);
-    const rawImage = await this.numbersStorageApi
-      .getImage$(asset.asset_file)
+    const asset = await this.diaBackendAssetRepository
+      .getById$(data.id)
+      .toPromise();
+    await this.diaBackendAssetRepository.addAssetDirectly(asset);
+    const rawImage = await this.httpClient
+      .get(asset.asset_file, { responseType: 'blob' })
       .toPromise();
     const proof = await getProof(
       this.imageStore,
@@ -121,9 +117,9 @@ export class PushNotificationService {
 }
 
 interface NumbersStorageNotification {
-  app_message_type:
+  readonly app_message_type:
     | 'transaction_received'
     | 'transaction_accepted'
     | 'transaction_expired';
-  id: string;
+  readonly id: string;
 }

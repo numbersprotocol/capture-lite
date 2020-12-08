@@ -1,3 +1,5 @@
+// tslint:disable: prefer-function-over-method no-unbound-method
+
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { MimeType } from '../../utils/mime-type';
@@ -15,18 +17,15 @@ import { SignatureProvider } from './signature/signature-provider';
 
 describe('CollectorService', () => {
   let service: CollectorService;
-  let proofRepositorySpy: jasmine.SpyObj<ProofRepository>;
+  let proofRepository: ProofRepository;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('ProofRepository', ['add']);
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
-      providers: [{ provide: ProofRepository, useValue: spy }],
     });
     service = TestBed.inject(CollectorService);
-    proofRepositorySpy = TestBed.inject(
-      ProofRepository
-    ) as jasmine.SpyObj<ProofRepository>;
+    proofRepository = TestBed.inject(ProofRepository);
+    spyOn(console, 'info');
   });
 
   it('should be created', () => expect(service).toBeTruthy());
@@ -67,10 +66,11 @@ describe('CollectorService', () => {
   });
 
   it('should store proof with ProofRepository', async () => {
+    spyOn(proofRepository, 'add').and.callThrough();
+
     const proof = await service.runAndStore(ASSETS);
 
-    // tslint:disable-next-line: no-unbound-method
-    expect(proofRepositorySpy.add).toHaveBeenCalledWith(proof);
+    expect(proofRepository.add).toHaveBeenCalledWith(proof);
   });
 });
 
@@ -98,7 +98,6 @@ const FACTS: Facts = {
 
 class MockFactsProvider implements FactsProvider {
   readonly id = MockFactsProvider.name;
-  // tslint:disable-next-line: prefer-function-over-method
   async provide(_: Assets) {
     return FACTS;
   }
@@ -116,7 +115,6 @@ const SIGNATURE: Signature = {
 };
 class MockSignatureProvider implements SignatureProvider {
   readonly id = MockSignatureProvider.name;
-  // tslint:disable-next-line: prefer-function-over-method
   async provide(_: string) {
     return SIGNATURE;
   }

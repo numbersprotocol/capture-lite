@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { concatMap, map, switchMap } from 'rxjs/operators';
-import { AssetRepository } from '../../../../services/publisher/numbers-storage/repositories/asset/asset-repository.service';
+import { DiaBackendAssetRepository } from '../../../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import {
   getOldProof,
   getOldSignatures,
@@ -21,7 +21,7 @@ export class InformationPage {
   readonly asset$ = this.route.paramMap.pipe(
     map(params => params.get('id')),
     isNonNullable(),
-    switchMap(id => this.assetRepository.getById$(id)),
+    switchMap(id => this.diaBackendAssetRepository.getById$(id)),
     isNonNullable()
   );
   private readonly proofsWithOld$ = this.proofRepository
@@ -70,7 +70,7 @@ export class InformationPage {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly assetRepository: AssetRepository,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly proofRepository: ProofRepository
   ) {}
 }

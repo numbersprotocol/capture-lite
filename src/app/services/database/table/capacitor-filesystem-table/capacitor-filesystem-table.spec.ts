@@ -159,14 +159,14 @@ describe('CapacitorFilesystemTable', () => {
 });
 
 interface TestTuple extends Tuple {
-  id: number;
-  name: string;
-  happy: boolean;
-  skills: {
+  readonly id: number;
+  readonly name: string;
+  readonly happy: boolean;
+  readonly skills: {
     name: string;
     level: number;
   }[];
-  address: {
+  readonly address: {
     country: string;
     city: string;
   };

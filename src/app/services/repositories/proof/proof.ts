@@ -182,11 +182,11 @@ export class Proof {
 }
 
 export interface Assets {
-  [base64: string]: AssetMeta;
+  readonly [base64: string]: AssetMeta;
 }
 
 interface IndexedAssets extends Tuple {
-  [index: string]: AssetMeta;
+  readonly [index: string]: AssetMeta;
 }
 
 export interface AssetMeta extends Tuple {
@@ -199,11 +199,11 @@ export interface Truth extends Tuple {
 }
 
 interface TruthProviders extends Tuple {
-  [id: string]: Facts;
+  readonly [id: string]: Facts;
 }
 
 export interface Facts extends Tuple {
-  [id: string]: boolean | number | string | undefined;
+  readonly [id: string]: boolean | number | string | undefined;
 }
 
 export function isFacts(value: any): value is Facts {
@@ -231,7 +231,7 @@ export const enum DefaultFactId {
 }
 
 export interface Signatures extends Tuple {
-  [id: string]: Signature;
+  readonly [id: string]: Signature;
 }
 
 export interface Signature extends Tuple {
@@ -255,9 +255,9 @@ export function isSignature(value: any): value is Signature {
 }
 
 interface SerializedProof {
-  assets: Assets;
-  truth: Truth;
-  signatures: Signatures;
+  readonly assets: Assets;
+  readonly truth: Truth;
+  readonly signatures: Signatures;
 }
 
 export type SignedTargets = Pick<SerializedProof, 'assets' | 'truth'>;
@@ -275,7 +275,7 @@ interface SignatureVerifier {
 }
 
 export interface IndexedProofView extends Tuple {
-  indexedAssets: IndexedAssets;
-  truth: Truth;
-  signatures: Signatures;
+  readonly indexedAssets: IndexedAssets;
+  readonly truth: Truth;
+  readonly signatures: Signatures;
 }

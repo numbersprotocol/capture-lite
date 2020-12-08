@@ -8,7 +8,7 @@ import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TranslocoRootModule } from './services/transloco/transloco-root.module';
+import { TranslocoRootModule } from './services/language/transloco/transloco-root.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({

@@ -134,7 +134,7 @@ Run `npm i` to update `package-lock.json`.
 
 Write the changelog in `CHANGELOG.md`.
 
-When push to the `develop` branch with new version in the `package.json` file, GitHub Action would automatically do the following jobs:
+When push to the `master` branch with new version in the `package.json` file, GitHub Action would automatically do the following jobs:
 
 1. Create release GitHub page with debug APK.
 1. Publish the app to Play Console on alpha track.

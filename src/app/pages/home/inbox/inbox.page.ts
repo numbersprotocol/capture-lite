@@ -3,8 +3,9 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
 import { concatMap, map, pluck, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../services/blocking-action/blocking-action.service';
-import { NumbersStorageApi } from '../../../services/publisher/numbers-storage/numbers-storage-api.service';
-import { IgnoredTransactionRepository } from '../../../services/publisher/numbers-storage/repositories/ignored-transaction/ignored-transaction-repository.service';
+import { DiaBackendAuthService } from '../../../services/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendTransactionRepository } from '../../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { IgnoredTransactionRepository } from '../../../services/dia-backend/transaction/ignored-transaction-repository.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -13,34 +14,43 @@ import { IgnoredTransactionRepository } from '../../../services/publisher/number
   styleUrls: ['./inbox.page.scss'],
 })
 export class InboxPage {
-  postCaptures$ = this.listInbox();
+  postCaptures$ = this.listInbox$();
 
   constructor(
-    private readonly numbersStorageApi: NumbersStorageApi,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
     private readonly blockingActionService: BlockingActionService
   ) {}
 
-  private listInbox() {
-    return this.numbersStorageApi.listInbox$().pipe(
+  private listInbox$() {
+    return this.diaBackendTransactionRepository.getAll$().pipe(
       pluck('results'),
+      concatMap(postCaptures =>
+        zip(of(postCaptures), this.diaBackendAuthService.getEmail())
+      ),
+      map(([postCaptures, email]) =>
+        postCaptures.filter(
+          postCapture =>
+            postCapture.receiver_email === email &&
+            !postCapture.fulfilled_at &&
+            !postCapture.expired
+        )
+      ),
       concatMap(postCaptures =>
         zip(of(postCaptures), this.ignoredTransactionRepository.getAll$())
       ),
       map(([postCaptures, ignoredTransactions]) =>
         postCaptures.filter(
-          postcapture =>
-            !ignoredTransactions
-              .map(transaction => transaction.id)
-              .includes(postcapture.id)
+          postcapture => !ignoredTransactions.includes(postcapture.id)
         )
       )
     );
   }
 
   accept(id: string) {
-    const action$ = this.numbersStorageApi
-      .acceptTransaction$(id)
+    const action$ = this.diaBackendTransactionRepository
+      .accept$(id)
       .pipe(tap(_ => this.refresh()));
 
     this.blockingActionService
@@ -49,17 +59,12 @@ export class InboxPage {
       .subscribe();
   }
 
-  ignore(id: string) {
-    this.ignoredTransactionRepository
-      .add$({ id })
-      .pipe(
-        tap(_ => this.refresh()),
-        untilDestroyed(this)
-      )
-      .subscribe();
+  async ignore(id: string) {
+    await this.ignoredTransactionRepository.add(id);
+    this.refresh();
   }
 
   private refresh() {
-    this.postCaptures$ = this.listInbox();
+    this.postCaptures$ = this.listInbox$();
   }
 }

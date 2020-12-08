@@ -1,4 +1,3 @@
-import { InjectionToken, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Preferences {
@@ -14,7 +13,3 @@ export interface Preferences {
   setString(key: string, value: string): Promise<string>;
   clear(): Promise<Preferences>;
 }
-
-export const PREFERENCES_IMPL = new InjectionToken<Type<Preferences>>(
-  'PREFERENCES_IMPL'
-);

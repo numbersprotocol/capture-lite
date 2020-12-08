@@ -27,7 +27,7 @@
     "curly": true,
     "import-blacklist": [true, "rxjs/Rx"],
     "no-async-without-await": true,
-    "no-console": [true, "log", "info", "debug"],
+    "no-console": [true, "log", "debug"],
     "no-duplicate-switch-case": true,
     "no-for-in-array": true,
     "no-inferred-empty-object-type": true,
