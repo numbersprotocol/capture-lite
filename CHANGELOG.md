@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.10.0 - 2020-12-08
+
+### Added
+
+- Add transaction-details page. #286
+- Display different status badge to distinguish different "In Progress" activity. #199
+
+### Changed
+
+#### Code Quality
+
+- Rewrite the tests of `NotificationService` with `MockLocalNotificationsPlugin`.
+- Rewrite tests for `PreferenceManager` service by mocking Capacitor `Storage` plugin.
+- Rewrite the interface of `ConfirmAlert` with tests.
+- Add tests for `LanguageService`.
+- Change the pre-release branch to master.
+- Rename `NumbersStorageBackend` with `DiaBackend`.
+- Implement `NotificationService.notifyOnGoing` method. Close #254.
+- Apply on-going notification to `CollectorService.runAndStore` method.
+- Apply on-going notification to `DiaBackendAssetRepository.add` method.
+- Reimplement simplified `IgnoredTransactionRepository`.
+- Extract `/api/**/transactions` endpoints to standalone service.
+- Extract `/api/**/assets` endpoints to standalone service.
+- Extract `/auth` endpoints to standalone service with tests.
+- Add readonly modifier to most dictionary interface.
+- Improve the import location for `secret.ts` from set-secret preconfig.
+
+### Fixed
+
+- Fix white margin on iOS 13.7 iPhone 6s Plus. #289
+- Fix background color of the PostCapture image. #285
+- Fix unified font size on Capture tab. #284
+- Fix cannot scroll on asset page. #282
+
 ## 0.9.4 - 2020-12-04
 
 ### Changed
