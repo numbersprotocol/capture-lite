@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
-import { combineLatest, defer, interval, of, zip } from 'rxjs';
+import { combineLatest, defer, forkJoin, interval, of, zip } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -21,7 +21,6 @@ import { PushNotificationService } from '../../services/push-notification/push-n
 import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
 import { capture } from '../../utils/camera';
-import { forkJoinWithDefault } from '../../utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -112,7 +111,7 @@ export class HomePage implements OnInit {
       concatMap(transactions =>
         zip(
           of(transactions),
-          forkJoinWithDefault(
+          forkJoin(
             transactions.map(transaction =>
               this.diaBackendAssetRepository.getById$(transaction.asset.id)
             )

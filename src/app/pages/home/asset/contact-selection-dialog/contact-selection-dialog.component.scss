@@ -1,35 +1,5 @@
-mat-toolbar {
-  color: white;
-
-  .mat-icon {
-    color: white;
+div[mat-dialog-content] {
+  mat-spinner {
+    margin: auto;
   }
-
-  span {
-    color: white;
-    padding-right: 40px;
-  }
-}
-
-.example-header-image {
-  background-color: black;
-}
-
-.mat-card {
-  margin: 0;
-  padding: 0;
-}
-
-.contact_line {
-  justify-content: space-between;
-}
-
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-}
-
-.example-full-width {
-  width: 100%;
 }
