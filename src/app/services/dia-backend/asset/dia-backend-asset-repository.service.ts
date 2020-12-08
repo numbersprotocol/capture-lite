@@ -5,7 +5,7 @@ import { defer, forkJoin } from 'rxjs';
 import { concatMap, single } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { Database } from '../../database/database.service';
-import { Tuple } from '../../database/table/table';
+import { OnConflictStrategy, Tuple } from '../../database/table/table';
 import { NotificationService } from '../../notification/notification.service';
 import {
   getOldSignatures,
@@ -83,8 +83,12 @@ export class DiaBackendAssetRepository {
   }
 
   // TODO: use repository to remove this method.
-  async addAssetDirectly(assets: DiaBackendAsset[]) {
-    return this.table.insert(assets);
+  async addAssetDirectly(
+    assets: DiaBackendAsset[],
+    onConflict = OnConflictStrategy.ABORT,
+    comparator = (x: DiaBackendAsset, y: DiaBackendAsset) => x.id === y.id
+  ) {
+    return this.table.insert(assets, onConflict, comparator);
   }
 
   // TODO: use repository to remove this method.

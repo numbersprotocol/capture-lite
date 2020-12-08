@@ -14,6 +14,7 @@ import {
   switchMapTo,
 } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
+import { OnConflictStrategy } from '../../services/database/table/table';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
@@ -121,7 +122,8 @@ export class HomePage implements OnInit {
                         .toPromise(),
                       a.information,
                       a.signature
-                    )
+                    ),
+                    OnConflictStrategy.REPLACE
                   );
                 })
               )
@@ -130,7 +132,8 @@ export class HomePage implements OnInit {
         ),
         concatMap(([expiredAssets]) =>
           this.diaBackendAssetRepository.addAssetDirectly(
-            expiredAssets /* TODO: onConflict.REPLACE */
+            expiredAssets,
+            OnConflictStrategy.REPLACE
           )
         ),
         untilDestroyed(this)
