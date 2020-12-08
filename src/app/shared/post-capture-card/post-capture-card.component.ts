@@ -17,19 +17,23 @@ export class PostCaptureCardComponent implements OnInit {
   longitude!: string;
   openMore = false;
 
-  constructor(
-    private readonly translocoService: TranslocoService,
-  ) { }
+  constructor(private readonly translocoService: TranslocoService) {}
 
   ngOnInit() {
-    const latitude = this.findOldInformation(OldDefaultInformationName.GEOLOCATION_LATITUDE)
-    const longitude = this.findOldInformation(OldDefaultInformationName.GEOLOCATION_LONGITUDE)
-    this.location = (latitude && longitude) ?
-      `${latitude}, ${longitude}` :
-      this.translocoService.translate('locationNotProvided')
+    const latitude = this.findOldInformation(
+      OldDefaultInformationName.GEOLOCATION_LATITUDE
+    );
+    const longitude = this.findOldInformation(
+      OldDefaultInformationName.GEOLOCATION_LONGITUDE
+    );
+    this.location =
+      latitude && longitude
+        ? `${latitude}, ${longitude}`
+        : this.translocoService.translate('locationNotProvided');
   }
 
   private findOldInformation(name: string) {
-    return this.asset.information.information.find(info => info.name === name)?.value;
+    return this.asset.information.information.find(info => info.name === name)
+      ?.value;
   }
 }

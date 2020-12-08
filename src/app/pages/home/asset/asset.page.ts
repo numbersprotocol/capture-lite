@@ -6,7 +6,14 @@ import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, defer, forkJoin, zip } from 'rxjs';
-import { concatMap, first, map, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import {
+  concatMap,
+  first,
+  map,
+  switchMap,
+  switchMapTo,
+  tap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../../services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -14,7 +21,10 @@ import { getOldProof } from '../../../services/repositories/proof/old-proof-adap
 import { ProofRepository } from '../../../services/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../utils/rx-operators';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
-import { Option, OptionsMenuComponent } from './options-menu/options-menu.component';
+import {
+  Option,
+  OptionsMenuComponent,
+} from './options-menu/options-menu.component';
 
 const { Browser } = Plugins;
 
@@ -55,7 +65,7 @@ export class AssetPage {
       const assets = await p.proof.getAssets();
       return `data:${Object.values(assets)[0].mimeType};base64,${
         Object.keys(assets)[0]
-        }`;
+      }`;
     })
   );
   readonly timestamp$ = this.capture$.pipe(
@@ -72,7 +82,7 @@ export class AssetPage {
       }
       return `${latitude}, ${longitude}`;
     })
-  )
+  );
 
   constructor(
     private readonly router: Router,
@@ -83,8 +93,8 @@ export class AssetPage {
     private readonly blockingActionService: BlockingActionService,
     private readonly dialog: MatDialog,
     private readonly bottomSheet: MatBottomSheet,
-    private readonly translacoService: TranslocoService,
-  ) { }
+    private readonly translacoService: TranslocoService
+  ) {}
 
   openContactSelectionDialog() {
     const dialogRef = this.dialog.open(ContactSelectionDialogComponent, {

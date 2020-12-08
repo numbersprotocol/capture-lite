@@ -4,7 +4,11 @@ import { GeolocationPlugin, Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { GEOLOCATION_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
-import { Assets, DefaultFactId, Facts } from '../../../repositories/proof/proof';
+import {
+  Assets,
+  DefaultFactId,
+  Facts,
+} from '../../../repositories/proof/proof';
 import { FactsProvider } from '../facts-provider';
 
 const { Device } = Plugins;
@@ -21,8 +25,8 @@ export class CapacitorFactsProvider implements FactsProvider {
     private readonly geolocationPlugin: GeolocationPlugin,
     private readonly preferenceManager: PreferenceManager,
     private readonly snackBar: MatSnackBar,
-    private readonly translocoService: TranslocoService,
-  ) { }
+    private readonly translocoService: TranslocoService
+  ) {}
 
   async provide(_: Assets): Promise<Facts> {
     const deviceInfo = await this.collectDeviceInfo();
@@ -53,29 +57,35 @@ export class CapacitorFactsProvider implements FactsProvider {
     if (!isLocationInfoCollectionEnabled) {
       return;
     }
-    return this.geolocationPlugin.getCurrentPosition({
-      enableHighAccuracy: true,
-      maximumAge: defaultGeolocationAge,
-      timeout: defaultGeolocationTimeout,
-    }).catch((err: GeolocationPositionError) => {
-      let message = '';
-      switch (err.code) {
-        case GeolocationPositionErrorCode.PERMISSION_DENIED:
-          message = this.translocoService.translate('error.locationPermissionDenied')
-          break;
-        case GeolocationPositionErrorCode.POSITION_UNAVAILABLE:
-          message = this.translocoService.translate('error.locationPositionUnavailable')
-          break;
-        case GeolocationPositionErrorCode.TIMEOUT:
-          message = this.translocoService.translate('error.locationTimeout')
-          break;
-        default:
-          message = err.message
-          break;
-      }
-      this.snackBar.open(message, '', { duration: 4000 });
-      return;
-    });
+    return this.geolocationPlugin
+      .getCurrentPosition({
+        enableHighAccuracy: true,
+        maximumAge: defaultGeolocationAge,
+        timeout: defaultGeolocationTimeout,
+      })
+      .catch((err: GeolocationPositionError) => {
+        let message = '';
+        switch (err.code) {
+          case GeolocationPositionErrorCode.PERMISSION_DENIED:
+            message = this.translocoService.translate(
+              'error.locationPermissionDenied'
+            );
+            break;
+          case GeolocationPositionErrorCode.POSITION_UNAVAILABLE:
+            message = this.translocoService.translate(
+              'error.locationPositionUnavailable'
+            );
+            break;
+          case GeolocationPositionErrorCode.TIMEOUT:
+            message = this.translocoService.translate('error.locationTimeout');
+            break;
+          default:
+            message = err.message;
+            break;
+        }
+        this.snackBar.open(message, '', { duration: 4000 });
+        return;
+      });
   }
 
   isDeviceInfoCollectionEnabled$() {
@@ -109,7 +119,10 @@ const enum PrefKeys {
 }
 
 const enum GeolocationPositionErrorCode {
-  NOT_USED, PERMISSION_DENIED, POSITION_UNAVAILABLE, TIMEOUT
+  NOT_USED,
+  PERMISSION_DENIED,
+  POSITION_UNAVAILABLE,
+  TIMEOUT,
 }
 export interface GeolocationPositionError {
   code: GeolocationPositionErrorCode;
