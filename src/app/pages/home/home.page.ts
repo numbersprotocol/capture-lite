@@ -25,7 +25,6 @@ import {
 } from '../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
 import { capture } from '../../utils/camera';
-import { forkJoinWithDefault } from '../../utils/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -189,7 +188,7 @@ export class HomePage implements OnInit {
       concatMap(transactions =>
         zip(
           of(transactions),
-          forkJoinWithDefault(
+          forkJoin(
             transactions.map(transaction =>
               this.diaBackendAssetRepository.getById$(transaction.asset.id)
             )
