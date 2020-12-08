@@ -14,7 +14,7 @@
         mat-stroked-button
         disableRipple
       >
-        {{ (details$ | async)?.status.__zone_symbol__value }}
+        {{ t((details$ | async)?.status.__zone_symbol__value) }}
       </button>
     </mat-card-content>
     <img [src]="(details$ | async)?.asset.asset_file_thumbnail" />
