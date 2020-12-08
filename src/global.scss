@@ -49,14 +49,15 @@ mat-toolbar {
     padding-top: 30px;
   }
 }
-// avoid overlapping with the status bar on iPhone 12 mini
+
+// avoid overlapping with the status bar on iPhone 6s plus/7plus/ 8 plus series
 @media (min-height: 736px) and (max-width: 750px) {
   .ios mat-toolbar {
     padding-top: 0;
   }
 }
 
-// avoid overlapping with the status bar on iPhone 12 mini
+// avoid overlapping with the status bar on iPhone 12 mini ＆ iPhone 12 series
 @media (min-height: 750px) {
   .ios mat-toolbar {
     padding-top: 30px;
