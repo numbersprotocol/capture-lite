@@ -100,5 +100,10 @@
     "invitationEmail": "Enter friend's email to send the invitation.",
     "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://docs.google.com/document/d/1ZtD-E4-zcnh8DxQCSgR1Efhb9UooJMr7fb7bzPENd24/edit?usp=sharing\" target=\"_blank\">Terms</a> and <a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">Privacy Policy</a>.",
     "sendPostCaptureAlert": "After a PostCapture is sent, the ownership will be transferred to the selected friend. Are you sure?"
+  },
+  "error": {
+    "locationPermissionDenied": "Location permission is denied. The relevant data will not be collected. Turn your location permission on to enable full feature of Capture.",
+    "locationPositionUnavailable": "Location is not available at this moment, possibly due to weak network connectivity or GPS signals.",
+    "locationTimeout": "Location info collection takes too much time, possibly due to weak network connectivity or GPS signals."
   }
 }
