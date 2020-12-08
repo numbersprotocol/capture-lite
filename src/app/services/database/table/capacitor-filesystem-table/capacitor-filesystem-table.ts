@@ -121,8 +121,6 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
       tuple => !this.tuples$.value.find(t => equals(tuple)(t))
     );
     if (nonexistent.length !== 0) {
-      console.error(JSON.stringify(this.tuples$.value));
-
       throw new Error(
         `Cannot delete nonexistent tuples: ${JSON.stringify(nonexistent)}`
       );
