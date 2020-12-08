@@ -10,11 +10,10 @@ import { NotificationService } from '../../notification/notification.service';
 import {
   getOldSignatures,
   getSortedProofInformation,
-  OldDefaultInformationName,
   OldSignature,
   SortedProofInformation,
 } from '../../repositories/proof/old-proof-adapter';
-import { DefaultFactId, Proof } from '../../repositories/proof/proof';
+import { Proof } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { BASE_URL } from '../secret';
 
@@ -84,8 +83,8 @@ export class DiaBackendAssetRepository {
   }
 
   // TODO: use repository to remove this method.
-  async addAssetDirectly(asset: DiaBackendAsset) {
-    return this.table.insert([asset]);
+  async addAssetDirectly(assets: DiaBackendAsset[]) {
+    return this.table.insert(assets);
   }
 
   // TODO: use repository to remove this method.
@@ -112,8 +111,7 @@ async function buildFormDataToCreateAsset(proof: Proof) {
   const formData = new FormData();
 
   const info = await getSortedProofInformation(proof);
-  const oldInfo = replaceDefaultFactIdWithOldDefaultInformationName(info);
-  formData.set('meta', JSON.stringify(oldInfo));
+  formData.set('meta', JSON.stringify(info));
 
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
 
@@ -124,36 +122,4 @@ async function buildFormDataToCreateAsset(proof: Proof) {
   formData.set('asset_file_mime_type', mimeType);
 
   return formData;
-}
-
-function replaceDefaultFactIdWithOldDefaultInformationName(
-  sortedProofInformation: SortedProofInformation
-): SortedProofInformation {
-  return {
-    proof: sortedProofInformation.proof,
-    information: sortedProofInformation.information.map(info => {
-      if (info.name === DefaultFactId.DEVICE_NAME) {
-        return {
-          provider: info.provider,
-          value: info.value,
-          name: OldDefaultInformationName.DEVICE_NAME,
-        };
-      }
-      if (info.name === DefaultFactId.GEOLOCATION_LATITUDE) {
-        return {
-          provider: info.provider,
-          value: info.value,
-          name: OldDefaultInformationName.GEOLOCATION_LATITUDE,
-        };
-      }
-      if (info.name === DefaultFactId.GEOLOCATION_LONGITUDE) {
-        return {
-          provider: info.provider,
-          value: info.value,
-          name: OldDefaultInformationName.GEOLOCATION_LONGITUDE,
-        };
-      }
-      return info;
-    }),
-  };
 }

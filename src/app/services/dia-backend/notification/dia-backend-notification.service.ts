@@ -32,11 +32,11 @@ export class DiaBackendNotificationService {
 }
 
 interface PushNotificationData {
-  app_message_type:
+  readonly app_message_type:
     | 'transaction_received'
     | 'transaction_accepted'
     | 'transaction_expired';
-  sender: 'string';
+  readonly sender: 'string';
 }
 
 function isDiaBackendPushNotificationData() {
