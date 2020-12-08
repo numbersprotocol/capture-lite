@@ -21,8 +21,14 @@ export class DiaBackendNotificationService {
       concatMap(data => {
         if (data.app_message_type === 'transaction_received') {
           return this.notificationService.notify(
-            this.translocoService.translate('newTransactionReceived'),
-            this.translocoService.translate('message.newTransactionReceived')
+            this.translocoService.translate('transactionReceived'),
+            this.translocoService.translate('message.transactionReceived')
+          );
+        }
+        if (data.app_message_type === 'transaction_expired') {
+          return this.notificationService.notify(
+            this.translocoService.translate('transactionExpired'),
+            this.translocoService.translate('message.transactionExpired')
           );
         }
         return EMPTY;
