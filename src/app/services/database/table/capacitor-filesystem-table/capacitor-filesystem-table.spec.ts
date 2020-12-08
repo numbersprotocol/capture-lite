@@ -148,8 +148,26 @@ describe('CapacitorFilesystemTable', () => {
     });
   });
 
+  it('should not emit removed tuples with comparator', async done => {
+    const sameIdTuple1: TestTuple = { ...TUPLE2, id: TUPLE1_ID };
+
+    await table.insert([TUPLE1, TUPLE2]);
+    await table.delete([sameIdTuple1], (x, y) => x.id === y.id);
+
+    table.queryAll$().subscribe(tuples => {
+      expect(tuples).toEqual([TUPLE2]);
+      done();
+    });
+  });
+
   it('should throw on deleting non-existent tuples', async () => {
     await expectAsync(table.delete([TUPLE1])).toBeRejected();
+  });
+
+  it('should throw on deleting non-existent tuples with comparator', async () => {
+    await table.insert([TUPLE1, TUPLE2]);
+
+    await expectAsync(table.delete([TUPLE1], () => false)).toBeRejected();
   });
 
   it('should insert atomically', async done => {

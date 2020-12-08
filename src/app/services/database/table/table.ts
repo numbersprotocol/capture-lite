@@ -9,7 +9,7 @@ export interface Table<T extends Tuple> {
     onConflict?: OnConflictStrategy,
     comparator?: (x: T, y: T) => boolean
   ): Promise<T[]>;
-  delete(tuples: T[]): Promise<T[]>;
+  delete(tuples: T[], comparator?: (x: T, y: T) => boolean): Promise<T[]>;
   drop(): Promise<void>;
 }
 

@@ -120,12 +120,14 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     }
   }
 
-  async delete(tuples: T[]) {
+  async delete(tuples: T[], comparator = isEqual) {
     return this.mutex.runExclusive(async () => {
-      this.assertTuplesExist(tuples);
+      this.assertTuplesExist(tuples, comparator);
       await this.initialize();
-      const afterDeletion = this.tuples$.value.filter(
-        tuple => !tuples.map(t => isEqual(tuple, t)).includes(true)
+      const afterDeletion = differenceWith(
+        this.tuples$.value,
+        tuples,
+        comparator
       );
       this.tuples$.next(afterDeletion);
       await this.dumpJson();
@@ -133,10 +135,8 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     });
   }
 
-  private assertTuplesExist(tuples: T[]) {
-    const nonexistent = tuples.filter(
-      tuple => !this.tuples$.value.find(t => isEqual(tuple, t))
-    );
+  private assertTuplesExist(tuples: T[], comparator: (x: T, y: T) => boolean) {
+    const nonexistent = differenceWith(tuples, this.tuples$.value, comparator);
     if (nonexistent.length !== 0) {
       throw new Error(
         `Cannot delete nonexistent tuples: ${JSON.stringify(nonexistent)}`
