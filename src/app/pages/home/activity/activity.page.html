@@ -10,7 +10,7 @@
     <ng-container
       *ngFor="let activity of activitiesWithStatus$ | async; last as isLast"
     >
-      <mat-list-item [routerLink]="['transaction-details']" [state]="activity">
+      <mat-list-item routerLink="transaction-details" [state]="activity">
         <img matListAvatar [src]="activity.asset.asset_file_thumbnail" />
         <div mat-line>{{ activity.asset.id }}</div>
         <div mat-line>{{ activity.created_at | date: 'short' }}</div>
