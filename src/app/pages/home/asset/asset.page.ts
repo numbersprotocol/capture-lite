@@ -3,6 +3,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, defer, forkJoin, zip } from 'rxjs';
 import {
@@ -70,11 +71,17 @@ export class AssetPage {
   readonly timestamp$ = this.capture$.pipe(
     map(capture => capture.proofWithOld?.proof.timestamp)
   );
-  readonly latitude$ = this.capture$.pipe(
-    map(capture => `${capture.proofWithOld?.proof.geolocationLatitude}`)
-  );
-  readonly longitude$ = this.capture$.pipe(
-    map(capture => `${capture.proofWithOld?.proof.geolocationLongitude}`)
+  readonly location$ = this.capture$.pipe(
+    map(capture => [
+      capture.proofWithOld?.proof.geolocationLatitude,
+      capture.proofWithOld?.proof.geolocationLongitude,
+    ]),
+    map(([latitude, longitude]) => {
+      if (!latitude || !longitude) {
+        return this.translacoService.translate('locationNotProvided');
+      }
+      return `${latitude}, ${longitude}`;
+    })
   );
 
   constructor(
@@ -85,7 +92,8 @@ export class AssetPage {
     private readonly proofRepository: ProofRepository,
     private readonly blockingActionService: BlockingActionService,
     private readonly dialog: MatDialog,
-    private readonly bottomSheet: MatBottomSheet
+    private readonly bottomSheet: MatBottomSheet,
+    private readonly translacoService: TranslocoService
   ) {}
 
   openContactSelectionDialog() {
