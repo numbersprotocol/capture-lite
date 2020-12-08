@@ -20,7 +20,24 @@ mat-toolbar {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 100vh;
+  overflow: auto;
+}
+
+.page-container {
+  padding-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: auto;
+}
+
+.content {
+  flex: 1;
+}
+
+.end-button {
+  flex: 1;
+  flex-grow: 1;
 }
 
 button.center {
