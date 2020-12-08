@@ -102,8 +102,8 @@
     "sendPostCaptureAlert": "After a PostCapture is sent, the ownership will be transferred to the selected friend. Are you sure?"
   },
   "error": {
-    "locationPermissionDenied": "Location permission is denied. The relevant data will not be collected. Turn your location permission on to enable full feature of Capture.",
-    "locationPositionUnavailable": "Location is not available at this moment, possibly due to weak network connectivity or GPS signals.",
-    "locationTimeout": "Location info collection takes too much time, possibly due to weak network connectivity or GPS signals."
+    "locationPermissionDenied": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
+    "locationPositionUnavailable": "Location is not available at this moment; possibly due to weak network connectivity or GPS signals.",
+    "locationTimeout": "Location collection timeout, possibly due to weak network connectivity or GPS signals."
   }
 }
