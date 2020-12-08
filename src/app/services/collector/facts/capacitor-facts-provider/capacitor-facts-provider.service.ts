@@ -55,7 +55,7 @@ export class CapacitorFactsProvider implements FactsProvider {
     const defaultGeolocationTimeout = 10000;
     const isLocationInfoCollectionEnabled = await this.isGeolocationInfoCollectionEnabled();
     if (!isLocationInfoCollectionEnabled) {
-      return;
+      return undefined;
     }
     return this.geolocationPlugin
       .getCurrentPosition({
@@ -84,7 +84,7 @@ export class CapacitorFactsProvider implements FactsProvider {
             break;
         }
         this.snackBar.open(message, '', { duration: 4000 });
-        return;
+        return undefined;
       });
   }
 
