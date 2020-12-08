@@ -69,6 +69,3 @@ interface DiaBackendContact extends Tuple {
 interface ListContactResponse {
   readonly results: DiaBackendContact[];
 }
-
-// tslint:disable-next-line: no-empty-interface
-interface InviteContactResponse {}
