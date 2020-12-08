@@ -10,11 +10,11 @@
     <mat-card-content class="row">
       <mat-label> {{ (details$ | async)?.asset.id }}</mat-label>
       <button
-        [class]="(details$ | async)?.status.__zone_symbol__value"
+        [class]="(details$ | async)?.status"
         mat-stroked-button
         disableRipple
       >
-        {{ t((details$ | async)?.status.__zone_symbol__value) }}
+        {{ t((details$ | async)?.status) }}
       </button>
     </mat-card-content>
     <img [src]="(details$ | async)?.asset.asset_file_thumbnail" />

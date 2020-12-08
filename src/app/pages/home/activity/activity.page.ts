@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map, pluck } from 'rxjs/operators';
+import { concatMap, pluck } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../services/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendTransaction,
@@ -19,11 +19,13 @@ export class ActivityPage {
     .getAll$()
     .pipe(
       pluck('results'),
-      map(activities =>
-        activities.map(activity => ({
-          ...activity,
-          status: this.getStatus(activity),
-        }))
+      concatMap(activities =>
+        Promise.all(
+          activities.map(async activity => ({
+            ...activity,
+            status: await this.getStatus(activity),
+          }))
+        )
       )
     );
 
