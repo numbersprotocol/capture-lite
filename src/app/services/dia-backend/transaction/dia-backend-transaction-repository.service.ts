@@ -1,14 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { isEqual } from 'lodash';
-import { BehaviorSubject, defer, merge, of } from 'rxjs';
+import { BehaviorSubject, defer, merge, Observable, of } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
   distinctUntilChanged,
+  map,
   pluck,
   tap,
 } from 'rxjs/operators';
+import {
+  switchTap,
+  switchTapTo,
+} from '../../../utils/rx-operators/rx-operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy, Tuple } from '../../database/table/table';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
@@ -29,9 +34,17 @@ export class DiaBackendTransactionRepository {
     private readonly database: Database
   ) {}
 
-  getAll$() {
+  getAll$(): Observable<DiaBackendTransaction[]> {
     return merge(this.fetchAll$(), this.table.queryAll$()).pipe(
       distinctUntilChanged(isEqual)
+    );
+  }
+
+  getById$(id: string) {
+    return this.getAll$().pipe(
+      map(transactions =>
+        transactions.find(transaction => transaction.id === id)
+      )
     );
   }
 
@@ -60,18 +73,6 @@ export class DiaBackendTransactionRepository {
     );
   }
 
-  // TODO: make private by using repository pattern
-  oldFetchAll$() {
-    return defer(() => this.authService.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.get<ListTransactionResponse>(
-          `${BASE_URL}/api/v2/transactions/`,
-          { headers }
-        )
-      )
-    );
-  }
-
   add$(assetId: string, targetEmail: string, caption: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
@@ -81,7 +82,7 @@ export class DiaBackendTransactionRepository {
           { headers }
         )
       ),
-      tap(response => console.log(response))
+      switchTap(response => defer(() => this.table.insert([response])))
     );
   }
 
@@ -93,7 +94,8 @@ export class DiaBackendTransactionRepository {
           {},
           { headers }
         )
-      )
+      ),
+      switchTapTo(this.fetchAll$())
     );
   }
 }
@@ -117,7 +119,7 @@ interface ListTransactionResponse {
 }
 
 // tslint:disable-next-line: no-empty-interface
-interface CreateTransactionResponse {}
+interface CreateTransactionResponse extends DiaBackendTransaction {}
 
 // tslint:disable-next-line: no-empty-interface
 interface AcceptTransactionResponse {}

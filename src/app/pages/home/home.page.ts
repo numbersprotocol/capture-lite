@@ -10,7 +10,6 @@ import {
   distinctUntilChanged,
   first,
   map,
-  pluck,
 } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -95,13 +94,14 @@ export class HomePage implements OnInit {
     );
   }
 
+  // TODO: Clean up this ugly WORKAROUND with repository pattern.
   private getPostCaptures$() {
     return zip(
-      this.diaBackendTransactionRepository.oldFetchAll$().pipe(first()),
+      this.diaBackendTransactionRepository.getAll$().pipe(first()),
       this.diaBackendAuthService.getEmail()
     ).pipe(
-      map(([transactionListResponse, email]) =>
-        transactionListResponse.results.filter(
+      map(([transactions, email]) =>
+        transactions.filter(
           transaction =>
             transaction.sender !== email &&
             !transaction.expired &&
@@ -155,10 +155,7 @@ export class HomePage implements OnInit {
   private pollingInbox$() {
     // tslint:disable-next-line: no-magic-numbers
     return interval(10000).pipe(
-      concatMapTo(
-        this.diaBackendTransactionRepository.oldFetchAll$().pipe(first())
-      ),
-      pluck('results'),
+      concatMapTo(this.diaBackendTransactionRepository.getAll$().pipe(first())),
       concatMap(postCaptures =>
         zip(of(postCaptures), this.diaBackendAuthService.getEmail())
       ),

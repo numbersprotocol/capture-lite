@@ -5,26 +5,24 @@
   <span>{{ t('transactionDetails') }}</span>
 </mat-toolbar>
 <div *transloco="let t" class="page-content">
-  <h4 class="top-time">{{ (details$ | async)?.created_at | date: 'short' }}</h4>
+  <h4 class="top-time">
+    {{ (transaction$ | async)?.created_at | date: 'short' }}
+  </h4>
   <mat-card class="transaction-card">
     <mat-card-content class="row">
-      <mat-label> {{ (details$ | async)?.asset.id }}</mat-label>
-      <button
-        [class]="(details$ | async)?.status"
-        mat-stroked-button
-        disableRipple
-      >
-        {{ t((details$ | async)?.status) }}
+      <mat-label> {{ (transaction$ | async)?.asset.id }}</mat-label>
+      <button [class]="status$ | async" mat-stroked-button disableRipple>
+        {{ t(status$ | async) }}
       </button>
     </mat-card-content>
-    <img [src]="(details$ | async)?.asset.asset_file_thumbnail" />
+    <img [src]="(transaction$ | async)?.asset.asset_file_thumbnail" />
     <mat-card-content class="column">
       <mat-label
-        >{{ t('sentFrom') }} : {{ (details$ | async)?.sender }}</mat-label
+        >{{ t('sentFrom') }} : {{ (transaction$ | async)?.sender }}</mat-label
       >
       <mat-label
         >{{ t('receiver') }} :
-        {{ (details$ | async)?.receiver_email }}</mat-label
+        {{ (transaction$ | async)?.receiver_email }}</mat-label
       >
     </mat-card-content>
   </mat-card>
