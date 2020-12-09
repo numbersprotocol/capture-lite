@@ -3,14 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
-import { combineLatest, defer, forkJoin, interval, of, zip } from 'rxjs';
-import {
-  concatMap,
-  concatMapTo,
-  distinctUntilChanged,
-  first,
-  map,
-} from 'rxjs/operators';
+import { combineLatest, defer, forkJoin, of, zip } from 'rxjs';
+import { concatMap, distinctUntilChanged, first, map } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
@@ -42,9 +36,9 @@ export class HomePage implements OnInit {
   postCaptures$ = this.getPostCaptures$();
   readonly username$ = this.diaBackendAuthService.getUsername$();
   captureButtonShow = true;
-  inboxCount$ = this.pollingInbox$().pipe(
-    map(transactions => transactions.length)
-  );
+  inboxCount$ = this.diaBackendTransactionRepository
+    .getInbox$()
+    .pipe(map(transactions => transactions.length));
 
   constructor(
     private readonly proofRepository: ProofRepository,
@@ -147,34 +141,5 @@ export class HomePage implements OnInit {
     if (event.index === 1) {
       this.postCaptures$ = this.getPostCaptures$();
     }
-  }
-
-  /**
-   * TODO: Use repository pattern to cache the inbox data.
-   */
-  private pollingInbox$() {
-    // tslint:disable-next-line: no-magic-numbers
-    return interval(10000).pipe(
-      concatMapTo(this.diaBackendTransactionRepository.getAll$().pipe(first())),
-      concatMap(postCaptures =>
-        zip(of(postCaptures), this.diaBackendAuthService.getEmail())
-      ),
-      map(([postCaptures, email]) =>
-        postCaptures.filter(
-          postCapture =>
-            postCapture.receiver_email === email &&
-            !postCapture.fulfilled_at &&
-            !postCapture.expired
-        )
-      ),
-      concatMap(postCaptures =>
-        zip(of(postCaptures), this.ignoredTransactionRepository.getAll$())
-      ),
-      map(([postCaptures, ignoredTransactions]) =>
-        postCaptures.filter(
-          postcapture => !ignoredTransactions.includes(postcapture.id)
-        )
-      )
-    );
   }
 }

@@ -1,7 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { isEqual, omit } from 'lodash';
-import { BehaviorSubject, defer, merge, Observable, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  defer,
+  merge,
+  Observable,
+  of,
+} from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -18,6 +25,7 @@ import { Database } from '../../database/database.service';
 import { OnConflictStrategy, Tuple } from '../../database/table/table';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { BASE_URL } from '../secret';
+import { IgnoredTransactionRepository } from './ignored-transaction-repository.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +39,8 @@ export class DiaBackendTransactionRepository {
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService,
-    private readonly database: Database
+    private readonly database: Database,
+    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
   ) {}
 
   getAll$(): Observable<DiaBackendTransaction[]> {
@@ -101,6 +110,24 @@ export class DiaBackendTransactionRepository {
         )
       ),
       switchTapTo(this.fetchAll$())
+    );
+  }
+
+  getInbox$() {
+    return combineLatest([
+      this.getAll$(),
+      this.ignoredTransactionRepository.getAll$(),
+      this.authService.getEmail$(),
+    ]).pipe(
+      map(([transactions, ignoredTransactions, email]) =>
+        transactions.filter(
+          transaction =>
+            transaction.receiver_email === email &&
+            !transaction.fulfilled_at &&
+            !transaction.expired &&
+            !ignoredTransactions.includes(transaction.id)
+        )
+      )
     );
   }
 }
