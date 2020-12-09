@@ -8,6 +8,7 @@
 
 mat-icon {
   color: black;
+  font-size: 18px;
 }
 
 mat-card {
@@ -100,13 +101,25 @@ mat-card-title {
 
 .info-list[dense] {
   display: none;
+  font-size: 12px;
 
   .info-list-content {
-    width: 80%;
+    width: 75%;
     float: right;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+  }
+
+  .info-list-icon {
+    font-size: 16px;
+  }
+
+  .info-list-img {
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    padding: 6px;
   }
 
   mat-list-item {
