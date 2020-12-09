@@ -38,17 +38,17 @@ export async function getStatus(
   transaction: DiaBackendTransaction,
   email: string | Promise<string>
 ) {
-  email = await email;
+  const resolvedEmail = await email;
   if (transaction.expired) {
     return Status.Returned;
   }
   if (!transaction.fulfilled_at) {
-    if (transaction.receiver_email === email) {
+    if (transaction.receiver_email === resolvedEmail) {
       return Status.InProgress;
     }
     return Status.waitingToBeAccepted;
   }
-  if (transaction.sender === email) {
+  if (transaction.sender === resolvedEmail) {
     return Status.Delivered;
   }
   return Status.Accepted;

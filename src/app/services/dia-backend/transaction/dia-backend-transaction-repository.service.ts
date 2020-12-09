@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { isEqual } from 'lodash';
+import { isEqual, omit } from 'lodash';
 import { BehaviorSubject, defer, merge, Observable, of } from 'rxjs';
 import {
   concatMap,
@@ -38,8 +38,8 @@ export class DiaBackendTransactionRepository {
     return merge(this.fetchAll$(), this.table.queryAll$()).pipe(
       distinctUntilChanged((transactionsX, transactionsY) =>
         isEqual(
-          transactionsX.map(x => x.id),
-          transactionsY.map(y => y.id)
+          transactionsX.map(x => omit(x, 'asset.asset_file_thumbnail')),
+          transactionsY.map(y => omit(y, 'asset.asset_file_thumbnail'))
         )
       )
     );
@@ -115,7 +115,7 @@ export interface DiaBackendTransaction extends Tuple {
   readonly sender: string;
   readonly receiver_email: string;
   readonly created_at: string;
-  readonly fulfilled_at: string;
+  readonly fulfilled_at: string | null;
   readonly expired: boolean;
 }
 
