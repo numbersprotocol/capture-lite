@@ -36,7 +36,12 @@ export class DiaBackendTransactionRepository {
 
   getAll$(): Observable<DiaBackendTransaction[]> {
     return merge(this.fetchAll$(), this.table.queryAll$()).pipe(
-      distinctUntilChanged(isEqual)
+      distinctUntilChanged((transactionsX, transactionsY) =>
+        isEqual(
+          transactionsX.map(x => x.id),
+          transactionsY.map(y => y.id)
+        )
+      )
     );
   }
 

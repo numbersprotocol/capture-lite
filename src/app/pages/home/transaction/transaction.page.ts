@@ -22,6 +22,7 @@ export class TransactionPage {
         }))
       )
     );
+  readonly isFetching$ = this.diaBackendTransactionRepository.isFetching$();
 
   constructor(
     private readonly diaBackendAuthService: DiaBackendAuthService,
