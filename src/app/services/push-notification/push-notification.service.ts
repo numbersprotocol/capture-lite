@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Capacitor, PushNotificationsPlugin } from '@capacitor/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { PUSH_NOTIFICATIONS_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
-import { isNonNullable } from '../../utils/rx-operators';
+import { isNonNullable } from '../../utils/rx-operators/rx-operators';
 
 @Injectable({
   providedIn: 'root',

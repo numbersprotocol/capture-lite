@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { EMPTY, Observable } from 'rxjs';
+import { defer, EMPTY, Observable } from 'rxjs';
 import { concatMap, filter } from 'rxjs/operators';
+import { switchTapTo } from '../../../utils/rx-operators/rx-operators';
 import { NotificationService } from '../../notification/notification.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
+import { DiaBackendTransactionRepository } from '../transaction/dia-backend-transaction-repository.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +13,7 @@ import { PushNotificationService } from '../../push-notification/push-notificati
 export class DiaBackendNotificationService {
   constructor(
     private readonly pushNotificationService: PushNotificationService,
+    private readonly transactionRepository: DiaBackendTransactionRepository,
     private readonly notificationService: NotificationService,
     private readonly translocoService: TranslocoService
   ) {}
@@ -20,16 +23,20 @@ export class DiaBackendNotificationService {
       isDiaBackendPushNotificationData(),
       concatMap(data => {
         if (data.app_message_type === 'transaction_received') {
-          return this.notificationService.notify(
-            this.translocoService.translate('transactionReceived'),
-            this.translocoService.translate('message.transactionReceived')
-          );
+          return defer(() =>
+            this.notificationService.notify(
+              this.translocoService.translate('transactionReceived'),
+              this.translocoService.translate('message.transactionReceived')
+            )
+          ).pipe(switchTapTo(this.transactionRepository.getAll$()));
         }
         if (data.app_message_type === 'transaction_expired') {
-          return this.notificationService.notify(
-            this.translocoService.translate('transactionExpired'),
-            this.translocoService.translate('message.transactionExpired')
-          );
+          return defer(() =>
+            this.notificationService.notify(
+              this.translocoService.translate('transactionExpired'),
+              this.translocoService.translate('message.transactionExpired')
+            )
+          ).pipe(switchTapTo(this.transactionRepository.getAll$()));
         }
         return EMPTY;
       })
