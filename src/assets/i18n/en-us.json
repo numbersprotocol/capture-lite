@@ -70,7 +70,7 @@
   "inbox": "Inbox",
   "ignore": "Ignore",
   "accept": "Accept",
-  "activity": "Activity",
+  "transaction": "Activity",
   "transactionDetails": "Activity Details",
   "accepted": "Accepted",
   "delivered": "Delivered",

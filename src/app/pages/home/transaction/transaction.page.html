@@ -1,0 +1,27 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('transaction') }}</span>
+</mat-toolbar>
+
+<div *transloco="let t" class="page-content">
+  <mat-list>
+    <ng-container
+      *ngFor="
+        let transaction of transactionsWithStatus$ | async;
+        last as isLast
+      "
+    >
+      <mat-list-item routerLink="transaction-details" [state]="transaction">
+        <img matListAvatar [src]="transaction.asset.asset_file_thumbnail" />
+        <div mat-line>{{ transaction.asset.id }}</div>
+        <div mat-line>{{ transaction.created_at | date: 'short' }}</div>
+        <button [class]="transaction.status" mat-stroked-button disableRipple>
+          {{ t(transaction.status) }}
+        </button>
+      </mat-list-item>
+      <mat-divider *ngIf="!isLast"></mat-divider>
+    </ng-container>
+  </mat-list>
+</div>

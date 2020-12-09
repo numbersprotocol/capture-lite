@@ -9,21 +9,21 @@ import {
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'app-activity',
-  templateUrl: './activity.page.html',
-  styleUrls: ['./activity.page.scss'],
+  selector: 'app-transaction',
+  templateUrl: './transaction.page.html',
+  styleUrls: ['./transaction.page.scss'],
 })
-export class ActivityPage {
+export class TransactionPage {
   readonly status = Status;
-  readonly activitiesWithStatus$ = this.diaBackendTransactionRepository
+  readonly transactionsWithStatus$ = this.diaBackendTransactionRepository
     .getAll$()
     .pipe(
       pluck('results'),
       concatMap(activities =>
         Promise.all(
-          activities.map(async activity => ({
-            ...activity,
-            status: await this.getStatus(activity),
+          activities.map(async transaction => ({
+            ...transaction,
+            status: await this.getStatus(transaction),
           }))
         )
       )
@@ -34,18 +34,18 @@ export class ActivityPage {
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository
   ) {}
 
-  private async getStatus(activity: DiaBackendTransaction) {
+  private async getStatus(transaction: DiaBackendTransaction) {
     const email = await this.diaBackendAuthService.getEmail();
-    if (activity.expired) {
+    if (transaction.expired) {
       return Status.Returned;
     }
-    if (!activity.fulfilled_at) {
-      if (activity.receiver_email === email) {
+    if (!transaction.fulfilled_at) {
+      if (transaction.receiver_email === email) {
         return Status.InProgress;
       }
       return Status.waitingToBeAccepted;
     }
-    if (activity.sender === email) {
+    if (transaction.sender === email) {
       return Status.Delivered;
     }
     return Status.Accepted;
