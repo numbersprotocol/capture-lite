@@ -75,7 +75,7 @@
   "accepted": "已接收",
   "delivered": "已送出",
   "inProgress": "等待中",
-  "waitingToBeAccepted": "等待對方接收中",
+  "waitingToBeAccepted": "等待中",
   "returned": "已退回",
   "sentFrom": "發送自",
   "receiver": "收件人",

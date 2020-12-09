@@ -76,7 +76,7 @@
   "delivered": "Delivered",
   "returned": "Returned",
   "inProgress": "In Progress",
-  "waitingToBeAccepted": "Waiting to be Accepted",
+  "waitingToBeAccepted": "In Progress",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
   ".message": "Message",
