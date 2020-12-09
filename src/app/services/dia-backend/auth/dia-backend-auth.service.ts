@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { defer, forkJoin, Observable } from 'rxjs';
-import { concatMap, concatMapTo, map } from 'rxjs/operators';
+import { reject } from 'lodash';
+import { combineLatest, defer, forkJoin, Observable } from 'rxjs';
+import { concatMap, concatMapTo, filter, map } from 'rxjs/operators';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
+import { PushNotificationService } from '../../push-notification/push-notification.service';
 import { BASE_URL } from '../secret';
 
 const { Device } = Plugins;
@@ -18,8 +20,13 @@ export class DiaBackendAuthService {
 
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly preferenceManager: PreferenceManager
+    private readonly preferenceManager: PreferenceManager,
+    private readonly pushNotificationService: PushNotificationService
   ) {}
+
+  initialize$() {
+    return this.updateDevice$();
+  }
 
   login$(email: string, password: string): Observable<LoginResult> {
     return this.httpClient
@@ -75,12 +82,13 @@ export class DiaBackendAuthService {
     });
   }
 
-  // TODO: Internally depend on PushNotificationService and remove parameters.
-  createDevice$(fcmToken: string) {
-    return defer(() =>
-      forkJoin([this.getAuthHeaders(), Device.getInfo()])
-    ).pipe(
-      concatMap(([headers, deviceInfo]) =>
+  private updateDevice$() {
+    return combineLatest([
+      this.pushNotificationService.getToken$(),
+      this.getAuthHeaders$(),
+      defer(() => Device.getInfo()),
+    ]).pipe(
+      concatMap(([fcmToken, headers, deviceInfo]) =>
         this.httpClient.post(
           `${BASE_URL}/auth/devices/`,
           {
@@ -133,8 +141,28 @@ export class DiaBackendAuthService {
     return { authorization: `token ${await this.getToken()}` };
   }
 
+  getAuthHeaders$() {
+    return this.getToken$().pipe(
+      map(token => ({ authorization: `token ${token}` }))
+    );
+  }
+
   private async getToken() {
-    return this.preferences.getString(PrefKeys.TOKEN);
+    return new Promise<string>(resolve => {
+      this.preferences.getString(PrefKeys.TOKEN).then(token => {
+        if (token.length !== 0) {
+          resolve(token);
+        } else {
+          reject(new Error('Cannot get DIA backend token which is empty.'));
+        }
+      });
+    });
+  }
+
+  private getToken$() {
+    return this.preferences
+      .getString$(PrefKeys.TOKEN)
+      .pipe(filter(token => token.length !== 0));
   }
 
   private async setToken(value: string) {

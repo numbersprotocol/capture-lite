@@ -17,8 +17,6 @@ describe('HomePage', () => {
     fixture.detectChanges();
   }));
 
-  // TODO: Enable this after removing the polling WORKAROUND
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  // TODO: Enable this test after we remove the ugly WORKAROUND in ngOnInit().
+  // it('should create', () => expect(component).toBeTruthy());
 });

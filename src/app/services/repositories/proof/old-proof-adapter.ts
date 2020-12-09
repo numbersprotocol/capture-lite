@@ -3,7 +3,7 @@ import { blobToBase64 } from '../../../utils/encoding/encoding';
 import { MimeType } from '../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
 import { ImageStore } from '../../image-store/image-store.service';
-import { Proof, Signature } from './proof';
+import { DefaultFactId, Proof, Signature } from './proof';
 
 /**
  * Only for migration and connection to backend. Subject to change.
@@ -29,8 +29,27 @@ export async function getSortedProofInformation(
 ): Promise<SortedProofInformation> {
   return {
     proof: getOldProof(proof),
-    information: createSortedEssentialInformation(proof),
+    information: createSortedEssentialInformation(proof).map(info => ({
+      provider: info.provider,
+      name: replaceDefaultFactIdWithOldDefaultInformationName(info.name),
+      value: info.value,
+    })),
   };
+}
+
+export function replaceDefaultFactIdWithOldDefaultInformationName(
+  name: string
+): string {
+  if (name === DefaultFactId.DEVICE_NAME) {
+    return OldDefaultInformationName.DEVICE_NAME;
+  }
+  if (name === DefaultFactId.GEOLOCATION_LATITUDE) {
+    return OldDefaultInformationName.GEOLOCATION_LATITUDE;
+  }
+  if (name === DefaultFactId.GEOLOCATION_LONGITUDE) {
+    return OldDefaultInformationName.GEOLOCATION_LONGITUDE;
+  }
+  return name;
 }
 
 function createSortedEssentialInformation(
@@ -79,7 +98,11 @@ export async function getProof(
 ): Promise<Proof> {
   const base64 = await blobToBase64(raw);
   const groupedByProvider = groupObjectsBy(
-    sortedProofInformation.information,
+    sortedProofInformation.information.map(info => ({
+      provider: info.provider,
+      name: replaceOldDefaultInformationNameWithDefaultFactId(info.name),
+      value: info.value,
+    })),
     'provider'
   );
   const providers = flow(
@@ -105,6 +128,21 @@ export async function getProof(
     { timestamp: sortedProofInformation.proof.timestamp, providers },
     signatures
   );
+}
+
+export function replaceOldDefaultInformationNameWithDefaultFactId(
+  name: string
+): string {
+  if (name === OldDefaultInformationName.DEVICE_NAME) {
+    return DefaultFactId.DEVICE_NAME;
+  }
+  if (name === OldDefaultInformationName.GEOLOCATION_LATITUDE) {
+    return DefaultFactId.GEOLOCATION_LATITUDE;
+  }
+  if (name === OldDefaultInformationName.GEOLOCATION_LONGITUDE) {
+    return DefaultFactId.GEOLOCATION_LONGITUDE;
+  }
+  return name;
 }
 
 /**

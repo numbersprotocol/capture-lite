@@ -1,4 +1,5 @@
 import { formatDate } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -6,12 +7,15 @@ import { groupBy } from 'lodash';
 import { combineLatest, defer, forkJoin, of, zip } from 'rxjs';
 import { concatMap, distinctUntilChanged, first, map } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
+import { OnConflictStrategy } from '../../services/database/table/table';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import { IgnoredTransactionRepository } from '../../services/dia-backend/transaction/ignored-transaction-repository.service';
-import { PushNotificationService } from '../../services/push-notification/push-notification.service';
-import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
+import { ImageStore } from '../../services/image-store/image-store.service';
+import {
+  getOldProof,
+  getProof,
+} from '../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
 import { capture } from '../../utils/camera';
 
@@ -46,12 +50,65 @@ export class HomePage implements OnInit {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
-    private readonly pushNotificationService: PushNotificationService,
-    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
+    private readonly imageStore: ImageStore,
+    private readonly httpClient: HttpClient
   ) {}
 
   ngOnInit() {
-    this.pushNotificationService.configure();
+    /**
+     * TODO: Remove this ugly WORKAROUND by using repository pattern to cache the expired assets and proofs.
+     * TODO: Move this functionality to DiaBackendAssetRepository.initialize$() method.
+     */
+    this.diaBackendTransactionRepository
+      .getAll$()
+      .pipe(
+        concatMap(transactions =>
+          forkJoin([
+            of(transactions),
+            defer(() => this.diaBackendAuthService.getEmail()),
+          ])
+        ),
+        map(([transactions, email]) =>
+          transactions.filter(t => t.expired && t.sender === email)
+        ),
+        concatMap(expiredTransactions =>
+          forkJoin(
+            expiredTransactions.map(t =>
+              this.diaBackendAssetRepository.getById$(t.asset.id)
+            )
+          )
+        ),
+        concatMap(expiredAssets =>
+          forkJoin([
+            of(expiredAssets),
+            defer(() =>
+              Promise.all(
+                expiredAssets.map(async a => {
+                  return this.proofRepository.add(
+                    await getProof(
+                      this.imageStore,
+                      await this.httpClient
+                        .get(a.asset_file, { responseType: 'blob' })
+                        .toPromise(),
+                      a.information,
+                      a.signature
+                    ),
+                    OnConflictStrategy.REPLACE
+                  );
+                })
+              )
+            ),
+          ])
+        ),
+        concatMap(([expiredAssets]) =>
+          this.diaBackendAssetRepository.addAssetDirectly(
+            expiredAssets,
+            OnConflictStrategy.REPLACE
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   private getCaptures$() {
