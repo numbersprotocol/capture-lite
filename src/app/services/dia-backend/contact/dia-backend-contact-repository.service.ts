@@ -18,10 +18,10 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendContactRepository {
-  private readonly _isFetching$ = new BehaviorSubject(false);
   private readonly table = this.database.getTable<DiaBackendContact>(
     DiaBackendContactRepository.name
   );
+  private readonly _isFetching$ = new BehaviorSubject(false);
 
   constructor(
     private readonly httpClient: HttpClient,

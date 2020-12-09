@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, zip } from 'rxjs';
-import { concatMap, map, pluck, tap } from 'rxjs/operators';
+import { concatMap, first, map, pluck, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../services/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
@@ -24,7 +24,8 @@ export class InboxPage {
   ) {}
 
   private listInbox$() {
-    return this.diaBackendTransactionRepository.getAll$().pipe(
+    return this.diaBackendTransactionRepository.oldFetchAll$().pipe(
+      first(),
       pluck('results'),
       concatMap(postCaptures =>
         zip(of(postCaptures), this.diaBackendAuthService.getEmail())

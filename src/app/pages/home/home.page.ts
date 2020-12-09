@@ -97,7 +97,7 @@ export class HomePage implements OnInit {
 
   private getPostCaptures$() {
     return zip(
-      this.diaBackendTransactionRepository.getAll$(),
+      this.diaBackendTransactionRepository.oldFetchAll$().pipe(first()),
       this.diaBackendAuthService.getEmail()
     ).pipe(
       map(([transactionListResponse, email]) =>
@@ -155,7 +155,9 @@ export class HomePage implements OnInit {
   private pollingInbox$() {
     // tslint:disable-next-line: no-magic-numbers
     return interval(10000).pipe(
-      concatMapTo(this.diaBackendTransactionRepository.getAll$()),
+      concatMapTo(
+        this.diaBackendTransactionRepository.oldFetchAll$().pipe(first())
+      ),
       pluck('results'),
       concatMap(postCaptures =>
         zip(of(postCaptures), this.diaBackendAuthService.getEmail())

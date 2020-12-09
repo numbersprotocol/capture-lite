@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { concatMap, pluck } from 'rxjs/operators';
+import { concatMap, first, pluck } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../services/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendTransaction,
@@ -16,8 +16,9 @@ import {
 export class TransactionPage {
   readonly status = Status;
   readonly transactionsWithStatus$ = this.diaBackendTransactionRepository
-    .getAll$()
+    .oldFetchAll$()
     .pipe(
+      first(),
       pluck('results'),
       concatMap(activities =>
         Promise.all(
