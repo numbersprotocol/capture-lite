@@ -38,7 +38,6 @@ jobs:
           npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
-          npm run test-ci
           npm run build
 
       - name: Build Android release bundle (AAB) for Google Play Console
