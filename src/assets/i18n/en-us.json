@@ -71,9 +71,10 @@
   "transactionDetails": "Activity Details",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
-  ".message": "Message",
   "location": "Location",
   "locationNotProvided": "Location Not Provided",
+  "dismiss": "Dismiss",
+  ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "verificationEmailSent": "A verification email has been sent to your email address.",

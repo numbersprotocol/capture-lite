@@ -113,7 +113,9 @@ export class CapacitorFactsProvider implements FactsProvider {
         message = error.message;
         break;
     }
-    this.snackBar.open(message, '', { duration: 4000 });
+    this.snackBar.open(message, this.translocoService.translate('dismiss'), {
+      duration: 4000,
+    });
   }
 }
 
