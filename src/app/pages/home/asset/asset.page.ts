@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, defer, forkJoin, zip } from 'rxjs';
@@ -25,9 +24,6 @@ import {
   Option,
   OptionsMenuComponent,
 } from './options-menu/options-menu.component';
-
-const { Browser } = Plugins;
-
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-asset',
@@ -145,18 +141,5 @@ export class AssetPage {
         .pipe(untilDestroyed(this))
         .subscribe();
     }
-  }
-
-  openDashboardLink() {
-    this.asset$
-      .pipe(
-        tap(asset =>
-          Browser.open({
-            url: `https://authmedia.net/dia-certificate?mid=${asset.id}`,
-          })
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
   }
 }
