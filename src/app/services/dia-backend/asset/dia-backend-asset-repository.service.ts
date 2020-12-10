@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
+import { isEqual } from 'lodash';
 import { defer, forkJoin } from 'rxjs';
-import { concatMap, single } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, single } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy, Tuple } from '../../database/table/table';
@@ -34,7 +35,14 @@ export class DiaBackendAssetRepository {
   ) {}
 
   getAll$() {
-    return this.table.queryAll$();
+    return this.table.queryAll$().pipe(
+      distinctUntilChanged((assetsX, assetsY) =>
+        isEqual(
+          assetsX.map(x => x.id),
+          assetsY.map(y => y.id)
+        )
+      )
+    );
   }
 
   // TODO: use repository pattern to read locally.

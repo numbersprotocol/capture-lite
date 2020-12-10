@@ -101,7 +101,7 @@ export class HomePage implements OnInit {
                       a.information,
                       a.signature
                     ),
-                    OnConflictStrategy.REPLACE
+                    OnConflictStrategy.IGNORE
                   );
                 })
               )
@@ -111,7 +111,7 @@ export class HomePage implements OnInit {
         concatMap(([expiredAssets]) =>
           this.diaBackendAssetRepository.addAssetDirectly(
             expiredAssets,
-            OnConflictStrategy.REPLACE
+            OnConflictStrategy.IGNORE
           )
         ),
         untilDestroyed(this)

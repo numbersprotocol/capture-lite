@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { isEqual } from 'lodash';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy } from '../../database/table/table';
 import { ImageStore } from '../../image-store/image-store.service';
@@ -20,7 +21,8 @@ export class ProofRepository {
 
   getAll$() {
     return this.table.queryAll$().pipe(
-      map(indexedProofViews => {
+      distinctUntilChanged(isEqual),
+      map((indexedProofViews: IndexedProofView[]) => {
         return indexedProofViews.map(view =>
           Proof.fromIndexedProofView(this.imageStore, view)
         );

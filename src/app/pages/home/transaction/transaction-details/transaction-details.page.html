@@ -12,7 +12,7 @@
     <mat-card-content class="row">
       <mat-label> {{ (transaction$ | async)?.asset.id }}</mat-label>
       <button [class]="status$ | async" mat-stroked-button disableRipple>
-        {{ t(status$ | async) }}
+        {{ t('transactionState.' + (status$ | async)) }}
       </button>
     </mat-card-content>
     <img [src]="(transaction$ | async)?.asset.asset_file_thumbnail" />

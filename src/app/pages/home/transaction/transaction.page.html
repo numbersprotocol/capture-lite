@@ -30,7 +30,7 @@
           mat-stroked-button
           disableRipple
         >
-          {{ t(transaction.status | async) }}
+          {{ t('transactionState.' + (transaction.status | async)) }}
         </button>
       </mat-list-item>
       <mat-divider *ngIf="!isLast"></mat-divider>
