@@ -16,7 +16,7 @@ import { DiaBackendTransactionRepository } from '../../services/dia-backend/tran
 import { ImageStore } from '../../services/image-store/image-store.service';
 import {
   getOldProof,
-  getProof
+  getProof,
 } from '../../services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../services/repositories/proof/proof';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
@@ -59,8 +59,8 @@ export class HomePage implements OnInit {
     private readonly imageStore: ImageStore,
     private readonly httpClient: HttpClient,
     private readonly snackbar: MatSnackBar,
-    private readonly translocoService: TranslocoService,
-  ) { }
+    private readonly translocoService: TranslocoService
+  ) {}
 
   ngOnInit() {
     /**
@@ -218,7 +218,7 @@ export class HomePage implements OnInit {
         this.snackbar.open(
           this.translocoService.translate('message.postCaptureLimitation'),
           this.translocoService.translate('dismiss'),
-          { duration: 8000 },
+          { duration: 8000 }
         );
         this.postCaptureLimitationMessageShowed = true;
       }
