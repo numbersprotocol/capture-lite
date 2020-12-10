@@ -3,7 +3,7 @@
     <div mat-card-avatar class="post-capture-avatar"></div>
     <mat-card-title>{{ transaction.sender }}</mat-card-title>
     <mat-card-subtitle>{{
-      asset.uploaded_at | date: 'short'
+      transaction.fulfilled_at | date: 'short'
     }}</mat-card-subtitle>
     <span class="toolbar-spacer"></span>
   </mat-card-header>
