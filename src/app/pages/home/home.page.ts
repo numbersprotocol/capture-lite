@@ -5,7 +5,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
 import { combineLatest, defer, forkJoin, of, zip } from 'rxjs';
-import { concatMap, distinctUntilChanged, first, map } from 'rxjs/operators';
+import { concatMap, first, map } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
 import { OnConflictStrategy } from '../../services/database/table/table';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -16,6 +16,7 @@ import {
   getOldProof,
   getProof,
 } from '../../services/repositories/proof/old-proof-adapter';
+import { Proof } from '../../services/repositories/proof/proof';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
 import { capture } from '../../utils/camera';
 
@@ -43,6 +44,7 @@ export class HomePage implements OnInit {
   inboxCount$ = this.diaBackendTransactionRepository
     .getInbox$()
     .pipe(map(transactions => transactions.length));
+  currentUploadingProofHash = '';
 
   constructor(
     private readonly proofRepository: ProofRepository,
@@ -127,20 +129,13 @@ export class HomePage implements OnInit {
 
     return combineLatest([originallyOwnedAssets$, proofsWithThumbnail$]).pipe(
       map(([assets, proofsWithThumbnail]) =>
-        assets.map(asset => ({
-          asset,
-          // tslint:disable-next-line: no-non-null-assertion
-          proofWithThumbnail: proofsWithThumbnail.find(
-            p => getOldProof(p.proof).hash === asset.proof_hash
-          )!,
+        proofsWithThumbnail.map(proofWithThumbnail => ({
+          hash: getOldProof(proofWithThumbnail.proof).hash,
+          proofWithThumbnail,
+          asset: assets.find(
+            a => getOldProof(proofWithThumbnail.proof).hash === a.proof_hash
+          ),
         }))
-      ),
-      // WORKAROUND: Use the lax comparison for now. We will redefine the flow
-      // to save and show Proofs first, and then publish to DIA backend. See
-      // #212:
-      // https://github.com/numbersprotocol/capture-lite/issues/212
-      distinctUntilChanged(
-        (captures1, captures2) => captures1.length === captures2.length
       )
     );
   }
@@ -191,6 +186,20 @@ export class HomePage implements OnInit {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  /**
+   * WORKAROUND: use a single string currentUploadingProofHash to display uploading spinner for single Capture
+   * The implementation has a limitation that only 1 Capture could be triggered to upload at a time.
+   */
+  async upload(proof: Proof) {
+    if (this.currentUploadingProofHash) {
+      return;
+    }
+    this.currentUploadingProofHash = getOldProof(proof).hash;
+    return this.diaBackendAssetRepository
+      .add(proof)
+      .finally(() => (this.currentUploadingProofHash = ''));
   }
 
   onTapChanged(event: MatTabChangeEvent) {

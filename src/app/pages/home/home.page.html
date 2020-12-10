@@ -46,7 +46,8 @@
           [matBadgeHidden]="!(inboxCount$ | async)"
           matBadgeSize="small"
           matBadgeColor="warn"
-          >all_inbox</mat-icon
+        >
+          all_inbox</mat-icon
         >
       </button>
     </mat-toolbar>
@@ -62,17 +63,44 @@
           >
             <div class="mat-title">{{ captureByDate.key }}</div>
             <mat-grid-list cols="3" gutterSize="8px">
-              <mat-grid-tile
-                *ngFor="let capture of captureByDate.value"
-                class="square-image-tile"
-                [style]="
-                  'background-image: url(data:image/*;base64,' +
-                  (capture.proofWithThumbnail.thumbnailBase64$ | async)! +
-                  ');'
-                "
-                [routerLink]="['asset', { id: capture.asset.id }]"
-              >
-              </mat-grid-tile>
+              <ng-container *ngFor="let capture of captureByDate.value">
+                <mat-grid-tile
+                  *ngIf="capture.asset"
+                  class="square-image-tile"
+                  [style.background]="
+                    'url(data:image/*;base64,' +
+                    (capture.proofWithThumbnail.thumbnailBase64$ | async)!
+                  "
+                  [routerLink]="['asset', { id: capture.asset.id }]"
+                >
+                </mat-grid-tile>
+                <ng-container *ngIf="!capture.asset">
+                  <mat-grid-tile
+                    class="square-image-tile"
+                    [style.background]="
+                      'url(data:image/*;base64,' +
+                      (capture.proofWithThumbnail.thumbnailBase64$ | async)!
+                    "
+                  >
+                    <div
+                      class="image-tile-overlay"
+                      (click)="upload(capture.proofWithThumbnail.proof)"
+                    ></div>
+                    <div class="overlay-icon">
+                      <mat-spinner
+                        *ngIf="
+                          currentUploadingProofHash === capture.hash;
+                          else uploadError
+                        "
+                        diameter="50"
+                      ></mat-spinner>
+                      <ng-template #uploadError>
+                        <mat-icon>error</mat-icon>
+                      </ng-template>
+                    </div>
+                  </mat-grid-tile>
+                </ng-container>
+              </ng-container>
             </mat-grid-list>
           </ng-container>
         </div>
