@@ -100,7 +100,8 @@
     "sendPostCaptureAlert": "After a PostCapture is sent, the ownership will be transferred to the selected friend. Are you sure?",
     "transactionReceived": "A new PostCapture has received.",
     "transactionExpired": "A PostCapture you delivered has been returned.",
-    "viewAll": "open more..."
+    "viewAll": "open more...",
+    "postCaptureLimitation": "The current Beta version of Capture only displays the 10 newest PostCaptures."
   },
   "error": {
     "locationPermissionDenied": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",

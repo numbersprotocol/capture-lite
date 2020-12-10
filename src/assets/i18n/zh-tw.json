@@ -100,7 +100,8 @@
     "sendPostCaptureAlert": "PostCapture 送出後，它的所有權將轉移至選定的朋友。您確定嗎？",
     "transactionReceived": "收到了新的 PostCapture。",
     "transactionExpired": "您寄出的 PostCapture 已被退回。",
-    "viewAll": "檢視全部"
+    "viewAll": "檢視全部",
+    "postCaptureLimitation": "目前的 Beta 版本 Capture 只會顯示 10 張最新的 PostCapture 。"
   },
   "error": {
     "locationPermissionDenied": "位置存取被拒絕。如欲使用 Capture 的完整功能，請開啟位置權限。",

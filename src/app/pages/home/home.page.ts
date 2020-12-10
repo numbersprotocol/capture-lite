@@ -1,7 +1,9 @@
 import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
 import { combineLatest, defer, forkJoin, of, zip } from 'rxjs';
@@ -45,6 +47,8 @@ export class HomePage implements OnInit {
     .getInbox$()
     .pipe(map(transactions => transactions.length));
   currentUploadingProofHash = '';
+  private readonly workaroundFetchLimit = 10;
+  private postCaptureLimitationMessageShowed = false;
 
   constructor(
     private readonly proofRepository: ProofRepository,
@@ -53,7 +57,9 @@ export class HomePage implements OnInit {
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly imageStore: ImageStore,
-    private readonly httpClient: HttpClient
+    private readonly httpClient: HttpClient,
+    private readonly snackbar: MatSnackBar,
+    private readonly translocoService: TranslocoService
   ) {}
 
   ngOnInit() {
@@ -154,6 +160,8 @@ export class HomePage implements OnInit {
             transaction.fulfilled_at
         )
       ),
+      // WORKAROUND: for PostCapture not displaying when exceeding a certain limit. (#291)
+      map(transactions => transactions.slice(0, this.workaroundFetchLimit)),
       concatMap(transactions =>
         zip(
           of(transactions),
@@ -206,6 +214,14 @@ export class HomePage implements OnInit {
     this.captureButtonShow = event.index === 0;
     if (event.index === 1) {
       this.postCaptures$ = this.getPostCaptures$();
+      if (!this.postCaptureLimitationMessageShowed) {
+        this.snackbar.open(
+          this.translocoService.translate('message.postCaptureLimitation'),
+          this.translocoService.translate('dismiss'),
+          { duration: 8000 }
+        );
+        this.postCaptureLimitationMessageShowed = true;
+      }
     }
   }
 }
