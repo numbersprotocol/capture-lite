@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DiaBackendContactRepository } from '../../../../services/dia-backend/contact/dia-backend-contact-repository.service';
-import { isNonNullable } from '../../../../utils/rx-operators';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { FriendInvitationDialogComponent } from './friend-invitation-dialog/friend-invitation-dialog.component';
 
 @Component({

@@ -1,17 +1,21 @@
 import { formatDate } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
-import { combineLatest, defer, forkJoin, interval, of, zip } from 'rxjs';
-import { concatMap, concatMapTo, first, map, pluck } from 'rxjs/operators';
+import { combineLatest, defer, forkJoin, of, zip } from 'rxjs';
+import { concatMap, first, map } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
+import { OnConflictStrategy } from '../../services/database/table/table';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import { IgnoredTransactionRepository } from '../../services/dia-backend/transaction/ignored-transaction-repository.service';
-import { PushNotificationService } from '../../services/push-notification/push-notification.service';
-import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
+import { ImageStore } from '../../services/image-store/image-store.service';
+import {
+  getOldProof,
+  getProof,
+} from '../../services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../services/repositories/proof/proof';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
 import { capture } from '../../utils/camera';
@@ -37,9 +41,9 @@ export class HomePage implements OnInit {
   postCaptures$ = this.getPostCaptures$();
   readonly username$ = this.diaBackendAuthService.getUsername$();
   captureButtonShow = true;
-  inboxCount$ = this.pollingInbox$().pipe(
-    map(transactions => transactions.length)
-  );
+  inboxCount$ = this.diaBackendTransactionRepository
+    .getInbox$()
+    .pipe(map(transactions => transactions.length));
   currentUploadingProofHash = '';
 
   constructor(
@@ -48,12 +52,65 @@ export class HomePage implements OnInit {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
-    private readonly pushNotificationService: PushNotificationService,
-    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
+    private readonly imageStore: ImageStore,
+    private readonly httpClient: HttpClient
   ) {}
 
   ngOnInit() {
-    this.pushNotificationService.configure();
+    /**
+     * TODO: Remove this ugly WORKAROUND by using repository pattern to cache the expired assets and proofs.
+     * TODO: Move this functionality to DiaBackendAssetRepository.initialize$() method.
+     */
+    this.diaBackendTransactionRepository
+      .getAll$()
+      .pipe(
+        concatMap(transactions =>
+          forkJoin([
+            of(transactions),
+            defer(() => this.diaBackendAuthService.getEmail()),
+          ])
+        ),
+        map(([transactions, email]) =>
+          transactions.filter(t => t.expired && t.sender === email)
+        ),
+        concatMap(expiredTransactions =>
+          forkJoin(
+            expiredTransactions.map(t =>
+              this.diaBackendAssetRepository.getById$(t.asset.id)
+            )
+          )
+        ),
+        concatMap(expiredAssets =>
+          forkJoin([
+            of(expiredAssets),
+            defer(() =>
+              Promise.all(
+                expiredAssets.map(async a => {
+                  return this.proofRepository.add(
+                    await getProof(
+                      this.imageStore,
+                      await this.httpClient
+                        .get(a.asset_file, { responseType: 'blob' })
+                        .toPromise(),
+                      a.information,
+                      a.signature
+                    ),
+                    OnConflictStrategy.REPLACE
+                  );
+                })
+              )
+            ),
+          ])
+        ),
+        concatMap(([expiredAssets]) =>
+          this.diaBackendAssetRepository.addAssetDirectly(
+            expiredAssets,
+            OnConflictStrategy.REPLACE
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   private getCaptures$() {
@@ -83,13 +140,14 @@ export class HomePage implements OnInit {
     );
   }
 
+  // TODO: Clean up this ugly WORKAROUND with repository pattern.
   private getPostCaptures$() {
     return zip(
-      this.diaBackendTransactionRepository.getAll$(),
+      this.diaBackendTransactionRepository.getAll$().pipe(first()),
       this.diaBackendAuthService.getEmail()
     ).pipe(
-      map(([transactionListResponse, email]) =>
-        transactionListResponse.results.filter(
+      map(([transactions, email]) =>
+        transactions.filter(
           transaction =>
             transaction.sender !== email &&
             !transaction.expired &&
@@ -149,35 +207,5 @@ export class HomePage implements OnInit {
     if (event.index === 1) {
       this.postCaptures$ = this.getPostCaptures$();
     }
-  }
-
-  /**
-   * TODO: Use repository pattern to cache the inbox data.
-   */
-  private pollingInbox$() {
-    // tslint:disable-next-line: no-magic-numbers
-    return interval(10000).pipe(
-      concatMapTo(this.diaBackendTransactionRepository.getAll$()),
-      pluck('results'),
-      concatMap(postCaptures =>
-        zip(of(postCaptures), this.diaBackendAuthService.getEmail())
-      ),
-      map(([postCaptures, email]) =>
-        postCaptures.filter(
-          postCapture =>
-            postCapture.receiver_email === email &&
-            !postCapture.fulfilled_at &&
-            !postCapture.expired
-        )
-      ),
-      concatMap(postCaptures =>
-        zip(of(postCaptures), this.ignoredTransactionRepository.getAll$())
-      ),
-      map(([postCaptures, ignoredTransactions]) =>
-        postCaptures.filter(
-          postcapture => !ignoredTransactions.includes(postcapture.id)
-        )
-      )
-    );
   }
 }

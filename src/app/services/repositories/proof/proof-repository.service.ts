@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
+import { OnConflictStrategy } from '../../database/table/table';
 import { ImageStore } from '../../image-store/image-store.service';
 import { IndexedProofView, Proof } from './proof';
 
@@ -27,8 +28,8 @@ export class ProofRepository {
     );
   }
 
-  async add(proof: Proof) {
-    await this.table.insert([proof.getIndexedProofView()]);
+  async add(proof: Proof, onConflict = OnConflictStrategy.ABORT) {
+    await this.table.insert([proof.getIndexedProofView()], onConflict);
     return proof;
   }
 

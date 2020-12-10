@@ -19,7 +19,7 @@ import { ConfirmAlert } from '../../../services/confirm-alert/confirm-alert.serv
 import { DiaBackendAssetRepository } from '../../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { getOldProof } from '../../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../services/repositories/proof/proof-repository.service';
-import { isNonNullable } from '../../../utils/rx-operators';
+import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import {
   Option,

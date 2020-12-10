@@ -67,12 +67,14 @@
   "inbox": "Inbox",
   "ignore": "Ignore",
   "accept": "Accept",
-  "activity": "Activity",
+  "transaction": "Activity",
   "transactionDetails": "Activity Details",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
   "location": "Location",
   "locationNotProvided": "Location Not Provided",
+  "transactionReceived": "New PostCapture Received",
+  "transactionExpired": "PostCapture Returned",
   "dismiss": "Dismiss",
   ".message": "Message",
   "message": {
@@ -96,6 +98,8 @@
     "invitationEmail": "Enter friend's email to send the invitation.",
     "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://docs.google.com/document/d/1ZtD-E4-zcnh8DxQCSgR1Efhb9UooJMr7fb7bzPENd24/edit?usp=sharing\" target=\"_blank\">Terms</a> and <a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">Privacy Policy</a>.",
     "sendPostCaptureAlert": "After a PostCapture is sent, the ownership will be transferred to the selected friend. Are you sure?",
+    "transactionReceived": "A new PostCapture has received.",
+    "transactionExpired": "A PostCapture you delivered has been returned.",
     "viewAll": "open more..."
   },
   "error": {

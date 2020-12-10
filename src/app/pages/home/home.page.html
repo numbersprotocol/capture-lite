@@ -37,13 +37,14 @@
         <mat-icon>menu</mat-icon>
       </button>
       <span class="toolbar-spacer"></span>
-      <button routerLink="activity" mat-icon-button>
+      <button routerLink="transaction" mat-icon-button>
         <mat-icon>history</mat-icon>
       </button>
       <button routerLink="inbox" mat-icon-button>
         <mat-icon
-          [matBadge]="inboxCount$ | async"
+          matBadge="&#8288;"
           [matBadgeHidden]="!(inboxCount$ | async)"
+          matBadgeSize="small"
           matBadgeColor="warn"
         >
           all_inbox</mat-icon

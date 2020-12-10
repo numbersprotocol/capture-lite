@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { isEqual } from 'lodash';
-import { BehaviorSubject, defer, merge, of } from 'rxjs';
+import { BehaviorSubject, defer, merge, Observable, of } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -18,10 +18,10 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendContactRepository {
-  private readonly _isFetching$ = new BehaviorSubject(false);
   private readonly table = this.database.getTable<DiaBackendContact>(
     DiaBackendContactRepository.name
   );
+  private readonly _isFetching$ = new BehaviorSubject(false);
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -29,7 +29,7 @@ export class DiaBackendContactRepository {
     private readonly authService: DiaBackendAuthService
   ) {}
 
-  getAll$() {
+  getAll$(): Observable<DiaBackendContact[]> {
     return merge(this.fetchAll$(), this.table.queryAll$()).pipe(
       distinctUntilChanged(isEqual)
     );
