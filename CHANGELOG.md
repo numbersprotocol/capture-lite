@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.11.2 - 2020-12-10
+
+### Fixed
+
+- Use `r0adkll/upload-google-play@v1.0.7` to avoid `This edit has already been successfully committed, please create a new Edit.` error.
+
+### Change
+
+- Remove `npm run test-ci` during pre-release CD.
+
 ## 0.11.1 - 2020-12-10
 
 ### Fixed
@@ -17,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Show error message with snackbar when fails to get geolocation information. #308, #267
 - Show contact list on contact selection dialog. #307, #230
+- Improve contacts and transactions loading time with repository pattern. #226
 - Implement the re-upload mechanism on publishing Proofs to DIA backend. #321, #217, #292, #212
 - Show notification when receive new PostCapture. #310, #295
 - Show notification when a PostCapture has expired. #229
@@ -28,6 +39,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### UI/UX
 
 - Update UI to follow the design. #320
+
+#### Code Quality
+
+- Use repository pattern to implement `DiaBackendContactRepository` and `DiaBackendTransactionRepository`.
 
 ### Fixed
 

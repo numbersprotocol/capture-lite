@@ -38,7 +38,6 @@ jobs:
           npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
-          npm run test-ci
           npm run build
 
       - name: Build Android release bundle (AAB) for Google Play Console
@@ -64,7 +63,7 @@ jobs:
 
       - name: Deploy to Play Store (closed alpha track)
         if: steps.version_check.outputs.changed == 'true'
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.0.7
         with:
           serviceAccountJson: service_account.json
           packageName: io.numbersprotocol.capturelite
