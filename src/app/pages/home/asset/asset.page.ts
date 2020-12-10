@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, defer, forkJoin, zip } from 'rxjs';
 import {
@@ -18,15 +18,12 @@ import { ConfirmAlert } from '../../../services/confirm-alert/confirm-alert.serv
 import { DiaBackendAssetRepository } from '../../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { getOldProof } from '../../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../services/repositories/proof/proof-repository.service';
-import { isNonNullable } from '../../../utils/rx-operators';
+import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import {
   Option,
   OptionsMenuComponent,
 } from './options-menu/options-menu.component';
-
-const { Browser } = Plugins;
-
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-asset',
@@ -70,11 +67,17 @@ export class AssetPage {
   readonly timestamp$ = this.capture$.pipe(
     map(capture => capture.proofWithOld?.proof.timestamp)
   );
-  readonly latitude$ = this.capture$.pipe(
-    map(capture => `${capture.proofWithOld?.proof.geolocationLatitude}`)
-  );
-  readonly longitude$ = this.capture$.pipe(
-    map(capture => `${capture.proofWithOld?.proof.geolocationLongitude}`)
+  readonly location$ = this.capture$.pipe(
+    map(capture => [
+      capture.proofWithOld?.proof.geolocationLatitude,
+      capture.proofWithOld?.proof.geolocationLongitude,
+    ]),
+    map(([latitude, longitude]) => {
+      if (!latitude || !longitude) {
+        return this.translacoService.translate('locationNotProvided');
+      }
+      return `${latitude}, ${longitude}`;
+    })
   );
 
   constructor(
@@ -85,7 +88,8 @@ export class AssetPage {
     private readonly proofRepository: ProofRepository,
     private readonly blockingActionService: BlockingActionService,
     private readonly dialog: MatDialog,
-    private readonly bottomSheet: MatBottomSheet
+    private readonly bottomSheet: MatBottomSheet,
+    private readonly translacoService: TranslocoService
   ) {}
 
   openContactSelectionDialog() {
@@ -137,18 +141,5 @@ export class AssetPage {
         .pipe(untilDestroyed(this))
         .subscribe();
     }
-  }
-
-  openDashboardLink() {
-    this.asset$
-      .pipe(
-        tap(asset =>
-          Browser.open({
-            url: `https://authmedia.net/dia-certificate?mid=${asset.id}`,
-          })
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
   }
 }

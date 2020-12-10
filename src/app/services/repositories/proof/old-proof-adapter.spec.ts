@@ -17,6 +17,7 @@ import {
   getProof,
   getSortedProofInformation,
   OldSignature,
+  replaceOldDefaultInformationNameWithDefaultFactId,
   SortedProofInformation,
 } from './old-proof-adapter';
 
@@ -40,7 +41,7 @@ describe('old-proof-adapter', () => {
     expect(oldProof.timestamp).toEqual(TRUTH.timestamp);
   });
 
-  it('should convert Proof SortedProofInformation', async () => {
+  it('should convert Proof to SortedProofInformation', async () => {
     const sortedProofInformation = await getSortedProofInformation(proof);
 
     expect(sortedProofInformation.proof.hash).toEqual(ASSET1_SHA256);
@@ -51,7 +52,7 @@ describe('old-proof-adapter', () => {
       expect(
         Object.values(proof.truth.providers)
           .flatMap(facts => Object.keys(facts))
-          .includes(name)
+          .includes(replaceOldDefaultInformationNameWithDefaultFactId(name))
       ).toBeTrue();
     });
   });

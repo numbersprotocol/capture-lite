@@ -7,7 +7,7 @@ import { sha256WithBase64 } from '../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../utils/encoding/encoding';
 import { MimeType } from '../../utils/mime-type';
 import { Database } from '../database/database.service';
-import { Tuple } from '../database/table/table';
+import { OnConflictStrategy, Tuple } from '../database/table/table';
 
 // TODO: Implement a CacheStore service to cache the thumb and other files, such
 //       as the image thumb from backend. User should be able to clear the cache
@@ -108,12 +108,16 @@ export class ImageStore {
       max: thumbnailSize,
     });
     const thumbnailBase64 = await blobToBase64(thumbnailBlob);
-    this.thumbnailTable.insert([
-      {
-        imageIndex: index,
-        thumbnailIndex: await this.write(thumbnailBase64),
-      },
-    ]);
+    this.thumbnailTable.insert(
+      [
+        {
+          imageIndex: index,
+          thumbnailIndex: await this.write(thumbnailBase64),
+        },
+      ],
+      // TODO: A potential bug might be ignored due to this unnecessary IGNORE strategy. Should be removed in the future.
+      OnConflictStrategy.IGNORE
+    );
     return thumbnailBase64;
   }
 

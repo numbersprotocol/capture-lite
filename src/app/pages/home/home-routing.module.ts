@@ -18,9 +18,11 @@ const routes: Routes = [
       import('./inbox/inbox.module').then(m => m.InboxPageModule),
   },
   {
-    path: 'activity',
+    path: 'transaction',
     loadChildren: () =>
-      import('./activity/activity.module').then(m => m.ActivityPageModule),
+      import('./transaction/transaction.module').then(
+        m => m.TransactionPageModule
+      ),
   },
 ];
 

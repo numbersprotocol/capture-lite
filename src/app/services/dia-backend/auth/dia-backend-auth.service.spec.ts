@@ -7,11 +7,6 @@ import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { BASE_URL } from '../secret';
 import { DiaBackendAuthService } from './dia-backend-auth.service';
 
-const sampleUsername = 'test';
-const sampleEmail = 'test@test.com';
-const samplePassword = 'testpassword';
-const sampleToken = '0123-4567-89ab-cdef';
-
 describe('DiaBackendAuthService', () => {
   let service: DiaBackendAuthService;
   let httpClient: HttpClient;
@@ -50,7 +45,7 @@ describe('DiaBackendAuthService', () => {
 
   it('should get username and email from result after logged in', done => {
     service
-      .login$(sampleEmail, samplePassword)
+      .login$(EMAIL, PASSWORD)
       .pipe(
         tap(result => {
           expect(result.username).toBeTruthy();
@@ -62,7 +57,7 @@ describe('DiaBackendAuthService', () => {
 
   it('should get username after logged in', done => {
     service
-      .login$(sampleEmail, samplePassword)
+      .login$(EMAIL, PASSWORD)
       .pipe(
         concatMapTo(defer(() => service.getUsername())),
         tap(username => expect(username).toBeTruthy())
@@ -72,7 +67,7 @@ describe('DiaBackendAuthService', () => {
 
   it('should get email after logged in', done => {
     service
-      .login$(sampleEmail, samplePassword)
+      .login$(EMAIL, PASSWORD)
       .pipe(
         concatMapTo(defer(() => service.getEmail())),
         tap(email => expect(email).toBeTruthy())
@@ -82,7 +77,7 @@ describe('DiaBackendAuthService', () => {
 
   it('should indicate has-logged-in after logged in', done => {
     service
-      .login$(sampleEmail, samplePassword)
+      .login$(EMAIL, PASSWORD)
       .pipe(
         concatMapTo(defer(() => service.hasLoggedIn())),
         tap(hasLoggedIn => expect(hasLoggedIn).toBeTrue())
@@ -92,7 +87,7 @@ describe('DiaBackendAuthService', () => {
 
   it('should clear email after logged out', done => {
     service
-      .login$(sampleEmail, samplePassword)
+      .login$(EMAIL, PASSWORD)
       .pipe(
         concatMapTo(service.logout$()),
         concatMapTo(defer(() => service.getEmail())),
@@ -102,38 +97,41 @@ describe('DiaBackendAuthService', () => {
   });
 
   it('should create user', done => {
-    service
-      .createUser$(sampleUsername, sampleEmail, samplePassword)
-      .subscribe(result => {
-        expect(result).toBeTruthy();
-        done();
-      });
+    service.createUser$(USERNAME, EMAIL, PASSWORD).subscribe(result => {
+      expect(result).toBeTruthy();
+      done();
+    });
   });
 });
 
 function mockHttpClient(httpClient: HttpClient) {
   spyOn(httpClient, 'post')
     .withArgs(`${BASE_URL}/auth/token/login/`, {
-      email: sampleEmail,
-      password: samplePassword,
+      email: EMAIL,
+      password: PASSWORD,
     })
-    .and.returnValue(of({ auth_token: sampleToken }))
+    .and.returnValue(of({ auth_token: TOKEN }))
     .withArgs(
       `${BASE_URL}/auth/token/logout/`,
       {},
-      { headers: { authorization: `token ${sampleToken}` } }
+      { headers: { authorization: `token ${TOKEN}` } }
     )
     .and.returnValue(of(EMPTY))
     .withArgs(`${BASE_URL}/auth/users/`, {
-      username: sampleUsername,
-      email: sampleEmail,
-      password: samplePassword,
+      username: USERNAME,
+      email: EMAIL,
+      password: PASSWORD,
     })
     .and.returnValue(of(EMPTY));
 
   spyOn(httpClient, 'get')
     .withArgs(`${BASE_URL}/auth/users/me/`, {
-      headers: { authorization: `token ${sampleToken}` },
+      headers: { authorization: `token ${TOKEN}` },
     })
-    .and.returnValue(of({ username: sampleUsername, email: sampleEmail }));
+    .and.returnValue(of({ username: USERNAME, email: EMAIL }));
 }
+
+const USERNAME = 'test';
+const EMAIL = 'test@test.com';
+const PASSWORD = 'testpassword';
+const TOKEN = '0123-4567-89ab-cdef';

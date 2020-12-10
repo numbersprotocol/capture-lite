@@ -4,10 +4,17 @@ import {
   GeolocationPlugin,
   LocalNotificationsPlugin,
   Plugins,
+  PushNotificationsPlugin,
   StoragePlugin,
 } from '@capacitor/core';
 
-const { Filesystem, Geolocation, LocalNotifications, Storage } = Plugins;
+const {
+  Filesystem,
+  Geolocation,
+  LocalNotifications,
+  Storage,
+  PushNotifications,
+} = Plugins;
 
 export const GEOLOCATION_PLUGIN = new InjectionToken<GeolocationPlugin>(
   'GEOLOCATION_PLUGIN'
@@ -21,6 +28,9 @@ export const LOCAL_NOTIFICATIONS_PLUGIN = new InjectionToken<LocalNotificationsP
 export const STORAGE_PLUGIN = new InjectionToken<StoragePlugin>(
   'STORAGE_PLUGIN'
 );
+export const PUSH_NOTIFICATIONS_PLUGIN = new InjectionToken<PushNotificationsPlugin>(
+  'PUSH_NOTIFICATIONS_PLUGIN'
+);
 
 @NgModule({
   providers: [
@@ -28,6 +38,7 @@ export const STORAGE_PLUGIN = new InjectionToken<StoragePlugin>(
     { provide: FILESYSTEM_PLUGIN, useValue: Filesystem },
     { provide: LOCAL_NOTIFICATIONS_PLUGIN, useValue: LocalNotifications },
     { provide: STORAGE_PLUGIN, useValue: Storage },
+    { provide: PUSH_NOTIFICATIONS_PLUGIN, useValue: PushNotifications },
   ],
 })
 export class CapacitorPluginsModule {}

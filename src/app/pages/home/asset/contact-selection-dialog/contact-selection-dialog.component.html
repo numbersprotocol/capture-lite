@@ -1,7 +1,18 @@
 <h1 *transloco="let t" mat-dialog-title>{{ t('selectContact') }}</h1>
 
 <div *transloco="let t" mat-dialog-content>
+  <mat-spinner
+    *ngIf="(contacts$ | async)?.length === 0 && isFetching$ | async"
+    diameter="24"
+  ></mat-spinner>
   <mat-action-list>
+    <mat-list-item
+      *ngFor="let contact of contacts$ | async"
+      [mat-dialog-close]="contact.contact_email"
+    >
+      <mat-icon mat-list-icon>person</mat-icon>
+      <div mat-line>{{ contact.contact_name || contact.contact_email }}</div>
+    </mat-list-item>
     <mat-list-item (click)="openFriendInvitationDialog()">
       <mat-icon mat-list-icon>share</mat-icon>
       <div mat-line>{{ t('inviteFriend') }}</div>

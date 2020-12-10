@@ -1,23 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
-import { ActivityPage } from './activity.page';
+import { TransactionPage } from './transaction.page';
 
-describe('ActivityPage', () => {
-  let component: ActivityPage;
-  let fixture: ComponentFixture<ActivityPage>;
+describe('TransactionPage', () => {
+  let component: TransactionPage;
+  let fixture: ComponentFixture<TransactionPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ActivityPage],
+      declarations: [TransactionPage],
       imports: [SharedTestingModule],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ActivityPage);
+    fixture = TestBed.createComponent(TransactionPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should create', () => expect(component).toBeTruthy());
 });

@@ -21,14 +21,14 @@
     <mat-list-item>
       <mat-icon mat-list-icon>place</mat-icon>
       <div mat-line>
-        {{ (latitude$ | async) + ', ' + (longitude$ | async) }}
+        {{ location$ | async }}
       </div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>access_time</mat-icon>
       <div mat-line>{{ timestamp$ | async | date: 'long' }}</div>
     </mat-list-item>
-    <mat-list-item (click)="openDashboardLink()">
+    <mat-list-item>
       <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
       <div mat-line>{{ (asset$ | async)?.id }}</div>
     </mat-list-item>
@@ -39,6 +39,6 @@
     mat-stroked-button
     color="primary"
   >
-    {{ t('viewAll') }}
+    {{ t('moreInformation') }}
   </button>
 </div>

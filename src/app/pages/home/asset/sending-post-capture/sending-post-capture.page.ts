@@ -10,7 +10,7 @@ import { DiaBackendAssetRepository } from '../../../../services/dia-backend/asse
 import { DiaBackendTransactionRepository } from '../../../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { getOldProof } from '../../../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../../services/repositories/proof/proof-repository.service';
-import { isNonNullable } from '../../../../utils/rx-operators';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

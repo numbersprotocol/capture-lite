@@ -1,27 +1,89 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { isEqual, omit } from 'lodash';
+import {
+  BehaviorSubject,
+  combineLatest,
+  defer,
+  merge,
+  Observable,
+  of,
+} from 'rxjs';
+import {
+  concatMap,
+  concatMapTo,
+  distinctUntilChanged,
+  map,
+  pluck,
+  tap,
+} from 'rxjs/operators';
+import {
+  switchTap,
+  switchTapTo,
+} from '../../../utils/rx-operators/rx-operators';
+import { Database } from '../../database/database.service';
+import { OnConflictStrategy, Tuple } from '../../database/table/table';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { BASE_URL } from '../secret';
+import { IgnoredTransactionRepository } from './ignored-transaction-repository.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DiaBackendTransactionRepository {
+  private readonly table = this.database.getTable<DiaBackendTransaction>(
+    DiaBackendTransactionRepository.name
+  );
+  private readonly _isFetching$ = new BehaviorSubject(false);
+
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly authService: DiaBackendAuthService
+    private readonly authService: DiaBackendAuthService,
+    private readonly database: Database,
+    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
   ) {}
 
-  getAll$() {
-    return defer(() => this.authService.getAuthHeaders()).pipe(
+  getAll$(): Observable<DiaBackendTransaction[]> {
+    return merge(this.fetchAll$(), this.table.queryAll$()).pipe(
+      distinctUntilChanged((transactionsX, transactionsY) =>
+        isEqual(
+          transactionsX.map(x => omit(x, 'asset.asset_file_thumbnail')),
+          transactionsY.map(y => omit(y, 'asset.asset_file_thumbnail'))
+        )
+      )
+    );
+  }
+
+  getById$(id: string) {
+    return this.getAll$().pipe(
+      map(transactions =>
+        transactions.find(transaction => transaction.id === id)
+      )
+    );
+  }
+
+  isFetching$() {
+    return this._isFetching$.asObservable();
+  }
+
+  private fetchAll$() {
+    return of(this._isFetching$.next(true)).pipe(
+      concatMapTo(defer(() => this.authService.getAuthHeaders())),
       concatMap(headers =>
         this.httpClient.get<ListTransactionResponse>(
           `${BASE_URL}/api/v2/transactions/`,
           { headers }
         )
-      )
+      ),
+      pluck('results'),
+      concatMap(transactions =>
+        this.table.insert(
+          transactions,
+          OnConflictStrategy.REPLACE,
+          (x, y) => x.id === y.id
+        )
+      ),
+      tap(() => this._isFetching$.next(false))
     );
   }
 
@@ -33,7 +95,8 @@ export class DiaBackendTransactionRepository {
           { asset_id: assetId, email: targetEmail, caption },
           { headers }
         )
-      )
+      ),
+      switchTap(response => defer(() => this.table.insert([response])))
     );
   }
 
@@ -45,12 +108,31 @@ export class DiaBackendTransactionRepository {
           {},
           { headers }
         )
+      ),
+      switchTapTo(this.fetchAll$())
+    );
+  }
+
+  getInbox$() {
+    return combineLatest([
+      this.getAll$(),
+      this.ignoredTransactionRepository.getAll$(),
+      this.authService.getEmail$(),
+    ]).pipe(
+      map(([transactions, ignoredTransactions, email]) =>
+        transactions.filter(
+          transaction =>
+            transaction.receiver_email === email &&
+            !transaction.fulfilled_at &&
+            !transaction.expired &&
+            !ignoredTransactions.includes(transaction.id)
+        )
       )
     );
   }
 }
 
-export interface DiaBackendTransaction {
+export interface DiaBackendTransaction extends Tuple {
   readonly id: string;
   readonly asset: {
     readonly id: string;
@@ -60,7 +142,7 @@ export interface DiaBackendTransaction {
   readonly sender: string;
   readonly receiver_email: string;
   readonly created_at: string;
-  readonly fulfilled_at: string;
+  readonly fulfilled_at: string | null;
   readonly expired: boolean;
 }
 
@@ -69,7 +151,7 @@ interface ListTransactionResponse {
 }
 
 // tslint:disable-next-line: no-empty-interface
-interface CreateTransactionResponse {}
+interface CreateTransactionResponse extends DiaBackendTransaction {}
 
 // tslint:disable-next-line: no-empty-interface
 interface AcceptTransactionResponse {}

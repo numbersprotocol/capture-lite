@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeolocationPlugin, Plugins } from '@capacitor/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { GEOLOCATION_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import {
@@ -21,7 +23,9 @@ export class CapacitorFactsProvider implements FactsProvider {
   constructor(
     @Inject(GEOLOCATION_PLUGIN)
     private readonly geolocationPlugin: GeolocationPlugin,
-    private readonly preferenceManager: PreferenceManager
+    private readonly preferenceManager: PreferenceManager,
+    private readonly snackBar: MatSnackBar,
+    private readonly translocoService: TranslocoService
   ) {}
 
   async provide(_: Assets): Promise<Facts> {
@@ -51,13 +55,18 @@ export class CapacitorFactsProvider implements FactsProvider {
     const defaultGeolocationTimeout = 10000;
     const isLocationInfoCollectionEnabled = await this.isGeolocationInfoCollectionEnabled();
     if (!isLocationInfoCollectionEnabled) {
-      return;
+      return undefined;
     }
-    return this.geolocationPlugin.getCurrentPosition({
-      enableHighAccuracy: true,
-      maximumAge: defaultGeolocationAge,
-      timeout: defaultGeolocationTimeout,
-    });
+    return this.geolocationPlugin
+      .getCurrentPosition({
+        enableHighAccuracy: true,
+        maximumAge: defaultGeolocationAge,
+        timeout: defaultGeolocationTimeout,
+      })
+      .catch((err: GeolocationPositionError) => {
+        this.showGeolocationPostiionErrorMessage(err);
+        return undefined;
+      });
   }
 
   isDeviceInfoCollectionEnabled$() {
@@ -83,9 +92,45 @@ export class CapacitorFactsProvider implements FactsProvider {
   async setGeolocationInfoCollection(enable: boolean) {
     return this.preferences.setBoolean(PrefKeys.COLLECT_LOCATION_INFO, enable);
   }
+
+  private showGeolocationPostiionErrorMessage(error: GeolocationPositionError) {
+    let message = '';
+    switch (error.code) {
+      case GeolocationPositionErrorCode.PERMISSION_DENIED:
+        message = this.translocoService.translate(
+          'error.locationPermissionDenied'
+        );
+        break;
+      case GeolocationPositionErrorCode.POSITION_UNAVAILABLE:
+        message = this.translocoService.translate(
+          'error.locationPositionUnavailable'
+        );
+        break;
+      case GeolocationPositionErrorCode.TIMEOUT:
+        message = this.translocoService.translate('error.locationTimeout');
+        break;
+      default:
+        message = error.message;
+        break;
+    }
+    this.snackBar.open(message, this.translocoService.translate('dismiss'), {
+      duration: 4000,
+    });
+  }
 }
 
 const enum PrefKeys {
   COLLECT_DEVICE_INFO = 'COLLECT_DEVICE_INFO',
   COLLECT_LOCATION_INFO = 'COLLECT_LOCATION_INFO',
+}
+
+const enum GeolocationPositionErrorCode {
+  NOT_USED,
+  PERMISSION_DENIED,
+  POSITION_UNAVAILABLE,
+  TIMEOUT,
+}
+export interface GeolocationPositionError {
+  code: GeolocationPositionErrorCode;
+  message: string;
 }

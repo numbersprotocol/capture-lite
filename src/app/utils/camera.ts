@@ -22,6 +22,7 @@ export async function capture(): Promise<Photo> {
   };
 }
 
+// TODO: This promise may never resolve. Use BehaviorSubject instead.
 export async function restoreKilledCapture() {
   return new Promise<Photo>(resolve => {
     App.addListener('appRestoredResult', appState => {

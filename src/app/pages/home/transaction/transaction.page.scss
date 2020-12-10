@@ -12,6 +12,10 @@ mat-toolbar {
 }
 
 .page-content {
+  mat-spinner {
+    margin: 36px auto 0;
+  }
+
   mat-list-item {
     height: initial;
     padding-top: 16px;
