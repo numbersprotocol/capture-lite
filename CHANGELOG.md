@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.11.0 - 2020-12-10
+
+### Added
+
+- Show error message with snackbar when fails to get geolocation information. #308, #267
+- Show contact list on contact selection dialog. #307, #230
+- Implement the re-upload mechanism on publishing Proofs to DIA backend. #321, #217, #292, #212
+- Show notification when receive new PostCapture. #310, #295
+- Show notification when a PostCapture has expired. #229
+- Show a badge indicating new items in inbox. #190
+- **WORKAROUND**: Limit to display 10 PostCaptures to avoid #291.
+
+### Changed
+
+#### UI/UX
+
+- Update UI to follow the design. #320
+
+### Fixed
+
+- Remove opening dashboard on clicking media ID. #324
+
 ## 0.10.0 - 2020-12-08
 
 ### Added
