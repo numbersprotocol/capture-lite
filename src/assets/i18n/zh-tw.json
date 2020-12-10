@@ -50,16 +50,13 @@
   "alreadyHaveAnAccount": "已有帳號",
   "resendVerificationEmail": "重新傳送確認郵件",
   "logout": "登出",
-  "tags": "標籤",
-  "all": "所有",
-  "viewAll": "檢視全部",
+  "moreInformation": "更多訊息",
   "mediaId": "媒體 ID",
   "media": "媒體",
   "selectContact": "選擇聯絡人",
   "inviteFriend": "邀請好友",
   "invitationEmail": "邀請電子信箱",
   "sendPostCapture": "發送 PostCapture",
-  "previewPostCapture": "預覽 PostCapture",
   "preview": "預覽",
   "owner": "擁有者",
   "digitalAsset": "數位資產",
@@ -72,17 +69,12 @@
   "accept": "接收",
   "activity": "活動紀錄",
   "transactionDetails": "活動資訊",
-  "accepted": "已接收",
-  "delivered": "已送出",
-  "inProgress": "等待中",
-  "waitingToBeAccepted": "等待對方接收中",
-  "returned": "已退回",
   "sentFrom": "發送自",
   "receiver": "收件人",
-  ".message": "訊息",
   "location": "位置",
   "locationNotProvided": "沒有位置資訊",
   "dismiss": "關閉",
+  ".message": "訊息",
   "message": {
     "areYouSure": "此操作不可撤銷。",
     "verificationEmailSent": "驗證電子郵件已發送到您的電子郵件地址。",
@@ -103,11 +95,19 @@
     "copiedToClipboard": "已複製至剪貼簿。",
     "invitationEmail": "輸入好友電子信箱發送邀請。",
     "clickingSignupToAgreePolicy": "點擊「註冊」即表示你同意我們的《<a href=\"https://docs.google.com/document/d/1ZtD-E4-zcnh8DxQCSgR1Efhb9UooJMr7fb7bzPENd24/edit?usp=sharing\" target=\"_blank\">服務條款</a>》和《<a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">資料政策</a>》。",
-    "sendPostCaptureAlert": "PostCapture 送出後，它的所有權將轉移至選定的朋友。您確定嗎？"
+    "sendPostCaptureAlert": "PostCapture 送出後，它的所有權將轉移至選定的朋友。您確定嗎？",
+    "viewAll": "檢視全部"
   },
   "error": {
     "locationPermissionDenied": "位置存取被拒絕。如欲使用 Capture 的完整功能，請開啟位置權限。",
     "locationPositionUnavailable": "暫時無法取得位置資訊。可能原因為網路連線或 GPS 信號不穩。",
     "locationTimeout": "取得位置資訊花費過長。可能原因為網路連線或 GPS 信號不穩。"
+  },
+  "transactionState": {
+    "accepted": "已接收",
+    "delivered": "已送出",
+    "returned": "已退回",
+    "inProgress": "等待中",
+    "waitingToBeAccepted": "等待中"
   }
 }

@@ -50,16 +50,13 @@
   "alreadyHaveAnAccount": "Already Have an Account",
   "resendVerificationEmail": "Resend Verification Email",
   "logout": "Log Out",
-  "tags": "Tags",
-  "all": "All",
-  "viewAll": "View All",
+  "moreInformation": "More Information",
   "mediaId": "Media ID",
   "media": "Media",
   "selectContact": "Select Contact",
   "inviteFriend": "Invite Friend",
   "invitationEmail": "Invitation Email",
   "sendPostCapture": "Send PostCapture",
-  "previewPostCapture": "Preview PostCapture",
   "preview": "Preview",
   "owner": "Owner",
   "digitalAsset": "Digital Asset",
@@ -72,17 +69,12 @@
   "accept": "Accept",
   "activity": "Activity",
   "transactionDetails": "Activity Details",
-  "accepted": "Accepted",
-  "delivered": "Delivered",
-  "returned": "Returned",
-  "inProgress": "In Progress",
-  "waitingToBeAccepted": "Waiting to be Accepted",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
-  ".message": "Message",
   "location": "Location",
   "locationNotProvided": "Location Not Provided",
   "dismiss": "Dismiss",
+  ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "verificationEmailSent": "A verification email has been sent to your email address.",
@@ -103,11 +95,19 @@
     "copiedToClipboard": "Has copied to clipboard.",
     "invitationEmail": "Enter friend's email to send the invitation.",
     "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://docs.google.com/document/d/1ZtD-E4-zcnh8DxQCSgR1Efhb9UooJMr7fb7bzPENd24/edit?usp=sharing\" target=\"_blank\">Terms</a> and <a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">Privacy Policy</a>.",
-    "sendPostCaptureAlert": "After a PostCapture is sent, the ownership will be transferred to the selected friend. Are you sure?"
+    "sendPostCaptureAlert": "After a PostCapture is sent, the ownership will be transferred to the selected friend. Are you sure?",
+    "viewAll": "open more..."
   },
   "error": {
     "locationPermissionDenied": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
     "locationPositionUnavailable": "Location is not available at this moment; possibly due to weak network connectivity or GPS signals.",
     "locationTimeout": "Location collection timeout, possibly due to weak network connectivity or GPS signals."
+  },
+  "transactionState": {
+    "accepted": "Accepted",
+    "delivered": "Delivered",
+    "returned": "Returned",
+    "inProgress": "In Progress",
+    "waitingToBeAccepted": "In Progress"
   }
 }

@@ -23,26 +23,30 @@
   <mat-card-content>
     <mat-list dense class="info-list" [class.info-list-show]="openMore">
       <mat-list-item>
-        <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
+        <mat-icon class="info-list-icon" mat-list-icon>access_time</mat-icon>
         <div mat-line>
-          <span>{{ t('mediaId') }}</span>
-          <span class="info-list-content">{{ asset.id }}</span>
-        </div>
-      </mat-list-item>
-      <mat-list-item>
-        <mat-icon mat-list-icon>access_time</mat-icon>
-        <div mat-line>
-          <span>{{ t('timestamp') }}</span>
+          <span class="info-list-title">{{ t('timestamp') }}</span>
           <span class="info-list-content">{{
             asset.uploaded_at | date: 'medium'
           }}</span>
         </div>
       </mat-list-item>
       <mat-list-item>
-        <mat-icon mat-list-icon>place</mat-icon>
+        <mat-icon class="info-list-icon" mat-list-icon>place</mat-icon>
         <div mat-line>
-          <span>{{ t('location') }}</span>
+          <span class="info-list-title">{{ t('location') }}</span>
           <span class="info-list-content" mat-line>{{ location }}</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon
+          class="info-list-img"
+          svgIcon="media-id"
+          mat-list-icon
+        ></mat-icon>
+        <div mat-line>
+          <span class="info-list-title">{{ t('mediaId') }}</span>
+          <span class="info-list-content">{{ asset.id }}</span>
         </div>
       </mat-list-item>
     </mat-list>
@@ -52,7 +56,7 @@
   </mat-card-content>
   <mat-card-actions [align]="'end'">
     <button class="view-all-button" (click)="openMore = !openMore">
-      {{ t('viewAll') + '...' }}
+      {{ t('message.viewAll') + '...' }}
     </button>
   </mat-card-actions>
 </mat-card>
