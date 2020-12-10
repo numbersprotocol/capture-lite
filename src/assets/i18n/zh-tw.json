@@ -83,6 +83,7 @@
   "locationNotProvided": "沒有位置資訊",
   "transactionReceived": "收到新 PostCapture",
   "transactionExpired": "PostCapture 被退回",
+  "dismiss": "關閉",
   ".message": "訊息",
   "message": {
     "areYouSure": "此操作不可撤銷。",
