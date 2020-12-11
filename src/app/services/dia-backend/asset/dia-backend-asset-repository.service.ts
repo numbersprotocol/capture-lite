@@ -72,8 +72,8 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  getById$(id: string) {
-    return this.getAll$().pipe(
+  getById$(id: string, refresh = false) {
+    return this.getAll$(refresh).pipe(
       map(assets => assets.find(asset => asset.id === id))
     );
   }
