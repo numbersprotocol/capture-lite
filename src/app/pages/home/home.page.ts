@@ -23,14 +23,17 @@ import { capture } from '../../utils/camera';
 export class HomePage {
   readonly capturesByDate$ = this.getCaptures$().pipe(
     map(captures =>
-      groupBy(captures, c =>
-        formatDate(
-          c.proofWithThumbnail?.proof.truth.timestamp,
-          'mediumDate',
-          'en-US'
+      Object.entries(
+        groupBy(captures, c =>
+          formatDate(
+            c.proofWithThumbnail?.proof.truth.timestamp,
+            'yyyy/MM/dd',
+            'en-US'
+          )
         )
       )
-    )
+    ),
+    map(entries => Object.fromEntries(entries))
   );
   readonly postCaptures$ = combineLatest([
     this.diaBackendTransactionRepository.getAll$(),

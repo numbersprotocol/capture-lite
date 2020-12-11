@@ -2,7 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { isEqual } from 'lodash';
-import { BehaviorSubject, defer, forkJoin, from, merge, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  defer,
+  EMPTY,
+  forkJoin,
+  from,
+  merge,
+  Observable,
+  of,
+} from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -15,6 +24,7 @@ import {
   pluck,
   single,
   tap,
+  toArray,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { switchTap, VOID$ } from '../../../utils/rx-operators/rx-operators';
@@ -55,10 +65,7 @@ export class DiaBackendAssetRepository {
     private readonly imageStore: ImageStore
   ) {}
 
-  getAll$(refresh = false) {
-    if (refresh) {
-      this.isDirty = true;
-    }
+  getAll$() {
     if (!this.isDirty) {
       return this.table.queryAll$();
     }
@@ -72,8 +79,8 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  getById$(id: string, refresh = false) {
-    return this.getAll$(refresh).pipe(
+  getById$(id: string) {
+    return this.getAll$().pipe(
       map(assets => assets.find(asset => asset.id === id))
     );
   }
@@ -82,7 +89,8 @@ export class DiaBackendAssetRepository {
     return this._isFetching$.asObservable();
   }
 
-  private fetchAll$() {
+  // TODO: make this method private
+  fetchAll$(): Observable<DiaBackendAsset[]> {
     this.isDirty = false;
     return of(this._isFetching$.next(true)).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
@@ -100,26 +108,45 @@ export class DiaBackendAssetRepository {
         )
       ),
       switchTap(assets => this.fetchProof$(assets)),
-      tap(() => this._isFetching$.next(false))
+      tap(() => this._isFetching$.next(false)),
+      catchError(() => EMPTY)
     );
   }
 
   private fetchProof$(assets: DiaBackendAsset[]) {
     const delayMillisBetweenAssets = 1000;
     return defer(() => this.proofRepository.getAll()).pipe(
-      concatMap(proofs =>
-        from(assets.filter(asset => !isProofFetched(asset, proofs)))
-      ),
+      concatMap(proofs => {
+        const notFetched = assets.filter(
+          asset => !isProofFetched(asset, proofs)
+        );
+        console.log(`${notFetched.length} assets has not synced.`);
+        return from(notFetched);
+      }),
       concatMap(asset => of(asset).pipe(delay(delayMillisBetweenAssets))),
       concatMap(asset =>
-        this.httpClient.get(asset.asset_file, { responseType: 'blob' }).pipe(
+        this.downloadAsset$(asset).pipe(
           concatMap(raw =>
             getProof(this.imageStore, raw, asset.information, asset.signature)
           ),
           concatMap(proof =>
             this.proofRepository.add(proof, OnConflictStrategy.IGNORE)
           ),
+          tap(v => console.log(v.timestamp)),
           catchError(() => VOID$)
+        )
+      ),
+      toArray()
+    );
+  }
+
+  private downloadAsset$(asset: DiaBackendAsset) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.post(
+          `${BASE_URL}/api/v2/assets/${asset.id}/download/`,
+          { field: 'asset_file' },
+          { headers, responseType: 'blob' }
         )
       )
     );
