@@ -49,24 +49,8 @@ export class ImageStore {
           recursive: true,
         });
       }
-      await this.migrate();
       this.hasInitialized = true;
     });
-  }
-
-  private async migrate() {
-    const dirs = await this.filesystemPlugin.readdir({
-      directory: this.directory,
-      path: '',
-    });
-    if (dirs.files.includes('FileStore')) {
-      await this.filesystemPlugin.copy({
-        directory: this.directory,
-        from: 'FileStore',
-        toDirectory: this.directory,
-        to: ImageStore.name,
-      });
-    }
   }
 
   async read(index: string) {
