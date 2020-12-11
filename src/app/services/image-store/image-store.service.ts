@@ -131,7 +131,6 @@ export class ImageStore {
           thumbnailIndex: await this.write(thumbnailBase64),
         },
       ],
-      // TODO: A potential bug might be ignored due to this unnecessary IGNORE strategy. Should be removed in the future.
       OnConflictStrategy.IGNORE
     );
     return thumbnailBase64;

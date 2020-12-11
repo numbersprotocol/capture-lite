@@ -13,6 +13,4 @@ describe('DiaBackendAssetRepository', () => {
   });
 
   it('should be created', () => expect(service).toBeTruthy());
-
-  // TODO: add tests when implementing repository pattern
 });

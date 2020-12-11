@@ -128,7 +128,8 @@ export class AssetPage {
       first(),
       concatMap(([asset, capture]) =>
         forkJoin([
-          this.diaBackendAssetRepository.remove(asset),
+          this.diaBackendAssetRepository.remove$(asset).pipe(first()),
+          // TODO: remove proof repo in DiaBackendAssetRepository
           this.proofRepository.remove(capture.proofWithOld.proof),
         ])
       ),
