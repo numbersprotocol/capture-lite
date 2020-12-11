@@ -18,7 +18,6 @@ import {
   tap,
 } from 'rxjs/operators';
 import {
-  concatTapTo,
   switchTap,
   switchTapTo,
 } from '../../../utils/rx-operators/rx-operators';
@@ -113,7 +112,7 @@ export class DiaBackendTransactionRepository {
         )
       ),
       switchTapTo(this.fetchAll$()),
-      concatTapTo(this.diaBackendAssetRepository.fetchAll$())
+      switchTapTo(this.diaBackendAssetRepository.refresh$())
     );
   }
 

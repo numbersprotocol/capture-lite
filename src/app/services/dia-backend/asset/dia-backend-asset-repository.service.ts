@@ -89,8 +89,11 @@ export class DiaBackendAssetRepository {
     return this._isFetching$.asObservable();
   }
 
-  // TODO: make this method private
-  fetchAll$(): Observable<DiaBackendAsset[]> {
+  refresh$() {
+    return this.fetchAll$().pipe(single());
+  }
+
+  private fetchAll$(): Observable<DiaBackendAsset[]> {
     this.isDirty = false;
     return of(this._isFetching$.next(true)).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
