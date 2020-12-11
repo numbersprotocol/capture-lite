@@ -61,10 +61,6 @@ export class HomePage {
   ) {}
 
   private getCaptures$() {
-    const originallyOwnedAssets$ = this.diaBackendAssetRepository
-      .getAll$()
-      .pipe(map(assets => assets.filter(asset => asset.is_original_owner)));
-
     const proofsWithThumbnail$ = this.proofRepository.getAll$().pipe(
       map(proofs =>
         proofs.map(proof => ({
@@ -74,7 +70,10 @@ export class HomePage {
       )
     );
 
-    return combineLatest([originallyOwnedAssets$, proofsWithThumbnail$]).pipe(
+    return combineLatest([
+      this.diaBackendAssetRepository.getAll$(),
+      proofsWithThumbnail$,
+    ]).pipe(
       map(([assets, proofsWithThumbnail]) =>
         proofsWithThumbnail.map(proofWithThumbnail => ({
           hash: getOldProof(proofWithThumbnail.proof).hash,
@@ -83,6 +82,9 @@ export class HomePage {
             a => getOldProof(proofWithThumbnail.proof).hash === a.proof_hash
           ),
         }))
+      ),
+      map(captures =>
+        captures.filter(c => !c.asset || c.asset?.is_original_owner)
       )
     );
   }

@@ -106,11 +106,10 @@ export class SendingPostCapturePage {
   }
 
   private removeAsset$() {
-    return zip(this.asset$, this.capture$).pipe(
+    return this.capture$.pipe(
       first(),
-      concatMap(([asset, capture]) =>
+      concatMap(capture =>
         forkJoin([
-          this.diaBackendAssetRepository.remove$(asset).pipe(first()),
           // TODO: remove proof repo in DiaBackendAssetRepository
           this.proofRepository.remove(capture.proofWithThumbnailAndOld.proof),
         ])

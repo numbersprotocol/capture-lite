@@ -2,11 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { isEqual } from 'lodash';
-import { BehaviorSubject, defer, forkJoin, iif, merge, of } from 'rxjs';
+import { BehaviorSubject, defer, forkJoin, from, merge, of } from 'rxjs';
 import {
   catchError,
   concatMap,
   concatMapTo,
+  delay,
   distinctUntilChanged,
   first,
   map,
@@ -54,7 +55,10 @@ export class DiaBackendAssetRepository {
     private readonly imageStore: ImageStore
   ) {}
 
-  getAll$() {
+  getAll$(refresh = false) {
+    if (refresh) {
+      this.isDirty = true;
+    }
     if (!this.isDirty) {
       return this.table.queryAll$();
     }
@@ -64,8 +68,7 @@ export class DiaBackendAssetRepository {
           assetsX.map(x => x.id),
           assetsY.map(y => y.id)
         )
-      ),
-      tap(v => console.log(v))
+      )
     );
   }
 
@@ -96,30 +99,27 @@ export class DiaBackendAssetRepository {
           (x, y) => x.id === y.id
         )
       ),
-      switchTap(assets =>
-        // TODO: use from, toArray and delay to fetchProof sequentailly for backpressure
-        forkJoin(assets.map(asset => this.fetchProof$(asset)))
-      ),
+      switchTap(assets => this.fetchProof$(assets)),
       tap(() => this._isFetching$.next(false))
     );
   }
 
-  private fetchProof$(asset: DiaBackendAsset) {
-    return this.proofRepository.getAll$().pipe(
-      first(),
+  private fetchProof$(assets: DiaBackendAsset[]) {
+    const delayMillisBetweenAssets = 1000;
+    return defer(() => this.proofRepository.getAll()).pipe(
       concatMap(proofs =>
-        iif(
-          () => !isProofFetched(asset, proofs),
-          this.httpClient.get(asset.asset_file, { responseType: 'blob' }).pipe(
-            concatMap(raw =>
-              getProof(this.imageStore, raw, asset.information, asset.signature)
-            ),
-            concatMap(proof =>
-              this.proofRepository.add(proof, OnConflictStrategy.IGNORE)
-            ),
-            catchError(() => VOID$)
+        from(assets.filter(asset => !isProofFetched(asset, proofs)))
+      ),
+      concatMap(asset => of(asset).pipe(delay(delayMillisBetweenAssets))),
+      concatMap(asset =>
+        this.httpClient.get(asset.asset_file, { responseType: 'blob' }).pipe(
+          concatMap(raw =>
+            getProof(this.imageStore, raw, asset.information, asset.signature)
           ),
-          VOID$
+          concatMap(proof =>
+            this.proofRepository.add(proof, OnConflictStrategy.IGNORE)
+          ),
+          catchError(() => VOID$)
         )
       )
     );
