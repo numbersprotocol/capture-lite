@@ -120,6 +120,7 @@ export class DiaBackendAssetRepository {
         const notFetched = assets.filter(
           asset => !isProofFetched(asset, proofs)
         );
+        // tslint:disable-next-line: no-console
         console.log(`${notFetched.length} assets has not synced.`);
         return from(notFetched);
       }),
@@ -132,6 +133,7 @@ export class DiaBackendAssetRepository {
           concatMap(proof =>
             this.proofRepository.add(proof, OnConflictStrategy.IGNORE)
           ),
+          // tslint:disable-next-line: no-console
           tap(v => console.log(v.timestamp)),
           catchError(() => VOID$)
         )
@@ -141,11 +143,13 @@ export class DiaBackendAssetRepository {
   }
 
   private downloadAsset$(asset: DiaBackendAsset) {
+    const formData = new FormData();
+    formData.set('field', 'asset_file');
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post(
           `${BASE_URL}/api/v2/assets/${asset.id}/download/`,
-          { field: 'asset_file' },
+          formData,
           { headers, responseType: 'blob' }
         )
       )
