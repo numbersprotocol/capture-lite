@@ -8,6 +8,7 @@ import {
   EMPTY,
   forkJoin,
   from,
+  iif,
   merge,
   Observable,
   of,
@@ -66,14 +67,15 @@ export class DiaBackendAssetRepository {
   ) {}
 
   getAll$() {
-    if (!this.isDirty) {
-      return this.table.queryAll$();
-    }
-    return merge(this.fetchAll$(), this.table.queryAll$()).pipe(
-      distinctUntilChanged((assetsX, assetsY) =>
-        isEqual(
-          assetsX.map(x => x.id),
-          assetsY.map(y => y.id)
+    return iif(
+      () => !this.isDirty,
+      this.table.queryAll$(),
+      merge(this.fetchAll$(), this.table.queryAll$()).pipe(
+        distinctUntilChanged((assetsX, assetsY) =>
+          isEqual(
+            assetsX.map(x => x.id),
+            assetsY.map(y => y.id)
+          )
         )
       )
     );
@@ -94,8 +96,10 @@ export class DiaBackendAssetRepository {
   }
 
   private fetchAll$(): Observable<DiaBackendAsset[]> {
-    this.isDirty = false;
-    return of(this._isFetching$.next(true)).pipe(
+    return defer(async () => {
+      this.isDirty = false;
+      return this._isFetching$.next(true);
+    }).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
       concatMap(headers =>
         this.httpClient.get<ListAssetResponse>(`${BASE_URL}/api/v2/assets/`, {
@@ -175,11 +179,13 @@ export class DiaBackendAssetRepository {
   }
 
   private createAsset$(proof: Proof) {
-    this.isDirty = true;
-    return forkJoin([
-      defer(() => this.authService.getAuthHeaders()),
-      defer(() => buildFormDataToCreateAsset(proof)),
-    ]).pipe(
+    return defer(async () => (this.isDirty = true)).pipe(
+      concatMapTo(
+        forkJoin([
+          defer(() => this.authService.getAuthHeaders()),
+          defer(() => buildFormDataToCreateAsset(proof)),
+        ])
+      ),
       concatMap(([headers, formData]) =>
         this.httpClient.post<CreateAssetResponse>(
           `${BASE_URL}/api/v2/assets/`,
@@ -203,8 +209,10 @@ export class DiaBackendAssetRepository {
   }
 
   private removeAsset$(asset: DiaBackendAsset) {
-    this.isDirty = true;
-    return defer(() => this.authService.getAuthHeaders()).pipe(
+    return defer(async () => {
+      this.isDirty = true;
+      return this.authService.getAuthHeaders();
+    }).pipe(
       concatMap(headers =>
         this.httpClient.delete<DeleteAssetResponse>(
           `${BASE_URL}/api/v2/assets/${asset.id}`,

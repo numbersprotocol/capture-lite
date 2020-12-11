@@ -5,9 +5,9 @@ import {
   BehaviorSubject,
   combineLatest,
   defer,
+  iif,
   merge,
   Observable,
-  of,
 } from 'rxjs';
 import {
   concatMap,
@@ -15,6 +15,7 @@ import {
   distinctUntilChanged,
   map,
   pluck,
+  single,
   tap,
 } from 'rxjs/operators';
 import {
@@ -36,6 +37,7 @@ export class DiaBackendTransactionRepository {
     DiaBackendTransactionRepository.name
   );
   private readonly _isFetching$ = new BehaviorSubject(false);
+  private isDirty = true;
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -46,11 +48,15 @@ export class DiaBackendTransactionRepository {
   ) {}
 
   getAll$(): Observable<DiaBackendTransaction[]> {
-    return merge(this.fetchAll$(), this.table.queryAll$()).pipe(
-      distinctUntilChanged((transactionsX, transactionsY) =>
-        isEqual(
-          transactionsX.map(x => omit(x, 'asset.asset_file_thumbnail')),
-          transactionsY.map(y => omit(y, 'asset.asset_file_thumbnail'))
+    return iif(
+      () => !this.isDirty,
+      this.table.queryAll$(),
+      merge(this.fetchAll$(), this.table.queryAll$()).pipe(
+        distinctUntilChanged((transactionsX, transactionsY) =>
+          isEqual(
+            transactionsX.map(x => omit(x, 'asset.asset_file_thumbnail')),
+            transactionsY.map(y => omit(y, 'asset.asset_file_thumbnail'))
+          )
         )
       )
     );
@@ -68,8 +74,15 @@ export class DiaBackendTransactionRepository {
     return this._isFetching$.asObservable();
   }
 
+  refresh$() {
+    return this.fetchAll$().pipe(single());
+  }
+
   private fetchAll$() {
-    return of(this._isFetching$.next(true)).pipe(
+    return defer(async () => {
+      this.isDirty = false;
+      return this._isFetching$.next(true);
+    }).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
       concatMap(headers =>
         this.httpClient.get<ListTransactionResponse>(
@@ -90,7 +103,10 @@ export class DiaBackendTransactionRepository {
   }
 
   add$(assetId: string, targetEmail: string, caption: string) {
-    return defer(() => this.authService.getAuthHeaders()).pipe(
+    return defer(async () => {
+      this.isDirty = true;
+      return this.authService.getAuthHeaders();
+    }).pipe(
       concatMap(headers =>
         this.httpClient.post<CreateTransactionResponse>(
           `${BASE_URL}/api/v2/transactions/`,
@@ -103,7 +119,10 @@ export class DiaBackendTransactionRepository {
   }
 
   accept$(id: string) {
-    return defer(() => this.authService.getAuthHeaders()).pipe(
+    return defer(async () => {
+      this.isDirty = true;
+      return this.authService.getAuthHeaders();
+    }).pipe(
       concatMap(headers =>
         this.httpClient.post<AcceptTransactionResponse>(
           `${BASE_URL}/api/v2/transactions/${id}/accept/`,
