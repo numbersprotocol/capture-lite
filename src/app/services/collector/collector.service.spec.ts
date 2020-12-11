@@ -1,5 +1,4 @@
 // tslint:disable: prefer-function-over-method no-unbound-method
-
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { MimeType } from '../../utils/mime-type';

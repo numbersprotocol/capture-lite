@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { filter, mapTo, switchMap } from 'rxjs/operators';
 
 export function isNonNullable<T>() {
@@ -17,3 +17,5 @@ export function switchTapTo<T>(observable$: Observable<any>) {
   return (source$: Observable<T>) =>
     source$.pipe(switchMap(value => observable$.pipe(mapTo(value))));
 }
+
+export const VOID$ = of(void 0);

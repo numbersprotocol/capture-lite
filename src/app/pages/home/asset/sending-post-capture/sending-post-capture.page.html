@@ -48,9 +48,8 @@
       *ngIf="asset$ | async; let asset"
       [transaction]="{
         sender: asset.owner,
-        asset: { caption: previewCaption }
+        asset: { id: asset.id, caption: previewCaption }
       }"
-      [asset]="asset"
     >
     </app-post-capture-card>
 

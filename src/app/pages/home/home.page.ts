@@ -1,23 +1,15 @@
 import { formatDate } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
-import { combineLatest, defer, forkJoin, of, zip } from 'rxjs';
+import { combineLatest, defer } from 'rxjs';
 import { concatMap, first, map } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
-import { OnConflictStrategy } from '../../services/database/table/table';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import { ImageStore } from '../../services/image-store/image-store.service';
-import {
-  getOldProof,
-  getProof,
-} from '../../services/repositories/proof/old-proof-adapter';
+import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../services/repositories/proof/proof';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
 import { capture } from '../../utils/camera';
@@ -28,7 +20,7 @@ import { capture } from '../../utils/camera';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage {
   readonly capturesByDate$ = this.getCaptures$().pipe(
     map(captures =>
       groupBy(captures, c =>
@@ -40,84 +32,33 @@ export class HomePage implements OnInit {
       )
     )
   );
-  postCaptures$ = this.getPostCaptures$();
+  readonly postCaptures$ = combineLatest([
+    this.diaBackendTransactionRepository.getAll$(),
+    this.diaBackendAuthService.getEmail(),
+  ]).pipe(
+    map(([transactions, email]) =>
+      transactions.filter(
+        transaction =>
+          transaction.sender !== email &&
+          !transaction.expired &&
+          transaction.fulfilled_at
+      )
+    )
+  );
   readonly username$ = this.diaBackendAuthService.getUsername$();
-  captureButtonShow = true;
-  inboxCount$ = this.diaBackendTransactionRepository
+  readonly inboxCount$ = this.diaBackendTransactionRepository
     .getInbox$()
     .pipe(map(transactions => transactions.length));
+  captureButtonShow = true;
   currentUploadingProofHash = '';
-  private readonly workaroundFetchLimit = 10;
-  private postCaptureLimitationMessageShowed = false;
 
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly collectorService: CollectorService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
-    private readonly imageStore: ImageStore,
-    private readonly httpClient: HttpClient,
-    private readonly snackbar: MatSnackBar,
-    private readonly translocoService: TranslocoService
+    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository
   ) {}
-
-  ngOnInit() {
-    /**
-     * TODO: Remove this ugly WORKAROUND by using repository pattern to cache the expired assets and proofs.
-     * TODO: Move this functionality to DiaBackendAssetRepository.initialize$() method.
-     */
-    this.diaBackendTransactionRepository
-      .getAll$()
-      .pipe(
-        concatMap(transactions =>
-          forkJoin([
-            of(transactions),
-            defer(() => this.diaBackendAuthService.getEmail()),
-          ])
-        ),
-        map(([transactions, email]) =>
-          transactions.filter(t => t.expired && t.sender === email)
-        ),
-        concatMap(expiredTransactions =>
-          forkJoin(
-            expiredTransactions.map(t =>
-              this.diaBackendAssetRepository.getById$(t.asset.id)
-            )
-          )
-        ),
-        concatMap(expiredAssets =>
-          forkJoin([
-            of(expiredAssets),
-            defer(() =>
-              Promise.all(
-                expiredAssets.map(async a => {
-                  return this.proofRepository.add(
-                    await getProof(
-                      this.imageStore,
-                      await this.httpClient
-                        .get(a.asset_file, { responseType: 'blob' })
-                        .toPromise(),
-                      a.information,
-                      a.signature
-                    ),
-                    OnConflictStrategy.IGNORE
-                  );
-                })
-              )
-            ),
-          ])
-        ),
-        concatMap(([expiredAssets]) =>
-          this.diaBackendAssetRepository.addAssetDirectly(
-            expiredAssets,
-            OnConflictStrategy.IGNORE
-          )
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
-  }
 
   private getCaptures$() {
     const originallyOwnedAssets$ = this.diaBackendAssetRepository
@@ -141,41 +82,6 @@ export class HomePage implements OnInit {
           asset: assets.find(
             a => getOldProof(proofWithThumbnail.proof).hash === a.proof_hash
           ),
-        }))
-      )
-    );
-  }
-
-  // TODO: Clean up this ugly WORKAROUND with repository pattern.
-  private getPostCaptures$() {
-    return zip(
-      this.diaBackendTransactionRepository.getAll$().pipe(first()),
-      this.diaBackendAuthService.getEmail()
-    ).pipe(
-      map(([transactions, email]) =>
-        transactions.filter(
-          transaction =>
-            transaction.sender !== email &&
-            !transaction.expired &&
-            transaction.fulfilled_at
-        )
-      ),
-      // WORKAROUND: for PostCapture not displaying when exceeding a certain limit. (#291)
-      map(transactions => transactions.slice(0, this.workaroundFetchLimit)),
-      concatMap(transactions =>
-        zip(
-          of(transactions),
-          forkJoin(
-            transactions.map(transaction =>
-              this.diaBackendAssetRepository.getById$(transaction.asset.id)
-            )
-          )
-        )
-      ),
-      map(([transactions, assets]) =>
-        transactions.map((transaction, index) => ({
-          transaction,
-          asset: assets[index],
         }))
       )
     );
@@ -212,16 +118,5 @@ export class HomePage implements OnInit {
 
   onTapChanged(event: MatTabChangeEvent) {
     this.captureButtonShow = event.index === 0;
-    if (event.index === 1) {
-      this.postCaptures$ = this.getPostCaptures$();
-      if (!this.postCaptureLimitationMessageShowed) {
-        this.snackbar.open(
-          this.translocoService.translate('message.postCaptureLimitation'),
-          this.translocoService.translate('dismiss'),
-          { duration: 8000 }
-        );
-        this.postCaptureLimitationMessageShowed = true;
-      }
-    }
   }
 }

@@ -1,9 +1,9 @@
 <mat-card *transloco="let t">
   <mat-card-header>
     <div mat-card-avatar class="post-capture-avatar"></div>
-    <mat-card-title>{{ transaction.sender }}</mat-card-title>
+    <mat-card-title>{{ (transaction$ | async)?.sender }}</mat-card-title>
     <mat-card-subtitle>{{
-      transaction.fulfilled_at | date: 'short'
+      (transaction$ | async)?.fulfilled_at | date: 'short'
     }}</mat-card-subtitle>
     <span class="toolbar-spacer"></span>
   </mat-card-header>
@@ -18,7 +18,12 @@
           : 'calc(100vw / 16 * 9)'
     }"
   >
-    <img #ratioImg id="image" [src]="asset.asset_file" mat-card-image />
+    <img
+      #ratioImg
+      id="image"
+      [src]="(asset$ | async)?.asset_file"
+      mat-card-image
+    />
   </div>
   <mat-card-content>
     <mat-list dense class="info-list" [class.info-list-show]="openMore">
@@ -27,7 +32,7 @@
         <div mat-line>
           <span class="info-list-title">{{ t('timestamp') }}</span>
           <span class="info-list-content">{{
-            asset.uploaded_at | date: 'medium'
+            (asset$ | async)?.uploaded_at | date: 'medium'
           }}</span>
         </div>
       </mat-list-item>
@@ -35,7 +40,9 @@
         <mat-icon class="info-list-icon" mat-list-icon>place</mat-icon>
         <div mat-line>
           <span class="info-list-title">{{ t('location') }}</span>
-          <span class="info-list-content" mat-line>{{ location }}</span>
+          <span class="info-list-content" mat-line>{{
+            location$ | async
+          }}</span>
         </div>
       </mat-list-item>
       <mat-list-item>
@@ -46,12 +53,12 @@
         ></mat-icon>
         <div mat-line>
           <span class="info-list-title">{{ t('mediaId') }}</span>
-          <span class="info-list-content">{{ asset.id }}</span>
+          <span class="info-list-content">{{ (asset$ | async)?.id }}</span>
         </div>
       </mat-list-item>
     </mat-list>
     <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">
-      {{ transaction.asset.caption }}
+      {{ (transaction$ | async)?.asset.caption }}
     </p>
   </mat-card-content>
   <mat-card-actions [align]="'end'">
