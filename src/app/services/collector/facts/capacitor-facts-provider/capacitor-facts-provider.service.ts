@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeolocationPlugin, Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { GEOLOCATION_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
@@ -24,7 +23,6 @@ export class CapacitorFactsProvider implements FactsProvider {
     @Inject(GEOLOCATION_PLUGIN)
     private readonly geolocationPlugin: GeolocationPlugin,
     private readonly preferenceManager: PreferenceManager,
-    private readonly snackBar: MatSnackBar,
     private readonly translocoService: TranslocoService
   ) {}
 
@@ -64,7 +62,7 @@ export class CapacitorFactsProvider implements FactsProvider {
         timeout: defaultGeolocationTimeout,
       })
       .catch((err: GeolocationPositionError) => {
-        this.showGeolocationPostiionErrorMessage(err);
+        this.throwGeolocationPostiionErrorWithMessage(err);
         return undefined;
       });
   }
@@ -93,7 +91,9 @@ export class CapacitorFactsProvider implements FactsProvider {
     return this.preferences.setBoolean(PrefKeys.COLLECT_LOCATION_INFO, enable);
   }
 
-  private showGeolocationPostiionErrorMessage(error: GeolocationPositionError) {
+  private throwGeolocationPostiionErrorWithMessage(
+    error: GeolocationPositionError
+  ) {
     let message = '';
     switch (error.code) {
       case GeolocationPositionErrorCode.PERMISSION_DENIED:
@@ -131,9 +131,7 @@ export class CapacitorFactsProvider implements FactsProvider {
         }
         break;
     }
-    this.snackBar.open(message, this.translocoService.translate('dismiss'), {
-      duration: 4000,
-    });
+    throw new Error(message);
   }
 }
 

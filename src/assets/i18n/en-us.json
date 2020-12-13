@@ -103,6 +103,7 @@
     "viewAll": "open more...",
     "postCaptureLimitation": "The current Beta version of Capture only displays the 10 newest PostCaptures."
   },
+  ".error": "Error",
   "error": {
     "locationPermissionDenied": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
     "locationPositionUnavailable": "Location is not available at this moment; possibly due to weak network connectivity or GPS signals.",

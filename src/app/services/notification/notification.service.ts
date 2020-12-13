@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalNotificationsPlugin } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { Observable } from 'rxjs';
@@ -14,7 +15,8 @@ export class NotificationService {
   constructor(
     @Inject(LOCAL_NOTIFICATIONS_PLUGIN)
     private readonly localNotificationsPlugin: LocalNotificationsPlugin,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly snackbar: MatSnackBar
   ) {}
 
   async requestPermission() {
@@ -25,7 +27,8 @@ export class NotificationService {
     return new NotificationItem(
       this.getNewNotificationId(),
       this.localNotificationsPlugin,
-      this.translocoService
+      this.translocoService,
+      this.snackbar
     );
   }
 

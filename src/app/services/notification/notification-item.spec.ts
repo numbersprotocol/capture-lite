@@ -1,6 +1,7 @@
 // tslint:disable: no-unbound-method
 
 import { TestBed } from '@angular/core/testing';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalNotificationsPlugin, Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { of, throwError } from 'rxjs';
@@ -23,8 +24,14 @@ describe('NotificationItem', () => {
     });
     localNotificationsPlugin = TestBed.inject(LOCAL_NOTIFICATIONS_PLUGIN);
     const translocoService = TestBed.inject(TranslocoService);
+    const snackbar = TestBed.inject(MatSnackBar);
     const id = 2;
-    item = new NotificationItem(id, localNotificationsPlugin, translocoService);
+    item = new NotificationItem(
+      id,
+      localNotificationsPlugin,
+      translocoService,
+      snackbar
+    );
   });
 
   it('should be created', () => expect(item).toBeTruthy());
