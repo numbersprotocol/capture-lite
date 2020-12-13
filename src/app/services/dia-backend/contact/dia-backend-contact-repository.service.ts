@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { isEqual } from 'lodash';
-import { BehaviorSubject, defer, merge, Observable, of } from 'rxjs';
+import { BehaviorSubject, defer, merge, Observable } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -40,7 +40,7 @@ export class DiaBackendContactRepository {
   }
 
   private fetchAll$() {
-    return of(this._isFetching$.next(true)).pipe(
+    return defer(async () => this._isFetching$.next(true)).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
       concatMap(headers =>
         this.httpClient.get<ListContactResponse>(
