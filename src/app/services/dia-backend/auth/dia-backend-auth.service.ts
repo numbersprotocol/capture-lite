@@ -30,7 +30,7 @@ export class DiaBackendAuthService {
       key: 'numbersStoragePublisher_authToken',
     });
     if (oldToken.value) {
-      this.setToken(oldToken.value);
+      this.setToken(oldToken.value.split(' ')[1]);
     }
   }
 
