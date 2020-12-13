@@ -32,6 +32,20 @@ export class DiaBackendAuthService {
     if (oldToken.value) {
       this.setToken(oldToken.value.split(' ')[1]);
     }
+
+    const oldUsername = await Storage.get({
+      key: 'numbersStoragePublisher_userName',
+    });
+    if (oldUsername.value) {
+      this.setUsername(oldUsername.value);
+    }
+
+    const oldEmail = await Storage.get({
+      key: 'numbersStoragePublisher_email',
+    });
+    if (oldEmail.value) {
+      this.setEmail(oldEmail.value);
+    }
   }
 
   initialize$() {
