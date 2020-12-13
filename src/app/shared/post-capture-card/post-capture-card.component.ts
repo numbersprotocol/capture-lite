@@ -1,15 +1,24 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { BehaviorSubject } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import mergeImages from 'merge-images';
+import { BehaviorSubject, defer, forkJoin, of } from 'rxjs';
+import { concatMap, first, map } from 'rxjs/operators';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendTransaction } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { ImageStore } from '../../services/image-store/image-store.service';
 import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../utils/rx-operators/rx-operators';
+
+const { Share, Browser } = Plugins;
+
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-post-capture-card',
   templateUrl: './post-capture-card.component.html',
@@ -54,7 +63,9 @@ export class PostCaptureCardComponent implements OnInit {
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly proofRepository: ProofRepository,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly imageStore: ImageStore,
+    private readonly httpClient: HttpClient
   ) {}
 
   ngOnInit() {
@@ -70,4 +81,86 @@ export class PostCaptureCardComponent implements OnInit {
         )
       );
   }
+
+  share() {
+    return this.rawDataUrl$
+      .pipe(
+        first(),
+        concatMap(rawDataUrl => this.createWatermarkedImage$(rawDataUrl)),
+        map(watermarkedUrl => watermarkedUrl.split(',')[1]),
+        concatMap(watermarkedBase64 =>
+          this.imageStore.write(watermarkedBase64)
+        ),
+        concatMap(index => this.imageStore.getUri(index)),
+        concatMap(watermarkedUri =>
+          Share.share({
+            title: 'title',
+            dialogTitle: 'dialogTitle',
+            text: 'text',
+            url: watermarkedUri,
+          })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private createWatermarkedImage$(imageUrl: string) {
+    const watermarkDimensionRatio = 0.2;
+    const watermarkMarginRatio = 0.02;
+    return defer(() => getImageDimensions(imageUrl)).pipe(
+      concatMap(dimensions =>
+        forkJoin([
+          of(dimensions),
+          this.getScaledWatermarkUrl$(
+            dimensions.width * watermarkDimensionRatio
+          ),
+        ])
+      ),
+      concatMap(([dimensions, watermarkUrl]) =>
+        mergeImages(
+          [
+            imageUrl,
+            {
+              src: watermarkUrl,
+              x: dimensions.width * watermarkMarginRatio,
+              y: dimensions.height * watermarkMarginRatio,
+            },
+          ],
+          { format: 'image/jpeg' }
+        )
+      )
+    );
+  }
+
+  private getScaledWatermarkUrl$(size: number) {
+    return this.httpClient
+      .get('/assets/image/capture.svg', { responseType: 'text' })
+      .pipe(
+        map(svgString => {
+          const doc = new DOMParser().parseFromString(
+            svgString,
+            'image/svg+xml'
+          );
+          // tslint:disable-next-line: no-non-null-assertion
+          const svgElement = doc.firstElementChild!;
+          svgElement.setAttribute('width', `${size}`);
+          svgElement.setAttribute('height', `${size}`);
+          const resizedString = new XMLSerializer().serializeToString(
+            svgElement
+          );
+          return `data:image/svg+xml;base64,${btoa(resizedString)}`;
+        })
+      );
+  }
+}
+
+async function getImageDimensions(url: string) {
+  return new Promise<{ width: number; height: number }>(resolved => {
+    const image = new Image();
+    image.onload = () => {
+      resolved({ width: image.width, height: image.height });
+    };
+    image.src = url;
+  });
 }

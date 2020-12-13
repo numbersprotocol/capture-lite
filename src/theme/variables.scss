@@ -8,25 +8,6 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
-.mat-tab-labels {
-  background: #564dfc;
-
-  .mat-tab-label-content {
-    color: white;
-  }
-
-  .mat-icon {
-    color: white;
-    background-color: white;
-  }
-}
-
-.mat-sidenav-content {
-  button .mat-icon {
-    color: white;
-  }
-}
-
 $capture-primary: (
   50: #ece6fe,
   100: #ccc1fc,

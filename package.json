@@ -37,10 +37,12 @@
     "@ngx-formly/core": "^5.0.0",
     "@ngx-formly/material": "^5.0.0",
     "@ngx-formly/schematics": "^5.10.3",
+    "@types/merge-images": "^1.1.2",
     "async-mutex": "^0.2.6",
     "image-blob-reduce": "^2.1.1",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.20",
+    "merge-images": "^2.0.0",
     "rxjs": "~6.6.3",
     "tslib": "^2.0.1",
     "zone.js": "~0.10.2"

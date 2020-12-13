@@ -139,6 +139,15 @@ export class ImageStore {
     return thumbnails.find(thumb => thumb.imageIndex === index);
   }
 
+  async getUri(index: string) {
+    await this.initialize();
+    const result = await this.filesystemPlugin.getUri({
+      directory: this.directory,
+      path: `${this.rootDir}/${index}`,
+    });
+    return result.uri;
+  }
+
   async drop() {
     await this.initialize();
     await this.thumbnailTable.drop();
