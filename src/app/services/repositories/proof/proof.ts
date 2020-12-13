@@ -38,7 +38,7 @@ export class Proof {
   private async setAssets(assets: Assets) {
     const indexedAssetEntries: [string, AssetMeta][] = [];
     for (const [base64, meta] of Object.entries(assets)) {
-      const index = await this.imageStore.write(base64);
+      const index = await this.imageStore.write(base64, meta.mimeType);
       indexedAssetEntries.push([index, meta]);
     }
 

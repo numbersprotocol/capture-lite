@@ -87,10 +87,10 @@ export class PostCaptureCardComponent implements OnInit {
       .pipe(
         first(),
         concatMap(rawDataUrl => this.createWatermarkedImage$(rawDataUrl)),
-        map(watermarkedUrl => watermarkedUrl.split(',')[1]),
-        concatMap(watermarkedBase64 =>
-          this.imageStore.write(watermarkedBase64)
-        ),
+        concatMap(async watermarkedUrl => {
+          const base64 = watermarkedUrl.split(',')[1];
+          return this.imageStore.write(base64, 'image/jpeg');
+        }),
         concatMap(index => this.imageStore.getUri(index)),
         concatMap(watermarkedUri =>
           Share.share({
