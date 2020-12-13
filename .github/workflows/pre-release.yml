@@ -100,7 +100,6 @@ jobs:
           npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
-          npm run test-ci
           npm run build
 
       - name: Build APKs
@@ -151,7 +150,6 @@ jobs:
           npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
-          npm run test-ci
           npm run build
 
       - name: Build APKs

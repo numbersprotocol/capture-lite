@@ -8,7 +8,7 @@ import { PreferenceManager } from '../../preference-manager/preference-manager.s
 import { PushNotificationService } from '../../push-notification/push-notification.service';
 import { BASE_URL } from '../secret';
 
-const { Device } = Plugins;
+const { Device, Storage } = Plugins;
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +23,16 @@ export class DiaBackendAuthService {
     private readonly preferenceManager: PreferenceManager,
     private readonly pushNotificationService: PushNotificationService
   ) {}
+
+  // TODO: remove this method
+  private async migrate() {
+    const oldToken = await Storage.get({
+      key: 'numbersStoragePublisher_authToken',
+    });
+    if (oldToken.value) {
+      this.setToken(oldToken.value);
+    }
+  }
 
   initialize$() {
     return this.updateDevice$();
@@ -109,6 +119,7 @@ export class DiaBackendAuthService {
   }
 
   async hasLoggedIn() {
+    await this.migrate();
     const token = await this.preferences.getString(PrefKeys.TOKEN);
     return token !== '';
   }

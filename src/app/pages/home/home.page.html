@@ -109,8 +109,7 @@
         <div class="tab-content-post">
           <app-post-capture-card
             *ngFor="let postCapture of postCaptures$ | async"
-            [transaction]="postCapture.transaction"
-            [asset]="postCapture.asset"
+            [transaction]="postCapture"
           >
           </app-post-capture-card>
         </div>

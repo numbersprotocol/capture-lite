@@ -18,11 +18,13 @@ import {
   tap,
 } from 'rxjs/operators';
 import {
+  concatTapTo,
   switchTap,
   switchTapTo,
 } from '../../../utils/rx-operators/rx-operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy, Tuple } from '../../database/table/table';
+import { DiaBackendAssetRepository } from '../asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { BASE_URL } from '../secret';
 import { IgnoredTransactionRepository } from './ignored-transaction-repository.service';
@@ -40,7 +42,8 @@ export class DiaBackendTransactionRepository {
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService,
     private readonly database: Database,
-    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
+    private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
   ) {}
 
   getAll$(): Observable<DiaBackendTransaction[]> {
@@ -109,7 +112,8 @@ export class DiaBackendTransactionRepository {
           { headers }
         )
       ),
-      switchTapTo(this.fetchAll$())
+      switchTapTo(this.fetchAll$()),
+      concatTapTo(this.diaBackendAssetRepository.fetchAll$())
     );
   }
 

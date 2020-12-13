@@ -30,6 +30,11 @@ export class ProofRepository {
     );
   }
 
+  async getAll() {
+    const views = await this.table.queryAll();
+    return views.map(view => Proof.fromIndexedProofView(this.imageStore, view));
+  }
+
   async add(proof: Proof, onConflict = OnConflictStrategy.ABORT) {
     await this.table.insert([proof.getIndexedProofView()], onConflict);
     return proof;

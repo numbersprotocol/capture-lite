@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { filter, mapTo, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { concatMap, filter, mapTo, switchMap } from 'rxjs/operators';
 
 export function isNonNullable<T>() {
   return (source$: Observable<null | undefined | T>) =>
@@ -17,3 +17,10 @@ export function switchTapTo<T>(observable$: Observable<any>) {
   return (source$: Observable<T>) =>
     source$.pipe(switchMap(value => observable$.pipe(mapTo(value))));
 }
+
+export function concatTapTo<T>(observable$: Observable<any>) {
+  return (source$: Observable<T>) =>
+    source$.pipe(concatMap(value => observable$.pipe(mapTo(value))));
+}
+
+export const VOID$ = of(void 0);

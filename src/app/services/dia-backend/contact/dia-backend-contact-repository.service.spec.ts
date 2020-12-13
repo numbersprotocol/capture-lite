@@ -20,10 +20,8 @@ xdescribe('DiaBackendContactRepository', () => {
 
   it('should be created', () => expect(repository).toBeTruthy());
 
-  it('should get all local cache first then via HTTP request', done => {
-    // tslint:disable-next-line: no-console
-    repository.getAll$().subscribe(result => console.log(result));
-  });
+  // TODO
+  it('should get all local cache first then via HTTP request');
 });
 
 const EMAIL = 'test@test.com';

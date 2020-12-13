@@ -17,6 +17,5 @@ describe('HomePage', () => {
     fixture.detectChanges();
   }));
 
-  // TODO: Enable this test after we remove the ugly WORKAROUND in ngOnInit().
-  // it('should create', () => expect(component).toBeTruthy());
+  it('should create', () => expect(component).toBeTruthy());
 });
