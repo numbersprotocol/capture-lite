@@ -8,6 +8,10 @@ export function getExtension(mimeType: MimeType) {
       return 'jpg';
     case 'image/png':
       return 'png';
+    case 'application/octet-stream':
+      return 'bin';
+    default:
+      throw TypeError(`Unknown MIME type: ${mimeType}`);
   }
 }
 
@@ -18,6 +22,8 @@ export function fromExtension(extension: string): MimeType {
       return 'image/jpeg';
     case 'png':
       return 'image/png';
+    case 'bin':
+      return 'application/octet-stream';
     default:
       throw TypeError(`Unknown extension: ${extension}`);
   }

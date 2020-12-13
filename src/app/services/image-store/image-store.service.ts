@@ -5,7 +5,7 @@ import ImageBlobReduce from 'image-blob-reduce';
 import { FILESYSTEM_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
 import { sha256WithBase64 } from '../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../utils/encoding/encoding';
-import { MimeType } from '../../utils/mime-type';
+import { getExtension, MimeType } from '../../utils/mime-type';
 import { Database } from '../database/database.service';
 import { OnConflictStrategy, Tuple } from '../database/table/table';
 
@@ -23,6 +23,9 @@ export class ImageStore {
   private readonly rootDir = ImageStore.name;
   private readonly mutex = new Mutex();
   private hasInitialized = false;
+  private readonly extensionTable = this.database.getTable<ImageExtension>(
+    `${ImageStore.name}_extension`
+  );
   private readonly thumbnailTable = this.database.getTable<Thumbnail>(
     `${ImageStore.name}_thumbnail`
   );
@@ -55,20 +58,22 @@ export class ImageStore {
 
   async read(index: string) {
     await this.initialize();
+    const extension = await this.getExtension(index);
     const result = await this.filesystemPlugin.readFile({
       directory: this.directory,
-      path: `${this.rootDir}/${index}`,
+      path: `${this.rootDir}/${index}.${extension}`,
     });
     return result.data;
   }
 
-  async write(base64: string) {
+  async write(base64: string, mimeType: MimeType) {
     const index = await sha256WithBase64(base64);
     await this.initialize();
     return this.mutex.runExclusive(async () => {
+      const imageExtension = await this.setImageExtension(index, mimeType);
       await this.filesystemPlugin.writeFile({
         directory: this.directory,
-        path: `${this.rootDir}/${index}`,
+        path: `${this.rootDir}/${index}.${imageExtension.extension}`,
         data: base64,
         recursive: true,
       });
@@ -80,10 +85,13 @@ export class ImageStore {
     await this.initialize();
     await this.deleteThumbnail(index);
     return this.mutex.runExclusive(async () => {
-      return this.filesystemPlugin.deleteFile({
+      const extension = await this.getExtension(index);
+      await this.filesystemPlugin.deleteFile({
         directory: this.directory,
-        path: `${this.rootDir}/${index}`,
+        path: `${this.rootDir}/${index}.${extension}`,
       });
+      await this.deleteImageExtension(index);
+      return index;
     });
   }
 
@@ -93,7 +101,8 @@ export class ImageStore {
       directory: this.directory,
       path: `${this.rootDir}`,
     });
-    return result.files.includes(index);
+    const extension = await this.getExtension(index);
+    return result.files.includes(`${index}.${extension}`);
   }
 
   async readThumbnail(index: string, mimeType: MimeType) {
@@ -112,7 +121,7 @@ export class ImageStore {
       [
         {
           imageIndex: index,
-          thumbnailIndex: await this.write(thumbnailBase64),
+          thumbnailIndex: await this.write(thumbnailBase64, mimeType),
         },
       ],
       OnConflictStrategy.IGNORE
@@ -139,6 +148,35 @@ export class ImageStore {
     return thumbnails.find(thumb => thumb.imageIndex === index);
   }
 
+  private async getExtension(index: string) {
+    return (await this.getImageExtension(index))?.extension;
+  }
+
+  private async getImageExtension(index: string) {
+    const imageExtensions = await this.extensionTable.queryAll();
+    return imageExtensions.find(
+      imageExtension => imageExtension.imageIndex === index
+    );
+  }
+
+  private async setImageExtension(index: string, mimeType: MimeType) {
+    return (
+      await this.extensionTable.insert(
+        [{ imageIndex: index, extension: getExtension(mimeType) }],
+        OnConflictStrategy.IGNORE
+      )
+    )[0];
+  }
+
+  private async deleteImageExtension(index: string) {
+    const imageExtension = await this.getImageExtension(index);
+    if (!imageExtension) {
+      return index;
+    }
+    await this.extensionTable.delete([imageExtension]);
+    return index;
+  }
+
   async drop() {
     await this.initialize();
     await this.thumbnailTable.drop();
@@ -151,6 +189,11 @@ export class ImageStore {
       });
     });
   }
+}
+
+interface ImageExtension extends Tuple {
+  readonly imageIndex: string;
+  readonly extension: string;
 }
 
 interface Thumbnail extends Tuple {
