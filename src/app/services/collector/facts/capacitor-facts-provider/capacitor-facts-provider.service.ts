@@ -57,16 +57,30 @@ export class CapacitorFactsProvider implements FactsProvider {
     if (!isLocationInfoCollectionEnabled) {
       return undefined;
     }
-    return this.geolocationPlugin
-      .getCurrentPosition({
+
+    // WORKAROUND: manually set timeout to avoid location never resolved:
+    //             https://github.com/ionic-team/capacitor/issues/3062
+
+    const timeout = new Promise<undefined>((_, reject) => {
+      setTimeout(() => {
+        reject({
+          code: GeolocationPositionErrorCode.TIMEOUT,
+          message: `Timeout when collecting location info: ${defaultGeolocationTimeout}`,
+        });
+      }, defaultGeolocationTimeout);
+    });
+
+    return Promise.race([
+      this.geolocationPlugin.getCurrentPosition({
         enableHighAccuracy: true,
         maximumAge: defaultGeolocationAge,
         timeout: defaultGeolocationTimeout,
-      })
-      .catch((err: GeolocationPositionError) => {
-        this.showGeolocationPostiionErrorMessage(err);
-        return undefined;
-      });
+      }),
+      timeout,
+    ]).catch((err: GeolocationPositionError) => {
+      this.showGeolocationPostiionErrorMessage(err);
+      return undefined;
+    });
   }
 
   isDeviceInfoCollectionEnabled$() {

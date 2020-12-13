@@ -2,9 +2,9 @@ import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { groupBy } from 'lodash';
+import { groupBy, isEqual } from 'lodash';
 import { combineLatest, defer } from 'rxjs';
-import { concatMap, first, map } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, first, map } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
@@ -88,6 +88,12 @@ export class HomePage {
       ),
       map(captures =>
         captures.filter(c => !c.asset || c.asset?.is_original_owner)
+      ),
+      distinctUntilChanged((x, y) =>
+        isEqual(
+          x.map(cx => ({ hash: cx.hash, asset: cx.asset?.id })),
+          y.map(cy => ({ hash: cy.hash, asset: cy.asset?.id }))
+        )
       )
     );
   }
