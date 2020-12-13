@@ -110,7 +110,25 @@ export class CapacitorFactsProvider implements FactsProvider {
         message = this.translocoService.translate('error.locationTimeout');
         break;
       default:
-        message = error.message;
+        /*
+         * WORKAROUND: iOS/Android location error code is always undefined
+         * the only way to determine the error type on Native platform with the Capacitor Geolocation plugin
+         * is by parsing the message.
+         * But message is not reliable, and iOS doesn't return a expressive error message,
+         * so a fallback message is provided.
+         */
+        if (
+          error.message.toLowerCase().includes('permission') ||
+          error.message.toLowerCase().includes('denied')
+        ) {
+          message = this.translocoService.translate(
+            'error.locationPermissionDenied'
+          );
+        } else {
+          message = this.translocoService.translate(
+            'error.locationUnknownError'
+          );
+        }
         break;
     }
     this.snackBar.open(message, this.translocoService.translate('dismiss'), {
