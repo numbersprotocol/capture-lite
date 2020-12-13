@@ -30,7 +30,10 @@ export class DiaBackendAuthService {
       key: 'numbersStoragePublisher_authToken',
     });
     if (oldToken.value) {
-      this.setToken(oldToken.value.split(' ')[1]);
+      const splitted = oldToken.value.split(' ');
+      if (splitted[0] === 'token' && splitted[1]) {
+        this.setToken(splitted[1]);
+      }
     }
 
     const oldUsername = await Storage.get({
@@ -135,7 +138,7 @@ export class DiaBackendAuthService {
   async hasLoggedIn() {
     await this.migrate();
     const token = await this.preferences.getString(PrefKeys.TOKEN);
-    return token !== '';
+    return !!token;
   }
 
   getUsername$() {
