@@ -2,7 +2,7 @@
 // other platform.
 export type MimeType = 'image/jpeg' | 'image/png' | 'application/octet-stream';
 
-export function getExtension(mimeType: MimeType) {
+export function toExtension(mimeType: MimeType) {
   switch (mimeType) {
     case 'image/jpeg':
       return 'jpg';
