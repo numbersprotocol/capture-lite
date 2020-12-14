@@ -5,6 +5,7 @@ import { concatMap, filter } from 'rxjs/operators';
 import { switchTapTo } from '../../../utils/rx-operators/rx-operators';
 import { NotificationService } from '../../notification/notification.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
+import { DiaBackendAssetRepository } from '../asset/dia-backend-asset-repository.service';
 import { DiaBackendTransactionRepository } from '../transaction/dia-backend-transaction-repository.service';
 
 @Injectable({
@@ -14,6 +15,7 @@ export class DiaBackendNotificationService {
   constructor(
     private readonly pushNotificationService: PushNotificationService,
     private readonly transactionRepository: DiaBackendTransactionRepository,
+    private readonly assetRepositroy: DiaBackendAssetRepository,
     private readonly notificationService: NotificationService,
     private readonly translocoService: TranslocoService
   ) {}
@@ -28,7 +30,7 @@ export class DiaBackendNotificationService {
               this.translocoService.translate('transactionReceived'),
               this.translocoService.translate('message.transactionReceived')
             )
-          ).pipe(switchTapTo(this.transactionRepository.getAll$()));
+          ).pipe(switchTapTo(this.transactionRepository.refresh$()));
         }
         if (data.app_message_type === 'transaction_expired') {
           return defer(() =>
@@ -36,7 +38,10 @@ export class DiaBackendNotificationService {
               this.translocoService.translate('transactionExpired'),
               this.translocoService.translate('message.transactionExpired')
             )
-          ).pipe(switchTapTo(this.transactionRepository.getAll$()));
+          ).pipe(
+            switchTapTo(this.transactionRepository.refresh$()),
+            switchTapTo(this.assetRepositroy.refresh$())
+          );
         }
         return EMPTY;
       })

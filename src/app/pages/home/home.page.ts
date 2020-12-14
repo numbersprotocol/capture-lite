@@ -1,6 +1,8 @@
 import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy, isEqual } from 'lodash';
 import { combineLatest, defer } from 'rxjs';
@@ -40,12 +42,15 @@ export class HomePage {
     this.diaBackendAuthService.getEmail(),
   ]).pipe(
     map(([transactions, email]) =>
-      transactions.filter(
-        transaction =>
-          transaction.sender !== email &&
-          !transaction.expired &&
-          transaction.fulfilled_at
-      )
+      transactions
+        .filter(
+          transaction =>
+            transaction.sender !== email &&
+            !transaction.expired &&
+            transaction.fulfilled_at
+        )
+        // WORKAROUND: for PostCapture not displaying when exceeding a certain limit. (#291)
+        .slice(0, this.workaroundFetchLimit)
     )
   );
   readonly username$ = this.diaBackendAuthService.getUsername$();
@@ -54,13 +59,17 @@ export class HomePage {
     .pipe(map(transactions => transactions.length));
   captureButtonShow = true;
   currentUploadingProofHash = '';
+  private readonly workaroundFetchLimit = 10;
+  private postCaptureLimitationMessageShowed = false;
 
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly collectorService: CollectorService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository
+    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
+    private readonly snackbar: MatSnackBar,
+    private readonly translocoService: TranslocoService
   ) {}
 
   private getCaptures$() {
@@ -129,5 +138,15 @@ export class HomePage {
 
   onTapChanged(event: MatTabChangeEvent) {
     this.captureButtonShow = event.index === 0;
+    if (event.index === 1) {
+      if (!this.postCaptureLimitationMessageShowed) {
+        this.snackbar.open(
+          this.translocoService.translate('message.postCaptureLimitation'),
+          this.translocoService.translate('dismiss'),
+          { duration: 8000 }
+        );
+        this.postCaptureLimitationMessageShowed = true;
+      }
+    }
   }
 }
