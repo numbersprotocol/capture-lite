@@ -52,7 +52,7 @@ export class CapacitorFactsProvider implements FactsProvider {
 
   private async collectLocationInfo() {
     const defaultGeolocationAge = 600000;
-    const defaultGeolocationTimeout = 10000;
+    const defaultGeolocationTimeout = 20000;
     const isLocationInfoCollectionEnabled = await this.isGeolocationInfoCollectionEnabled();
     if (!isLocationInfoCollectionEnabled) {
       return undefined;
