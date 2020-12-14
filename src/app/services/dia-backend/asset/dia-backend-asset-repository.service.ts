@@ -215,7 +215,7 @@ export class DiaBackendAssetRepository {
     }).pipe(
       concatMap(headers =>
         this.httpClient.delete<DeleteAssetResponse>(
-          `${BASE_URL}/api/v2/assets/${asset.id}`,
+          `${BASE_URL}/api/v2/assets/${asset.id}/`,
           { headers }
         )
       )
