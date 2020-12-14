@@ -33,17 +33,17 @@ describe('ImageStore', () => {
   });
 
   it('should write file with Base64', async () => {
-    const index = await store.write(sampleFile);
+    const index = await store.write(sampleFile, sampleMimeType);
     expect(await store.exists(index)).toBeTrue();
   });
 
   it('should read file with index', async () => {
-    const index = await store.write(sampleFile);
+    const index = await store.write(sampleFile, sampleMimeType);
     expect(await store.read(index)).toEqual(sampleFile);
   });
 
   it('should delete file with index', async () => {
-    const index = await store.write(sampleFile);
+    const index = await store.write(sampleFile, sampleMimeType);
 
     await store.delete(index);
 
@@ -51,7 +51,7 @@ describe('ImageStore', () => {
   });
 
   it('should delete file with index and thumbnail', async () => {
-    const index = await store.write(sampleFile);
+    const index = await store.write(sampleFile, sampleMimeType);
     await store.readThumbnail(index, sampleMimeType);
 
     await store.delete(index);
@@ -60,10 +60,10 @@ describe('ImageStore', () => {
   });
 
   it('should remove all files after drop', async () => {
-    const index1 = await store.write(sampleFile);
+    const index1 = await store.write(sampleFile, sampleMimeType);
     const anotherFile =
       'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=';
-    const index2 = await store.write(anotherFile);
+    const index2 = await store.write(anotherFile, sampleMimeType);
 
     await store.drop();
 
@@ -77,7 +77,9 @@ describe('ImageStore', () => {
       stringToBase64(`${value}`)
     );
 
-    const indexes = await Promise.all(files.map(file => store.write(file)));
+    const indexes = await Promise.all(
+      files.map(file => store.write(file, sampleMimeType))
+    );
 
     for (const index of indexes) {
       expect(await store.exists(index)).toBeTrue();
@@ -92,7 +94,7 @@ describe('ImageStore', () => {
     const indexes = [];
 
     for (const file of files) {
-      indexes.push(await store.write(file));
+      indexes.push(await store.write(file, sampleMimeType));
     }
 
     await Promise.all(indexes.map(index => store.delete(index)));
@@ -103,7 +105,7 @@ describe('ImageStore', () => {
   });
 
   it('should read thumbnail', async () => {
-    const index = await store.write(sampleFile);
+    const index = await store.write(sampleFile, sampleMimeType);
     const thumbnailFile = await store.readThumbnail(index, sampleMimeType);
     expect(thumbnailFile).toBeTruthy();
   });
