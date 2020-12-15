@@ -132,20 +132,25 @@ export class DiaBackendAssetRepository {
         return from(notFetched);
       }),
       concatMap(asset => of(asset).pipe(delay(delayMillisBetweenAssets))),
-      concatMap(asset =>
-        this.downloadAsset$(asset).pipe(
-          concatMap(raw =>
-            getProof(this.imageStore, raw, asset.information, asset.signature)
-          ),
-          concatMap(proof =>
-            this.proofRepository.add(proof, OnConflictStrategy.IGNORE)
-          ),
-          // tslint:disable-next-line: no-console
-          tap(v => console.log(v.timestamp)),
-          catchError(() => VOID$)
-        )
-      ),
+      concatMap(asset => this.storeAsset$(asset)),
+      // tslint:disable-next-line: no-console
+      tap(v => console.log(v.timestamp)),
+      catchError(err => {
+        console.error(err);
+        return VOID$;
+      }),
       toArray()
+    );
+  }
+
+  private storeAsset$(asset: DiaBackendAsset) {
+    return this.downloadAsset$(asset).pipe(
+      concatMap(raw =>
+        getProof(this.imageStore, raw, asset.information, asset.signature)
+      ),
+      concatMap(proof =>
+        this.proofRepository.add(proof, OnConflictStrategy.IGNORE)
+      )
     );
   }
 
