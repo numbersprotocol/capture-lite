@@ -1,4 +1,4 @@
-import { formatDate } from '@angular/common';
+import { formatDate, KeyValue } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -25,17 +25,14 @@ import { capture } from '../../utils/camera';
 export class HomePage {
   readonly capturesByDate$ = this.getCaptures$().pipe(
     map(captures =>
-      Object.entries(
-        groupBy(captures, c =>
-          formatDate(
-            c.proofWithThumbnail?.proof.truth.timestamp,
-            'yyyy/MM/dd',
-            'en-US'
-          )
+      groupBy(captures, c =>
+        formatDate(
+          c.proofWithThumbnail?.proof.truth.timestamp,
+          'yyyy/MM/dd',
+          'en-US'
         )
       )
-    ),
-    map(entries => Object.fromEntries(entries))
+    )
   );
   readonly postCaptures$ = combineLatest([
     this.diaBackendTransactionRepository.getAll$(),
@@ -71,6 +68,14 @@ export class HomePage {
     private readonly snackbar: MatSnackBar,
     private readonly translocoService: TranslocoService
   ) {}
+
+  // tslint:disable-next-line: prefer-function-over-method
+  keyDescendingOrder(
+    a: KeyValue<number, string>,
+    b: KeyValue<number, string>
+  ): number {
+    return a.key > b.key ? -1 : b.key > a.key ? 1 : 0;
+  }
 
   private getCaptures$() {
     const proofsWithThumbnail$ = this.proofRepository.getAll$().pipe(
