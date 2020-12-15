@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.11.6 - 2020-12-14
+
+### Fixed
+
+- Fix the view-all button out of place in WebKit browser in iOS devices. #348
+
+## 0.11.5 - 2020-12-14
+
+### Changed
+
+#### Code Quality
+
+- Add extension to files stored in `ImageStore`. #345
+
+### Fixed
+
+- Fix drop pictures during capturing. #341
+- Change the `background-size` to `cover` for capture thumbs. #343
+- Rename `nothing-here` to `empty-inbox`. #342
+- Migrate `DiaBackendAuthService`. #340
+- Handle geolocation error message for native devices. #328
+- **Limitation**: Cannot receive push notification on iOS. Inbox on iOS is only updated when the App is started.
+
 ## 0.11.4 - 2020-12-11
 
 ### Fixed
@@ -23,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use `r0adkll/upload-google-play@v1.0.7` to avoid `This edit has already been successfully committed, please create a new Edit.` error.
 
-### Change
+### Changed
 
 - Remove `npm run test-ci` during pre-release CD.
 

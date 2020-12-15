@@ -67,7 +67,7 @@
                 <mat-grid-tile
                   *ngIf="capture.asset"
                   class="square-image-tile"
-                  [style.background]="
+                  [style.backgroundImage]="
                     'url(data:image/*;base64,' +
                     (capture.proofWithThumbnail.thumbnailBase64$ | async)!
                   "
@@ -77,7 +77,7 @@
                 <ng-container *ngIf="!capture.asset">
                   <mat-grid-tile
                     class="square-image-tile"
-                    [style.background]="
+                    [style.backgroundImage]="
                       'url(data:image/*;base64,' +
                       (capture.proofWithThumbnail.thumbnailBase64$ | async)!
                     "
