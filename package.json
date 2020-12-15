@@ -30,7 +30,7 @@
     "@capacitor/ios": "2.4.4",
     "@ionic-native/core": "^5.30.0",
     "@ionic/angular": "^5.5.1",
-    "@ionic/core": "^5.5.1",
+    "@ionic/core": "^5.5.2",
     "@ionic/pwa-elements": "^3.0.1",
     "@ngneat/transloco": "^2.19.3",
     "@ngneat/until-destroy": "^8.0.2",
