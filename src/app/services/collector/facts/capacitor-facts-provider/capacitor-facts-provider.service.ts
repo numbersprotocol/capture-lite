@@ -33,10 +33,22 @@ export class CapacitorFactsProvider implements FactsProvider {
       [DefaultFactId.DEVICE_NAME]: deviceInfo?.model,
       [DefaultFactId.GEOLOCATION_LATITUDE]: locationInfo?.coords.latitude,
       [DefaultFactId.GEOLOCATION_LONGITUDE]: locationInfo?.coords.longitude,
-      UUID: deviceInfo?.uuid,
+      USER_DEVICE_NAME: deviceInfo?.name,
       PLATFORM: deviceInfo?.platform,
+      UUID: deviceInfo?.uuid,
+      APP_VERSION: deviceInfo?.appVersion,
+      APP_BUILD: deviceInfo?.appBuild,
+      APP_ID: deviceInfo?.appId,
+      APP_NAME: deviceInfo?.appName,
       OPERATING_SYSTEM: deviceInfo?.operatingSystem,
       OS_VERSION: deviceInfo?.osVersion,
+      MANUFACTURER: deviceInfo?.manufacturer,
+      IS_VIRTUAL: deviceInfo?.isVirtual,
+      MEM_USED: deviceInfo?.memUsed,
+      DISK_FREE: deviceInfo?.diskFree,
+      DISK_TOTAL: deviceInfo?.diskTotal,
+      BETTERY_LEVEL: deviceInfo?.batteryLevel,
+      IS_CHARGING: deviceInfo?.isCharging,
     };
   }
 
@@ -45,7 +57,7 @@ export class CapacitorFactsProvider implements FactsProvider {
     if (!isDeviceInfoCollectionEnabled) {
       return;
     }
-    return Device.getInfo();
+    return { ...(await Device.getInfo()), ...(await Device.getBatteryInfo()) };
   }
 
   private async collectLocationInfo() {

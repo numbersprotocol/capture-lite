@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.11.7 - 2020-12-15
+
+### Added
+
+- Add `beta` string to the splash image. #360
+
+### Fixed
+
+- Sort captures descendingly. #358
+- Collect complete device info provided by Capacitor Device plugin. #359
+
 ## 0.11.6 - 2020-12-14
 
 ### Fixed
