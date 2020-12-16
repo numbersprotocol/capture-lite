@@ -79,11 +79,13 @@ export class HomePage {
 
   private getCaptures$() {
     const proofsWithThumbnail$ = this.proofRepository.getAll$().pipe(
-      map(proofs =>
-        proofs.map(proof => ({
-          proof,
-          thumbnailBase64$: defer(() => proof.getThumbnailBase64()),
-        }))
+      concatMap(proofs =>
+        Promise.all(
+          proofs.map(async proof => ({
+            proof,
+            thumbnailBase64: await proof.getThumbnailBase64(),
+          }))
+        )
       )
     );
 
