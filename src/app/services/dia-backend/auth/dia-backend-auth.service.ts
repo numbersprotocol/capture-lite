@@ -126,9 +126,7 @@ export class DiaBackendAuthService {
       concatMap(([headers, language]) =>
         this.httpClient.patch(
           `${BASE_URL}/auth/users/me/`,
-          {
-            language,
-          },
+          { language },
           { headers }
         )
       )
