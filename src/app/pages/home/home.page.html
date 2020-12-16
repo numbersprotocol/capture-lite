@@ -43,7 +43,9 @@
       <button routerLink="inbox" mat-icon-button>
         <mat-icon
           matBadge="&#8288;"
-          [matBadgeHidden]="!(inboxCount$ | async)"
+          [matBadgeHidden]="
+            (inboxCount$ | async) === null || (inboxCount$ | async) === 0
+          "
           matBadgeSize="small"
           matBadgeColor="warn"
         >
