@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService } from '@ngneat/transloco';
 import { isEqual } from 'lodash';
 import {
@@ -63,7 +64,8 @@ export class DiaBackendAssetRepository {
     private readonly notificationService: NotificationService,
     private readonly translocoService: TranslocoService,
     private readonly proofRepository: ProofRepository,
-    private readonly imageStore: ImageStore
+    private readonly imageStore: ImageStore,
+    private readonly snackbar: MatSnackBar
   ) {}
 
   getAll$() {
@@ -129,6 +131,13 @@ export class DiaBackendAssetRepository {
         );
         // tslint:disable-next-line: no-console
         console.log(`${notFetched.length} assets has not synced.`);
+        if (notFetched.length) {
+          this.snackbar.open(
+            this.translocoService.translate('message.syncingAssets'),
+            this.translocoService.translate('dismiss'),
+            { duration: 8000 }
+          );
+        }
         return from(notFetched);
       }),
       concatMap(asset => of(asset).pipe(delay(delayMillisBetweenAssets))),
