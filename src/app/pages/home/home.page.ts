@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { groupBy, isEqual } from 'lodash';
+import { groupBy, isEqual, sortBy } from 'lodash';
 import { combineLatest, defer } from 'rxjs';
 import { concatMap, distinctUntilChanged, first, map } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
@@ -24,6 +24,9 @@ import { capture } from '../../utils/camera';
 })
 export class HomePage {
   readonly capturesByDate$ = this.getCaptures$().pipe(
+    map(captures =>
+      sortBy(captures, c => -c.proofWithThumbnail.proof.timestamp)
+    ),
     map(captures =>
       groupBy(captures, c =>
         formatDate(
@@ -79,11 +82,13 @@ export class HomePage {
 
   private getCaptures$() {
     const proofsWithThumbnail$ = this.proofRepository.getAll$().pipe(
-      map(proofs =>
-        proofs.map(proof => ({
-          proof,
-          thumbnailBase64$: defer(() => proof.getThumbnailBase64()),
-        }))
+      concatMap(proofs =>
+        Promise.all(
+          proofs.map(async proof => ({
+            proof,
+            thumbnailBase64: await proof.getThumbnailBase64(),
+          }))
+        )
       )
     );
 
