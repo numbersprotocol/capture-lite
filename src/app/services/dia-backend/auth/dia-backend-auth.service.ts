@@ -1,9 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { reject } from 'lodash';
+import { isEqual, reject } from 'lodash';
 import { combineLatest, defer, forkJoin, Observable } from 'rxjs';
-import { concatMap, concatMapTo, filter, map } from 'rxjs/operators';
+import {
+  concatMap,
+  concatMapTo,
+  distinctUntilChanged,
+  filter,
+  map,
+} from 'rxjs/operators';
+import { LanguageService } from '../../language/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
 import { BASE_URL } from '../secret';
@@ -20,6 +27,7 @@ export class DiaBackendAuthService {
 
   constructor(
     private readonly httpClient: HttpClient,
+    private readonly languageService: LanguageService,
     private readonly preferenceManager: PreferenceManager,
     private readonly pushNotificationService: PushNotificationService
   ) {}
@@ -52,7 +60,7 @@ export class DiaBackendAuthService {
   }
 
   initialize$() {
-    return this.updateDevice$();
+    return combineLatest([this.updateDevice$(), this.updateLanguage$()]);
   }
 
   login$(email: string, password: string): Observable<LoginResult> {
@@ -107,6 +115,24 @@ export class DiaBackendAuthService {
       email,
       password,
     });
+  }
+
+  updateLanguage$() {
+    return combineLatest([
+      this.getAuthHeaders$(),
+      this.languageService.currentLanguageKey$,
+    ]).pipe(
+      distinctUntilChanged(isEqual),
+      concatMap(([headers, language]) =>
+        this.httpClient.patch(
+          `${BASE_URL}/auth/users/me/`,
+          {
+            language: language,
+          },
+          { headers }
+        )
+      )
+    );
   }
 
   private updateDevice$() {
