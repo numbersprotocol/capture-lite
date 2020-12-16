@@ -3,15 +3,16 @@ import {
   AppLaunchUrl,
   AppPlugin,
   AppState,
-  PluginListenerHandle,
+  PluginListenerHandle
 } from '@capacitor/core';
 
 export class MockAppPlugin implements AppPlugin {
   addListener(): PluginListenerHandle {
-    return { remove: () => {} };
+    return { remove: () => undefined };
   }
 
-  removeAllListeners(): void {}
+  /* tslint:disable:no-empty */
+  removeAllListeners(): void { }
 
   exitApp(): never {
     throw new Error('exited');
