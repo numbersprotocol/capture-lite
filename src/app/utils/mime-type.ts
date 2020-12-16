@@ -6,7 +6,7 @@ export type MimeType =
   | 'image/svg+xml'
   | 'application/octet-stream';
 
-export function getExtension(mimeType: MimeType) {
+export function toExtension(mimeType: MimeType) {
   switch (mimeType) {
     case 'image/jpeg':
       return 'jpg';

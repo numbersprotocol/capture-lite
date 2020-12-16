@@ -1,12 +1,12 @@
-import { formatDate } from '@angular/common';
+import { formatDate, KeyValue } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { groupBy } from 'lodash';
+import { groupBy, isEqual } from 'lodash';
 import { combineLatest, defer } from 'rxjs';
-import { concatMap, first, map } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, first, map } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
@@ -25,17 +25,14 @@ import { capture } from '../../utils/camera';
 export class HomePage {
   readonly capturesByDate$ = this.getCaptures$().pipe(
     map(captures =>
-      Object.entries(
-        groupBy(captures, c =>
-          formatDate(
-            c.proofWithThumbnail?.proof.truth.timestamp,
-            'yyyy/MM/dd',
-            'en-US'
-          )
+      groupBy(captures, c =>
+        formatDate(
+          c.proofWithThumbnail?.proof.truth.timestamp,
+          'yyyy/MM/dd',
+          'en-US'
         )
       )
-    ),
-    map(entries => Object.fromEntries(entries))
+    )
   );
   readonly postCaptures$ = combineLatest([
     this.diaBackendTransactionRepository.getAll$(),
@@ -72,6 +69,14 @@ export class HomePage {
     private readonly translocoService: TranslocoService
   ) {}
 
+  // tslint:disable-next-line: prefer-function-over-method
+  keyDescendingOrder(
+    a: KeyValue<number, string>,
+    b: KeyValue<number, string>
+  ): number {
+    return a.key > b.key ? -1 : b.key > a.key ? 1 : 0;
+  }
+
   private getCaptures$() {
     const proofsWithThumbnail$ = this.proofRepository.getAll$().pipe(
       map(proofs =>
@@ -97,6 +102,12 @@ export class HomePage {
       ),
       map(captures =>
         captures.filter(c => !c.asset || c.asset?.is_original_owner)
+      ),
+      distinctUntilChanged((x, y) =>
+        isEqual(
+          x.map(cx => ({ hash: cx.hash, asset: cx.asset?.id })),
+          y.map(cy => ({ hash: cy.hash, asset: cy.asset?.id }))
+        )
       )
     );
   }

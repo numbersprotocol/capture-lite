@@ -5,7 +5,7 @@ import ImageBlobReduce from 'image-blob-reduce';
 import { FILESYSTEM_PLUGIN } from '../../shared/capacitor-plugins/capacitor-plugins.module';
 import { sha256WithBase64 } from '../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../utils/encoding/encoding';
-import { getExtension, MimeType } from '../../utils/mime-type';
+import { MimeType, toExtension } from '../../utils/mime-type';
 import { Database } from '../database/database.service';
 import { OnConflictStrategy, Tuple } from '../database/table/table';
 
@@ -172,7 +172,7 @@ export class ImageStore {
   private async setImageExtension(index: string, mimeType: MimeType) {
     return (
       await this.extensionTable.insert(
-        [{ imageIndex: index, extension: getExtension(mimeType) }],
+        [{ imageIndex: index, extension: toExtension(mimeType) }],
         OnConflictStrategy.IGNORE
       )
     )[0];

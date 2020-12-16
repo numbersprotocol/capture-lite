@@ -60,7 +60,11 @@
       <mat-tab label="Capture">
         <div class="tab-content-capture">
           <ng-container
-            *ngFor="let captureByDate of capturesByDate$ | async | keyvalue"
+            *ngFor="
+              let captureByDate of capturesByDate$
+                | async
+                | keyvalue: keyDescendingOrder
+            "
           >
             <div class="mat-title">{{ captureByDate.key }}</div>
             <mat-grid-list cols="3" gutterSize="8px">
@@ -68,7 +72,7 @@
                 <mat-grid-tile
                   *ngIf="capture.asset"
                   class="square-image-tile"
-                  [style.background]="
+                  [style.backgroundImage]="
                     'url(data:image/*;base64,' +
                     (capture.proofWithThumbnail.thumbnailBase64$ | async)!
                   "
@@ -78,7 +82,7 @@
                 <ng-container *ngIf="!capture.asset">
                   <mat-grid-tile
                     class="square-image-tile"
-                    [style.background]="
+                    [style.backgroundImage]="
                       'url(data:image/*;base64,' +
                       (capture.proofWithThumbnail.thumbnailBase64$ | async)!
                     "
