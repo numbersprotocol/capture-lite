@@ -3,7 +3,7 @@ import {
   AppLaunchUrl,
   AppPlugin,
   AppState,
-  PluginListenerHandle
+  PluginListenerHandle,
 } from '@capacitor/core';
 
 export class MockAppPlugin implements AppPlugin {
@@ -12,7 +12,7 @@ export class MockAppPlugin implements AppPlugin {
   }
 
   /* tslint:disable:no-empty */
-  removeAllListeners(): void { }
+  removeAllListeners(): void {}
 
   exitApp(): never {
     throw new Error('exited');
