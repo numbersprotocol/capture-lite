@@ -90,7 +90,7 @@ export class PostCaptureCardComponent implements OnInit {
           mergeImages(
             [asset.sharable_copy, 'assets/image/new-year-frame.png'],
             // @ts-ignore
-            { crossOrigin: 'Anonymous' }
+            { format: 'image/jpeg', crossOrigin: 'Anonymous' }
           )
         ),
         concatMap(async watermarkedUrl => {
@@ -100,9 +100,7 @@ export class PostCaptureCardComponent implements OnInit {
         concatMap(index => this.imageStore.getUri(index)),
         concatMap(watermarkedUri =>
           Share.share({
-            title: 'title',
-            dialogTitle: 'dialogTitle',
-            text: 'text',
+            text: '#CaptureApp #OnlyTruePhotos',
             url: watermarkedUri,
           })
         ),
@@ -110,14 +108,4 @@ export class PostCaptureCardComponent implements OnInit {
       )
       .subscribe();
   }
-}
-
-async function getImageDimensions(url: string) {
-  return new Promise<{ width: number; height: number }>(resolved => {
-    const image = new Image();
-    image.onload = () => {
-      resolved({ width: image.width, height: image.height });
-    };
-    image.src = url;
-  });
 }
