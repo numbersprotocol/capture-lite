@@ -44,15 +44,15 @@ export class DiaBackendNotificationService {
     );
   }
 
-  private async requireNotify(): Promise<boolean> {
+  private async needLocalNotification() {
     if (Capacitor.platform !== 'android') {
-      return Promise.resolve(false);
+      return false;
     }
     return (await this.appPlugin.getState()).isActive;
   }
 
   private async notifyTransactionReceived() {
-    if (!(await this.requireNotify())) {
+    if (!(await this.needLocalNotification())) {
       return;
     }
     return this.notificationService.notify(
@@ -62,7 +62,7 @@ export class DiaBackendNotificationService {
   }
 
   private async notifyTransactionExpired() {
-    if (!(await this.requireNotify())) {
+    if (!(await this.needLocalNotification())) {
       return;
     }
     return this.notificationService.notify(
