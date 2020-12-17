@@ -142,8 +142,6 @@ export class DiaBackendAssetRepository {
       }),
       concatMap(asset => of(asset).pipe(delay(delayMillisBetweenAssets))),
       concatMap(asset => this.storeAsset$(asset)),
-      // tslint:disable-next-line: no-console
-      tap(v => console.log(v.timestamp)),
       catchError(err => {
         console.error(err);
         return VOID$;
