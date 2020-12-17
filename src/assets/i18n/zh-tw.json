@@ -101,7 +101,8 @@
     "transactionReceived": "收到了新的 PostCapture。",
     "transactionExpired": "您寄出的 PostCapture 已被退回。",
     "viewAll": "檢視全部",
-    "postCaptureLimitation": "目前的 Beta 版本 Capture 只會顯示 10 張最新的 PostCapture 。"
+    "postCaptureLimitation": "目前的 Beta 版本 Capture 只會顯示 10 張最新的 PostCapture 。",
+    "syncingAssets": "正在同步您的影像資產至手機，這個步驟會執行數分鐘，請保持 app 開啟並且連線至網路。"
   },
   ".error": "錯誤",
   "error": {

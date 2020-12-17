@@ -1,12 +1,18 @@
 import { formatDate, KeyValue } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { groupBy, isEqual } from 'lodash';
+import { groupBy, isEqual, sortBy } from 'lodash';
 import { combineLatest, defer } from 'rxjs';
-import { concatMap, distinctUntilChanged, first, map } from 'rxjs/operators';
+import {
+  concatMap,
+  distinctUntilChanged,
+  first,
+  map,
+  tap,
+} from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
@@ -24,6 +30,9 @@ import { capture } from '../../utils/camera';
 })
 export class HomePage {
   readonly capturesByDate$ = this.getCaptures$().pipe(
+    map(captures =>
+      sortBy(captures, c => -c.proofWithThumbnail.proof.timestamp)
+    ),
     map(captures =>
       groupBy(captures, c =>
         formatDate(
@@ -51,15 +60,18 @@ export class HomePage {
     )
   );
   readonly username$ = this.diaBackendAuthService.getUsername$();
-  readonly inboxCount$ = this.diaBackendTransactionRepository
-    .getInbox$()
-    .pipe(map(transactions => transactions.length));
+  readonly inboxCount$ = this.diaBackendTransactionRepository.getInbox$().pipe(
+    map(transactions => transactions.length),
+    // WORKARDOUND: force changeDetection to update badge when returning to App by clicking push notification
+    tap(() => this.changeDetectorRef.detectChanges())
+  );
   captureButtonShow = true;
   currentUploadingProofHash = '';
   private readonly workaroundFetchLimit = 10;
   private postCaptureLimitationMessageShowed = false;
 
   constructor(
+    private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly proofRepository: ProofRepository,
     private readonly collectorService: CollectorService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
@@ -79,11 +91,13 @@ export class HomePage {
 
   private getCaptures$() {
     const proofsWithThumbnail$ = this.proofRepository.getAll$().pipe(
-      map(proofs =>
-        proofs.map(proof => ({
-          proof,
-          thumbnailBase64$: defer(() => proof.getThumbnailBase64()),
-        }))
+      concatMap(proofs =>
+        Promise.all(
+          proofs.map(async proof => ({
+            proof,
+            thumbnailBase64: await proof.getThumbnailBase64(),
+          }))
+        )
       )
     );
 

@@ -45,7 +45,7 @@
   "confirmPassword": "Confirm Password",
   "bringTrustIntoData": "Bring Trust Into Data",
   "login": "Login",
-  "createAnAccount": "Create an Accont",
+  "createAnAccount": "Create an Account",
   "signup": "Sign Up",
   "alreadyHaveAnAccount": "Already Have an Account",
   "resendVerificationEmail": "Resend Verification Email",
@@ -101,7 +101,8 @@
     "transactionReceived": "A new PostCapture has received.",
     "transactionExpired": "A PostCapture you delivered has been returned.",
     "viewAll": "open more...",
-    "postCaptureLimitation": "The current Beta version of Capture only displays the 10 newest PostCaptures."
+    "postCaptureLimitation": "The current Beta version of Capture only displays the 10 newest PostCaptures.",
+    "syncingAssets": "Syncing of your photo assets is in progress, this might take a few minutes. Please keep the app open and connected online."
   },
   ".error": "Error",
   "error": {
