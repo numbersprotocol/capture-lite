@@ -50,6 +50,13 @@ const routes: Routes = [
       import('./pages/about/about.module').then(m => m.AboutPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'tutorial',
+    loadChildren: () =>
+      import('./pages/tutorial/tutorial.module').then(
+        m => m.TutorialPageModule
+      ),
+  },
 ];
 @NgModule({
   imports: [
