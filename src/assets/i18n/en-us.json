@@ -76,6 +76,12 @@
   "transactionReceived": "New PostCapture Received",
   "transactionExpired": "PostCapture Returned",
   "dismiss": "Dismiss",
+  "photoCaptured": "Photo Captured",
+  "photoReceived": "Photo Received",
+  "viewActivities": "View Activities",
+  "clickToShare": "Click to Share",
+  "takePhotos": "Take Photos",
+  "sendToFriends": "Send to Friends",
   ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",

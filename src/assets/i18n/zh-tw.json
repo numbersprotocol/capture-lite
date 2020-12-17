@@ -76,6 +76,12 @@
   "transactionReceived": "收到新 PostCapture",
   "transactionExpired": "PostCapture 被退回",
   "dismiss": "關閉",
+  "photoCaptured": "瀏覽拍攝照片",
+  "photoReceived": "瀏覽接收照片",
+  "viewActivities": "瀏覽活動紀錄",
+  "clickToShare": "點選照片分享",
+  "takePhotos": "拍攝照片",
+  "sendToFriends": "送給朋友",
   ".message": "訊息",
   "message": {
     "areYouSure": "此操作不可撤銷。",
