@@ -3,6 +3,7 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.tslint": true,
+    "source.fixAll.stylelint": true,
     "source.organizeImports": true
   },
   "typescript.preferences.importModuleSpecifier": "relative"

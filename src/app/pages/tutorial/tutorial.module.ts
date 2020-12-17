@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { FormlyMaterialModule } from '@ngx-formly/material';
+import { SharedModule } from '../../shared/shared.module';
 import { TutorialPageRoutingModule } from './tutorial-routing.module';
 import { TutorialPage } from './tutorial.page';
 
 @NgModule({
-  imports: [TutorialPageRoutingModule, FormlyMaterialModule],
+  imports: [TutorialPageRoutingModule, SharedModule],
   declarations: [TutorialPage],
 })
 export class TutorialPageModule {}
