@@ -148,6 +148,16 @@ export class ImageStore {
     return thumbnails.find(thumb => thumb.imageIndex === index);
   }
 
+  async getUri(index: string) {
+    await this.initialize();
+    const extension = await this.getExtension(index);
+    const result = await this.filesystemPlugin.getUri({
+      directory: this.directory,
+      path: `${this.rootDir}/${index}.${extension}`,
+    });
+    return result.uri;
+  }
+
   private async getExtension(index: string) {
     return (await this.getImageExtension(index))?.extension;
   }

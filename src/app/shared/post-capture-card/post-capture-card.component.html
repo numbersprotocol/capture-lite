@@ -6,6 +6,9 @@
       (transaction$ | async)?.fulfilled_at | date: 'short'
     }}</mat-card-subtitle>
     <span class="toolbar-spacer"></span>
+    <button (click)="share()" mat-icon-button>
+      <mat-icon>share</mat-icon>
+    </button>
   </mat-card-header>
   <div
     class="fixed-ratio"
