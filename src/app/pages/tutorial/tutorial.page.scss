@@ -1,13 +1,10 @@
-mat-toolbar {
-  color: white;
-
-  .mat-icon {
-    color: white;
-  }
-
-  span {
-    color: white;
-    padding-right: 40px;
+ion-content {
+  ion-slides {
+    ion-slide {
+      div {
+        width: 100%;
+      }
+    }
   }
 }
 
