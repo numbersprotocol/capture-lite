@@ -30,6 +30,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_capture_lite" />
+
         <activity
             android:name="io.numbersprotocol.capturelite.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
@@ -50,7 +52,6 @@
 
                 <data android:scheme="@string/custom_url_scheme" />
             </intent-filter>
-
         </activity>
 
         <provider

@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { AppPlugin, Capacitor } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { defer, EMPTY, Observable } from 'rxjs';
 import { concatMap, filter } from 'rxjs/operators';
+import { APP_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { switchTapTo } from '../../../utils/rx-operators/rx-operators';
 import { NotificationService } from '../../notification/notification.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
@@ -13,6 +15,8 @@ import { DiaBackendTransactionRepository } from '../transaction/dia-backend-tran
 })
 export class DiaBackendNotificationService {
   constructor(
+    @Inject(APP_PLUGIN)
+    private readonly appPlugin: AppPlugin,
     private readonly pushNotificationService: PushNotificationService,
     private readonly transactionRepository: DiaBackendTransactionRepository,
     private readonly assetRepositroy: DiaBackendAssetRepository,
@@ -25,26 +29,45 @@ export class DiaBackendNotificationService {
       isDiaBackendPushNotificationData(),
       concatMap(data => {
         if (data.app_message_type === 'transaction_received') {
-          return defer(() =>
-            this.notificationService.notify(
-              this.translocoService.translate('transactionReceived'),
-              this.translocoService.translate('message.transactionReceived')
-            )
-          ).pipe(switchTapTo(this.transactionRepository.refresh$()));
+          return defer(() => this.notifyTransactionReceived()).pipe(
+            switchTapTo(this.transactionRepository.refresh$())
+          );
         }
         if (data.app_message_type === 'transaction_expired') {
-          return defer(() =>
-            this.notificationService.notify(
-              this.translocoService.translate('transactionExpired'),
-              this.translocoService.translate('message.transactionExpired')
-            )
-          ).pipe(
+          return defer(() => this.notifyTransactionExpired()).pipe(
             switchTapTo(this.transactionRepository.refresh$()),
             switchTapTo(this.assetRepositroy.refresh$())
           );
         }
         return EMPTY;
       })
+    );
+  }
+
+  private async needLocalNotification() {
+    if (Capacitor.platform !== 'android') {
+      return false;
+    }
+    return (await this.appPlugin.getState()).isActive;
+  }
+
+  private async notifyTransactionReceived() {
+    if (!(await this.needLocalNotification())) {
+      return;
+    }
+    return this.notificationService.notify(
+      this.translocoService.translate('transactionReceived'),
+      this.translocoService.translate('message.transactionReceived')
+    );
+  }
+
+  private async notifyTransactionExpired() {
+    if (!(await this.needLocalNotification())) {
+      return;
+    }
+    return this.notificationService.notify(
+      this.translocoService.translate('transactionExpired'),
+      this.translocoService.translate('message.transactionExpired')
     );
   }
 }
