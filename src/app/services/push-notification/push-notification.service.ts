@@ -23,6 +23,12 @@ export class PushNotificationService {
           this.pushData$.next(notification.data);
         }
       );
+      this.pushNotificationsPlugin.addListener(
+        'pushNotificationActionPerformed',
+        notification => {
+          this.pushData$.next(notification.notification.data);
+        }
+      );
     }
   }
 

@@ -1,5 +1,6 @@
 import { InjectionToken, NgModule } from '@angular/core';
 import {
+  AppPlugin,
   FilesystemPlugin,
   GeolocationPlugin,
   LocalNotificationsPlugin,
@@ -9,6 +10,7 @@ import {
 } from '@capacitor/core';
 
 const {
+  App,
   Filesystem,
   Geolocation,
   LocalNotifications,
@@ -16,6 +18,7 @@ const {
   PushNotifications,
 } = Plugins;
 
+export const APP_PLUGIN = new InjectionToken<AppPlugin>('APP_PLUGIN');
 export const GEOLOCATION_PLUGIN = new InjectionToken<GeolocationPlugin>(
   'GEOLOCATION_PLUGIN'
 );
@@ -34,6 +37,7 @@ export const PUSH_NOTIFICATIONS_PLUGIN = new InjectionToken<PushNotificationsPlu
 
 @NgModule({
   providers: [
+    { provide: APP_PLUGIN, useValue: App },
     { provide: GEOLOCATION_PLUGIN, useValue: Geolocation },
     { provide: FILESYSTEM_PLUGIN, useValue: Filesystem },
     { provide: LOCAL_NOTIFICATIONS_PLUGIN, useValue: LocalNotifications },
