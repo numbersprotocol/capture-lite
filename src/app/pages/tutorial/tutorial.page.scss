@@ -2,7 +2,14 @@ ion-content {
   ion-slides {
     ion-slide {
       div {
+        position: relative;
         width: 100%;
+
+        button[mat-fab] {
+          position: absolute;
+          bottom: 16px;
+          right: 16px;
+        }
       }
     }
   }

@@ -1,7 +1,8 @@
 import { formatDate, KeyValue } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy, isEqual, sortBy } from 'lodash';
@@ -17,6 +18,7 @@ import { CollectorService } from '../../services/collector/collector.service';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { OnboardingService } from '../../services/onboarding/onboarding.service';
 import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../services/repositories/proof/proof';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
@@ -28,7 +30,7 @@ import { capture } from '../../utils/camera';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   readonly capturesByDate$ = this.getCaptures$().pipe(
     map(captures =>
       sortBy(captures, c => -c.proofWithThumbnail.proof.timestamp)
@@ -78,8 +80,16 @@ export class HomePage {
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly snackbar: MatSnackBar,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly onboardingService: OnboardingService,
+    private readonly router: Router
   ) {}
+
+  async ngOnInit() {
+    if (await this.onboardingService.isOnboarding()) {
+      this.router.navigate(['/tutorial']);
+    }
+  }
 
   // tslint:disable-next-line: prefer-function-over-method
   keyDescendingOrder(
