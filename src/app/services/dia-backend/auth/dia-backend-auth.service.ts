@@ -60,7 +60,14 @@ export class DiaBackendAuthService {
   }
 
   initialize$() {
-    return combineLatest([this.updateDevice$(), this.updateLanguage$()]);
+    return this.getAuthHeaders$().pipe(
+      concatMap(headers =>
+        combineLatest([
+          this.updateDevice$(headers),
+          this.updateLanguage$(headers),
+        ])
+      )
+    );
   }
 
   login$(email: string, password: string): Observable<LoginResult> {
@@ -117,13 +124,10 @@ export class DiaBackendAuthService {
     });
   }
 
-  updateLanguage$() {
-    return combineLatest([
-      this.getAuthHeaders$(),
-      this.languageService.currentLanguageKey$,
-    ]).pipe(
+  updateLanguage$(headers: { [header: string]: string | string[] }) {
+    return this.languageService.currentLanguageKey$.pipe(
       distinctUntilChanged(isEqual),
-      concatMap(([headers, language]) =>
+      concatMap(language =>
         this.httpClient.patch(
           `${BASE_URL}/auth/users/me/`,
           { language },
@@ -133,13 +137,12 @@ export class DiaBackendAuthService {
     );
   }
 
-  private updateDevice$() {
+  private updateDevice$(headers: { [header: string]: string | string[] }) {
     return combineLatest([
       this.pushNotificationService.getToken$(),
-      this.getAuthHeaders$(),
       defer(() => Device.getInfo()),
     ]).pipe(
-      concatMap(([fcmToken, headers, deviceInfo]) =>
+      concatMap(([fcmToken, deviceInfo]) =>
         this.httpClient.post(
           `${BASE_URL}/auth/devices/`,
           {
