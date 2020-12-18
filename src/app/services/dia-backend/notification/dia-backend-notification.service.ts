@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { AppPlugin, Capacitor } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { defer, EMPTY, Observable } from 'rxjs';
+import { combineLatest, defer, EMPTY, Observable } from 'rxjs';
 import { concatMap, filter } from 'rxjs/operators';
 import { APP_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { switchTapTo } from '../../../utils/rx-operators/rx-operators';
@@ -55,9 +55,11 @@ export class DiaBackendNotificationService {
     if (!(await this.needLocalNotification())) {
       return;
     }
-    return this.notificationService.notify(
-      this.translocoService.translate('transactionReceived'),
-      this.translocoService.translate('message.transactionReceived')
+    return combineLatest([
+      this.translocoService.selectTranslate('transactionReceived'),
+      this.translocoService.selectTranslate('message.transactionReceived'),
+    ]).pipe(
+      concatMap(([title, body]) => this.notificationService.notify(title, body))
     );
   }
 
@@ -65,9 +67,11 @@ export class DiaBackendNotificationService {
     if (!(await this.needLocalNotification())) {
       return;
     }
-    return this.notificationService.notify(
-      this.translocoService.translate('transactionExpired'),
-      this.translocoService.translate('message.transactionExpired')
+    return combineLatest([
+      this.translocoService.selectTranslate('transactionExpired'),
+      this.translocoService.selectTranslate('message.transactionExpired'),
+    ]).pipe(
+      concatMap(([title, body]) => this.notificationService.notify(title, body))
     );
   }
 }
