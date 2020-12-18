@@ -56,6 +56,7 @@ const routes: Routes = [
       import('./pages/tutorial/tutorial.module').then(
         m => m.TutorialPageModule
       ),
+    canActivate: [AuthGuard],
   },
 ];
 @NgModule({
