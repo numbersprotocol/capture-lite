@@ -29,6 +29,7 @@ import {
   toArray,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
+import { toExtension } from '../../../utils/mime-type';
 import { switchTap, VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy, Tuple } from '../../database/table/table';
@@ -239,6 +240,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly asset_file: string;
   readonly information: SortedProofInformation;
   readonly signature: OldSignature[];
+  readonly sharable_copy: string;
 }
 
 interface ListAssetResponse {
@@ -268,7 +270,11 @@ async function buildFormDataToCreateAsset(proof: Proof) {
 
   const fileBase64 = Object.keys(await proof.getAssets())[0];
   const mimeType = Object.values(proof.indexedAssets)[0].mimeType;
-  formData.set('asset_file', await base64ToBlob(fileBase64, mimeType));
+  formData.set(
+    'asset_file',
+    await base64ToBlob(fileBase64, mimeType),
+    `proof.${toExtension(mimeType)}`
+  );
 
   formData.set('asset_file_mime_type', mimeType);
 
