@@ -44,6 +44,7 @@ export class PushNotificationService {
     if (!Capacitor.isPluginAvailable('PushNotifications')) {
       return;
     }
+    await this.pushNotificationsPlugin.requestPermission();
     const result = await this.pushNotificationsPlugin.requestPermission();
 
     return new Promise<string>((resolve, reject) => {
