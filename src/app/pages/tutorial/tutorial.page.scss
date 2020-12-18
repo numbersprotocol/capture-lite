@@ -1,0 +1,31 @@
+ion-content {
+  ion-slides {
+    ion-slide {
+      div {
+        position: relative;
+        width: 100%;
+
+        button[routerLink] {
+          position: absolute;
+          left: 50%;
+          bottom: 15px;
+          width: 100%;
+          height: 60px;
+          transform: translate(-50%, 0);
+        }
+      }
+
+      background-color: black;
+      height: 100vh;
+    }
+  }
+}
+
+@media (min-height: 750px) {
+  .ios div {
+    position: relative;
+    width: 100%;
+    padding: 30px;
+    height: 90%;
+  }
+}
