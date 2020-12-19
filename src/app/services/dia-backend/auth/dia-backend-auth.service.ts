@@ -12,7 +12,7 @@ import {
   distinctUntilChanged,
   filter,
   map,
-  timeout
+  timeout,
 } from 'rxjs/operators';
 import { LanguageService } from '../../language/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
@@ -37,7 +37,7 @@ export class DiaBackendAuthService {
     private readonly pushNotificationService: PushNotificationService,
     private readonly snackbar: MatSnackBar,
     private readonly translocoService: TranslocoService
-  ) { }
+  ) {}
 
   // TODO: remove this method
   private async migrate() {
@@ -282,4 +282,4 @@ export interface ReadUserResponse {
 }
 
 // tslint:disable-next-line: no-empty-interface
-interface CreateUserResponse { }
+interface CreateUserResponse {}
