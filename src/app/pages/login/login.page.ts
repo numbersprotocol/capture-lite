@@ -87,21 +87,7 @@ export class LoginPage {
         message: this.translocoService.translate('message.pleaseWait'),
       })
       .pipe(untilDestroyed(this))
-      .subscribe(
-        () => this.router.navigate(['home'], { replaceUrl: true }),
-        err => {
-          console.error(err);
-          this.toastController
-            .create({
-              message: this.translocoService.translate(
-                'message.emailOrPasswordIsInvalid'
-              ),
-              duration: 4000,
-              color: 'danger',
-            })
-            .then(toast => toast.present());
-        }
-      );
+      .subscribe(() => this.router.navigate(['home'], { replaceUrl: true }));
   }
 }
 

@@ -94,7 +94,6 @@
     "passwordNotMatching": "Password not matching.",
     "accountNotActivated": "This account has not been activated yet.",
     "ifYouNotReceiveEmail": "If you haven't received the verification email in 10 minutes, you can click the button below to resend the verification email.",
-    "emailOrPasswordIsInvalid": "The email address or password you entered is invalid.",
     "tooManyRetries": "You have entered the invalid email or password too many times. Please try again later.",
     "storingAssets": "Collecting environment variables, signing and storing assets...",
     "registeringProof": "Registering the asset to Numbers DIA.",
@@ -112,6 +111,9 @@
     "syncingAssets": "Syncing of your photo assets is in progress, this might take a few minutes. Please keep the app open and connected online."
   },
   "error": {
+    "loginTimeoutError": "Connection timeout. Please try again later.",
+    "loginHttpResponseError": "The email address or password you entered is invalid.",
+    "loginUnkownError": "Unknown error. Please try again later.",
     "locationPermissionDenied": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
     "locationPositionUnavailable": "Location is not available at this moment; possibly due to weak network connectivity or GPS signals.",
     "locationTimeout": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",

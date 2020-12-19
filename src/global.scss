@@ -74,3 +74,10 @@ button.expand {
 ion-button {
   text-transform: none;
 }
+
+.snackbar-error {
+  background-color: #eb445a;
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
