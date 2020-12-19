@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.12.1 - 2020-12-19
+
+### Changed
+
+- iOS splash screen has Beta mark now.
+
+### Fixed
+
+- Fix iOS push notifcation issues. #337 #365
+- Login will timeout after 20 seconds to prevent infinite loading popup.
+
 ## 0.12.0 - 2020-12-18
 
 ### Added
