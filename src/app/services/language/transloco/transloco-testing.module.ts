@@ -6,14 +6,12 @@ import { defaultLanguage, languages } from './transloco-root.module';
 export function getTranslocoTestingModule(
   config: Partial<TranslocoConfig> = {}
 ) {
-  return TranslocoTestingModule.withLangs(
-    { enUs, zhTw },
-    {
-      availableLangs: Object.keys(languages),
-      defaultLang: defaultLanguage[0],
-      fallbackLang: defaultLanguage[0],
-      missingHandler: { useFallbackTranslation: true },
-      ...config,
-    }
-  );
+  return TranslocoTestingModule.forRoot({
+    langs: { enUs, zhTw },
+    availableLangs: Object.keys(languages),
+    defaultLang: defaultLanguage[0],
+    fallbackLang: defaultLanguage[0],
+    missingHandler: { useFallbackTranslation: true },
+    ...config,
+  });
 }
