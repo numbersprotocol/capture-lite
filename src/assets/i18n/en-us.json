@@ -47,8 +47,8 @@
   "login": "Login",
   "createAnAccount": "Create an Account",
   "signup": "Sign Up",
+  "resendActivationEmail": "Resend Activation Email",
   "alreadyHaveAnAccount": "Already Have an Account",
-  "resendVerificationEmail": "Resend Verification Email",
   "logout": "Log Out",
   "moreInformation": "More Information",
   "mediaId": "Media ID",
@@ -113,6 +113,7 @@
   "error": {
     "loginTimeoutError": "Connection timeout. Please try again later.",
     "loginHttpResponseError": "The email address or password you entered is invalid.",
+    "loginUserNotActiveError": "Account is not active. Please activate the account from the activation email you received.",
     "loginUnkownError": "Unknown error. Please try again later.",
     "locationPermissionDenied": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
     "locationPositionUnavailable": "Location is not available at this moment; possibly due to weak network connectivity or GPS signals.",

@@ -18,4 +18,13 @@
   <button routerLink="/signup" replaceUrl mat-stroked-button color="primary">
     {{ t('createAnAccount') }}
   </button>
+
+  <button
+    *ngIf="showResendEmailButton"
+    (click)="resendEmail()"
+    mat-stroked-button
+    color="primary"
+  >
+    {{ t('resendActivationEmail') }}
+  </button>
 </div>
