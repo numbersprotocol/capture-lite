@@ -21,6 +21,10 @@ ion-content {
   }
 }
 
+.ios text {
+  font-family: Helvetica, Arial, Verdana, Tahoma, sans-serif;
+}
+
 @media (min-height: 750px) {
   .ios div {
     position: relative;
