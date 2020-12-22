@@ -47,8 +47,8 @@
   "login": "登入",
   "createAnAccount": "建立帳號",
   "signup": "註冊",
+  "resendActivationEmail": "重新寄送帳號驗證信",
   "alreadyHaveAnAccount": "已有帳號",
-  "resendVerificationEmail": "重新傳送確認郵件",
   "logout": "登出",
   "moreInformation": "更多訊息",
   "mediaId": "媒體 ID",
@@ -113,6 +113,7 @@
   "error": {
     "loginTimeoutError": "連線逾時。請稍候再試。",
     "loginHttpResponseError": "您輸入的電子郵件地址或密碼無效。",
+    "loginUserNotActiveError": "帳號未啟用。請透過您收到的帳號驗證信啟用帳號。",
     "loginUnkownError": "發生未知錯誤。請稍後再試。",
     "locationPermissionDenied": "位置存取被拒絕。如欲使用 Capture 的完整功能，請開啟位置權限。",
     "locationPositionUnavailable": "暫時無法取得位置資訊。可能原因為網路連線或 GPS 信號不穩。",

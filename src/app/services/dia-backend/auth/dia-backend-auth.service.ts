@@ -1,12 +1,11 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { isEqual, reject } from 'lodash';
-import { combineLatest, defer, forkJoin, Observable, TimeoutError } from 'rxjs';
+import { combineLatest, defer, forkJoin, Observable } from 'rxjs';
 import {
-  catchError,
   concatMap,
   concatMapTo,
   distinctUntilChanged,
@@ -85,10 +84,6 @@ export class DiaBackendAuthService {
       })
       .pipe(
         timeout(this.loginTimeout),
-        catchError((error: TimeoutError | HttpErrorResponse) => {
-          this.showLoginErrorMessage(error);
-          throw new Error('Login failed');
-        }),
         concatMap(response => this.setToken(response.auth_token)),
         concatMapTo(this.readUser$()),
         concatMap(response =>
@@ -99,30 +94,6 @@ export class DiaBackendAuthService {
         ),
         map(([username, _email]) => ({ username, email: _email }))
       );
-  }
-
-  private showLoginErrorMessage(error: TimeoutError | HttpErrorResponse) {
-    let message;
-    switch (error?.name) {
-      case 'TimeoutError': {
-        message = this.translocoService.translate('error.loginTimeoutError');
-        break;
-      }
-      case 'HttpErrorResponse': {
-        message = this.translocoService.translate(
-          'error.loginHttpResponseError'
-        );
-        break;
-      }
-      default: {
-        message = this.translocoService.translate('error.loginUnkownError');
-        break;
-      }
-    }
-    this.snackbar.open(message, this.translocoService.translate('dismiss'), {
-      duration: 4000,
-      panelClass: ['snackbar-error'],
-    });
   }
 
   private readUser$() {
@@ -157,6 +128,12 @@ export class DiaBackendAuthService {
       username,
       email,
       password,
+    });
+  }
+
+  resendActivationEmail(email: string) {
+    return this.httpClient.post(`${BASE_URL}/auth/users/resend_activation/`, {
+      email,
     });
   }
 
