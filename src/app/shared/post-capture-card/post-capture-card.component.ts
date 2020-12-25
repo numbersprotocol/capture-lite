@@ -25,6 +25,7 @@ const { Share, Browser } = Plugins;
   styleUrls: ['./post-capture-card.component.scss'],
 })
 export class PostCaptureCardComponent implements OnInit {
+  @Input() readonly sharable = true;
   @Input() private readonly transaction!: DiaBackendTransaction;
   @ViewChild('ratioImg', { static: true }) ratioImg!: ElementRef;
 
