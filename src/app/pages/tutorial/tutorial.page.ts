@@ -22,6 +22,8 @@ export class TutorialPage implements OnInit {
 
   // tslint:disable-next-line: prefer-function-over-method prefer-method-signature no-inferred-empty-object-type
   next(slide: { slideTo: (arg0: number) => {} }, index: number) {
+    // @ts-ignore
+    // tslint:disable-next-line: no-inferred-empty-object-type
     slide.slideTo(index);
   }
 }
