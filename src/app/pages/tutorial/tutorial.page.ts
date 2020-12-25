@@ -20,7 +20,7 @@ export class TutorialPage implements OnInit {
     this.onboardingService.onboard();
   }
 
-  // tslint:disable-next-line:rule1   prefer-function-over-method prefer-method-signature no-inferred-empty-object-type
+  // tslint:disable-next-line: prefer-function-over-method prefer-method-signature no-inferred-empty-object-type
   next(slide: { slideTo: (arg0: number) => {} }, index: number) {
     slide.slideTo(index);
   }
