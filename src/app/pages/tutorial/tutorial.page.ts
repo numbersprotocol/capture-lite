@@ -16,7 +16,7 @@ export class TutorialPage implements OnInit {
 
   constructor(private readonly onboardingService: OnboardingService) {}
 
-  next(slide: { slideTo: (arg0: any) => void }, index: any) {
+  next(slide: { slideTo: (arg0: number) => {} }, index: number) {
     slide.slideTo(index);
   }
 
