@@ -10,6 +10,14 @@ import { OnboardingService } from '../../services/onboarding/onboarding.service'
 })
 export class TutorialPage implements OnInit {
   constructor(private readonly onboardingService: OnboardingService) {}
+  slideOptsOne = {
+    initialSlide: 0,
+    slidesPerView: 1,
+  };
+
+  next(slide: { slideTo: (arg0: any) => void }, index: any) {
+    slide.slideTo(index);
+  }
 
   ngOnInit() {
     this.onboardingService.onboard();
