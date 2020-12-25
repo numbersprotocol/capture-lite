@@ -9,11 +9,12 @@ import { OnboardingService } from '../../services/onboarding/onboarding.service'
   styleUrls: ['./tutorial.page.scss'],
 })
 export class TutorialPage implements OnInit {
-  constructor(private readonly onboardingService: OnboardingService) {}
   slideOptsOne = {
     initialSlide: 0,
     slidesPerView: 1,
   };
+
+  constructor(private readonly onboardingService: OnboardingService) {}
 
   next(slide: { slideTo: (arg0: any) => void }, index: any) {
     slide.slideTo(index);
