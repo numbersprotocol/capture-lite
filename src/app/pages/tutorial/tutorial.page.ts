@@ -16,11 +16,12 @@ export class TutorialPage implements OnInit {
 
   constructor(private readonly onboardingService: OnboardingService) {}
 
-  next(slide: { slideTo: (arg0: number) => {} }, index: number) {
-    slide.slideTo(index);
-  }
-
   ngOnInit() {
     this.onboardingService.onboard();
+  }
+
+  // tslint:disable-next-line:rule1   prefer-function-over-method prefer-method-signature no-inferred-empty-object-type
+  next(slide: { slideTo: (arg0: number) => {} }, index: number) {
+    slide.slideTo(index);
   }
 }
