@@ -196,7 +196,7 @@
             {{ t('photoCaptured') }}
           </text>
         </svg>
-        <button (click)="next(slides, 1)" mat-raised-button color="primary">
+        <button (click)="slides.slideNext()" mat-raised-button color="primary">
           {{ t('next') }}
         </button>
       </div>
@@ -590,7 +590,7 @@
           </g>
         </svg>
 
-        <button (click)="next(slides, 2)" mat-raised-button color="primary">
+        <button (click)="slides.slideNext()" mat-raised-button color="primary">
           {{ t('next') }}
         </button>
       </div>
@@ -819,7 +819,7 @@
             </g>
           </g>
         </svg>
-        <button (click)="next(slides, 3)" mat-raised-button color="primary">
+        <button (click)="slides.slideNext()" mat-raised-button color="primary">
           {{ t('next') }}
         </button>
       </div>

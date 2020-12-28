@@ -5,20 +5,6 @@ ion-content {
         position: relative;
         width: 100%;
 
-        button[routerLink] {
-          position: absolute;
-          left: 50%;
-          bottom: 15px;
-          width: 80%;
-          height: 50px;
-          transform: translate(-50%, 0);
-          align-items: center;
-          padding: 30 30px;
-          border: 1px solid #564dfc;
-          box-sizing: border-box;
-          border-radius: 25px;
-        }
-
         button {
           position: absolute;
           left: 50%;
