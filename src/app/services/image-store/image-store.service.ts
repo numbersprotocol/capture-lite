@@ -117,7 +117,7 @@ export class ImageStore {
       max: thumbnailSize,
     });
     const thumbnailBase64 = await blobToBase64(thumbnailBlob);
-    this.thumbnailTable.insert(
+    await this.thumbnailTable.insert(
       [
         {
           imageIndex: index,
