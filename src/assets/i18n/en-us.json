@@ -61,6 +61,7 @@
   "owner": "Owner",
   "digitalAsset": "Digital Asset",
   "delete": "Delete",
+  "share": "Share",
   "saveToLocal": "Save to Local",
   "copyCertificate": "Copy Certificate",
   "downloadCertificate": "Download Certificate",
