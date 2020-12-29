@@ -29,5 +29,5 @@ export class OptionsMenuComponent implements OnInit {
 
 export enum Option {
   Delete,
-  share,
+  Share,
 }

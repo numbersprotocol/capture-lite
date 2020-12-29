@@ -96,6 +96,8 @@ export class PostCaptureCardComponent implements OnInit {
         tap((option?: Option) => {
           if (option === Option.Delete) {
             this.remove();
+          } else if (option === Option.Share) {
+            this.share();
           }
         }),
         untilDestroyed(this)
