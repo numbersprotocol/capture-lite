@@ -1,11 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import mergeImages from 'merge-images';
 import { BehaviorSubject } from 'rxjs';
-import { concatMap, first, map } from 'rxjs/operators';
+import { concatMap, first, map, tap } from 'rxjs/operators';
+import {
+  Option,
+  OptionsMenuComponent,
+} from '../../pages/home/asset/options-menu/options-menu.component';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -17,7 +22,6 @@ import { ProofRepository } from '../../services/repositories/proof/proof-reposit
 import { isNonNullable } from '../../utils/rx-operators/rx-operators';
 
 const { Share, Browser } = Plugins;
-
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-post-capture-card',
@@ -66,7 +70,8 @@ export class PostCaptureCardComponent implements OnInit {
     private readonly proofRepository: ProofRepository,
     private readonly translocoService: TranslocoService,
     private readonly imageStore: ImageStore,
-    private readonly httpClient: HttpClient
+    private readonly httpClient: HttpClient,
+    private readonly bottomSheet: MatBottomSheet
   ) {}
 
   ngOnInit() {
@@ -81,6 +86,24 @@ export class PostCaptureCardComponent implements OnInit {
           proofs.find(proof => getOldProof(proof).hash === asset.proof_hash)
         )
       );
+  }
+
+  openOptionsMenu() {
+    const bottomSheetRef = this.bottomSheet.open(OptionsMenuComponent);
+    bottomSheetRef
+      .afterDismissed()
+      .pipe(
+        tap((option?: Option) => {
+          if (option === Option.Delete) {
+            this.remove();
+          }
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+  private async remove() {
+    //WIP
   }
 
   share() {

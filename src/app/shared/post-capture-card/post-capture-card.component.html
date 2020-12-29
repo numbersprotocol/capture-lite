@@ -9,6 +9,9 @@
     <button [hidden]="!sharable" (click)="share()" mat-icon-button>
       <mat-icon>share</mat-icon>
     </button>
+    <button [hidden]="!sharable" (click)="openOptionsMenu()" mat-icon-button>
+      <mat-icon>more</mat-icon>
+    </button>
   </mat-card-header>
   <div
     class="fixed-ratio"
