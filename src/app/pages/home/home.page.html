@@ -75,8 +75,7 @@
                   *ngIf="capture.asset"
                   class="square-image-tile"
                   [style.backgroundImage]="
-                    'url(data:image/*;base64,' +
-                    capture.proofWithThumbnail.thumbnailBase64
+                    'url(' + capture.asset.asset_file_thumbnail + ')'
                   "
                   [routerLink]="['asset', { id: capture.asset.id }]"
                 >

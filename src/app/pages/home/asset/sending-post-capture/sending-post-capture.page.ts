@@ -2,8 +2,15 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, forkJoin, zip } from 'rxjs';
-import { concatMap, concatMapTo, first, map, switchMap } from 'rxjs/operators';
+import { defer, zip } from 'rxjs';
+import {
+  concatMap,
+  concatMapTo,
+  first,
+  map,
+  share,
+  switchMap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../../services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../../../services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -23,34 +30,8 @@ export class SendingPostCapturePage {
     map(params => params.get('id')),
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.getById$(id)),
-    isNonNullable()
-  );
-  private readonly proofsWithOld$ = this.proofRepository
-    .getAll$()
-    .pipe(
-      map(proofs =>
-        proofs.map(proof => ({ proof, oldProof: getOldProof(proof) }))
-      )
-    );
-  readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
-    map(([asset, proofsWithThumbnailAndOld]) => ({
-      asset,
-      // tslint:disable-next-line: no-non-null-assertion
-      proofWithThumbnailAndOld: proofsWithThumbnailAndOld.find(
-        p => p.oldProof.hash === asset.proof_hash
-      )!,
-    })),
-    isNonNullable()
-  );
-  readonly base64Src$ = this.capture$.pipe(
-    map(capture => capture.proofWithThumbnailAndOld),
     isNonNullable(),
-    concatMap(async p => {
-      const assets = await p.proof.getAssets();
-      return `data:${Object.values(assets)[0].mimeType};base64,${
-        Object.keys(assets)[0]
-      }`;
-    })
+    share()
   );
   readonly contact$ = this.route.paramMap.pipe(
     map(params => params.get('contact')),
@@ -106,14 +87,16 @@ export class SendingPostCapturePage {
   }
 
   private removeAsset$() {
-    return this.capture$.pipe(
+    return zip(this.asset$, this.proofRepository.getAll$()).pipe(
       first(),
-      concatMap(capture =>
-        forkJoin([
-          // TODO: remove proof repo in DiaBackendAssetRepository
-          this.proofRepository.remove(capture.proofWithThumbnailAndOld.proof),
-        ])
-      )
+      concatMap(async ([asset, proofs]) => {
+        const proof = proofs.find(
+          p => getOldProof(p).hash === asset.proof_hash
+        );
+        if (proof) {
+          await this.proofRepository.remove(proof);
+        }
+      })
     );
   }
 }

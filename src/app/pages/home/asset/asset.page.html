@@ -13,7 +13,7 @@
 
 <div *transloco="let t" class="page-content">
   <mat-list class="content">
-    <img class="proof-image" [src]="base64Src$ | async" />
+    <img class="proof-image" [src]="(asset$ | async)?.asset_file" />
     <mat-list-item>
       <mat-icon mat-list-icon>person</mat-icon>
       <div mat-line>{{ (asset$ | async)?.owner }}</div>
@@ -26,7 +26,9 @@
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>access_time</mat-icon>
-      <div mat-line>{{ timestamp$ | async | date: 'long' }}</div>
+      <div mat-line>
+        {{ (asset$ | async)?.information.proof.timestamp | date: 'long' }}
+      </div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>

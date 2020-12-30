@@ -12,6 +12,8 @@ import {
   distinctUntilChanged,
   first,
   map,
+  share,
+  skipWhile,
   tap,
 } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
@@ -115,6 +117,7 @@ export class HomePage implements OnInit {
       this.diaBackendAssetRepository.getAll$(),
       proofsWithThumbnail$,
     ]).pipe(
+      skipWhile(([assets]) => assets.length === 0),
       map(([assets, proofsWithThumbnail]) =>
         proofsWithThumbnail.map(proofWithThumbnail => ({
           hash: getOldProof(proofWithThumbnail.proof).hash,
@@ -125,14 +128,15 @@ export class HomePage implements OnInit {
         }))
       ),
       map(captures =>
-        captures.filter(c => !c.asset || c.asset?.is_original_owner)
+        captures.filter(c => !c.asset || c.asset.is_original_owner)
       ),
       distinctUntilChanged((x, y) =>
         isEqual(
           x.map(cx => ({ hash: cx.hash, asset: cx.asset?.id })),
           y.map(cy => ({ hash: cy.hash, asset: cy.asset?.id }))
         )
-      )
+      ),
+      share()
     );
   }
 

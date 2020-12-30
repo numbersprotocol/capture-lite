@@ -4,11 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, forkJoin, zip } from 'rxjs';
+import { defer, zip } from 'rxjs';
 import {
   concatMap,
   first,
   map,
+  share,
   switchMap,
   switchMapTo,
   tap,
@@ -16,7 +17,10 @@ import {
 import { BlockingActionService } from '../../../services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../../services/dia-backend/asset/dia-backend-asset-repository.service';
-import { getOldProof } from '../../../services/repositories/proof/old-proof-adapter';
+import {
+  getOldProof,
+  OldDefaultInformationName,
+} from '../../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../services/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
@@ -35,44 +39,17 @@ export class AssetPage {
     map(params => params.get('id')),
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.getById$(id)),
-    isNonNullable()
-  );
-  private readonly proofsWithOld$ = this.proofRepository
-    .getAll$()
-    .pipe(
-      map(proofs =>
-        proofs.map(proof => ({ proof, oldProof: getOldProof(proof) }))
-      )
-    );
-  readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
-    map(([asset, proofsWithOld]) => ({
-      asset,
-      // tslint:disable-next-line: no-non-null-assertion
-      proofWithOld: proofsWithOld.find(
-        p => p.oldProof.hash === asset.proof_hash
-      )!,
-    })),
-    isNonNullable()
-  );
-  readonly base64Src$ = this.capture$.pipe(
-    map(capture => capture.proofWithOld),
     isNonNullable(),
-    concatMap(async p => {
-      const assets = await p.proof.getAssets();
-      return `data:${Object.values(assets)[0].mimeType};base64,${
-        Object.keys(assets)[0]
-      }`;
-    })
+    share()
   );
-  readonly timestamp$ = this.capture$.pipe(
-    map(capture => capture.proofWithOld?.proof.timestamp)
-  );
-  readonly location$ = this.capture$.pipe(
-    map(capture => [
-      capture.proofWithOld?.proof.geolocationLatitude,
-      capture.proofWithOld?.proof.geolocationLongitude,
-    ]),
-    map(([latitude, longitude]) => {
+  readonly location$ = this.asset$.pipe(
+    map(asset => {
+      const latitude = asset.information.information.find(
+        info => info.name === OldDefaultInformationName.GEOLOCATION_LATITUDE
+      )?.value;
+      const longitude = asset.information.information.find(
+        info => info.name === OldDefaultInformationName.GEOLOCATION_LONGITUDE
+      )?.value;
       if (!latitude || !longitude) {
         return this.translacoService.translate('locationNotProvided');
       }
@@ -85,11 +62,11 @@ export class AssetPage {
     private readonly route: ActivatedRoute,
     private readonly confirmAlert: ConfirmAlert,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly proofRepository: ProofRepository,
     private readonly blockingActionService: BlockingActionService,
     private readonly dialog: MatDialog,
     private readonly bottomSheet: MatBottomSheet,
-    private readonly translacoService: TranslocoService
+    private readonly translacoService: TranslocoService,
+    private readonly proofRepositroy: ProofRepository
   ) {}
 
   openContactSelectionDialog() {
@@ -124,15 +101,17 @@ export class AssetPage {
   }
 
   private async remove() {
-    const action$ = zip(this.asset$, this.capture$).pipe(
+    const action$ = zip(this.asset$, this.proofRepositroy.getAll$()).pipe(
       first(),
-      concatMap(([asset, capture]) =>
-        forkJoin([
-          this.diaBackendAssetRepository.remove$(asset).pipe(first()),
-          // TODO: remove proof repo in DiaBackendAssetRepository
-          this.proofRepository.remove(capture.proofWithOld.proof),
-        ])
-      ),
+      concatMap(([asset, proofs]) => {
+        const proof = proofs.find(
+          p => getOldProof(p).hash === asset.proof_hash
+        );
+        if (proof) {
+          this.proofRepositroy.remove(proof);
+        }
+        return this.diaBackendAssetRepository.remove$(asset).pipe(first());
+      }),
       switchMapTo(defer(() => this.router.navigate(['..'])))
     );
     const result = await this.confirmAlert.present();
