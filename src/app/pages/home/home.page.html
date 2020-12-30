@@ -72,30 +72,32 @@
             <mat-grid-list cols="3" gutterSize="8px">
               <ng-container *ngFor="let capture of captureByDate.value">
                 <mat-grid-tile
-                  *ngIf="capture.asset"
+                  *ngIf="capture.item.diaBackendAsset"
                   class="square-image-tile"
                   [style.backgroundImage]="
-                    'url(' + capture.asset.asset_file_thumbnail + ')'
+                    'url(' + ((capture.thumbnailUrl | async) || '') + ')'
                   "
-                  [routerLink]="['asset', { id: capture.asset.id }]"
+                  [routerLink]="[
+                    'asset',
+                    { id: capture.item.diaBackendAsset.id }
+                  ]"
                 >
                 </mat-grid-tile>
-                <ng-container *ngIf="!capture.asset">
+                <ng-container *ngIf="!capture.item.diaBackendAsset">
                   <mat-grid-tile
                     class="square-image-tile"
                     [style.backgroundImage]="
-                      'url(data:image/*;base64,' +
-                      capture.proofWithThumbnail.thumbnailBase64
+                      'url(' + ((capture.thumbnailUrl | async) || '') + ')'
                     "
                   >
                     <div
                       class="image-tile-overlay"
-                      (click)="upload(capture.proofWithThumbnail.proof)"
+                      (click)="upload(capture.item.proof)"
                     ></div>
                     <div class="overlay-icon">
                       <mat-spinner
                         *ngIf="
-                          currentUploadingProofHash === capture.hash;
+                          currentUploadingProofHash === capture.item.hash;
                           else uploadError
                         "
                         diameter="50"

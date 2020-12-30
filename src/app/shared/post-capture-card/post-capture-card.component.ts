@@ -4,7 +4,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import mergeImages from 'merge-images';
 import { BehaviorSubject } from 'rxjs';
-import { concatMap, first, map, share } from 'rxjs/operators';
+import { concatMap, first, map } from 'rxjs/operators';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendTransaction } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { ImageStore } from '../../services/image-store/image-store.service';
@@ -32,8 +32,7 @@ export class PostCaptureCardComponent implements OnInit {
     concatMap(transaction =>
       this.diaBackendAssetRepository.getById$(transaction.asset.id)
     ),
-    isNonNullable(),
-    share()
+    isNonNullable()
   );
   readonly location$ = this.asset$.pipe(
     map(asset => {
@@ -66,7 +65,7 @@ export class PostCaptureCardComponent implements OnInit {
         first(),
         concatMap(asset =>
           mergeImages(
-            [asset.sharable_copy, 'assets/image/new-year-frame.png'],
+            [asset.sharable_copy, '/assets/image/new-year-frame.png'],
             // @ts-ignore
             { format: 'image/jpeg', crossOrigin: 'Anonymous' }
           )

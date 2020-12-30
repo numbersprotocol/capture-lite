@@ -5,7 +5,7 @@ import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
-import { concatMap, first } from 'rxjs/operators';
+import { concatMap, concatMapTo, first } from 'rxjs/operators';
 import { CollectorService } from './services/collector/collector.service';
 import { CapacitorFactsProvider } from './services/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 import { WebCryptoApiSignatureProvider } from './services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
@@ -66,6 +66,7 @@ export class AppComponent {
         ),
         concatMap(proof => this.diaBackendAssetRepository.add(proof)),
         first(),
+        concatMapTo(this.diaBackendAssetRepository.refresh$()),
         untilDestroyed(this)
       )
       .subscribe();

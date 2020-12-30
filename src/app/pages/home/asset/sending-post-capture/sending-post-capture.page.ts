@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, zip } from 'rxjs';
+import { combineLatest, defer } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -13,11 +13,17 @@ import {
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../services/confirm-alert/confirm-alert.service';
-import { DiaBackendAssetRepository } from '../../../../services/dia-backend/asset/dia-backend-asset-repository.service';
+import {
+  DiaBackendAsset,
+  DiaBackendAssetRepository,
+} from '../../../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendTransactionRepository } from '../../../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { getOldProof } from '../../../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../../services/repositories/proof/proof-repository.service';
-import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import {
+  isNonNullable,
+  switchTap,
+} from '../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -59,16 +65,16 @@ export class SendingPostCapturePage {
   }
 
   async send(captionText: string) {
-    const action$ = zip(this.asset$, this.contact$).pipe(
+    const action$ = combineLatest([this.asset$, this.contact$]).pipe(
       first(),
-      concatMap(([asset, contact]) =>
+      switchTap(([asset, contact]) =>
         this.diaBackendTransactionRepository.add$(
           asset.id,
           contact,
           captionText
         )
       ),
-      concatMapTo(this.removeAsset$()),
+      concatMap(([asset]) => this.removeAsset$(asset)),
       concatMapTo(
         defer(() => this.router.navigate(['../..'], { relativeTo: this.route }))
       )
@@ -86,10 +92,10 @@ export class SendingPostCapturePage {
     }
   }
 
-  private removeAsset$() {
-    return zip(this.asset$, this.proofRepository.getAll$()).pipe(
+  private removeAsset$(asset: DiaBackendAsset) {
+    return this.proofRepository.getAll$().pipe(
       first(),
-      concatMap(async ([asset, proofs]) => {
+      concatMap(async proofs => {
         const proof = proofs.find(
           p => getOldProof(p).hash === asset.proof_hash
         );

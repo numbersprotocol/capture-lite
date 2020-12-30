@@ -122,8 +122,6 @@ interface ListAssetResponse {
   results: DiaBackendAsset[];
 }
 
-type ReadAssetResponse = DiaBackendAsset;
-
 type CreateAssetResponse = DiaBackendAsset;
 
 // tslint:disable-next-line: no-empty-interface
