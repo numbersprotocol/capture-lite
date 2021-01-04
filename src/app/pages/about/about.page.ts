@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { defer } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 
@@ -13,8 +13,5 @@ const { Device } = Plugins;
   styleUrls: ['./about.page.scss'],
 })
 export class AboutPage {
-  readonly version$ = defer(() => Device.getInfo()).pipe(
-    pluck('appVersion'),
-    untilDestroyed(this)
-  );
+  readonly version$ = defer(() => Device.getInfo()).pipe(pluck('appVersion'));
 }
