@@ -1,0 +1,45 @@
+name: ui-release
+
+on:
+  push:
+    branches:
+      - uiux
+
+jobs:
+  upload-google-drive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Build Ionic
+        env:
+          NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
+        run: |
+          npm install -g @angular/cli
+          npm install -g @ionic/cli
+          npm install
+          npm run build
+
+      - name: Build APKs
+        run: |
+          npx cap sync android
+          cd android/
+          ./gradlew assembleDebug
+
+      - name: Upload debug outputs to Google Drive
+        uses: satackey/action-google-drive@v1
+        with:
+          skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
+          google-client-id: ${{ secrets.SKICKA_GOOGLE_CLIENT_ID }}
+          google-client-secret: ${{ secrets.SKICKA_GOOGLE_CLIENT_SECRET }}
+          upload-from: ./android/app/build/outputs/apk/debug/
+          upload-to: /capture-lite/apk/uiux/
