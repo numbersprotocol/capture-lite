@@ -10,16 +10,12 @@ export class OptionsMenuComponent implements OnInit {
   readonly options = Option;
   isHome = false;
   constructor(
-    private router: Router,
+    private readonly router: Router,
     private readonly bottomSheetRef: MatBottomSheetRef<OptionsMenuComponent>
   ) {}
 
   ngOnInit() {
-    if (this.router.url == '/home') {
-      this.isHome = true;
-    } else {
-      this.isHome = false;
-    }
+    this.isHome = this.router.url == '/home' ? true : false;
   }
 
   openLink(option: Option) {
