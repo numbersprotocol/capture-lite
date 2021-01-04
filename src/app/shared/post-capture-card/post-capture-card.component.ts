@@ -104,8 +104,13 @@ export class PostCaptureCardComponent implements OnInit {
       )
       .subscribe();
   }
-  private async remove() {
-    //WIP
+  remove() {
+    return this.asset$
+      .pipe(
+        first(),
+        concatMap(asset => this.diaBackendAssetRepository.remove$(asset))
+      )
+      .subscribe();
   }
 
   share() {

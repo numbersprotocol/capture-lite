@@ -6,11 +6,8 @@
       (transaction$ | async)?.fulfilled_at | date: 'short'
     }}</mat-card-subtitle>
     <span class="toolbar-spacer"></span>
-    <button [hidden]="!sharable" (click)="share()" mat-icon-button>
-      <mat-icon>share</mat-icon>
-    </button>
     <button [hidden]="!sharable" (click)="openOptionsMenu()" mat-icon-button>
-      <mat-icon>more</mat-icon>
+      <mat-icon>toc</mat-icon>
     </button>
   </mat-card-header>
   <div
