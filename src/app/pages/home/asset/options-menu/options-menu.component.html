@@ -2,7 +2,11 @@
   <a mat-list-item (click)="openLink(options.Delete)">
     <span mat-line>{{ t('delete') }}</span>
   </a>
-  <a *ngIf="isHome" mat-list-item (click)="openLink(options.Share)">
+  <a
+    *ngIf="this.router.url == '/home'"
+    mat-list-item
+    (click)="openLink(options.Share)"
+  >
     <span mat-line>{{ t('share') }}</span>
   </a>
 </mat-nav-list>
