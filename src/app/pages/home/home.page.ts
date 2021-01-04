@@ -14,7 +14,6 @@ import {
   finalize,
   first,
   map,
-  skipWhile,
   tap,
 } from 'rxjs/operators';
 import { CollectorService } from '../../services/collector/collector.service';
@@ -104,7 +103,6 @@ export class HomePage implements OnInit {
       this.diaBackendAssetRepository.getAll$(),
       this.proofRepository.getAll$(),
     ]).pipe(
-      skipWhile(([assets]) => assets.length === 0),
       map(([assets, proofs]) => mergeDiaBackendAssetsAndProofs(assets, proofs)),
       map(captures =>
         captures.filter(

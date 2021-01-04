@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { BehaviorSubject, defer, forkJoin, merge } from 'rxjs';
+import { isEqual } from 'lodash';
+import { BehaviorSubject, defer, forkJoin, merge, Observable } from 'rxjs';
 import {
+  catchError,
   concatMap,
   concatMapTo,
+  distinctUntilChanged,
   map,
   pluck,
   single,
@@ -12,7 +15,8 @@ import {
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { toExtension } from '../../../utils/mime-type';
-import { Tuple } from '../../database/table/table';
+import { Database } from '../../database/database.service';
+import { OnConflictStrategy, Tuple } from '../../database/table/table';
 import { NotificationService } from '../../notification/notification.service';
 import {
   getOldSignatures,
@@ -29,26 +33,30 @@ import { BASE_URL } from '../secret';
 })
 export class DiaBackendAssetRepository {
   private readonly _isFetching$ = new BehaviorSubject(false);
+  readonly isFetching$ = this._isFetching$
+    .asObservable()
+    .pipe(distinctUntilChanged());
 
-  private readonly fetchAllCache$ = new BehaviorSubject<DiaBackendAsset[]>([]);
+  private readonly fetchAllCacheTable = this.database.getTable<DiaBackendAsset>(
+    `${DiaBackendAssetRepository.name}_fetchAllCache`
+  );
 
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService,
     private readonly notificationService: NotificationService,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly database: Database
   ) {}
-
-  isFetching$() {
-    return this._isFetching$.asObservable();
-  }
 
   refresh$() {
     return this.fetchAll$().pipe(single());
   }
 
-  getAll$() {
-    return merge(this.fetchAll$(), this.fetchAllCache$.asObservable());
+  getAll$(): Observable<DiaBackendAsset[]> {
+    return merge(this.fetchAll$(), this.fetchAllCacheTable.queryAll$()).pipe(
+      distinctUntilChanged(isEqual)
+    );
   }
 
   getById$(id: string) {
@@ -66,8 +74,15 @@ export class DiaBackendAssetRepository {
         })
       ),
       pluck('results'),
-      tap(assets => this.fetchAllCache$.next(assets)),
-      tap(() => this._isFetching$.next(false))
+      tap(assets =>
+        this.fetchAllCacheTable.insert(
+          assets,
+          OnConflictStrategy.REPLACE,
+          (x, y) => x.id === y.id
+        )
+      ),
+      tap(() => this._isFetching$.next(false)),
+      catchError(() => defer(() => this.fetchAllCacheTable.queryAll()))
     );
   }
 
