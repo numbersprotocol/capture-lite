@@ -12,23 +12,25 @@
       <mat-icon mat-list-icon>access_time</mat-icon>
       <div mat-line>{{ t('timestamp') }}</div>
       <div mat-line>
-        {{ (asset$ | async)?.information.proof.timestamp | date: 'long' }}
+        {{ (asset$ | async)?.information.proof?.timestamp | date: 'long' }}
       </div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>code</mat-icon>
       <div mat-line>{{ t('hash') }}</div>
-      <div mat-line>{{ (asset$ | async)?.information.proof.hash }}</div>
+      <div mat-line>{{ (asset$ | async)?.proof_hash }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>image</mat-icon>
       <div mat-line>{{ t('mimeType') }}</div>
-      <div mat-line>{{ (asset$ | async)?.information.proof.mimeType }}</div>
+      <div mat-line>{{ (asset$ | async)?.information.proof?.mimeType }}</div>
     </mat-list-item>
 
-    <ng-container *ngIf="asset$ | async as asset">
+    <ng-container
+      *ngIf="(asset$ | async)?.information.information as information"
+    >
       <div mat-subheader>{{ t('information') }}</div>
-      <mat-list-item *ngFor="let info of asset.information.information">
+      <mat-list-item *ngFor="let info of information">
         <mat-icon mat-list-icon>information</mat-icon>
         <div mat-line>{{ info.name }}</div>
         <div mat-line>{{ info.value }}</div>

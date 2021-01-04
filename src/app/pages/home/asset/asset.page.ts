@@ -44,10 +44,10 @@ export class AssetPage {
   );
   readonly location$ = this.asset$.pipe(
     map(asset => {
-      const latitude = asset.information.information.find(
+      const latitude = asset.information.information?.find(
         info => info.name === OldDefaultInformationName.GEOLOCATION_LATITUDE
       )?.value;
-      const longitude = asset.information.information.find(
+      const longitude = asset.information.information?.find(
         info => info.name === OldDefaultInformationName.GEOLOCATION_LONGITUDE
       )?.value;
       if (!latitude || !longitude) {
