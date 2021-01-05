@@ -7,7 +7,10 @@ import mergeImages from 'merge-images';
 import { BehaviorSubject } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendTransaction } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import {
+  DiaBackendTransaction,
+  DiaBackendTransactionRepository,
+} from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { ImageStore } from '../../services/image-store/image-store.service';
 import { OldDefaultInformationName } from '../../services/repositories/proof/old-proof-adapter';
 import {
@@ -58,6 +61,7 @@ export class PostCaptureCardComponent implements OnInit {
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly translocoService: TranslocoService,
     private readonly imageStore: ImageStore,
     private readonly bottomSheet: MatBottomSheet
@@ -88,7 +92,8 @@ export class PostCaptureCardComponent implements OnInit {
       .pipe(
         first(),
         concatMap(asset => this.diaBackendAssetRepository.remove$(asset)),
-        switchTapTo(this.diaBackendAssetRepository.refresh$())
+        switchTapTo(this.diaBackendAssetRepository.refresh$()),
+        switchTapTo(this.diaBackendTransactionRepository.refresh$())
       )
       .subscribe();
   }
