@@ -2,15 +2,28 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, forkJoin, zip } from 'rxjs';
-import { concatMap, concatMapTo, first, map, switchMap } from 'rxjs/operators';
+import { combineLatest, defer } from 'rxjs';
+import {
+  concatMap,
+  concatMapTo,
+  first,
+  map,
+  share,
+  switchMap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../../services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../services/confirm-alert/confirm-alert.service';
-import { DiaBackendAssetRepository } from '../../../../services/dia-backend/asset/dia-backend-asset-repository.service';
+import {
+  DiaBackendAsset,
+  DiaBackendAssetRepository,
+} from '../../../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendTransactionRepository } from '../../../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { getOldProof } from '../../../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../../services/repositories/proof/proof-repository.service';
-import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import {
+  isNonNullable,
+  switchTap,
+} from '../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -23,34 +36,8 @@ export class SendingPostCapturePage {
     map(params => params.get('id')),
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.getById$(id)),
-    isNonNullable()
-  );
-  private readonly proofsWithOld$ = this.proofRepository
-    .getAll$()
-    .pipe(
-      map(proofs =>
-        proofs.map(proof => ({ proof, oldProof: getOldProof(proof) }))
-      )
-    );
-  readonly capture$ = combineLatest([this.asset$, this.proofsWithOld$]).pipe(
-    map(([asset, proofsWithThumbnailAndOld]) => ({
-      asset,
-      // tslint:disable-next-line: no-non-null-assertion
-      proofWithThumbnailAndOld: proofsWithThumbnailAndOld.find(
-        p => p.oldProof.hash === asset.proof_hash
-      )!,
-    })),
-    isNonNullable()
-  );
-  readonly base64Src$ = this.capture$.pipe(
-    map(capture => capture.proofWithThumbnailAndOld),
     isNonNullable(),
-    concatMap(async p => {
-      const assets = await p.proof.getAssets();
-      return `data:${Object.values(assets)[0].mimeType};base64,${
-        Object.keys(assets)[0]
-      }`;
-    })
+    share()
   );
   readonly contact$ = this.route.paramMap.pipe(
     map(params => params.get('contact')),
@@ -78,16 +65,16 @@ export class SendingPostCapturePage {
   }
 
   async send(captionText: string) {
-    const action$ = zip(this.asset$, this.contact$).pipe(
+    const action$ = combineLatest([this.asset$, this.contact$]).pipe(
       first(),
-      concatMap(([asset, contact]) =>
+      switchTap(([asset, contact]) =>
         this.diaBackendTransactionRepository.add$(
           asset.id,
           contact,
           captionText
         )
       ),
-      concatMapTo(this.removeAsset$()),
+      concatMap(([asset]) => this.removeAsset$(asset)),
       concatMapTo(
         defer(() => this.router.navigate(['../..'], { relativeTo: this.route }))
       )
@@ -105,15 +92,17 @@ export class SendingPostCapturePage {
     }
   }
 
-  private removeAsset$() {
-    return this.capture$.pipe(
+  private removeAsset$(asset: DiaBackendAsset) {
+    return this.proofRepository.getAll$().pipe(
       first(),
-      concatMap(capture =>
-        forkJoin([
-          // TODO: remove proof repo in DiaBackendAssetRepository
-          this.proofRepository.remove(capture.proofWithThumbnailAndOld.proof),
-        ])
-      )
+      concatMap(async proofs => {
+        const proof = proofs.find(
+          p => getOldProof(p).hash === asset.proof_hash
+        );
+        if (proof) {
+          await this.proofRepository.remove(proof);
+        }
+      })
     );
   }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { first } from 'rxjs/operators';
+import { first, share, switchMapTo } from 'rxjs/operators';
 import { BlockingActionService } from '../../../services/blocking-action/blocking-action.service';
 import { DiaBackendTransactionRepository } from '../../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { IgnoredTransactionRepository } from '../../../services/dia-backend/transaction/ignored-transaction-repository.service';
@@ -12,7 +12,9 @@ import { IgnoredTransactionRepository } from '../../../services/dia-backend/tran
   styleUrls: ['./inbox.page.scss'],
 })
 export class InboxPage {
-  readonly receivedTransactions$ = this.diaBackendTransactionRepository.getInbox$();
+  readonly receivedTransactions$ = this.diaBackendTransactionRepository
+    .getInbox$()
+    .pipe(share());
   readonly isFetching$ = this.diaBackendTransactionRepository.isFetching$();
 
   constructor(
@@ -24,7 +26,10 @@ export class InboxPage {
   accept(id: string) {
     const action$ = this.diaBackendTransactionRepository
       .accept$(id)
-      .pipe(first());
+      .pipe(
+        first(),
+        switchMapTo(this.diaBackendTransactionRepository.refresh$())
+      );
 
     this.blockingActionService
       .run$(action$)

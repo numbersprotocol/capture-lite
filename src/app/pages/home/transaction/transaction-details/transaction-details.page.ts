@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map, switchMap } from 'rxjs/operators';
+import { map, share, switchMap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../services/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendTransaction,
@@ -19,7 +19,8 @@ export class TransactionDetailsPage {
     map(params => params.get('id')),
     isNonNullable(),
     switchMap(id => this.diaBackendTransactionRepository.getById$(id)),
-    isNonNullable()
+    isNonNullable(),
+    share()
   );
   readonly status$ = this.transaction$.pipe(
     switchMap(transaction =>

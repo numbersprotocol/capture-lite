@@ -11,7 +11,7 @@ import { SharedModule } from './shared.module';
 @NgModule({
   imports: [
     SharedModule,
-    IonicModule.forRoot(),
+    IonicModule,
     HttpClientTestingModule,
     RouterTestingModule,
     BrowserAnimationsModule,

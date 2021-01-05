@@ -21,7 +21,12 @@
           : 'calc(100vw / 16 * 9)'
     }"
   >
-    <img #ratioImg id="image" [src]="rawDataUrl$ | async" mat-card-image />
+    <img
+      #ratioImg
+      id="image"
+      [src]="(asset$ | async)?.sharable_copy"
+      mat-card-image
+    />
   </div>
   <mat-card-content>
     <mat-list dense class="info-list" [class.info-list-show]="openMore">
