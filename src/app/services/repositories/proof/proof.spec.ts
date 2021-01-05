@@ -69,7 +69,7 @@ describe('Proof', () => {
 
   it('should have thumbnail when its assets have images', async () => {
     proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
-    expect(await proof.getThumbnailBase64()).toBeTruthy();
+    expect(await proof.getThumbnailUrl()).toBeTruthy();
   });
 
   it('should not have thumbnail when its assets do not have image', async () => {
@@ -79,7 +79,7 @@ describe('Proof', () => {
       TRUTH,
       SIGNATURES_VALID
     );
-    expect(await proof.getThumbnailBase64()).toBeUndefined();
+    expect(await proof.getThumbnailUrl()).toBeUndefined();
   });
 
   it('should get any device name when exists', async () => {

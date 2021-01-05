@@ -1,16 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { isEqual } from 'lodash';
-import { BehaviorSubject, defer, merge, Observable } from 'rxjs';
-import {
-  concatMap,
-  concatMapTo,
-  distinctUntilChanged,
-  pluck,
-  tap,
-} from 'rxjs/operators';
-import { Database } from '../../database/database.service';
-import { OnConflictStrategy, Tuple } from '../../database/table/table';
+import { BehaviorSubject, defer, merge } from 'rxjs';
+import { concatMap, concatMapTo, pluck, tap } from 'rxjs/operators';
+import { Tuple } from '../../database/table/table';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { BASE_URL } from '../secret';
 
@@ -18,25 +10,22 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendContactRepository {
-  private readonly table = this.database.getTable<DiaBackendContact>(
-    DiaBackendContactRepository.name
-  );
   private readonly _isFetching$ = new BehaviorSubject(false);
+  private readonly fetchAllCache$ = new BehaviorSubject<DiaBackendContact[]>(
+    []
+  );
 
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly database: Database,
     private readonly authService: DiaBackendAuthService
   ) {}
 
-  getAll$(): Observable<DiaBackendContact[]> {
-    return merge(this.fetchAll$(), this.table.queryAll$()).pipe(
-      distinctUntilChanged(isEqual)
-    );
-  }
-
   isFetching$() {
     return this._isFetching$.asObservable();
+  }
+
+  getAll$() {
+    return merge(this.fetchAll$(), this.fetchAllCache$.asObservable());
   }
 
   private fetchAll$() {
@@ -49,13 +38,7 @@ export class DiaBackendContactRepository {
         )
       ),
       pluck('results'),
-      concatMap(contacts =>
-        this.table.insert(
-          contacts,
-          OnConflictStrategy.REPLACE,
-          (x, y) => x.contact_email === y.contact_email
-        )
-      ),
+      tap(contacts => this.fetchAllCache$.next(contacts)),
       tap(() => this._isFetching$.next(false))
     );
   }
