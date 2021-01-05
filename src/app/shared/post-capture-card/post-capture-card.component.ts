@@ -4,7 +4,7 @@ import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import mergeImages from 'merge-images';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, defer } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import {
@@ -92,8 +92,9 @@ export class PostCaptureCardComponent implements OnInit {
       .pipe(
         first(),
         concatMap(asset => this.diaBackendAssetRepository.remove$(asset)),
-        switchTapTo(this.diaBackendAssetRepository.refresh$()),
-        switchTapTo(this.diaBackendTransactionRepository.refresh$())
+        switchTapTo(
+          defer(() => this.diaBackendTransactionRepository.refresh$())
+        )
       )
       .subscribe();
   }
