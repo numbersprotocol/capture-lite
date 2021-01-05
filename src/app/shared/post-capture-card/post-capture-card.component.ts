@@ -10,7 +10,10 @@ import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-
 import { DiaBackendTransaction } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { ImageStore } from '../../services/image-store/image-store.service';
 import { OldDefaultInformationName } from '../../services/repositories/proof/old-proof-adapter';
-import { isNonNullable } from '../../utils/rx-operators/rx-operators';
+import {
+  isNonNullable,
+  switchTapTo,
+} from '../../utils/rx-operators/rx-operators';
 import {
   Option,
   OptionsMenuComponent,
@@ -84,7 +87,8 @@ export class PostCaptureCardComponent implements OnInit {
     return this.asset$
       .pipe(
         first(),
-        concatMap(asset => this.diaBackendAssetRepository.remove$(asset))
+        concatMap(asset => this.diaBackendAssetRepository.remove$(asset)),
+        switchTapTo(this.diaBackendAssetRepository.refresh$())
       )
       .subscribe();
   }
