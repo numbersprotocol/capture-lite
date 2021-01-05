@@ -1,18 +1,28 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import mergeImages from 'merge-images';
-import { BehaviorSubject } from 'rxjs';
-import { concatMap, first, map } from 'rxjs/operators';
+import { BehaviorSubject, defer } from 'rxjs';
+import { concatMap, first, map, tap } from 'rxjs/operators';
 import { DiaBackendAssetRepository } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendTransaction } from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import {
+  DiaBackendTransaction,
+  DiaBackendTransactionRepository,
+} from '../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { ImageStore } from '../../services/image-store/image-store.service';
 import { OldDefaultInformationName } from '../../services/repositories/proof/old-proof-adapter';
-import { isNonNullable } from '../../utils/rx-operators/rx-operators';
+import {
+  isNonNullable,
+  switchTapTo,
+} from '../../utils/rx-operators/rx-operators';
+import {
+  Option,
+  OptionsMenuComponent,
+} from './options-menu/options-menu.component';
 
 const { Share, Browser } = Plugins;
-
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-post-capture-card',
@@ -51,12 +61,42 @@ export class PostCaptureCardComponent implements OnInit {
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly translocoService: TranslocoService,
-    private readonly imageStore: ImageStore
+    private readonly imageStore: ImageStore,
+    private readonly bottomSheet: MatBottomSheet
   ) {}
 
   ngOnInit() {
     this._transaction$.next(this.transaction);
+  }
+
+  openOptionsMenu() {
+    const bottomSheetRef = this.bottomSheet.open(OptionsMenuComponent);
+    bottomSheetRef
+      .afterDismissed()
+      .pipe(
+        tap((option?: Option) => {
+          if (option === Option.Delete) {
+            this.remove();
+          } else if (option === Option.Share) {
+            this.share();
+          }
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+  remove() {
+    return this.asset$
+      .pipe(
+        first(),
+        concatMap(asset => this.diaBackendAssetRepository.remove$(asset)),
+        switchTapTo(
+          defer(() => this.diaBackendTransactionRepository.refresh$())
+        )
+      )
+      .subscribe();
   }
 
   share() {
