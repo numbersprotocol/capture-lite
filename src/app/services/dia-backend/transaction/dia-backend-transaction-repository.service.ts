@@ -1,30 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { isEqual, omit } from 'lodash';
-import {
-  BehaviorSubject,
-  combineLatest,
-  defer,
-  iif,
-  merge,
-  Observable,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, defer, merge } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
-  distinctUntilChanged,
   map,
   pluck,
   single,
   tap,
 } from 'rxjs/operators';
-import {
-  switchTap,
-  switchTapTo,
-} from '../../../utils/rx-operators/rx-operators';
-import { Database } from '../../database/database.service';
-import { OnConflictStrategy, Tuple } from '../../database/table/table';
-import { DiaBackendAssetRepository } from '../asset/dia-backend-asset-repository.service';
+import { Tuple } from '../../database/table/table';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { BASE_URL } from '../secret';
 import { IgnoredTransactionRepository } from './ignored-transaction-repository.service';
@@ -33,33 +18,24 @@ import { IgnoredTransactionRepository } from './ignored-transaction-repository.s
   providedIn: 'root',
 })
 export class DiaBackendTransactionRepository {
-  private readonly table = this.database.getTable<DiaBackendTransaction>(
-    DiaBackendTransactionRepository.name
-  );
   private readonly _isFetching$ = new BehaviorSubject(false);
-  private isDirty = true;
+
+  private readonly fetchAllCache$ = new BehaviorSubject<
+    DiaBackendTransaction[]
+  >([]);
 
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService,
-    private readonly database: Database,
-    private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
-    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
+    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
   ) {}
 
-  getAll$(): Observable<DiaBackendTransaction[]> {
-    return iif(
-      () => !this.isDirty,
-      this.table.queryAll$(),
-      merge(this.fetchAll$(), this.table.queryAll$()).pipe(
-        distinctUntilChanged((transactionsX, transactionsY) =>
-          isEqual(
-            transactionsX.map(x => omit(x, 'asset.asset_file_thumbnail')),
-            transactionsY.map(y => omit(y, 'asset.asset_file_thumbnail'))
-          )
-        )
-      )
-    );
+  isFetching$() {
+    return this._isFetching$.asObservable();
+  }
+
+  getAll$() {
+    return merge(this.fetchAll$(), this.fetchAllCache$.asObservable());
   }
 
   getById$(id: string) {
@@ -70,19 +46,12 @@ export class DiaBackendTransactionRepository {
     );
   }
 
-  isFetching$() {
-    return this._isFetching$.asObservable();
-  }
-
   refresh$() {
     return this.fetchAll$().pipe(single());
   }
 
   private fetchAll$() {
-    return defer(async () => {
-      this.isDirty = false;
-      return this._isFetching$.next(true);
-    }).pipe(
+    return defer(async () => this._isFetching$.next(true)).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
       concatMap(headers =>
         this.httpClient.get<ListTransactionResponse>(
@@ -91,47 +60,32 @@ export class DiaBackendTransactionRepository {
         )
       ),
       pluck('results'),
-      concatMap(transactions =>
-        this.table.insert(
-          transactions,
-          OnConflictStrategy.REPLACE,
-          (x, y) => x.id === y.id
-        )
-      ),
+      tap(transactions => this.fetchAllCache$.next(transactions)),
       tap(() => this._isFetching$.next(false))
     );
   }
 
   add$(assetId: string, targetEmail: string, caption: string) {
-    return defer(async () => {
-      this.isDirty = true;
-      return this.authService.getAuthHeaders();
-    }).pipe(
+    return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post<CreateTransactionResponse>(
           `${BASE_URL}/api/v2/transactions/`,
           { asset_id: assetId, email: targetEmail, caption },
           { headers }
         )
-      ),
-      switchTap(response => defer(() => this.table.insert([response])))
+      )
     );
   }
 
   accept$(id: string) {
-    return defer(async () => {
-      this.isDirty = true;
-      return this.authService.getAuthHeaders();
-    }).pipe(
+    return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post<AcceptTransactionResponse>(
           `${BASE_URL}/api/v2/transactions/${id}/accept/`,
           {},
           { headers }
         )
-      ),
-      switchTapTo(this.fetchAll$()),
-      switchTapTo(this.diaBackendAssetRepository.refresh$())
+      )
     );
   }
 
@@ -172,8 +126,7 @@ interface ListTransactionResponse {
   readonly results: DiaBackendTransaction[];
 }
 
-// tslint:disable-next-line: no-empty-interface
-interface CreateTransactionResponse extends DiaBackendTransaction {}
+type CreateTransactionResponse = DiaBackendTransaction;
 
 // tslint:disable-next-line: no-empty-interface
 interface AcceptTransactionResponse {}

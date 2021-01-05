@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
-import { TranslocoService } from '@ngneat/transloco';
 import { isEqual, reject } from 'lodash';
 import { combineLatest, defer, forkJoin, Observable } from 'rxjs';
 import {
@@ -33,9 +31,7 @@ export class DiaBackendAuthService {
     private readonly httpClient: HttpClient,
     private readonly languageService: LanguageService,
     private readonly preferenceManager: PreferenceManager,
-    private readonly pushNotificationService: PushNotificationService,
-    private readonly snackbar: MatSnackBar,
-    private readonly translocoService: TranslocoService
+    private readonly pushNotificationService: PushNotificationService
   ) {}
 
   // TODO: remove this method
