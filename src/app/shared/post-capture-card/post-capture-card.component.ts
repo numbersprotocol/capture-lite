@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Plugins } from '@capacitor/core';
@@ -8,10 +7,6 @@ import mergeImages from 'merge-images';
 import { BehaviorSubject } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 import {
-  Option,
-  OptionsMenuComponent,
-} from '../../pages/home/asset/options-menu/options-menu.component';
-import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -20,6 +15,10 @@ import { ImageStore } from '../../services/image-store/image-store.service';
 import { getOldProof } from '../../services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../services/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../utils/rx-operators/rx-operators';
+import {
+  Option,
+  OptionsMenuComponent,
+} from './options-menu/options-menu.component';
 
 const { Share, Browser } = Plugins;
 @UntilDestroy({ checkProperties: true })
@@ -70,7 +69,6 @@ export class PostCaptureCardComponent implements OnInit {
     private readonly proofRepository: ProofRepository,
     private readonly translocoService: TranslocoService,
     private readonly imageStore: ImageStore,
-    private readonly httpClient: HttpClient,
     private readonly bottomSheet: MatBottomSheet
   ) {}
 
