@@ -9,7 +9,7 @@ import {
   concatMap,
   first,
   map,
-  share,
+  shareReplay,
   switchMap,
   switchMapTo,
   tap,
@@ -40,7 +40,7 @@ export class AssetPage {
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.getById$(id)),
     isNonNullable(),
-    share()
+    shareReplay({ bufferSize: 1, refCount: true })
   );
   readonly location$ = this.asset$.pipe(
     map(asset => {

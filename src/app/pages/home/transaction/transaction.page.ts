@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map, share } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { getStatus } from './transaction-details/transaction-details.page';
@@ -21,7 +21,7 @@ export class TransactionPage {
           status: getStatus(transaction, this.diaBackendAuthService.getEmail()),
         }))
       ),
-      share()
+      shareReplay({ bufferSize: 1, refCount: true })
     );
   readonly isFetching$ = this.diaBackendTransactionRepository.isFetching$();
 

@@ -15,7 +15,7 @@ import {
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { toExtension } from '../../../utils/mime-type';
-import { switchTap } from '../../../utils/rx-operators/rx-operators';
+import { switchTap, VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy, Tuple } from '../../database/table/table';
 import { NotificationService } from '../../notification/notification.service';
@@ -124,6 +124,12 @@ export class DiaBackendAssetRepository {
           { headers }
         )
       )
+    );
+  }
+
+  removeCache$(asset: DiaBackendAsset) {
+    return defer(() => this.fetchAllCacheTable.delete([asset])).pipe(
+      catchError(() => VOID$)
     );
   }
 }
