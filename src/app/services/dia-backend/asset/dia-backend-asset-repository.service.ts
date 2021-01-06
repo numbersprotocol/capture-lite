@@ -15,6 +15,7 @@ import {
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { toExtension } from '../../../utils/mime-type';
+import { switchTap } from '../../../utils/rx-operators/rx-operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy, Tuple } from '../../database/table/table';
 import { NotificationService } from '../../notification/notification.service';
@@ -74,12 +75,18 @@ export class DiaBackendAssetRepository {
         })
       ),
       pluck('results'),
-      tap(assets =>
-        this.fetchAllCacheTable.insert(
-          assets,
-          OnConflictStrategy.REPLACE,
-          (x, y) => x.id === y.id
-        )
+      switchTap(assets =>
+        defer(async () => {
+          const all = await this.fetchAllCacheTable.queryAll();
+          await this.fetchAllCacheTable.delete(
+            all.filter(a => !assets.map(asset => asset.id).includes(a.id))
+          );
+          return this.fetchAllCacheTable.insert(
+            assets,
+            OnConflictStrategy.REPLACE,
+            (x, y) => x.id === y.id
+          );
+        })
       ),
       tap(() => this._isFetching$.next(false)),
       catchError(() => defer(() => this.fetchAllCacheTable.queryAll()))
