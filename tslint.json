@@ -114,7 +114,6 @@
     "rxjs-no-internal": true,
     "rxjs-no-nested-subscribe": true,
     "rxjs-no-redundant-notify": true,
-    "rxjs-no-sharereplay": true,
     "rxjs-no-subclass": true,
     "rxjs-no-unbound-methods": true,
     "rxjs-no-unsafe-catch": true,

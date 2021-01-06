@@ -7,9 +7,10 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, zip } from 'rxjs';
 import {
   concatMap,
+  concatMapTo,
   first,
   map,
-  share,
+  shareReplay,
   switchMap,
   switchMapTo,
   tap,
@@ -40,7 +41,7 @@ export class AssetPage {
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.getById$(id)),
     isNonNullable(),
-    share()
+    shareReplay({ bufferSize: 1, refCount: true })
   );
   readonly location$ = this.asset$.pipe(
     map(asset => {
@@ -110,7 +111,12 @@ export class AssetPage {
         if (proof) {
           this.proofRepositroy.remove(proof);
         }
-        return this.diaBackendAssetRepository.remove$(asset).pipe(first());
+        return this.diaBackendAssetRepository
+          .remove$(asset)
+          .pipe(
+            first(),
+            concatMapTo(defer(() => this.diaBackendAssetRepository.refresh$()))
+          );
       }),
       switchMapTo(defer(() => this.router.navigate(['..'])))
     );

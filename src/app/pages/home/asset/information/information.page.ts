@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map, share, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { DiaBackendAssetRepository } from '../../../../services/dia-backend/asset/dia-backend-asset-repository.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 
@@ -17,7 +17,7 @@ export class InformationPage {
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.getById$(id)),
     isNonNullable(),
-    share()
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   constructor(

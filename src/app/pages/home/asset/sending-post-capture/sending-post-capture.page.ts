@@ -8,7 +8,7 @@ import {
   concatMapTo,
   first,
   map,
-  share,
+  shareReplay,
   switchMap,
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../services/blocking-action/blocking-action.service';
@@ -37,7 +37,7 @@ export class SendingPostCapturePage {
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.getById$(id)),
     isNonNullable(),
-    share()
+    shareReplay({ bufferSize: 1, refCount: true })
   );
   readonly contact$ = this.route.paramMap.pipe(
     map(params => params.get('contact')),
@@ -102,7 +102,9 @@ export class SendingPostCapturePage {
         if (proof) {
           await this.proofRepository.remove(proof);
         }
-      })
+      }),
+      concatMapTo(this.diaBackendAssetRepository.refresh$()),
+      concatMapTo(this.diaBackendAssetRepository.removeCache$(asset))
     );
   }
 }

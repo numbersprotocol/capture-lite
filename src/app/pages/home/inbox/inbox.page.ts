@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { first, share, switchMapTo } from 'rxjs/operators';
+import { first, shareReplay, switchMapTo } from 'rxjs/operators';
 import { BlockingActionService } from '../../../services/blocking-action/blocking-action.service';
 import { DiaBackendTransactionRepository } from '../../../services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { IgnoredTransactionRepository } from '../../../services/dia-backend/transaction/ignored-transaction-repository.service';
@@ -14,7 +14,7 @@ import { IgnoredTransactionRepository } from '../../../services/dia-backend/tran
 export class InboxPage {
   readonly receivedTransactions$ = this.diaBackendTransactionRepository
     .getInbox$()
-    .pipe(share());
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
   readonly isFetching$ = this.diaBackendTransactionRepository.isFetching$();
 
   constructor(
