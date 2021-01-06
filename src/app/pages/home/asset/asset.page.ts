@@ -7,6 +7,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, zip } from 'rxjs';
 import {
   concatMap,
+  concatMapTo,
   first,
   map,
   shareReplay,
@@ -110,7 +111,12 @@ export class AssetPage {
         if (proof) {
           this.proofRepositroy.remove(proof);
         }
-        return this.diaBackendAssetRepository.remove$(asset).pipe(first());
+        return this.diaBackendAssetRepository
+          .remove$(asset)
+          .pipe(
+            first(),
+            concatMapTo(defer(() => this.diaBackendAssetRepository.refresh$()))
+          );
       }),
       switchMapTo(defer(() => this.router.navigate(['..'])))
     );
