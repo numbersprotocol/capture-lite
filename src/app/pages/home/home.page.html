@@ -70,12 +70,17 @@
           >
             <div class="mat-title">{{ captureByDate.key }}</div>
             <mat-grid-list cols="3" gutterSize="8px">
-              <ng-container *ngFor="let capture of captureByDate.value">
+              <ng-container
+                *ngFor="
+                  let capture of captureByDate.value;
+                  trackBy: trackCaptureItem
+                "
+              >
                 <mat-grid-tile
                   *ngIf="capture.item.diaBackendAsset"
                   class="square-image-tile"
                   [style.backgroundImage]="
-                    'url(' + ((capture.thumbnailUrl | async) || '') + ')'
+                    'url(' + (capture.thumbnailUrl || '') + ')'
                   "
                   [routerLink]="[
                     'asset',
@@ -87,7 +92,7 @@
                   <mat-grid-tile
                     class="square-image-tile"
                     [style.backgroundImage]="
-                      'url(' + ((capture.thumbnailUrl | async) || '') + ')'
+                      'url(' + (capture.thumbnailUrl || '') + ')'
                     "
                   >
                     <div
