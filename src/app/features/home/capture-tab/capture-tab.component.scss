@@ -1,6 +1,13 @@
 :host {
   display: block;
-  margin-bottom: 120px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-bottom: 128px;
+}
+
+div.mat-title {
+  margin: 26px 0 0;
+  font-size: large;
 }
 
 .capture-item {
