@@ -5,7 +5,7 @@
   "homepage": "https://numbersprotocol.io/",
   "scripts": {
     "ng": "ng",
-    "preconfig": "node set-secret.js",
+    "preconfig": "ts-node set-secret.ts",
     "serve": "npm run preconfig && ionic serve",
     "build": "npm run preconfig && ionic build",
     "build-android": "npm run build && cap sync android",

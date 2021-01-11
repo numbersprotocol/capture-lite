@@ -4,8 +4,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
-import { CapacitorPluginsModule } from './capacitor-plugins/capacitor-plugins.module';
-import { MaterialModule } from './material/material.module';
+import { CapacitorPluginsModule } from './core/capacitor-plugins/capacitor-plugins.module';
+import { MaterialModule } from './core/material/material.module';
 
 @NgModule({
   imports: [
