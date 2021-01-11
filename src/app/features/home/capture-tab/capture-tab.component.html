@@ -1,0 +1,22 @@
+<ion-grid>
+  <ion-row
+    *ngFor="let group of capturesByDate$ | async | keyvalue: keyDescendingOrder"
+  >
+    <ion-col size="12">
+      <h3>{{ group.key }}</h3>
+    </ion-col>
+    <ion-col *ngFor="let capture of group.value" size="4">
+      <div class="capture-item">
+        <div *ngIf="!capture.isCollected" class="spinner-container">
+          <ion-spinner></ion-spinner>
+        </div>
+        <ion-icon
+          *ngIf="!capture.isCollected"
+          name="hourglass-outline"
+          size="large"
+        ></ion-icon>
+        <img [src]="capture.thumbnailUrl" />
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>

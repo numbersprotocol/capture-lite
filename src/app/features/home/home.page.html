@@ -60,63 +60,7 @@
       backgroundColor="primary"
     >
       <mat-tab label="Capture">
-        <div class="tab-content-capture">
-          <ng-container
-            *ngFor="
-              let captureByDate of capturesByDate$
-                | async
-                | keyvalue: keyDescendingOrder
-            "
-          >
-            <div class="mat-title">{{ captureByDate.key }}</div>
-            <mat-grid-list cols="3" gutterSize="8px">
-              <ng-container
-                *ngFor="
-                  let capture of captureByDate.value;
-                  trackBy: trackCaptureItem
-                "
-              >
-                <mat-grid-tile
-                  *ngIf="capture.item.diaBackendAsset"
-                  class="square-image-tile"
-                  [style.backgroundImage]="
-                    'url(' + (capture.thumbnailUrl || '') + ')'
-                  "
-                  [routerLink]="[
-                    'asset',
-                    { id: capture.item.diaBackendAsset.id }
-                  ]"
-                >
-                </mat-grid-tile>
-                <ng-container *ngIf="!capture.item.diaBackendAsset">
-                  <mat-grid-tile
-                    class="square-image-tile"
-                    [style.backgroundImage]="
-                      'url(' + (capture.thumbnailUrl || '') + ')'
-                    "
-                  >
-                    <div
-                      class="image-tile-overlay"
-                      (click)="upload(capture.item.proof)"
-                    ></div>
-                    <div class="overlay-icon">
-                      <mat-spinner
-                        *ngIf="
-                          currentUploadingProofHash === capture.item.hash;
-                          else uploadError
-                        "
-                        diameter="50"
-                      ></mat-spinner>
-                      <ng-template #uploadError>
-                        <mat-icon>error</mat-icon>
-                      </ng-template>
-                    </div>
-                  </mat-grid-tile>
-                </ng-container>
-              </ng-container>
-            </mat-grid-list>
-          </ng-container>
-        </div>
+        <app-capture-tab></app-capture-tab>
       </mat-tab>
       <mat-tab label="PostCapture">
         <div class="tab-content-post">
@@ -128,13 +72,11 @@
         </div>
       </mat-tab>
     </mat-tab-group>
-    <button
-      *ngIf="captureButtonShow"
-      (click)="capture()"
-      mat-fab
-      color="primary"
-    >
-      <mat-icon>camera_alt</mat-icon>
-    </button>
+
+    <ion-fab class="capture-fab">
+      <ion-fab-button (click)="capture()">
+        <ion-icon name="camera-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
   </mat-sidenav-content>
 </mat-sidenav-container>
