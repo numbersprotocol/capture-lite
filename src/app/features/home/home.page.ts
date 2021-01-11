@@ -1,12 +1,11 @@
-import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { ImageStore } from '../../shared/services/image-store/image-store.service';
@@ -14,7 +13,6 @@ import { OnboardingService } from '../../shared/services/onboarding/onboarding.s
 import { Proof } from '../../shared/services/repositories/proof/proof';
 import { ProofRepository } from '../../shared/services/repositories/proof/proof-repository.service';
 import { capture } from '../../utils/camera';
-import { blobToBase64 } from '../../utils/encoding/encoding';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -57,8 +55,7 @@ export class HomePage implements OnInit {
     private readonly onboardingService: OnboardingService,
     private readonly router: Router,
     private readonly proofRepository: ProofRepository,
-    private readonly imageStore: ImageStore,
-    private readonly httpClient: HttpClient
+    private readonly imageStore: ImageStore
   ) {}
 
   async ngOnInit() {
@@ -90,37 +87,4 @@ export class HomePage implements OnInit {
     );
     return this.proofRepository.add(proof);
   }
-
-  captureTest() {
-    for (let index = 1; index <= 20; index += 1) {
-      this.httpClient
-        .get(`/assets/test/${index}.jpg`, { responseType: 'blob' })
-        .pipe(
-          concatMap(blobToBase64),
-          concatMap(base64 =>
-            Proof.from(
-              this.imageStore,
-              { [base64]: { mimeType: 'image/jpeg' } },
-              {
-                timestamp: randomDate(
-                  new Date(2020, 1, 1),
-                  new Date(2020, 1, 5)
-                ).getTime(),
-                providers: {},
-              },
-              {}
-            )
-          ),
-          concatMap(proof => this.proofRepository.add(proof)),
-          untilDestroyed(this)
-        )
-        .subscribe();
-    }
-  }
-}
-
-function randomDate(start: Date, end: Date) {
-  return new Date(
-    start.getTime() + Math.random() * (end.getTime() - start.getTime())
-  );
 }
