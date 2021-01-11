@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { CaptureTabComponent } from './capture-tab.component';
 
 describe('CaptureTabComponent', () => {
@@ -9,7 +9,7 @@ describe('CaptureTabComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CaptureTabComponent],
-      imports: [IonicModule.forRoot()],
+      imports: [SharedTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CaptureTabComponent);
