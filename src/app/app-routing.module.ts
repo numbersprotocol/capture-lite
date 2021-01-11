@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './guards/auth/auth.guard';
+import { AuthGuard } from './shared/guards/auth/auth.guard';
 
 const routes: Routes = [
   {
@@ -11,29 +11,31 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () =>
-      import('./pages/login/login.module').then(m => m.LoginPageModule),
+      import('./features/login/login.module').then(m => m.LoginPageModule),
   },
   {
     path: 'signup',
     loadChildren: () =>
-      import('./pages/signup/signup.module').then(m => m.SignupPageModule),
+      import('./features/signup/signup.module').then(m => m.SignupPageModule),
   },
   {
     path: 'home',
     loadChildren: () =>
-      import('./pages/home/home.module').then(m => m.HomePageModule),
+      import('./features/home/home.module').then(m => m.HomePageModule),
     canActivate: [AuthGuard],
   },
   {
     path: 'profile',
     loadChildren: () =>
-      import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
+      import('./features/profile/profile.module').then(
+        m => m.ProfilePageModule
+      ),
     canActivate: [AuthGuard],
   },
   {
     path: 'settings',
     loadChildren: () =>
-      import('./pages/settings/settings.module').then(
+      import('./features/settings/settings.module').then(
         m => m.SettingsPageModule
       ),
     canActivate: [AuthGuard],
@@ -41,19 +43,21 @@ const routes: Routes = [
   {
     path: 'privacy',
     loadChildren: () =>
-      import('./pages/privacy/privacy.module').then(m => m.PrivacyPageModule),
+      import('./features/privacy/privacy.module').then(
+        m => m.PrivacyPageModule
+      ),
     canActivate: [AuthGuard],
   },
   {
     path: 'about',
     loadChildren: () =>
-      import('./pages/about/about.module').then(m => m.AboutPageModule),
+      import('./features/about/about.module').then(m => m.AboutPageModule),
     canActivate: [AuthGuard],
   },
   {
     path: 'tutorial',
     loadChildren: () =>
-      import('./pages/tutorial/tutorial.module').then(
+      import('./features/tutorial/tutorial.module').then(
         m => m.TutorialPageModule
       ),
     canActivate: [AuthGuard],
