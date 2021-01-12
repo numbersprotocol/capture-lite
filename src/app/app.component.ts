@@ -4,6 +4,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { concatMap } from 'rxjs/operators';
+import { CameraService } from './shared/services/camera/camera.service';
+import { CaptureService } from './shared/services/capture/capture.service';
 import { CollectorService } from './shared/services/collector/collector.service';
 import { CapacitorFactsProvider } from './shared/services/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 import { WebCryptoApiSignatureProvider } from './shared/services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
@@ -29,6 +32,8 @@ export class AppComponent {
     private readonly sanitizer: DomSanitizer,
     private readonly capacitorFactsProvider: CapacitorFactsProvider,
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
+    private readonly captureService: CaptureService,
+    private readonly cameraService: CameraService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
@@ -44,6 +49,7 @@ export class AppComponent {
       .pipe(untilDestroyed(this))
       .subscribe();
     this.initializeApp();
+    this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
   }
@@ -51,6 +57,15 @@ export class AppComponent {
   async initializeApp() {
     await this.platform.ready();
     await SplashScreen.hide();
+  }
+
+  private restoreAppState() {
+    this.cameraService.restoreKilledCaptureEvent$
+      .pipe(
+        concatMap(photo => this.captureService.capture(photo)),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   initializeCollector() {
