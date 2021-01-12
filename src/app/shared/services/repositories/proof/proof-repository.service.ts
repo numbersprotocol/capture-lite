@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { isEqual } from 'lodash';
-import { concatMap, distinctUntilChanged, map } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy } from '../../database/table/table';
 import { ImageStore } from '../../image-store/image-store.service';
@@ -33,19 +33,6 @@ export class ProofRepository {
   async getAll() {
     const views = await this.table.queryAll();
     return views.map(view => Proof.fromIndexedProofView(this.imageStore, view));
-  }
-
-  getById$(id: string) {
-    return this.getAll$().pipe(
-      concatMap(async proofs => {
-        for (const proof of proofs) {
-          if (id === (await proof.getId())) {
-            return proof;
-          }
-        }
-        return undefined;
-      })
-    );
   }
 
   async add(proof: Proof, onConflict = OnConflictStrategy.ABORT) {

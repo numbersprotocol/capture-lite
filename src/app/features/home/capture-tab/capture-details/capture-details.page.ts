@@ -8,6 +8,7 @@ import { concatMap, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
+import { getOldProof } from '../../../../shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../../shared/services/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { toDataUrl } from '../../../../utils/url';
@@ -24,9 +25,12 @@ import {
 })
 export class CaptureDetailsPage {
   readonly proof$ = this.route.paramMap.pipe(
-    map(params => params.get('id')),
+    map(params => params.get('oldProofHash')),
     isNonNullable(),
-    switchMap(id => this.proofRepositroy.getById$(id)),
+    switchMap(async oldProofHash => {
+      const all = await this.proofRepository.getAll();
+      return all.find(proof => getOldProof(proof).hash === oldProofHash);
+    }),
     isNonNullable(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
@@ -55,7 +59,7 @@ export class CaptureDetailsPage {
     private readonly dialog: MatDialog,
     private readonly bottomSheet: MatBottomSheet,
     private readonly translacoService: TranslocoService,
-    private readonly proofRepositroy: ProofRepository,
+    private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService
   ) {}
 
@@ -92,7 +96,7 @@ export class CaptureDetailsPage {
 
   private async remove() {
     const action$ = this.proof$.pipe(
-      concatMap(proof => this.proofRepositroy.remove(proof))
+      concatMap(proof => this.proofRepository.remove(proof))
     );
     const result = await this.confirmAlert.present();
     if (result) {

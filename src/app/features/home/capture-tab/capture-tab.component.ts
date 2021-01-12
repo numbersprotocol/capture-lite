@@ -2,6 +2,7 @@ import { formatDate, KeyValue } from '@angular/common';
 import { Component } from '@angular/core';
 import { groupBy } from 'lodash';
 import { concatMap, map } from 'rxjs/operators';
+import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
 
 @Component({
@@ -18,7 +19,7 @@ export class CaptureTabComponent {
         proofs.map(async proof => ({
           proof,
           thumbnailUrl: await proof.getThumbnailUrl(),
-          id: await proof.getId(),
+          oldProofHash: getOldProof(proof).hash,
         }))
       )
     ),

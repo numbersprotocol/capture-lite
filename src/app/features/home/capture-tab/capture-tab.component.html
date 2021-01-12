@@ -8,7 +8,7 @@
       [routerLink]="
         capture.proof.willCollectTruth
           ? undefined
-          : ['capture-details', { id: capture.id }]
+          : ['capture-details', { oldProofHash: capture.oldProofHash }]
       "
       class="capture-item"
     >
