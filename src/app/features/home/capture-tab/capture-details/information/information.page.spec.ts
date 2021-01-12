@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SharedTestingModule } from '../../../../shared/shared-testing.module';
+import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
 import { InformationPage } from './information.page';
 
 describe('InformationPage', () => {

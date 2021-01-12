@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { SharedTestingModule } from '../../../../shared/shared-testing.module';
+import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
 import { OptionsMenuComponent } from './options-menu.component';
 
 describe('OptionsMenuComponent', () => {

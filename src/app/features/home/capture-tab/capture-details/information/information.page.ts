@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
-import { DiaBackendAssetRepository } from '../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
-import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import { DiaBackendAssetRepository } from '../../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

@@ -15,15 +15,15 @@ import {
   switchMapTo,
   tap,
 } from 'rxjs/operators';
-import { BlockingActionService } from '../../../shared/services/blocking-action/blocking-action.service';
-import { ConfirmAlert } from '../../../shared/services/confirm-alert/confirm-alert.service';
-import { DiaBackendAssetRepository } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
+import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
+import { DiaBackendAssetRepository } from '../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import {
   getOldProof,
   OldDefaultInformationName,
-} from '../../../shared/services/repositories/proof/old-proof-adapter';
-import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
-import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
+} from '../../../../shared/services/repositories/proof/old-proof-adapter';
+import { ProofRepository } from '../../../../shared/services/repositories/proof/proof-repository.service';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import {
   Option,
@@ -32,10 +32,10 @@ import {
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-asset',
-  templateUrl: './asset.page.html',
-  styleUrls: ['./asset.page.scss'],
+  templateUrl: './capture-details.page.html',
+  styleUrls: ['./capture-details.page.scss'],
 })
-export class AssetPage {
+export class CaptureDetailsPage {
   readonly asset$ = this.route.paramMap.pipe(
     map(params => params.get('id')),
     isNonNullable(),
