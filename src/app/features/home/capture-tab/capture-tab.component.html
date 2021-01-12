@@ -3,7 +3,15 @@
 >
   <div class="mat-title">{{ group.key }}</div>
   <mat-grid-list cols="3" gutterSize="8px">
-    <mat-grid-tile *ngFor="let capture of group.value" class="capture-item">
+    <mat-grid-tile
+      *ngFor="let capture of group.value"
+      [routerLink]="
+        capture.proof.willCollectTruth
+          ? undefined
+          : ['capture-details', { id: capture.id }]
+      "
+      class="capture-item"
+    >
       <div *ngIf="capture.proof.willCollectTruth" class="spinner-container">
         <ion-spinner></ion-spinner>
       </div>

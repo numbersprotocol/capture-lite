@@ -4,26 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, zip } from 'rxjs';
-import {
-  concatMap,
-  concatMapTo,
-  first,
-  map,
-  shareReplay,
-  switchMap,
-  switchMapTo,
-  tap,
-} from 'rxjs/operators';
+import { concatMap, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
-import { DiaBackendAssetRepository } from '../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
-import {
-  getOldProof,
-  OldDefaultInformationName,
-} from '../../../../shared/services/repositories/proof/old-proof-adapter';
+import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { ProofRepository } from '../../../../shared/services/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import { toDataUrl } from '../../../../utils/url';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import {
   Option,
@@ -36,38 +23,40 @@ import {
   styleUrls: ['./capture-details.page.scss'],
 })
 export class CaptureDetailsPage {
-  readonly asset$ = this.route.paramMap.pipe(
+  readonly proof$ = this.route.paramMap.pipe(
     map(params => params.get('id')),
     isNonNullable(),
-    switchMap(id => this.diaBackendAssetRepository.getById$(id)),
+    switchMap(id => this.proofRepositroy.getById$(id)),
     isNonNullable(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
-  readonly location$ = this.asset$.pipe(
-    map(asset => {
-      const latitude = asset.information.information?.find(
-        info => info.name === OldDefaultInformationName.GEOLOCATION_LATITUDE
-      )?.value;
-      const longitude = asset.information.information?.find(
-        info => info.name === OldDefaultInformationName.GEOLOCATION_LONGITUDE
-      )?.value;
+  readonly imageSrc$ = this.proof$.pipe(
+    switchMap(proof => proof.getAssets()),
+    map(assets => Object.entries(assets)[0]),
+    map(([base64, assetMeta]) => toDataUrl(base64, assetMeta.mimeType))
+  );
+  readonly location$ = this.proof$.pipe(
+    map(proof => {
+      const latitude = proof.geolocationLatitude;
+      const longitude = proof.geolocationLongitude;
       if (!latitude || !longitude) {
         return this.translacoService.translate('locationNotProvided');
       }
       return `${latitude}, ${longitude}`;
     })
   );
+  readonly email$ = this.diaBackendAuthService.getEmail$;
 
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly confirmAlert: ConfirmAlert,
-    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly blockingActionService: BlockingActionService,
     private readonly dialog: MatDialog,
     private readonly bottomSheet: MatBottomSheet,
     private readonly translacoService: TranslocoService,
-    private readonly proofRepositroy: ProofRepository
+    private readonly proofRepositroy: ProofRepository,
+    private readonly diaBackendAuthService: DiaBackendAuthService
   ) {}
 
   openContactSelectionDialog() {
@@ -102,23 +91,8 @@ export class CaptureDetailsPage {
   }
 
   private async remove() {
-    const action$ = zip(this.asset$, this.proofRepositroy.getAll$()).pipe(
-      first(),
-      concatMap(([asset, proofs]) => {
-        const proof = proofs.find(
-          p => getOldProof(p).hash === asset.proof_hash
-        );
-        if (proof) {
-          this.proofRepositroy.remove(proof);
-        }
-        return this.diaBackendAssetRepository
-          .remove$(asset)
-          .pipe(
-            first(),
-            concatMapTo(defer(() => this.diaBackendAssetRepository.refresh$()))
-          );
-      }),
-      switchMapTo(defer(() => this.router.navigate(['..'])))
+    const action$ = this.proof$.pipe(
+      concatMap(proof => this.proofRepositroy.remove(proof))
     );
     const result = await this.confirmAlert.present();
     if (result) {

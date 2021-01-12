@@ -35,8 +35,7 @@ export class SendingPostCapturePage {
   readonly asset$ = this.route.paramMap.pipe(
     map(params => params.get('id')),
     isNonNullable(),
-    switchMap(id => this.diaBackendAssetRepository.getById$(id)),
-    isNonNullable(),
+    switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
   readonly contact$ = this.route.paramMap.pipe(
@@ -103,8 +102,7 @@ export class SendingPostCapturePage {
           await this.proofRepository.remove(proof);
         }
       }),
-      concatMapTo(this.diaBackendAssetRepository.refresh$()),
-      concatMapTo(this.diaBackendAssetRepository.removeCache$(asset))
+      concatMapTo(this.diaBackendAssetRepository.refresh$())
     );
   }
 }

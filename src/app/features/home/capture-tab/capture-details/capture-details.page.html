@@ -13,10 +13,10 @@
 
 <div *transloco="let t" class="page-content">
   <mat-list class="content">
-    <img class="proof-image" [src]="(asset$ | async)?.asset_file" />
+    <img class="proof-image" [attr.src]="imageSrc$ | async" />
     <mat-list-item>
       <mat-icon mat-list-icon>person</mat-icon>
-      <div mat-line>{{ (asset$ | async)?.owner }}</div>
+      <div mat-line>{{ email$ | async }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>place</mat-icon>
@@ -27,12 +27,12 @@
     <mat-list-item>
       <mat-icon mat-list-icon>access_time</mat-icon>
       <div mat-line>
-        {{ (asset$ | async)?.information.proof?.timestamp | date: 'long' }}
+        {{ (proof$ | async)?.truth.timestamp | date: 'long' }}
       </div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
-      <div mat-line>{{ (asset$ | async)?.id }}</div>
+      <div mat-line>{{ '' }}</div>
     </mat-list-item>
     <mat-list-item>
       <button

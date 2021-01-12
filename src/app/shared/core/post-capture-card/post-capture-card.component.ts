@@ -40,9 +40,8 @@ export class PostCaptureCardComponent implements OnInit {
     .pipe(isNonNullable());
   readonly asset$ = this.transaction$.pipe(
     concatMap(transaction =>
-      this.diaBackendAssetRepository.getById$(transaction.asset.id)
-    ),
-    isNonNullable()
+      this.diaBackendAssetRepository.fetchById$(transaction.asset.id)
+    )
   );
   readonly location$ = this.asset$.pipe(
     map(asset => {

@@ -1,23 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { isEqual } from 'lodash';
-import { BehaviorSubject, defer, forkJoin, merge, Observable } from 'rxjs';
+import { BehaviorSubject, defer, forkJoin } from 'rxjs';
 import {
-  catchError,
   concatMap,
   concatMapTo,
   distinctUntilChanged,
-  map,
   pluck,
   single,
   tap,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
 import { toExtension } from '../../../../utils/mime-type';
-import { switchTap, VOID$ } from '../../../../utils/rx-operators/rx-operators';
-import { Database } from '../../database/database.service';
-import { OnConflictStrategy, Tuple } from '../../database/table/table';
+import { Tuple } from '../../database/table/table';
 import { NotificationService } from '../../notification/notification.service';
 import {
   getOldSignatures,
@@ -38,31 +33,25 @@ export class DiaBackendAssetRepository {
     .asObservable()
     .pipe(distinctUntilChanged());
 
-  private readonly fetchAllCacheTable = this.database.getTable<DiaBackendAsset>(
-    `${DiaBackendAssetRepository.name}_fetchAllCache`
-  );
-
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService,
     private readonly notificationService: NotificationService,
-    private readonly translocoService: TranslocoService,
-    private readonly database: Database
+    private readonly translocoService: TranslocoService
   ) {}
 
   refresh$() {
     return this.fetchAll$().pipe(single());
   }
 
-  getAll$(): Observable<DiaBackendAsset[]> {
-    return merge(this.fetchAll$(), this.fetchAllCacheTable.queryAll$()).pipe(
-      distinctUntilChanged(isEqual)
-    );
-  }
-
-  getById$(id: string) {
-    return this.getAll$().pipe(
-      map(assets => assets.find(asset => asset.id === id))
+  fetchById$(id: string) {
+    return this.authService.getAuthHeaders$.pipe(
+      concatMap(headers =>
+        this.httpClient.get<DiaBackendAsset>(
+          `${BASE_URL}/api/v2/assets/${id}/`,
+          { headers }
+        )
+      )
     );
   }
 
@@ -75,21 +64,7 @@ export class DiaBackendAssetRepository {
         })
       ),
       pluck('results'),
-      switchTap(assets =>
-        defer(async () => {
-          const all = await this.fetchAllCacheTable.queryAll();
-          await this.fetchAllCacheTable.delete(
-            all.filter(a => !assets.map(asset => asset.id).includes(a.id))
-          );
-          return this.fetchAllCacheTable.insert(
-            assets,
-            OnConflictStrategy.REPLACE,
-            (x, y) => x.id === y.id
-          );
-        })
-      ),
-      tap(() => this._isFetching$.next(false)),
-      catchError(() => defer(() => this.fetchAllCacheTable.queryAll()))
+      tap(() => this._isFetching$.next(false))
     );
   }
 
@@ -124,12 +99,6 @@ export class DiaBackendAssetRepository {
           { headers }
         )
       )
-    );
-  }
-
-  removeCache$(asset: DiaBackendAsset) {
-    return defer(() => this.fetchAllCacheTable.delete([asset])).pipe(
-      catchError(() => VOID$)
     );
   }
 }
