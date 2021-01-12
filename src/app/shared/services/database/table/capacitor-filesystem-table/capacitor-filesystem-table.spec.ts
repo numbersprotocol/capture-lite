@@ -211,6 +211,18 @@ describe('CapacitorFilesystemTable', () => {
       done();
     });
   });
+
+  it('should update', async done => {
+    const sameIdTuple1: TestTuple = { ...TUPLE2, id: TUPLE1_ID };
+    await table.insert([TUPLE1]);
+
+    await table.update(sameIdTuple1, (x, y) => x.id === y.id);
+
+    table.queryAll$().subscribe(tuples => {
+      expect(tuples).toEqual([sameIdTuple1]);
+      done();
+    });
+  });
 });
 
 interface TestTuple extends Tuple {

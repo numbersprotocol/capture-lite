@@ -73,6 +73,26 @@ describe('ProofRepository', () => {
       done();
     });
   });
+
+  it('should emit updated proof', async done => {
+    const sameTimestampProof = await Proof.from(
+      imageStore,
+      PROOF2_ASSETS,
+      PROOF1_TRUTH,
+      PROOF1_SIGNATURES_VALID
+    );
+    await repo.add(proof1);
+
+    await repo.update(
+      sameTimestampProof,
+      (x, y) => x.timestamp === y.timestamp
+    );
+
+    repo.getAll$().subscribe(proofs => {
+      expect(proofs).toEqual([sameTimestampProof]);
+      done();
+    });
+  });
 });
 
 const ASSET1_MIMETYPE: MimeType = 'image/png';
