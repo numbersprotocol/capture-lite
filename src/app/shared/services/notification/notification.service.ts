@@ -42,7 +42,17 @@ export class NotificationService {
     return this.createNotification().error(error);
   }
 
-  async notifyOnGoing<T>(action$: Observable<T>, title: string, body: string) {
-    return this.createNotification().notifyOnGoing(action$, title, body);
+  async notifyOnGoing<T>(
+    action$: Observable<T>,
+    title: string,
+    body: string,
+    swipable = false
+  ) {
+    return this.createNotification().notifyOnGoing(
+      action$,
+      title,
+      body,
+      swipable
+    );
   }
 }

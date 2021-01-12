@@ -33,7 +33,8 @@ export class CollectorService {
     return this.notificationService.notifyOnGoing(
       defer(() => this._run(assets)),
       this.translocoService.translate('storingAssets'),
-      this.translocoService.translate('message.storingAssets')
+      this.translocoService.translate('message.storingAssets'),
+      true
     );
   }
 
