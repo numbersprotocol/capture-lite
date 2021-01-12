@@ -1,6 +1,6 @@
 import { formatDate, KeyValue } from '@angular/common';
 import { Component } from '@angular/core';
-import { groupBy, isEmpty } from 'lodash';
+import { groupBy } from 'lodash';
 import { concatMap, map } from 'rxjs/operators';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
 
@@ -18,7 +18,6 @@ export class CaptureTabComponent {
         proofs.map(async proof => ({
           proof,
           thumbnailUrl: await proof.getThumbnailUrl(),
-          isCollected: !isEmpty(proof.truth.providers),
         }))
       )
     ),

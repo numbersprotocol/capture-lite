@@ -25,9 +25,12 @@ export class CaptureService {
       { timestamp: Date.now(), providers: {} },
       {}
     );
+
+    proof.willCollectTruth = true;
     await this.proofRepository.add(proof);
 
     const collected = await this.collectorService.run(await proof.getAssets());
+
     return this.proofRepository.update(
       collected,
       (x, y) => getOldProof(x).hash === getOldProof(y).hash
