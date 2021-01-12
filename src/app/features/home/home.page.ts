@@ -6,13 +6,10 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { CaptureService } from '../../shared/services/capture/capture.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import { ImageStore } from '../../shared/services/image-store/image-store.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
-import { Proof } from '../../shared/services/repositories/proof/proof';
-import { ProofRepository } from '../../shared/services/repositories/proof/proof-repository.service';
-import { capture } from '../../utils/camera';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -54,8 +51,7 @@ export class HomePage implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly onboardingService: OnboardingService,
     private readonly router: Router,
-    private readonly proofRepository: ProofRepository,
-    private readonly imageStore: ImageStore
+    private readonly captureService: CaptureService
   ) {}
 
   async ngOnInit() {
@@ -78,13 +74,6 @@ export class HomePage implements OnInit {
   }
 
   async capture() {
-    const photo = await capture();
-    const proof = await Proof.from(
-      this.imageStore,
-      { [photo.base64]: { mimeType: photo.mimeType } },
-      { timestamp: Date.now(), providers: {} },
-      {}
-    );
-    return this.proofRepository.add(proof);
+    return this.captureService.capture();
   }
 }

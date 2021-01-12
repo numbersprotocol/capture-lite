@@ -5,14 +5,9 @@ import { toDataUrl } from '../../../../utils/url';
 import { Tuple } from '../../database/table/table';
 import { ImageStore } from '../../image-store/image-store.service';
 
-/**
- * - A box containing self-verifiable data.
- * - Easy to serialize and deserialize for data persistence and interchange.
- * - Bundle all immutable information.
- * - Check if proof.assets has image. If true, generate and cache single thumb.
- * - Generate and ID from hash of stringified.
- */
 export class Proof {
+  willCollectTruth = false;
+
   get timestamp() {
     return this.truth.timestamp;
   }
@@ -126,6 +121,7 @@ export class Proof {
       indexedAssets: this.indexedAssets,
       truth: this.truth,
       signatures: this.signatures,
+      willCollectTruth: this.willCollectTruth,
     };
   }
 
@@ -167,6 +163,7 @@ export class Proof {
       indexedProofView.signatures
     );
     proof.setIndexedAssets(indexedProofView.indexedAssets);
+    proof.willCollectTruth = indexedProofView.willCollectTruth ?? false;
     return proof;
   }
 
@@ -283,4 +280,5 @@ export interface IndexedProofView extends Tuple {
   readonly indexedAssets: IndexedAssets;
   readonly truth: Truth;
   readonly signatures: Signatures;
+  readonly willCollectTruth?: boolean;
 }

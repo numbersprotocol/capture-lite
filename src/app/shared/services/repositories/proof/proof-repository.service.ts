@@ -46,4 +46,14 @@ export class ProofRepository {
       proof.destroy(),
     ]);
   }
+
+  async update(newProof: Proof, comparator: (x: Proof, y: Proof) => boolean) {
+    await this.table.update(newProof.getIndexedProofView(), (x, y) =>
+      comparator(
+        Proof.fromIndexedProofView(this.imageStore, x),
+        Proof.fromIndexedProofView(this.imageStore, y)
+      )
+    );
+    return newProof;
+  }
 }

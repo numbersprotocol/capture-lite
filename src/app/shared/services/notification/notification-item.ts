@@ -36,13 +36,18 @@ export class NotificationItem {
     return this;
   }
 
-  async notifyOnGoing<T>(action$: Observable<T>, title: string, body: string) {
+  async notifyOnGoing<T>(
+    action$: Observable<T>,
+    title: string,
+    body: string,
+    swipable = false
+  ) {
     console.info(`${title}: ${body}`);
     const notification = await this.schedule({
       id: this.id,
       title,
       body,
-      ongoing: true,
+      ongoing: !swipable,
     });
     return new Promise<T>((resolve, reject) => {
       action$.pipe(last()).subscribe({
