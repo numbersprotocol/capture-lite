@@ -1,15 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SharedTestingModule } from '../../../../shared/shared-testing.module';
-import { ContactSelectionDialogComponent } from './contact-selection-dialog.component';
+import { SharedTestingModule } from '../../../../../../shared/shared-testing.module';
+import { FriendInvitationDialogComponent } from './friend-invitation-dialog.component';
 
-describe('ContactSelectionDialogComponent', () => {
-  let component: ContactSelectionDialogComponent;
-  let fixture: ComponentFixture<ContactSelectionDialogComponent>;
+describe('FriendInvitationDialogComponent', () => {
+  let component: FriendInvitationDialogComponent;
+  let fixture: ComponentFixture<FriendInvitationDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContactSelectionDialogComponent],
+      declarations: [FriendInvitationDialogComponent],
       imports: [SharedTestingModule],
       providers: [
         { provide: MatDialogRef, useValue: {} },
@@ -17,7 +17,7 @@ describe('ContactSelectionDialogComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ContactSelectionDialogComponent);
+    fixture = TestBed.createComponent(FriendInvitationDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

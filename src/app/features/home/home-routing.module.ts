@@ -8,9 +8,11 @@ const routes: Routes = [
     component: HomePage,
   },
   {
-    path: 'asset',
+    path: 'capture-details',
     loadChildren: () =>
-      import('./asset/asset.module').then(m => m.AssetPageModule),
+      import('./capture-tab/capture-details/capture-details.module').then(
+        m => m.CaptureDetailsPageModule
+      ),
   },
   {
     path: 'inbox',

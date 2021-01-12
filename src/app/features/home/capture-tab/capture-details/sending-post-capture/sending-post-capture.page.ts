@@ -11,19 +11,19 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
-import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
-import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
+import { BlockingActionService } from '../../../../../shared/services/blocking-action/blocking-action.service';
+import { ConfirmAlert } from '../../../../../shared/services/confirm-alert/confirm-alert.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
-} from '../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendTransactionRepository } from '../../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import { getOldProof } from '../../../../shared/services/repositories/proof/old-proof-adapter';
-import { ProofRepository } from '../../../../shared/services/repositories/proof/proof-repository.service';
+} from '../../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendTransactionRepository } from '../../../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { getOldProof } from '../../../../../shared/services/repositories/proof/old-proof-adapter';
+import { ProofRepository } from '../../../../../shared/services/repositories/proof/proof-repository.service';
 import {
   isNonNullable,
   switchTap,
-} from '../../../../utils/rx-operators/rx-operators';
+} from '../../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -35,8 +35,7 @@ export class SendingPostCapturePage {
   readonly asset$ = this.route.paramMap.pipe(
     map(params => params.get('id')),
     isNonNullable(),
-    switchMap(id => this.diaBackendAssetRepository.getById$(id)),
-    isNonNullable(),
+    switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
   readonly contact$ = this.route.paramMap.pipe(
@@ -103,8 +102,7 @@ export class SendingPostCapturePage {
           await this.proofRepository.remove(proof);
         }
       }),
-      concatMapTo(this.diaBackendAssetRepository.refresh$()),
-      concatMapTo(this.diaBackendAssetRepository.removeCache$(asset))
+      concatMapTo(this.diaBackendAssetRepository.refresh$())
     );
   }
 }

@@ -34,7 +34,7 @@ export class HomePage implements OnInit {
         .slice(0, this.workaroundFetchLimit)
     )
   );
-  readonly username$ = this.diaBackendAuthService.getUsername$();
+  readonly username$ = this.diaBackendAuthService.getUsername$;
   readonly inboxCount$ = this.diaBackendTransactionRepository.getInbox$().pipe(
     map(transactions => transactions.length),
     // WORKARDOUND: force changeDetection to update badge when returning to App by clicking push notification

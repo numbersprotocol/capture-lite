@@ -18,6 +18,7 @@ export class CaptureTabComponent {
         proofs.map(async proof => ({
           proof,
           thumbnailUrl: await proof.getThumbnailUrl(),
+          id: await proof.getId(),
         }))
       )
     ),
