@@ -6,10 +6,12 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { CollectorService } from '../../shared/services/collector/collector.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { ImageStore } from '../../shared/services/image-store/image-store.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
+import { getOldProof } from '../../shared/services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../shared/services/repositories/proof/proof';
 import { ProofRepository } from '../../shared/services/repositories/proof/proof-repository.service';
 import { capture } from '../../utils/camera';
@@ -55,7 +57,8 @@ export class HomePage implements OnInit {
     private readonly onboardingService: OnboardingService,
     private readonly router: Router,
     private readonly proofRepository: ProofRepository,
-    private readonly imageStore: ImageStore
+    private readonly imageStore: ImageStore,
+    private readonly collectorService: CollectorService
   ) {}
 
   async ngOnInit() {
@@ -85,6 +88,12 @@ export class HomePage implements OnInit {
       { timestamp: Date.now(), providers: {} },
       {}
     );
-    return this.proofRepository.add(proof);
+    await this.proofRepository.add(proof);
+
+    const collected = await this.collectorService.run(await proof.getAssets());
+    return this.proofRepository.update(
+      collected,
+      (x, y) => getOldProof(x).hash === getOldProof(y).hash
+    );
   }
 }

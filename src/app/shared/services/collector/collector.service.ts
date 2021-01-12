@@ -29,19 +29,18 @@ export class CollectorService {
     private readonly imageStore: ImageStore
   ) {}
 
-  async runAndStore(assets: Assets) {
+  async run(assets: Assets) {
     return this.notificationService.notifyOnGoing(
-      defer(() => this._runAndStore(assets)),
+      defer(() => this._run(assets)),
       this.translocoService.translate('storingAssets'),
       this.translocoService.translate('message.storingAssets')
     );
   }
 
-  private async _runAndStore(assets: Assets) {
+  private async _run(assets: Assets) {
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
-    const proof = await Proof.from(this.imageStore, assets, truth, signatures);
-    return this.proofRepository.add(proof);
+    return Proof.from(this.imageStore, assets, truth, signatures);
   }
 
   private async collectTruth(assets: Assets): Promise<Truth> {

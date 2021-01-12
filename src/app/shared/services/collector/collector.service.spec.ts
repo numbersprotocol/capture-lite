@@ -9,28 +9,25 @@ import {
   Facts,
   Signature,
 } from '../repositories/proof/proof';
-import { ProofRepository } from '../repositories/proof/proof-repository.service';
 import { CollectorService } from './collector.service';
 import { FactsProvider } from './facts/facts-provider';
 import { SignatureProvider } from './signature/signature-provider';
 
 describe('CollectorService', () => {
   let service: CollectorService;
-  let proofRepository: ProofRepository;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
     service = TestBed.inject(CollectorService);
-    proofRepository = TestBed.inject(ProofRepository);
     spyOn(console, 'info');
   });
 
   it('should be created', () => expect(service).toBeTruthy());
 
   it('should get the stored proof after run', async () => {
-    const proof = await service.runAndStore(ASSETS);
+    const proof = await service.run(ASSETS);
     expect(await proof.getAssets()).toEqual(ASSETS);
   });
 
@@ -38,7 +35,7 @@ describe('CollectorService', () => {
     service.addFactsProvider(mockFactsProvider);
     service.removeFactsProvider(mockFactsProvider);
 
-    const proof = await service.runAndStore(ASSETS);
+    const proof = await service.run(ASSETS);
 
     expect(proof.truth.providers).toEqual({});
   });
@@ -47,29 +44,21 @@ describe('CollectorService', () => {
     service.addSignatureProvider(mockSignatureProvider);
     service.removeSignatureProvider(mockSignatureProvider);
 
-    const proof = await service.runAndStore(ASSETS);
+    const proof = await service.run(ASSETS);
 
     expect(proof.signatures).toEqual({});
   });
 
   it('should get the stored proof with provided facts', async () => {
     service.addFactsProvider(mockFactsProvider);
-    const proof = await service.runAndStore(ASSETS);
+    const proof = await service.run(ASSETS);
     expect(proof.truth.providers).toEqual({ [mockFactsProvider.id]: FACTS });
   });
 
   it('should get the stored proof with provided signature', async () => {
     service.addSignatureProvider(mockSignatureProvider);
-    const proof = await service.runAndStore(ASSETS);
+    const proof = await service.run(ASSETS);
     expect(proof.signatures).toEqual({ [mockSignatureProvider.id]: SIGNATURE });
-  });
-
-  it('should store proof with ProofRepository', async () => {
-    spyOn(proofRepository, 'add').and.callThrough();
-
-    const proof = await service.runAndStore(ASSETS);
-
-    expect(proofRepository.add).toHaveBeenCalledWith(proof);
   });
 });
 
