@@ -7,7 +7,7 @@ import { ImageStore } from '../../image-store/image-store.service';
 
 export class Proof {
   willCollectTruth = false;
-  diaBackendAssetId = '';
+  diaBackendAssetId: string | undefined = undefined;
 
   get timestamp() {
     return this.truth.timestamp;
