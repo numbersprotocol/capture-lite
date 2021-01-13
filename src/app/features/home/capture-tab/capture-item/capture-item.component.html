@@ -1,0 +1,5 @@
+<div *ngIf="willCollectTruth$ | async" class="spinner-container">
+  <ion-spinner></ion-spinner>
+</div>
+<ion-icon *ngIf="willCollectTruth$ | async" name="hourglass-outline"></ion-icon>
+<ion-img [attr.src]="thumbnailUrl$ | async"></ion-img>

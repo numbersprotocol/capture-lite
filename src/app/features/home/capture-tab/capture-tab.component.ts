@@ -2,8 +2,8 @@ import { formatDate, KeyValue } from '@angular/common';
 import { Component } from '@angular/core';
 import { groupBy } from 'lodash';
 import { concatMap, map } from 'rxjs/operators';
-import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
+import { CaptureItem } from './capture-item/capture-item.component';
 
 @Component({
   selector: 'app-capture-tab',
@@ -15,17 +15,11 @@ export class CaptureTabComponent {
   readonly capturesByDate$ = this.proofs$.pipe(
     map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp)),
     concatMap(proofs =>
-      Promise.all(
-        proofs.map(async proof => ({
-          proof,
-          thumbnailUrl: await proof.getThumbnailUrl(),
-          oldProofHash: getOldProof(proof).hash,
-        }))
-      )
+      Promise.all(proofs.map(async proof => new CaptureItem({ proof })))
     ),
-    map(captures =>
-      groupBy(captures, capture =>
-        formatDate(capture.proof.timestamp, 'yyyy/MM/dd', 'en-US')
+    map(captureItems =>
+      groupBy(captureItems, item =>
+        formatDate(item.timestamp, 'yyyy/MM/dd', 'en-US')
       )
     )
   );
@@ -38,5 +32,18 @@ export class CaptureTabComponent {
     b: KeyValue<number, string>
   ): number {
     return a.key > b.key ? -1 : b.key > a.key ? 1 : 0;
+  }
+
+  // tslint:disable-next-line: prefer-function-over-method
+  trackCaptureGroupByDate(
+    _: number,
+    item: { key: string; value: CaptureItem[] }
+  ) {
+    return item.key;
+  }
+
+  // tslint:disable-next-line: prefer-function-over-method
+  trackCaptureItem(_: number, item: CaptureItem) {
+    return `${item.oldProofHash}_${item.proof?.willCollectTruth}`;
   }
 }
