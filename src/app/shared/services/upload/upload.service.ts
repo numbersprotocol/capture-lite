@@ -6,7 +6,6 @@ import {
   EMPTY,
   from,
   of,
-  Subject,
   throwError,
   timer,
 } from 'rxjs';
@@ -33,7 +32,7 @@ import { ProofRepository } from '../repositories/proof/proof-repository.service'
 export class UploadService {
   private readonly _isPaused$ = new BehaviorSubject(false);
   private readonly _isPausedByFailure$ = new BehaviorSubject(false);
-  private readonly _taskQueue$ = new Subject<Proof[]>();
+  private readonly _taskQueue$ = new BehaviorSubject<Proof[]>([]);
   private readonly _currentUploadingCount$ = new BehaviorSubject(0);
   readonly isPaused$ = this._isPaused$
     .asObservable()
