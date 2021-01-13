@@ -6,12 +6,6 @@
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
-  <mat-spinner
-    *ngIf="
-      (transactionsWithStatus$ | async)?.length === 0 && isFetching$ | async
-    "
-    diameter="36"
-  ></mat-spinner>
   <mat-list>
     <ng-container
       *ngFor="
