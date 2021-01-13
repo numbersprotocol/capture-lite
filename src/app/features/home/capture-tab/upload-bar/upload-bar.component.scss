@@ -3,6 +3,7 @@
   height: 32px;
   justify-content: stretch;
   transition: all 1s;
+
   .upload-text {
     flex-grow: 0;
     font-size: 0.7em;
@@ -10,6 +11,7 @@
     margin-right: 10px;
     color: darkgray;
   }
+
   .complete-text {
     flex-grow: 1;
     font-size: 0.7em;
@@ -17,6 +19,7 @@
     margin-right: 10px;
     color: darkgray;
   }
+
   mat-icon {
     margin-left: 10px;
     margin-right: 10px;
