@@ -111,7 +111,7 @@ export class UploadService {
   private uploadProof$(proof: Proof) {
     const retryDelay = 500;
     const retryLimit = 3;
-    return this.diaBackendAssetRepository.createAsset$(proof).pipe(
+    return this.diaBackendAssetRepository.add$(proof).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err.error?.error.type === 'duplicate_asset_not_allowed') {
           return this.diaBackendAssetRepository.fetchByProof$(proof);

@@ -4,7 +4,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { concatMap, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { defer } from 'rxjs';
+import {
+  concatMap,
+  concatMapTo,
+  map,
+  shareReplay,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
@@ -96,7 +104,8 @@ export class CaptureDetailsPage {
 
   private async remove() {
     const action$ = this.proof$.pipe(
-      concatMap(proof => this.proofRepository.remove(proof))
+      concatMap(proof => this.proofRepository.remove(proof)),
+      concatMapTo(defer(() => this.router.navigate(['..'])))
     );
     const result = await this.confirmAlert.present();
     if (result) {

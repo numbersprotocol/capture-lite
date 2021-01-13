@@ -82,7 +82,7 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  createAsset$(proof: Proof) {
+  add$(proof: Proof) {
     return forkJoin([
       defer(() => this.authService.getAuthHeaders()),
       defer(() => buildFormDataToCreateAsset(proof)),

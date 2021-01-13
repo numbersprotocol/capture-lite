@@ -1,25 +1,20 @@
 <ng-container
-  *ngFor="let group of capturesByDate$ | async | keyvalue: keyDescendingOrder"
+  *ngFor="
+    let group of capturesByDate$ | async | keyvalue: keyDescendingOrder;
+    trackBy: trackCaptureGroupByDate
+  "
 >
   <div class="mat-title">{{ group.key }}</div>
   <mat-grid-list cols="3" gutterSize="8px">
     <mat-grid-tile
-      *ngFor="let capture of group.value"
+      *ngFor="let captureItem of group.value; trackBy: trackCaptureItem"
       [routerLink]="
-        capture.proof.willCollectTruth
+        captureItem.proof.willCollectTruth
           ? undefined
-          : ['capture-details', { oldProofHash: capture.oldProofHash }]
+          : ['capture-details', { oldProofHash: captureItem.oldProofHash }]
       "
-      class="capture-item"
     >
-      <div *ngIf="capture.proof.willCollectTruth" class="spinner-container">
-        <ion-spinner></ion-spinner>
-      </div>
-      <ion-icon
-        *ngIf="capture.proof.willCollectTruth"
-        name="hourglass-outline"
-      ></ion-icon>
-      <img [src]="capture.thumbnailUrl" />
+      <app-capture-item [item]="captureItem"></app-capture-item>
     </mat-grid-tile>
   </mat-grid-list>
 </ng-container>
