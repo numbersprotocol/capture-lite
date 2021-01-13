@@ -17,6 +17,7 @@ import { NotificationService } from './shared/services/notification/notification
 import { PushNotificationService } from './shared/services/push-notification/push-notification.service';
 import { getOldProof } from './shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from './shared/services/repositories/proof/proof-repository.service';
+import { UploadService } from './shared/services/upload/upload.service';
 
 const { SplashScreen } = Plugins;
 
@@ -41,12 +42,14 @@ export class AppComponent {
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
     diaBackendAuthService: DiaBackendAuthService,
-    diaBackendNotificationService: DiaBackendNotificationService
+    diaBackendNotificationService: DiaBackendNotificationService,
+    uploadService: UploadService
   ) {
     notificationService.requestPermission();
     pushNotificationService.register();
     langaugeService.initialize();
     diaBackendAuthService.initialize$().pipe(untilDestroyed(this)).subscribe();
+    uploadService.initialize$().pipe(untilDestroyed(this)).subscribe();
     diaBackendNotificationService
       .initialize$()
       .pipe(untilDestroyed(this))
