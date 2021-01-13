@@ -1,18 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
-import { UploadBarComponent } from './upload-bar.component';
+import { UploadingBarComponent } from './uploading-bar.component';
 
-describe('UploadBarComponent', () => {
-  let component: UploadBarComponent;
-  let fixture: ComponentFixture<UploadBarComponent>;
+describe('UploadingBarComponent', () => {
+  let component: UploadingBarComponent;
+  let fixture: ComponentFixture<UploadingBarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [UploadBarComponent],
+      declarations: [UploadingBarComponent],
       imports: [SharedTestingModule],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(UploadBarComponent);
+    fixture = TestBed.createComponent(UploadingBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

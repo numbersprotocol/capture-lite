@@ -3,17 +3,17 @@ import { PostCaptureCardModule } from '../../shared/core/post-capture-card/post-
 import { SharedModule } from '../../shared/shared.module';
 import { CaptureItemComponent } from './capture-tab/capture-item/capture-item.component';
 import { CaptureTabComponent } from './capture-tab/capture-tab.component';
-import { UploadBarModule } from './capture-tab/upload-bar/upload-bar.module';
+import { UploadingBarComponent } from './capture-tab/uploading-bar/uploading-bar.component';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    HomePageRoutingModule,
-    PostCaptureCardModule,
-    UploadBarModule,
+  imports: [SharedModule, HomePageRoutingModule, PostCaptureCardModule],
+  declarations: [
+    HomePage,
+    CaptureTabComponent,
+    CaptureItemComponent,
+    UploadingBarComponent,
   ],
-  declarations: [HomePage, CaptureTabComponent, CaptureItemComponent],
 })
 export class HomePageModule {}

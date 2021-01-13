@@ -21,15 +21,15 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
-import { DiaBackendAssetRepository } from '../dia-backend/asset/dia-backend-asset-repository.service';
-import { getOldProof } from '../repositories/proof/old-proof-adapter';
-import { Proof } from '../repositories/proof/proof';
-import { ProofRepository } from '../repositories/proof/proof-repository.service';
+import { getOldProof } from '../../../repositories/proof/old-proof-adapter';
+import { Proof } from '../../../repositories/proof/proof';
+import { ProofRepository } from '../../../repositories/proof/proof-repository.service';
+import { DiaBackendAssetRepository } from '../dia-backend-asset-repository.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UploadService {
+export class DiaBackendAssetUploadingService {
   private readonly _isPaused$ = new BehaviorSubject(false);
   private readonly _isPausedByFailure$ = new BehaviorSubject(false);
   private readonly _taskQueue$ = new BehaviorSubject<Proof[]>([]);

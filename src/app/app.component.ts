@@ -10,6 +10,7 @@ import { CaptureService } from './shared/services/capture/capture.service';
 import { CollectorService } from './shared/services/collector/collector.service';
 import { CapacitorFactsProvider } from './shared/services/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 import { WebCryptoApiSignatureProvider } from './shared/services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { DiaBackendAssetUploadingService } from './shared/services/dia-backend/asset/uploading/dia-backend-asset-uploading.service';
 import { DiaBackendAuthService } from './shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendNotificationService } from './shared/services/dia-backend/notification/dia-backend-notification.service';
 import { LanguageService } from './shared/services/language/language.service';
@@ -17,7 +18,6 @@ import { NotificationService } from './shared/services/notification/notification
 import { PushNotificationService } from './shared/services/push-notification/push-notification.service';
 import { getOldProof } from './shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from './shared/services/repositories/proof/proof-repository.service';
-import { UploadService } from './shared/services/upload/upload.service';
 
 const { SplashScreen } = Plugins;
 
@@ -43,7 +43,7 @@ export class AppComponent {
     langaugeService: LanguageService,
     diaBackendAuthService: DiaBackendAuthService,
     diaBackendNotificationService: DiaBackendNotificationService,
-    uploadService: UploadService
+    uploadService: DiaBackendAssetUploadingService
   ) {
     notificationService.requestPermission();
     pushNotificationService.register();
