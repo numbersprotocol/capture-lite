@@ -68,15 +68,7 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  async add(proof: Proof) {
-    return this.notificationService.notifyOnGoing(
-      this.createAsset$(proof),
-      this.translocoService.translate('registeringProof'),
-      this.translocoService.translate('message.registeringProof')
-    );
-  }
-
-  private createAsset$(proof: Proof) {
+  add$(proof: Proof) {
     return forkJoin([
       defer(() => this.authService.getAuthHeaders()),
       defer(() => buildFormDataToCreateAsset(proof)),
