@@ -44,6 +44,10 @@ export class UploadService {
   readonly currentUploadingCount$ = this._currentUploadingCount$
     .asObservable()
     .pipe(distinctUntilChanged());
+  private readonly taskQueue$ = combineLatest([
+    this._taskQueue$.asObservable().pipe(distinctUntilChanged()),
+    this.isPaused$,
+  ]).pipe(map(([t, _]) => t));
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
@@ -69,21 +73,20 @@ export class UploadService {
     const taskDebounceTime = 50;
     return combineLatest([
       this.proofRepository.getAll$().pipe(debounceTime(taskDebounceTime)),
-      this.isPaused$.pipe(filter(isPaused => !isPaused)),
+      this.isPaused$,
     ]).pipe(
-      map(([proofs, _]) =>
-        proofs.filter(
+      tap(([proofs, isPaused]) => {
+        const tasks = proofs.filter(
           proof => !proof.diaBackendAssetId && !proof.willCollectTruth
-        )
-      ),
-      tap(proofs => this._currentUploadingCount$.next(proofs.length)),
-      tap(proofs => this.updateTaskQueue(proofs))
+        );
+        this._currentUploadingCount$.next(tasks.length);
+        this.updateTaskQueue(isPaused ? [] : tasks);
+      })
     );
   }
 
   private uploadTaskWorker$() {
-    const cleanTasks$ = EMPTY.pipe(tap(() => this.updateTaskQueue([])));
-    const runTasks$ = this._taskQueue$.pipe(
+    const runTasks$ = this.taskQueue$.pipe(
       filter(proofs => proofs.length > 0),
       concatMap(proofs =>
         from(proofs).pipe(
@@ -98,7 +101,7 @@ export class UploadService {
       )
     );
     return this.isPaused$.pipe(
-      switchMap(isPaused => (isPaused ? cleanTasks$ : runTasks$))
+      switchMap(isPaused => (isPaused ? EMPTY : runTasks$))
     );
   }
 
