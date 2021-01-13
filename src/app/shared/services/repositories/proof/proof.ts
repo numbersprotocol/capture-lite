@@ -166,7 +166,7 @@ export class Proof {
     );
     proof.setIndexedAssets(indexedProofView.indexedAssets);
     proof.willCollectTruth = indexedProofView.willCollectTruth ?? false;
-    proof.diaBackendAssetId = indexedProofView.diaBackendAssetId ?? '';
+    proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
     return proof;
   }
 
