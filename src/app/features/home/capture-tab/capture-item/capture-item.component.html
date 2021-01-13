@@ -2,4 +2,10 @@
   <ion-spinner></ion-spinner>
 </div>
 <ion-icon *ngIf="willCollectTruth$ | async" name="hourglass-outline"></ion-icon>
-<ion-img [attr.src]="thumbnailUrl$ | async"></ion-img>
+<!-- Display an empty small image to avoid border of img without src. -->
+<img
+  [src]="
+    (thumbnailUrl$ | async) ||
+    'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+  "
+/>
