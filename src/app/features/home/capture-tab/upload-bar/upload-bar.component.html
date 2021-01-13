@@ -1,0 +1,44 @@
+<ng-container
+  *ngIf="{
+    currentUploadingCount: currentUploadingCount$ | async,
+    isPaused: isPaused$ | async,
+    isPausedByFailure: isPausedByFailure$ | async
+  } as uploadState"
+>
+  <mat-toolbar color="background" class="thin-upload-bar">
+    <ng-container *ngIf="uploadState.currentUploadingCount > 0; else completed">
+      <span class="upload-text" *ngIf="!uploadState.isPaused"
+        >Registering {{ uploadState.currentUploadingCount }} photos on
+        blockchain.</span
+      >
+      <span
+        class="upload-text"
+        *ngIf="uploadState.isPaused && !uploadState.isPausedByFailure"
+        >Registering {{ uploadState.currentUploadingCount }} photos on
+        blockchain paused.</span
+      >
+      <span
+        class="upload-text"
+        *ngIf="uploadState.isPaused && uploadState.isPausedByFailure"
+        >Server connection lost. Registering paused.</span
+      >
+      <span class="spacer">
+        <mat-progress-bar
+          *ngIf="!uploadState.isPaused"
+          mode="indeterminate"
+        ></mat-progress-bar>
+      </span>
+      <mat-icon *ngIf="!uploadState.isPaused" (click)="pause()">pause</mat-icon>
+      <mat-icon *ngIf="uploadState.isPaused" (click)="resume()"
+        >publish</mat-icon
+      >
+    </ng-container>
+    <ng-template #completed>
+      <span
+        class="complete-text"
+        *ngIf="uploadState.currentUploadingCount === 0"
+        >All photos registered on blockchain successfully</span
+      >
+    </ng-template>
+  </mat-toolbar>
+</ng-container>
