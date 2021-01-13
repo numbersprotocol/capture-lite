@@ -53,13 +53,13 @@
         >
       </button>
     </mat-toolbar>
-
     <mat-tab-group
       (selectedTabChange)="onTapChanged($event)"
       mat-align-tabs="center"
       backgroundColor="primary"
     >
       <mat-tab label="Capture">
+        <app-upload-bar></app-upload-bar>
         <app-capture-tab></app-capture-tab>
       </mat-tab>
       <mat-tab label="PostCapture">
