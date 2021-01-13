@@ -5,22 +5,26 @@
     isPausedByFailure: isPausedByFailure$ | async
   } as uploadState"
 >
-  <mat-toolbar color="background" class="thin-upload-bar">
+  <mat-toolbar color="background" class="thin-upload-bar" *transloco="let t">
     <ng-container *ngIf="uploadState.currentUploadingCount > 0; else completed">
-      <span class="upload-text" *ngIf="!uploadState.isPaused"
-        >Registering {{ uploadState.currentUploadingCount }} photos on
-        blockchain.</span
-      >
+      <span class="upload-text" *ngIf="!uploadState.isPaused">{{
+        t('message.registeringPhotos', {
+          photos: uploadState.currentUploadingCount
+        })
+      }}</span>
       <span
         class="upload-text"
         *ngIf="uploadState.isPaused && !uploadState.isPausedByFailure"
-        >Registering {{ uploadState.currentUploadingCount }} photos on
-        blockchain paused.</span
+        >{{
+          t('message.registeringPhotosPaused', {
+            photos: uploadState.currentUploadingCount
+          })
+        }}</span
       >
       <span
         class="upload-text"
         *ngIf="uploadState.isPaused && uploadState.isPausedByFailure"
-        >Server connection lost. Registering paused.</span
+        >{{ t('message.serverConnectionLost') }}</span
       >
       <span class="spacer">
         <mat-progress-bar
@@ -37,7 +41,7 @@
       <span
         class="complete-text"
         *ngIf="uploadState.currentUploadingCount === 0"
-        >All photos registered on blockchain successfully</span
+        >{{ t('message.allPhotosRegistered') }}</span
       >
     </ng-template>
   </mat-toolbar>

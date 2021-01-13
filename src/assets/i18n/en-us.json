@@ -84,6 +84,7 @@
   ".message": "Message",
   "next": "Next",
   "start": "Start",
+  "notRegistered": "Not Registered",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "verificationEmailSent": "A verification email has been sent to your email address.",
@@ -106,7 +107,11 @@
     "transactionExpired": "A PostCapture you delivered has been returned.",
     "viewAll": "open more...",
     "postCaptureLimitation": "The current Beta version of Capture only displays the 10 newest PostCaptures.",
-    "syncingAssets": "Syncing of your photo assets is in progress, this might take a few minutes. Please keep the app open and connected online."
+    "syncingAssets": "Syncing of your photo assets is in progress, this might take a few minutes. Please keep the app open and connected online.",
+    "registeringPhotos": "Registering {{ photos }} photos on blockchain.",
+    "registeringPhotosPaused": "Registering {{ photos }} photos on blockchain paused.",
+    "serverConnectionLost": "Server connection lost. Registration paused.",
+    "allPhotosRegistered": "All photos registered on blockchain successfully"
   },
   "error": {
     "loginTimeoutError": "Connection timeout. Please try again later.",
