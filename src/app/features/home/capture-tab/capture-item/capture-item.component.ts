@@ -13,6 +13,8 @@ import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
   styleUrls: ['./capture-item.component.scss'],
 })
 export class CaptureItemComponent {
+  // Use setter to make sure the item is updated even if the component is
+  // recycled and redrawed (e.g. virtual scroll).
   @Input()
   set item(value: CaptureItem) {
     this._item$.next(value);

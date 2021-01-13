@@ -44,6 +44,6 @@ export class CaptureTabComponent {
 
   // tslint:disable-next-line: prefer-function-over-method
   trackCaptureItem(_: number, item: CaptureItem) {
-    return `${item.oldProofHash}_${item.proof?.willCollectTruth}`;
+    return item.oldProofHash;
   }
 }
