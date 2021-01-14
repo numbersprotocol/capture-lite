@@ -5,21 +5,13 @@
   <mat-grid-list cols="3" gutterSize="8px">
     <mat-grid-tile
       *ngFor="let capture of group.value"
-      [routerLink]="
-        capture.proof.willCollectTruth
-          ? undefined
-          : ['capture-details', { id: capture.id }]
-      "
+      [routerLink]="false ? undefined : ['capture-details', { id: capture.id }]"
       class="capture-item"
     >
-      <div *ngIf="capture.proof.willCollectTruth" class="spinner-container">
+      <div *ngIf="false" class="spinner-container">
         <ion-spinner></ion-spinner>
       </div>
-      <ion-icon
-        *ngIf="capture.proof.willCollectTruth"
-        name="hourglass-outline"
-        size="large"
-      ></ion-icon>
+      <ion-icon *ngIf="false" name="hourglass-outline" size="large"></ion-icon>
       <img [src]="capture.thumbnailUrl" />
     </mat-grid-tile>
   </mat-grid-list>

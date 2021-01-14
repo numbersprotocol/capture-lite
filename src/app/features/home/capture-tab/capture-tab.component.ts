@@ -1,7 +1,9 @@
 import { formatDate, KeyValue } from '@angular/common';
 import { Component } from '@angular/core';
 import { groupBy } from 'lodash';
-import { concatMap, map } from 'rxjs/operators';
+import { combineLatest, of } from 'rxjs';
+import { concatMap, map, switchMap } from 'rxjs/operators';
+import { CaptureService } from '../../../shared/services/capture/capture.service';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
 
 @Component({
@@ -13,12 +15,16 @@ export class CaptureTabComponent {
   private readonly proofs$ = this.proofRepository.getAll$();
   readonly capturesByDate$ = this.proofs$.pipe(
     map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp)),
-    concatMap(proofs =>
+    switchMap(proofs =>
+      combineLatest([of(proofs), this.captureService.collectingOldProofHashes$])
+    ),
+    concatMap(([proofs, collectingOldProofHashes]) =>
       Promise.all(
         proofs.map(async proof => ({
           proof,
           thumbnailUrl: await proof.getThumbnailUrl(),
           id: await proof.getId(),
+          isCollecting: collectingOldProofHashes.has(),
         }))
       )
     ),
@@ -29,7 +35,10 @@ export class CaptureTabComponent {
     )
   );
 
-  constructor(private readonly proofRepository: ProofRepository) {}
+  constructor(
+    private readonly proofRepository: ProofRepository,
+    private readonly captureService: CaptureService
+  ) {}
 
   // tslint:disable-next-line: prefer-function-over-method
   keyDescendingOrder(
