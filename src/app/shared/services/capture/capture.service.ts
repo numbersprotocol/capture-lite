@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { CameraService, Photo } from '../camera/camera.service';
 import { CollectorService } from '../collector/collector.service';
 import { ImageStore } from '../image-store/image-store.service';
@@ -10,6 +12,14 @@ import { ProofRepository } from '../repositories/proof/proof-repository.service'
   providedIn: 'root',
 })
 export class CaptureService {
+  // tslint:disable-next-line: rxjs-no-explicit-generics
+  private readonly _collectingOldProofHashes$ = new BehaviorSubject<
+    Set<string>
+  >(new Set());
+  readonly collectingOldProofHashes$ = this._collectingOldProofHashes$
+    .asObservable()
+    .pipe(distinctUntilChanged());
+
   constructor(
     private readonly cameraService: CameraService,
     private readonly proofRepository: ProofRepository,
@@ -25,11 +35,15 @@ export class CaptureService {
       { timestamp: Date.now(), providers: {} },
       {}
     );
-
-    proof.willCollectTruth = true;
     await this.proofRepository.add(proof);
 
+    this._collectingOldProofHashes$.next(
+      this._collectingOldProofHashes$.value.add(getOldProof(proof).hash)
+    );
     const collected = await this.collectorService.run(await proof.getAssets());
+    const newCollectingOldProofHashes = this._collectingOldProofHashes$.value;
+    newCollectingOldProofHashes.delete(getOldProof(proof).hash);
+    this._collectingOldProofHashes$.next(newCollectingOldProofHashes);
 
     return this.proofRepository.update(
       collected,

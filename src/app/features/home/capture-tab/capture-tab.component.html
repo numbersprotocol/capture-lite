@@ -9,17 +9,17 @@
     <mat-grid-tile
       *ngFor="let captureItem of group.value; trackBy: trackCaptureItem"
       [routerLink]="
-        captureItem.proof.willCollectTruth
+        captureItem.isCollecting
           ? undefined
           : ['capture-details', { oldProofHash: captureItem.oldProofHash }]
       "
       class="capture-item"
     >
-      <div *ngIf="captureItem.proof.willCollectTruth" class="spinner-container">
+      <div *ngIf="captureItem.isCollecting" class="spinner-container">
         <ion-spinner></ion-spinner>
       </div>
       <ion-icon
-        *ngIf="captureItem.proof.willCollectTruth"
+        *ngIf="captureItem.isCollecting"
         name="hourglass-outline"
       ></ion-icon>
       <img [src]="captureItem.thumbnailUrl" />
