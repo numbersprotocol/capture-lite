@@ -2,8 +2,9 @@ import { formatDate, KeyValue } from '@angular/common';
 import { Component } from '@angular/core';
 import { groupBy } from 'lodash';
 import { concatMap, map } from 'rxjs/operators';
+import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
+import { Proof } from '../../../shared/services/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
-import { CaptureItem } from './capture-item/capture-item.component';
 
 @Component({
   selector: 'app-capture-tab',
@@ -15,11 +16,17 @@ export class CaptureTabComponent {
   readonly capturesByDate$ = this.proofs$.pipe(
     map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp)),
     concatMap(proofs =>
-      Promise.all(proofs.map(async proof => new CaptureItem({ proof })))
+      Promise.all<CaptureItem>(
+        proofs.map(async proof => ({
+          proof,
+          thumbnailUrl: await proof.getThumbnailUrl(),
+          oldProofHash: getOldProof(proof).hash,
+        }))
+      )
     ),
-    map(captureItems =>
-      groupBy(captureItems, item =>
-        formatDate(item.timestamp, 'yyyy/MM/dd', 'en-US')
+    map(captures =>
+      groupBy(captures, capture =>
+        formatDate(capture.proof.timestamp, 'yyyy/MM/dd', 'en-US')
       )
     )
   );
@@ -46,4 +53,10 @@ export class CaptureTabComponent {
   trackCaptureItem(_: number, item: CaptureItem) {
     return item.oldProofHash;
   }
+}
+
+interface CaptureItem {
+  proof: Proof;
+  thumbnailUrl?: string;
+  oldProofHash: string;
 }

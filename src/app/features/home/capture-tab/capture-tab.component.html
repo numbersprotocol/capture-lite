@@ -13,8 +13,16 @@
           ? undefined
           : ['capture-details', { oldProofHash: captureItem.oldProofHash }]
       "
+      class="capture-item"
     >
-      <app-capture-item [item]="captureItem"></app-capture-item>
+      <div *ngIf="captureItem.proof.willCollectTruth" class="spinner-container">
+        <ion-spinner></ion-spinner>
+      </div>
+      <ion-icon
+        *ngIf="captureItem.proof.willCollectTruth"
+        name="hourglass-outline"
+      ></ion-icon>
+      <img [src]="captureItem.thumbnailUrl" />
     </mat-grid-tile>
   </mat-grid-list>
 </ng-container>
