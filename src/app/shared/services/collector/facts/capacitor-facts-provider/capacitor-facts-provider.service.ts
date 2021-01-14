@@ -1,8 +1,12 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { GeolocationPlugin, Plugins } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { GEOLOCATION_PLUGIN } from '../../../../../shared/core/capacitor-plugins/capacitor-plugins.module';
+import {
+  GeolocationError,
+  GeolocationErrorCode,
+  GeolocationService,
+} from '../../../geolocation/geolocation.service';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import {
   Assets,
@@ -21,8 +25,7 @@ export class CapacitorFactsProvider implements FactsProvider {
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
   constructor(
-    @Inject(GEOLOCATION_PLUGIN)
-    private readonly geolocationPlugin: GeolocationPlugin,
+    private readonly geolocationService: GeolocationService,
     private readonly preferenceManager: PreferenceManager,
     private readonly snackBar: MatSnackBar,
     private readonly translocoService: TranslocoService
@@ -63,36 +66,25 @@ export class CapacitorFactsProvider implements FactsProvider {
   }
 
   private async collectLocationInfo() {
-    const defaultGeolocationAge = 600000;
+    const defaultGeolocationAge = 30000;
     const defaultGeolocationTimeout = 20000;
     const isLocationInfoCollectionEnabled = await this.isGeolocationInfoCollectionEnabled();
     if (!isLocationInfoCollectionEnabled) {
       return undefined;
     }
 
-    // WORKAROUND: manually set timeout to avoid location never resolved:
-    //             https://github.com/ionic-team/capacitor/issues/3062
-
-    const timeout = new Promise<undefined>((_, reject) => {
-      setTimeout(() => {
-        reject({
-          code: GeolocationPositionErrorCode.TIMEOUT,
-          message: `Timeout when collecting location info: ${defaultGeolocationTimeout}`,
-        });
-      }, defaultGeolocationTimeout);
-    });
-
-    return Promise.race([
-      this.geolocationPlugin.getCurrentPosition({
+    return this.geolocationService
+      .getCurrentPosition({
         enableHighAccuracy: true,
         maximumAge: defaultGeolocationAge,
         timeout: defaultGeolocationTimeout,
-      }),
-      timeout,
-    ]).catch((err: GeolocationPositionError) => {
-      this.showGeolocationPostiionErrorMessage(err);
-      return undefined;
-    });
+      })
+      .catch((error: any) => {
+        if (error instanceof GeolocationError) {
+          this.showGeolocationPostiionErrorMessage(error);
+        }
+        return undefined;
+      });
   }
 
   isDeviceInfoCollectionEnabled$() {
@@ -119,20 +111,20 @@ export class CapacitorFactsProvider implements FactsProvider {
     return this.preferences.setBoolean(PrefKeys.COLLECT_LOCATION_INFO, enable);
   }
 
-  private showGeolocationPostiionErrorMessage(error: GeolocationPositionError) {
+  private showGeolocationPostiionErrorMessage(error: GeolocationError) {
     let message = '';
     switch (error.code) {
-      case GeolocationPositionErrorCode.PERMISSION_DENIED:
+      case GeolocationErrorCode.PERMISSION_DENIED:
         message = this.translocoService.translate(
           'error.locationPermissionDenied'
         );
         break;
-      case GeolocationPositionErrorCode.POSITION_UNAVAILABLE:
+      case GeolocationErrorCode.POSITION_UNAVAILABLE:
         message = this.translocoService.translate(
           'error.locationPositionUnavailable'
         );
         break;
-      case GeolocationPositionErrorCode.TIMEOUT:
+      case GeolocationErrorCode.TIMEOUT:
         message = this.translocoService.translate('error.locationTimeout');
         break;
       default:
@@ -144,8 +136,8 @@ export class CapacitorFactsProvider implements FactsProvider {
          * so a fallback message is provided.
          */
         if (
-          error.message.toLowerCase().includes('permission') ||
-          error.message.toLowerCase().includes('denied')
+          error.message?.toLowerCase().includes('permission') ||
+          error.message?.toLowerCase().includes('denied')
         ) {
           message = this.translocoService.translate(
             'error.locationPermissionDenied'
@@ -166,15 +158,4 @@ export class CapacitorFactsProvider implements FactsProvider {
 const enum PrefKeys {
   COLLECT_DEVICE_INFO = 'COLLECT_DEVICE_INFO',
   COLLECT_LOCATION_INFO = 'COLLECT_LOCATION_INFO',
-}
-
-const enum GeolocationPositionErrorCode {
-  NOT_USED,
-  PERMISSION_DENIED,
-  POSITION_UNAVAILABLE,
-  TIMEOUT,
-}
-export interface GeolocationPositionError {
-  code: GeolocationPositionErrorCode;
-  message: string;
 }
