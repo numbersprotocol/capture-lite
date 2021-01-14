@@ -5,6 +5,7 @@ import { combineLatest, of } from 'rxjs';
 import { concatMap, map, switchMap } from 'rxjs/operators';
 import { CaptureService } from '../../../shared/services/capture/capture.service';
 import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
+import { Proof } from '../../../shared/services/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class CaptureTabComponent {
       combineLatest([of(proofs), this.captureService.collectingOldProofHashes$])
     ),
     concatMap(([proofs, collectingOldProofHashes]) =>
-      Promise.all(
+      Promise.all<CaptureItem>(
         proofs.map(async proof => ({
           proof,
           thumbnailUrl: await proof.getThumbnailUrl(),
@@ -48,4 +49,24 @@ export class CaptureTabComponent {
   ): number {
     return a.key > b.key ? -1 : b.key > a.key ? 1 : 0;
   }
+
+  // tslint:disable-next-line: prefer-function-over-method
+  trackCaptureGroupByDate(
+    _: number,
+    item: { key: string; value: CaptureItem[] }
+  ) {
+    return item.key;
+  }
+
+  // tslint:disable-next-line: prefer-function-over-method
+  trackCaptureItem(_: number, item: CaptureItem) {
+    return item.oldProofHash;
+  }
+}
+
+interface CaptureItem {
+  proof: Proof;
+  thumbnailUrl?: string;
+  oldProofHash: string;
+  isCollecting: boolean;
 }

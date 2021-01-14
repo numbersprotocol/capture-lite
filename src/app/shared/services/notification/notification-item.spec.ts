@@ -3,7 +3,6 @@
 import { TestBed } from '@angular/core/testing';
 import { LocalNotificationsPlugin, Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { of, throwError } from 'rxjs';
 import { LOCAL_NOTIFICATIONS_PLUGIN } from '../../../shared/core/capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { NotificationItem } from './notification-item';
@@ -34,47 +33,6 @@ describe('NotificationItem', () => {
     expect(await item.notify(SAMPLE_TITLE, SAMPLE_MESSAGE)).toBeInstanceOf(
       NotificationItem
     );
-  });
-
-  it('should be able to notify error', async () => {
-    spyOn(console, 'error');
-    expect(await item.error(SAMPLE_ERROR)).toBeInstanceOf(Error);
-  });
-
-  it('should be able to cancel itself', async () => {
-    spyOn(console, 'log');
-    expect(await item.cancel()).toBeInstanceOf(NotificationItem);
-  });
-
-  it('should be able to notify with on going action and cancel automatically', async () => {
-    spyOn(console, 'info');
-    spyOn(localNotificationsPlugin, 'cancel').and.resolveTo();
-    const expected = 2;
-    const result = await item.notifyOnGoing(
-      of(1, expected),
-      SAMPLE_TITLE,
-      SAMPLE_MESSAGE
-    );
-    expect(localNotificationsPlugin.cancel).toHaveBeenCalled();
-    expect(result).toEqual(expected);
-  });
-
-  it('should return an Error and do not cancel automatically when throw during on going action', async () => {
-    const expected = SAMPLE_ERROR;
-    spyOn(console, 'info');
-    spyOn(localNotificationsPlugin, 'cancel').and.resolveTo();
-    spyOn(item, 'error').and.resolveTo(expected);
-    try {
-      await item.notifyOnGoing(
-        throwError(expected),
-        SAMPLE_TITLE,
-        SAMPLE_MESSAGE
-      );
-    } catch (err) {
-      expect(err).toEqual(expected);
-    }
-    expect(localNotificationsPlugin.cancel).not.toHaveBeenCalled();
-    expect(item.error).toHaveBeenCalled();
   });
 });
 
