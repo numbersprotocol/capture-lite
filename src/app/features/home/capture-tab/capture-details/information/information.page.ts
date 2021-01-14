@@ -14,9 +14,12 @@ import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
 })
 export class InformationPage {
   readonly proof$ = this.route.paramMap.pipe(
-    map(params => params.get('id')),
+    map(params => params.get('oldProofHash')),
     isNonNullable(),
-    switchMap(id => this.proofRepository.getById$(id)),
+    switchMap(async oldProofHash => {
+      const all = await this.proofRepository.getAll();
+      return all.find(proof => getOldProof(proof).hash === oldProofHash);
+    }),
     isNonNullable(),
     shareReplay({ bufferSize: 1, refCount: true })
   );

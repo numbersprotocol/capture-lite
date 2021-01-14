@@ -4,6 +4,7 @@ import { groupBy } from 'lodash';
 import { combineLatest, of } from 'rxjs';
 import { concatMap, map, switchMap } from 'rxjs/operators';
 import { CaptureService } from '../../../shared/services/capture/capture.service';
+import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
 
 @Component({
@@ -23,8 +24,7 @@ export class CaptureTabComponent {
         proofs.map(async proof => ({
           proof,
           thumbnailUrl: await proof.getThumbnailUrl(),
-          id: await proof.getId(),
-          isCollecting: collectingOldProofHashes.has(),
+          oldProofHash: getOldProof(proof).hash,
         }))
       )
     ),
