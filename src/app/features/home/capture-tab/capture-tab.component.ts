@@ -25,6 +25,7 @@ export class CaptureTabComponent {
           proof,
           thumbnailUrl: await proof.getThumbnailUrl(),
           oldProofHash: getOldProof(proof).hash,
+          isCollecting: collectingOldProofHashes.has(getOldProof(proof).hash),
         }))
       )
     ),
