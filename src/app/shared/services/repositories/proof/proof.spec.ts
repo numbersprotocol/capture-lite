@@ -56,14 +56,6 @@ describe('Proof', () => {
     expect(proof.timestamp).toEqual(TRUTH.timestamp);
   });
 
-  it('should get the same state of willCollectTruth with the previously set value', async () => {
-    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
-    const expected = true;
-    proof.willCollectTruth = expected;
-
-    expect(proof.willCollectTruth).toEqual(expected);
-  });
-
   it('should get same ID with same properties', async () => {
     proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
     const another = await Proof.from(

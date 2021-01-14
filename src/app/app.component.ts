@@ -16,8 +16,6 @@ import { DiaBackendNotificationService } from './shared/services/dia-backend/not
 import { LanguageService } from './shared/services/language/language.service';
 import { NotificationService } from './shared/services/notification/notification.service';
 import { PushNotificationService } from './shared/services/push-notification/push-notification.service';
-import { getOldProof } from './shared/services/repositories/proof/old-proof-adapter';
-import { ProofRepository } from './shared/services/repositories/proof/proof-repository.service';
 
 const { SplashScreen } = Plugins;
 
@@ -37,7 +35,6 @@ export class AppComponent {
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     private readonly captureService: CaptureService,
     private readonly cameraService: CameraService,
-    private readonly proofRepository: ProofRepository,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
@@ -56,7 +53,6 @@ export class AppComponent {
       .subscribe();
     this.initializeApp();
     this.restoreAppState();
-    this.initializeProofRepository();
     this.initializeCollector();
     this.registerIcon();
   }
@@ -73,17 +69,6 @@ export class AppComponent {
         untilDestroyed(this)
       )
       .subscribe();
-  }
-
-  async initializeProofRepository() {
-    const all = await this.proofRepository.getAll();
-    for (const proof of all) {
-      proof.willCollectTruth = false;
-      await this.proofRepository.update(
-        proof,
-        (x, y) => getOldProof(x).hash === getOldProof(y).hash
-      );
-    }
   }
 
   initializeCollector() {
