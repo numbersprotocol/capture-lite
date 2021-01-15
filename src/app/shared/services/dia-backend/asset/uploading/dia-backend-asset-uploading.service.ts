@@ -22,6 +22,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
+import { NetworkService } from '../../../network/network.service';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import { getOldProof } from '../../../repositories/proof/old-proof-adapter';
 import { Proof } from '../../../repositories/proof/proof';
@@ -35,26 +36,30 @@ export class DiaBackendAssetUploadingService {
   private readonly preferences = this.preferenceManager.getPreferences(
     DiaBackendAssetUploadingService.name
   );
-  private readonly _isPausedByFailure$ = new BehaviorSubject(false);
   private readonly _taskQueue$ = new BehaviorSubject<Proof[]>([]);
   // tslint:disable-next-line: rxjs-no-explicit-generics
   private readonly _pendingTasks$ = new BehaviorSubject<number | undefined>(
     undefined
   );
   readonly isPaused$ = this.preferences.getBoolean$(PrefKeys.IS_PAUSED);
-  readonly isPausedByFailure$ = this._isPausedByFailure$
+  readonly networkConnected$ = this.networkService.connected$;
+  private readonly executionSignal$ = combineLatest([
+    this.isPaused$,
+    this.networkConnected$,
+  ]).pipe(
+    map(([isPaused, networkConnected]) => !isPaused && networkConnected),
+    distinctUntilChanged()
+  );
+  private readonly taskQueue$ = this._taskQueue$
     .asObservable()
     .pipe(distinctUntilChanged());
   readonly pendingTasks$ = this._pendingTasks$
     .asObservable()
     .pipe(isNonNullable(), distinctUntilChanged());
-  private readonly taskQueue$ = combineLatest([
-    this._taskQueue$.asObservable().pipe(distinctUntilChanged()),
-    this.isPaused$,
-  ]).pipe(map(([t, _]) => t));
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly networkService: NetworkService,
     private readonly preferenceManager: PreferenceManager,
     private readonly proofRepository: ProofRepository
   ) {}
@@ -78,14 +83,14 @@ export class DiaBackendAssetUploadingService {
     const taskDebounceTime = 50;
     return combineLatest([
       this.proofRepository.getAll$().pipe(debounceTime(taskDebounceTime)),
-      this.isPaused$,
+      this.executionSignal$,
     ]).pipe(
-      tap(([proofs, isPaused]) => {
+      tap(([proofs, signal]) => {
         const tasks = proofs.filter(
           proof => !proof.diaBackendAssetId && proof.isCollected
         );
         this._pendingTasks$.next(tasks.length);
-        this.updateTaskQueue(isPaused ? [] : tasks);
+        this.updateTaskQueue(signal ? tasks : []);
       })
     );
   }
@@ -106,8 +111,8 @@ export class DiaBackendAssetUploadingService {
         )
       )
     );
-    return this.isPaused$.pipe(
-      switchMap(isPaused => (isPaused ? EMPTY : runTasks$))
+    return this.executionSignal$.pipe(
+      switchMap(signal => (signal ? runTasks$ : EMPTY))
     );
   }
 
@@ -141,7 +146,6 @@ export class DiaBackendAssetUploadingService {
         )
       ),
       catchError(_ => {
-        this._isPausedByFailure$.next(true);
         this.preferences.setBoolean(PrefKeys.IS_PAUSED, true);
         return of(undefined);
       })
