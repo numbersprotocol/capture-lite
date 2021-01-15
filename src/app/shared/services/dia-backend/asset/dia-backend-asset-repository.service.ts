@@ -6,6 +6,7 @@ import {
   concatMap,
   concatMapTo,
   distinctUntilChanged,
+  map,
   pluck,
   single,
   tap,
@@ -15,6 +16,7 @@ import { toExtension } from '../../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
 import { NotificationService } from '../../notification/notification.service';
 import {
+  getOldProof,
   getOldSignatures,
   getSortedProofInformation,
   OldSignature,
@@ -52,6 +54,18 @@ export class DiaBackendAssetRepository {
           { headers }
         )
       )
+    );
+  }
+
+  fetchByProof$(proof: Proof) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.get<ListAssetResponse>(`${BASE_URL}/api/v2/assets/`, {
+          headers,
+          params: { proof_hash: getOldProof(proof).hash },
+        })
+      ),
+      map(listAssetResponse => listAssetResponse.results[0])
     );
   }
 

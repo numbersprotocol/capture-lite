@@ -1,0 +1,31 @@
+.thin-upload-bar {
+  min-height: 32px;
+  height: 32px;
+  justify-content: stretch;
+  transition: all 1s;
+
+  .upload-text {
+    flex-grow: 0;
+    font-size: 0.7em;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: darkgray;
+  }
+
+  .complete-text {
+    flex-grow: 1;
+    font-size: 0.7em;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: darkgray;
+  }
+
+  mat-icon {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

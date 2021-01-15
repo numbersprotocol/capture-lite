@@ -6,6 +6,9 @@ import { Tuple } from '../../database/table/table';
 import { ImageStore } from '../../image-store/image-store.service';
 
 export class Proof {
+  diaBackendAssetId?: string = undefined;
+  isCollected = false;
+
   get timestamp() {
     return this.truth.timestamp;
   }
@@ -119,6 +122,8 @@ export class Proof {
       indexedAssets: this.indexedAssets,
       truth: this.truth,
       signatures: this.signatures,
+      diaBackendAssetId: this.diaBackendAssetId,
+      isCollected: this.isCollected,
     };
   }
 
@@ -160,6 +165,8 @@ export class Proof {
       indexedProofView.signatures
     );
     proof.setIndexedAssets(indexedProofView.indexedAssets);
+    proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
+    proof.isCollected = indexedProofView.isCollected ?? false;
     return proof;
   }
 
@@ -276,4 +283,6 @@ export interface IndexedProofView extends Tuple {
   readonly indexedAssets: IndexedAssets;
   readonly truth: Truth;
   readonly signatures: Signatures;
+  readonly diaBackendAssetId?: string;
+  readonly isCollected?: boolean;
 }
