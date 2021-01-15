@@ -49,6 +49,19 @@ export class CaptureTabComponent {
   ): number {
     return a.key > b.key ? -1 : b.key > a.key ? 1 : 0;
   }
+
+  // tslint:disable-next-line: prefer-function-over-method
+  trackCaptureGroupByDate(
+    _: number,
+    item: { key: string; value: CaptureItem[] }
+  ) {
+    return item.key;
+  }
+
+  // tslint:disable-next-line: prefer-function-over-method
+  trackCaptureItem(_: number, item: CaptureItem) {
+    return item.oldProofHash;
+  }
 }
 
 interface CaptureItem {
