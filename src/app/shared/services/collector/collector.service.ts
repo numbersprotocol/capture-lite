@@ -20,22 +20,25 @@ export class CollectorService {
 
   constructor(private readonly imageStore: ImageStore) {}
 
-  async run(assets: Assets) {
-    const truth = await this.collectTruth(assets);
+  async run(assets: Assets, capturedTimestamp: number) {
+    const truth = await this.collectTruth(assets, capturedTimestamp);
     const signatures = await this.signTargets({ assets, truth });
     const proof = await Proof.from(this.imageStore, assets, truth, signatures);
     proof.isCollected = true;
     return proof;
   }
 
-  private async collectTruth(assets: Assets): Promise<Truth> {
+  private async collectTruth(
+    assets: Assets,
+    capturedTimestamp: number
+  ): Promise<Truth> {
     return {
       timestamp: Date.now(),
       providers: Object.fromEntries(
         await Promise.all(
           [...this.factsProviders].map(async provider => [
             provider.id,
-            await provider.provide(assets),
+            await provider.provide(assets, capturedTimestamp),
           ])
         )
       ),
