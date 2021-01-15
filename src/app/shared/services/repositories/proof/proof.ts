@@ -7,6 +7,7 @@ import { ImageStore } from '../../image-store/image-store.service';
 
 export class Proof {
   diaBackendAssetId: string | undefined = undefined;
+  isCollected = false;
 
   get timestamp() {
     return this.truth.timestamp;
@@ -122,6 +123,7 @@ export class Proof {
       truth: this.truth,
       signatures: this.signatures,
       diaBackendAssetId: this.diaBackendAssetId,
+      isCollected: this.isCollected,
     };
   }
 
@@ -164,6 +166,7 @@ export class Proof {
     );
     proof.setIndexedAssets(indexedProofView.indexedAssets);
     proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
+    proof.isCollected = indexedProofView.isCollected ?? false;
     return proof;
   }
 
@@ -281,4 +284,5 @@ export interface IndexedProofView extends Tuple {
   readonly truth: Truth;
   readonly signatures: Signatures;
   readonly diaBackendAssetId?: string;
+  readonly isCollected?: boolean;
 }

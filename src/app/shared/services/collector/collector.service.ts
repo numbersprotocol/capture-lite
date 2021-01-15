@@ -23,7 +23,9 @@ export class CollectorService {
   async run(assets: Assets) {
     const truth = await this.collectTruth(assets);
     const signatures = await this.signTargets({ assets, truth });
-    return Proof.from(this.imageStore, assets, truth, signatures);
+    const proof = await Proof.from(this.imageStore, assets, truth, signatures);
+    proof.isCollected = true;
+    return proof;
   }
 
   private async collectTruth(assets: Assets): Promise<Truth> {

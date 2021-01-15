@@ -76,7 +76,7 @@ export class DiaBackendAssetUploadingService {
     ]).pipe(
       tap(([proofs, isPaused]) => {
         const tasks = proofs.filter(
-          proof => !proof.diaBackendAssetId && !proof.willCollectTruth
+          proof => !proof.diaBackendAssetId && proof.isCollected
         );
         this._currentUploadingCount$.next(tasks.length);
         this.updateTaskQueue(isPaused ? [] : tasks);
