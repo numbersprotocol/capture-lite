@@ -5,6 +5,7 @@ import {
   FILESYSTEM_PLUGIN,
   GEOLOCATION_PLUGIN,
   LOCAL_NOTIFICATIONS_PLUGIN,
+  NETOWRK_PLUGIN,
   PUSH_NOTIFICATIONS_PLUGIN,
   STORAGE_PLUGIN,
 } from './capacitor-plugins.module';
@@ -13,6 +14,7 @@ import { MockCameraPlugin } from './mock-camera-plugin';
 import { MockFilesystemPlugin } from './mock-filesystem-plugin';
 import { MockGeolocationPlugin } from './mock-geolocation-plugin';
 import { MockLocalNotificationsPlugin } from './mock-local-notifications-plugin';
+import { MockNetworkPlugin } from './mock-network-plugin';
 import { MockPushNotificationsPlugin } from './mock-push-notifications-plugin';
 import { MockStoragePlugin } from './mock-storage-plugin';
 
@@ -37,6 +39,10 @@ import { MockStoragePlugin } from './mock-storage-plugin';
     {
       provide: LOCAL_NOTIFICATIONS_PLUGIN,
       useClass: MockLocalNotificationsPlugin,
+    },
+    {
+      provide: NETOWRK_PLUGIN,
+      useClass: MockNetworkPlugin,
     },
     {
       provide: STORAGE_PLUGIN,
