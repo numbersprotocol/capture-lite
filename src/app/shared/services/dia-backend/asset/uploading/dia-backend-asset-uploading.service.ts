@@ -5,7 +5,6 @@ import {
   combineLatest,
   EMPTY,
   from,
-  of,
   throwError,
   timer,
 } from 'rxjs';
@@ -101,7 +100,6 @@ export class DiaBackendAssetUploadingService {
       concatMap(proofs =>
         from(proofs).pipe(
           concatMap(proof => this.uploadProof$(proof)),
-          isNonNullable(),
           concatMap(proof =>
             this.proofRepository.update(
               proof,
@@ -121,8 +119,7 @@ export class DiaBackendAssetUploadingService {
   }
 
   private uploadProof$(proof: Proof) {
-    const retryDelay = 500;
-    const retryLimit = 3;
+    const scalingDuration = 1000;
     return this.diaBackendAssetRepository.add$(proof).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err.error?.error.type === 'duplicate_asset_not_allowed') {
@@ -136,19 +133,11 @@ export class DiaBackendAssetUploadingService {
       }),
       retryWhen(err$ =>
         err$.pipe(
-          mergeMap((error, i) => {
-            const retryAttempt = i + 1;
-            if (retryAttempt > retryLimit) {
-              return throwError(error);
-            }
-            return timer(retryDelay);
+          mergeMap((error, attempt) => {
+            return timer(2 ** attempt * scalingDuration);
           })
         )
-      ),
-      catchError(_ => {
-        this.preferences.setBoolean(PrefKeys.IS_PAUSED, true);
-        return of(undefined);
-      })
+      )
     );
   }
 }
