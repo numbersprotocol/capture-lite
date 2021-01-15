@@ -14,7 +14,8 @@ export class MockNetworkPlugin implements NetworkPlugin {
     _eventName: string,
     _listenerFunc: (status: NetworkStatus) => any
   ): PluginListenerHandle {
-    throw new Error('Method not implemented.');
+    // tslint:disable-next-line: no-empty
+    return { remove: () => {} };
   }
 
   removeAllListeners() {
