@@ -31,9 +31,12 @@ export class CapacitorFactsProvider implements FactsProvider {
     private readonly translocoService: TranslocoService
   ) {}
 
-  async provide(_: Assets): Promise<Facts> {
+  async provide(
+    _: Assets,
+    capturedTimestamp: number = Date.now()
+  ): Promise<Facts> {
     const deviceInfo = await this.collectDeviceInfo();
-    const locationInfo = await this.collectLocationInfo();
+    const locationInfo = await this.collectLocationInfo(capturedTimestamp);
     return {
       [DefaultFactId.DEVICE_NAME]: deviceInfo?.model,
       [DefaultFactId.GEOLOCATION_LATITUDE]: locationInfo?.coords.latitude,
@@ -65,7 +68,7 @@ export class CapacitorFactsProvider implements FactsProvider {
     return { ...(await Device.getInfo()), ...(await Device.getBatteryInfo()) };
   }
 
-  private async collectLocationInfo() {
+  private async collectLocationInfo(capturedTimestamp: number) {
     const defaultGeolocationAge = 30000;
     const defaultGeolocationTimeout = 20000;
     const isLocationInfoCollectionEnabled = await this.isGeolocationInfoCollectionEnabled();
@@ -75,6 +78,7 @@ export class CapacitorFactsProvider implements FactsProvider {
 
     return this.geolocationService
       .getCurrentPosition({
+        capturedTimestamp,
         enableHighAccuracy: true,
         maximumAge: defaultGeolocationAge,
         timeout: defaultGeolocationTimeout,

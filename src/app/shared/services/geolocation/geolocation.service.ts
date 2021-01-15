@@ -11,7 +11,7 @@ export class GeolocationService {
   // Cache the current position manually due to the issue of Capacitor
   // geolocation plugin: https://github.com/ionic-team/capacitor/issues/3304
   private currentPositionCache?: Position;
-  private lastRequestTimestamp?: number;
+  private lastCaptureTimestamp?: number;
 
   constructor(
     @Inject(GEOLOCATION_PLUGIN)
@@ -19,33 +19,45 @@ export class GeolocationService {
   ) {}
 
   async getCurrentPosition(
-    { enableHighAccuracy, timeout, maximumAge }: GetCurrentPositionOptions = {
+    {
+      capturedTimestamp,
+      enableHighAccuracy,
+      timeout,
+      maximumAge,
+    }: GetCurrentPositionOptions = {
       enableHighAccuracy: true,
       timeout: undefined,
       maximumAge: undefined,
     }
   ): Promise<Position | undefined> {
     const result = await this._getCurrentPosition({
+      capturedTimestamp,
       enableHighAccuracy,
       timeout,
       maximumAge,
     });
-    this.lastRequestTimestamp = Date.now();
+    this.lastCaptureTimestamp = capturedTimestamp;
     return result;
   }
 
   private async _getCurrentPosition(
-    { enableHighAccuracy, timeout, maximumAge }: GetCurrentPositionOptions = {
+    {
+      capturedTimestamp,
+      enableHighAccuracy,
+      timeout,
+      maximumAge,
+    }: GetCurrentPositionOptions = {
       enableHighAccuracy: true,
       timeout: undefined,
       maximumAge: undefined,
     }
   ): Promise<Position | undefined> {
     if (
+      capturedTimestamp &&
       maximumAge &&
       maximumAge > 0 &&
       this.currentPositionCache &&
-      Date.now() - this.currentPositionCache.timestamp < maximumAge
+      capturedTimestamp - this.currentPositionCache.timestamp < maximumAge
     ) {
       return this.currentPositionCache;
     }
@@ -74,9 +86,10 @@ export class GeolocationService {
     }
 
     if (
-      this.lastRequestTimestamp &&
+      capturedTimestamp &&
+      this.lastCaptureTimestamp &&
       maximumAge &&
-      Date.now() - this.lastRequestTimestamp < maximumAge
+      capturedTimestamp - this.lastCaptureTimestamp < maximumAge
     ) {
       return this.currentPositionCache;
     }
@@ -94,6 +107,7 @@ async function getTimer(timeout: number) {
 }
 
 export interface GetCurrentPositionOptions {
+  readonly capturedTimestamp?: number;
   readonly enableHighAccuracy?: boolean;
   readonly timeout?: number;
   readonly maximumAge?: number;
