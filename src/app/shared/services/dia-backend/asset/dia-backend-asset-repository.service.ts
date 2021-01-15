@@ -98,10 +98,14 @@ export class DiaBackendAssetRepository {
   }
 
   remove$(asset: DiaBackendAsset) {
+    return this.removeById$(asset.id);
+  }
+
+  removeById$(id: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.delete<DeleteAssetResponse>(
-          `${BASE_URL}/api/v2/assets/${asset.id}/`,
+          `${BASE_URL}/api/v2/assets/${id}/`,
           { headers }
         )
       )

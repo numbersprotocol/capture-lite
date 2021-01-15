@@ -15,16 +15,22 @@ import {
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
+import { DiaBackendAssetRepository } from '../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { getOldProof } from '../../../../shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../../shared/services/repositories/proof/proof-repository.service';
-import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import {
+  isNonNullable,
+  switchTap,
+  VOID$,
+} from '../../../../utils/rx-operators/rx-operators';
 import { toDataUrl } from '../../../../utils/url';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import {
   Option,
   OptionsMenuComponent,
 } from './options-menu/options-menu.component';
+
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-asset',
@@ -68,7 +74,8 @@ export class CaptureDetailsPage {
     private readonly bottomSheet: MatBottomSheet,
     private readonly translacoService: TranslocoService,
     private readonly proofRepository: ProofRepository,
-    private readonly diaBackendAuthService: DiaBackendAuthService
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
   ) {}
 
   openContactSelectionDialog() {
@@ -104,6 +111,16 @@ export class CaptureDetailsPage {
 
   private async remove() {
     const action$ = this.proof$.pipe(
+      switchTap(proof =>
+        defer(() => {
+          if (proof.diaBackendAssetId) {
+            return this.diaBackendAssetRepository.removeById$(
+              proof.diaBackendAssetId
+            );
+          }
+          return VOID$;
+        })
+      ),
       concatMap(proof => this.proofRepository.remove(proof)),
       concatMapTo(defer(() => this.router.navigate(['..'])))
     );
