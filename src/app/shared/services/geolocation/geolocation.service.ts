@@ -11,6 +11,7 @@ export class GeolocationService {
   // Cache the current position manually due to the issue of Capacitor
   // geolocation plugin: https://github.com/ionic-team/capacitor/issues/3304
   private currentPositionCache?: Position;
+  private lastRequestTimestamp?: number;
 
   constructor(
     @Inject(GEOLOCATION_PLUGIN)
@@ -18,6 +19,22 @@ export class GeolocationService {
   ) {}
 
   async getCurrentPosition(
+    { enableHighAccuracy, timeout, maximumAge }: GetCurrentPositionOptions = {
+      enableHighAccuracy: true,
+      timeout: undefined,
+      maximumAge: undefined,
+    }
+  ): Promise<Position | undefined> {
+    const result = await this._getCurrentPosition({
+      enableHighAccuracy,
+      timeout,
+      maximumAge,
+    });
+    this.lastRequestTimestamp = Date.now();
+    return result;
+  }
+
+  private async _getCurrentPosition(
     { enableHighAccuracy, timeout, maximumAge }: GetCurrentPositionOptions = {
       enableHighAccuracy: true,
       timeout: undefined,
@@ -53,9 +70,18 @@ export class GeolocationService {
 
     if (result) {
       this.currentPositionCache = result;
+      return result;
     }
 
-    return result;
+    if (
+      this.lastRequestTimestamp &&
+      maximumAge &&
+      Date.now() - this.lastRequestTimestamp < maximumAge
+    ) {
+      return this.currentPositionCache;
+    }
+
+    return undefined;
   }
 }
 
