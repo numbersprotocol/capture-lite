@@ -6,7 +6,7 @@ import { Tuple } from '../../database/table/table';
 import { ImageStore } from '../../image-store/image-store.service';
 
 export class Proof {
-  diaBackendAssetId: string | undefined = undefined;
+  diaBackendAssetId?: string = undefined;
   isCollected = false;
 
   get timestamp() {
