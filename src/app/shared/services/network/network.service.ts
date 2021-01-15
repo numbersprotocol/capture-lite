@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, NgZone } from '@angular/core';
 import { NetworkPlugin, NetworkStatus } from '@capacitor/core';
 import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
@@ -13,14 +13,15 @@ export class NetworkService {
 
   constructor(
     @Inject(NETOWRK_PLUGIN)
-    private readonly networkPlugin: NetworkPlugin
+    private readonly networkPlugin: NetworkPlugin,
+    private readonly ngZone: NgZone
   ) {}
 
   async initialize() {
     const currentStatus = await this.networkPlugin.getStatus();
     this.updateNetworkStatus(currentStatus);
     this.networkPlugin.addListener('networkStatusChange', status => {
-      this.updateNetworkStatus(status);
+      this.ngZone.run(() => this.updateNetworkStatus(status));
     });
   }
 
