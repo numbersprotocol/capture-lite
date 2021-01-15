@@ -6,7 +6,7 @@ import {
 } from '@capacitor/core';
 
 export class MockNetworkPlugin implements NetworkPlugin {
-  getStatus(): Promise<NetworkStatus> {
+  async getStatus(): Promise<NetworkStatus> {
     throw new Error('Method not implemented.');
   }
 
