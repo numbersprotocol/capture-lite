@@ -21,6 +21,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
+import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
 import { getOldProof } from '../../../repositories/proof/old-proof-adapter';
 import { Proof } from '../../../repositories/proof/proof';
 import { ProofRepository } from '../../../repositories/proof/proof-repository.service';
@@ -90,6 +91,7 @@ export class DiaBackendAssetUploadingService {
       concatMap(proofs =>
         from(proofs).pipe(
           concatMap(proof => this.uploadProof$(proof)),
+          isNonNullable(),
           concatMap(proof =>
             this.proofRepository.update(
               proof,
@@ -136,7 +138,7 @@ export class DiaBackendAssetUploadingService {
       catchError(_ => {
         this._isPausedByFailure$.next(true);
         this._isPaused$.next(true);
-        return of(proof);
+        return of(undefined);
       })
     );
   }
