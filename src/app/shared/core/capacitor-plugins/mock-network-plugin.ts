@@ -7,7 +7,7 @@ import {
 
 export class MockNetworkPlugin implements NetworkPlugin {
   async getStatus(): Promise<NetworkStatus> {
-    throw new Error('Method not implemented.');
+    return { connected: false, connectionType: 'unknown' };
   }
 
   addListener(
