@@ -1,15 +1,15 @@
 <ng-container
   *ngIf="{
-    currentUploadingCount: currentUploadingCount$ | async,
+    pendingTasks: pendingTasks$ | async,
     isPaused: isPaused$ | async,
     isPausedByFailure: isPausedByFailure$ | async
   } as uploadState"
 >
   <mat-toolbar color="background" class="thin-upload-bar" *transloco="let t">
-    <ng-container *ngIf="uploadState.currentUploadingCount > 0; else completed">
+    <ng-container *ngIf="uploadState.pendingTasks > 0; else completed">
       <span class="upload-text" *ngIf="!uploadState.isPaused">{{
         t('message.registeringPhotos', {
-          photos: uploadState.currentUploadingCount
+          photos: uploadState.pendingTasks
         })
       }}</span>
       <span
@@ -17,7 +17,7 @@
         *ngIf="uploadState.isPaused && !uploadState.isPausedByFailure"
         >{{
           t('message.registeringPhotosPaused', {
-            photos: uploadState.currentUploadingCount
+            photos: uploadState.pendingTasks
           })
         }}</span
       >
@@ -38,11 +38,9 @@
       >
     </ng-container>
     <ng-template #completed>
-      <span
-        class="complete-text"
-        *ngIf="uploadState.currentUploadingCount === 0"
-        >{{ t('message.allPhotosRegistered') }}</span
-      >
+      <span class="complete-text" *ngIf="uploadState.pendingTasks === 0">{{
+        t('message.allPhotosRegistered')
+      }}</span>
     </ng-template>
   </mat-toolbar>
 </ng-container>

@@ -7,7 +7,7 @@ import { DiaBackendAssetUploadingService } from '../../../../shared/services/dia
   styleUrls: ['./uploading-bar.component.scss'],
 })
 export class UploadingBarComponent {
-  currentUploadingCount$ = this.uploadService.currentUploadingCount$;
+  pendingTasks$ = this.uploadService.pendingTasks$;
   isPaused$ = this.uploadService.isPaused$;
   isPausedByFailure$ = this.uploadService.isPausedByFailure$;
 

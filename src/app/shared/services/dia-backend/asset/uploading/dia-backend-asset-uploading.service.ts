@@ -37,14 +37,17 @@ export class DiaBackendAssetUploadingService {
   );
   private readonly _isPausedByFailure$ = new BehaviorSubject(false);
   private readonly _taskQueue$ = new BehaviorSubject<Proof[]>([]);
-  private readonly _currentUploadingCount$ = new BehaviorSubject(0);
+  // tslint:disable-next-line: rxjs-no-explicit-generics
+  private readonly _pendingTasks$ = new BehaviorSubject<number | undefined>(
+    undefined
+  );
   readonly isPaused$ = this.preferences.getBoolean$(PrefKeys.IS_PAUSED);
   readonly isPausedByFailure$ = this._isPausedByFailure$
     .asObservable()
     .pipe(distinctUntilChanged());
-  readonly currentUploadingCount$ = this._currentUploadingCount$
+  readonly pendingTasks$ = this._pendingTasks$
     .asObservable()
-    .pipe(distinctUntilChanged());
+    .pipe(isNonNullable(), distinctUntilChanged());
   private readonly taskQueue$ = combineLatest([
     this._taskQueue$.asObservable().pipe(distinctUntilChanged()),
     this.isPaused$,
@@ -81,7 +84,7 @@ export class DiaBackendAssetUploadingService {
         const tasks = proofs.filter(
           proof => !proof.diaBackendAssetId && proof.isCollected
         );
-        this._currentUploadingCount$.next(tasks.length);
+        this._pendingTasks$.next(tasks.length);
         this.updateTaskQueue(isPaused ? [] : tasks);
       })
     );
