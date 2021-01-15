@@ -9,7 +9,7 @@ import { DiaBackendAssetUploadingService } from '../../../../shared/services/dia
 export class UploadingBarComponent {
   pendingTasks$ = this.uploadService.pendingTasks$;
   isPaused$ = this.uploadService.isPaused$;
-  isPausedByFailure$ = this.uploadService.isPausedByFailure$;
+  networkConnected$ = this.uploadService.networkConnected$;
 
   constructor(
     private readonly uploadService: DiaBackendAssetUploadingService
