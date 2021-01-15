@@ -1,49 +1,22 @@
-<ng-container
-  *ngIf="{
-    pendingTasks: pendingTasks$ | async,
-    isPaused: isPaused$ | async,
-    networkConnected: networkConnected$ | async
-  } as uploadState"
->
-  <mat-toolbar color="background" class="thin-upload-bar" *transloco="let t">
-    <ng-container
-      *ngIf="
-        uploadState.pendingTasks > 0 && uploadState.networkConnected;
-        else noSpacer
-      "
+<mat-toolbar color="background" class="thin-upload-bar">
+  <ng-container *ngIf="uploadingBarState$ | async as uploadingBarState">
+    <span class="text-with-spacer" *ngIf="uploadingBarState.spacer">{{
+      uploadingBarState.text
+    }}</span>
+    <span class="text-without-spacer" *ngIf="!uploadingBarState.spacer">{{
+      uploadingBarState.text
+    }}</span>
+    <span class="spacer" *ngIf="uploadingBarState.spacer">
+      <mat-progress-bar
+        *ngIf="uploadingBarState.showProgressBar"
+        mode="indeterminate"
+      ></mat-progress-bar>
+    </span>
+    <mat-icon *ngIf="uploadingBarState.showPauseButton" (click)="pause()"
+      >pause</mat-icon
     >
-      <span class="text-with-spacer" *ngIf="!uploadState.isPaused">{{
-        t('message.registeringPhotos', {
-          photos: uploadState.pendingTasks
-        })
-      }}</span>
-      <span class="text-with-spacer" *ngIf="uploadState.isPaused">{{
-        t('message.registeringPhotosPaused', {
-          photos: uploadState.pendingTasks
-        })
-      }}</span>
-      <span class="spacer">
-        <mat-progress-bar
-          *ngIf="!uploadState.isPaused"
-          mode="indeterminate"
-        ></mat-progress-bar>
-      </span>
-      <mat-icon *ngIf="!uploadState.isPaused" (click)="pause()">pause</mat-icon>
-      <mat-icon *ngIf="uploadState.isPaused" (click)="resume()"
-        >publish</mat-icon
-      >
-    </ng-container>
-    <ng-template #noSpacer>
-      <span
-        class="text-without-spacer"
-        *ngIf="uploadState.pendingTasks === 0"
-        >{{ t('message.allPhotosRegistered') }}</span
-      >
-      <span
-        class="text-without-spacer"
-        *ngIf="uploadState.pendingTasks > 0 && !uploadState.networkConnected"
-        >{{ t('message.networkNotConnected') }}</span
-      >
-    </ng-template>
-  </mat-toolbar>
-</ng-container>
+    <mat-icon *ngIf="uploadingBarState.showResumeButton" (click)="resume()"
+      >publish</mat-icon
+    >
+  </ng-container>
+</mat-toolbar>

@@ -45,10 +45,7 @@ export class DiaBackendAssetUploadingService {
   private readonly executionSignal$ = combineLatest([
     this.isPaused$,
     this.networkConnected$,
-  ]).pipe(
-    map(([isPaused, networkConnected]) => !isPaused && networkConnected),
-    distinctUntilChanged()
-  );
+  ]).pipe(map(([isPaused, networkConnected]) => !isPaused && networkConnected));
   private readonly taskQueue$ = this._taskQueue$
     .asObservable()
     .pipe(distinctUntilChanged());
