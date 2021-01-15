@@ -22,6 +22,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
+import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import { getOldProof } from '../../../repositories/proof/old-proof-adapter';
 import { Proof } from '../../../repositories/proof/proof';
 import { ProofRepository } from '../../../repositories/proof/proof-repository.service';
@@ -31,13 +32,13 @@ import { DiaBackendAssetRepository } from '../dia-backend-asset-repository.servi
   providedIn: 'root',
 })
 export class DiaBackendAssetUploadingService {
-  private readonly _isPaused$ = new BehaviorSubject(false);
+  private readonly preferences = this.preferenceManager.getPreferences(
+    DiaBackendAssetUploadingService.name
+  );
   private readonly _isPausedByFailure$ = new BehaviorSubject(false);
   private readonly _taskQueue$ = new BehaviorSubject<Proof[]>([]);
   private readonly _currentUploadingCount$ = new BehaviorSubject(0);
-  readonly isPaused$ = this._isPaused$
-    .asObservable()
-    .pipe(distinctUntilChanged());
+  readonly isPaused$ = this.preferences.getBoolean$(PrefKeys.IS_PAUSED);
   readonly isPausedByFailure$ = this._isPausedByFailure$
     .asObservable()
     .pipe(distinctUntilChanged());
@@ -51,6 +52,7 @@ export class DiaBackendAssetUploadingService {
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly preferenceManager: PreferenceManager,
     private readonly proofRepository: ProofRepository
   ) {}
 
@@ -61,12 +63,12 @@ export class DiaBackendAssetUploadingService {
     ]);
   }
 
-  pause() {
-    this._isPaused$.next(true);
+  async pause() {
+    return this.preferences.setBoolean(PrefKeys.IS_PAUSED, true);
   }
 
-  resume() {
-    this._isPaused$.next(false);
+  async resume() {
+    return this.preferences.setBoolean(PrefKeys.IS_PAUSED, false);
   }
 
   private uploadTaskDispatcher$() {
@@ -137,9 +139,13 @@ export class DiaBackendAssetUploadingService {
       ),
       catchError(_ => {
         this._isPausedByFailure$.next(true);
-        this._isPaused$.next(true);
+        this.preferences.setBoolean(PrefKeys.IS_PAUSED, true);
         return of(undefined);
       })
     );
   }
+}
+
+const enum PrefKeys {
+  IS_PAUSED = 'IS_PAUSED',
 }
