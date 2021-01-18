@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 
 export interface Table<T extends Tuple> {
   readonly id: string;
-  queryAll$(): Observable<T[]>;
+  readonly queryAll$: Observable<T[]>;
   queryAll(): Promise<T[]>;
   insert(
     tuples: T[],
