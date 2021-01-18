@@ -16,7 +16,7 @@ export class IgnoredTransactionRepository {
   constructor(private readonly database: Database) {}
 
   getAll$(): Observable<string[]> {
-    return this.table.queryAll$().pipe(
+    return this.table.queryAll$.pipe(
       map(tuples => tuples.map(tuple => tuple.id)),
       distinctUntilChanged(isEqual)
     );

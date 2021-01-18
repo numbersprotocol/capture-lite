@@ -7,12 +7,18 @@ import { Mutex } from 'async-mutex';
 import { differenceWith, intersectionWith, isEqual, uniqWith } from 'lodash';
 import { BehaviorSubject, defer } from 'rxjs';
 import { concatMapTo } from 'rxjs/operators';
+import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
 import { OnConflictStrategy, Table, Tuple } from '../table';
 
 export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   private readonly directory = FilesystemDirectory.Data;
   private readonly rootDir = CapacitorFilesystemTable.name;
-  private readonly tuples$ = new BehaviorSubject<T[]>([]);
+  // tslint:disable-next-line: rxjs-no-explicit-generics
+  private readonly tuples$ = new BehaviorSubject<T[] | undefined>(undefined);
+  readonly queryAll$ = defer(() => this.initialize()).pipe(
+    concatMapTo(this.tuples$.asObservable()),
+    isNonNullable()
+  );
   private hasInitialized = false;
   private readonly mutex = new Mutex();
 
@@ -21,15 +27,12 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     private readonly filesystemPlugin: FilesystemPlugin
   ) {}
 
-  queryAll$() {
-    return defer(() => this.initialize()).pipe(
-      concatMapTo(this.tuples$.asObservable())
-    );
-  }
-
   async queryAll() {
     await this.initialize();
-    return this.tuples$.value;
+    if (this.tuples$.value) {
+      return this.tuples$.value;
+    }
+    throw new Error(`${this.id} has not initialized.`);
   }
 
   private async initialize() {
@@ -95,14 +98,14 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
       await this.initialize();
       if (onConflict === OnConflictStrategy.ABORT) {
         this.assertNoConflictWithExistedTuples(tuples, comparator);
-        this.tuples$.next([...this.tuples$.value, ...tuples]);
+        this.tuples$.next([...(this.tuples$.value ?? []), ...tuples]);
       } else if (onConflict === OnConflictStrategy.IGNORE) {
         this.tuples$.next(
-          uniqWith([...this.tuples$.value, ...tuples], comparator)
+          uniqWith([...(this.tuples$.value ?? []), ...tuples], comparator)
         );
       } else if (onConflict === OnConflictStrategy.REPLACE) {
         this.tuples$.next(
-          uniqWith([...tuples, ...this.tuples$.value], comparator)
+          uniqWith([...tuples, ...(this.tuples$.value ?? [])], comparator)
         );
       }
       await this.dumpJson();
@@ -114,7 +117,11 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     tuples: T[],
     comparator: (x: T, y: T) => boolean
   ) {
-    const conflicted = intersectionWith(tuples, this.tuples$.value, comparator);
+    const conflicted = intersectionWith(
+      tuples,
+      this.tuples$.value ?? [],
+      comparator
+    );
     if (conflicted.length !== 0) {
       throw new Error(`Tuples existed: ${JSON.stringify(conflicted)}`);
     }
@@ -149,7 +156,11 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   private assertTuplesExist(tuples: T[], comparator: (x: T, y: T) => boolean) {
-    const nonexistent = differenceWith(tuples, this.tuples$.value, comparator);
+    const nonexistent = differenceWith(
+      tuples,
+      this.tuples$.value ?? [],
+      comparator
+    );
     if (nonexistent.length !== 0) {
       throw new Error(
         `Cannot delete nonexistent tuples: ${JSON.stringify(nonexistent)}`

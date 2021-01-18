@@ -20,7 +20,7 @@ export class ProofRepository {
   ) {}
 
   getAll$() {
-    return this.table.queryAll$().pipe(
+    return this.table.queryAll$.pipe(
       distinctUntilChanged(isEqual),
       map((indexedProofViews: IndexedProofView[]) => {
         return indexedProofViews.map(view =>
