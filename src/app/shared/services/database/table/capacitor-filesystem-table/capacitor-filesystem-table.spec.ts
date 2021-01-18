@@ -17,7 +17,7 @@ describe('CapacitorFilesystemTable', () => {
   it('should be created', () => expect(table).toBeTruthy());
 
   it('should emit empty array with Observable on initial query', done => {
-    table.queryAll$().subscribe(tuples => {
+    table.queryAll$.subscribe(tuples => {
       expect(tuples).toEqual([]);
       done();
     });
@@ -32,7 +32,7 @@ describe('CapacitorFilesystemTable', () => {
     await table.insert([TUPLE1]);
     await table.insert([TUPLE2]);
 
-    table.queryAll$().subscribe(tuples => {
+    table.queryAll$.subscribe(tuples => {
       expect(tuples).toEqual([TUPLE1, TUPLE2]);
       done();
     });
@@ -130,7 +130,7 @@ describe('CapacitorFilesystemTable', () => {
     await table.insert([TUPLE1]);
     await table.delete([sameTuple]);
 
-    table.queryAll$().subscribe(tuples => {
+    table.queryAll$.subscribe(tuples => {
       expect(tuples).toEqual([]);
       done();
     });
@@ -142,7 +142,7 @@ describe('CapacitorFilesystemTable', () => {
     await table.insert([TUPLE1, TUPLE2]);
     await table.delete([sameTuple1]);
 
-    table.queryAll$().subscribe(tuples => {
+    table.queryAll$.subscribe(tuples => {
       expect(tuples).toEqual([TUPLE2]);
       done();
     });
@@ -154,7 +154,7 @@ describe('CapacitorFilesystemTable', () => {
     await table.insert([TUPLE1, TUPLE2]);
     await table.delete([sameIdTuple1], (x, y) => x.id === y.id);
 
-    table.queryAll$().subscribe(tuples => {
+    table.queryAll$.subscribe(tuples => {
       expect(tuples).toEqual([TUPLE2]);
       done();
     });
@@ -184,7 +184,7 @@ describe('CapacitorFilesystemTable', () => {
 
     await Promise.all(expectedTuples.map(tuple => table.insert([tuple])));
 
-    table.queryAll$().subscribe(tuples => {
+    table.queryAll$.subscribe(tuples => {
       expect(tuples).toEqual(expectedTuples);
       done();
     });
@@ -206,7 +206,7 @@ describe('CapacitorFilesystemTable', () => {
 
     await Promise.all(sourceTuple.map(tuple => table.delete([tuple])));
 
-    table.queryAll$().subscribe(tuples => {
+    table.queryAll$.subscribe(tuples => {
       expect(tuples).toEqual([]);
       done();
     });
@@ -218,7 +218,7 @@ describe('CapacitorFilesystemTable', () => {
 
     await table.update(sameIdTuple1, (x, y) => x.id === y.id);
 
-    table.queryAll$().subscribe(tuples => {
+    table.queryAll$.subscribe(tuples => {
       expect(tuples).toEqual([sameIdTuple1]);
       done();
     });

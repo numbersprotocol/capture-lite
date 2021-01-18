@@ -5,6 +5,11 @@
   margin-bottom: 128px;
 }
 
+.loading-spinner-container {
+  width: fit-content;
+  margin: 32px auto;
+}
+
 div.mat-title {
   margin: 26px 0 0;
   font-size: large;
@@ -16,7 +21,7 @@ div.mat-title {
   object-fit: cover;
   border-radius: 4px;
 
-  .spinner-container {
+  .collecting-spinner-container {
     position: absolute;
     top: 50%;
     left: 50%;
