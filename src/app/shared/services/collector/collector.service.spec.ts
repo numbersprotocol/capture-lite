@@ -27,7 +27,7 @@ describe('CollectorService', () => {
   it('should be created', () => expect(service).toBeTruthy());
 
   it('should get the stored proof after run', async () => {
-    const proof = await service.run(ASSETS);
+    const proof = await service.run(ASSETS, Date.now());
     expect(await proof.getAssets()).toEqual(ASSETS);
   });
 
@@ -35,7 +35,7 @@ describe('CollectorService', () => {
     service.addFactsProvider(mockFactsProvider);
     service.removeFactsProvider(mockFactsProvider);
 
-    const proof = await service.run(ASSETS);
+    const proof = await service.run(ASSETS, Date.now());
 
     expect(proof.truth.providers).toEqual({});
   });
@@ -44,20 +44,20 @@ describe('CollectorService', () => {
     service.addSignatureProvider(mockSignatureProvider);
     service.removeSignatureProvider(mockSignatureProvider);
 
-    const proof = await service.run(ASSETS);
+    const proof = await service.run(ASSETS, Date.now());
 
     expect(proof.signatures).toEqual({});
   });
 
   it('should get the stored proof with provided facts', async () => {
     service.addFactsProvider(mockFactsProvider);
-    const proof = await service.run(ASSETS);
+    const proof = await service.run(ASSETS, Date.now());
     expect(proof.truth.providers).toEqual({ [mockFactsProvider.id]: FACTS });
   });
 
   it('should get the stored proof with provided signature', async () => {
     service.addSignatureProvider(mockSignatureProvider);
-    const proof = await service.run(ASSETS);
+    const proof = await service.run(ASSETS, Date.now());
     expect(proof.signatures).toEqual({ [mockSignatureProvider.id]: SIGNATURE });
   });
 });

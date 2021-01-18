@@ -40,7 +40,10 @@ export class CaptureService {
     this._collectingOldProofHashes$.next(
       this._collectingOldProofHashes$.value.add(getOldProof(proof).hash)
     );
-    const collected = await this.collectorService.run(await proof.getAssets());
+    const collected = await this.collectorService.run(
+      await proof.getAssets(),
+      proof.timestamp
+    );
     const newCollectingOldProofHashes = this._collectingOldProofHashes$.value;
     newCollectingOldProofHashes.delete(getOldProof(proof).hash);
     this._collectingOldProofHashes$.next(newCollectingOldProofHashes);
