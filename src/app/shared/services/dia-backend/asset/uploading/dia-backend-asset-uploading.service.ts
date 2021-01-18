@@ -42,7 +42,7 @@ export class DiaBackendAssetUploadingService {
   );
   readonly isPaused$ = this.preferences.getBoolean$(PrefKeys.IS_PAUSED);
   readonly networkConnected$ = this.networkService.connected$;
-  private readonly executionSignal$ = combineLatest([
+  private readonly executionEvent$ = combineLatest([
     this.isPaused$,
     this.networkConnected$,
   ]).pipe(map(([isPaused, networkConnected]) => !isPaused && networkConnected));
@@ -79,7 +79,7 @@ export class DiaBackendAssetUploadingService {
     const taskDebounceTime = 50;
     return combineLatest([
       this.proofRepository.getAll$().pipe(debounceTime(taskDebounceTime)),
-      this.executionSignal$,
+      this.executionEvent$,
     ]).pipe(
       tap(([proofs, signal]) => {
         const tasks = proofs.filter(
@@ -106,7 +106,7 @@ export class DiaBackendAssetUploadingService {
         )
       )
     );
-    return this.executionSignal$.pipe(
+    return this.executionEvent$.pipe(
       switchMap(signal => (signal ? runTasks$ : EMPTY))
     );
   }
