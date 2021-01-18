@@ -3,7 +3,11 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span class="title">{{ t('captureDetails') }}</span>
-  <button (click)="openContactSelectionDialog()" mat-icon-button>
+  <button
+    (click)="openContactSelectionDialog()"
+    mat-icon-button
+    *ngIf="isRegistered$ | async"
+  >
     <mat-icon>send</mat-icon>
   </button>
   <button (click)="openOptionsMenu()" mat-icon-button>
