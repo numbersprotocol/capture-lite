@@ -3,7 +3,11 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span class="title">{{ t('captureDetails') }}</span>
-  <button (click)="openContactSelectionDialog()" mat-icon-button>
+  <button
+    (click)="openContactSelectionDialog()"
+    mat-icon-button
+    *ngIf="isRegistered$ | async"
+  >
     <mat-icon>send</mat-icon>
   </button>
   <button (click)="openOptionsMenu()" mat-icon-button>
@@ -33,11 +37,11 @@
       </mat-list-item>
       <mat-list-item>
         <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
-        <div mat-line *ngIf="proof.diaBackendAssetId">
-          {{ proof.diaBackendAssetId }}
-        </div>
-        <div mat-line *ngIf="!proof.diaBackendAssetId">
-          {{ t('notRegistered') }}
+        <div mat-line>
+          <ng-container *ngIf="isRegistered$ | async; else notRegistered">{{
+            proof.diaBackendAssetId
+          }}</ng-container>
+          <ng-template #notRegistered>{{ t('notRegistered') }}</ng-template>
         </div>
       </mat-list-item>
     </ng-container>
