@@ -1,9 +1,9 @@
 <mat-toolbar color="background" class="thin-upload-bar">
   <ng-container *ngIf="uploadingBarState$ | async as uploadingBarState">
-    <span class="text-with-spacer" *ngIf="uploadingBarState.spacer">{{
+    <span class="text spacer-text" *ngIf="uploadingBarState.spacer">{{
       uploadingBarState.text
     }}</span>
-    <span class="text-without-spacer" *ngIf="!uploadingBarState.spacer">{{
+    <span class="text" *ngIf="!uploadingBarState.spacer">{{
       uploadingBarState.text
     }}</span>
     <span class="spacer" *ngIf="uploadingBarState.spacer">

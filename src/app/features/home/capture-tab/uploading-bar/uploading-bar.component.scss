@@ -4,20 +4,16 @@
   justify-content: stretch;
   transition: all 1s;
 
-  .text-with-spacer {
-    flex-grow: 0;
+  .text {
+    flex-grow: 1;
     font-size: 0.7em;
     margin-left: 10px;
     margin-right: 10px;
     color: darkgray;
   }
 
-  .text-without-spacer {
-    flex-grow: 1;
-    font-size: 0.7em;
-    margin-left: 10px;
-    margin-right: 10px;
-    color: darkgray;
+  .spacer-text {
+    flex-grow: 0;
   }
 
   mat-icon {
