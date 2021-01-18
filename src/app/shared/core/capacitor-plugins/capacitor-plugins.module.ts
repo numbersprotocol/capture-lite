@@ -5,6 +5,7 @@ import {
   FilesystemPlugin,
   GeolocationPlugin,
   LocalNotificationsPlugin,
+  NetworkPlugin,
   Plugins,
   PushNotificationsPlugin,
   StoragePlugin,
@@ -20,6 +21,9 @@ export const FILESYSTEM_PLUGIN = new InjectionToken<FilesystemPlugin>(
 );
 export const LOCAL_NOTIFICATIONS_PLUGIN = new InjectionToken<LocalNotificationsPlugin>(
   'LOCAL_NOTIFICATIONS_PLUGIN'
+);
+export const NETOWRK_PLUGIN = new InjectionToken<NetworkPlugin>(
+  'NETWORK_PLUGIN'
 );
 export const STORAGE_PLUGIN = new InjectionToken<StoragePlugin>(
   'STORAGE_PLUGIN'
@@ -49,6 +53,10 @@ export const PUSH_NOTIFICATIONS_PLUGIN = new InjectionToken<PushNotificationsPlu
     {
       provide: LOCAL_NOTIFICATIONS_PLUGIN,
       useValue: Plugins.LocalNotifications,
+    },
+    {
+      provide: NETOWRK_PLUGIN,
+      useValue: Plugins.Network,
     },
     {
       provide: STORAGE_PLUGIN,

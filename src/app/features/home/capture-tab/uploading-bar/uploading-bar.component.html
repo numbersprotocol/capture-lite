@@ -1,48 +1,22 @@
-<ng-container
-  *ngIf="{
-    currentUploadingCount: currentUploadingCount$ | async,
-    isPaused: isPaused$ | async,
-    isPausedByFailure: isPausedByFailure$ | async
-  } as uploadState"
->
-  <mat-toolbar color="background" class="thin-upload-bar" *transloco="let t">
-    <ng-container *ngIf="uploadState.currentUploadingCount > 0; else completed">
-      <span class="upload-text" *ngIf="!uploadState.isPaused">{{
-        t('message.registeringPhotos', {
-          photos: uploadState.currentUploadingCount
-        })
-      }}</span>
-      <span
-        class="upload-text"
-        *ngIf="uploadState.isPaused && !uploadState.isPausedByFailure"
-        >{{
-          t('message.registeringPhotosPaused', {
-            photos: uploadState.currentUploadingCount
-          })
-        }}</span
-      >
-      <span
-        class="upload-text"
-        *ngIf="uploadState.isPaused && uploadState.isPausedByFailure"
-        >{{ t('message.serverConnectionLost') }}</span
-      >
-      <span class="spacer">
-        <mat-progress-bar
-          *ngIf="!uploadState.isPaused"
-          mode="indeterminate"
-        ></mat-progress-bar>
-      </span>
-      <mat-icon *ngIf="!uploadState.isPaused" (click)="pause()">pause</mat-icon>
-      <mat-icon *ngIf="uploadState.isPaused" (click)="resume()"
-        >publish</mat-icon
-      >
-    </ng-container>
-    <ng-template #completed>
-      <span
-        class="complete-text"
-        *ngIf="uploadState.currentUploadingCount === 0"
-        >{{ t('message.allPhotosRegistered') }}</span
-      >
-    </ng-template>
-  </mat-toolbar>
-</ng-container>
+<mat-toolbar color="background" class="thin-upload-bar">
+  <ng-container *ngIf="uploadingBarState$ | async as uploadingBarState">
+    <span class="text spacer-text" *ngIf="uploadingBarState.spacer">{{
+      uploadingBarState.text
+    }}</span>
+    <span class="text" *ngIf="!uploadingBarState.spacer">{{
+      uploadingBarState.text
+    }}</span>
+    <span class="spacer" *ngIf="uploadingBarState.spacer">
+      <mat-progress-bar
+        *ngIf="uploadingBarState.showProgressBar"
+        mode="indeterminate"
+      ></mat-progress-bar>
+    </span>
+    <mat-icon *ngIf="uploadingBarState.showPauseButton" (click)="pause()"
+      >pause</mat-icon
+    >
+    <mat-icon *ngIf="uploadingBarState.showResumeButton" (click)="resume()"
+      >publish</mat-icon
+    >
+  </ng-container>
+</mat-toolbar>
