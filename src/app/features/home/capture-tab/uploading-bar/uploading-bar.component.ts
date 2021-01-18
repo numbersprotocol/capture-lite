@@ -80,9 +80,9 @@ export class UploadingBarComponent {
 }
 
 interface UploadingBarState {
-  text: string;
-  spacer: boolean;
-  showProgressBar: boolean;
-  showPauseButton: boolean;
-  showResumeButton: boolean;
+  readonly text: string;
+  readonly spacer: boolean;
+  readonly showProgressBar: boolean;
+  readonly showPauseButton: boolean;
+  readonly showResumeButton: boolean;
 }
