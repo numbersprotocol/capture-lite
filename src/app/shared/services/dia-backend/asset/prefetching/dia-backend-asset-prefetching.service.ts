@@ -28,15 +28,21 @@ export class DiaBackendAssetPrefetchingService {
     const limit = 100;
     while (true) {
       const diaBackendAssets = await this.diaBackendAssetRepository
-        .fetchAll$(currentOffset, limit)
+        .fetchAllOriginallyOwned$(currentOffset, limit)
         .toPromise();
+      console.log(diaBackendAssets.length);
+
       if (diaBackendAssets.length === 0) {
         break;
       }
-      for (const diaBackendAsset of diaBackendAssets) {
-        await this.storeAssetThumbnail(diaBackendAsset);
-        await this.storeIndexedProof(diaBackendAsset);
-      }
+      await Promise.all(
+        diaBackendAssets.map(async diaBackendAsset => {
+          await this.storeAssetThumbnail(diaBackendAsset);
+          console.log(`thumbnail stored: ${diaBackendAsset.id}`);
+          await this.storeIndexedProof(diaBackendAsset);
+          console.log(`indexed proof stored: ${diaBackendAsset.id}`);
+        })
+      );
       currentOffset += diaBackendAssets.length;
     }
   }
@@ -48,7 +54,7 @@ export class DiaBackendAssetPrefetchingService {
     const thumbnailBlob = await this.diaBackendAssetRepository
       .downloadFile$(diaBackendAsset.id, 'asset_file_thumbnail')
       .toPromise();
-    this.imageStore.storeThumbnail(
+    return this.imageStore.storeThumbnail(
       diaBackendAsset.proof_hash,
       await blobToBase64(thumbnailBlob),
       diaBackendAsset.information.proof.mimeType
@@ -75,6 +81,6 @@ export class DiaBackendAssetPrefetchingService {
         mimeType: diaBackendAsset.information.proof.mimeType,
       },
     });
-    await this.proofRepository.add(proof, OnConflictStrategy.REPLACE);
+    return this.proofRepository.add(proof, OnConflictStrategy.REPLACE);
   }
 }

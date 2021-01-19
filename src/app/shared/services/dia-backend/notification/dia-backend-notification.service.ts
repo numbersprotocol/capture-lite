@@ -35,8 +35,7 @@ export class DiaBackendNotificationService {
         }
         if (data.app_message_type === 'transaction_expired') {
           return defer(() => this.notifyTransactionExpired()).pipe(
-            switchTapTo(this.transactionRepository.refresh$()),
-            switchTapTo(this.assetRepositroy.refresh$())
+            switchTapTo(this.transactionRepository.refresh$())
           );
         }
         return EMPTY;

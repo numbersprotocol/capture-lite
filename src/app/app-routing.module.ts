@@ -54,14 +54,6 @@ const routes: Routes = [
       import('./features/about/about.module').then(m => m.AboutPageModule),
     canActivate: [AuthGuard],
   },
-  {
-    path: 'tutorial',
-    loadChildren: () =>
-      import('./features/tutorial/tutorial.module').then(
-        m => m.TutorialPageModule
-      ),
-    canActivate: [AuthGuard],
-  },
 ];
 @NgModule({
   imports: [

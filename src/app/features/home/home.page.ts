@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
@@ -51,12 +51,13 @@ export class HomePage implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly onboardingService: OnboardingService,
     private readonly router: Router,
-    private readonly captureService: CaptureService
+    private readonly captureService: CaptureService,
+    private readonly route: ActivatedRoute
   ) {}
 
   async ngOnInit() {
     if (await this.onboardingService.isOnboarding()) {
-      this.router.navigate(['/tutorial']);
+      this.router.navigate(['onboarding'], { relativeTo: this.route });
     }
   }
 

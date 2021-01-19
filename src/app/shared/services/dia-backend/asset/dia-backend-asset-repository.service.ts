@@ -7,7 +7,6 @@ import {
   distinctUntilChanged,
   map,
   pluck,
-  single,
   tap,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
@@ -38,10 +37,6 @@ export class DiaBackendAssetRepository {
     private readonly authService: DiaBackendAuthService
   ) {}
 
-  refresh$() {
-    return this.fetchAll$().pipe(single());
-  }
-
   fetchById$(id: string) {
     return this.authService.getAuthHeaders$.pipe(
       concatMap(headers =>
@@ -65,13 +60,17 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  fetchAll$(offset = 0, limit = 100) {
+  fetchAllOriginallyOwned$(offset = 0, limit = 100) {
     return defer(async () => this._isFetching$.next(true)).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
       concatMap(headers =>
         this.httpClient.get<ListAssetResponse>(`${BASE_URL}/api/v2/assets/`, {
           headers,
-          params: { offset: `${offset}`, limit: `${limit}` },
+          params: {
+            offset: `${offset}`,
+            limit: `${limit}`,
+            is_original_owner: `${true}`,
+          },
         })
       ),
       pluck('results'),

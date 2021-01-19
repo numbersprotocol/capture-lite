@@ -101,8 +101,7 @@ export class SendingPostCapturePage {
         if (proof) {
           await this.proofRepository.remove(proof);
         }
-      }),
-      concatMapTo(this.diaBackendAssetRepository.refresh$())
+      })
     );
   }
 }
