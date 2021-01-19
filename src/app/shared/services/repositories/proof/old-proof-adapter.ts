@@ -3,7 +3,7 @@ import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import { MimeType } from '../../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
 import { ImageStore } from '../../image-store/image-store.service';
-import { DefaultFactId, Proof, Signature } from './proof';
+import { DefaultFactId, Proof, Signature, Signatures, Truth } from './proof';
 
 /**
  * Only for migration and connection to backend. Subject to change.
@@ -97,6 +97,18 @@ export async function getProof(
   oldSignatures: OldSignature[]
 ): Promise<Proof> {
   const base64 = await blobToBase64(raw);
+
+  return Proof.from(
+    imageStore,
+    { [base64]: { mimeType: raw.type as MimeType } },
+    getTruth(sortedProofInformation),
+    getSignatures(oldSignatures)
+  );
+}
+
+export function getTruth(
+  sortedProofInformation: SortedProofInformation
+): Truth {
   const groupedByProvider = groupObjectsBy(
     sortedProofInformation.information.map(info => ({
       provider: info.provider,
@@ -115,19 +127,16 @@ export async function getProof(
       )
     )
   )(groupedByProvider);
-  const signatures = flow(
+  return { timestamp: sortedProofInformation.proof.timestamp, providers };
+}
+
+export function getSignatures(oldSignatures: OldSignature[]): Signatures {
+  return flow(
     mapValues((values: Signature[]) => ({
       signature: values[0].signature,
       publicKey: values[0].publicKey,
     }))
   )(groupObjectsBy(oldSignatures, 'provider'));
-
-  return Proof.from(
-    imageStore,
-    { [base64]: { mimeType: raw.type as MimeType } },
-    { timestamp: sortedProofInformation.proof.timestamp, providers },
-    signatures
-  );
 }
 
 export function replaceOldDefaultInformationNameWithDefaultFactId(
