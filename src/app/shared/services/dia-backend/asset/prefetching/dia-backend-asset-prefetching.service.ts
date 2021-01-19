@@ -30,7 +30,6 @@ export class DiaBackendAssetPrefetchingService {
       const diaBackendAssets = await this.diaBackendAssetRepository
         .fetchAllOriginallyOwned$(currentOffset, limit)
         .toPromise();
-      console.log(diaBackendAssets.length);
 
       if (diaBackendAssets.length === 0) {
         break;
@@ -38,9 +37,7 @@ export class DiaBackendAssetPrefetchingService {
       await Promise.all(
         diaBackendAssets.map(async diaBackendAsset => {
           await this.storeAssetThumbnail(diaBackendAsset);
-          console.log(`thumbnail stored: ${diaBackendAsset.id}`);
           await this.storeIndexedProof(diaBackendAsset);
-          console.log(`indexed proof stored: ${diaBackendAsset.id}`);
         })
       );
       currentOffset += diaBackendAssets.length;
@@ -81,6 +78,7 @@ export class DiaBackendAssetPrefetchingService {
         mimeType: diaBackendAsset.information.proof.mimeType,
       },
     });
+    proof.diaBackendAssetId = diaBackendAsset.id;
     return this.proofRepository.add(proof, OnConflictStrategy.REPLACE);
   }
 }

@@ -5,7 +5,6 @@ import { defer } from 'rxjs';
 import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
 import { DiaBackendAssetPrefetchingService } from '../../../../shared/services/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
 import { OnboardingService } from '../../../../shared/services/onboarding/onboarding.service';
-import { switchTapTo } from '../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -26,17 +25,11 @@ export class PrefetchingPage {
       .run$(
         defer(async () => {
           await this.diaBackendAssetPrefetchingService.prefetch();
+          await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
           this.router.navigate(['/home']);
         })
       )
-      .pipe(
-        switchTapTo(
-          defer(() =>
-            this.onboardingService.setHasPrefetchedDiaBackendAssets(true)
-          )
-        ),
-        untilDestroyed(this)
-      )
+      .pipe(untilDestroyed(this))
       .subscribe();
   }
 
