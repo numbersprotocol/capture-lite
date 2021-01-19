@@ -11,15 +11,30 @@ export class OnboardingService {
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
 
-  async onboard() {
-    return this.preferences.setBoolean(PrefKeys.IS_ONBOARDING, false);
+  async hasShownTutorial() {
+    return this.preferences.getBoolean(PrefKeys.HAS_SHOWN_TUTORIAL, false);
   }
 
-  async isOnboarding() {
-    return this.preferences.getBoolean(PrefKeys.IS_ONBOARDING, true);
+  async setHasShownTutorial(value: boolean) {
+    return this.preferences.setBoolean(PrefKeys.HAS_SHOWN_TUTORIAL, value);
+  }
+
+  async hasPrefetchedDiaBackendAssets() {
+    return this.preferences.getBoolean(
+      PrefKeys.HAS_PREFETCHED_DIA_BACKEND_ASSETS,
+      false
+    );
+  }
+
+  async setHasPrefetchedDiaBackendAssets(value: boolean) {
+    return this.preferences.setBoolean(
+      PrefKeys.HAS_PREFETCHED_DIA_BACKEND_ASSETS,
+      value
+    );
   }
 }
 
 const enum PrefKeys {
-  IS_ONBOARDING = 'IS_ONBOARDING',
+  HAS_SHOWN_TUTORIAL = 'HAS_SHOWN_TUTORIAL',
+  HAS_PREFETCHED_DIA_BACKEND_ASSETS = 'HAS_PREFETCHED_DIA_BACKEND_ASSETS',
 }

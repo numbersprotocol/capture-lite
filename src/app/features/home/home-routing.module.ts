@@ -27,10 +27,17 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'onboarding',
+    path: 'onboarding/tutorial',
     loadChildren: () =>
-      import('./onboarding/onboarding.module').then(
-        m => m.OnboardingPageModule
+      import('./onboarding/tutorial/tutorial.module').then(
+        m => m.TutorialPageModule
+      ),
+  },
+  {
+    path: 'onboarding/prefetching',
+    loadChildren: () =>
+      import('./onboarding/prefetching/prefetching.module').then(
+        m => m.PrefetchingPageModule
       ),
   },
 ];

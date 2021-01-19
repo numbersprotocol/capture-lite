@@ -11,7 +11,7 @@ import { OnboardingService } from '../../../../shared/services/onboarding/onboar
 export class TutorialPage implements OnInit {
   constructor(private readonly onboardingService: OnboardingService) {}
 
-  ngOnInit() {
-    this.onboardingService.onboard();
+  async ngOnInit() {
+    return this.onboardingService.setHasShownTutorial(true);
   }
 }

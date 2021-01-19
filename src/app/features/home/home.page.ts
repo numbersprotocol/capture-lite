@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { OnboardingService } from '../../shared/services/onboarding/onboarding.s
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage {
   readonly postCaptures$ = combineLatest([
     this.diaBackendTransactionRepository.getAll$(),
     this.diaBackendAuthService.getEmail(),
@@ -55,9 +55,16 @@ export class HomePage implements OnInit {
     private readonly route: ActivatedRoute
   ) {}
 
-  async ngOnInit() {
-    if (await this.onboardingService.isOnboarding()) {
-      this.router.navigate(['onboarding'], { relativeTo: this.route });
+  async ionViewDidEnter() {
+    if (!(await this.onboardingService.hasShownTutorial())) {
+      return this.router.navigate(['onboarding/tutorial'], {
+        relativeTo: this.route,
+      });
+    }
+    if (!(await this.onboardingService.hasPrefetchedDiaBackendAssets())) {
+      return this.router.navigate(['onboarding/prefetching'], {
+        relativeTo: this.route,
+      });
     }
   }
 
