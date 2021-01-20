@@ -45,12 +45,9 @@
 
   <ng-container *ngIf="isPreview">
     <app-post-capture-card
+      *ngIf="previewAsset$ | async; let asset"
       [sharable]="false"
-      *ngIf="asset$ | async; let asset"
-      [transaction]="{
-        sender: asset.owner,
-        asset: { id: asset.id, caption: previewCaption }
-      }"
+      [postCapture]="asset"
     >
     </app-post-capture-card>
 

@@ -1,0 +1,16 @@
+<div *ngIf="networkConnected$ | async" class="tab-content-post" #scrollingBlock>
+  <virtual-scroller
+    #scroll
+    [items]="postCaptures$ | async"
+    [parentScroll]="scrollingBlock"
+    [enableUnequalChildrenSizes]="true"
+    [bufferAmount]="2"
+    (vsEnd)="loadNextPage($event)"
+  >
+    <app-post-capture-card
+      *ngFor="let item of scroll.viewPortItems; trackBy: trackPostCapture"
+      [postCapture]="item"
+    >
+    </app-post-capture-card>
+  </virtual-scroller>
+</div>

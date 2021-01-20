@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer } from 'rxjs';
+import { combineLatest, defer } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -87,14 +87,15 @@ export class CaptureDetailsPage {
       autoFocus: false,
       data: { email: '' },
     });
-    dialogRef
-      .afterClosed()
-      .pipe(isNonNullable())
-      .subscribe(result =>
-        this.router.navigate(['sending-post-capture', { contact: result }], {
+    const contact$ = dialogRef.afterClosed().pipe(isNonNullable());
+    combineLatest([contact$, this.proof$]).subscribe(([contact, proof]) =>
+      this.router.navigate(
+        ['sending-post-capture', { contact, id: proof.diaBackendAssetId }],
+        {
           relativeTo: this.route,
-        })
-      );
+        }
+      )
+    );
   }
 
   openOptionsMenu() {
