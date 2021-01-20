@@ -45,6 +45,23 @@ export class SendingPostCapturePage {
   readonly username$ = this.contact$.pipe(
     map(contact => contact.substring(0, contact.lastIndexOf('@')))
   );
+  readonly previewAsset$ = combineLatest([this.asset$, this.contact$]).pipe(
+    map(([asset, contact]) => {
+      const fakeAsset: DiaBackendAsset = {
+        ...asset,
+        caption: this.previewCaption,
+        source_transaction: {
+          id: '',
+          sender: asset.owner,
+          receiver_email: contact,
+          created_at: '',
+          fulfilled_at: '',
+          expired: false,
+        },
+      };
+      return fakeAsset;
+    })
+  );
   previewCaption = '';
   isPreview = false;
 
