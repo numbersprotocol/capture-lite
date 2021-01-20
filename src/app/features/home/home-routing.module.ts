@@ -33,13 +33,6 @@ const routes: Routes = [
         m => m.TutorialPageModule
       ),
   },
-  {
-    path: 'onboarding/prefetching',
-    loadChildren: () =>
-      import('./onboarding/prefetching/prefetching.module').then(
-        m => m.PrefetchingPageModule
-      ),
-  },
 ];
 
 @NgModule({

@@ -1,0 +1,11 @@
+<ng-container *transloco="let t">
+  <h1 mat-dialog-title>{{ t('message.loadingPreviousData') }}</h1>
+  <div>
+    {{ t('message.doNotTurnOffApp') }}
+    <mat-progress-bar
+      [mode]="progress === 0 ? 'indeterminate' : 'determinate'"
+      [value]="progress * 100"
+      diameter="48"
+    ></mat-progress-bar>
+  </div>
+</ng-container>

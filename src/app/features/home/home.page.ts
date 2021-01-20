@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +12,7 @@ import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
+import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -54,7 +56,8 @@ export class HomePage {
     private readonly router: Router,
     private readonly captureService: CaptureService,
     private readonly route: ActivatedRoute,
-    private readonly confirmAlert: ConfirmAlert
+    private readonly confirmAlert: ConfirmAlert,
+    private readonly dialog: MatDialog
   ) {}
 
   async ionViewDidEnter() {
@@ -65,10 +68,7 @@ export class HomePage {
     }
     if (!(await this.onboardingService.hasPrefetchedDiaBackendAssets())) {
       if (await this.showPrefetchAlert()) {
-        return this.router.navigate(['onboarding/prefetching'], {
-          relativeTo: this.route,
-          replaceUrl: true,
-        });
+        return this.dialog.open(PrefetchingDialogComponent);
       }
       return this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     }
@@ -76,8 +76,10 @@ export class HomePage {
 
   private async showPrefetchAlert() {
     return this.confirmAlert.present({
-      header: this.translocoService.translate('loadPreviousData'),
+      header: this.translocoService.translate('restorePhotos'),
       message: this.translocoService.translate('message.confirmPrefetch'),
+      confirmButtonText: this.translocoService.translate('restore'),
+      cancelButtonText: this.translocoService.translate('skip'),
     });
   }
 

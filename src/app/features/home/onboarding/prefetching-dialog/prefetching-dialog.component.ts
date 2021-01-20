@@ -1,21 +1,19 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { MatDialogRef } from '@angular/material/dialog';
 import { DiaBackendAssetPrefetchingService } from '../../../../shared/services/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
 import { OnboardingService } from '../../../../shared/services/onboarding/onboarding.service';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'app-prefetching',
-  templateUrl: './prefetching.page.html',
-  styleUrls: ['./prefetching.page.scss'],
+  selector: 'app-prefetching-dialog',
+  templateUrl: './prefetching-dialog.component.html',
+  styleUrls: ['./prefetching-dialog.component.scss'],
 })
-export class PrefetchingPage {
+export class PrefetchingDialogComponent {
   progress = 0;
 
   constructor(
+    private readonly dialogRef: MatDialogRef<PrefetchingDialogComponent>,
     private readonly diaBackendAssetPrefetchingService: DiaBackendAssetPrefetchingService,
-    private readonly router: Router,
     private readonly onboardingService: OnboardingService
   ) {
     this.prefetch();
@@ -26,6 +24,6 @@ export class PrefetchingPage {
       (currentCount, totalCount) => (this.progress = currentCount / totalCount)
     );
     await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
-    this.router.navigate(['/home']);
+    this.dialogRef.close();
   }
 }

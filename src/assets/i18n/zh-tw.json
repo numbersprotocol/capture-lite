@@ -84,7 +84,9 @@
   "next": "下一頁",
   "start": "開始使用",
   "notRegistered": "未註冊",
-  "loadPreviousData": "載入舊資料",
+  "restorePhotos": "恢復已註冊的相片",
+  "restore": "恢復",
+  "skip": "跳過",
   ".message": "訊息",
   "message": {
     "areYouSure": "此操作不可撤銷。",
@@ -113,9 +115,9 @@
     "registeringPhotosPaused": "暫停註冊 {{ photos }} 張相片到區塊鏈上",
     "networkNotConnected": "沒有網路連線",
     "allPhotosRegistered": "所有照片都已被成功註冊",
-    "confirmPrefetch": "是否要載入舊資料？需要數秒至數分鐘的時間，期間請勿關閉螢幕與 APP。",
-    "loadingPreviousData": "正在載入您的舊資料...",
-    "doNotTurnOffApp": "請勿關閉螢幕與 app。"
+    "confirmPrefetch": "是否要恢復已註冊的相片？需要數秒至數分鐘的時間。",
+    "loadingPreviousData": "正在恢復已註冊的相片...",
+    "doNotTurnOffApp": "載入中，期間請勿關閉螢幕與離開 APP。"
   },
   "error": {
     "loginTimeoutError": "連線逾時。請稍候再試。",

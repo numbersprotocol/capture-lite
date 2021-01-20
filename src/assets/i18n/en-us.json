@@ -84,7 +84,9 @@
   "next": "Next",
   "start": "Start",
   "notRegistered": "Not Registered",
-  "loadPreviousData": "Load Previous Data",
+  "restorePhotos": "Restore Photos",
+  "restore": "Restore",
+  "skip": "Skip",
   ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",
@@ -113,9 +115,9 @@
     "registeringPhotosPaused": "Registering {{ photos }} photos on blockchain paused.",
     "networkNotConnected": "Network not connected",
     "allPhotosRegistered": "All photos registered on blockchain successfully",
-    "confirmPrefetch": "Do you want to load the previous data? This action requires minutes to be completed. Please do NOT turn off your screen and the app during the loading.",
-    "loadingPreviousData": "Loading your previous data...",
-    "doNotTurnOffApp": "Please do not turn off your screen and the app during this process."
+    "confirmPrefetch": "Do you want to restore the registered photos? It may take minutes to complete.",
+    "loadingPreviousData": "Restoring photos...",
+    "doNotTurnOffApp": "Please keep the screen on and DO NOT leave the app."
   },
   "error": {
     "loginTimeoutError": "Connection timeout. Please try again later.",
