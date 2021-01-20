@@ -66,7 +66,7 @@ export class PostCaptureTabComponent implements OnInit {
   }
 
   loadNextPage(event: IPageInfo) {
-    if (event.endIndex !== this._postCaptures$.getValue().length - 1) {
+    if (event.endIndex !== this._postCaptures$.value.length - 1) {
       return;
     }
     this.pagination$
@@ -86,8 +86,6 @@ export class PostCaptureTabComponent implements OnInit {
   }
 
   private concatPostCaptures(postCaptures: DiaBackendAsset[]) {
-    this._postCaptures$.next(
-      this._postCaptures$.getValue().concat(postCaptures)
-    );
+    this._postCaptures$.next(this._postCaptures$.value.concat(postCaptures));
   }
 }

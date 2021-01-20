@@ -72,7 +72,7 @@ export class DiaBackendAssetRepository {
   }
 
   fetchPostCapturePagination$(pageSize: number, overrideUrl?: string) {
-    const url = overrideUrl || `${BASE_URL}/api/v2/assets/`;
+    const url = overrideUrl ?? `${BASE_URL}/api/v2/assets/`;
     const params = overrideUrl
       ? undefined
       : { is_original_owner: 'false', limit: `${pageSize}` };
