@@ -4,19 +4,14 @@ import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import mergeImages from 'merge-images';
-import { BehaviorSubject, defer } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
-import { DiaBackendAssetRepository } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import {
-  DiaBackendTransaction,
-  DiaBackendTransactionRepository,
-} from '../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
+  DiaBackendAsset,
+  DiaBackendAssetRepository,
+} from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { ImageStore } from '../../../shared/services/image-store/image-store.service';
-import { OldDefaultInformationName } from '../../../shared/services/repositories/proof/old-proof-adapter';
-import {
-  isNonNullable,
-  switchTapTo,
-} from '../../../utils/rx-operators/rx-operators';
+import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import {
   Option,
   OptionsMenuComponent,
@@ -31,28 +26,19 @@ const { Share, Browser } = Plugins;
 })
 export class PostCaptureCardComponent implements OnInit {
   @Input() readonly sharable = true;
-  @Input() private readonly transaction!: DiaBackendTransaction;
+  @Input() private readonly postCapture!: DiaBackendAsset;
   @ViewChild('ratioImg', { static: true }) ratioImg!: ElementRef;
 
-  private readonly _transaction$ = new BehaviorSubject(this.transaction);
-  readonly transaction$ = this._transaction$
+  private readonly _postCapture$ = new BehaviorSubject(this.postCapture);
+  readonly postCapture$ = this._postCapture$
     .asObservable()
     .pipe(isNonNullable());
-  readonly asset$ = this.transaction$.pipe(
-    concatMap(transaction =>
-      this.diaBackendAssetRepository.fetchById$(transaction.asset.id)
-    )
-  );
-  readonly location$ = this.asset$.pipe(
-    map(asset => {
-      const latitude = asset.information.information?.find(
-        info => info.name === OldDefaultInformationName.GEOLOCATION_LATITUDE
-      )?.value;
-      const longitude = asset.information.information?.find(
-        info => info.name === OldDefaultInformationName.GEOLOCATION_LONGITUDE
-      )?.value;
-      return latitude && longitude
-        ? `${latitude}, ${longitude}`
+  readonly location$ = this.postCapture$.pipe(
+    map(postCapture => {
+      const lat = postCapture.parsed_meta.capture_latitude;
+      const lon = postCapture.parsed_meta.capture_longitude;
+      return lat && lon && lat !== 'undefined' && lon !== 'undefined'
+        ? `${lat}, ${lon}`
         : this.translocoService.translate('locationNotProvided');
     })
   );
@@ -60,14 +46,13 @@ export class PostCaptureCardComponent implements OnInit {
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly translocoService: TranslocoService,
     private readonly imageStore: ImageStore,
     private readonly bottomSheet: MatBottomSheet
   ) {}
 
   ngOnInit() {
-    this._transaction$.next(this.transaction);
+    this._postCapture$.next(this.postCapture);
   }
 
   openOptionsMenu() {
@@ -87,24 +72,23 @@ export class PostCaptureCardComponent implements OnInit {
       .subscribe();
   }
   remove() {
-    return this.asset$
+    return this.postCapture$
       .pipe(
         first(),
-        concatMap(asset => this.diaBackendAssetRepository.remove$(asset)),
-        switchTapTo(
-          defer(() => this.diaBackendTransactionRepository.refresh$())
+        concatMap(postCapture =>
+          this.diaBackendAssetRepository.remove$(postCapture)
         )
       )
       .subscribe();
   }
 
   share() {
-    return this.asset$
+    return this.postCapture$
       .pipe(
         first(),
-        concatMap(asset =>
+        concatMap(postCapture =>
           mergeImages(
-            [asset.sharable_copy, '/assets/image/new-year-frame.png'],
+            [postCapture.sharable_copy, '/assets/image/new-year-frame.png'],
             // @ts-ignore
             { format: 'image/jpeg', crossOrigin: 'Anonymous' }
           )
