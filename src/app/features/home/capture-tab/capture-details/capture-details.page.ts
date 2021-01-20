@@ -53,6 +53,9 @@ export class CaptureDetailsPage {
     map(assets => Object.entries(assets)[0]),
     map(([base64, assetMeta]) => toDataUrl(base64, assetMeta.mimeType))
   );
+  readonly isRegistered$ = this.proof$.pipe(
+    map(proof => !!proof.diaBackendAssetId)
+  );
   readonly location$ = this.proof$.pipe(
     map(proof => {
       const latitude = proof.geolocationLatitude;

@@ -14,6 +14,7 @@ import { DiaBackendAssetUploadingService } from './shared/services/dia-backend/a
 import { DiaBackendAuthService } from './shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendNotificationService } from './shared/services/dia-backend/notification/dia-backend-notification.service';
 import { LanguageService } from './shared/services/language/language.service';
+import { NetworkService } from './shared/services/network/network.service';
 import { NotificationService } from './shared/services/notification/notification.service';
 import { PushNotificationService } from './shared/services/push-notification/push-notification.service';
 
@@ -38,6 +39,7 @@ export class AppComponent {
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
+    networkService: NetworkService,
     diaBackendAuthService: DiaBackendAuthService,
     diaBackendNotificationService: DiaBackendNotificationService,
     uploadService: DiaBackendAssetUploadingService
@@ -45,6 +47,7 @@ export class AppComponent {
     notificationService.requestPermission();
     pushNotificationService.register();
     langaugeService.initialize();
+    networkService.initialize();
     diaBackendAuthService.initialize$().pipe(untilDestroyed(this)).subscribe();
     uploadService.initialize$().pipe(untilDestroyed(this)).subscribe();
     diaBackendNotificationService

@@ -110,7 +110,7 @@
     "syncingAssets": "Syncing of your photo assets is in progress, this might take a few minutes. Please keep the app open and connected online.",
     "registeringPhotos": "Registering {{ photos }} photos on blockchain.",
     "registeringPhotosPaused": "Registering {{ photos }} photos on blockchain paused.",
-    "serverConnectionLost": "Server connection lost. Registration paused.",
+    "networkNotConnected": "Network not connected",
     "allPhotosRegistered": "All photos registered on blockchain successfully"
   },
   "error": {
