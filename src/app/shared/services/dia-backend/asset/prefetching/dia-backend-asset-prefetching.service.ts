@@ -23,11 +23,17 @@ export class DiaBackendAssetPrefetchingService {
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository
   ) {}
 
-  async prefetch() {
+  async prefetch(
+    onStored: (currentCount: number, totalCount: number) => any = () => void 0
+  ) {
     let currentOffset = 0;
+    let currentCount = 0;
     const limit = 100;
     while (true) {
-      const diaBackendAssets = await this.diaBackendAssetRepository
+      const {
+        results: diaBackendAssets,
+        count: totalCount,
+      } = await this.diaBackendAssetRepository
         .fetchAllOriginallyOwned$(currentOffset, limit)
         .toPromise();
 
@@ -38,6 +44,8 @@ export class DiaBackendAssetPrefetchingService {
         diaBackendAssets.map(async diaBackendAsset => {
           await this.storeAssetThumbnail(diaBackendAsset);
           await this.storeIndexedProof(diaBackendAsset);
+          currentCount += 1;
+          onStored(currentCount, totalCount);
         })
       );
       currentOffset += diaBackendAssets.length;

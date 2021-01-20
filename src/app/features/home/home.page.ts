@@ -7,6 +7,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { CaptureService } from '../../shared/services/capture/capture.service';
+import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
@@ -52,7 +53,8 @@ export class HomePage {
     private readonly onboardingService: OnboardingService,
     private readonly router: Router,
     private readonly captureService: CaptureService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly confirmAlert: ConfirmAlert
   ) {}
 
   async ionViewDidEnter() {
@@ -62,10 +64,21 @@ export class HomePage {
       });
     }
     if (!(await this.onboardingService.hasPrefetchedDiaBackendAssets())) {
-      return this.router.navigate(['onboarding/prefetching'], {
-        relativeTo: this.route,
-      });
+      if (await this.showPrefetchAlert()) {
+        return this.router.navigate(['onboarding/prefetching'], {
+          relativeTo: this.route,
+          replaceUrl: true,
+        });
+      }
+      return this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     }
+  }
+
+  private async showPrefetchAlert() {
+    return this.confirmAlert.present({
+      header: this.translocoService.translate('loadPreviousData'),
+      message: this.translocoService.translate('message.confirmPrefetch'),
+    });
   }
 
   onTapChanged(event: MatTabChangeEvent) {

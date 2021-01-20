@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer } from 'rxjs';
-import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { DiaBackendAssetPrefetchingService } from '../../../../shared/services/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
 import { OnboardingService } from '../../../../shared/services/onboarding/onboarding.service';
 
@@ -13,28 +11,21 @@ import { OnboardingService } from '../../../../shared/services/onboarding/onboar
   styleUrls: ['./prefetching.page.scss'],
 })
 export class PrefetchingPage {
+  progress = 0;
+
   constructor(
     private readonly diaBackendAssetPrefetchingService: DiaBackendAssetPrefetchingService,
     private readonly router: Router,
-    private readonly blockingActionService: BlockingActionService,
     private readonly onboardingService: OnboardingService
-  ) {}
-
-  prefetch() {
-    this.blockingActionService
-      .run$(
-        defer(async () => {
-          await this.diaBackendAssetPrefetchingService.prefetch();
-          await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
-          this.router.navigate(['/home']);
-        })
-      )
-      .pipe(untilDestroyed(this))
-      .subscribe();
+  ) {
+    this.prefetch();
   }
 
-  async skip() {
+  private async prefetch() {
+    await this.diaBackendAssetPrefetchingService.prefetch(
+      (currentCount, totalCount) => (this.progress = currentCount / totalCount)
+    );
     await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
-    return this.router.navigate(['/home']);
+    this.router.navigate(['/home']);
   }
 }

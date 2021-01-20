@@ -6,7 +6,6 @@ import {
   concatMapTo,
   distinctUntilChanged,
   map,
-  pluck,
   tap,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
@@ -73,7 +72,6 @@ export class DiaBackendAssetRepository {
           },
         })
       ),
-      pluck('results'),
       tap(() => this._isFetching$.next(false))
     );
   }
@@ -132,6 +130,7 @@ export interface DiaBackendAsset extends Tuple {
 }
 
 interface ListAssetResponse {
+  count: number;
   results: DiaBackendAsset[];
 }
 

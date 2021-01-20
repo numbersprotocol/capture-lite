@@ -81,10 +81,11 @@
   "clickToShare": "Click to Share",
   "takePhotos": "Take Photos",
   "sendToFriends": "Send to Friends",
-  ".message": "Message",
   "next": "Next",
   "start": "Start",
   "notRegistered": "Not Registered",
+  "loadPreviousData": "Load Previous Data",
+  ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "verificationEmailSent": "A verification email has been sent to your email address.",
@@ -111,7 +112,10 @@
     "registeringPhotos": "Registering {{ photos }} photos on blockchain.",
     "registeringPhotosPaused": "Registering {{ photos }} photos on blockchain paused.",
     "networkNotConnected": "Network not connected",
-    "allPhotosRegistered": "All photos registered on blockchain successfully"
+    "allPhotosRegistered": "All photos registered on blockchain successfully",
+    "confirmPrefetch": "Do you want to load the previous data? This action requires minutes to be completed. Please do NOT turn off your screen and the app during the loading.",
+    "loadingPreviousData": "Loading your previous data...",
+    "doNotTurnOffApp": "Please do not turn off your screen and the app during this process."
   },
   "error": {
     "loginTimeoutError": "Connection timeout. Please try again later.",
