@@ -17,25 +17,6 @@ mat-sidenav-content {
   overflow-x: hidden;
 }
 
-.tab-content-post {
-  margin-bottom: 128px;
-
-  div.mat-title {
-    margin-top: 16px;
-    padding: 16px;
-  }
-
-  .square-image-tile {
-    border-radius: 4px;
-    background-position: center center;
-    background-size: cover;
-  }
-
-  app-post-capture-card {
-    width: 100%;
-  }
-}
-
 .capture-fab {
   position: fixed;
   bottom: 16px;

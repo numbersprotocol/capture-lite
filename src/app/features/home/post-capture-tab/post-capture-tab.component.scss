@@ -1,0 +1,23 @@
+.tab-content-post {
+  margin-bottom: 128px;
+
+  div.mat-title {
+    margin-top: 16px;
+    padding: 16px;
+  }
+
+  .square-image-tile {
+    border-radius: 4px;
+    background-position: center center;
+    background-size: cover;
+  }
+
+  virtual-scroller {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  app-post-capture-card {
+    width: 100%;
+  }
+}
