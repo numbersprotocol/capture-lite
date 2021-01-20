@@ -10,6 +10,7 @@ import { CaptureService } from '../../shared/services/capture/capture.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
+import { AutoCaptureService } from '../../test/auto-capture/auto-capture.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -51,7 +52,8 @@ export class HomePage implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly onboardingService: OnboardingService,
     private readonly router: Router,
-    private readonly captureService: CaptureService
+    private readonly captureService: CaptureService,
+    private readonly autoCaptureService: AutoCaptureService
   ) {}
 
   async ngOnInit() {
@@ -75,5 +77,9 @@ export class HomePage implements OnInit {
 
   async capture() {
     return this.captureService.capture();
+  }
+
+  async autoCapture() {
+    return this.autoCaptureService.showDialog();
   }
 }
