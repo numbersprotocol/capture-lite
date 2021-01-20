@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
@@ -25,7 +25,9 @@ const { Share, Browser } = Plugins;
   styleUrls: ['./post-capture-card.component.scss'],
 })
 export class PostCaptureCardComponent implements OnInit {
+  @Input() readonly sharable = true;
   @Input() private readonly postCapture!: DiaBackendAsset;
+  @ViewChild('ratioImg', { static: true }) ratioImg!: ElementRef;
 
   private readonly _postCapture$ = new BehaviorSubject(this.postCapture);
   readonly postCapture$ = this._postCapture$

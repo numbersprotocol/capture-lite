@@ -13,7 +13,17 @@
         <mat-icon>more_vert</mat-icon>
       </button>
     </mat-card-header>
-    <div class="fixed-ratio">
+    <div
+      class="fixed-ratio"
+      [ngStyle]="{
+        height:
+          ratioImg.offsetHeight === ratioImg.offsetWidth
+            ? '100vw'
+            : ratioImg.offsetHeight > ratioImg.offsetWidth
+            ? 'calc(100vw / 4 * 5)'
+            : 'calc(100vw / 16 * 9)'
+      }"
+    >
       <img
         #ratioImg
         id="image"
