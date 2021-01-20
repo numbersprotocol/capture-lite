@@ -3,6 +3,8 @@
     #scroll
     [items]="postCaptures$ | async"
     [parentScroll]="scrollingBlock"
+    [enableUnequalChildrenSizes]="true"
+    [bufferAmount]="2"
     (vsEnd)="loadNextPage($event)"
   >
     <app-post-capture-card
