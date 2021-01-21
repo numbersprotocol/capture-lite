@@ -40,19 +40,19 @@ export class AutoCaptureService {
   }
 
   private async run(count: number) {
-    await Promise.all(
-      [...Array(count).keys()].map(async index => {
-        const blob = await this.httpClient
-          .get(`/assets/unsample/${index + 1}.jpg`, {
-            responseType: 'blob',
-          })
-          .toPromise();
-        await this.captureService.capture({
-          base64: await blobToBase64(blob),
-          mimeType: 'image/jpeg',
-        });
-      })
-    );
+    for (let index = 0; index < count; index += 1) {
+      const blob = await this.httpClient
+        .get(`/assets/unsample/${index + 1}.jpg`, {
+          responseType: 'blob',
+        })
+        .toPromise();
+      this.captureService.capture({
+        base64: await blobToBase64(blob),
+        mimeType: 'image/jpeg',
+      });
+
+      await new Promise<void>(resolve => setTimeout(resolve, 2000));
+    }
   }
 }
 

@@ -67,8 +67,32 @@ export class ImageStore {
     return result.data;
   }
 
-  async write(base64: string, mimeType: MimeType) {
+  async write(base64: string, mimeType: MimeType, mode = WriteMode.REPLACE) {
+    const st = Date.now();
     const index = await sha256WithBase64(base64);
+    await this.initialize();
+    if (mode === WriteMode.REPLACE) {
+      return this._write(index, base64, mimeType);
+    }
+    const exists = await this.exists(index);
+    if (mode === WriteMode.IGNORE) {
+      if (exists) {
+        console.log(
+          `[PERF]${pad(Date.now() - st)}, ignored writing: ${index.substring(
+            0,
+            6
+          )}`
+        );
+        return index;
+      }
+    }
+    if (exists) {
+      throw new Error(`File already exist: ${index}`);
+    }
+    return this._write(index, base64, mimeType);
+  }
+
+  async _write(index: string, base64: string, mimeType: MimeType) {
     await this.initialize();
     return this.mutex.runExclusive(async () => {
       const imageExtension = await this.setImageExtension(index, mimeType);
@@ -222,4 +246,10 @@ interface ImageExtension extends Tuple {
 interface Thumbnail extends Tuple {
   readonly imageIndex: string;
   readonly thumbnailIndex: string;
+}
+
+export const enum WriteMode {
+  ABORT,
+  IGNORE,
+  REPLACE,
 }
