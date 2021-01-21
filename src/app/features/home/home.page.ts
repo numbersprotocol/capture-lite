@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -20,7 +20,7 @@ import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/pref
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements AfterViewInit {
   readonly postCaptures$ = combineLatest([
     this.diaBackendTransactionRepository.getAll$(),
     this.diaBackendAuthService.getEmail(),
@@ -60,7 +60,7 @@ export class HomePage {
     private readonly dialog: MatDialog
   ) {}
 
-  async ionViewDidEnter() {
+  async ngAfterViewInit() {
     if (!(await this.onboardingService.hasShownTutorial())) {
       return this.router.navigate(['onboarding/tutorial'], {
         relativeTo: this.route,
@@ -68,7 +68,9 @@ export class HomePage {
     }
     if (!(await this.onboardingService.hasPrefetchedDiaBackendAssets())) {
       if (await this.showPrefetchAlert()) {
-        return this.dialog.open(PrefetchingDialogComponent);
+        return this.dialog.open(PrefetchingDialogComponent, {
+          disableClose: true,
+        });
       }
       return this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     }
