@@ -1,10 +1,5 @@
 <mat-toolbar color="primary" *transloco="let t">
-  <button
-    [routerLink]="isPreview ? null : '..'"
-    routerDirection="back"
-    (click)="isPreview ? (isPreview = false) : null"
-    mat-icon-button
-  >
+  <button (click)="onBackButtonClick()" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span>{{ t(isPreview ? 'preview' : 'sendPostCapture') }}</span>
