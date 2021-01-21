@@ -63,17 +63,13 @@
         <app-capture-tab></app-capture-tab>
       </mat-tab>
       <mat-tab label="PostCapture">
-        <div class="tab-content-post">
-          <app-post-capture-card
-            *ngFor="let postCapture of postCaptures$ | async"
-            [transaction]="postCapture"
-          >
-          </app-post-capture-card>
-        </div>
+        <app-post-capture-tab
+          [focus]="postCaptureTabFocus"
+        ></app-post-capture-tab>
       </mat-tab>
     </mat-tab-group>
 
-    <ion-fab class="capture-fab">
+    <ion-fab class="capture-fab" *ngIf="!postCaptureTabFocus">
       <ion-fab-button (click)="capture()">
         <ion-icon name="camera-outline"></ion-icon>
       </ion-fab-button>

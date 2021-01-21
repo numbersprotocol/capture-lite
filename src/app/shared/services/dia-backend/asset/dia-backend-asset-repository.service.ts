@@ -20,6 +20,8 @@ import {
 } from '../../repositories/proof/old-proof-adapter';
 import { Proof } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
+import { PaginatedResponse } from '../pagination/paginated-response';
+import { Pagination } from '../pagination/pagination';
 import { BASE_URL } from '../secret';
 
 @Injectable({
@@ -56,6 +58,22 @@ export class DiaBackendAssetRepository {
         })
       ),
       map(listAssetResponse => listAssetResponse.results[0])
+    );
+  }
+
+  fetchPostCapturePagination$(pageSize: number, overrideUrl?: string) {
+    const url = overrideUrl ?? `${BASE_URL}/api/v2/assets/`;
+    const params = overrideUrl
+      ? undefined
+      : { is_original_owner: 'false', limit: `${pageSize}` };
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(url, {
+          headers,
+          params,
+        })
+      ),
+      map(paginatedResponse => new Pagination(paginatedResponse))
     );
   }
 
@@ -106,15 +124,37 @@ export class DiaBackendAssetRepository {
   }
 
   remove$(asset: DiaBackendAsset) {
+    return this.removeById$(asset.id);
+  }
+
+  removeById$(id: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.delete<DeleteAssetResponse>(
-          `${BASE_URL}/api/v2/assets/${asset.id}/`,
+          `${BASE_URL}/api/v2/assets/${id}/`,
           { headers }
         )
       )
     );
   }
+}
+
+export interface DiaBackendAssetTransaction extends Tuple {
+  readonly id: string;
+  readonly sender: string;
+  readonly receiver_email: string;
+  readonly created_at: string;
+  readonly fulfilled_at: string | null;
+  readonly expired: boolean;
+}
+
+export interface DiaBackendAssetParsedMeta extends Tuple {
+  readonly proof_hash: string;
+  readonly mime_type?: string;
+  readonly capture_time?: number;
+  readonly capture_device?: string;
+  readonly capture_latitude?: string;
+  readonly capture_longitude?: string;
 }
 
 export interface DiaBackendAsset extends Tuple {
@@ -127,6 +167,8 @@ export interface DiaBackendAsset extends Tuple {
   readonly information: Partial<SortedProofInformation>;
   readonly signature: OldSignature[];
   readonly sharable_copy: string;
+  readonly source_transaction: DiaBackendAssetTransaction | null;
+  readonly parsed_meta: DiaBackendAssetParsedMeta;
 }
 
 interface ListAssetResponse {

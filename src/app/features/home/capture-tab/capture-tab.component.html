@@ -1,3 +1,9 @@
+<div
+  *ngIf="(capturesByDate$ | async) === null"
+  class="loading-spinner-container"
+>
+  <ion-spinner></ion-spinner>
+</div>
 <ng-container
   *ngFor="
     let group of capturesByDate$ | async | keyvalue: keyDescendingOrder;
@@ -15,7 +21,10 @@
       "
       class="capture-item"
     >
-      <div *ngIf="captureItem.isCollecting" class="spinner-container">
+      <div
+        *ngIf="captureItem.isCollecting"
+        class="collecting-spinner-container"
+      >
         <ion-spinner></ion-spinner>
       </div>
       <ion-icon

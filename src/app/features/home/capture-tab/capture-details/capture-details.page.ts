@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer } from 'rxjs';
+import { combineLatest, defer } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -21,13 +21,18 @@ import { ImageStore } from '../../../../shared/services/image-store/image-store.
 import { getOldProof } from '../../../../shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../../shared/services/repositories/proof/proof-repository.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
-import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import {
+  isNonNullable,
+  switchTap,
+  VOID$,
+} from '../../../../utils/rx-operators/rx-operators';
 import { toDataUrl } from '../../../../utils/url';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import {
   Option,
   OptionsMenuComponent,
 } from './options-menu/options-menu.component';
+
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-asset',
@@ -94,14 +99,15 @@ export class CaptureDetailsPage {
       autoFocus: false,
       data: { email: '' },
     });
-    dialogRef
-      .afterClosed()
-      .pipe(isNonNullable())
-      .subscribe(result =>
-        this.router.navigate(['sending-post-capture', { contact: result }], {
+    const contact$ = dialogRef.afterClosed().pipe(isNonNullable());
+    combineLatest([contact$, this.proof$]).subscribe(([contact, proof]) =>
+      this.router.navigate(
+        ['sending-post-capture', { contact, id: proof.diaBackendAssetId }],
+        {
           relativeTo: this.route,
-        })
-      );
+        }
+      )
+    );
   }
 
   openOptionsMenu() {
@@ -121,6 +127,16 @@ export class CaptureDetailsPage {
 
   private async remove() {
     const action$ = this.proof$.pipe(
+      switchTap(proof =>
+        defer(() => {
+          if (proof.diaBackendAssetId) {
+            return this.diaBackendAssetRepository.removeById$(
+              proof.diaBackendAssetId
+            );
+          }
+          return VOID$;
+        })
+      ),
       concatMap(proof => this.proofRepository.remove(proof)),
       concatMapTo(defer(() => this.router.navigate(['..'])))
     );
