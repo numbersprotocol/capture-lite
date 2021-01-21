@@ -1,13 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { IPageInfo } from 'ngx-virtual-scroller';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import {
   concatMap,
   distinctUntilChanged,
   filter,
   first,
   map,
+  startWith,
   tap,
 } from 'rxjs/operators';
 import {
@@ -38,14 +40,19 @@ export class PostCaptureTabComponent implements OnInit {
   readonly postCaptures$ = this._postCaptures$.asObservable();
   readonly pagination$ = this._pagination$.asObservable();
   readonly networkConnected$ = this.networkService.connected$;
+  readonly onDidNavigate$ = this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd && event?.url === '/home'),
+    startWith(undefined)
+  );
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly networkService: NetworkService
+    private readonly networkService: NetworkService,
+    private readonly router: Router
   ) {}
 
   ngOnInit() {
-    this.focus$
+    combineLatest([this.focus$, this.onDidNavigate$])
       .pipe(
         filter(focus => !!focus),
         concatMap(() => this.fetchPostCaptures$()),
