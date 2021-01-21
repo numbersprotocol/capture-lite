@@ -1,3 +1,4 @@
+import { pad } from '../../../../test/auto-capture/auto-capture.service';
 import { sha256WithString } from '../../../../utils/crypto/crypto';
 import { sortObjectDeeplyByKey } from '../../../../utils/immutable/immutable';
 import { MimeType } from '../../../../utils/mime-type';
@@ -35,7 +36,14 @@ export class Proof {
   private async setAssets(assets: Assets) {
     const indexedAssetEntries: [string, AssetMeta][] = [];
     for (const [base64, meta] of Object.entries(assets)) {
+      const st = Date.now();
       const index = await this.imageStore.write(base64, meta.mimeType);
+      console.log(
+        `[PERF]${pad(Date.now() - st)}, wrote original image: ${index.substring(
+          0,
+          6
+        )}`
+      );
       indexedAssetEntries.push([index, meta]);
     }
 

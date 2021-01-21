@@ -3,6 +3,7 @@ import { FilesystemDirectory, FilesystemPlugin } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
 import ImageBlobReduce from 'image-blob-reduce';
 import { FILESYSTEM_PLUGIN } from '../../../shared/core/capacitor-plugins/capacitor-plugins.module';
+import { pad } from '../../../test/auto-capture/auto-capture.service';
 import { sha256WithBase64 } from '../../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
 import { MimeType, toExtension } from '../../../utils/mime-type';
@@ -121,12 +122,24 @@ export class ImageStore {
       [
         {
           imageIndex: index,
-          thumbnailIndex: await this.write(thumbnailBase64, mimeType),
+          thumbnailIndex: await this.writeThumb(thumbnailBase64, mimeType),
         },
       ],
       OnConflictStrategy.IGNORE
     );
     return thumbnailBase64;
+  }
+
+  private async writeThumb(base64: string, mimeType: MimeType) {
+    const st = Date.now();
+    const ret = await this.write(base64, mimeType);
+    console.log(
+      `[PERF]${pad(Date.now() - st)}, wrote thumbnail image: ${ret.substring(
+        0,
+        6
+      )}`
+    );
+    return ret;
   }
 
   private async deleteThumbnail(index: string) {

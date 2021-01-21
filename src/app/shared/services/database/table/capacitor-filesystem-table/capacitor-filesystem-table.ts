@@ -7,6 +7,7 @@ import { Mutex } from 'async-mutex';
 import { differenceWith, intersectionWith, isEqual, uniqWith } from 'lodash';
 import { BehaviorSubject, defer } from 'rxjs';
 import { concatMapTo } from 'rxjs/operators';
+import { pad } from '../../../../../test/auto-capture/auto-capture.service';
 import { OnConflictStrategy, Table, Tuple } from '../table';
 
 export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
@@ -67,13 +68,20 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   private async createEmptyJson() {
-    return this.filesystemPlugin.writeFile({
+    const st = Date.now();
+    const ret = await this.filesystemPlugin.writeFile({
       directory: this.directory,
       path: `${this.rootDir}/${this.id}.json`,
       data: JSON.stringify([]),
       encoding: FilesystemEncoding.UTF8,
       recursive: true,
     });
+    console.log(
+      `[PERF]${pad(Date.now() - st)}, created empty json: ${this.rootDir}/${
+        this.id
+      }.json`
+    );
+    return ret;
   }
 
   private async loadJson() {
@@ -158,13 +166,20 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
   }
 
   private async dumpJson() {
-    return this.filesystemPlugin.writeFile({
+    const st = Date.now();
+    const ret = await this.filesystemPlugin.writeFile({
       directory: this.directory,
       path: `${this.rootDir}/${this.id}.json`,
       data: JSON.stringify(this.tuples$.value),
       encoding: FilesystemEncoding.UTF8,
       recursive: true,
     });
+    console.log(
+      `[PERF]${pad(Date.now() - st)}, dumped json: ${this.rootDir}/${
+        this.id
+      }.json`
+    );
+    return ret;
   }
 
   async drop() {

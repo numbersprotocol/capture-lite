@@ -43,7 +43,7 @@ export class AutoCaptureService {
     await Promise.all(
       [...Array(count).keys()].map(async index => {
         const blob = await this.httpClient
-          .get(`/assets/test/unsample/${index + 1}.jpg/`, {
+          .get(`/assets/unsample/${index + 1}.jpg`, {
             responseType: 'blob',
           })
           .toPromise();
@@ -54,4 +54,8 @@ export class AutoCaptureService {
       })
     );
   }
+}
+
+export function pad(value: number | string, size = 10) {
+  return String(value).padStart(size);
 }
