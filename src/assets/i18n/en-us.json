@@ -81,10 +81,13 @@
   "clickToShare": "Click to Share",
   "takePhotos": "Take Photos",
   "sendToFriends": "Send to Friends",
-  ".message": "Message",
   "next": "Next",
   "start": "Start",
   "notRegistered": "Not Registered",
+  "restorePhotos": "Restore Photos",
+  "restore": "Restore",
+  "skip": "Skip",
+  ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",
     "verificationEmailSent": "A verification email has been sent to your email address.",
@@ -111,7 +114,10 @@
     "registeringPhotos": "Registering {{ photos }} photos on blockchain.",
     "registeringPhotosPaused": "Registering {{ photos }} photos on blockchain paused.",
     "networkNotConnected": "Network not connected",
-    "allPhotosRegistered": "All photos registered on blockchain successfully"
+    "allPhotosRegistered": "All photos registered on blockchain successfully",
+    "confirmPrefetch": "Do you want to restore the registered photos? It may take minutes to complete.",
+    "loadingPreviousData": "Restoring photos...",
+    "doNotTurnOffApp": "Please keep the screen on and DO NOT leave the app."
   },
   "error": {
     "loginTimeoutError": "Connection timeout. Please try again later.",

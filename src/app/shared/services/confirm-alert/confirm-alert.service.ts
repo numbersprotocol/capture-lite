@@ -11,22 +11,31 @@ export class ConfirmAlert {
     private readonly translocoService: TranslocoService
   ) {}
 
-  async present(
-    message: string = this.translocoService.translate('message.areYouSure')
-  ) {
+  async present({
+    header = this.translocoService.translate('areYouSure'),
+    message = this.translocoService.translate('message.areYouSure'),
+    confirmButtonText = this.translocoService.translate('ok'),
+    cancelButtonText = this.translocoService.translate('cancel'),
+  }: {
+    header?: string;
+    message?: string;
+    confirmButtonText?: string;
+    cancelButtonText?: string;
+  } = {}) {
     return new Promise<boolean>(resolve => {
       this.alertController
         .create({
-          header: this.translocoService.translate('areYouSure'),
+          header,
           message,
           buttons: [
             {
-              text: this.translocoService.translate('cancel'),
+              text:
+                cancelButtonText ?? this.translocoService.translate('cancel'),
               role: 'cancel',
               handler: () => resolve(false),
             },
             {
-              text: this.translocoService.translate('ok'),
+              text: confirmButtonText ?? this.translocoService.translate('ok'),
               handler: () => resolve(true),
             },
           ],

@@ -79,9 +79,9 @@ export class SendingPostCapturePage {
       )
     );
 
-    const result = await this.confirmAlert.present(
-      this.translocoService.translate('message.sendPostCaptureAlert')
-    );
+    const result = await this.confirmAlert.present({
+      message: this.translocoService.translate('message.sendPostCaptureAlert'),
+    });
 
     if (result) {
       this.blockingActionService
@@ -101,8 +101,7 @@ export class SendingPostCapturePage {
         if (proof) {
           await this.proofRepository.remove(proof);
         }
-      }),
-      concatMapTo(this.diaBackendAssetRepository.refresh$())
+      })
     );
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
+import { OnboardingService } from '../../../../shared/services/onboarding/onboarding.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -11,7 +11,7 @@ import { OnboardingService } from '../../shared/services/onboarding/onboarding.s
 export class TutorialPage implements OnInit {
   constructor(private readonly onboardingService: OnboardingService) {}
 
-  ngOnInit() {
-    this.onboardingService.onboard();
+  async ngOnInit() {
+    return this.onboardingService.setHasShownTutorial(true);
   }
 }

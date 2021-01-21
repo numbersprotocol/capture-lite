@@ -1,20 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, defer, forkJoin } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
   distinctUntilChanged,
   map,
-  pluck,
-  single,
   tap,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
 import { toExtension } from '../../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
-import { NotificationService } from '../../notification/notification.service';
 import {
   getOldProof,
   getOldSignatures,
@@ -37,14 +33,8 @@ export class DiaBackendAssetRepository {
 
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly authService: DiaBackendAuthService,
-    private readonly notificationService: NotificationService,
-    private readonly translocoService: TranslocoService
+    private readonly authService: DiaBackendAuthService
   ) {}
-
-  refresh$() {
-    return this.fetchAll$().pipe(single());
-  }
 
   fetchById$(id: string) {
     return this.authService.getAuthHeaders$.pipe(
@@ -69,16 +59,34 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  private fetchAll$() {
+  fetchAllOriginallyOwned$(offset = 0, limit = 100) {
     return defer(async () => this._isFetching$.next(true)).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
       concatMap(headers =>
         this.httpClient.get<ListAssetResponse>(`${BASE_URL}/api/v2/assets/`, {
           headers,
+          params: {
+            offset: `${offset}`,
+            limit: `${limit}`,
+            is_original_owner: `${true}`,
+          },
         })
       ),
-      pluck('results'),
       tap(() => this._isFetching$.next(false))
+    );
+  }
+
+  downloadFile$(id: string, field: AssetDownloadField) {
+    const formData = new FormData();
+    formData.append('field', field);
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.post(
+          `${BASE_URL}/api/v2/assets/${id}/download/`,
+          formData,
+          { headers, responseType: 'blob' }
+        )
+      )
     );
   }
 
@@ -122,8 +130,11 @@ export interface DiaBackendAsset extends Tuple {
 }
 
 interface ListAssetResponse {
+  count: number;
   results: DiaBackendAsset[];
 }
+
+export type AssetDownloadField = 'asset_file' | 'asset_file_thumbnail';
 
 type CreateAssetResponse = DiaBackendAsset;
 

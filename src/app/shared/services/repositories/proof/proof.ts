@@ -26,13 +26,13 @@ export class Proof {
   }
   readonly indexedAssets: IndexedAssets = {};
 
-  private constructor(
+  constructor(
     private readonly imageStore: ImageStore,
     readonly truth: Truth,
     readonly signatures: Signatures
   ) {}
 
-  private async setAssets(assets: Assets) {
+  async setAssets(assets: Assets) {
     const indexedAssetEntries: [string, AssetMeta][] = [];
     for (const [base64, meta] of Object.entries(assets)) {
       const index = await this.imageStore.write(base64, meta.mimeType);
@@ -42,7 +42,7 @@ export class Proof {
     this.setIndexedAssets(Object.fromEntries(indexedAssetEntries));
   }
 
-  private setIndexedAssets(indexedAssets: IndexedAssets) {
+  setIndexedAssets(indexedAssets: IndexedAssets) {
     // @ts-ignore
     this.indexedAssets = indexedAssets;
     return indexedAssets;

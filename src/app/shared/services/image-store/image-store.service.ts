@@ -111,12 +111,28 @@ export class ImageStore {
     if (thumbnail) {
       return this.read(thumbnail.thumbnailIndex);
     }
+    return this.setThumbnail(index, mimeType);
+  }
+
+  private async setThumbnail(index: string, mimeType: MimeType) {
+    const thumbnailBase64 = await this.makeThumbnail(index, mimeType);
+    return this.storeThumbnail(index, thumbnailBase64, mimeType);
+  }
+
+  private async makeThumbnail(index: string, mimeType: MimeType) {
     const thumbnailSize = 200;
     const blob = await base64ToBlob(await this.read(index), mimeType);
     const thumbnailBlob = await imageBlobReduce.toBlob(blob, {
       max: thumbnailSize,
     });
-    const thumbnailBase64 = await blobToBase64(thumbnailBlob);
+    return blobToBase64(thumbnailBlob);
+  }
+
+  async storeThumbnail(
+    index: string,
+    thumbnailBase64: string,
+    mimeType: MimeType
+  ) {
     await this.thumbnailTable.insert(
       [
         {
