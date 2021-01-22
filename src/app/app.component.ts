@@ -10,6 +10,11 @@ import { CaptureService } from './shared/services/capture/capture.service';
 import { CollectorService } from './shared/services/collector/collector.service';
 import { CapacitorFactsProvider } from './shared/services/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 import { WebCryptoApiSignatureProvider } from './shared/services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { Database } from './shared/services/database/database.service';
+import {
+  DiaBackendAsset,
+  DiaBackendAssetRepository,
+} from './shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAssetUploadingService } from './shared/services/dia-backend/asset/uploading/dia-backend-asset-uploading.service';
 import { DiaBackendAuthService } from './shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendNotificationService } from './shared/services/dia-backend/notification/dia-backend-notification.service';
@@ -17,6 +22,8 @@ import { LanguageService } from './shared/services/language/language.service';
 import { NetworkService } from './shared/services/network/network.service';
 import { NotificationService } from './shared/services/notification/notification.service';
 import { PushNotificationService } from './shared/services/push-notification/push-notification.service';
+import { getOldProof } from './shared/services/repositories/proof/old-proof-adapter';
+import { ProofRepository } from './shared/services/repositories/proof/proof-repository.service';
 
 const { SplashScreen } = Plugins;
 
@@ -42,7 +49,9 @@ export class AppComponent {
     networkService: NetworkService,
     diaBackendAuthService: DiaBackendAuthService,
     diaBackendNotificationService: DiaBackendNotificationService,
-    uploadService: DiaBackendAssetUploadingService
+    uploadService: DiaBackendAssetUploadingService,
+    private readonly database: Database,
+    private readonly proofRepository: ProofRepository
   ) {
     notificationService.requestPermission();
     pushNotificationService.register();
@@ -58,6 +67,7 @@ export class AppComponent {
     this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
+    this.migrate();
   }
 
   async initializeApp() {
@@ -87,5 +97,30 @@ export class AppComponent {
       'media-id',
       this.sanitizer.bypassSecurityTrustResourceUrl('/assets/icon/media-id.svg')
     );
+  }
+
+  private async migrate() {
+    // remove local PostCaptures
+    const table = this.database.getTable<DiaBackendAsset>(
+      DiaBackendAssetRepository.name
+    );
+    const allDiaBackendAssets = await table.queryAll();
+    console.log(`allDiaBackendAssets:`, allDiaBackendAssets);
+
+    const allProofs = await this.proofRepository.getAll();
+    const localPostCaptures = allProofs.filter(proof =>
+      allDiaBackendAssets
+        .filter(asset => !asset.is_original_owner)
+        .map(asset => asset.proof_hash)
+        .includes(getOldProof(proof).hash)
+    );
+    console.log(`localPostCaptures`, localPostCaptures);
+    await Promise.all(
+      localPostCaptures.map(async postCapture =>
+        this.proofRepository.remove(postCapture)
+      )
+    );
+    // remove diaBackendAssetRepository database
+    // table.drop()
   }
 }
