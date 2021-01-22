@@ -80,6 +80,14 @@ export class SendingPostCapturePage {
     this.isPreview = true;
   }
 
+  onBackButtonClick() {
+    if (this.isPreview) {
+      this.isPreview = false;
+    } else {
+      this.router.navigate(['..'], { relativeTo: this.route });
+    }
+  }
+
   async send(captionText: string) {
     const action$ = combineLatest([this.asset$, this.contact$]).pipe(
       first(),

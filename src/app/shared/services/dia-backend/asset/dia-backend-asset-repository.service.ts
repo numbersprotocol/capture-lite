@@ -100,6 +100,20 @@ export class DiaBackendAssetRepository {
     );
   }
 
+  downloadFile$(id: string, field: AssetDownloadField) {
+    const formData = new FormData();
+    formData.append('field', field);
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.post(
+          `${BASE_URL}/api/v2/assets/${id}/download/`,
+          formData,
+          { headers, responseType: 'blob' }
+        )
+      )
+    );
+  }
+
   add$(proof: Proof) {
     return forkJoin([
       defer(() => this.authService.getAuthHeaders()),
@@ -166,6 +180,11 @@ export interface DiaBackendAsset extends Tuple {
 interface ListAssetResponse {
   results: DiaBackendAsset[];
 }
+
+export type AssetDownloadField =
+  | 'asset_file'
+  | 'asset_file_thumbnail'
+  | 'sharable_copy';
 
 type CreateAssetResponse = DiaBackendAsset;
 
