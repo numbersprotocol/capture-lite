@@ -2,7 +2,7 @@ import { formatDate, KeyValue } from '@angular/common';
 import { Component } from '@angular/core';
 import { groupBy } from 'lodash';
 import { combineLatest, of } from 'rxjs';
-import { concatMap, map, switchMap } from 'rxjs/operators';
+import { concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { CaptureService } from '../../../shared/services/capture/capture.service';
 import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../shared/services/repositories/proof/proof';
@@ -16,6 +16,7 @@ import { ProofRepository } from '../../../shared/services/repositories/proof/pro
 export class CaptureTabComponent {
   private readonly proofs$ = this.proofRepository.getAll$();
   readonly capturesByDate$ = this.proofs$.pipe(
+    tap(v => console.log(v)),
     map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp)),
     switchMap(proofs =>
       combineLatest([of(proofs), this.captureService.collectingOldProofHashes$])

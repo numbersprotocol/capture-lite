@@ -23,7 +23,10 @@ export class MigrationService {
 
   async migrate() {
     if (
-      await this.preferences.getBoolean(PrefKeys.FROM_0_12_0_TO_0_15_0, false)
+      !(await this.preferences.getBoolean(
+        PrefKeys.FROM_0_12_0_TO_0_15_0,
+        false
+      ))
     ) {
       await this.from0_12_0To0_15_0();
     }
@@ -46,25 +49,27 @@ export class MigrationService {
         this.proofRepository.remove(postCapture)
       )
     );
+    await this.preferences.setBoolean(PrefKeys.FROM_0_12_0_TO_0_15_0, true);
     // remove diaBackendAssetRepository database
     // table.drop()
   }
 
   private async fetchAllNotOriginallyOwned() {
-    const currentOffset = 0;
+    let currentOffset = 0;
     const limit = 100;
     const ret: DiaBackendAsset[] = [];
     while (true) {
       const {
         results: diaBackendAssets,
       } = await this.diaBackendAssetRepository
-        .fetchAllNotOriginallyOwned$()
+        .fetchAllNotOriginallyOwned$(currentOffset, limit)
         .toPromise();
 
       if (diaBackendAssets.length === 0) {
         break;
       }
       ret.push(...diaBackendAssets);
+      currentOffset += diaBackendAssets.length;
     }
     return ret;
   }
