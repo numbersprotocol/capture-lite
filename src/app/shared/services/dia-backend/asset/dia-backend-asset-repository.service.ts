@@ -176,7 +176,10 @@ interface ListAssetResponse {
   results: DiaBackendAsset[];
 }
 
-export type AssetDownloadField = 'asset_file' | 'asset_file_thumbnail';
+export type AssetDownloadField =
+  | 'asset_file'
+  | 'asset_file_thumbnail'
+  | 'sharable_copy';
 
 type CreateAssetResponse = DiaBackendAsset;
 
