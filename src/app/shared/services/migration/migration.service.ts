@@ -54,8 +54,6 @@ export class MigrationService {
       )
     );
     await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
-    // remove diaBackendAssetRepository database
-    // table.drop()
   }
 
   private async fetchAllNotOriginallyOwned() {
