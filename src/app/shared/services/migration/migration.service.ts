@@ -38,7 +38,6 @@ export class MigrationService {
   }
 
   private async to0_15_0() {
-    console.info('Migrate: to 0.15.0');
     // remove local PostCaptures
     const allNotOriginallyOwnedDiaBackendAssets = await this.fetchAllNotOriginallyOwned();
 
