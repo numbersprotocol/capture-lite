@@ -44,7 +44,9 @@ export class ProofRepository {
 
   async remove(proof: Proof) {
     await Promise.all([
-      this.table.delete([proof.getIndexedProofView()]),
+      this.table.delete([proof.getIndexedProofView()], (x, y) =>
+        isEqual(x.indexedAssets, y.indexedAssets)
+      ),
       proof.destroy(),
     ]);
   }
