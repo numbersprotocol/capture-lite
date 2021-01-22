@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.15.0 - 2021-01-22
+
+### Added
+
+- Implement uploading bar. #455
+- Resume uploading after reconnection. #457
+- Display spinner on loading captures. #459
+- Show contact information on about page.
+- Implement customized GPS cache policy. #454
+
+### Fixed
+
+- Improve capture performance. #444
+- Load PostCaptures from remote only.
+- Remove buggy PostCapture deletion feature.
+
 ## 0.14.2 - 2021-01-08
 
 ### Added
