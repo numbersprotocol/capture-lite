@@ -2,12 +2,12 @@
   <mat-card *transloco="let t">
     <mat-card-header>
       <div mat-card-avatar class="post-capture-avatar"></div>
-      <mat-card-title>{{
-        postCapture.source_transaction.sender
-      }}</mat-card-title>
-      <mat-card-subtitle>{{
-        postCapture.source_transaction.fulfilled_at | date: 'short'
-      }}</mat-card-subtitle>
+      <mat-card-title>
+        {{ postCapture.source_transaction.sender }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ postCapture.source_transaction.fulfilled_at | date: 'short' }}
+      </mat-card-subtitle>
       <span class="toolbar-spacer"></span>
       <button [hidden]="!sharable" (click)="openOptionsMenu()" mat-icon-button>
         <mat-icon>more_vert</mat-icon>
@@ -27,18 +27,18 @@
           <mat-icon class="info-list-icon" mat-list-icon>access_time</mat-icon>
           <div mat-line>
             <span class="info-list-title">{{ t('timestamp') }}</span>
-            <span class="info-list-content">{{
-              postCapture.uploaded_at | date: 'medium'
-            }}</span>
+            <span class="info-list-content">
+              {{ postCapture.uploaded_at | date: 'medium' }}
+            </span>
           </div>
         </mat-list-item>
         <mat-list-item>
           <mat-icon class="info-list-icon" mat-list-icon>place</mat-icon>
           <div mat-line>
             <span class="info-list-title">{{ t('location') }}</span>
-            <span class="info-list-content" mat-line>{{
-              location$ | async
-            }}</span>
+            <span class="info-list-content" mat-line>
+              {{ location$ | async }}
+            </span>
           </div>
         </mat-list-item>
         <mat-list-item>

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,7 +18,7 @@ import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/pref
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements AfterViewInit {
+export class HomePage {
   readonly username$ = this.diaBackendAuthService.getUsername$;
   readonly inboxCount$ = this.diaBackendTransactionRepository.getInbox$().pipe(
     map(transactions => transactions.length),
@@ -40,7 +40,7 @@ export class HomePage implements AfterViewInit {
     private readonly translocoService: TranslocoService
   ) {}
 
-  async ngAfterViewInit() {
+  async ionViewDidEnter() {
     if (!(await this.onboardingService.hasShownTutorial())) {
       return this.router.navigate(['onboarding/tutorial'], {
         relativeTo: this.route,

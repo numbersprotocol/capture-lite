@@ -14,6 +14,7 @@ import { DiaBackendAssetUploadingService } from './shared/services/dia-backend/a
 import { DiaBackendAuthService } from './shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendNotificationService } from './shared/services/dia-backend/notification/dia-backend-notification.service';
 import { LanguageService } from './shared/services/language/language.service';
+import { MigrationService } from './shared/services/migration/migration.service';
 import { NetworkService } from './shared/services/network/network.service';
 import { NotificationService } from './shared/services/notification/notification.service';
 import { PushNotificationService } from './shared/services/push-notification/push-notification.service';
@@ -42,7 +43,8 @@ export class AppComponent {
     networkService: NetworkService,
     diaBackendAuthService: DiaBackendAuthService,
     diaBackendNotificationService: DiaBackendNotificationService,
-    uploadService: DiaBackendAssetUploadingService
+    uploadService: DiaBackendAssetUploadingService,
+    migrationService: MigrationService
   ) {
     notificationService.requestPermission();
     pushNotificationService.register();
@@ -58,6 +60,7 @@ export class AppComponent {
     this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
+    migrationService.migrate();
   }
 
   async initializeApp() {

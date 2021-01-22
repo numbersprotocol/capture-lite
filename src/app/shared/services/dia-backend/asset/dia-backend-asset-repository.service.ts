@@ -94,6 +94,23 @@ export class DiaBackendAssetRepository {
     );
   }
 
+  fetchAllNotOriginallyOwned$(offset = 0, limit = 100) {
+    return defer(async () => this._isFetching$.next(true)).pipe(
+      concatMapTo(defer(() => this.authService.getAuthHeaders())),
+      concatMap(headers =>
+        this.httpClient.get<ListAssetResponse>(`${BASE_URL}/api/v2/assets/`, {
+          headers,
+          params: {
+            offset: `${offset}`,
+            limit: `${limit}`,
+            is_original_owner: `${false}`,
+          },
+        })
+      ),
+      tap(() => this._isFetching$.next(false))
+    );
+  }
+
   downloadFile$(id: string, field: AssetDownloadField) {
     const formData = new FormData();
     formData.append('field', field);

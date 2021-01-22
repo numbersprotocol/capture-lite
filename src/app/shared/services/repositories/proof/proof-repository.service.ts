@@ -36,13 +36,17 @@ export class ProofRepository {
   }
 
   async add(proof: Proof, onConflict = OnConflictStrategy.ABORT) {
-    await this.table.insert([proof.getIndexedProofView()], onConflict);
+    await this.table.insert([proof.getIndexedProofView()], onConflict, (x, y) =>
+      isEqual(x.indexedAssets, y.indexedAssets)
+    );
     return proof;
   }
 
   async remove(proof: Proof) {
     await Promise.all([
-      this.table.delete([proof.getIndexedProofView()]),
+      this.table.delete([proof.getIndexedProofView()], (x, y) =>
+        isEqual(x.indexedAssets, y.indexedAssets)
+      ),
       proof.destroy(),
     ]);
   }

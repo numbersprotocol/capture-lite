@@ -24,7 +24,7 @@ export class CaptureTabComponent {
       Promise.all<CaptureItem>(
         proofs.map(async proof => ({
           proof,
-          thumbnailUrl: await proof.getThumbnailUrl(),
+          thumbnailUrl: await proof.getThumbnailUrl().catch(() => undefined),
           oldProofHash: getOldProof(proof).hash,
           isCollecting: collectingOldProofHashes.has(getOldProof(proof).hash),
         }))
