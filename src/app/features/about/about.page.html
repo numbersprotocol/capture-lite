@@ -12,5 +12,14 @@
       <div mat-line>{{ t('version') }}</div>
       <div mat-line>{{ version$ | async }}</div>
     </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>help</mat-icon>
+      <div mat-line>{{ t('contactUs') }}</div>
+      <div mat-line>
+        <a href="mailto:service@numbersprotocol.io">
+          service@numbersprotocol.io
+        </a>
+      </div>
+    </mat-list-item>
   </mat-list>
 </div>
