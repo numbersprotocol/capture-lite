@@ -18,7 +18,6 @@ describe('PostCaptureTabComponent', () => {
     fixture.detectChanges();
   }));
 
-  // FIXME: May be related to https://github.com/numbersprotocol/capture-lite/issues/277
   xit('should create', () => {
     expect(component).toBeTruthy();
   });
