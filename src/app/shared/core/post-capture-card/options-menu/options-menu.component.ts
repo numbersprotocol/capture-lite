@@ -17,6 +17,5 @@ export class OptionsMenuComponent {
 }
 
 export enum Option {
-  Delete,
   Share,
 }
