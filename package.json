@@ -36,7 +36,7 @@
     "@ngneat/until-destroy": "^8.0.2",
     "@ngx-formly/core": "^5.0.0",
     "@ngx-formly/material": "^5.0.0",
-    "@ngx-formly/schematics": "^5.10.10",
+    "@ngx-formly/schematics": "^5.10.11",
     "@types/merge-images": "^1.1.2",
     "async-mutex": "^0.2.6",
     "image-blob-reduce": "^2.2.0",
