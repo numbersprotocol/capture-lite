@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Plugins } from '@capacitor/core';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -6,6 +7,8 @@ import {
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
+
+const { Device } = Plugins;
 
 @Injectable({
   providedIn: 'root',
@@ -22,20 +25,22 @@ export class MigrationService {
   ) {}
 
   async migrate() {
-    if (
-      !(await this.preferences.getBoolean(
-        PrefKeys.FROM_0_12_0_TO_0_15_0,
-        false
-      ))
-    ) {
-      await this.from0_12_0To0_15_0();
+    if (!(await this.preferences.getBoolean(PrefKeys.TO_0_15_0, false))) {
+      await this.to0_15_0();
     }
+
+    return this.updatePreviousVersion();
   }
 
-  private async from0_12_0To0_15_0() {
+  private async updatePreviousVersion() {
+    const { appVersion } = await Device.getInfo();
+    return this.preferences.setString(PrefKeys.PREVIOUS_VERSION, appVersion);
+  }
+
+  private async to0_15_0() {
+    console.info('Migrate: to 0.15.0');
     // remove local PostCaptures
     const allNotOriginallyOwnedDiaBackendAssets = await this.fetchAllNotOriginallyOwned();
-    console.log(`allDiaBackendAssets:`, allNotOriginallyOwnedDiaBackendAssets);
 
     const allProofs = await this.proofRepository.getAll();
     const localPostCaptures = allProofs.filter(proof =>
@@ -43,13 +48,12 @@ export class MigrationService {
         .map(asset => asset.proof_hash)
         .includes(getOldProof(proof).hash)
     );
-    console.log(`localPostCaptures`, localPostCaptures);
     await Promise.all(
       localPostCaptures.map(async postCapture =>
         this.proofRepository.remove(postCapture)
       )
     );
-    await this.preferences.setBoolean(PrefKeys.FROM_0_12_0_TO_0_15_0, true);
+    await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
     // remove diaBackendAssetRepository database
     // table.drop()
   }
@@ -76,5 +80,6 @@ export class MigrationService {
 }
 
 const enum PrefKeys {
-  FROM_0_12_0_TO_0_15_0 = 'FROM_0_12_0_TO_0_15_0',
+  TO_0_15_0 = 'TO_0_15_0',
+  PREVIOUS_VERSION = 'PREVIOUS_VERSION',
 }
