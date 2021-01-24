@@ -33,11 +33,4 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
-
-  it('should initialize the app', async () => {
-    TestBed.createComponent(AppComponent);
-    // tslint:disable-next-line: no-unbound-method
-    expect(platformSpy.ready).toHaveBeenCalled();
-    await platformReadySpy;
-  });
 });

@@ -4,6 +4,7 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
+import { OnboardingService } from '../onboarding/onboarding.service';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
@@ -21,12 +22,14 @@ export class MigrationService {
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly preferenceManager: PreferenceManager
+    private readonly preferenceManager: PreferenceManager,
+    private readonly onboardingService: OnboardingService
   ) {}
 
   async migrate() {
     if (!(await this.preferences.getBoolean(PrefKeys.TO_0_15_0, false))) {
       await this.to0_15_0();
+      await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
     }
 
     return this.updatePreviousVersion();
@@ -38,7 +41,11 @@ export class MigrationService {
   }
 
   private async to0_15_0() {
-    // remove local PostCaptures
+    await this.removeLocalPostCaptures();
+    await this.updateOnboardingServicePreferences();
+  }
+
+  private async removeLocalPostCaptures() {
     const allNotOriginallyOwnedDiaBackendAssets = await this.fetchAllNotOriginallyOwned();
 
     const allProofs = await this.proofRepository.getAll();
@@ -52,7 +59,6 @@ export class MigrationService {
         this.proofRepository.remove(postCapture)
       )
     );
-    await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
   }
 
   private async fetchAllNotOriginallyOwned() {
@@ -73,6 +79,16 @@ export class MigrationService {
       currentOffset += diaBackendAssets.length;
     }
     return ret;
+  }
+
+  private async updateOnboardingServicePreferences() {
+    const preferences = this.preferenceManager.getPreferences(
+      OnboardingService.name
+    );
+    if (!(await preferences.getBoolean('IS_ONBOARDING'))) {
+      await this.onboardingService.setHasShownTutorial(true);
+      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+    }
   }
 }
 
