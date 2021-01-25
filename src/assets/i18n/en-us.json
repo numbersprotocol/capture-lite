@@ -117,7 +117,8 @@
     "allPhotosRegistered": "All photos registered on blockchain successfully",
     "confirmPrefetch": "Do you want to restore the registered photos? It may take minutes to complete.",
     "loadingPreviousData": "Restoring photos...",
-    "doNotTurnOffApp": "Please keep the screen on and DO NOT leave the app."
+    "doNotTurnOffApp": "Please keep the screen on and DO NOT leave the app.",
+    "upgrading": "Upgrading..."
   },
   "error": {
     "loginTimeoutError": "Connection timeout. Please try again later.",

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { TranslocoService } from '@ngneat/transloco';
+import { BehaviorSubject, defer } from 'rxjs';
+import { concatMap, distinctUntilChanged, tap } from 'rxjs/operators';
+import { VOID$ } from '../../../utils/rx-operators/rx-operators';
+import { BlockingActionService } from '..//blocking-action/blocking-action.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
-import { OnboardingService } from '../onboarding/onboarding.service';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
@@ -26,19 +28,29 @@ export class MigrationService {
   );
 
   constructor(
+    private readonly blockingActionService: BlockingActionService,
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly preferenceManager: PreferenceManager,
-    private readonly onboardingService: OnboardingService
+    private readonly translocoService: TranslocoService
   ) {}
 
-  async migrate() {
-    if (!(await this.preferences.getBoolean(PrefKeys.TO_0_15_0, false))) {
-      await this.to0_15_0();
-      await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
-    }
-    this._hasMigrated$.next(true);
-    return this.updatePreviousVersion();
+  migrate$() {
+    const migrate$ = defer(() => this.to0_15_0()).pipe(
+      concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
+      tap(() => this._hasMigrated$.next(true)),
+      concatMap(() => this.updatePreviousVersion())
+    );
+    const runMigrate$ = this.translocoService
+      .selectTranslate('message.upgrading')
+      .pipe(
+        concatMap(message =>
+          this.blockingActionService.run$(migrate$, { message })
+        )
+      );
+    return defer(() =>
+      this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
+    ).pipe(concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)));
   }
 
   private async updatePreviousVersion() {
@@ -48,7 +60,6 @@ export class MigrationService {
 
   private async to0_15_0() {
     await this.removeLocalPostCaptures();
-    await this.updateOnboardingServicePreferences();
   }
 
   private async removeLocalPostCaptures() {
@@ -85,16 +96,6 @@ export class MigrationService {
       currentOffset += diaBackendAssets.length;
     }
     return ret;
-  }
-
-  private async updateOnboardingServicePreferences() {
-    const preferences = this.preferenceManager.getPreferences(
-      OnboardingService.name
-    );
-    if (!(await preferences.getBoolean('IS_ONBOARDING'))) {
-      await this.onboardingService.setHasShownTutorial(true);
-      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
-    }
   }
 }
 
