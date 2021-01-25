@@ -13,11 +13,11 @@ export class OnboardingService {
   constructor(private readonly preferenceManager: PreferenceManager) {}
 
   async isOnboarding() {
-    return this.preferences.getBoolean(PrefKeys.IS_ONBOARDING, false);
+    return this.preferences.getBoolean(PrefKeys.IS_ONBOARDING, true);
   }
 
   async onboard() {
-    return this.preferences.setBoolean(PrefKeys.IS_ONBOARDING, true);
+    return this.preferences.setBoolean(PrefKeys.IS_ONBOARDING, false);
   }
 
   async hasPrefetchedDiaBackendAssets() {
