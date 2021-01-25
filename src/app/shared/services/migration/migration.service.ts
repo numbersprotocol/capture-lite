@@ -38,8 +38,7 @@ export class MigrationService {
   migrate$() {
     const migrate$ = defer(() => this.to0_15_0()).pipe(
       concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
-      tap(() => this._hasMigrated$.next(true)),
-      concatMap(() => this.updatePreviousVersion())
+      tap(() => this._hasMigrated$.next(true))
     );
     const runMigrate$ = this.translocoService
       .selectTranslate('message.upgrading')
@@ -53,7 +52,7 @@ export class MigrationService {
     ).pipe(concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)));
   }
 
-  private async updatePreviousVersion() {
+  async updatePreviousVersion() {
     const { appVersion } = await Device.getInfo();
     return this.preferences.setString(PrefKeys.PREVIOUS_VERSION, appVersion);
   }

@@ -4,7 +4,8 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { map, tap } from 'rxjs/operators';
+import { defer, of } from 'rxjs';
+import { concatMap, concatMapTo, map, tap } from 'rxjs/operators';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
@@ -42,11 +43,19 @@ export class HomePage {
     private readonly migrationService: MigrationService
   ) {}
 
-  async ionViewDidEnter() {
-    if (this.onboardingService.isNewLogin) {
-      return this.onboardingRedirect();
-    }
-    this.migrationService.migrate$().pipe(untilDestroyed(this)).subscribe();
+  ionViewDidEnter() {
+    of(this.onboardingService.isNewLogin)
+      .pipe(
+        concatMap(isNewLogin => {
+          if (isNewLogin) {
+            return this.onboardingRedirect();
+          }
+          return this.migrationService.migrate$();
+        }),
+        concatMapTo(defer(() => this.migrationService.updatePreviousVersion())),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   private async onboardingRedirect() {
