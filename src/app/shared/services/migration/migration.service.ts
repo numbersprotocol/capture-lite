@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
+import { BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -15,6 +17,10 @@ const { Device } = Plugins;
   providedIn: 'root',
 })
 export class MigrationService {
+  private readonly _hasMigrated$ = new BehaviorSubject(false);
+  readonly hasMigrated$ = this._hasMigrated$
+    .asObservable()
+    .pipe(distinctUntilChanged());
   private readonly preferences = this.preferenceManager.getPreferences(
     MigrationService.name
   );
@@ -31,7 +37,7 @@ export class MigrationService {
       await this.to0_15_0();
       await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
     }
-
+    this._hasMigrated$.next(true);
     return this.updatePreviousVersion();
   }
 
