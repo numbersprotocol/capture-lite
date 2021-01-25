@@ -58,6 +58,7 @@ export class HomePage {
         untilDestroyed(this)
       )
       .subscribe();
+    this.migrationService.migrate$().pipe(untilDestroyed(this)).subscribe();
   }
 
   private async onboardingRedirect() {
