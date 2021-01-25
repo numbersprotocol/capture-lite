@@ -42,6 +42,7 @@
     "image-blob-reduce": "^2.2.0",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.20",
+    "material-design-icons-iconfont": "^6.1.0",
     "merge-images": "^2.0.0",
     "ngx-virtual-scroller": "^4.0.3",
     "rxjs": "~6.6.3",
