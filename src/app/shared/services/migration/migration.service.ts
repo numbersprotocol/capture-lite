@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, defer } from 'rxjs';
 import { concatMap, distinctUntilChanged, tap } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
-import { BlockingActionService } from '..//blocking-action/blocking-action.service';
+import { MigratingDialogComponent } from '../../core/migrating-dialog/migrating-dialog.component';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -28,15 +29,17 @@ export class MigrationService {
   );
 
   constructor(
-    private readonly blockingActionService: BlockingActionService,
-    private readonly proofRepository: ProofRepository,
+    private readonly dialog: MatDialog,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly proofRepository: ProofRepository,
     private readonly preferenceManager: PreferenceManager,
     private readonly translocoService: TranslocoService
   ) {}
 
   migrate$(skip?: boolean) {
-    const runMigrate$ = this.runMigrateWithLoadingPrompt$(skip).pipe(
+    const runMigrate$ = defer(() =>
+      this.runMigrateWithProgressDialog$(skip)
+    ).pipe(
       concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
       concatMap(() => this.updatePreviousVersion())
     );
@@ -48,18 +51,16 @@ export class MigrationService {
     );
   }
 
-  private runMigrateWithLoadingPrompt$(skip?: boolean) {
+  private async runMigrateWithProgressDialog$(skip?: boolean) {
     if (skip) {
-      return VOID$;
+      return;
     }
-    const migrate$ = defer(() => this.to0_15_0());
-    return this.translocoService
-      .selectTranslate('message.upgrading')
-      .pipe(
-        concatMap(message =>
-          this.blockingActionService.run$(migrate$, { message })
-        )
-      );
+    const dialogRef = this.dialog.open(MigratingDialogComponent, {
+      disableClose: true,
+      data: { progress: 0 },
+    });
+
+    return this.to0_15_0().then(() => dialogRef.close());
   }
 
   async updatePreviousVersion() {
