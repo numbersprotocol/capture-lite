@@ -14,7 +14,6 @@ import { DiaBackendAssetUploadingService } from './shared/services/dia-backend/a
 import { DiaBackendAuthService } from './shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendNotificationService } from './shared/services/dia-backend/notification/dia-backend-notification.service';
 import { LanguageService } from './shared/services/language/language.service';
-import { MigrationService } from './shared/services/migration/migration.service';
 import { NetworkService } from './shared/services/network/network.service';
 import { NotificationService } from './shared/services/notification/notification.service';
 import { PushNotificationService } from './shared/services/push-notification/push-notification.service';
@@ -37,7 +36,6 @@ export class AppComponent {
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     private readonly captureService: CaptureService,
     private readonly cameraService: CameraService,
-    private readonly migrationService: MigrationService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
@@ -63,7 +61,6 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    await this.migrationService.migrate();
     await this.platform.ready();
     await SplashScreen.hide();
   }

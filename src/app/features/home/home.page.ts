@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map, tap } from 'rxjs/operators';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
@@ -46,6 +46,7 @@ export class HomePage {
     if (this.onboardingService.isNewLogin) {
       return this.onboardingRedirect();
     }
+    this.migrationService.migrate$().pipe(untilDestroyed(this)).subscribe();
   }
 
   private async onboardingRedirect() {

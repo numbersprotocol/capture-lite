@@ -117,7 +117,8 @@
     "allPhotosRegistered": "所有照片都已被成功註冊",
     "confirmPrefetch": "是否要恢復已註冊的相片？需要數秒至數分鐘的時間。",
     "loadingPreviousData": "正在恢復已註冊的相片...",
-    "doNotTurnOffApp": "載入中，期間請勿關閉螢幕與離開 APP。"
+    "doNotTurnOffApp": "載入中，期間請勿關閉螢幕與離開 APP。",
+    "upgrading": "升級中..."
   },
   "error": {
     "loginTimeoutError": "連線逾時。請稍候再試。",

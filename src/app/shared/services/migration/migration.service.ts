@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { TranslocoService } from '@ngneat/transloco';
+import { BehaviorSubject, defer } from 'rxjs';
+import { concatMap, distinctUntilChanged, tap } from 'rxjs/operators';
+import { VOID$ } from '../../../utils/rx-operators/rx-operators';
+import { BlockingActionService } from '..//blocking-action/blocking-action.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -25,18 +28,29 @@ export class MigrationService {
   );
 
   constructor(
+    private readonly blockingActionService: BlockingActionService,
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly preferenceManager: PreferenceManager
+    private readonly preferenceManager: PreferenceManager,
+    private readonly translocoService: TranslocoService
   ) {}
 
-  async migrate() {
-    if (!(await this.preferences.getBoolean(PrefKeys.TO_0_15_0, false))) {
-      await this.to0_15_0();
-      await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
-    }
-    this._hasMigrated$.next(true);
-    return this.updatePreviousVersion();
+  migrate$() {
+    const migrate$ = defer(() => this.to0_15_0()).pipe(
+      concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
+      tap(() => this._hasMigrated$.next(true)),
+      concatMap(() => this.updatePreviousVersion())
+    );
+    const runMigrate$ = this.translocoService
+      .selectTranslate('message.upgrading')
+      .pipe(
+        concatMap(message =>
+          this.blockingActionService.run$(migrate$, { message })
+        )
+      );
+    return defer(() =>
+      this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
+    ).pipe(concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)));
   }
 
   private async updatePreviousVersion() {
