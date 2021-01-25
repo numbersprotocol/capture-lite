@@ -65,7 +65,11 @@ export class DiaBackendAssetRepository {
     const url = overrideUrl ?? `${BASE_URL}/api/v2/assets/`;
     const params = overrideUrl
       ? undefined
-      : { is_original_owner: 'false', limit: `${pageSize}` };
+      : {
+          is_original_owner: 'false',
+          order_by: 'source_transaction',
+          limit: `${pageSize}`,
+        };
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(url, {
