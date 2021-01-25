@@ -68,7 +68,31 @@ export class MigrationService {
   }
 
   private async to0_15_0() {
-    return this.removeLocalPostCaptures();
+    await this.fetchAndUpdateDiaBackendAssetId();
+    await this.removeLocalPostCaptures();
+  }
+
+  private async fetchAndUpdateDiaBackendAssetId() {
+    const allOriginallyOwnedDiaBackendAssets = await this.fetchAllOriginallyOwned();
+
+    const allProofs = await this.proofRepository.getAll();
+    const proofsToBeUpdated = allProofs
+      .filter(proof => !proof.diaBackendAssetId)
+      .map(proof => {
+        proof.diaBackendAssetId = allOriginallyOwnedDiaBackendAssets.find(
+          asset => asset.proof_hash === getOldProof(proof).hash
+        )?.id;
+        return proof;
+      })
+      .filter(proof => !proof.diaBackendAssetId);
+    await Promise.all(
+      proofsToBeUpdated.map(async proof =>
+        this.proofRepository.update(
+          proof,
+          (x, y) => getOldProof(x).hash === getOldProof(y).hash
+        )
+      )
+    );
   }
 
   private async removeLocalPostCaptures() {
@@ -85,6 +109,26 @@ export class MigrationService {
         this.proofRepository.remove(postCapture)
       )
     );
+  }
+
+  private async fetchAllOriginallyOwned() {
+    let currentOffset = 0;
+    const limit = 100;
+    const ret: DiaBackendAsset[] = [];
+    while (true) {
+      const {
+        results: diaBackendAssets,
+      } = await this.diaBackendAssetRepository
+        .fetchAllOriginallyOwned$(currentOffset, limit)
+        .toPromise();
+
+      if (diaBackendAssets.length === 0) {
+        break;
+      }
+      ret.push(...diaBackendAssets);
+      currentOffset += diaBackendAssets.length;
+    }
+    return ret;
   }
 
   private async fetchAllNotOriginallyOwned() {
