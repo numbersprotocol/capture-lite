@@ -6,7 +6,6 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
-import { OnboardingService } from '../onboarding/onboarding.service';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
@@ -28,8 +27,7 @@ export class MigrationService {
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly preferenceManager: PreferenceManager,
-    private readonly onboardingService: OnboardingService
+    private readonly preferenceManager: PreferenceManager
   ) {}
 
   async migrate() {
@@ -47,8 +45,7 @@ export class MigrationService {
   }
 
   private async to0_15_0() {
-    await this.removeLocalPostCaptures();
-    await this.updateOnboardingServicePreferences();
+    return this.removeLocalPostCaptures();
   }
 
   private async removeLocalPostCaptures() {
@@ -85,16 +82,6 @@ export class MigrationService {
       currentOffset += diaBackendAssets.length;
     }
     return ret;
-  }
-
-  private async updateOnboardingServicePreferences() {
-    const preferences = this.preferenceManager.getPreferences(
-      OnboardingService.name
-    );
-    if (!(await preferences.getBoolean('IS_ONBOARDING'))) {
-      await this.onboardingService.setHasShownTutorial(true);
-      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
-    }
   }
 }
 

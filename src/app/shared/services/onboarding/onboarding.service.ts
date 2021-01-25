@@ -8,15 +8,16 @@ export class OnboardingService {
   private readonly preferences = this.preferenceManager.getPreferences(
     OnboardingService.name
   );
+  isNewLogin = false;
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
 
-  async hasShownTutorial() {
-    return this.preferences.getBoolean(PrefKeys.HAS_SHOWN_TUTORIAL, false);
+  async isOnboarding() {
+    return this.preferences.getBoolean(PrefKeys.IS_ONBOARDING, false);
   }
 
-  async setHasShownTutorial(value: boolean) {
-    return this.preferences.setBoolean(PrefKeys.HAS_SHOWN_TUTORIAL, value);
+  async onboard() {
+    return this.preferences.setBoolean(PrefKeys.IS_ONBOARDING, true);
   }
 
   async hasPrefetchedDiaBackendAssets() {
@@ -35,6 +36,6 @@ export class OnboardingService {
 }
 
 const enum PrefKeys {
-  HAS_SHOWN_TUTORIAL = 'HAS_SHOWN_TUTORIAL',
+  IS_ONBOARDING = 'IS_ONBOARDING',
   HAS_PREFETCHED_DIA_BACKEND_ASSETS = 'HAS_PREFETCHED_DIA_BACKEND_ASSETS',
 }

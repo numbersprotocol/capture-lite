@@ -10,6 +10,7 @@ import { combineLatest, TimeoutError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
+import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
 import { EMAIL_REGEXP } from '../../utils/validation';
 
 @UntilDestroy({ checkProperties: true })
@@ -29,7 +30,8 @@ export class LoginPage {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly translocoService: TranslocoService,
     private readonly router: Router,
-    private readonly snackbar: MatSnackBar
+    private readonly snackbar: MatSnackBar,
+    private readonly onboardingService: OnboardingService
   ) {
     combineLatest([
       this.translocoService.selectTranslate('email'),
@@ -87,7 +89,8 @@ export class LoginPage {
         catchError((error: TimeoutError | HttpErrorResponse) => {
           this.showLoginErrorMessage(error);
           throw new Error('Login failed');
-        })
+        }),
+        tap(_ => (this.onboardingService.isNewLogin = true))
       );
     this.blockingActionService
       .run$(action$, {
