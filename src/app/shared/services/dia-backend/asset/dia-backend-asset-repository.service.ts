@@ -5,7 +5,9 @@ import {
   concatMap,
   concatMapTo,
   distinctUntilChanged,
+  first,
   map,
+  pluck,
   tap,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
@@ -37,6 +39,21 @@ export class DiaBackendAssetRepository {
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService
   ) {}
+
+  async getCount() {
+    return this.authService.getAuthHeaders$
+      .pipe(
+        concatMap(headers =>
+          this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(
+            `${BASE_URL}/api/v2/assets/`,
+            { headers }
+          )
+        ),
+        pluck('count'),
+        first()
+      )
+      .toPromise();
+  }
 
   fetchById$(id: string) {
     return this.authService.getAuthHeaders$.pipe(
