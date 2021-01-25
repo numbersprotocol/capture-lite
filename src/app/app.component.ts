@@ -37,14 +37,14 @@ export class AppComponent {
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     private readonly captureService: CaptureService,
     private readonly cameraService: CameraService,
+    private readonly migrationService: MigrationService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
     networkService: NetworkService,
     diaBackendAuthService: DiaBackendAuthService,
     diaBackendNotificationService: DiaBackendNotificationService,
-    uploadService: DiaBackendAssetUploadingService,
-    migrationService: MigrationService
+    uploadService: DiaBackendAssetUploadingService
   ) {
     notificationService.requestPermission();
     pushNotificationService.register();
@@ -60,10 +60,10 @@ export class AppComponent {
     this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
-    migrationService.migrate();
   }
 
   async initializeApp() {
+    await this.migrationService.migrate();
     await this.platform.ready();
     await SplashScreen.hide();
   }

@@ -3,13 +3,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { defer } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { MigrationService } from '../../shared/services/migration/migration.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
+import { switchTap, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 
 @UntilDestroy({ checkProperties: true })
@@ -37,10 +40,27 @@ export class HomePage {
     private readonly route: ActivatedRoute,
     private readonly confirmAlert: ConfirmAlert,
     private readonly dialog: MatDialog,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly migrationService: MigrationService
   ) {}
 
-  async ionViewDidEnter() {
+  ionViewDidEnter() {
+    this.migrationService.hasMigrated$
+      .pipe(
+        switchTap(hasMigrated =>
+          defer(() => {
+            if (hasMigrated) {
+              return this.onboardingRedirect();
+            }
+            return VOID$;
+          })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private async onboardingRedirect() {
     if (!(await this.onboardingService.hasShownTutorial())) {
       return this.router.navigate(['onboarding/tutorial'], {
         relativeTo: this.route,
