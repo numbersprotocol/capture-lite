@@ -50,6 +50,33 @@ export class DiaBackendAuthService {
     private readonly pushNotificationService: PushNotificationService
   ) {}
 
+  // TODO: remove this method
+  private async migrate() {
+    const oldToken = await Storage.get({
+      key: 'numbersStoragePublisher_authToken',
+    });
+    if (oldToken.value) {
+      const splitted = oldToken.value.split(' ');
+      if (splitted[0] === 'token' && splitted[1]) {
+        this.setToken(splitted[1]);
+      }
+    }
+
+    const oldUsername = await Storage.get({
+      key: 'numbersStoragePublisher_userName',
+    });
+    if (oldUsername.value) {
+      this.setUsername(oldUsername.value);
+    }
+
+    const oldEmail = await Storage.get({
+      key: 'numbersStoragePublisher_email',
+    });
+    if (oldEmail.value) {
+      this.setEmail(oldEmail.value);
+    }
+  }
+
   initialize$() {
     return this.getAuthHeaders$.pipe(
       concatMap(headers =>
@@ -155,6 +182,7 @@ export class DiaBackendAuthService {
   }
 
   async hasLoggedIn() {
+    await this.migrate();
     const token = await this.preferences.getString(PrefKeys.TOKEN);
     return !!token;
   }
