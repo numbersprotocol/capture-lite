@@ -35,21 +35,31 @@ export class MigrationService {
     private readonly translocoService: TranslocoService
   ) {}
 
-  migrate$() {
-    const migrate$ = defer(() => this.to0_15_0()).pipe(
+  migrate$(skip?: boolean) {
+    const runMigrate$ = this.runMigrateWithLoadingPrompt$(skip).pipe(
       concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
+      concatMap(() => this.updatePreviousVersion())
+    );
+    return defer(() =>
+      this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
+    ).pipe(
+      concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)),
       tap(() => this._hasMigrated$.next(true))
     );
-    const runMigrate$ = this.translocoService
+  }
+
+  private runMigrateWithLoadingPrompt$(skip?: boolean) {
+    if (skip) {
+      return VOID$;
+    }
+    const migrate$ = defer(() => this.to0_15_0());
+    return this.translocoService
       .selectTranslate('message.upgrading')
       .pipe(
         concatMap(message =>
           this.blockingActionService.run$(migrate$, { message })
         )
       );
-    return defer(() =>
-      this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
-    ).pipe(concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)));
   }
 
   async updatePreviousVersion() {

@@ -12,6 +12,6 @@ export class TutorialPage implements OnInit {
   constructor(private readonly onboardingService: OnboardingService) {}
 
   async ngOnInit() {
-    return this.onboardingService.setHasShownTutorial(true);
+    return this.onboardingService.onboard();
   }
 }
