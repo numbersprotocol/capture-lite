@@ -63,7 +63,6 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    await this.migrationService.migrate();
     await this.platform.ready();
     await SplashScreen.hide();
   }
