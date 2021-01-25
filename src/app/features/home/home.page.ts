@@ -48,7 +48,7 @@ export class HomePage {
     this.migrationService.hasMigrated$
       .pipe(
         switchTap(hasMigrated =>
-          defer(async () => {
+          defer(() => {
             if (hasMigrated) {
               return this.onboardingRedirect();
             }
