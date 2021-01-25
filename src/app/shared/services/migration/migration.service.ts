@@ -74,7 +74,6 @@ export class MigrationService {
 
   private async fetchAndUpdateDiaBackendAssetId() {
     const allOriginallyOwnedDiaBackendAssets = await this.fetchAllOriginallyOwned();
-
     const allProofs = await this.proofRepository.getAll();
     const proofsToBeUpdated = allProofs
       .filter(proof => !proof.diaBackendAssetId)
@@ -84,7 +83,7 @@ export class MigrationService {
         )?.id;
         return proof;
       })
-      .filter(proof => !proof.diaBackendAssetId);
+      .filter(proof => !!proof.diaBackendAssetId);
     await Promise.all(
       proofsToBeUpdated.map(async proof =>
         this.proofRepository.update(
