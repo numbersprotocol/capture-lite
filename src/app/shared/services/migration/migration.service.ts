@@ -38,8 +38,9 @@ export class MigrationService {
 
   migrate$(skip?: boolean) {
     const runMigrate$ = defer(() =>
-      this.runMigrateWithProgressDialog(skip)
+      this.onboardingService.setHasPrefetchedDiaBackendAssets(true)
     ).pipe(
+      concatMap(() => this.runMigrateWithProgressDialog(skip)),
       concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
       concatMap(() => this.updatePreviousVersion())
     );
@@ -61,7 +62,6 @@ export class MigrationService {
     });
 
     await this.to0_15_0();
-    await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     dialogRef.close();
   }
 
