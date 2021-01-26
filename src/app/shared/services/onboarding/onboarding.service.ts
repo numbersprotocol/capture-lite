@@ -19,23 +19,8 @@ export class OnboardingService {
   async onboard() {
     return this.preferences.setBoolean(PrefKeys.IS_ONBOARDING, false);
   }
-
-  async hasPrefetchedDiaBackendAssets() {
-    return this.preferences.getBoolean(
-      PrefKeys.HAS_PREFETCHED_DIA_BACKEND_ASSETS,
-      false
-    );
-  }
-
-  async setHasPrefetchedDiaBackendAssets(value: boolean) {
-    return this.preferences.setBoolean(
-      PrefKeys.HAS_PREFETCHED_DIA_BACKEND_ASSETS,
-      value
-    );
-  }
 }
 
 const enum PrefKeys {
   IS_ONBOARDING = 'IS_ONBOARDING',
-  HAS_PREFETCHED_DIA_BACKEND_ASSETS = 'HAS_PREFETCHED_DIA_BACKEND_ASSETS',
 }

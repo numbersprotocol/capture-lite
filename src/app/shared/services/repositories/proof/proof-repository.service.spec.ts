@@ -84,7 +84,7 @@ describe('ProofRepository', () => {
     await repo.add(proof1);
 
     await repo.update(
-      sameTimestampProof,
+      [sameTimestampProof],
       (x, y) => x.timestamp === y.timestamp
     );
 

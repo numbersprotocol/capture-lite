@@ -212,14 +212,32 @@ describe('CapacitorFilesystemTable', () => {
     });
   });
 
-  it('should update', async done => {
-    const sameIdTuple1: TestTuple = { ...TUPLE2, id: TUPLE1_ID };
-    await table.insert([TUPLE1]);
+  it('should update proofs', async done => {
+    const tupleCount = 100;
+    const sourceTuple: TestTuple[] = [...Array(tupleCount).keys()].map(
+      value => ({
+        id: value,
+        name: `${value}`,
+        happy: true,
+        skills: [],
+        address: { country: '', city: '' },
+      })
+    );
+    const expectedTuple: TestTuple[] = [...Array(tupleCount).keys()].map(
+      value => ({
+        id: value,
+        name: `${value}`,
+        happy: false,
+        skills: [],
+        address: { country: '', city: '' },
+      })
+    );
+    await table.insert(sourceTuple);
 
-    await table.update(sameIdTuple1, (x, y) => x.id === y.id);
+    await table.update(expectedTuple, (x, y) => x.id === y.id);
 
     table.queryAll$.subscribe(tuples => {
-      expect(tuples).toEqual([sameIdTuple1]);
+      expect(tuples).toEqual(expectedTuple);
       done();
     });
   });

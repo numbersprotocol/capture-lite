@@ -49,20 +49,27 @@
           matBadgeSize="small"
           matBadgeColor="warn"
         >
-          all_inbox</mat-icon
+          email</mat-icon
         >
       </button>
     </mat-toolbar>
     <mat-tab-group
+      mat-stretch-tabs
       (selectedTabChange)="onTapChanged($event)"
       mat-align-tabs="center"
       backgroundColor="primary"
     >
-      <mat-tab label="Capture">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">apps</mat-icon>
+        </ng-template>
         <app-uploading-bar></app-uploading-bar>
         <app-capture-tab></app-capture-tab>
       </mat-tab>
-      <mat-tab label="PostCapture">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">move_to_inbox</mat-icon>
+        </ng-template>
         <app-post-capture-tab
           [focus]="postCaptureTabFocus"
         ></app-post-capture-tab>

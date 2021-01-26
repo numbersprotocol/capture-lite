@@ -49,7 +49,7 @@ export class CaptureService {
     this._collectingOldProofHashes$.next(newCollectingOldProofHashes);
 
     return this.proofRepository.update(
-      collected,
+      [collected],
       (x, y) => getOldProof(x).hash === getOldProof(y).hash
     );
   }
