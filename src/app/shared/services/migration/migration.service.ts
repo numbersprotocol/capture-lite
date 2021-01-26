@@ -38,7 +38,7 @@ export class MigrationService {
 
   migrate$(skip?: boolean) {
     const runMigrate$ = defer(() =>
-      this.runMigrateWithProgressDialog$(skip)
+      this.runMigrateWithProgressDialog(skip)
     ).pipe(
       concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
       concatMap(() => this.updatePreviousVersion())
@@ -51,7 +51,7 @@ export class MigrationService {
     );
   }
 
-  private async runMigrateWithProgressDialog$(skip?: boolean) {
+  private async runMigrateWithProgressDialog(skip?: boolean) {
     if (skip) {
       return;
     }
