@@ -8,6 +8,7 @@ import { defer, of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
+import { DiaBackendAssetRepository } from '../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { MigrationService } from '../../shared/services/migration/migration.service';
@@ -33,6 +34,7 @@ export class HomePage {
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly onboardingService: OnboardingService,
     private readonly router: Router,
@@ -67,13 +69,12 @@ export class HomePage {
         relativeTo: this.route,
       });
     }
-    if (!(await this.onboardingService.hasPrefetchedDiaBackendAssets())) {
+    if ((await this.diaBackendAssetRepository.getCount()) > 0) {
       if (await this.showPrefetchAlert()) {
         return this.dialog.open(PrefetchingDialogComponent, {
           disableClose: true,
         });
       }
-      return this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     }
   }
 
