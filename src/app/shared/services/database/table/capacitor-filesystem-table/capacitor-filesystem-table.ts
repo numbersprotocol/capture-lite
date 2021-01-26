@@ -142,20 +142,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
     });
   }
 
-  async update(newTuple: T, comparator: (x: T, y: T) => boolean) {
-    return this.mutex.runExclusive(async () => {
-      const afterDeletion = differenceWith(
-        this.tuples$.value,
-        [newTuple],
-        comparator
-      );
-      this.tuples$.next(afterDeletion.concat(newTuple));
-      await this.dumpJson();
-      return newTuple;
-    });
-  }
-
-  async bulkUpdate(tuples: T[], comparator: (x: T, y: T) => boolean) {
+  async update(tuples: T[], comparator: (x: T, y: T) => boolean) {
     return this.mutex.runExclusive(async () => {
       const afterDeletion = differenceWith(
         this.tuples$.value,

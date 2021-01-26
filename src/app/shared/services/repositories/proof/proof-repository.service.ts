@@ -51,21 +51,8 @@ export class ProofRepository {
     ]);
   }
 
-  async update(newProof: Proof, comparator: (x: Proof, y: Proof) => boolean) {
-    await this.table.update(newProof.getIndexedProofView(), (x, y) =>
-      comparator(
-        Proof.fromIndexedProofView(this.imageStore, x),
-        Proof.fromIndexedProofView(this.imageStore, y)
-      )
-    );
-    return newProof;
-  }
-
-  async bulkUpdate(
-    proofs: Proof[],
-    comparator: (x: Proof, y: Proof) => boolean
-  ) {
-    await this.table.bulkUpdate(
+  async update(proofs: Proof[], comparator: (x: Proof, y: Proof) => boolean) {
+    await this.table.update(
       proofs.map(proof => proof.getIndexedProofView()),
       (x, y) =>
         comparator(

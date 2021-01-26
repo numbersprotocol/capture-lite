@@ -85,7 +85,7 @@ export class MigrationService {
         return proof;
       })
       .filter(proof => !!proof.diaBackendAssetId);
-    await this.proofRepository.bulkUpdate(
+    await this.proofRepository.update(
       proofsToBeUpdated,
       (x, y) => getOldProof(x).hash === getOldProof(y).hash
     );

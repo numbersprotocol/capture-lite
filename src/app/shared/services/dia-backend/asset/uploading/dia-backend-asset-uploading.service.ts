@@ -99,7 +99,7 @@ export class DiaBackendAssetUploadingService {
           concatMap(proof => this.uploadProof$(proof)),
           concatMap(proof =>
             this.proofRepository.update(
-              proof,
+              [proof],
               (x, y) => getOldProof(x).hash === getOldProof(y).hash
             )
           )
