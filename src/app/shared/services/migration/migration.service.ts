@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
-import { TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, defer } from 'rxjs';
 import { concatMap, distinctUntilChanged, tap } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
@@ -10,6 +9,7 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
+import { OnboardingService } from '../onboarding/onboarding.service';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
@@ -33,7 +33,7 @@ export class MigrationService {
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly proofRepository: ProofRepository,
     private readonly preferenceManager: PreferenceManager,
-    private readonly translocoService: TranslocoService
+    private readonly onboardingService: OnboardingService
   ) {}
 
   migrate$(skip?: boolean) {
@@ -60,7 +60,9 @@ export class MigrationService {
       data: { progress: 0 },
     });
 
-    return this.to0_15_0().then(() => dialogRef.close());
+    await this.to0_15_0();
+    await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+    dialogRef.close();
   }
 
   async updatePreviousVersion() {
