@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DiaBackendAssetPrefetchingService } from '../../../../shared/services/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
+import { OnboardingService } from '../../../../shared/services/onboarding/onboarding.service';
 
 @Component({
   selector: 'app-prefetching-dialog',
@@ -12,7 +13,8 @@ export class PrefetchingDialogComponent {
 
   constructor(
     private readonly dialogRef: MatDialogRef<PrefetchingDialogComponent>,
-    private readonly diaBackendAssetPrefetchingService: DiaBackendAssetPrefetchingService
+    private readonly diaBackendAssetPrefetchingService: DiaBackendAssetPrefetchingService,
+    private readonly onboardingService: OnboardingService
   ) {
     this.prefetch();
   }
@@ -21,6 +23,7 @@ export class PrefetchingDialogComponent {
     await this.diaBackendAssetPrefetchingService.prefetch(
       (currentCount, totalCount) => (this.progress = currentCount / totalCount)
     );
+    await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     this.dialogRef.close();
   }
 }

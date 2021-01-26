@@ -13,7 +13,7 @@ import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/di
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { MigrationService } from '../../shared/services/migration/migration.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
-import { switchTap, VOID$ } from '../../utils/rx-operators/rx-operators';
+import { switchTapTo } from '../../utils/rx-operators/rx-operators';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 
 @UntilDestroy({ checkProperties: true })
@@ -49,15 +49,8 @@ export class HomePage {
   ionViewDidEnter() {
     of(this.onboardingService.isNewLogin)
       .pipe(
-        switchTap(isNewLogin =>
-          defer(() => {
-            if (isNewLogin) {
-              return this.onboardingRedirect();
-            }
-            return VOID$;
-          })
-        ),
         concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
+        switchTapTo(defer(() => this.onboardingRedirect())),
         untilDestroyed(this)
       )
       .subscribe();
@@ -69,7 +62,11 @@ export class HomePage {
         relativeTo: this.route,
       });
     }
-    if ((await this.diaBackendAssetRepository.getCount()) > 0) {
+    this.onboardingService.isNewLogin = false;
+    if (
+      !(await this.onboardingService.hasPrefetchedDiaBackendAssets()) &&
+      (await this.diaBackendAssetRepository.getCount()) > 0
+    ) {
       if (await this.showPrefetchAlert()) {
         return this.dialog.open(PrefetchingDialogComponent, {
           disableClose: true,
