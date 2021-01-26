@@ -73,9 +73,8 @@ export class ImageStore {
     await this.initialize();
     if (mode === WriteMode.REPLACE) {
       return this._write(index, base64, mimeType);
-    }
-    const exists = await this.exists(index);
-    if (mode === WriteMode.IGNORE) {
+    } else if (mode === WriteMode.IGNORE) {
+      const exists = await this.exists(index);
       if (exists) {
         console.log(
           `[PERF]${pad(Date.now() - st)}, ignored writing: ${index.substring(
@@ -84,12 +83,12 @@ export class ImageStore {
           )}`
         );
         return index;
+      } else {
+        return this._write(index, base64, mimeType);
       }
+    } else {
+      throw new Error(`Unknown WriteMode: ${mode}`);
     }
-    if (exists) {
-      throw new Error(`File already exist: ${index}`);
-    }
-    return this._write(index, base64, mimeType);
   }
 
   async _write(index: string, base64: string, mimeType: MimeType) {
