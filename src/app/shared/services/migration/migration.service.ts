@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
-import { TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, defer } from 'rxjs';
 import { concatMap, distinctUntilChanged, tap } from 'rxjs/operators';
-import { VOID$ } from '../../../utils/rx-operators/rx-operators';
+import { switchTapTo, VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { MigratingDialogComponent } from '../../core/migrating-dialog/migrating-dialog.component';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
+import { OnboardingService } from '../onboarding/onboarding.service';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
@@ -33,7 +33,7 @@ export class MigrationService {
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly proofRepository: ProofRepository,
     private readonly preferenceManager: PreferenceManager,
-    private readonly translocoService: TranslocoService
+    private readonly onboardingService: OnboardingService
   ) {}
 
   migrate$(skip?: boolean) {
@@ -41,7 +41,12 @@ export class MigrationService {
       this.runMigrateWithProgressDialog(skip)
     ).pipe(
       concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
-      concatMap(() => this.updatePreviousVersion())
+      concatMap(() => this.updatePreviousVersion()),
+      switchTapTo(
+        defer(() =>
+          this.onboardingService.setHasPrefetchedDiaBackendAssets(true)
+        )
+      )
     );
     return defer(() =>
       this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
