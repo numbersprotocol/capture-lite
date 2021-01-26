@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, of } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { catchError, concatMap, map, tap } from 'rxjs/operators';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -13,7 +13,7 @@ import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/di
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { MigrationService } from '../../shared/services/migration/migration.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
-import { switchTapTo } from '../../utils/rx-operators/rx-operators';
+import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 
 @UntilDestroy({ checkProperties: true })
@@ -50,6 +50,7 @@ export class HomePage {
     of(this.onboardingService.isNewLogin)
       .pipe(
         concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
+        catchError(() => VOID$),
         switchTapTo(defer(() => this.onboardingRedirect())),
         untilDestroyed(this)
       )
