@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
 import { BehaviorSubject, defer } from 'rxjs';
 import { concatMap, distinctUntilChanged, tap } from 'rxjs/operators';
-import { switchTapTo, VOID$ } from '../../../utils/rx-operators/rx-operators';
+import { VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { MigratingDialogComponent } from '../../core/migrating-dialog/migrating-dialog.component';
 import {
   DiaBackendAsset,
@@ -41,12 +41,7 @@ export class MigrationService {
       this.runMigrateWithProgressDialog(skip)
     ).pipe(
       concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
-      concatMap(() => this.updatePreviousVersion()),
-      switchTapTo(
-        defer(() =>
-          this.onboardingService.setHasPrefetchedDiaBackendAssets(true)
-        )
-      )
+      concatMap(() => this.updatePreviousVersion())
     );
     return defer(() =>
       this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
@@ -65,7 +60,9 @@ export class MigrationService {
       data: { progress: 0 },
     });
 
-    return this.to0_15_0().then(() => dialogRef.close());
+    await this.to0_15_0();
+    await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+    dialogRef.close();
   }
 
   async updatePreviousVersion() {
