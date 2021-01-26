@@ -85,13 +85,9 @@ export class MigrationService {
         return proof;
       })
       .filter(proof => !!proof.diaBackendAssetId);
-    await Promise.all(
-      proofsToBeUpdated.map(async proof =>
-        this.proofRepository.update(
-          proof,
-          (x, y) => getOldProof(x).hash === getOldProof(y).hash
-        )
-      )
+    await this.proofRepository.bulkUpdate(
+      proofsToBeUpdated,
+      (x, y) => getOldProof(x).hash === getOldProof(y).hash
     );
   }
 

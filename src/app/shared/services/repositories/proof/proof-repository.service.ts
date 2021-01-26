@@ -60,4 +60,19 @@ export class ProofRepository {
     );
     return newProof;
   }
+
+  async bulkUpdate(
+    proofs: Proof[],
+    comparator: (x: Proof, y: Proof) => boolean
+  ) {
+    await this.table.bulkUpdate(
+      proofs.map(proof => proof.getIndexedProofView()),
+      (x, y) =>
+        comparator(
+          Proof.fromIndexedProofView(this.imageStore, x),
+          Proof.fromIndexedProofView(this.imageStore, y)
+        )
+    );
+    return proofs;
+  }
 }
