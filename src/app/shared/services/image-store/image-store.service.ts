@@ -66,8 +66,24 @@ export class ImageStore {
     return result.data;
   }
 
-  async write(base64: string, mimeType: MimeType) {
+  async write(
+    base64: string,
+    mimeType: MimeType,
+    onWriteExistStrategy = OnWriteExistStrategy.REPLACE
+  ) {
     const index = await sha256WithBase64(base64);
+    await this.initialize();
+    if (onWriteExistStrategy === OnWriteExistStrategy.REPLACE) {
+      return this._write(index, base64, mimeType);
+    }
+    const exists = await this.exists(index);
+    if (exists) {
+      return index;
+    }
+    return this._write(index, base64, mimeType);
+  }
+
+  private async _write(index: string, base64: string, mimeType: MimeType) {
     await this.initialize();
     return this.mutex.runExclusive(async () => {
       const imageExtension = await this.setImageExtension(index, mimeType);
@@ -225,4 +241,9 @@ interface ImageExtension extends Tuple {
 interface Thumbnail extends Tuple {
   readonly imageIndex: string;
   readonly thumbnailIndex: string;
+}
+
+export const enum OnWriteExistStrategy {
+  IGNORE,
+  REPLACE,
 }

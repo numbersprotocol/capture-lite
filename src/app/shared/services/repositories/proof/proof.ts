@@ -3,7 +3,10 @@ import { sortObjectDeeplyByKey } from '../../../../utils/immutable/immutable';
 import { MimeType } from '../../../../utils/mime-type';
 import { toDataUrl } from '../../../../utils/url';
 import { Tuple } from '../../database/table/table';
-import { ImageStore } from '../../image-store/image-store.service';
+import {
+  ImageStore,
+  OnWriteExistStrategy,
+} from '../../image-store/image-store.service';
 
 export class Proof {
   diaBackendAssetId?: string = undefined;
@@ -35,7 +38,11 @@ export class Proof {
   async setAssets(assets: Assets) {
     const indexedAssetEntries: [string, AssetMeta][] = [];
     for (const [base64, meta] of Object.entries(assets)) {
-      const index = await this.imageStore.write(base64, meta.mimeType);
+      const index = await this.imageStore.write(
+        base64,
+        meta.mimeType,
+        OnWriteExistStrategy.IGNORE
+      );
       indexedAssetEntries.push([index, meta]);
     }
 
