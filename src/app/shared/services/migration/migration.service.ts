@@ -37,11 +37,9 @@ export class MigrationService {
   ) {}
 
   migrate$(skip?: boolean) {
-    const runMigrate$ = defer(() =>
-      this.runMigrateWithProgressDialog(skip)
-    ).pipe(
-      concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
-      concatMap(() => this.updatePreviousVersion())
+    const runMigrate$ = defer(() => this.preMigrate()).pipe(
+      concatMap(() => this.runMigrateWithProgressDialog(skip)),
+      concatMap(() => this.postMigrate())
     );
     return defer(() =>
       this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
@@ -49,6 +47,17 @@ export class MigrationService {
       concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)),
       tap(() => this._hasMigrated$.next(true))
     );
+  }
+
+  private async preMigrate() {
+    if (!(await this.onboardingService.hasPrefetchedDiaBackendAssets())) {
+      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+    }
+  }
+
+  private async postMigrate() {
+    await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
+    await this.updatePreviousVersion();
   }
 
   private async runMigrateWithProgressDialog(skip?: boolean) {
