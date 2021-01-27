@@ -20,16 +20,14 @@ export class PrefetchingDialogComponent {
   }
 
   private async prefetch() {
-    await this.diaBackendAssetPrefetchingService
-      .prefetch(
+    try {
+      await this.diaBackendAssetPrefetchingService.prefetch(
         (currentCount, totalCount) =>
           (this.progress = currentCount / totalCount)
-      )
-      .catch(err => {
-        this.dialogRef.close();
-        throw err;
-      });
-    await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
-    this.dialogRef.close();
+      );
+      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+    } finally {
+      this.dialogRef.close();
+    }
   }
 }
