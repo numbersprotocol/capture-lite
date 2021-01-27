@@ -47,6 +47,7 @@ mat-toolbar {
 @media (min-width: 380px) {
   .ios mat-toolbar {
     padding-top: 30px;
+    min-height: 90px;
     height: 90px;
   }
 }
@@ -62,6 +63,7 @@ mat-toolbar {
 @media (min-height: 750px) {
   .ios mat-toolbar {
     padding-top: 30px;
+    min-height: 90px;
     height: 90px;
   }
 }
