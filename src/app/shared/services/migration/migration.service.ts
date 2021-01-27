@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
-import { BehaviorSubject, defer } from 'rxjs';
-import { concatMap, distinctUntilChanged, tap } from 'rxjs/operators';
+import { defer } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { MigratingDialogComponent } from '../../core/migrating-dialog/migrating-dialog.component';
 import {
@@ -20,10 +20,6 @@ const { Device } = Plugins;
   providedIn: 'root',
 })
 export class MigrationService {
-  private readonly _hasMigrated$ = new BehaviorSubject(false);
-  readonly hasMigrated$ = this._hasMigrated$
-    .asObservable()
-    .pipe(distinctUntilChanged());
   private readonly preferences = this.preferenceManager.getPreferences(
     MigrationService.name
   );
@@ -43,10 +39,7 @@ export class MigrationService {
     );
     return defer(() =>
       this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
-    ).pipe(
-      concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)),
-      tap(() => this._hasMigrated$.next(true))
-    );
+    ).pipe(concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)));
   }
 
   private async preMigrate() {
