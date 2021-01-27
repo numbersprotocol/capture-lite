@@ -46,7 +46,7 @@
     "merge-images": "^2.0.0",
     "ngx-virtual-scroller": "^4.0.3",
     "rxjs": "~6.6.3",
-    "tslib": "^2.0.1",
+    "tslib": "^2.1.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
