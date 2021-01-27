@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
 import { defer } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { concatMap, first } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { MigratingDialogComponent } from '../../core/migrating-dialog/migrating-dialog.component';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
+import { NetworkService } from '../network/network.service';
 import { OnboardingService } from '../onboarding/onboarding.service';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
@@ -27,13 +28,14 @@ export class MigrationService {
   constructor(
     private readonly dialog: MatDialog,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly networkService: NetworkService,
     private readonly proofRepository: ProofRepository,
     private readonly preferenceManager: PreferenceManager,
     private readonly onboardingService: OnboardingService
   ) {}
 
   migrate$(skip?: boolean) {
-    const runMigrate$ = defer(() => this.preMigrate()).pipe(
+    const runMigrate$ = defer(() => this.preMigrate(skip)).pipe(
       concatMap(() => this.runMigrateWithProgressDialog(skip)),
       concatMap(() => this.postMigrate())
     );
@@ -42,8 +44,11 @@ export class MigrationService {
     ).pipe(concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)));
   }
 
-  private async preMigrate() {
-    if (!(await this.onboardingService.hasPrefetchedDiaBackendAssets())) {
+  private async preMigrate(skip?: boolean) {
+    if (
+      !skip &&
+      !(await this.onboardingService.hasPrefetchedDiaBackendAssets())
+    ) {
       await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     }
   }
@@ -57,12 +62,18 @@ export class MigrationService {
     if (skip) {
       return;
     }
+    if (!(await this.networkService.connected$.pipe(first()).toPromise())) {
+      throw new Error('No network connection, aborting migration.');
+    }
     const dialogRef = this.dialog.open(MigratingDialogComponent, {
       disableClose: true,
       data: { progress: 0 },
     });
 
-    await this.to0_15_0();
+    await this.to0_15_0().catch(err => {
+      dialogRef.close();
+      throw err;
+    });
     await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     dialogRef.close();
   }
@@ -121,7 +132,6 @@ export class MigrationService {
       } = await this.diaBackendAssetRepository
         .fetchAllOriginallyOwned$(currentOffset, limit)
         .toPromise();
-
       if (diaBackendAssets.length === 0) {
         break;
       }
