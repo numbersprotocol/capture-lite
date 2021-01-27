@@ -73,6 +73,7 @@ export class HomePage {
           disableClose: true,
         });
       }
+      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     }
   }
 
