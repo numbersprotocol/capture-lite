@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer } from 'rxjs';
+import { combineLatest, defer, iif } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -21,6 +21,7 @@ import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/a
 import { ImageStore } from '../../../../shared/services/image-store/image-store.service';
 import { getOldProof } from '../../../../shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../../shared/services/repositories/proof/proof-repository.service';
+import { ShareService } from '../../../../shared/services/share/share.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import {
   isNonNullable,
@@ -91,7 +92,8 @@ export class CaptureDetailsPage {
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly imageStore: ImageStore
+    private readonly imageStore: ImageStore,
+    private readonly shareService: ShareService
   ) {}
 
   openContactSelectionDialog() {
@@ -121,8 +123,26 @@ export class CaptureDetailsPage {
         tap((option?: Option) => {
           if (option === Option.Delete) {
             this.remove();
+          } else if (option === Option.Share) {
+            this.share();
           }
         }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private share() {
+    this.proof$
+      .pipe(
+        concatMap(proof =>
+          iif(
+            () => proof.diaBackendAssetId !== undefined,
+            // tslint:disable-next-line: no-non-null-assertion
+            this.diaBackendAssetRepository.fetchById$(proof.diaBackendAssetId!)
+          )
+        ),
+        concatMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
         untilDestroyed(this)
       )
       .subscribe();
