@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
-import { defer } from 'rxjs';
-import { concatMap, first } from 'rxjs/operators';
+import { BehaviorSubject, defer } from 'rxjs';
+import { concatMap, distinctUntilChanged, tap } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { MigratingDialogComponent } from '../../core/migrating-dialog/migrating-dialog.component';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
-import { NetworkService } from '../network/network.service';
 import { OnboardingService } from '../onboarding/onboarding.service';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
@@ -21,6 +20,10 @@ const { Device } = Plugins;
   providedIn: 'root',
 })
 export class MigrationService {
+  private readonly _hasMigrated$ = new BehaviorSubject(false);
+  readonly hasMigrated$ = this._hasMigrated$
+    .asObservable()
+    .pipe(distinctUntilChanged());
   private readonly preferences = this.preferenceManager.getPreferences(
     MigrationService.name
   );
@@ -28,54 +31,38 @@ export class MigrationService {
   constructor(
     private readonly dialog: MatDialog,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly networkService: NetworkService,
     private readonly proofRepository: ProofRepository,
     private readonly preferenceManager: PreferenceManager,
     private readonly onboardingService: OnboardingService
   ) {}
 
   migrate$(skip?: boolean) {
-    const runMigrate$ = defer(() => this.preMigrate(skip)).pipe(
-      concatMap(() => this.runMigrateWithProgressDialog(skip)),
-      concatMap(() => this.postMigrate())
+    const runMigrate$ = defer(() =>
+      this.runMigrateWithProgressDialog(skip)
+    ).pipe(
+      concatMap(() => this.preferences.setBoolean(PrefKeys.TO_0_15_0, true)),
+      concatMap(() => this.updatePreviousVersion())
     );
     return defer(() =>
       this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
-    ).pipe(concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)));
-  }
-
-  private async preMigrate(skip?: boolean) {
-    if (
-      !skip &&
-      !(await this.onboardingService.hasPrefetchedDiaBackendAssets())
-    ) {
-      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
-    }
-  }
-
-  private async postMigrate() {
-    await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
-    await this.updatePreviousVersion();
+    ).pipe(
+      concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)),
+      tap(() => this._hasMigrated$.next(true))
+    );
   }
 
   private async runMigrateWithProgressDialog(skip?: boolean) {
     if (skip) {
       return;
     }
-    if (!(await this.networkService.connected$.pipe(first()).toPromise())) {
-      throw new Error('No network connection, aborting migration.');
-    }
     const dialogRef = this.dialog.open(MigratingDialogComponent, {
       disableClose: true,
       data: { progress: 0 },
     });
 
-    try {
-      await this.to0_15_0();
-      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
-    } finally {
-      dialogRef.close();
-    }
+    await this.to0_15_0();
+    await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+    dialogRef.close();
   }
 
   async updatePreviousVersion() {
@@ -132,6 +119,7 @@ export class MigrationService {
       } = await this.diaBackendAssetRepository
         .fetchAllOriginallyOwned$(currentOffset, limit)
         .toPromise();
+
       if (diaBackendAssets.length === 0) {
         break;
       }
