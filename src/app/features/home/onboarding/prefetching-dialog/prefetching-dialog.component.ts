@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { TranslocoService } from '@ngneat/transloco';
+import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetPrefetchingService } from '../../../../shared/services/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
 import { OnboardingService } from '../../../../shared/services/onboarding/onboarding.service';
 
@@ -14,7 +16,9 @@ export class PrefetchingDialogComponent {
   constructor(
     private readonly dialogRef: MatDialogRef<PrefetchingDialogComponent>,
     private readonly diaBackendAssetPrefetchingService: DiaBackendAssetPrefetchingService,
-    private readonly onboardingService: OnboardingService
+    private readonly onboardingService: OnboardingService,
+    private readonly confirmAlert: ConfirmAlert,
+    private readonly translocoService: TranslocoService
   ) {
     this.prefetch();
   }
@@ -26,6 +30,12 @@ export class PrefetchingDialogComponent {
           (this.progress = currentCount / totalCount)
       );
       await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+    } catch {
+      this.dialogRef.close();
+      await this.confirmAlert.present({
+        header: this.translocoService.translate('.error'),
+        message: this.translocoService.translate('error.prefetchError'),
+      });
     } finally {
       this.dialogRef.close();
     }

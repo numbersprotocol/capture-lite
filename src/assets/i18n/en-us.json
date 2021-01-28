@@ -88,6 +88,7 @@
   "restore": "Restore",
   "skip": "Skip",
   "contactUs": "Contact Us",
+  ".error": "Error",
   ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",
@@ -128,7 +129,8 @@
     "locationPermissionDenied": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
     "locationPositionUnavailable": "Location is not available at this moment; possibly due to weak network connectivity or GPS signals.",
     "locationTimeout": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",
-    "locationUnknownError": "Location is not available at this moment; possibly due to permission error, weak network connectivity or GPS signals."
+    "locationUnknownError": "Location is not available at this moment; possibly due to permission error, weak network connectivity or GPS signals.",
+    "prefetchError": "Photo restore does not complete due to bad network connections. It will continue when you re-open the app next time."
   },
   "transactionState": {
     "accepted": "Accepted",
