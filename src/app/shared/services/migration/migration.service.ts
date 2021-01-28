@@ -60,9 +60,12 @@ export class MigrationService {
       data: { progress: 0 },
     });
 
-    await this.to0_15_0();
-    await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
-    dialogRef.close();
+    try {
+      await this.to0_15_0();
+      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+    } finally {
+      dialogRef.close();
+    }
   }
 
   async updatePreviousVersion() {
