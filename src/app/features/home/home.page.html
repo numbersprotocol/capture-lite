@@ -54,6 +54,7 @@
       </button>
     </mat-toolbar>
     <mat-tab-group
+      headerPosition="below"
       mat-stretch-tabs
       (selectedTabChange)="onTapChanged($event)"
       mat-align-tabs="center"
@@ -61,25 +62,26 @@
     >
       <mat-tab>
         <ng-template mat-tab-label>
-          <mat-icon class="example-tab-icon">apps</mat-icon>
+          <mat-icon>apps</mat-icon>
         </ng-template>
         <app-uploading-bar></app-uploading-bar>
         <app-capture-tab></app-capture-tab>
       </mat-tab>
+      <mat-tab disabled>
+        <ng-template mat-tab-label>
+          <button mat-icon-button (click)="capture()">
+            <ion-icon class="camera-tab-icon" name="camera-outline"></ion-icon>
+          </button>
+        </ng-template>
+      </mat-tab>
       <mat-tab>
         <ng-template mat-tab-label>
-          <mat-icon class="example-tab-icon">move_to_inbox</mat-icon>
+          <mat-icon>move_to_inbox</mat-icon>
         </ng-template>
         <app-post-capture-tab
           [focus]="postCaptureTabFocus"
         ></app-post-capture-tab>
       </mat-tab>
     </mat-tab-group>
-
-    <ion-fab class="capture-fab" *ngIf="!postCaptureTabFocus">
-      <ion-fab-button (click)="capture()">
-        <ion-icon name="camera-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
   </mat-sidenav-content>
 </mat-sidenav-container>
