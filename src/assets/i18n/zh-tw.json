@@ -114,8 +114,8 @@
     "registeringPhotos": "正在註冊 {{ photos }} 張瞬時影像到區塊鏈上",
     "registeringPhotosPaused": "暫停註冊 {{ photos }} 張瞬時影像到區塊鏈上",
     "networkNotConnected": "沒有網路連線",
-    "allPhotosRegistered": "所有瞬間照片都已被成功註冊",
-    "confirmPrefetch": "是否要恢復已註冊的相片？需要數秒至數分鐘的時間。",
+    "allPhotosRegistered": "所有瞬時影像都已成功註冊",
+    "confirmPrefetch": "是否要恢復已註冊的瞬時影像？這個流程需要數分鐘的時間。",
     "loadingPreviousData": "正在恢復已註冊的瞬時影像...",
     "doNotTurnOffApp": "載入中，期間請勿關閉螢幕與離開 APP。",
     "upgrading": "升級中..."
