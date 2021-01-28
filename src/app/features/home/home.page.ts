@@ -91,6 +91,6 @@ export class HomePage {
   }
 
   onTapChanged(event: MatTabChangeEvent) {
-    this.postCaptureTabFocus = event.index === 1;
+    this.postCaptureTabFocus = event.index === 2;
   }
 }

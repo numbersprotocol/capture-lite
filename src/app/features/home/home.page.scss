@@ -11,25 +11,12 @@ mat-sidenav {
   width: 60%;
 }
 
-mat-tab {
-  height: 100%;
-  display: flex;
-}
-
-mat-tab-bady {
-  height: 100%;
-  display: flex;
-}
-
 mat-sidenav-content {
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-}
-
-.camera-tab-button {
-  height: 48px;
-  width: 48px;
+  display: flex;
+  flex-direction: column;
 }
 
 .camera-tab-icon {
@@ -38,10 +25,12 @@ mat-sidenav-content {
   color: white;
 }
 
-#tab-group {
-  height: calc(100% - 90px);
+mat-tab-group {
+  flex-grow: 1;
+  min-height: 0;
 }
 
-#tab-group mat-tab-body {
+/* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+:host ::ng-deep .mat-tab-body-wrapper {
   flex-grow: 1;
 }
