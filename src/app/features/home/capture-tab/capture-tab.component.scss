@@ -39,15 +39,34 @@ div.mat-title {
   }
 
   ion-icon {
+    color: white;
+    z-index: 10;
+  }
+
+  ion-icon.collecting {
     position: absolute;
     top: 50%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    z-index: 10;
     opacity: 30%;
-    color: white;
     font-size: 24px;
+  }
+
+  ion-icon.uploaded {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 20px;
+    opacity: 30%;
+  }
+
+  ion-icon.located {
+    position: absolute;
+    top: 32px;
+    right: 8px;
+    font-size: 20px;
+    opacity: 30%;
   }
 
   img {
