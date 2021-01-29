@@ -116,16 +116,25 @@ export class CaptureDetailsPage {
   }
 
   openOptionsMenu() {
-    const bottomSheetRef = this.bottomSheet.open(OptionsMenuComponent);
-    bottomSheetRef
-      .afterDismissed()
+    this.proof$
       .pipe(
-        tap((option?: Option) => {
-          if (option === Option.Delete) {
-            this.remove();
-          } else if (option === Option.Share) {
-            this.share();
-          }
+        tap(proof => {
+          const bottomSheetRef = this.bottomSheet.open(OptionsMenuComponent, {
+            data: { proof },
+          });
+          bottomSheetRef
+            .afterDismissed()
+            .pipe(
+              tap((option?: Option) => {
+                if (option === Option.Delete) {
+                  this.remove();
+                } else if (option === Option.Share) {
+                  this.share();
+                }
+              }),
+              untilDestroyed(this)
+            )
+            .subscribe();
         }),
         untilDestroyed(this)
       )
