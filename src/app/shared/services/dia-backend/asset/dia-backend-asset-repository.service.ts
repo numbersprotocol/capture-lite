@@ -46,7 +46,7 @@ export class DiaBackendAssetRepository {
         concatMap(headers =>
           this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(
             `${BASE_URL}/api/v2/assets/`,
-            { headers }
+            { headers, params: { is_original_owner: 'true' } }
           )
         ),
         pluck('count'),
