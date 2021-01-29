@@ -15,10 +15,22 @@ mat-sidenav-content {
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.capture-fab {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
+.camera-tab-icon {
+  height: 24px;
+  width: 24px;
+  color: white;
+}
+
+mat-tab-group {
+  flex-grow: 1;
+  min-height: 0;
+}
+
+/* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+:host ::ng-deep .mat-tab-body-wrapper {
+  flex-grow: 1;
 }
