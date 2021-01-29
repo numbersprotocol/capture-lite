@@ -1,5 +1,5 @@
 <ion-content *transloco="let t">
-  <ion-slides #slides>
+  <ion-slides #slides pager>
     <ion-slide>
       <div>
         <svg
@@ -41,11 +41,10 @@
             {{ t('captureMoments') }}
           </text>
         </svg>
-
-        <button (click)="slides.slideNext()" mat-raised-button color="primary">
-          {{ t('next') }}
-        </button>
       </div>
+      <button (click)="slides.slideNext()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
     </ion-slide>
     <ion-slide>
       <div>
@@ -96,11 +95,10 @@
             {{ t('histories') }}
           </text>
         </svg>
-
-        <button (click)="slides.slideNext()" mat-raised-button color="primary">
-          {{ t('next') }}
-        </button>
       </div>
+      <button (click)="slides.slideNext()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
     </ion-slide>
     <ion-slide>
       <div>
@@ -134,11 +132,10 @@
             {{ t('moreActions') }}
           </text>
         </svg>
-
-        <button routerLink="/home" mat-raised-button color="primary">
-          {{ t('start') }}
-        </button>
       </div>
+      <button routerLink="/home" mat-stroked-button>
+        {{ t('start') }}
+      </button>
     </ion-slide>
   </ion-slides>
 </ion-content>

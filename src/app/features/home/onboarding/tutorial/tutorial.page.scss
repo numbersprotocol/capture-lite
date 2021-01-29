@@ -1,29 +1,30 @@
 ion-content {
   ion-slides {
+    --bullet-background-active: white;
+
     ion-slide {
-      div {
-        position: relative;
-        width: 100%;
-
-        button {
-          position: absolute;
-          left: 50%;
-          bottom: -30px;
-          width: 80%;
-          height: 40px;
-          transform: translate(-50%, 0);
-          align-items: center;
-          padding: 30 30px;
-          border: 1px solid #564dfc;
-          box-sizing: border-box;
-          border-radius: 25px;
-        }
-      }
-
+      flex-direction: column;
       background-color: black;
       height: 100vh;
+
+      div {
+        position: relative;
+        width: 85%;
+      }
+
+      button {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+        color: white;
+        font-size: 24px;
+      }
     }
   }
+}
+
+.pagination-bullets {
+  bottom: 16px;
 }
 
 .ios text {
