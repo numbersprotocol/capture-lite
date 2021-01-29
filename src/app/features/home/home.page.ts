@@ -74,6 +74,7 @@ export class HomePage {
         });
       }
     }
+    await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
   }
 
   private async showPrefetchAlert() {
