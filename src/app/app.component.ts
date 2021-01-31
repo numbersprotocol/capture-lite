@@ -84,8 +84,10 @@ export class AppComponent {
 
   registerIcon() {
     this.iconRegistry.addSvgIcon(
-      'media-id',
-      this.sanitizer.bypassSecurityTrustResourceUrl('/assets/icon/media-id.svg')
+      'media-id-solid-black',
+      this.sanitizer.bypassSecurityTrustResourceUrl(
+        '/assets/icon/media-id-solid-black.svg'
+      )
     );
   }
 }
