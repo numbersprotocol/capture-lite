@@ -1,4 +1,11 @@
 <mat-nav-list *transloco="let t">
+  <a
+    *ngIf="data.proof.diaBackendAssetId"
+    mat-list-item
+    (click)="openLink(options.Share)"
+  >
+    <span mat-line>{{ t('share') }}</span>
+  </a>
   <a mat-list-item (click)="openLink(options.Delete)">
     <span mat-line>{{ t('delete') }}</span>
   </a>
