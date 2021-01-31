@@ -1,5 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import {
+  MatBottomSheetRef,
+  MAT_BOTTOM_SHEET_DATA,
+} from '@angular/material/bottom-sheet';
 import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
 import { OptionsMenuComponent } from './options-menu.component';
 
@@ -11,7 +14,13 @@ describe('OptionsMenuComponent', () => {
     TestBed.configureTestingModule({
       declarations: [OptionsMenuComponent],
       imports: [SharedTestingModule],
-      providers: [{ provide: MatBottomSheetRef, useValue: {} }],
+      providers: [
+        { provide: MatBottomSheetRef, useValue: {} },
+        {
+          provide: MAT_BOTTOM_SHEET_DATA,
+          useValue: { proof: { diaBackendAssetId: '' } },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(OptionsMenuComponent);
