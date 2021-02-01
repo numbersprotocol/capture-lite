@@ -131,7 +131,7 @@ export class LoginPage {
     if (error instanceof TimeoutError) {
       message = this.translocoService.translate('error.loginTimeoutError');
     } else if (error instanceof HttpErrorResponse) {
-      if (error.error?.non_field_errors[0] === 'user_is_not_active') {
+      if (error.error?.type === 'user_is_not_active') {
         message = this.translocoService.translate(
           'error.loginUserNotActiveError'
         );
