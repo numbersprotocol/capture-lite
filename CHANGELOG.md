@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.17.0 - 2021-02-01
+
+### Added
+
+- Implement capture sharing. #499
+- Show capture status icons on capture-tab. #509
+- Show certificate on authmedia by clicking media ID. #512
+
+### Fixed
+
+- Remove new year frame when sharing. #507
+- Fix error handling on login `HttpErrorResponse`. #508
+- Remove "view more" information on `PostCaptureCard` #510
+
 ## 0.16.5 - 2021-01-29
 
 Re-release due to an internal error on releaseing.
