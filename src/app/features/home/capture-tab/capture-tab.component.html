@@ -30,6 +30,17 @@
       <ion-icon
         *ngIf="captureItem.isCollecting"
         name="hourglass-outline"
+        class="collecting"
+      ></ion-icon>
+      <ion-icon
+        *ngIf="captureItem.proof.diaBackendAssetId"
+        src="/assets/icon/media-id.svg"
+        class="uploaded"
+      ></ion-icon>
+      <ion-icon
+        *ngIf="captureItem.hasGeolocation"
+        src="/assets/icon/location.svg"
+        class="located"
       ></ion-icon>
       <img [src]="captureItem.thumbnailUrl" />
     </mat-grid-tile>

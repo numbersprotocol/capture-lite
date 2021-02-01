@@ -16,24 +16,15 @@ mat-toolbar {
 }
 
 .page-content {
-  padding-bottom: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: auto;
-}
-
-.page-container {
-  padding-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: auto;
 }
 
 .content {
   flex: 1;
   padding-top: 0;
+  min-height: 0;
 }
 
 .end-button {
