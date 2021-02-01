@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, iif } from 'rxjs';
+import { combineLatest, defer, iif, zip } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -34,6 +35,8 @@ import {
   Option,
   OptionsMenuComponent,
 } from './options-menu/options-menu.component';
+
+const { Browser } = Plugins;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -136,6 +139,24 @@ export class CaptureDetailsPage {
             )
             .subscribe();
         }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  openCertificate() {
+    zip(this.proof$, this.diaBackendAuthService.token$)
+      .pipe(
+        concatMap(([proof, token]) =>
+          iif(
+            () => proof.diaBackendAssetId !== undefined,
+            defer(() =>
+              Browser.open({
+                url: `https://authmedia.net/dia-certificate?mid=${proof.diaBackendAssetId}&token=${token}`,
+              })
+            )
+          )
+        ),
         untilDestroyed(this)
       )
       .subscribe();
