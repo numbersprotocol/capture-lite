@@ -33,12 +33,12 @@
         class="collecting"
       ></ion-icon>
       <ion-icon
-        *ngIf="true"
+        *ngIf="captureItem.proof.diaBackendAssetId"
         src="/assets/icon/media-id.svg"
         class="uploaded"
       ></ion-icon>
       <ion-icon
-        *ngIf="true"
+        *ngIf="captureItem.hasGeolocation"
         src="/assets/icon/location.svg"
         class="located"
       ></ion-icon>
