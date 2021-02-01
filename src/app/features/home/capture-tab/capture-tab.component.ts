@@ -27,6 +27,9 @@ export class CaptureTabComponent {
           thumbnailUrl: await proof.getThumbnailUrl().catch(() => undefined),
           oldProofHash: getOldProof(proof).hash,
           isCollecting: collectingOldProofHashes.has(getOldProof(proof).hash),
+          hasGeolocation:
+            proof.geolocationLatitude !== undefined &&
+            proof.geolocationLongitude !== undefined,
         }))
       )
     ),
@@ -69,4 +72,5 @@ interface CaptureItem {
   thumbnailUrl?: string;
   oldProofHash: string;
   isCollecting: boolean;
+  hasGeolocation: boolean;
 }
