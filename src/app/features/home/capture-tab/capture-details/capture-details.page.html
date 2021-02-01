@@ -35,12 +35,12 @@
           {{ proof.truth.timestamp | date: 'long' }}
         </div>
       </mat-list-item>
-      <mat-list-item>
+      <mat-list-item (click)="openCertificate()">
         <mat-icon svgIcon="media-id" mat-list-icon></mat-icon>
         <div mat-line>
-          <ng-container *ngIf="isRegistered$ | async; else notRegistered">{{
-            proof.diaBackendAssetId
-          }}</ng-container>
+          <ng-container *ngIf="isRegistered$ | async; else notRegistered">
+            {{ proof.diaBackendAssetId }}
+          </ng-container>
           <ng-template #notRegistered>{{ t('notRegistered') }}</ng-template>
         </div>
       </mat-list-item>

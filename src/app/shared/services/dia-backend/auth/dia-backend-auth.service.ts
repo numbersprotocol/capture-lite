@@ -35,11 +35,11 @@ export class DiaBackendAuthService {
 
   readonly getEmail$ = this.preferences.getString$(PrefKeys.EMAIL);
 
-  private readonly getToken$ = this.preferences
+  readonly token$ = this.preferences
     .getString$(PrefKeys.TOKEN)
     .pipe(filter(token => token.length !== 0));
 
-  readonly getAuthHeaders$ = this.getToken$.pipe(
+  readonly getAuthHeaders$ = this.token$.pipe(
     map(token => ({ authorization: `token ${token}` }))
   );
 
