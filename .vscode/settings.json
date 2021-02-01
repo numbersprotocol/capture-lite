@@ -6,6 +6,5 @@
     "source.fixAll.stylelint": true,
     "source.organizeImports": true
   },
-  "typescript.preferences.importModuleSpecifier": "relative",
-  "svg.preview.background": "transparent"
+  "typescript.preferences.importModuleSpecifier": "relative"
 }
