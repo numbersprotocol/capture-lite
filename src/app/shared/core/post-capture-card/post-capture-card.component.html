@@ -22,45 +22,9 @@
       />
     </div>
     <mat-card-content>
-      <mat-list dense class="info-list" [class.info-list-show]="openMore">
-        <mat-list-item>
-          <mat-icon class="info-list-icon" mat-list-icon>access_time</mat-icon>
-          <div mat-line>
-            <span class="info-list-title">{{ t('timestamp') }}</span>
-            <span class="info-list-content">
-              {{ postCapture.uploaded_at | date: 'medium' }}
-            </span>
-          </div>
-        </mat-list-item>
-        <mat-list-item>
-          <mat-icon class="info-list-icon" mat-list-icon>place</mat-icon>
-          <div mat-line>
-            <span class="info-list-title">{{ t('location') }}</span>
-            <span class="info-list-content" mat-line>
-              {{ location$ | async }}
-            </span>
-          </div>
-        </mat-list-item>
-        <mat-list-item>
-          <mat-icon
-            class="info-list-img"
-            svgIcon="media-id-solid-black"
-            mat-list-icon
-          ></mat-icon>
-          <div mat-line>
-            <span class="info-list-title">{{ t('mediaId') }}</span>
-            <span class="info-list-content">{{ postCapture.id }}</span>
-          </div>
-        </mat-list-item>
-      </mat-list>
-      <p class="caption-ellipsis mat-body" [class.caption-full]="openMore">
+      <p class="caption mat-body">
         {{ postCapture.caption }}
       </p>
     </mat-card-content>
-    <mat-card-actions [align]="'end'">
-      <button class="view-all-button" (click)="openMore = !openMore">
-        {{ t('message.viewAll') + '...' }}
-      </button>
-    </mat-card-actions>
   </mat-card>
 </ng-container>
