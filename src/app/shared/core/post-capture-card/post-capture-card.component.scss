@@ -42,26 +42,6 @@ mat-card-actions {
   width: 100vw;
   padding-right: 8px;
   padding-left: 16px;
-
-  .all-.view-all-button {
-    align-items: center;
-    padding: 0 30px;
-    height: 24px;
-    border: 1px solid #564dfc;
-    background-color: white;
-    box-sizing: border-box;
-    border-radius: 13px;
-  }
-}
-
-.view-all-button {
-  align-items: center;
-  padding: 0 30px;
-  height: 24px;
-  border: 1px solid #564dfc;
-  background-color: white;
-  box-sizing: border-box;
-  border-radius: 13px;
 }
 
 mat-card-content {
@@ -76,56 +56,13 @@ mat-card-title {
   padding-right: 16px;
 }
 
-.mat-card-title {
-  font-size: 16px;
-}
-
 .post-capture-avatar {
   background-image: url('https://gravatar.com/avatar/8db683da3c728970bb776f6cc4048fd2?s=400&d=mp&r=x');
   background-size: cover;
 }
 
-.caption-ellipsis {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  padding-left: 16px;
-}
-
-.caption-full {
+.caption {
   overflow: visible;
+  padding-left: 16px;
   height: auto;
-  text-overflow: initial;
-  white-space: initial;
-}
-
-.info-list[dense] {
-  display: none;
-  font-size: 12px;
-
-  .info-list-content {
-    width: 75%;
-    float: right;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .info-list-icon {
-    font-size: 16px;
-  }
-
-  .info-list-img {
-    width: 16px;
-    height: 16px;
-    padding: 6px;
-  }
-
-  mat-list-item {
-    height: 28px;
-  }
-}
-
-.info-list-show[dense] {
-  display: block;
 }
