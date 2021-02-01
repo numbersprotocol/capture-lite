@@ -73,8 +73,8 @@ export class HomePage {
           disableClose: true,
         });
       }
-      await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
     }
+    await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
   }
 
   private async showPrefetchAlert() {
