@@ -150,9 +150,11 @@ export class CaptureDetailsPage {
         concatMap(([proof, token]) =>
           iif(
             () => proof.diaBackendAssetId !== undefined,
-            Browser.open({
-              url: `https://authmedia.net/dia-certificate?mid=${proof.diaBackendAssetId}&token=${token}`,
-            })
+            defer(() =>
+              Browser.open({
+                url: `https://authmedia.net/dia-certificate?mid=${proof.diaBackendAssetId}&token=${token}`,
+              })
+            )
           )
         ),
         untilDestroyed(this)
