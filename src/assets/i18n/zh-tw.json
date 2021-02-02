@@ -124,7 +124,11 @@
     "confirmPrefetch": "是否要恢復已註冊的瞬時影像？這個流程需要數分鐘的時間。",
     "loadingPreviousData": "正在恢復已註冊的瞬時影像...",
     "doNotTurnOffApp": "載入中，期間請勿關閉螢幕與離開 APP。",
-    "upgrading": "升級中..."
+    "upgrading": "升級中...",
+    "shareMoment": "分享瞬時影像",
+    "transferMoment": "轉移瞬時影像",
+    "deleteMoment": "刪除瞬時影像",
+    "viewBlockchainCertificate": "檢視區塊鏈證書"
   },
   "error": {
     "loginTimeoutError": "連線逾時。請稍候再試。",

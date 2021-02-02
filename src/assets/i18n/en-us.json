@@ -125,7 +125,11 @@
     "confirmPrefetch": "Do you want to restore the registered Moments? It may take minutes to complete.",
     "loadingPreviousData": "Restoring Moments...",
     "doNotTurnOffApp": "Please keep the screen on and DO NOT leave the app.",
-    "upgrading": "Upgrading..."
+    "upgrading": "Upgrading...",
+    "shareMoment": "Share moment",
+    "transferMoment": "Transfer moment",
+    "deleteMoment": "Delete moment",
+    "viewBlockchainCertificate": "View blockchain certificate"
   },
   "error": {
     "loginTimeoutError": "Connection timeout. Please try again later.",
