@@ -35,7 +35,7 @@
           {{ proof.truth.timestamp | date: 'long' }}
         </div>
       </mat-list-item>
-      <mat-list-item (click)="openCertificate()">
+      <mat-list-item>
         <mat-icon svgIcon="media-id-solid-black" mat-list-icon></mat-icon>
         <div mat-line>
           <ng-container *ngIf="isRegistered$ | async; else notRegistered">

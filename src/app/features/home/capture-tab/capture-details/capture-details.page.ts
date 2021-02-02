@@ -129,10 +129,14 @@ export class CaptureDetailsPage {
             .afterDismissed()
             .pipe(
               tap((option?: Option) => {
-                if (option === Option.Delete) {
-                  this.remove();
-                } else if (option === Option.Share) {
+                if (option === Option.Share) {
                   this.share();
+                } else if (option === Option.Transfer) {
+                  this.openContactSelectionDialog();
+                } else if (option === Option.Delete) {
+                  this.remove();
+                } else if (option === Option.ViewCertificate) {
+                  this.openCertificate();
                 }
               }),
               untilDestroyed(this)
@@ -144,7 +148,7 @@ export class CaptureDetailsPage {
       .subscribe();
   }
 
-  openCertificate() {
+  private openCertificate() {
     zip(this.proof$, this.diaBackendAuthService.token$)
       .pipe(
         concatMap(([proof, token]) =>
