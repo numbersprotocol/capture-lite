@@ -165,7 +165,14 @@ export class SignupPage {
       .run$(action$)
       .pipe(untilDestroyed(this))
       .subscribe(
-        () => this.router.navigate(['/signup/finished'], { replaceUrl: true }),
+        () =>
+          this.router.navigate(
+            [
+              '/login',
+              { email: this.model.email, password: this.model.password },
+            ],
+            { replaceUrl: true }
+          ),
         err => {
           // TODO: The actual error type can't be determined from response. Fix this after API updates error messages.
           console.error(err);
