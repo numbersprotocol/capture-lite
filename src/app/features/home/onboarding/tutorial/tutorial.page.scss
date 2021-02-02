@@ -8,8 +8,8 @@ ion-content {
       height: 100vh;
 
       svg {
-        padding-top: 5vh;
-        padding-bottom: 14vh;
+        padding-top: 8vh;
+        padding-bottom: calc(12vh + env(safe-area-inset-bottom));
       }
 
       button {
@@ -18,7 +18,7 @@ ion-content {
         right: 20px;
         color: white;
         font-size: 20px;
-        padding-bottom: 6.5vh;
+        padding-bottom: calc(5vh + env(safe-area-inset-bottom));
       }
     }
   }
