@@ -142,6 +142,7 @@
     "accepted": "Accepted",
     "delivered": "Delivered",
     "returned": "Returned",
+    "missed": "Returned",
     "inProgress": "In Progress",
     "waitingToBeAccepted": "In Progress",
     "null": "Not Provided"

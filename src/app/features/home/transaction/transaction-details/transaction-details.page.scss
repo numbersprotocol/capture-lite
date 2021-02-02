@@ -73,8 +73,13 @@ mat-toolbar {
 
   button.returned {
     color: white;
-    border-color: var(--ion-color-danger);
+    border-color: #e31587;
     background-color: #e31587;
+  }
+
+  button.missed {
+    color: #e31587;
+    border-color: #e31587;
   }
 }
 
