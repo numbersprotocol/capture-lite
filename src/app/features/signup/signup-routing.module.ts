@@ -7,11 +7,6 @@ const routes: Routes = [
     path: '',
     component: SignupPage,
   },
-  {
-    path: 'finished',
-    loadChildren: () =>
-      import('./finished/finished.module').then(m => m.FinishedPageModule),
-  },
 ];
 
 @NgModule({

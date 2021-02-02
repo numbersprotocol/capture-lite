@@ -2,12 +2,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { combineLatest, TimeoutError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
@@ -31,54 +31,74 @@ export class LoginPage {
     private readonly translocoService: TranslocoService,
     private readonly router: Router,
     private readonly snackbar: MatSnackBar,
-    private readonly onboardingService: OnboardingService
+    private readonly onboardingService: OnboardingService,
+    private readonly route: ActivatedRoute
   ) {
+    this.createFormFields();
+    this.attemptAutoLogin();
+  }
+
+  private createFormFields() {
     combineLatest([
       this.translocoService.selectTranslate('email'),
       this.translocoService.selectTranslate('password'),
     ])
       .pipe(
-        tap(([emailTranslation, passwordTranslation]) =>
-          this.createFormFields(emailTranslation, passwordTranslation)
-        ),
+        tap(([emailTranslation, passwordTranslation]) => {
+          this.fields = [
+            {
+              key: 'email',
+              type: 'input',
+              templateOptions: {
+                type: 'email',
+                placeholder: emailTranslation,
+                required: true,
+                hideRequiredMarker: true,
+                pattern: EMAIL_REGEXP,
+              },
+              validation: {
+                messages: {
+                  pattern: () =>
+                    this.translocoService.translate(
+                      'message.pleaseEnterValidEmail'
+                    ),
+                },
+              },
+            },
+            {
+              key: 'password',
+              type: 'input',
+              templateOptions: {
+                type: 'password',
+                placeholder: passwordTranslation,
+                required: true,
+                hideRequiredMarker: true,
+              },
+            },
+          ];
+        }),
         untilDestroyed(this)
       )
       .subscribe();
   }
 
-  private createFormFields(
-    emailTranslation: string,
-    passwordTranslation: string
-  ) {
-    this.fields = [
-      {
-        key: 'email',
-        type: 'input',
-        templateOptions: {
-          type: 'email',
-          placeholder: emailTranslation,
-          required: true,
-          hideRequiredMarker: true,
-          pattern: EMAIL_REGEXP,
-        },
-        validation: {
-          messages: {
-            pattern: () =>
-              this.translocoService.translate('message.pleaseEnterValidEmail'),
-          },
-        },
-      },
-      {
-        key: 'password',
-        type: 'input',
-        templateOptions: {
-          type: 'password',
-          placeholder: passwordTranslation,
-          required: true,
-          hideRequiredMarker: true,
-        },
-      },
-    ];
+  private attemptAutoLogin() {
+    this.route.paramMap
+      .pipe(
+        map(params => ({
+          email: params.get('email'),
+          password: params.get('password'),
+        })),
+        tap(({ email, password }) => {
+          this.model.email = email ?? '';
+          this.model.password = password ?? '';
+          if (email && password) {
+            this.onSubmit();
+          }
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   onSubmit() {
@@ -88,7 +108,7 @@ export class LoginPage {
       .pipe(
         catchError((error: TimeoutError | HttpErrorResponse) => {
           this.showLoginErrorMessage(error);
-          throw new Error('Login failed');
+          throw error;
         }),
         tap(_ => (this.onboardingService.isNewLogin = true))
       );
