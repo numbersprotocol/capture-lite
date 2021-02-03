@@ -145,6 +145,7 @@
     "accepted": "已接收",
     "delivered": "已送出",
     "returned": "已退回",
+    "missed": "已退回",
     "inProgress": "等待中",
     "waitingToBeAccepted": "等待中",
     "null": "未提供"

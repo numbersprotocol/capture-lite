@@ -41,7 +41,10 @@ export async function getStatus(
 ) {
   const resolvedEmail = await email;
   if (transaction.expired) {
-    return Status.Returned;
+    if (transaction.sender === resolvedEmail) {
+      return Status.Returned;
+    }
+    return Status.Missed;
   }
   if (!transaction.fulfilled_at) {
     if (transaction.receiver_email === resolvedEmail) {
@@ -59,6 +62,7 @@ enum Status {
   waitingToBeAccepted = 'waitingToBeAccepted',
   InProgress = 'inProgress',
   Returned = 'returned',
+  Missed = 'missed',
   Delivered = 'delivered',
   Accepted = 'accepted',
 }
