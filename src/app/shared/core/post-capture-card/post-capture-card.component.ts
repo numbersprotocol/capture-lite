@@ -1,16 +1,27 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, defer } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
-import { DiaBackendAsset } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
-import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
+import {
+  DiaBackendAsset,
+  DiaBackendAssetRepository,
+} from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendTransactionRepository } from '../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import {
+  isNonNullable,
+  switchTapTo,
+} from '../../../utils/rx-operators/rx-operators';
 import { ShareService } from '../../services/share/share.service';
 import {
   Option,
   OptionsMenuComponent,
 } from './options-menu/options-menu.component';
+
+const { Browser } = Plugins;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -35,12 +46,16 @@ export class PostCaptureCardComponent implements OnInit {
         : this.translocoService.translate('locationNotProvided');
     })
   );
+
   openMore = false;
 
   constructor(
     private readonly translocoService: TranslocoService,
     private readonly bottomSheet: MatBottomSheet,
-    private readonly shareService: ShareService
+    private readonly shareService: ShareService,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository
   ) {}
 
   ngOnInit() {
@@ -55,6 +70,10 @@ export class PostCaptureCardComponent implements OnInit {
         tap((option?: Option) => {
           if (option === Option.Share) {
             this.share();
+          } else if (option === Option.Delete) {
+            this.remove();
+          } else if (option === Option.ViewCertificate) {
+            this.openCertificate();
           }
         }),
         untilDestroyed(this)
@@ -62,12 +81,26 @@ export class PostCaptureCardComponent implements OnInit {
       .subscribe();
   }
 
-  share() {
+  private share() {
     return this.postCapture$
       .pipe(
         first(),
         concatMap(postCapture => this.shareService.share(postCapture)),
         untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private remove() {
+    return this.postCapture$
+      .pipe(
+        first(),
+        concatMap(postCapture =>
+          this.diaBackendAssetRepository.remove$(postCapture)
+        ),
+        switchTapTo(
+          defer(() => this.diaBackendTransactionRepository.refresh$())
+        )
       )
       .subscribe();
   }
