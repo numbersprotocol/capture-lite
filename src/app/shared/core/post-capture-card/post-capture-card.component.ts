@@ -3,7 +3,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, defer } from 'rxjs';
+import { BehaviorSubject, defer, iif } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 import {
   DiaBackendAsset,
@@ -33,6 +33,13 @@ export class PostCaptureCardComponent implements OnInit {
   @Input() readonly sharable = true;
   @Input() private readonly postCapture!: DiaBackendAsset;
 
+  readonly token$ = this.diaBackendAuthService.getAuthHeaders$
+    .pipe(
+      map(token => {
+        return token.authorization;
+      })
+    )
+    .subscribe();
   private readonly _postCapture$ = new BehaviorSubject(this.postCapture);
   readonly postCapture$ = this._postCapture$
     .asObservable()
@@ -89,6 +96,27 @@ export class PostCaptureCardComponent implements OnInit {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  private openCertificate() {
+    return this.postCapture$
+      .pipe(
+        first(),
+        concatMap(postCapture =>
+          iif(
+            () => postCapture.id !== undefined,
+            defer(() => {
+              Browser.open({
+                url: `https://authmedia.net/dia-certificate?mid=${
+                  postCapture.id
+                }&token=${this.token$.unsubscribe()}`,
+              });
+            })
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe(m => console.log(`It's been ${m} seconds since subscribing!`));
   }
 
   private remove() {
