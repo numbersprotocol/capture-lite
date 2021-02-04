@@ -99,7 +99,9 @@ export class PostCaptureCardComponent implements OnInit {
         first(),
         concatMap(([postCapture, token]) =>
           iif(
-            () => postCapture.id !== undefined,
+            () => {
+              return postCapture.id !== undefined;
+            },
             defer(() => {
               Browser.open({
                 url: `https://authmedia.net/dia-certificate?mid=${postCapture.id}&token=${token}`,
