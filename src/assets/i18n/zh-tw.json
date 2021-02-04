@@ -94,6 +94,7 @@
   "restore": "恢復",
   "skip": "跳過",
   "contactUs": "聯絡我們",
+  ".error": "錯誤",
   ".message": "訊息",
   "message": {
     "areYouSure": "此操作不可撤銷。",
