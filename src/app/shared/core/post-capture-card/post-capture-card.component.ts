@@ -3,7 +3,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, defer, iif, zip } from 'rxjs';
+import { BehaviorSubject, defer, zip } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 import {
   DiaBackendAsset,
@@ -98,16 +98,11 @@ export class PostCaptureCardComponent implements OnInit {
       .pipe(
         first(),
         concatMap(([postCapture, token]) =>
-          iif(
-            () => {
-              return postCapture.id !== undefined;
-            },
-            defer(() => {
-              Browser.open({
-                url: `https://authmedia.net/dia-certificate?mid=${postCapture.id}&token=${token}`,
-              });
-            })
-          )
+          defer(() => {
+            Browser.open({
+              url: `https://authmedia.net/dia-certificate?mid=${postCapture.id}&token=${token}`,
+            });
+          })
         ),
         untilDestroyed(this)
       )
