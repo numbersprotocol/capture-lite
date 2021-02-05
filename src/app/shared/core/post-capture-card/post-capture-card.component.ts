@@ -5,16 +5,9 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, defer, zip } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
-import {
-  DiaBackendAsset,
-  DiaBackendAssetRepository,
-} from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAsset } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { DiaBackendTransactionRepository } from '../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import {
-  isNonNullable,
-  switchTapTo,
-} from '../../../utils/rx-operators/rx-operators';
+import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { ShareService } from '../../services/share/share.service';
 import {
   Option,
@@ -55,9 +48,7 @@ export class PostCaptureCardComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly bottomSheet: MatBottomSheet,
     private readonly shareService: ShareService,
-    private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository
+    private readonly diaBackendAuthService: DiaBackendAuthService
   ) {}
 
   ngOnInit() {
@@ -72,8 +63,6 @@ export class PostCaptureCardComponent implements OnInit {
         tap((option?: Option) => {
           if (option === Option.Share) {
             this.share();
-          } else if (option === Option.Delete) {
-            this.remove();
           } else if (option === Option.ViewCertificate) {
             this.openCertificate();
           }
@@ -105,20 +94,6 @@ export class PostCaptureCardComponent implements OnInit {
           })
         ),
         untilDestroyed(this)
-      )
-      .subscribe();
-  }
-
-  private remove() {
-    return this.postCapture$
-      .pipe(
-        first(),
-        concatMap(postCapture =>
-          this.diaBackendAssetRepository.remove$(postCapture)
-        ),
-        switchTapTo(
-          defer(() => this.diaBackendTransactionRepository.refresh$())
-        )
       )
       .subscribe();
   }

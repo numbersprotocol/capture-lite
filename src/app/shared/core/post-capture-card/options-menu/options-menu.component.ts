@@ -24,6 +24,5 @@ export class OptionsMenuComponent {
 
 export enum Option {
   Share,
-  Delete,
   ViewCertificate,
 }
