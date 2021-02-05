@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.18.0 - 2021-02-05
+
+### Added
+
+- Implement options menu for `PostCaptureCard`. #536
+
+### Changed
+
+#### UI/UX
+
+- Update the title of error dialog on prefetching. #533
+- Reduce the size of PostCapture sender email. #530
+- Disable tab pagination on `HomPage`. #537
+- Adjust he position and size of the capture status-preview icons. #537
+- Remove the title on `CaptureDetailsPage`. #538
+
 ## 0.17.1 - 2021-02-03
 
 ### Changed
