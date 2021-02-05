@@ -1,16 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, defer, zip } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 import { DiaBackendAsset } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { ShareService } from '../../services/share/share.service';
 import {
   Option,
   OptionsMenuComponent,
 } from './options-menu/options-menu.component';
+
+const { Browser } = Plugins;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -23,9 +27,11 @@ export class PostCaptureCardComponent implements OnInit {
   @Input() private readonly postCapture!: DiaBackendAsset;
 
   private readonly _postCapture$ = new BehaviorSubject(this.postCapture);
+
   readonly postCapture$ = this._postCapture$
     .asObservable()
     .pipe(isNonNullable());
+
   readonly location$ = this.postCapture$.pipe(
     map(postCapture => {
       const lat = postCapture.parsed_meta.capture_latitude;
@@ -35,12 +41,14 @@ export class PostCaptureCardComponent implements OnInit {
         : this.translocoService.translate('locationNotProvided');
     })
   );
+
   openMore = false;
 
   constructor(
     private readonly translocoService: TranslocoService,
     private readonly bottomSheet: MatBottomSheet,
-    private readonly shareService: ShareService
+    private readonly shareService: ShareService,
+    private readonly diaBackendAuthService: DiaBackendAuthService
   ) {}
 
   ngOnInit() {
@@ -55,6 +63,8 @@ export class PostCaptureCardComponent implements OnInit {
         tap((option?: Option) => {
           if (option === Option.Share) {
             this.share();
+          } else if (option === Option.ViewCertificate) {
+            this.openCertificate();
           }
         }),
         untilDestroyed(this)
@@ -62,11 +72,27 @@ export class PostCaptureCardComponent implements OnInit {
       .subscribe();
   }
 
-  share() {
+  private share() {
     return this.postCapture$
       .pipe(
         first(),
         concatMap(postCapture => this.shareService.share(postCapture)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private openCertificate() {
+    zip(this.postCapture$, this.diaBackendAuthService.token$)
+      .pipe(
+        first(),
+        concatMap(([postCapture, token]) =>
+          defer(() => {
+            Browser.open({
+              url: `https://authmedia.net/dia-certificate?mid=${postCapture.id}&token=${token}`,
+            });
+          })
+        ),
         untilDestroyed(this)
       )
       .subscribe();

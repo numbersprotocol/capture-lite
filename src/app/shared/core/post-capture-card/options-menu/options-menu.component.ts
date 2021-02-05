@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+
 @Component({
   selector: 'app-options-menu',
   templateUrl: './options-menu.component.html',
@@ -18,4 +19,5 @@ export class OptionsMenuComponent {
 
 export enum Option {
   Share,
+  ViewCertificate,
 }
