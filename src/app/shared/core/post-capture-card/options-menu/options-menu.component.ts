@@ -1,9 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import {
-  MatBottomSheetRef,
-  MAT_BOTTOM_SHEET_DATA,
-} from '@angular/material/bottom-sheet';
-import { Proof } from '../../../../shared/services/repositories/proof/proof';
+import { Component } from '@angular/core';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-options-menu',
@@ -13,8 +9,7 @@ import { Proof } from '../../../../shared/services/repositories/proof/proof';
 export class OptionsMenuComponent {
   readonly options = Option;
   constructor(
-    private readonly bottomSheetRef: MatBottomSheetRef<OptionsMenuComponent>,
-    @Inject(MAT_BOTTOM_SHEET_DATA) readonly data: { proof: Proof }
+    private readonly bottomSheetRef: MatBottomSheetRef<OptionsMenuComponent>
   ) {}
 
   openLink(option: Option) {
