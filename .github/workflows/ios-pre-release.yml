@@ -51,7 +51,7 @@ jobs:
       - name: Sync Capacitor web assets
         if: steps.version_check.outputs.changed == 'true'
         run: |
-          npx cap sync ios --no-build
+          npx cap sync ios
 
       - name: Build ios release (archive) (Apple-Store)
         if: steps.version_check.outputs.changed == 'true'
