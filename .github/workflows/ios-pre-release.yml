@@ -73,14 +73,14 @@ jobs:
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
       - name: Upload .ipa
-        if: always()
+        if: steps.version_check.outputs.changed == 'true'
         uses: actions/upload-artifact@v1
         with:
           name: ipa
           path: build/App.ipa
 
       - name: Upload Archive
-        if: always()
+        if: steps.version_check.outputs.changed == 'true'
         uses: actions/upload-artifact@v1
         with:
           name: xcarchive
