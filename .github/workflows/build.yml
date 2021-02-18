@@ -46,3 +46,8 @@ jobs:
           npx cap sync android
           cd android/
           ./gradlew assembleDebug
+
+      - name: Build iOS
+        run: |
+          npx cap sync ios
+          xcodebuild archive -workspace ios/App/App.xcworkspace -scheme App -sdk iphoneos  -configuration Debug -archivePath build/App.xcarchive -showBuildTimingSummary -allowProvisioningUpdates archive
