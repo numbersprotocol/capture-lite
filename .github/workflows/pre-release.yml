@@ -88,20 +88,6 @@ jobs:
           diff-search: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Import the Code-Signing PKCS12 Certificate
-        if: steps.version_check.outputs.changed == 'true'
-        uses: apple-actions/import-codesign-certs@v1
-        with:
-          p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
-          p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
-      - uses: Apple-Actions/download-provisioning-profiles@v1
-        with:
-          bundle-id: io.numbersprotocol.capturelite
-          profile-type: 'IOS_APP_STORE'
-          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
-
       - name: Get current time
         uses: 1466587594/get-current-time@v2
         id: current-time
@@ -117,6 +103,22 @@ jobs:
           npm install -g @ionic/cli
           npm install
           npm run build
+
+      - name: Import the Code-Signing PKCS12 Certificate
+        if: steps.version_check.outputs.changed == 'true'
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+          p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+
+      - name: Download provisioning profiles
+        uses: Apple-Actions/download-provisioning-profiles@v1
+        with:
+          bundle-id: io.numbersprotocol.capturelite
+          profile-type: 'IOS_APP_STORE'
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
       - name: Build iOS Xcode Archive
         if: steps.version_check.outputs.changed == 'true'
