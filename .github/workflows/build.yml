@@ -80,7 +80,6 @@ jobs:
         run: npm run build
 
       - name: Import the Code-Signing PKCS12 Certificate
-        if: steps.version_check.outputs.changed == 'true'
         uses: apple-actions/import-codesign-certs@v1
         with:
           p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
