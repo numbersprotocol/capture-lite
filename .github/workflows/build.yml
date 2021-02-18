@@ -74,12 +74,6 @@ jobs:
       - name: Test
         run: npm run test-ci
 
-      - name: Upload coverage reports
-        uses: codacy/codacy-coverage-reporter-action@master
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: ./coverage/cobertura-coverage.xml
-
       - name: Build Ionic
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
