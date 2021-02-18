@@ -24,18 +24,11 @@ jobs:
           diff-search: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up JDK
-        if: steps.version_check.outputs.changed == 'true'
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
       - name: Build Ionic
         if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
         run: |
-          npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
           npm run build
@@ -88,18 +81,11 @@ jobs:
           diff-search: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get current time
-        uses: 1466587594/get-current-time@v2
-        id: current-time
-        with:
-          format: YYYYMMDDHHmmss
-
       - name: Build Ionic
         if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
         run: |
-          npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
           npm run build
@@ -120,6 +106,12 @@ jobs:
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYYMMDDHHmmss
 
       - name: Build iOS Xcode Archive
         if: steps.version_check.outputs.changed == 'true'
@@ -148,7 +140,7 @@ jobs:
 
       - uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
 
       - name: Check if version has been updated
         id: version_check
@@ -157,18 +149,11 @@ jobs:
           diff-search: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up JDK
-        if: steps.version_check.outputs.changed == 'true'
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
       - name: Build Ionic
         if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
         run: |
-          npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
           npm run build
@@ -198,7 +183,7 @@ jobs:
 
       - uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
 
       - name: Check if version has been updated
         id: version_check
@@ -207,18 +192,11 @@ jobs:
           diff-search: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up JDK
-        if: steps.version_check.outputs.changed == 'true'
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
       - name: Build Ionic
         if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
         run: |
-          npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
           npm run build
