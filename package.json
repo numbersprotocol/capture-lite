@@ -10,7 +10,7 @@
     "build": "npm run preconfig && ionic build",
     "build-android": "npm run build && cap sync android",
     "test": "npm run preconfig && ng test",
-    "test-ci": "npm run preconfig && ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
+    "test-ci": "npm run preconfig && ng test --no-watch --no-progress --source-map=false --browsers=ChromeHeadlessCI",
     "lint": "npm run preconfig && prettier --check . && stylelint \"**/*.{css,scss,sass}\" && ng lint",
     "e2e": "npm run preconfig && ng e2e"
   },
