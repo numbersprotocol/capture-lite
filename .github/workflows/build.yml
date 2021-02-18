@@ -3,9 +3,9 @@ name: build
 on: [push, pull_request]
 
 jobs:
-  android:
+  lint:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v2
@@ -14,9 +14,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
-
-      - name: Install Angular CLI
-        run: npm install -g @angular/cli
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
@@ -27,6 +24,24 @@ jobs:
       - name: Lint
         run: npm run lint
 
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Test
         run: npm run test-ci
 
@@ -35,6 +50,25 @@ jobs:
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: ./coverage/cobertura-coverage.xml
+
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: [lint, test]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Build Ionic
         env:
@@ -46,3 +80,47 @@ jobs:
           npx cap sync android
           cd android/
           ./gradlew assembleDebug
+
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    needs: [lint, test]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Ionic
+        env:
+          NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
+        run: npm run build
+
+      - name: Import the Code-Signing PKCS12 Certificate
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+          p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+
+      - name: Download provisioning profiles
+        uses: Apple-Actions/download-provisioning-profiles@v1
+        with:
+          bundle-id: io.numbersprotocol.capturelite
+          profile-type: 'IOS_APP_STORE'
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+
+      - name: Build iOS
+        run: |
+          npx cap sync ios
+          xcodebuild archive -workspace ios/App/App.xcworkspace -scheme App -sdk iphoneos  -configuration Debug -archivePath build/App.xcarchive -showBuildTimingSummary -allowProvisioningUpdates archive

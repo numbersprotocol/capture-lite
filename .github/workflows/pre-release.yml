@@ -24,18 +24,11 @@ jobs:
           diff-search: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up JDK
-        if: steps.version_check.outputs.changed == 'true'
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
       - name: Build Ionic
         if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
         run: |
-          npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
           npm run build
@@ -70,14 +63,16 @@ jobs:
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: alpha
 
-  upload-google-drive:
-    runs-on: ubuntu-latest
+  deploy-app-store:
+    runs-on: macos-latest
+    timeout-minutes: 120
+
     steps:
       - uses: actions/checkout@v2
 
       - uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
 
       - name: Check if version has been updated
         id: version_check
@@ -86,18 +81,79 @@ jobs:
           diff-search: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up JDK
+      - name: Build Ionic
         if: steps.version_check.outputs.changed == 'true'
-        uses: actions/setup-java@v1
+        env:
+          NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
+        run: |
+          npm install -g @ionic/cli
+          npm install
+          npm run build
+
+      - name: Import the Code-Signing PKCS12 Certificate
+        if: steps.version_check.outputs.changed == 'true'
+        uses: apple-actions/import-codesign-certs@v1
         with:
-          java-version: 1.8
+          p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+          p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+
+      - name: Download provisioning profiles
+        if: steps.version_check.outputs.changed == 'true'
+        uses: Apple-Actions/download-provisioning-profiles@v1
+        with:
+          bundle-id: io.numbersprotocol.capturelite
+          profile-type: 'IOS_APP_STORE'
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYYMMDDHHmmss
+
+      - name: Build iOS Xcode Archive
+        if: steps.version_check.outputs.changed == 'true'
+        run: |
+          npx cap sync ios
+          xcodebuild archive -workspace ios/App/App.xcworkspace -scheme App -sdk iphoneos  -configuration Release -archivePath build/App.xcarchive -showBuildTimingSummary  MARKETING_VERSION=${{ steps.version_check.outputs.version }}  CURRENT_PROJECT_VERSION=${{ steps.current-time.outputs.formattedTime }}  -allowProvisioningUpdates archive
+
+      - name: Export IPA from Xcode Archive
+        if: steps.version_check.outputs.changed == 'true'
+        run: |
+          xcodebuild -exportArchive -archivePath build/App.xcarchive -exportPath build -exportOptionsPlist ios/App/ExportOptions.plist -allowProvisioningUpdates
+
+      - name: Upload IPA to App Store (Testflight)
+        uses: Apple-Actions/upload-testflight-build@master
+        if: steps.version_check.outputs.changed == 'true'
+        with:
+          app-path: build/App.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+
+  upload-google-drive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Check if version has been updated
+        id: version_check
+        uses: EndBug/version-check@v1
+        with:
+          diff-search: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Ionic
         if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
         run: |
-          npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
           npm run build
@@ -127,7 +183,7 @@ jobs:
 
       - uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
 
       - name: Check if version has been updated
         id: version_check
@@ -136,18 +192,11 @@ jobs:
           diff-search: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up JDK
-        if: steps.version_check.outputs.changed == 'true'
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
       - name: Build Ionic
         if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
         run: |
-          npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
           npm run build
