@@ -118,14 +118,10 @@ jobs:
           npm install
           npm run build
 
-      - name: Sync Capacitor web assets
+      - name: Build iOS Xcode Archive
         if: steps.version_check.outputs.changed == 'true'
         run: |
           npx cap sync ios
-
-      - name: Build Xcode Archive
-        if: steps.version_check.outputs.changed == 'true'
-        run: |
           xcodebuild archive -workspace ios/App/App.xcworkspace -scheme App -sdk iphoneos  -configuration Release -archivePath build/App.xcarchive -showBuildTimingSummary  MARKETING_VERSION=${{ steps.version_check.outputs.version }}  CURRENT_PROJECT_VERSION=${{ steps.current-time.outputs.formattedTime }}  -allowProvisioningUpdates archive
 
       - name: Export IPA from Xcode Archive
@@ -141,20 +137,6 @@ jobs:
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
-
-      - name: Upload IPA to artifacts
-        if: steps.version_check.outputs.changed == 'true'
-        uses: actions/upload-artifact@v1
-        with:
-          name: ipa
-          path: build/App.ipa
-
-      - name: Upload Xcode Archive to artifacts
-        if: steps.version_check.outputs.changed == 'true'
-        uses: actions/upload-artifact@v1
-        with:
-          name: xcarchive
-          path: build/App.xcarchive
 
   upload-google-drive:
     runs-on: ubuntu-latest
