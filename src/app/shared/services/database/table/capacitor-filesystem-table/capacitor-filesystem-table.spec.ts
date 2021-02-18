@@ -212,6 +212,52 @@ describe('CapacitorFilesystemTable', () => {
     });
   });
 
+  it('should wipe all data after clear', async () => {
+    await table.insert([TUPLE1, TUPLE2]);
+
+    await table.clear();
+
+    expect(await table.queryAll()).toEqual([]);
+  });
+
+  it('should be able to reinitialize after clear', async () => {
+    await table.insert([TUPLE1, TUPLE2]);
+    await table.clear();
+
+    await table.insert([TUPLE1]);
+
+    expect(await table.queryAll()).toEqual([TUPLE1]);
+  });
+
+  it('should clear idempotently', async () => {
+    await table.insert([TUPLE1]);
+
+    await table.clear();
+    await table.clear();
+
+    expect(await table.queryAll()).toEqual([]);
+  });
+
+  it('should emit empty data after clear', async done => {
+    let counter = 0;
+
+    table.queryAll$.subscribe(value => {
+      if (counter === 0) {
+        expect(value).toEqual([]);
+      } else if (counter === 1) {
+        expect(value).toEqual([TUPLE1]);
+      } else if (counter === 2) {
+        expect(value).toEqual([]);
+        done();
+      }
+      counter += 1;
+    });
+
+    await table.insert([TUPLE1]);
+
+    await table.clear();
+  });
+
   it('should update proofs', async done => {
     const tupleCount = 100;
     const sourceTuple: TestTuple[] = [...Array(tupleCount).keys()].map(

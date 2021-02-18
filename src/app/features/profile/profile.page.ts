@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -9,7 +8,10 @@ import { defer } from 'rxjs';
 import { catchError, concatMapTo } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
 import { WebCryptoApiSignatureProvider } from '../../shared/services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { Database } from '../../shared/services/database/database.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
+import { ImageStore } from '../../shared/services/image-store/image-store.service';
+import { PreferenceManager } from '../../shared/services/preference-manager/preference-manager.service';
 
 const { Clipboard } = Plugins;
 
@@ -26,7 +28,9 @@ export class ProfilePage {
   readonly privateKey$ = this.webCryptoApiSignatureProvider.getPrivateKey$();
 
   constructor(
-    private readonly router: Router,
+    private readonly database: Database,
+    private readonly preferenceManager: PreferenceManager,
+    private readonly imageStore: ImageStore,
     private readonly blockingActionService: BlockingActionService,
     private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,
@@ -44,7 +48,10 @@ export class ProfilePage {
 
   logout() {
     const action$ = this.diaBackendAuthService.logout$().pipe(
-      concatMapTo(defer(() => this.router.navigate(['/login']))),
+      concatMapTo(defer(() => this.imageStore.clear())),
+      concatMapTo(defer(() => this.database.clear())),
+      concatMapTo(defer(() => this.preferenceManager.clear())),
+      concatMapTo(defer(reloadApp)),
       catchError(err =>
         this.toastController
           .create({ message: JSON.stringify(err.error), duration: 4000 })
@@ -52,10 +59,13 @@ export class ProfilePage {
       )
     );
     this.blockingActionService
-      .run$(action$, {
-        message: this.translocoService.translate('talkingToTheServer'),
-      })
+      .run$(action$)
       .pipe(untilDestroyed(this))
       .subscribe();
   }
+}
+
+// Reload the app to force app to re-run the initialization in AppModule.
+function reloadApp() {
+  location.href = 'index.html';
 }

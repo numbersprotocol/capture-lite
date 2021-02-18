@@ -28,4 +28,8 @@ export class Database {
     this.tables.set(id, created);
     return created;
   }
+
+  async clear() {
+    return Promise.all([...this.tables.values()].map(table => table.clear()));
+  }
 }

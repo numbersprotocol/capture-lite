@@ -213,4 +213,15 @@ describe('CapacitorStoragePreferences', () => {
         done();
       });
   });
+
+  it('should clear idempotently', async () => {
+    const key = 'key';
+    const expected = 2;
+    await preferences.setNumber(key, 1);
+
+    await preferences.clear();
+    await preferences.clear();
+
+    expect(await preferences.getNumber(key, expected)).toEqual(expected);
+  });
 });
