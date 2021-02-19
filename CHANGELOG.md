@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.19.1 - 2021-02-19
+
+### Fixed
+
+- Remove calling `logout` endpoints on logging out. #547
+
+### Changed
+
+#### CI/CD
+
+- Show build number on Slack message. #546
+
 ## 0.19.0 - 2021-02-19
 
 ### Added
@@ -13,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-#### Infrastructure
+#### CI/CD
 
 - Add CI/CD for iOS. #544
 
