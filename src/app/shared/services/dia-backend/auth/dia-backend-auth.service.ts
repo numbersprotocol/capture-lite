@@ -118,23 +118,6 @@ export class DiaBackendAuthService {
     );
   }
 
-  logout$() {
-    return defer(() => this.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.post(`${BASE_URL}/auth/token/logout/`, {}, { headers })
-      ),
-      concatMapTo(
-        defer(() =>
-          Promise.all([
-            this.setToken(''),
-            this.setEmail(''),
-            this.setUsername(''),
-          ])
-        )
-      )
-    );
-  }
-
   createUser$(username: string, email: string, password: string) {
     return this.httpClient.post<CreateUserResponse>(`${BASE_URL}/auth/users/`, {
       username,

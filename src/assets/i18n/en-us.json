@@ -126,7 +126,8 @@
     "shareMoment": "Share moment",
     "transferMoment": "Transfer moment",
     "deleteMoment": "Delete moment",
-    "viewBlockchainCertificate": "View blockchain certificate"
+    "viewBlockchainCertificate": "View blockchain certificate",
+    "confirmLogout": "Your local data will be wipe out after logout. You can restore your Moments after login again."
   },
   "error": {
     "loginTimeoutError": "Connection timeout. Please try again later.",
