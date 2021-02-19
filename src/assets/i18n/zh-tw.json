@@ -126,7 +126,8 @@
     "shareMoment": "分享瞬時影像",
     "transferMoment": "轉移瞬時影像",
     "deleteMoment": "刪除瞬時影像",
-    "viewBlockchainCertificate": "檢視區塊鏈證書"
+    "viewBlockchainCertificate": "檢視區塊鏈證書",
+    "confirmLogout": "所有您的本地資料將會在登出後清除。再次登入後可以復原您的拍攝。"
   },
   "error": {
     "loginTimeoutError": "連線逾時。請稍候再試。",

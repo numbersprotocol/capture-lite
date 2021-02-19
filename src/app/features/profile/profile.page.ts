@@ -1,17 +1,20 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer } from 'rxjs';
-import { catchError, concatMapTo } from 'rxjs/operators';
+import { defer, iif } from 'rxjs';
+import { catchError, concatMap, concatMapTo } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
 import { WebCryptoApiSignatureProvider } from '../../shared/services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { Database } from '../../shared/services/database/database.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { ImageStore } from '../../shared/services/image-store/image-store.service';
 import { PreferenceManager } from '../../shared/services/preference-manager/preference-manager.service';
+import { VOID$ } from '../../utils/rx-operators/rx-operators';
 
 const { Clipboard } = Plugins;
 
@@ -36,7 +39,8 @@ export class ProfilePage {
     private readonly translocoService: TranslocoService,
     private readonly snackBar: MatSnackBar,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider
+    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
+    private readonly confirmAlert: ConfirmAlert
   ) {}
 
   async copyToClipboard(value: string) {
@@ -47,21 +51,45 @@ export class ProfilePage {
   }
 
   logout() {
+    const INCORRECT_CREDENTIAL_ERROR = 401;
     const action$ = this.diaBackendAuthService.logout$().pipe(
+      catchError(err =>
+        iif(
+          () =>
+            err instanceof HttpErrorResponse &&
+            err.status === INCORRECT_CREDENTIAL_ERROR,
+          VOID$,
+          defer(() => this.presentErrorToast(err))
+        )
+      ),
       concatMapTo(defer(() => this.imageStore.clear())),
       concatMapTo(defer(() => this.database.clear())),
       concatMapTo(defer(() => this.preferenceManager.clear())),
       concatMapTo(defer(reloadApp)),
-      catchError(err =>
-        this.toastController
-          .create({ message: JSON.stringify(err.error), duration: 4000 })
-          .then(toast => toast.present())
-      )
+      catchError(err => this.presentErrorToast(err))
     );
-    this.blockingActionService
-      .run$(action$)
-      .pipe(untilDestroyed(this))
+    return defer(() =>
+      this.confirmAlert.present({
+        message: this.translocoService.translate('message.confirmLogout'),
+      })
+    )
+      .pipe(
+        concatMap(result =>
+          iif(() => result, this.blockingActionService.run$(action$))
+        ),
+        untilDestroyed(this)
+      )
       .subscribe();
+  }
+
+  private async presentErrorToast(err: any) {
+    return this.toastController
+      .create({
+        message:
+          err instanceof HttpErrorResponse ? err.message : JSON.stringify(err),
+        duration: 4000,
+      })
+      .then(toast => toast.present());
   }
 }
 
