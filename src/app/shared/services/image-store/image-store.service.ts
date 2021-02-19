@@ -219,9 +219,10 @@ export class ImageStore {
     return index;
   }
 
-  async drop() {
+  async clear() {
     await this.initialize();
-    await this.thumbnailTable.drop();
+    await this.extensionTable.clear();
+    await this.thumbnailTable.clear();
     return this.mutex.runExclusive(async () => {
       this.hasInitialized = false;
       await this.filesystemPlugin.rmdir({
@@ -230,6 +231,12 @@ export class ImageStore {
         recursive: true,
       });
     });
+  }
+
+  async drop() {
+    await this.clear();
+    await this.extensionTable.drop();
+    await this.thumbnailTable.drop();
   }
 }
 

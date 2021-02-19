@@ -23,4 +23,14 @@ describe('Database', () => {
     const id = 'id';
     expect(database.getTable(id)).toBe(database.getTable(id));
   });
+
+  it('should clear all tables', async () => {
+    const id = 'id';
+    const table = database.getTable(id);
+    await table.insert([{ a: 1 }]);
+
+    await database.clear();
+
+    expect(await table.queryAll()).toEqual([]);
+  });
 });

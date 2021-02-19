@@ -27,4 +27,10 @@ export class PreferenceManager {
     this.preferencesMap.set(id, created);
     return created;
   }
+
+  async clear() {
+    return Promise.all(
+      [...this.preferencesMap.values()].map(preferences => preferences.clear())
+    );
+  }
 }

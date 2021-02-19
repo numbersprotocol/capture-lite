@@ -11,6 +11,7 @@ export interface Table<T extends Tuple> {
   ): Promise<T[]>;
   delete(tuples: T[], comparator?: (x: T, y: T) => boolean): Promise<T[]>;
   update(tuples: T[], comparator: (x: T, y: T) => boolean): Promise<T[]>;
+  clear(): Promise<void>;
   drop(): Promise<void>;
 }
 
