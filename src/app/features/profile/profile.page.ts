@@ -14,7 +14,6 @@ import { Database } from '../../shared/services/database/database.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { ImageStore } from '../../shared/services/image-store/image-store.service';
 import { PreferenceManager } from '../../shared/services/preference-manager/preference-manager.service';
-import { VOID$ } from '../../utils/rx-operators/rx-operators';
 
 const { Clipboard } = Plugins;
 
@@ -51,18 +50,7 @@ export class ProfilePage {
   }
 
   logout() {
-    const INCORRECT_CREDENTIAL_ERROR = 401;
-    const action$ = this.diaBackendAuthService.logout$().pipe(
-      catchError(err =>
-        iif(
-          () =>
-            err instanceof HttpErrorResponse &&
-            err.status === INCORRECT_CREDENTIAL_ERROR,
-          VOID$,
-          defer(() => this.presentErrorToast(err))
-        )
-      ),
-      concatMapTo(defer(() => this.imageStore.clear())),
+    const action$ = defer(() => this.imageStore.clear()).pipe(
       concatMapTo(defer(() => this.database.clear())),
       concatMapTo(defer(() => this.preferenceManager.clear())),
       concatMapTo(defer(reloadApp)),
