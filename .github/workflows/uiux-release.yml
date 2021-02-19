@@ -13,18 +13,12 @@ jobs:
 
       - uses: actions/setup-node@v1
         with:
-          node-version: 10
-
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
+          node-version: 14
 
       - name: Build Ionic
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
         run: |
-          npm install -g @angular/cli
           npm install -g @ionic/cli
           npm install
           npm run build

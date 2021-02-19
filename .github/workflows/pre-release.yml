@@ -108,6 +108,7 @@ jobs:
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
       - name: Get current time
+        if: steps.version_check.outputs.changed == 'true'
         uses: 1466587594/get-current-time@v2
         id: current-time
         with:
