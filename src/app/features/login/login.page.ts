@@ -122,7 +122,7 @@ export class LoginPage {
 
   resendEmail() {
     this.diaBackendAuthService
-      .resendActivationEmail(this.model.email)
+      .resendActivationEmail$(this.model.email)
       .pipe(
         catchError(err => {
           this.snackbar.open(

@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, iif } from 'rxjs';
@@ -39,7 +39,8 @@ export class ProfilePage {
     private readonly snackBar: MatSnackBar,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
-    private readonly confirmAlert: ConfirmAlert
+    private readonly confirmAlert: ConfirmAlert,
+    private readonly alertController: AlertController
   ) {}
 
   async copyToClipboard(value: string) {
@@ -47,6 +48,43 @@ export class ProfilePage {
     this.snackBar.open(
       this.translocoService.translate('message.copiedToClipboard')
     );
+  }
+
+  resetPassword() {
+    const action$ = defer(() =>
+      this.diaBackendAuthService.resetPassword$()
+    ).pipe(
+      concatMapTo(
+        defer(() =>
+          this.alertController.create({
+            header: this.translocoService.translate('resetPassword'),
+            message: this.translocoService.translate(
+              'message.resetPasswordEmailSent'
+            ),
+            buttons: [
+              {
+                text: this.translocoService.translate('ok'),
+              },
+            ],
+          })
+        )
+      ),
+      concatMap(alertElement => alertElement.present())
+    );
+    return defer(() =>
+      this.confirmAlert.present({
+        message: this.translocoService.translate(
+          'message.confirmResetPassword'
+        ),
+      })
+    )
+      .pipe(
+        concatMap(result =>
+          iif(() => result, this.blockingActionService.run$(action$))
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   logout() {

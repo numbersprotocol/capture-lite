@@ -92,6 +92,7 @@
   "restore": "Restore",
   "skip": "Skip",
   "contactUs": "Contact Us",
+  "resetPassword": "Reset Password",
   ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",
@@ -127,7 +128,9 @@
     "transferMoment": "Transfer moment",
     "deleteMoment": "Delete moment",
     "viewBlockchainCertificate": "View blockchain certificate",
-    "confirmLogout": "Your local data will be wipe out after logout. You can restore your Moments after login again."
+    "confirmLogout": "Your local data will be wipe out after logout. You can restore your Moments after login again.",
+    "confirmResetPassword": "Are you sure to reset your password?",
+    "resetPasswordEmailSent": "An email has been sent to your registered email inbox. To reset your password, please click the link in the email."
   },
   "error": {
     "loginTimeoutError": "Connection timeout. Please try again later.",

@@ -45,6 +45,14 @@
     </mat-list-item>
   </mat-list>
 
+  <button
+    (click)="resetPassword()"
+    class="expand"
+    color="primary"
+    mat-stroked-button
+  >
+    {{ t('resetPassword') }}
+  </button>
   <button (click)="logout()" class="expand" color="primary" mat-stroked-button>
     {{ t('logout') }}
   </button>
