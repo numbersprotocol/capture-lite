@@ -166,6 +166,26 @@ export class CaptureDetailsPage {
       .subscribe();
   }
 
+  openMap() {
+    return this.proof$
+      .pipe(
+        concatMap(proof =>
+          iif(
+            () =>
+              proof.geolocationLatitude !== undefined &&
+              proof.geolocationLongitude !== undefined,
+            defer(() =>
+              Browser.open({
+                url: `https://maps.google.com/maps?q=${proof.geolocationLatitude}, ${proof.geolocationLongitude}`,
+              })
+            )
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
   private share() {
     this.proof$
       .pipe(
