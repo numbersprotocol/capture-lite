@@ -21,6 +21,7 @@ import { DiaBackendAssetRepository } from '../../../../shared/services/dia-backe
 import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { ImageStore } from '../../../../shared/services/image-store/image-store.service';
 import { getOldProof } from '../../../../shared/services/repositories/proof/old-proof-adapter';
+import { Proof } from '../../../../shared/services/repositories/proof/proof';
 import { ProofRepository } from '../../../../shared/services/repositories/proof/proof-repository.service';
 import { ShareService } from '../../../../shared/services/share/share.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
@@ -74,12 +75,10 @@ export class CaptureDetailsPage {
   );
   readonly location$ = this.proof$.pipe(
     map(proof => {
-      const latitude = proof.geolocationLatitude;
-      const longitude = proof.geolocationLongitude;
-      if (!latitude || !longitude) {
-        return this.translacoService.translate('locationNotProvided');
+      if (isValidGeolocation(proof)) {
+        return `${proof.geolocationLatitude}, ${proof.geolocationLongitude}`;
       }
-      return `${latitude}, ${longitude}`;
+      return this.translacoService.translate('locationNotProvided');
     })
   );
   readonly email$ = this.diaBackendAuthService.getEmail$;
@@ -166,6 +165,24 @@ export class CaptureDetailsPage {
       .subscribe();
   }
 
+  openMap() {
+    return this.proof$
+      .pipe(
+        concatMap(proof =>
+          iif(
+            () => isValidGeolocation(proof),
+            defer(() =>
+              Browser.open({
+                url: `https://maps.google.com/maps?q=${proof.geolocationLatitude},${proof.geolocationLongitude}`,
+              })
+            )
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
   private share() {
     this.proof$
       .pipe(
@@ -205,4 +222,13 @@ export class CaptureDetailsPage {
         .subscribe();
     }
   }
+}
+
+function isValidGeolocation(proof: Proof) {
+  return proof.geolocationLatitude === undefined ||
+    proof.geolocationLatitude === 'undefined' ||
+    proof.geolocationLongitude === undefined ||
+    proof.geolocationLongitude === 'undefined'
+    ? false
+    : true;
 }
