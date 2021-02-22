@@ -92,6 +92,7 @@
   "restore": "Restore",
   "skip": "Skip",
   "contactUs": "Contact Us",
+  "editUsername": "Edit Username",
   ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",
@@ -139,7 +140,8 @@
     "locationTimeout": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",
     "locationUnknownError": "Location is not available at this moment; possibly due to permission error, weak network connectivity or GPS signals.",
     "prefetchError": "Photo restore does not complete due to bad network connections. It will continue when you re-open the app next time.",
-    "prefetchErrorTitle": "Fail to pull old Moments"
+    "prefetchErrorTitle": "Fail to pull old Moments",
+    "invalidUsername": "Invalid username"
   },
   "transactionState": {
     "accepted": "Accepted",

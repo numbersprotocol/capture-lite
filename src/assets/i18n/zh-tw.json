@@ -92,6 +92,7 @@
   "restore": "恢復",
   "skip": "跳過",
   "contactUs": "聯絡我們",
+  "editUsername": "修改使用者名稱",
   ".message": "訊息",
   "message": {
     "areYouSure": "此操作不可撤銷。",
@@ -127,7 +128,8 @@
     "transferMoment": "轉移瞬時影像",
     "deleteMoment": "刪除瞬時影像",
     "viewBlockchainCertificate": "檢視區塊鏈證書",
-    "confirmLogout": "所有您的本地資料將會在登出後清除。再次登入後可以復原您的拍攝。"
+    "confirmLogout": "所有您的本地資料將會在登出後清除。再次登入後可以復原您的拍攝。",
+    "invalidUsername": "不允許的使用者名稱"
   },
   "error": {
     "loginTimeoutError": "連線逾時。請稍候再試。",

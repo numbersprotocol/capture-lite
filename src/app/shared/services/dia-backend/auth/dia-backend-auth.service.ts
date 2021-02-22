@@ -164,6 +164,25 @@ export class DiaBackendAuthService {
     );
   }
 
+  updateUser$({ username }: { username: string }) {
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.patch<UpdateUserResponse>(
+          `${BASE_URL}/auth/users/me/`,
+          { username },
+          { headers }
+        )
+      ),
+      concatMapTo(this.readUser$()),
+      concatMap(response =>
+        forkJoin([
+          this.setUsername(response.username),
+          this.setEmail(response.email),
+        ])
+      )
+    );
+  }
+
   async hasLoggedIn() {
     await this.migrate();
     const token = await this.preferences.getString(PrefKeys.TOKEN);
@@ -229,3 +248,6 @@ export interface ReadUserResponse {
 
 // tslint:disable-next-line: no-empty-interface
 interface CreateUserResponse {}
+
+// tslint:disable-next-line: no-empty-interface
+interface UpdateUserResponse {}
