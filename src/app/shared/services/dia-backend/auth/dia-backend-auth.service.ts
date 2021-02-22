@@ -126,10 +126,22 @@ export class DiaBackendAuthService {
     });
   }
 
-  resendActivationEmail(email: string) {
-    return this.httpClient.post(`${BASE_URL}/auth/users/resend_activation/`, {
-      email,
-    });
+  resendActivationEmail$(email: string) {
+    return this.httpClient.post<ResendActivationEmailResponse>(
+      `${BASE_URL}/auth/users/resend_activation/`,
+      {
+        email,
+      }
+    );
+  }
+
+  resetPassword$(email: string) {
+    return this.httpClient.post<ResetPasswordResponse>(
+      `${BASE_URL}/auth/users/reset_password/`,
+      {
+        email,
+      }
+    );
   }
 
   updateLanguage$(headers: { [header: string]: string | string[] }) {
@@ -229,3 +241,9 @@ export interface ReadUserResponse {
 
 // tslint:disable-next-line: no-empty-interface
 interface CreateUserResponse {}
+
+// tslint:disable-next-line: no-empty-interface
+interface ResendActivationEmailResponse {}
+
+// tslint:disable-next-line: no-empty-interface
+interface ResetPasswordResponse {}
