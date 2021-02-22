@@ -13,6 +13,9 @@
       <mat-icon mat-list-icon>account_circle</mat-icon>
       <div mat-line>{{ t('username') }}</div>
       <div mat-line>{{ username$ | async }}</div>
+      <button (click)="editUsername()" mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>email</mat-icon>

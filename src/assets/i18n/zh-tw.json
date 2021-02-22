@@ -92,6 +92,7 @@
   "restore": "恢復",
   "skip": "跳過",
   "contactUs": "聯絡我們",
+  "editUsername": "修改使用者名稱",
   "forgetPassword": "忘記密碼",
   "resetPassword": "重設密碼",
   ".message": "訊息",
@@ -130,6 +131,7 @@
     "deleteMoment": "刪除瞬時影像",
     "viewBlockchainCertificate": "檢視區塊鏈證書",
     "confirmLogout": "所有您的本地資料將會在登出後清除。再次登入後可以復原您的拍攝。",
+    "invalidUsername": "不允許的使用者名稱",
     "resetPasswordEnterEmail": "請輸入您的註冊信箱以重新設定密碼。",
     "resetPasswordEmailSent": "重新設定密碼的連結已經寄送至您註冊的電子信箱，請開啟您的電子信箱並點擊該連結以重新設定密碼。"
   },
