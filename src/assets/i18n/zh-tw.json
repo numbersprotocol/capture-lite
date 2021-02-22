@@ -92,6 +92,7 @@
   "restore": "恢復",
   "skip": "跳過",
   "contactUs": "聯絡我們",
+  "forgetPassword": "忘記密碼",
   "resetPassword": "重設密碼",
   ".message": "訊息",
   "message": {
@@ -129,7 +130,7 @@
     "deleteMoment": "刪除瞬時影像",
     "viewBlockchainCertificate": "檢視區塊鏈證書",
     "confirmLogout": "所有您的本地資料將會在登出後清除。再次登入後可以復原您的拍攝。",
-    "confirmResetPassword": "您確定要重新設定密碼嘛？",
+    "resetPasswordEnterEmail": "請輸入您的註冊信箱以重新設定密碼。",
     "resetPasswordEmailSent": "重新設定密碼的連結已經寄送至您註冊的電子信箱，請開啟您的電子信箱並點擊該連結以重新設定密碼。"
   },
   "error": {
@@ -142,7 +143,8 @@
     "locationTimeout": "取得位置資訊花費過長。可能原因為網路連線或 GPS 信號不穩。",
     "locationUnknownError": "暫時無法取得位置資訊。可能原因為位置存取被拒、網路連線或 GPS 信號不穩。",
     "prefetchError": "由於網路連線問題，本次照片載入失敗，下次打開 App 時會自動重試。",
-    "prefetchErrorTitle": "載入瞬時影像失敗"
+    "prefetchErrorTitle": "載入瞬時影像失敗",
+    "invalidEmail": "錯誤的電子信箱"
   },
   "transactionState": {
     "accepted": "已接收",

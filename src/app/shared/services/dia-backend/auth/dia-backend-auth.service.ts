@@ -8,7 +8,6 @@ import {
   concatMapTo,
   distinctUntilChanged,
   filter,
-  first,
   map,
   timeout,
 } from 'rxjs/operators';
@@ -136,17 +135,12 @@ export class DiaBackendAuthService {
     );
   }
 
-  resetPassword$() {
-    return this.getEmail$.pipe(
-      first(),
-      concatMap(email =>
-        this.httpClient.post<ResetPasswordResponse>(
-          `${BASE_URL}/auth/users/reset_password/`,
-          {
-            email,
-          }
-        )
-      )
+  resetPassword$(email: string) {
+    return this.httpClient.post<ResetPasswordResponse>(
+      `${BASE_URL}/auth/users/reset_password/`,
+      {
+        email,
+      }
     );
   }
 
