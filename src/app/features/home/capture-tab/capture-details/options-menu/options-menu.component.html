@@ -1,6 +1,6 @@
 <mat-nav-list *transloco="let t">
   <a
-    *ngIf="data.proof.diaBackendAssetId"
+    *ngIf="data.proof.diaBackendAssetId && (asset$ | async)?.sharable_copy"
     mat-list-item
     (click)="openLink(options.Share)"
   >

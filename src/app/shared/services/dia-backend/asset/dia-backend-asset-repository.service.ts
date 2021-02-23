@@ -74,7 +74,9 @@ export class DiaBackendAssetRepository {
           params: { proof_hash: getOldProof(proof).hash },
         })
       ),
-      map(listAssetResponse => listAssetResponse.results[0])
+      map(listAssetResponse =>
+        listAssetResponse.count >= 0 ? listAssetResponse.results[0] : undefined
+      )
     );
   }
 
