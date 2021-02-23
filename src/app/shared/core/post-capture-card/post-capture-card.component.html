@@ -13,14 +13,12 @@
         <mat-icon>more_vert</mat-icon>
       </button>
     </mat-card-header>
-    <div class="fixed-ratio">
-      <img
-        #ratioImg
-        id="image"
-        [src]="postCapture.sharable_copy"
-        mat-card-image
-      />
-    </div>
+    <img
+      #ratioImg
+      class="fixed-ratio-image"
+      [src]="postCapture.sharable_copy"
+      mat-card-image
+    />
     <mat-card-content>
       <p class="caption mat-body">
         {{ postCapture.caption }}
