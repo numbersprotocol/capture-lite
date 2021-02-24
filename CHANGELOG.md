@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.20.0 - 2021-02-24
+
+### Added
+
+- Add username editing. #550
+- Open Google Maps with extenrnal URL on clicking localtion info. #548
+- Implement password-resetting dialog. #549
+
+### Changed
+
+#### Performance
+
+- Improve register performance. #551
+
 ## 0.19.1 - 2021-02-19
 
 ### Fixed

@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, iif } from 'rxjs';
@@ -39,8 +39,53 @@ export class ProfilePage {
     private readonly snackBar: MatSnackBar,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
-    private readonly confirmAlert: ConfirmAlert
+    private readonly confirmAlert: ConfirmAlert,
+    private readonly alertController: AlertController
   ) {}
+
+  async editUsername() {
+    const alert = await this.alertController.create({
+      header: this.translocoService.translate('editUsername'),
+      inputs: [
+        {
+          name: 'username',
+          type: 'text',
+          value: await this.diaBackendAuthService.getUsername(),
+        },
+      ],
+      buttons: [
+        {
+          text: this.translocoService.translate('cancel'),
+          role: 'cancel',
+        },
+        {
+          text: this.translocoService.translate('ok'),
+          handler: value => this.updateUsername(value.username),
+        },
+      ],
+    });
+    return alert.present();
+  }
+
+  private updateUsername(username: string) {
+    const action$ = this.diaBackendAuthService.updateUser$({ username }).pipe(
+      catchError(err => {
+        this.snackBar.open(
+          this.translocoService.translate('error.invalidUsername'),
+          this.translocoService.translate('dismiss'),
+          {
+            duration: 4000,
+            panelClass: ['snackbar-error'],
+          }
+        );
+        throw err;
+      })
+    );
+    return this.blockingActionService
+      .run$(action$)
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
 
   async copyToClipboard(value: string) {
     await Clipboard.write({ string: value });

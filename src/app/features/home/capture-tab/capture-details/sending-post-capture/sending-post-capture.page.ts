@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
@@ -24,6 +25,7 @@ import {
   isNonNullable,
   switchTap,
 } from '../../../../../utils/rx-operators/rx-operators';
+import { toDataUrl } from '../../../../../utils/url';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -38,6 +40,19 @@ export class SendingPostCapturePage {
     switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
+  readonly assetFileUrl$ = combineLatest([
+    this.asset$,
+    this.proofRepository.getAll$(),
+  ]).pipe(
+    switchMap(async ([asset, proofs]) => {
+      const proof = proofs.find(p => p.diaBackendAssetId === asset.id);
+      if (proof) {
+        const proofAssets = await proof.getAssets();
+        const [base64, meta] = Object.entries(proofAssets)[0];
+        return toDataUrl(base64, meta.mimeType);
+      }
+    })
+  );
   readonly contact$ = this.route.paramMap.pipe(
     map(params => params.get('contact')),
     isNonNullable()
@@ -45,17 +60,24 @@ export class SendingPostCapturePage {
   readonly username$ = this.contact$.pipe(
     map(contact => contact.substring(0, contact.lastIndexOf('@')))
   );
-  readonly previewAsset$ = combineLatest([this.asset$, this.contact$]).pipe(
-    map(([asset, contact]) => {
+  readonly previewAsset$ = combineLatest([
+    this.asset$,
+    this.contact$,
+    this.assetFileUrl$,
+  ]).pipe(
+    switchMap(async ([asset, contact, assetFileUrl]) => {
       const fakeAsset: DiaBackendAsset = {
         ...asset,
+        asset_file: assetFileUrl ?? asset.asset_file,
+        asset_file_thumbnail: assetFileUrl ?? asset.asset_file_thumbnail,
+        sharable_copy: assetFileUrl ?? asset.sharable_copy,
         caption: this.previewCaption,
         source_transaction: {
           id: '',
           sender: asset.owner,
           receiver_email: contact,
           created_at: '',
-          fulfilled_at: '',
+          fulfilled_at: formatDate(Date.now(), 'short', 'en-US'),
           expired: false,
         },
       };

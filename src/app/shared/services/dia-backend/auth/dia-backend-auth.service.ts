@@ -126,10 +126,22 @@ export class DiaBackendAuthService {
     });
   }
 
-  resendActivationEmail(email: string) {
-    return this.httpClient.post(`${BASE_URL}/auth/users/resend_activation/`, {
-      email,
-    });
+  resendActivationEmail$(email: string) {
+    return this.httpClient.post<ResendActivationEmailResponse>(
+      `${BASE_URL}/auth/users/resend_activation/`,
+      {
+        email,
+      }
+    );
+  }
+
+  resetPassword$(email: string) {
+    return this.httpClient.post<ResetPasswordResponse>(
+      `${BASE_URL}/auth/users/reset_password/`,
+      {
+        email,
+      }
+    );
   }
 
   updateLanguage$(headers: { [header: string]: string | string[] }) {
@@ -160,6 +172,25 @@ export class DiaBackendAuthService {
           },
           { headers }
         )
+      )
+    );
+  }
+
+  updateUser$({ username }: { username: string }) {
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.patch<UpdateUserResponse>(
+          `${BASE_URL}/auth/users/me/`,
+          { username },
+          { headers }
+        )
+      ),
+      concatMapTo(this.readUser$()),
+      concatMap(response =>
+        forkJoin([
+          this.setUsername(response.username),
+          this.setEmail(response.email),
+        ])
       )
     );
   }
@@ -229,3 +260,12 @@ export interface ReadUserResponse {
 
 // tslint:disable-next-line: no-empty-interface
 interface CreateUserResponse {}
+
+// tslint:disable-next-line: no-empty-interface
+interface UpdateUserResponse {}
+
+// tslint:disable-next-line: no-empty-interface
+interface ResendActivationEmailResponse {}
+
+// tslint:disable-next-line: no-empty-interface
+interface ResetPasswordResponse {}

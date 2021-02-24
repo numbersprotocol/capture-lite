@@ -15,6 +15,15 @@
     </button>
   </form>
 
+  <button
+    (click)="forgetPassword()"
+    class="expand"
+    color="primary"
+    mat-stroked-button
+  >
+    {{ t('forgetPassword') }}
+  </button>
+
   <button routerLink="/signup" replaceUrl mat-stroked-button color="primary">
     {{ t('createAnAccount') }}
   </button>
