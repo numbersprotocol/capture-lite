@@ -15,6 +15,58 @@ div.mat-title {
   font-size: large;
 }
 
+hr {
+  border-bottom: 8pt solid#EEEEEE;
+  width: 100%;
+  left: 0;
+}
+
+.user-card {
+  width: 100%;
+  box-shadow: none;
+}
+
+.user-header-image {
+  background-size: cover;
+}
+
+.user {
+  background-color: azure;
+  height: 20vw;
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-img {
+  height: 20vw;
+  width: 20vw;
+}
+
+.edit-icon {
+  font-size: 16px;
+}
+
+.user-icon {
+  font-size: 10vw;
+  height: 10vw;
+  width: 10vw;
+}
+
+.user-form {
+  width: 40vw;
+}
+
+.user-full-width {
+  width: 100%;
+}
+
+.save-button {
+  height: 40px;
+}
+
 .capture-item {
   height: 30vw;
   overflow: hidden;
