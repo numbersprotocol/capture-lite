@@ -63,7 +63,7 @@
     >
       <mat-tab>
         <ng-template mat-tab-label>
-          <mat-icon>apps</mat-icon>
+          <mat-icon>account_circle</mat-icon>
         </ng-template>
         <app-uploading-bar></app-uploading-bar>
         <app-capture-tab></app-capture-tab>
@@ -74,14 +74,6 @@
             <ion-icon class="camera-tab-icon" name="camera"></ion-icon>
           </button>
         </ng-template>
-      </mat-tab>
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>move_to_inbox</mat-icon>
-        </ng-template>
-        <app-post-capture-tab
-          [focus]="postCaptureTabFocus"
-        ></app-post-capture-tab>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>
