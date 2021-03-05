@@ -4,6 +4,40 @@
 >
   <ion-spinner></ion-spinner>
 </div>
+<mat-card *transloco="let t" class="user-card">
+  <mat-card-header>
+    <div
+      (click)="uploadAvatar()"
+      *ngIf="!hasAvatar"
+      mat-card-avatar
+      class="user"
+    >
+      <mat-icon class="user-icon">add_a_photo</mat-icon>
+    </div>
+    <div
+      (click)="uploadAvatar()"
+      *ngIf="hasAvatar"
+      mat-card-avatar
+      class="user"
+    >
+      <img
+        mat-card-avatar
+        class="user-img"
+        src="https://material.angular.io/assets/img/examples/shiba1.jpg"
+        alt="Photo of a Shiba Inu"
+      />
+    </div>
+
+    <mat-card-title
+      >{{ username$ | async }}
+      <button mat-button (click)="editUsername()">
+        <mat-icon class="edit-icon">edit</mat-icon>
+      </button>
+    </mat-card-title>
+    <mat-card-subtitle>{{ email$ | async }} </mat-card-subtitle>
+  </mat-card-header>
+</mat-card>
+<hr />
 <ng-container
   *ngFor="
     let group of capturesByDate$ | async | keyvalue: keyDescendingOrder;

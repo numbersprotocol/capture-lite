@@ -15,6 +15,43 @@ div.mat-title {
   font-size: large;
 }
 
+hr {
+  border-bottom: 8pt solid darkgray;
+  width: 100vw;
+  left: 0;
+  position: absolute;
+}
+
+.user-card {
+  width: 100%;
+  box-shadow: none;
+}
+
+.user {
+  background-color: azure;
+  height: 20vw;
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-img {
+  height: 20vw;
+  width: 20vw;
+}
+
+.edit-icon {
+  font-size: 16px;
+}
+
+.user-icon {
+  font-size: 10vw;
+  height: 10vw;
+  width: 10vw;
+}
+
 .capture-item {
   height: 30vw;
   overflow: hidden;
