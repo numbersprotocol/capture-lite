@@ -34,3 +34,7 @@ mat-tab-group {
 :host ::ng-deep .mat-tab-body-wrapper {
   flex-grow: 1;
 }
+
+app-capture-tab {
+  position: relative;
+}

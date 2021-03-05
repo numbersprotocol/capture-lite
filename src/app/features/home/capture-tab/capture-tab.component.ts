@@ -139,7 +139,6 @@ export class CaptureTabComponent {
 
   UploadUserImg() {
     this.isHaveImg = !this.isHaveImg;
-    console.log('Hi,UploadUserImg');
   }
 }
 
