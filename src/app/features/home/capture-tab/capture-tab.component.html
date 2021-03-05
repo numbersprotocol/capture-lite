@@ -7,16 +7,16 @@
 <mat-card *transloco="let t" class="user-card">
   <mat-card-header>
     <div
-      (click)="UploadUserImg()"
-      *ngIf="!isHaveImg"
+      (click)="uploadAvatar()"
+      *ngIf="!hasAvatar"
       mat-card-avatar
       class="user"
     >
       <mat-icon class="user-icon">add_a_photo</mat-icon>
     </div>
     <div
-      (click)="UploadUserImg()"
-      *ngIf="isHaveImg"
+      (click)="uploadAvatar()"
+      *ngIf="hasAvatar"
       mat-card-avatar
       class="user"
     >
@@ -28,15 +28,13 @@
       />
     </div>
 
-    <mat-card-title *ngIf="!isEditing"
+    <mat-card-title
       >{{ username$ | async }}
       <button mat-button (click)="editUsername()">
         <mat-icon class="edit-icon">edit</mat-icon>
       </button>
     </mat-card-title>
-    <mat-card-subtitle *ngIf="!isEditing"
-      >{{ email$ | async }}
-    </mat-card-subtitle>
+    <mat-card-subtitle>{{ email$ | async }} </mat-card-subtitle>
   </mat-card-header>
 </mat-card>
 <hr />

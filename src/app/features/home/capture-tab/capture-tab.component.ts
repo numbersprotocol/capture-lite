@@ -1,8 +1,7 @@
 import { formatDate, KeyValue } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
@@ -22,7 +21,7 @@ import { ProofRepository } from '../../../shared/services/repositories/proof/pro
   styleUrls: ['./capture-tab.component.scss'],
 })
 export class CaptureTabComponent {
-  private isHaveImg = false;
+  hasAvatar = false;
   readonly username$ = this.diaBackendAuthService.getUsername$;
   readonly email$ = this.diaBackendAuthService.getEmail$;
   private readonly proofs$ = this.proofRepository.getAll$();
@@ -58,8 +57,7 @@ export class CaptureTabComponent {
     private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService,
     private readonly snackBar: MatSnackBar,
-    private readonly blockingActionService: BlockingActionService,
-    private readonly toastController: ToastController
+    private readonly blockingActionService: BlockingActionService
   ) {}
 
   async editUsername() {
@@ -106,16 +104,6 @@ export class CaptureTabComponent {
       .subscribe();
   }
 
-  private async presentErrorToast(err: any) {
-    return this.toastController
-      .create({
-        message:
-          err instanceof HttpErrorResponse ? err.message : JSON.stringify(err),
-        duration: 4000,
-      })
-      .then(toast => toast.present());
-  }
-
   // tslint:disable-next-line: prefer-function-over-method
   keyDescendingOrder(
     a: KeyValue<number, string>,
@@ -137,8 +125,8 @@ export class CaptureTabComponent {
     return item.oldProofHash;
   }
 
-  UploadUserImg() {
-    this.isHaveImg = !this.isHaveImg;
+  uploadAvatar() {
+    this.hasAvatar = !this.hasAvatar;
   }
 }
 
