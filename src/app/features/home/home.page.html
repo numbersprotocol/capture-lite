@@ -6,7 +6,6 @@
       </button>
       <span>{{ username$ | async }}</span>
     </mat-toolbar>
-
     <mat-nav-list>
       <mat-list-item>
         <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>{{
@@ -30,7 +29,6 @@
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
-
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <button (click)="sidenav.toggle()" mat-icon-button>
