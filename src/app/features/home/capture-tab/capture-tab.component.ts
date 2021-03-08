@@ -45,7 +45,7 @@ export class CaptureTabComponent {
     ),
     map(captures =>
       groupBy(captures, capture =>
-        formatDate(capture.proof.timestamp, 'yyyy/MM/dd', 'en-US')
+        formatDate(capture.proof.timestamp, 'longDate', 'en-US')
       )
     )
   );
