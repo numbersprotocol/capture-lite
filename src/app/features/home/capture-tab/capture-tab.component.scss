@@ -1,7 +1,5 @@
 :host {
   display: block;
-  padding-left: 16px;
-  padding-right: 16px;
   margin-bottom: 128px;
 }
 
@@ -18,12 +16,12 @@ div.mat-title {
 hr {
   border-bottom: 8pt solid#eeeeee;
   width: 100vw;
-  left: 0;
-  position: absolute;
 }
 
 .user-card {
   width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
   box-shadow: none;
 }
 
@@ -50,6 +48,11 @@ hr {
   font-size: 10vw;
   height: 10vw;
   width: 10vw;
+}
+
+.capture-container {
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .capture-item {
