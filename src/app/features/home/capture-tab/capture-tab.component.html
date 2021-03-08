@@ -27,7 +27,6 @@
         alt="Photo of a Shiba Inu"
       />
     </div>
-
     <mat-card-title
       >{{ username$ | async }}
       <button mat-button (click)="editUsername()">
@@ -37,46 +36,49 @@
     <mat-card-subtitle>{{ email$ | async }} </mat-card-subtitle>
   </mat-card-header>
 </mat-card>
-<hr />
-<ng-container
-  *ngFor="
-    let group of capturesByDate$ | async | keyvalue: keyDescendingOrder;
-    trackBy: trackCaptureGroupByDate
-  "
->
-  <div class="mat-title">{{ group.key }}</div>
-  <mat-grid-list cols="3" gutterSize="8px">
-    <mat-grid-tile
-      *ngFor="let captureItem of group.value; trackBy: trackCaptureItem"
-      [routerLink]="
-        captureItem.isCollecting
-          ? undefined
-          : ['capture-details', { oldProofHash: captureItem.oldProofHash }]
-      "
-      class="capture-item"
-    >
-      <div
-        *ngIf="captureItem.isCollecting"
-        class="collecting-spinner-container"
+<app-uploading-bar></app-uploading-bar>
+<div class="capture-container">
+  <ng-container
+    *ngFor="
+      let group of capturesByDate$ | async | keyvalue: keyDescendingOrder;
+      trackBy: trackCaptureGroupByDate
+    "
+  >
+    <div class="mat-title">{{ group.key }}</div>
+    <mat-grid-list cols="3" gutterSize="8px">
+      <mat-grid-tile
+        *ngFor="let captureItem of group.value; trackBy: trackCaptureItem"
+        [routerLink]="
+          captureItem.isCollecting
+            ? undefined
+            : ['capture-details', { oldProofHash: captureItem.oldProofHash }]
+        "
+        class="capture-item"
       >
-        <ion-spinner></ion-spinner>
-      </div>
-      <ion-icon
-        *ngIf="captureItem.isCollecting"
-        name="hourglass-outline"
-        class="collecting"
-      ></ion-icon>
-      <ion-icon
-        *ngIf="captureItem.proof.diaBackendAssetId"
-        src="/assets/icon/media-id.svg"
-        class="uploaded"
-      ></ion-icon>
-      <ion-icon
-        *ngIf="captureItem.hasGeolocation"
-        src="/assets/icon/location.svg"
-        class="located"
-      ></ion-icon>
-      <img [src]="captureItem.thumbnailUrl" />
-    </mat-grid-tile>
-  </mat-grid-list>
-</ng-container>
+        <div
+          *ngIf="captureItem.isCollecting"
+          class="collecting-spinner-container"
+        >
+          <ion-spinner></ion-spinner>
+        </div>
+        <ion-icon
+          *ngIf="captureItem.isCollecting"
+          name="hourglass-outline"
+          class="collecting"
+        ></ion-icon>
+        <ion-icon
+          *ngIf="captureItem.proof.diaBackendAssetId"
+          src="/assets/icon/media-id.svg"
+          class="uploaded"
+        >
+        </ion-icon>
+        <ion-icon
+          *ngIf="captureItem.hasGeolocation"
+          src="/assets/icon/location.svg"
+          class="located"
+        ></ion-icon>
+        <img [src]="captureItem.thumbnailUrl" />
+      </mat-grid-tile>
+    </mat-grid-list>
+  </ng-container>
+</div>

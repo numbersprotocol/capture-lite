@@ -6,7 +6,6 @@
       </button>
       <span>{{ username$ | async }}</span>
     </mat-toolbar>
-
     <mat-nav-list>
       <mat-list-item>
         <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>{{
@@ -30,7 +29,6 @@
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
-
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <button (click)="sidenav.toggle()" mat-icon-button>
@@ -65,7 +63,6 @@
         <ng-template mat-tab-label>
           <mat-icon>account_circle</mat-icon>
         </ng-template>
-        <app-uploading-bar></app-uploading-bar>
         <app-capture-tab></app-capture-tab>
       </mat-tab>
       <mat-tab disabled>
@@ -74,6 +71,17 @@
             <ion-icon class="camera-tab-icon" name="camera"></ion-icon>
           </button>
         </ng-template>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <ion-icon
+            src="/assets/icon/postcapture.svg"
+            class="postcapture-tab-icon"
+          ></ion-icon>
+        </ng-template>
+        <app-post-capture-tab
+          [focus]="postCaptureTabFocus"
+        ></app-post-capture-tab>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>
