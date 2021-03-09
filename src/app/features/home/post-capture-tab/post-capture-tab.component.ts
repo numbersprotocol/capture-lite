@@ -73,7 +73,7 @@ export class PostCaptureTabComponent implements OnInit {
   }
 
   fetchPostCaptures$() {
-    return this.diaBackendAssetRepository.fetchPostCapturePagination$().pipe(
+    return this.diaBackendAssetRepository.fetchPostCaptures$().pipe(
       first(),
       map(pagination => pagination.results),
       map(assets => assets.filter(asset => asset.source_transaction)),
