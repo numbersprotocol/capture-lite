@@ -56,6 +56,7 @@ export class CaptureDetailsPage {
     isNonNullable(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
+
   readonly imageSrc$ = this.proof$.pipe(
     switchMap(async proof => {
       const [index, meta] = Object.entries(proof.indexedAssets)[0];
@@ -70,9 +71,11 @@ export class CaptureDetailsPage {
     map(assets => Object.entries(assets)[0]),
     map(([base64, assetMeta]) => toDataUrl(base64, assetMeta.mimeType))
   );
+
   readonly isRegistered$ = this.proof$.pipe(
     map(proof => !!proof.diaBackendAssetId)
   );
+
   readonly location$ = this.proof$.pipe(
     map(proof => {
       if (isValidGeolocation(proof)) {
@@ -81,7 +84,8 @@ export class CaptureDetailsPage {
       return this.translacoService.translate('locationNotProvided');
     })
   );
-  readonly email$ = this.diaBackendAuthService.getEmail$;
+
+  readonly username$ = this.diaBackendAuthService.getUsername$;
 
   constructor(
     private readonly router: Router,
