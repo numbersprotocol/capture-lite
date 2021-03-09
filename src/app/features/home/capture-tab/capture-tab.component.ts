@@ -131,9 +131,9 @@ export class CaptureTabComponent {
 }
 
 interface CaptureItem {
-  proof: Proof;
-  thumbnailUrl?: string;
-  oldProofHash: string;
-  isCollecting: boolean;
-  hasGeolocation: boolean;
+  readonly proof: Proof;
+  readonly thumbnailUrl?: string;
+  readonly oldProofHash: string;
+  readonly isCollecting: boolean;
+  readonly hasGeolocation: boolean;
 }

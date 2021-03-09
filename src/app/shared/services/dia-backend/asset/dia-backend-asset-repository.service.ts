@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, defer, forkJoin } from 'rxjs';
+import { BehaviorSubject, defer, forkJoin, iif } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -23,7 +23,6 @@ import {
 import { Proof } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { PaginatedResponse } from '../pagination/paginated-response';
-import { Pagination } from '../pagination/pagination';
 import { BASE_URL } from '../secret';
 
 @Injectable({
@@ -80,23 +79,23 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  fetchPostCapturePagination$(pageSize: number, overrideUrl?: string) {
-    const url = overrideUrl ?? `${BASE_URL}/api/v2/assets/`;
-    const params = overrideUrl
-      ? undefined
-      : {
-          is_original_owner: 'false',
-          order_by: 'source_transaction',
-          limit: `${pageSize}`,
-        };
-    return defer(() => this.authService.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(url, {
-          headers,
-          params,
-        })
-      ),
-      map(paginatedResponse => new Pagination(paginatedResponse))
+  fetchPostCapturePagination$(pageSize?: number) {
+    return iif(
+      () => pageSize !== undefined,
+      this.get$({
+        limit: pageSize,
+        isOriginalOwner: false,
+        order_by: 'source_transaction',
+      }),
+      this.get$({ isOriginalOwner: false }).pipe(
+        concatMap(response =>
+          this.get$({
+            isOriginalOwner: false,
+            order_by: 'source_transaction',
+            limit: response.count,
+          })
+        )
+      )
     );
   }
 
@@ -131,6 +130,30 @@ export class DiaBackendAssetRepository {
         })
       ),
       tap(() => this._isFetching$.next(false))
+    );
+  }
+
+  private get$({
+    offset,
+    limit,
+    isOriginalOwner,
+  }: {
+    offset?: number;
+    limit?: number;
+    order_by?: 'source_transaction';
+    isOriginalOwner?: boolean;
+  }) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.get<ListAssetResponse>(`${BASE_URL}/api/v2/assets/`, {
+          headers,
+          params: {
+            offset: `${offset}`,
+            limit: `${limit}`,
+            is_original_owner: `${isOriginalOwner}`,
+          },
+        })
+      )
     );
   }
 
