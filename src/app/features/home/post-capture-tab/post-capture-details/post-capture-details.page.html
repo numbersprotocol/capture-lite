@@ -1,0 +1,37 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div class="toolbar-spacer"></div>
+  <button (click)="openOptionsMenu()" mat-icon-button>
+    <mat-icon>more_vert</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-list>
+  <img [attr.src]="(diaBackendAsset$ | async)?.asset_file" />
+  <mat-list-item>
+    <mat-icon mat-list-icon>person</mat-icon>
+    <div mat-line>{{ (diaBackendAsset$ | async)?.owner }}</div>
+  </mat-list-item>
+  <mat-list-item>
+    <mat-icon mat-list-icon>place</mat-icon>
+    <div mat-line (click)="openMap()">
+      {{ location$ | async }}
+    </div>
+  </mat-list-item>
+  <mat-list-item>
+    <mat-icon mat-list-icon>access_time</mat-icon>
+    <div mat-line>
+      {{
+        (diaBackendAsset$ | async)?.information.proof?.timestamp | date: 'long'
+      }}
+    </div>
+  </mat-list-item>
+  <mat-list-item>
+    <mat-icon svgIcon="media-id-solid-black" mat-list-icon></mat-icon>
+    <div mat-line>
+      {{ (diaBackendAsset$ | async)?.id }}
+    </div>
+  </mat-list-item>
+</mat-list>

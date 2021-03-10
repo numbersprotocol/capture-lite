@@ -1,6 +1,7 @@
 <mat-grid-list *ngIf="networkConnected$ | async" cols="3" gutterSize="8px">
   <mat-grid-tile
     *ngFor="let postCapture of postCaptures$ | async; trackBy: trackPostCapture"
+    [routerLink]="['post-capture-details', { id: postCapture.id }]"
   >
     <ion-icon
       *ngIf="postCapture.hasGeolocation"

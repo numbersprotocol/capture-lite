@@ -78,7 +78,7 @@ export class CaptureDetailsPage {
       if (isValidGeolocation(proof)) {
         return `${proof.geolocationLatitude}, ${proof.geolocationLongitude}`;
       }
-      return this.translacoService.translate('locationNotProvided');
+      return this.translocoService.translate('locationNotProvided');
     })
   );
   readonly email$ = this.diaBackendAuthService.getEmail$;
@@ -90,7 +90,7 @@ export class CaptureDetailsPage {
     private readonly blockingActionService: BlockingActionService,
     private readonly dialog: MatDialog,
     private readonly bottomSheet: MatBottomSheet,
-    private readonly translacoService: TranslocoService,
+    private readonly translocoService: TranslocoService,
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,

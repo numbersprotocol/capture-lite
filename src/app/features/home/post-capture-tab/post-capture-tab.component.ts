@@ -79,7 +79,7 @@ export class PostCaptureTabComponent implements OnInit {
       map(assets => assets.filter(asset => asset.source_transaction)),
       map(assets =>
         assets.map<PostCaptureItem>(asset => ({
-          oldProofHash: asset.proof_hash,
+          id: asset.id,
           thumbnailUrl: asset.asset_file_thumbnail,
           hasGeolocation: !!asset.information.information?.find(
             info => info.name === OldDefaultInformationName.GEOLOCATION_LATITUDE
@@ -97,7 +97,7 @@ export class PostCaptureTabComponent implements OnInit {
 }
 
 interface PostCaptureItem {
-  readonly oldProofHash: string;
+  readonly id: string;
   readonly thumbnailUrl: string;
   readonly hasGeolocation: boolean;
 }
