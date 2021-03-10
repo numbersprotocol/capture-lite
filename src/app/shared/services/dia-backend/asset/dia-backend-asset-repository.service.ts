@@ -40,7 +40,7 @@ export class DiaBackendAssetRepository {
   ) {}
 
   async getCount() {
-    return this.authService.getAuthHeaders$
+    return this.authService.authHeaders$
       .pipe(
         concatMap(headers =>
           this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(
@@ -55,7 +55,7 @@ export class DiaBackendAssetRepository {
   }
 
   fetchById$(id: string) {
-    return this.authService.getAuthHeaders$.pipe(
+    return this.authService.authHeaders$.pipe(
       concatMap(headers =>
         this.httpClient.get<DiaBackendAsset>(
           `${BASE_URL}/api/v2/assets/${id}/`,

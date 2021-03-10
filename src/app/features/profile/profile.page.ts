@@ -24,8 +24,8 @@ const { Clipboard } = Plugins;
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage {
-  readonly username$ = this.diaBackendAuthService.getUsername$;
-  readonly email$ = this.diaBackendAuthService.getEmail$;
+  readonly username$ = this.diaBackendAuthService.username$;
+  readonly email$ = this.diaBackendAuthService.email$;
   readonly publicKey$ = this.webCryptoApiSignatureProvider.getPublicKey$();
   readonly privateKey$ = this.webCryptoApiSignatureProvider.getPrivateKey$();
 

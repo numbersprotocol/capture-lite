@@ -93,7 +93,7 @@ export class DiaBackendTransactionRepository {
     return combineLatest([
       this.getAll$(),
       this.ignoredTransactionRepository.getAll$(),
-      this.authService.getEmail$,
+      this.authService.email$,
     ]).pipe(
       map(([transactions, ignoredTransactions, email]) =>
         transactions.filter(

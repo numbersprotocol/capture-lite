@@ -23,7 +23,7 @@ import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/pref
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
-  readonly username$ = this.diaBackendAuthService.getUsername$;
+  readonly username$ = this.diaBackendAuthService.username$;
   readonly inboxCount$ = this.diaBackendTransactionRepository.getInbox$().pipe(
     map(transactions => transactions.length),
     // WORKARDOUND: force changeDetection to update badge when returning to App by clicking push notification

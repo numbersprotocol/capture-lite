@@ -84,8 +84,9 @@ export class CaptureDetailsPage {
       return this.translocoService.translate('locationNotProvided');
     })
   );
+  readonly email$ = this.diaBackendAuthService.email$;
 
-  readonly username$ = this.diaBackendAuthService.getUsername$;
+  readonly username$ = this.diaBackendAuthService.username$;
 
   constructor(
     private readonly router: Router,

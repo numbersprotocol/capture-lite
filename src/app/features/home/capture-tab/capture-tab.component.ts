@@ -1,18 +1,27 @@
 import { formatDate, KeyValue } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash';
-import { combineLatest, of } from 'rxjs';
-import { catchError, concatMap, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, of } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  distinctUntilChanged,
+  first,
+  map,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/services/blocking-action/blocking-action.service';
 import { CaptureService } from '../../../shared/services/capture/capture.service';
 import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../shared/services/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
+import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -21,10 +30,29 @@ import { ProofRepository } from '../../../shared/services/repositories/proof/pro
   styleUrls: ['./capture-tab.component.scss'],
 })
 export class CaptureTabComponent {
-  hasAvatar = false;
-  readonly username$ = this.diaBackendAuthService.getUsername$;
-  readonly email$ = this.diaBackendAuthService.getEmail$;
+  // tslint:disable-next-line: rxjs-no-explicit-generics
+  private readonly _avatarInput$ = new BehaviorSubject<
+    HTMLInputElement | undefined
+  >(undefined);
+
+  private readonly avatarInput$ = this._avatarInput$.pipe(
+    isNonNullable(),
+    distinctUntilChanged()
+  );
+
+  @ViewChild('avatarInput')
+  set avatarInput(value: ElementRef<HTMLInputElement>) {
+    this._avatarInput$.next(value.nativeElement);
+  }
+
+  readonly username$ = this.diaBackendAuthService.username$;
+
+  readonly email$ = this.diaBackendAuthService.email$;
+
+  readonly avatar$ = this.diaBackendAuthService.avatar$;
+
   private readonly proofs$ = this.proofRepository.getAll$();
+
   readonly capturesByDate$ = this.proofs$.pipe(
     map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp)),
     switchMap(proofs =>
@@ -125,8 +153,26 @@ export class CaptureTabComponent {
     return item.oldProofHash;
   }
 
-  uploadAvatar() {
-    this.hasAvatar = !this.hasAvatar;
+  selectAvatar() {
+    return this.avatarInput$
+      .pipe(
+        first(),
+        tap(inputElement => inputElement.click()),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  uploadAvatar(fileList: FileList) {
+    return of(fileList.item(0))
+      .pipe(
+        isNonNullable(),
+        concatMap(picture =>
+          this.diaBackendAuthService.uploadAvatar$({ picture })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 }
 

@@ -2,15 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { isEqual, reject } from 'lodash';
-import { combineLatest, defer, forkJoin, Observable } from 'rxjs';
+import { combineLatest, defer, forkJoin, Observable, Subject } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
   distinctUntilChanged,
   filter,
   map,
+  pluck,
+  repeatWhen,
+  shareReplay,
+  tap,
   timeout,
 } from 'rxjs/operators';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { LanguageService } from '../../language/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
@@ -31,16 +36,31 @@ export class DiaBackendAuthService {
     .getString$(PrefKeys.TOKEN)
     .pipe(map(token => token !== ''));
 
-  readonly getUsername$ = this.preferences.getString$(PrefKeys.USERNAME);
+  readonly username$ = this.preferences.getString$(PrefKeys.USERNAME);
 
-  readonly getEmail$ = this.preferences.getString$(PrefKeys.EMAIL);
+  readonly email$ = this.preferences.getString$(PrefKeys.EMAIL);
 
   readonly token$ = this.preferences
     .getString$(PrefKeys.TOKEN)
     .pipe(filter(token => token.length !== 0));
 
-  readonly getAuthHeaders$ = this.token$.pipe(
+  readonly authHeaders$ = this.token$.pipe(
     map(token => ({ authorization: `token ${token}` }))
+  );
+
+  private readonly refreshAvatar$ = new Subject<string>();
+
+  readonly avatar$ = defer(() => this.getAuthHeaders()).pipe(
+    concatMap(headers =>
+      this.httpClient.get<GetAvatarResponse>(
+        `${BASE_URL}/auth/users/profile/`,
+        { headers }
+      )
+    ),
+    pluck('profile_picture_thumbnail'),
+    isNonNullable(),
+    repeatWhen(() => this.refreshAvatar$),
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   constructor(
@@ -78,7 +98,7 @@ export class DiaBackendAuthService {
   }
 
   initialize$() {
-    return this.getAuthHeaders$.pipe(
+    return this.authHeaders$.pipe(
       concatMap(headers =>
         combineLatest([
           this.updateDevice$(headers),
@@ -195,6 +215,24 @@ export class DiaBackendAuthService {
     );
   }
 
+  uploadAvatar$({ picture }: { picture: File }) {
+    const formData = new FormData();
+    formData.append('profile_picture', picture);
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.patch<UploadAvatarResponse>(
+          `${BASE_URL}/auth/users/profile/`,
+          formData,
+          {
+            headers,
+          }
+        )
+      ),
+      pluck('profile_picture_thumbnail'),
+      tap(url => this.refreshAvatar$.next(url))
+    );
+  }
+
   async hasLoggedIn() {
     await this.migrate();
     const token = await this.preferences.getString(PrefKeys.TOKEN);
@@ -269,3 +307,9 @@ interface ResendActivationEmailResponse {}
 
 // tslint:disable-next-line: no-empty-interface
 interface ResetPasswordResponse {}
+
+type GetAvatarResponse = UploadAvatarResponse;
+
+interface UploadAvatarResponse {
+  readonly profile_picture_thumbnail?: string;
+}

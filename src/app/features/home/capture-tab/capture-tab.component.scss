@@ -24,25 +24,27 @@ div.mat-title {
   background-color: azure;
   height: 20vw;
   width: 20vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.user-img {
-  height: 20vw;
-  width: 20vw;
 }
 
 .edit-icon {
   font-size: 16px;
 }
 
-.user-icon {
-  font-size: 10vw;
-  height: 10vw;
-  width: 10vw;
+.mat-card-avatar {
+  background-color: azure;
+  width: 2em;
+  height: 2em;
+  font-size: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+  object-position: center;
+  overflow: hidden;
+}
+
+.avatar-input {
+  display: none;
 }
 
 .capture-container {
