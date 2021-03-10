@@ -45,7 +45,7 @@ export class CaptureTabComponent {
     ),
     map(captures =>
       groupBy(captures, capture =>
-        formatDate(capture.proof.timestamp, 'longDate', 'en-US')
+        formatDate(capture.proof.timestamp, 'yyyy/MM/dd', 'en-US')
       )
     )
   );
@@ -109,6 +109,7 @@ export class CaptureTabComponent {
     a: KeyValue<number, string>,
     b: KeyValue<number, string>
   ): number {
+    console.log(a.key);
     return a.key > b.key ? -1 : b.key > a.key ? 1 : 0;
   }
 
