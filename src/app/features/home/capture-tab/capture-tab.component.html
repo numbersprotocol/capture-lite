@@ -12,7 +12,6 @@
       (click)="selectAvatar()"
       mat-card-avatar
     ></ion-img>
-
     <ng-template #avatarPlaceholder>
       <mat-icon (click)="selectAvatar()" mat-card-avatar>
         add_a_photo
@@ -42,7 +41,7 @@
       trackBy: trackCaptureGroupByDate
     "
   >
-    <div class="mat-title">{{ group.key }}</div>
+    <div class="mat-title">{{ group.key | date: 'longDate' }}</div>
     <mat-grid-list cols="3" gutterSize="8px">
       <mat-grid-tile
         *ngFor="let captureItem of group.value; trackBy: trackCaptureItem"
