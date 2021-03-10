@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { CaptureTabComponent } from './capture-tab/capture-tab.component';
 import { UploadingBarComponent } from './capture-tab/uploading-bar/uploading-bar.component';
@@ -19,7 +18,7 @@ describe('HomePage', () => {
         PostCaptureTabComponent,
         UploadingBarComponent,
       ],
-      imports: [SharedTestingModule, VirtualScrollerModule],
+      imports: [SharedTestingModule],
     }).compileComponents();
 
     const router = TestBed.inject(Router);

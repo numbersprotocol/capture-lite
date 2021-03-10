@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, defer, forkJoin } from 'rxjs';
+import { BehaviorSubject, defer, forkJoin, iif } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -23,7 +23,6 @@ import {
 import { Proof } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { PaginatedResponse } from '../pagination/paginated-response';
-import { Pagination } from '../pagination/pagination';
 import { BASE_URL } from '../secret';
 
 @Injectable({
@@ -67,70 +66,85 @@ export class DiaBackendAssetRepository {
   }
 
   fetchByProof$(proof: Proof) {
-    return defer(() => this.authService.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.get<ListAssetResponse>(`${BASE_URL}/api/v2/assets/`, {
-          headers,
-          params: { proof_hash: getOldProof(proof).hash },
-        })
-      ),
+    return defer(() => this.get$({ proofHash: getOldProof(proof).hash })).pipe(
       map(listAssetResponse =>
         listAssetResponse.count >= 0 ? listAssetResponse.results[0] : undefined
       )
     );
   }
 
-  fetchPostCapturePagination$(pageSize: number, overrideUrl?: string) {
-    const url = overrideUrl ?? `${BASE_URL}/api/v2/assets/`;
-    const params = overrideUrl
-      ? undefined
-      : {
-          is_original_owner: 'false',
-          order_by: 'source_transaction',
-          limit: `${pageSize}`,
-        };
-    return defer(() => this.authService.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(url, {
-          headers,
-          params,
-        })
-      ),
-      map(paginatedResponse => new Pagination(paginatedResponse))
+  fetchPostCaptures$(pageSize?: number) {
+    return iif(
+      () => pageSize !== undefined,
+      this.get$({
+        limit: pageSize,
+        isOriginalOwner: false,
+        orderBy: 'source_transaction',
+      }),
+      this.get$({ isOriginalOwner: false, limit: 1 }).pipe(
+        concatMap(response =>
+          this.get$({
+            isOriginalOwner: false,
+            orderBy: 'source_transaction',
+            limit: response.count,
+          })
+        )
+      )
     );
   }
 
   fetchAllOriginallyOwned$(offset = 0, limit = 100) {
     return defer(async () => this._isFetching$.next(true)).pipe(
-      concatMapTo(defer(() => this.authService.getAuthHeaders())),
-      concatMap(headers =>
-        this.httpClient.get<ListAssetResponse>(`${BASE_URL}/api/v2/assets/`, {
-          headers,
-          params: {
-            offset: `${offset}`,
-            limit: `${limit}`,
-            is_original_owner: `${true}`,
-          },
-        })
-      ),
+      concatMapTo(this.get$({ offset, limit, isOriginalOwner: true })),
       tap(() => this._isFetching$.next(false))
     );
   }
 
   fetchAllNotOriginallyOwned$(offset = 0, limit = 100) {
     return defer(async () => this._isFetching$.next(true)).pipe(
-      concatMapTo(defer(() => this.authService.getAuthHeaders())),
-      concatMap(headers =>
-        this.httpClient.get<ListAssetResponse>(`${BASE_URL}/api/v2/assets/`, {
-          headers,
-          params: {
-            offset: `${offset}`,
-            limit: `${limit}`,
-            is_original_owner: `${false}`,
-          },
-        })
-      ),
+      concatMapTo(this.get$({ offset, limit, isOriginalOwner: false })),
       tap(() => this._isFetching$.next(false))
+    );
+  }
+
+  private get$({
+    offset,
+    limit,
+    orderBy,
+    isOriginalOwner,
+    proofHash,
+  }: {
+    offset?: number;
+    limit?: number;
+    orderBy?: 'source_transaction';
+    isOriginalOwner?: boolean;
+    proofHash?: string;
+  }) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers => {
+        let params = new HttpParams();
+
+        if (offset) {
+          params = params.set('offset', `${offset}`);
+        }
+        if (limit) {
+          params = params.set('limit', `${limit}`);
+        }
+        if (isOriginalOwner) {
+          params = params.set('is_original_owner', `${isOriginalOwner}`);
+        }
+        if (orderBy) {
+          params = params.set('order_by', `${orderBy}`);
+        }
+        if (proofHash) {
+          params = params.set('proof_hash', `${proofHash}`);
+        }
+
+        return this.httpClient.get<ListAssetResponse>(
+          `${BASE_URL}/api/v2/assets/`,
+          { headers, params }
+        );
+      })
     );
   }
 

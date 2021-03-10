@@ -45,7 +45,7 @@ export class CaptureTabComponent {
     ),
     map(captures =>
       groupBy(captures, capture =>
-        formatDate(capture.proof.timestamp, 'longDate', 'en-US')
+        formatDate(capture.proof.timestamp, 'yyyy/MM/dd', 'en-US')
       )
     )
   );
@@ -131,9 +131,9 @@ export class CaptureTabComponent {
 }
 
 interface CaptureItem {
-  proof: Proof;
-  thumbnailUrl?: string;
-  oldProofHash: string;
-  isCollecting: boolean;
-  hasGeolocation: boolean;
+  readonly proof: Proof;
+  readonly thumbnailUrl?: string;
+  readonly oldProofHash: string;
+  readonly isCollecting: boolean;
+  readonly hasGeolocation: boolean;
 }

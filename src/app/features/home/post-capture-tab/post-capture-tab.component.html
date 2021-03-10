@@ -1,16 +1,13 @@
-<div *ngIf="networkConnected$ | async" class="tab-content-post" #scrollingBlock>
-  <virtual-scroller
-    #scroll
-    [items]="postCaptures$ | async"
-    [parentScroll]="scrollingBlock"
-    [enableUnequalChildrenSizes]="true"
-    [bufferAmount]="2"
-    (vsEnd)="loadNextPage($event)"
+<mat-grid-list *ngIf="networkConnected$ | async" cols="3" gutterSize="8px">
+  <mat-grid-tile
+    *ngFor="let postCapture of postCaptures$ | async; trackBy: trackPostCapture"
+    [routerLink]="['post-capture-details', { id: postCapture.id }]"
   >
-    <app-post-capture-card
-      *ngFor="let item of scroll.viewPortItems; trackBy: trackPostCapture"
-      [postCapture]="item"
-    >
-    </app-post-capture-card>
-  </virtual-scroller>
-</div>
+    <ion-icon
+      *ngIf="postCapture.hasGeolocation"
+      src="/assets/icon/location.svg"
+      class="located"
+    ></ion-icon>
+    <ion-img [src]="postCapture.thumbnailUrl"></ion-img>
+  </mat-grid-tile>
+</mat-grid-list>

@@ -33,6 +33,13 @@ const routes: Routes = [
         m => m.TutorialPageModule
       ),
   },
+  {
+    path: 'post-capture-details',
+    loadChildren: () =>
+      import(
+        './post-capture-tab/post-capture-details/post-capture-details.module'
+      ).then(m => m.PostCaptureDetailsPageModule),
+  },
 ];
 
 @NgModule({

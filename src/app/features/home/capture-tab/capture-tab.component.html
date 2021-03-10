@@ -27,8 +27,8 @@
         alt="Photo of a Shiba Inu"
       />
     </div>
-    <mat-card-title
-      >{{ username$ | async }}
+    <mat-card-title>
+      {{ username$ | async }}
       <button mat-button (click)="editUsername()">
         <mat-icon class="edit-icon">edit</mat-icon>
       </button>
@@ -44,7 +44,7 @@
       trackBy: trackCaptureGroupByDate
     "
   >
-    <div class="mat-title">{{ group.key }}</div>
+    <div class="mat-title">{{ group.key | date: 'longDate' }}</div>
     <mat-grid-list cols="3" gutterSize="8px">
       <mat-grid-tile
         *ngFor="let captureItem of group.value; trackBy: trackCaptureItem"
