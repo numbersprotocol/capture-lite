@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.0 - 2021-03-10
+
+### Added
+
+- Implement avatar uploading. #565
+- Display profile information on Capture tab. #562
+
+### Changed
+
+#### UI/UX
+
+- Update the layout of PostCapture tab to grid layout. #564
+- Revert string 'Moment' to 'Capture'. #566
+- Display username instead of email on Capture details page. #563
+
+#### CI/CD
+
+- Add upload-google-drive-qa job to pre-release workflow.
+
 ## 0.20.1 - 2021-02-25
 
 ### Fixed
