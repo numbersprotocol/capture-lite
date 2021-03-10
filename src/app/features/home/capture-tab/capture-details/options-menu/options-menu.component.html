@@ -4,17 +4,17 @@
     mat-list-item
     (click)="openLink(options.Share)"
   >
-    <span mat-line>{{ t('message.shareMoment') }}</span>
+    <span mat-line>{{ t('message.shareCapture') }}</span>
   </a>
   <a
     *ngIf="data.proof.diaBackendAssetId"
     mat-list-item
     (click)="openLink(options.Transfer)"
   >
-    <span mat-line>{{ t('message.transferMoment') }}</span>
+    <span mat-line>{{ t('message.transferCapture') }}</span>
   </a>
   <a mat-list-item (click)="openLink(options.Delete)">
-    <span mat-line>{{ t('message.deleteMoment') }}</span>
+    <span mat-line>{{ t('message.deleteCapture') }}</span>
   </a>
   <a
     *ngIf="data.proof.diaBackendAssetId"
