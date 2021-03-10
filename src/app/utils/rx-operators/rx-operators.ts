@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { filter, mapTo, switchMap } from 'rxjs/operators';
 
 export function isNonNullable<T>() {
@@ -8,9 +8,11 @@ export function isNonNullable<T>() {
     );
 }
 
-export function switchTap<T>(func: (value: T) => Observable<any>) {
+export function switchTap<T>(
+  func: (value: T) => Observable<any> | Promise<any>
+) {
   return (source$: Observable<T>) =>
-    source$.pipe(switchMap(value => func(value).pipe(mapTo(value))));
+    source$.pipe(switchMap(value => from(func(value)).pipe(mapTo(value))));
 }
 
 export function switchTapTo<T>(observable$: Observable<any>) {
