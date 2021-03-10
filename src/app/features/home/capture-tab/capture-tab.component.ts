@@ -109,7 +109,6 @@ export class CaptureTabComponent {
     a: KeyValue<number, string>,
     b: KeyValue<number, string>
   ): number {
-    console.log(a.key);
     return a.key > b.key ? -1 : b.key > a.key ? 1 : 0;
   }
 
