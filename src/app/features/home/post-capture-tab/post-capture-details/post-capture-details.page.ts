@@ -52,7 +52,7 @@ export class PostCaptureDetailsPage {
     const actionSheet = await this.actionSheetController.create({
       buttons: [
         {
-          text: this.translocoService.translate('message.shareMoment'),
+          text: this.translocoService.translate('message.shareCapture'),
           handler: () => {
             this.share();
           },
