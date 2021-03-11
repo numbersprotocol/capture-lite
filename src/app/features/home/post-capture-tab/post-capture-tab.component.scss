@@ -12,17 +12,4 @@ mat-grid-tile {
     overflow: hidden;
     border-radius: 4px;
   }
-
-  ion-icon {
-    color: white;
-    z-index: 10;
-  }
-
-  ion-icon.located {
-    position: absolute;
-    bottom: 9px;
-    left: 5px;
-    font-size: 13px;
-    opacity: 30%;
-  }
 }
