@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.1 - 2021-03-12
+
+### Added
+
+- Prefetch 9 PostCaptures upon initializing PostCapture tab. #572
+
+### UI/UX
+
+- Remove geolocation icons on PostCapture tab. #569
+- Display username instead of email on PostCapture details page. #570
+
+### CI/CD
+
+- Save iOS build number only if the version number increased.
+
+### Fixed
+
+- Add the missing translations on PostCapture details page. #571
+
 ## 0.21.0 - 2021-03-10
 
 ### Added
