@@ -124,19 +124,19 @@ export class DiaBackendAssetRepository {
       concatMap(headers => {
         let params = new HttpParams();
 
-        if (offset) {
+        if (offset !== undefined) {
           params = params.set('offset', `${offset}`);
         }
-        if (limit) {
+        if (limit !== undefined) {
           params = params.set('limit', `${limit}`);
         }
-        if (isOriginalOwner) {
+        if (isOriginalOwner !== undefined) {
           params = params.set('is_original_owner', `${isOriginalOwner}`);
         }
-        if (orderBy) {
+        if (orderBy !== undefined) {
           params = params.set('order_by', `${orderBy}`);
         }
-        if (proofHash) {
+        if (proofHash !== undefined) {
           params = params.set('proof_hash', `${proofHash}`);
         }
 
