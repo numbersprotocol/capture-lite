@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Browser } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
 import { ActionSheetController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -14,6 +14,8 @@ import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/a
 import { OldDefaultInformationName } from '../../../../shared/services/repositories/proof/old-proof-adapter';
 import { ShareService } from '../../../../shared/services/share/share.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+
+const { Browser } = Plugins;
 
 @UntilDestroy()
 @Component({
