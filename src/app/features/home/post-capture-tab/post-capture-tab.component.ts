@@ -17,7 +17,6 @@ import {
   DiaBackendAssetRepository,
 } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { NetworkService } from '../../../shared/services/network/network.service';
-import { OldDefaultInformationName } from '../../../shared/services/repositories/proof/old-proof-adapter';
 import { isNonNullable, VOID$ } from '../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
@@ -81,9 +80,6 @@ export class PostCaptureTabComponent implements OnInit {
         assets.map<PostCaptureItem>(asset => ({
           id: asset.id,
           thumbnailUrl: asset.asset_file_thumbnail,
-          hasGeolocation: !!asset.information.information?.find(
-            info => info.name === OldDefaultInformationName.GEOLOCATION_LATITUDE
-          ),
         }))
       ),
       tap(postCapture => this._postCaptures$.next(postCapture))
@@ -99,5 +95,4 @@ export class PostCaptureTabComponent implements OnInit {
 interface PostCaptureItem {
   readonly id: string;
   readonly thumbnailUrl: string;
-  readonly hasGeolocation: boolean;
 }

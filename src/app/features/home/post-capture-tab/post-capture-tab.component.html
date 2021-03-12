@@ -3,11 +3,6 @@
     *ngFor="let postCapture of postCaptures$ | async; trackBy: trackPostCapture"
     [routerLink]="['post-capture-details', { id: postCapture.id }]"
   >
-    <ion-icon
-      *ngIf="postCapture.hasGeolocation"
-      src="/assets/icon/location.svg"
-      class="located"
-    ></ion-icon>
     <ion-img [src]="postCapture.thumbnailUrl"></ion-img>
   </mat-grid-tile>
 </mat-grid-list>
