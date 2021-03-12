@@ -29,6 +29,8 @@ export class PostCaptureDetailsPage {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
+  readonly username$ = this.diaBackendAuthService.username$;
+
   readonly location$ = this.diaBackendAsset$.pipe(
     map(diaBackendAsset => {
       const geolocation = getValidGeolocation(diaBackendAsset);
@@ -52,7 +54,7 @@ export class PostCaptureDetailsPage {
     const actionSheet = await this.actionSheetController.create({
       buttons: [
         {
-          text: this.translocoService.translate('message.shareMoment'),
+          text: this.translocoService.translate('message.shareCapture'),
           handler: () => {
             this.share();
           },
