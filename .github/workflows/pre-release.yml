@@ -140,6 +140,7 @@ jobs:
           echo ${{ steps.current-time.outputs.formattedTime }} > build/ios-build-number.txt
 
       - name: Upload iOS build number as artifact
+        if: steps.version_check.outputs.changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: ios-build-number
@@ -304,10 +305,12 @@ jobs:
 
       - name: Download iOS build number
         uses: actions/download-artifact@v2
+        if: steps.version_check.outputs.changed == 'true'
         with:
           name: ios-build-number
 
       - name: Set iOS build number as Environment Variable
+        if: steps.version_check.outputs.changed == 'true'
         run: |
           IOS_BUILD=`cat ios-build-number.txt`
           echo "ios_build_number=$IOS_BUILD" >> $GITHUB_ENV
@@ -327,6 +330,7 @@ jobs:
             APKs
 
             - <https://drive.google.com/drive/folders/1NH-4mruBBubxHMfXF6VXaKRCQ76Ldg_n?usp=sharing|Google Drive (debug)>
+            - <https://drive.google.com/drive/folders/13Xql7ur8If8mqcp7ePMd-3EUH9Op7DgU?usp=sharing|Google Drive (QA)>
             - <https://play.google.com/apps/testing/io.numbersprotocol.capturelite|Google Play Closed Alpha Testing (release)>
 
             iOS Testflight
