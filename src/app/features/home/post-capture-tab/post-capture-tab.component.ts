@@ -51,6 +51,24 @@ export class PostCaptureTabComponent implements OnInit {
     startWith(undefined)
   );
 
+  private readonly refreshPostCaptures$ = combineLatest([
+    this.focus$,
+    this.onDidNavigate$,
+  ]).pipe(
+    filter(([focus]) => focus),
+    switchMapTo(defer(() => this.fetchPostCaptures$())),
+    catchError(err => {
+      console.error(err);
+      return VOID$;
+    })
+  );
+
+  private readonly prefetchSize = 9;
+
+  private readonly prefetchPostCaptures$ = this.fetchPostCaptures$(
+    this.prefetchSize
+  ).pipe(first());
+
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly networkService: NetworkService,
@@ -58,19 +76,8 @@ export class PostCaptureTabComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    combineLatest([this.focus$, this.onDidNavigate$])
-      .pipe(
-        filter(([focus]) => focus),
-        switchMapTo(defer(() => this.fetchPostCaptures$())),
-        catchError(err => {
-          console.error(err);
-          return VOID$;
-        }),
-        untilDestroyed(this)
-      )
-      .subscribe();
-
-    this.fetchPostCaptures$(9).pipe(first(), untilDestroyed(this)).subscribe();
+    this.refreshPostCaptures$.pipe(untilDestroyed(this)).subscribe();
+    this.prefetchPostCaptures$.pipe(untilDestroyed(this)).subscribe();
   }
 
   fetchPostCaptures$(pageSize?: number) {

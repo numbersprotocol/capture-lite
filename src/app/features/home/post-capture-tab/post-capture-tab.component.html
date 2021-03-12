@@ -3,6 +3,6 @@
     *ngFor="let postCapture of postCaptures$ | async; trackBy: trackPostCapture"
     [routerLink]="['post-capture-details', { id: postCapture.id }]"
   >
-    <ion-img [src]="postCapture.thumbnailUrl"></ion-img>
+    <img [src]="postCapture.thumbnailUrl" />
   </mat-grid-tile>
 </mat-grid-list>
