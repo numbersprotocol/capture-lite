@@ -135,6 +135,7 @@ jobs:
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
       - name: Save iOS build number
+        if: steps.version_check.outputs.changed == 'true'
         run: |
           echo ${{ steps.current-time.outputs.formattedTime }} > build/ios-build-number.txt
 
