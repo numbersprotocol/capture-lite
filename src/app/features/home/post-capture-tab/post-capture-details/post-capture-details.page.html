@@ -12,7 +12,7 @@
   <img [attr.src]="(diaBackendAsset$ | async)?.asset_file" />
   <mat-list-item>
     <mat-icon mat-list-icon>person</mat-icon>
-    <div mat-line>{{ (diaBackendAsset$ | async)?.owner }}</div>
+    <div mat-line>{{ username$ | async }}</div>
   </mat-list-item>
   <mat-list-item>
     <mat-icon mat-list-icon>place</mat-icon>
