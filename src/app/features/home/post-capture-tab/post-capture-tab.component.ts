@@ -82,13 +82,6 @@ export class PostCaptureTabComponent implements OnInit {
     this.refreshPostCaptures$.pipe(untilDestroyed(this)).subscribe();
     this.prefetchPostCaptures$.pipe(untilDestroyed(this)).subscribe();
   }
-  segmentChanged(ev: any) {
-    console.log('Segment changed', ev);
-  }
-
-  openCollectionStatus() {
-    console.log('openCollectionStatus');
-  }
 
   fetchPostCaptures$(pageSize?: number) {
     return this.diaBackendAssetRepository.fetchPostCaptures$(pageSize).pipe(

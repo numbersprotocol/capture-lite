@@ -6,6 +6,5 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SeriesPage implements OnInit {
   constructor() {}
-
   ngOnInit() {}
 }

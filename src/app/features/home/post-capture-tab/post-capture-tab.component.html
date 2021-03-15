@@ -1,11 +1,6 @@
 <div *ngIf="networkConnected$ | async" class="tab-content-post" #scrollingBlock>
   <div class="segment-background">
-    <ion-segment
-      mode="ios"
-      [(ngModel)]="categories"
-      (ionChange)="segmentChanged($event)"
-      scrollable
-    >
+    <ion-segment mode="ios" [(ngModel)]="categories" scrollable>
       <ion-segment-button value="Photo" checked>
         <ion-icon
           src="/assets/icon/apps.svg"
@@ -39,11 +34,7 @@
       </mat-grid-list>
     </div>
     <div class="capture-container" *ngSwitchCase="'Series'">
-      <div
-        (click)="openCollectionStatus()"
-        [routerLink]="['series']"
-        class="set-container"
-      >
+      <div [routerLink]="['series']" class="set-container">
         <div class="set-background">
           <div class="set-background">
             <div class="set-background">
@@ -60,7 +51,7 @@
           </div>
         </div>
       </div>
-      <div (click)="openCollectionStatus()" class="set-container">
+      <div class="set-container">
         <div class="set-background">
           <div class="set-background">
             <div class="set-background">
