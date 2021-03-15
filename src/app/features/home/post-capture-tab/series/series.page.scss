@@ -1,0 +1,98 @@
+mat-toolbar {
+  color: white;
+
+  .mat-icon {
+    color: white;
+  }
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.capture-container {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.set-container {
+  display: flex;
+  width: 100%;
+  height: 162px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.set-background {
+  display: flex;
+  padding-right: 5px;
+  background: white;
+  box-sizing: border-box;
+  box-shadow: 4px 0 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.collection-general {
+  height: 30vw;
+  overflow: hidden;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #cecece;
+}
+
+.collection-rare {
+  height: 30vw;
+  overflow: hidden;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #fff6a8;
+}
+
+.collection-special {
+  height: 30vw;
+  overflow: hidden;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #ffaced;
+}
+
+.set-image {
+  width: 350px;
+  height: 162px;
+  overflow: hidden;
+  border: 5px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 4px 0 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+ion-segment {
+  width: 80vw;
+  left: 10vw;
+  background: #eeeeee;
+  position: absolute;
+  top: 5px;
+  z-index: 3;
+}
+
+.series-tab-icon {
+  height: 40px;
+}
+
+mat-tab-group {
+  position: absolute;
+  width: 267px;
+  height: 47.47px;
+  left: 43px;
+  top: 55px;
+  background: #eeeeee;
+  border-radius: 11.125px;
+
+  .mat-tab-label {
+    background: #eeeeee;
+    border-radius: 11.125px;
+  }
+}
