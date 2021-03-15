@@ -13,3 +13,107 @@ mat-grid-tile {
     border-radius: 4px;
   }
 }
+
+.sub-content {
+  padding-top: 60px;
+}
+
+.tab-content-post {
+  virtual-scroller {
+    width: 100vw;
+    height: 93vh;
+    top: 7vh;
+  }
+
+  app-post-capture-card {
+    width: 100%;
+  }
+}
+
+.capture-container {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.set-container {
+  display: flex;
+  width: 100%;
+  height: 162px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.set-background {
+  display: flex;
+  padding-right: 5px;
+  background: white;
+  box-sizing: border-box;
+  box-shadow: 4px 0 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.set-image {
+  width: 350px;
+  height: 162px;
+  overflow: hidden;
+  border: 5px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 4px 0 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.segment-background {
+  position: absolute;
+  z-index: 3;
+  background: white;
+  height: 60px;
+  width: 100vw;
+}
+
+ion-segment {
+  width: 80vw;
+  left: 10vw;
+  background: #eeeeee;
+  top: 5px;
+}
+
+.series-tab-icon {
+  height: 40px;
+}
+
+ion-segment-button {
+  --segment-button-ios-background-color-activated: white;
+  --color-focused: white;
+  --background-checked: white;
+  --color-checked: white;
+  --background-hover: white;
+  --indicator-color: transparent;
+  --indicator-color: white;
+  --indicator-background: white;
+  --background-focused-opacity: 50;
+}
+
+mat-tab-group {
+  position: absolute;
+  width: 267px;
+  height: 47.47px;
+  left: 43px;
+  top: 55px;
+  background: #eeeeee;
+  border-radius: 11.125px;
+
+  .mat-tab-label {
+    background: #eeeeee;
+    border-radius: 11.125px;
+  }
+}
+
+.mat-tab-header .mat-tab-label {
+  width: 267px;
+  background: #eeeeee;
+
+  --background: white;
+}
