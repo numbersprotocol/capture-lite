@@ -59,7 +59,7 @@ mat-grid-tile {
   width: 350px;
   height: 162px;
   overflow: hidden;
-  border: 5px solid #000000;
+  border: 5px solid black;
   box-sizing: border-box;
   box-shadow: 4px 0 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
@@ -76,7 +76,7 @@ mat-grid-tile {
 ion-segment {
   width: 80vw;
   left: 10vw;
-  background: #eeeeee;
+  background: #eee;
   top: 5px;
 }
 
@@ -102,18 +102,18 @@ mat-tab-group {
   height: 47.47px;
   left: 43px;
   top: 55px;
-  background: #eeeeee;
+  background: #eee;
   border-radius: 11.125px;
 
   .mat-tab-label {
-    background: #eeeeee;
+    background: #eee;
     border-radius: 11.125px;
   }
 }
 
 .mat-tab-header .mat-tab-label {
   width: 267px;
-  background: #eeeeee;
+  background: #eee;
 
   --background: white;
 }

@@ -63,7 +63,7 @@ mat-toolbar {
   width: 350px;
   height: 162px;
   overflow: hidden;
-  border: 5px solid #000000;
+  border: 5px solid black;
   box-sizing: border-box;
   box-shadow: 4px 0 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
@@ -72,7 +72,7 @@ mat-toolbar {
 ion-segment {
   width: 80vw;
   left: 10vw;
-  background: #eeeeee;
+  background: #eee;
   position: absolute;
   top: 5px;
   z-index: 3;
@@ -88,11 +88,11 @@ mat-tab-group {
   height: 47.47px;
   left: 43px;
   top: 55px;
-  background: #eeeeee;
+  background: #eee;
   border-radius: 11.125px;
 
   .mat-tab-label {
-    background: #eeeeee;
+    background: #eee;
     border-radius: 11.125px;
   }
 }
