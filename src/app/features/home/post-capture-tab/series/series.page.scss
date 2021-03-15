@@ -10,29 +10,9 @@ mat-toolbar {
   flex: 1 1 auto;
 }
 
-.capture-container {
+.collection-container {
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.series-container {
-  display: flex;
-  width: 100%;
-  height: 162px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.set-background {
-  display: flex;
-  padding-right: 5px;
-  background: white;
-  box-sizing: border-box;
-  box-shadow: 4px 0 4px rgb(0 0 0/ 0.25);
-  border-radius: 5px;
 }
 
 .collection-general {
@@ -57,27 +37,4 @@ mat-toolbar {
   object-fit: cover;
   border-radius: 4px;
   background: #ffaced;
-}
-
-.series-image {
-  width: 90vw;
-  height: 162px;
-  overflow: hidden;
-  border: 5px solid black;
-  box-sizing: border-box;
-  box-shadow: 4px 0 4px rgb(0 0 0/ 0.25);
-  border-radius: 5px;
-}
-
-ion-segment {
-  width: 80vw;
-  left: 10vw;
-  background: #eee;
-  position: absolute;
-  top: 5px;
-  z-index: 3;
-}
-
-.series-tab-icon {
-  height: 40px;
 }

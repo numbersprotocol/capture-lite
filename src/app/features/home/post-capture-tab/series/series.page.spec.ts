@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { SeriesCardComponent } from '../../../../shared/core/series-card/series-card.component';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { SeriesPage } from './series.page';
 
@@ -8,7 +9,7 @@ describe('SeriesPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SeriesPage],
+      declarations: [SeriesPage, SeriesCardComponent],
       imports: [SharedTestingModule],
     }).compileComponents();
 

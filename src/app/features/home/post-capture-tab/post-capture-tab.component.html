@@ -34,40 +34,9 @@
       </mat-grid-list>
     </div>
     <div class="series-wrapper" *ngSwitchCase="'Series'">
-      <div [routerLink]="['series']" class="series-container">
-        <div class="series-background">
-          <div class="series-background">
-            <div class="series-background">
-              <div class="series-background">
-                <div class="series-background">
-                  <div class="series-image">
-                    <img
-                      src="https://material.angular.io/assets/img/examples/shiba1.jpg"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="series-container">
-        <div class="series-background">
-          <div class="series-background">
-            <div class="series-background">
-              <div class="series-background">
-                <div class="series-background">
-                  <div class="series-image">
-                    <img
-                      src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-series-card></app-series-card>
+      <app-series-card></app-series-card>
+      <app-series-card></app-series-card>
     </div>
   </div>
 </div>

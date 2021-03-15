@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { SeriesCardComponent } from '../../../../shared/core/series-card/series-card.component';
 import { SharedModule } from '../../../../shared/shared.module';
 import { SeriesPageRoutingModule } from './series-routing.module';
 import { SeriesPage } from './series.page';
@@ -14,6 +15,6 @@ import { SeriesPage } from './series.page';
     IonicModule,
     SeriesPageRoutingModule,
   ],
-  declarations: [SeriesPage],
+  declarations: [SeriesPage, SeriesCardComponent],
 })
 export class SeriesPageModule {}
