@@ -30,8 +30,7 @@ export class PostCaptureTabComponent implements OnInit {
     this._focus$.next(focus);
   }
 
-  categories!: string;
-
+  categories!: 'Photo';
   private readonly _focus$ = new BehaviorSubject(false);
 
   readonly focus$ = this._focus$.pipe(distinctUntilChanged());
@@ -78,7 +77,6 @@ export class PostCaptureTabComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.categories = 'Photo';
     this.refreshPostCaptures$.pipe(untilDestroyed(this)).subscribe();
     this.prefetchPostCaptures$.pipe(untilDestroyed(this)).subscribe();
   }

@@ -15,7 +15,7 @@ mat-toolbar {
   padding-right: 16px;
 }
 
-.set-container {
+.series-container {
   display: flex;
   width: 100%;
   height: 162px;
@@ -59,8 +59,8 @@ mat-toolbar {
   background: #ffaced;
 }
 
-.set-image {
-  width: 350px;
+.series-image {
+  width: 90vw;
   height: 162px;
   overflow: hidden;
   border: 5px solid black;
@@ -80,19 +80,4 @@ ion-segment {
 
 .series-tab-icon {
   height: 40px;
-}
-
-mat-tab-group {
-  position: absolute;
-  width: 267px;
-  height: 47.47px;
-  left: 43px;
-  top: 55px;
-  background: #eee;
-  border-radius: 11.125px;
-
-  .mat-tab-label {
-    background: #eee;
-    border-radius: 11.125px;
-  }
 }
