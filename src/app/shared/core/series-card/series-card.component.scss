@@ -1,0 +1,34 @@
+.series-wrapper {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.series-container {
+  display: flex;
+  width: 100%;
+  height: 162px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.series-background {
+  display: flex;
+  padding-right: 5px;
+  background: white;
+  box-sizing: border-box;
+  box-shadow: 4px 0 4px rgb(0 0 0/ 0.25);
+  border-radius: 5px;
+}
+
+.series-image {
+  width: 90vw;
+  height: 162px;
+  overflow: hidden;
+  border: 5px solid black;
+  box-sizing: border-box;
+  box-shadow: 4px 0 4px rgb(0 0 0/ 0.25);
+  border-radius: 5px;
+}
