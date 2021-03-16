@@ -1,7 +1,6 @@
 import { sha256WithString } from '../../../../utils/crypto/crypto';
 import { sortObjectDeeplyByKey } from '../../../../utils/immutable/immutable';
 import { MimeType } from '../../../../utils/mime-type';
-import { toDataUrl } from '../../../../utils/url';
 import { Tuple } from '../../database/table/table';
 import {
   ImageStore,
@@ -76,11 +75,7 @@ export class Proof {
       return undefined;
     }
     const [index, assetMeta] = imageAsset;
-    const base64 = await this.imageStore.readThumbnail(
-      index,
-      assetMeta.mimeType
-    );
-    return toDataUrl(base64, assetMeta.mimeType);
+    return this.imageStore.getThumbnailUrl(index, assetMeta.mimeType);
   }
 
   getFactValue(id: string) {
