@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
+import { SafePipeModule } from 'safe-pipe';
 import { CapacitorPluginsModule } from './core/capacitor-plugins/capacitor-plugins.module';
 import { MaterialModule } from './core/material/material.module';
 import { MigratingDialogComponent } from './core/migrating-dialog/migrating-dialog.component';
@@ -17,6 +18,7 @@ import { SeriesCardComponent } from './core/series-card/series-card.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    SafePipeModule,
     TranslocoModule,
     MaterialModule,
     CapacitorPluginsModule,
@@ -26,6 +28,7 @@ import { SeriesCardComponent } from './core/series-card/series-card.component';
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
+    SafePipeModule,
     TranslocoModule,
     MaterialModule,
     SeriesCardComponent,

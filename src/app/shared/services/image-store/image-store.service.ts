@@ -1,11 +1,16 @@
 import { Inject, Injectable } from '@angular/core';
-import { FilesystemDirectory, FilesystemPlugin } from '@capacitor/core';
+import {
+  Capacitor,
+  FilesystemDirectory,
+  FilesystemPlugin,
+} from '@capacitor/core';
 import { Mutex } from 'async-mutex';
 import ImageBlobReduce from 'image-blob-reduce';
 import { FILESYSTEM_PLUGIN } from '../../../shared/core/capacitor-plugins/capacitor-plugins.module';
 import { sha256WithBase64 } from '../../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
 import { MimeType, toExtension } from '../../../utils/mime-type';
+import { toDataUrl } from '../../../utils/url';
 import { Database } from '../database/database.service';
 import { OnConflictStrategy, Tuple } from '../database/table/table';
 
@@ -121,13 +126,20 @@ export class ImageStore {
     return result.files.includes(`${index}.${extension}`);
   }
 
-  async readThumbnail(index: string, mimeType: MimeType) {
+  async getThumbnailUrl(index: string, mimeType: MimeType) {
     const thumbnail = await this.getThumbnail(index);
 
     if (thumbnail) {
-      return this.read(thumbnail.thumbnailIndex);
+      if (Capacitor.isNative) {
+        // Use native URI to reduce memory usage during serialization between
+        // base64.
+        return Capacitor.convertFileSrc(
+          await this.getUri(thumbnail.thumbnailIndex)
+        );
+      }
+      return toDataUrl(await this.read(thumbnail.thumbnailIndex), mimeType);
     }
-    return this.setThumbnail(index, mimeType);
+    return toDataUrl(await this.setThumbnail(index, mimeType), mimeType);
   }
 
   private async setThumbnail(index: string, mimeType: MimeType) {
@@ -136,7 +148,7 @@ export class ImageStore {
   }
 
   private async makeThumbnail(index: string, mimeType: MimeType) {
-    const thumbnailSize = 200;
+    const thumbnailSize = 100;
     const blob = await base64ToBlob(await this.read(index), mimeType);
     const thumbnailBlob = await imageBlobReduce.toBlob(blob, {
       max: thumbnailSize,
