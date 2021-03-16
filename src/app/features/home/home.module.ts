@@ -7,6 +7,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 import { PostCaptureTabComponent } from './post-capture-tab/post-capture-tab.component';
+
 @NgModule({
   imports: [SharedModule, HomePageRoutingModule, PostCaptureCardModule],
   declarations: [

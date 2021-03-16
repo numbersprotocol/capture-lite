@@ -1,0 +1,51 @@
+mat-toolbar {
+  color: white;
+
+  .mat-icon {
+    color: white;
+  }
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+mat-grid-tile {
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+}
+
+.page-content {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.collection-general {
+  height: 30vw;
+  overflow: hidden;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #cecece;
+}
+
+.collection-rare {
+  height: 30vw;
+  overflow: hidden;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #fff6a8;
+}
+
+.collection-special {
+  height: 30vw;
+  overflow: hidden;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #ffaced;
+}
