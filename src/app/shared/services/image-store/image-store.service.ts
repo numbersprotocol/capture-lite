@@ -131,6 +131,8 @@ export class ImageStore {
 
     if (thumbnail) {
       if (Capacitor.isNative) {
+        // Use native URI to reduce memory usage during serialization between
+        // base64.
         return Capacitor.convertFileSrc(
           await this.getUri(thumbnail.thumbnailIndex)
         );
