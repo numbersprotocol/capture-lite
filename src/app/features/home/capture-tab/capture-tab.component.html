@@ -74,7 +74,7 @@
           src="/assets/icon/location.svg"
           class="located"
         ></ion-icon>
-        <img [src]="captureItem.thumbnailUrl" />
+        <img [src]="captureItem.thumbnailUrl | safe: 'url'" />
       </mat-grid-tile>
     </mat-grid-list>
   </ng-container>
