@@ -36,25 +36,3 @@ ion-segment {
 .series-tab-icon {
   height: 40px;
 }
-
-mat-tab-group {
-  position: absolute;
-  width: 267px;
-  height: 47.47px;
-  left: 43px;
-  top: 55px;
-  background: #eee;
-  border-radius: 11.125px;
-
-  .mat-tab-label {
-    background: #eee;
-    border-radius: 11.125px;
-  }
-}
-
-.mat-tab-header .mat-tab-label {
-  width: 267px;
-  background: #eee;
-
-  --background: white;
-}

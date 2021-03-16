@@ -30,7 +30,7 @@ export class PostCaptureTabComponent implements OnInit {
     this._focus$.next(focus);
   }
 
-  categories!: 'Photo';
+  categories = 'Photo';
   private readonly _focus$ = new BehaviorSubject(false);
 
   readonly focus$ = this._focus$.pipe(distinctUntilChanged());

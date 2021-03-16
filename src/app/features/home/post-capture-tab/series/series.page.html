@@ -1,48 +1,30 @@
-<mat-toolbar color="primary" *transloco="let t">
+<mat-toolbar color="primary">
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
   <div class="toolbar-spacer"></div>
-  <button
-    (click)="openContactSelectionDialog()"
-    mat-icon-button
-    *ngIf="isRegistered$ | async"
-  >
-    <mat-icon>send</mat-icon>
-  </button>
-  <button (click)="openOptionsMenu()" mat-icon-button>
-    <mat-icon>more_vert</mat-icon>
-  </button>
 </mat-toolbar>
-<div class="tab-content-post" #scrollingBlock>
-  <div class="collection-container">
-    <app-series-card></app-series-card>
-    <ng-container>
-      <mat-grid-list cols="3" gutterSize="8px">
-        <mat-grid-tile class="collection-general">
-          <img
-            src="https://material.angular.io/assets/img/examples/shiba1.jpg"
-          />
-        </mat-grid-tile>
-        <mat-grid-tile class="collection-general"> </mat-grid-tile>
-        <mat-grid-tile class="collection-general"> </mat-grid-tile>
-        <mat-grid-tile class="collection-general"> </mat-grid-tile>
-        <mat-grid-tile class="collection-general"> </mat-grid-tile>
-        <mat-grid-tile class="collection-general">
-          <img
-            src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-          />\
-        </mat-grid-tile>
-        <mat-grid-tile class="collection-general"> </mat-grid-tile>
-        <mat-grid-tile class="collection-general"> </mat-grid-tile>
-        <mat-grid-tile class="collection-general"> </mat-grid-tile>
-        <mat-grid-tile class="collection-special"> </mat-grid-tile>
-        <mat-grid-tile class="collection-special"> </mat-grid-tile>
-        <mat-grid-tile class="collection-special"> </mat-grid-tile>
-        <mat-grid-tile class="collection-rare"> </mat-grid-tile>
-        <mat-grid-tile class="collection-rare"> </mat-grid-tile>
-        <mat-grid-tile class="collection-rare"> </mat-grid-tile>
-      </mat-grid-list>
-    </ng-container>
-  </div>
+<div class="page-content">
+  <app-series-card></app-series-card>
+  <mat-grid-list cols="3" gutterSize="8px">
+    <mat-grid-tile class="collection-general">
+      <img src="https://material.angular.io/assets/img/examples/shiba1.jpg" />
+    </mat-grid-tile>
+    <mat-grid-tile class="collection-general"></mat-grid-tile>
+    <mat-grid-tile class="collection-general"></mat-grid-tile>
+    <mat-grid-tile class="collection-general"></mat-grid-tile>
+    <mat-grid-tile class="collection-general"></mat-grid-tile>
+    <mat-grid-tile class="collection-general">
+      <img src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+    </mat-grid-tile>
+    <mat-grid-tile class="collection-general"></mat-grid-tile>
+    <mat-grid-tile class="collection-general"></mat-grid-tile>
+    <mat-grid-tile class="collection-general"></mat-grid-tile>
+    <mat-grid-tile class="collection-special"></mat-grid-tile>
+    <mat-grid-tile class="collection-special"></mat-grid-tile>
+    <mat-grid-tile class="collection-special"></mat-grid-tile>
+    <mat-grid-tile class="collection-rare"></mat-grid-tile>
+    <mat-grid-tile class="collection-rare"></mat-grid-tile>
+    <mat-grid-tile class="collection-rare"></mat-grid-tile>
+  </mat-grid-list>
 </div>

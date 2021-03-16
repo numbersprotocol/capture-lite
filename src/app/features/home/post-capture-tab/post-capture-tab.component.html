@@ -1,4 +1,4 @@
-<div *ngIf="networkConnected$ | async" class="tab-content-post" #scrollingBlock>
+<div *ngIf="networkConnected$ | async" class="tab-content-post">
   <div class="segment-background">
     <ion-segment mode="ios" [(ngModel)]="categories" scrollable>
       <ion-segment-button value="Photo" checked>
@@ -34,9 +34,9 @@
       </mat-grid-list>
     </div>
     <div class="series-wrapper" *ngSwitchCase="'Series'">
-      <app-series-card></app-series-card>
-      <app-series-card></app-series-card>
-      <app-series-card></app-series-card>
+      <app-series-card routerLink="series"></app-series-card>
+      <app-series-card routerLink="series"></app-series-card>
+      <app-series-card routerLink="series"></app-series-card>
     </div>
   </div>
 </div>
