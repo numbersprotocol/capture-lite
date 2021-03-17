@@ -1,9 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  Capacitor,
-  FilesystemDirectory,
-  FilesystemPlugin,
-} from '@capacitor/core';
+import { FilesystemDirectory, FilesystemPlugin } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
 import ImageBlobReduce from 'image-blob-reduce';
 import { FILESYSTEM_PLUGIN } from '../../../shared/core/capacitor-plugins/capacitor-plugins.module';
@@ -130,13 +126,6 @@ export class ImageStore {
     const thumbnail = await this.getThumbnail(index);
 
     if (thumbnail) {
-      if (Capacitor.isNative) {
-        // Use native URI to reduce memory usage during serialization between
-        // base64.
-        return Capacitor.convertFileSrc(
-          await this.getUri(thumbnail.thumbnailIndex)
-        );
-      }
       return toDataUrl(await this.read(thumbnail.thumbnailIndex), mimeType);
     }
     return toDataUrl(await this.setThumbnail(index, mimeType), mimeType);
