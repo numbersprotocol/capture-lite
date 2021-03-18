@@ -12,6 +12,7 @@ import {
   distinctUntilChanged,
   first,
   map,
+  shareReplay,
   switchMap,
   tap,
 } from 'rxjs/operators';
@@ -49,7 +50,9 @@ export class CaptureTabComponent {
 
   readonly email$ = this.diaBackendAuthService.email$;
 
-  readonly avatar$ = this.diaBackendAuthService.avatar$;
+  readonly avatar$ = this.diaBackendAuthService.avatar$.pipe(
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
 
   private readonly proofs$ = this.proofRepository.all$;
 

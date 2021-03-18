@@ -13,14 +13,12 @@ export class IgnoredTransactionRepository {
     IgnoredTransactionRepository.name
   );
 
-  constructor(private readonly database: Database) {}
+  readonly all$: Observable<string[]> = this.table.queryAll$.pipe(
+    map(tuples => tuples.map(tuple => tuple.id)),
+    distinctUntilChanged(isEqual)
+  );
 
-  getAll$(): Observable<string[]> {
-    return this.table.queryAll$.pipe(
-      map(tuples => tuples.map(tuple => tuple.id)),
-      distinctUntilChanged(isEqual)
-    );
-  }
+  constructor(private readonly database: Database) {}
 
   async add(id: string) {
     return this.table.insert([{ id }]);
