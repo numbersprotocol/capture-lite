@@ -42,7 +42,7 @@ export class SendingPostCapturePage {
   );
   readonly assetFileUrl$ = combineLatest([
     this.asset$,
-    this.proofRepository.getAll$(),
+    this.proofRepository.all$,
   ]).pipe(
     switchMap(async ([asset, proofs]) => {
       const proof = proofs.find(p => p.diaBackendAssetId === asset.id);
@@ -139,7 +139,7 @@ export class SendingPostCapturePage {
   }
 
   private removeAsset$(asset: DiaBackendAsset) {
-    return this.proofRepository.getAll$().pipe(
+    return this.proofRepository.all$.pipe(
       first(),
       concatMap(async proofs => {
         const proof = proofs.find(

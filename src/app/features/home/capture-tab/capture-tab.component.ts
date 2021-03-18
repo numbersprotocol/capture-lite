@@ -51,7 +51,7 @@ export class CaptureTabComponent {
 
   readonly avatar$ = this.diaBackendAuthService.avatar$;
 
-  private readonly proofs$ = this.proofRepository.getAll$();
+  private readonly proofs$ = this.proofRepository.all$;
 
   readonly capturesByDate$ = this.proofs$.pipe(
     map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp)),

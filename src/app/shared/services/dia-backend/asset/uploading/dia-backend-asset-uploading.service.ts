@@ -79,7 +79,7 @@ export class DiaBackendAssetUploadingService {
   private uploadTaskDispatcher$() {
     const taskDebounceTime = 50;
     return combineLatest([
-      this.proofRepository.getAll$().pipe(debounceTime(taskDebounceTime)),
+      this.proofRepository.all$.pipe(debounceTime(taskDebounceTime)),
       this.executionEvent$,
     ]).pipe(
       tap(([proofs, signal]) => {

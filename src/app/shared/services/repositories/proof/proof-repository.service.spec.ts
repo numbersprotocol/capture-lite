@@ -41,7 +41,7 @@ describe('ProofRepository', () => {
   it('should be created', () => expect(repo).toBeTruthy());
 
   it('should get empty array when query on initial status', done => {
-    repo.getAll$().subscribe(proofs => {
+    repo.all$.subscribe(proofs => {
       expect(proofs).toEqual([]);
       done();
     });
@@ -50,7 +50,7 @@ describe('ProofRepository', () => {
   it('should emit new query on adding proof', async done => {
     await repo.add(proof1);
 
-    repo.getAll$().subscribe(proofs => {
+    repo.all$.subscribe(proofs => {
       expect(proofs).toEqual([proof1]);
       done();
     });
@@ -68,7 +68,7 @@ describe('ProofRepository', () => {
 
     await repo.remove(sameProof1);
 
-    repo.getAll$().subscribe(proofs => {
+    repo.all$.subscribe(proofs => {
       expect(proofs).toEqual([proof2]);
       done();
     });
@@ -88,7 +88,7 @@ describe('ProofRepository', () => {
       (x, y) => x.timestamp === y.timestamp
     );
 
-    repo.getAll$().subscribe(proofs => {
+    repo.all$.subscribe(proofs => {
       expect(proofs).toEqual([sameTimestampProof]);
       done();
     });
