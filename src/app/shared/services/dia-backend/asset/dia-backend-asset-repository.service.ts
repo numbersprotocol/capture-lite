@@ -1,15 +1,12 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, defer, forkJoin, iif } from 'rxjs';
+// tslint:disable: no-magic-numbers
 import {
-  concatMap,
-  concatMapTo,
-  distinctUntilChanged,
-  first,
-  map,
-  pluck,
-  tap,
-} from 'rxjs/operators';
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { defer, forkJoin, iif, of, throwError } from 'rxjs';
+import { catchError, concatMap, pluck } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
 import { toExtension } from '../../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
@@ -22,92 +19,71 @@ import {
 } from '../../repositories/proof/old-proof-adapter';
 import { Proof } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
-import { PaginatedResponse } from '../pagination/paginated-response';
+import { NotFoundErrorResponse } from '../errors';
+import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DiaBackendAssetRepository {
-  private readonly _isFetching$ = new BehaviorSubject(false);
-  readonly isFetching$ = this._isFetching$
-    .asObservable()
-    .pipe(distinctUntilChanged());
+  readonly capturesCount$ = this.list$({
+    limit: 1,
+    isOriginalOwner: true,
+  }).pipe(pluck('count'));
+
+  private readonly postCapturesCount$ = this.list$({
+    limit: 1,
+    isOriginalOwner: false,
+  }).pipe(pluck('count'));
 
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService
   ) {}
 
-  async getCount() {
-    return this.authService.authHeaders$
-      .pipe(
-        concatMap(headers =>
-          this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(
-            `${BASE_URL}/api/v2/assets/`,
-            { headers, params: { is_original_owner: 'true' } }
-          )
-        ),
-        pluck('count'),
-        first()
-      )
-      .toPromise();
+  fetchById$(id: string) {
+    return this.read$({ id });
   }
 
-  fetchById$(id: string) {
-    return this.authService.authHeaders$.pipe(
-      concatMap(headers =>
-        this.httpClient.get<DiaBackendAsset>(
-          `${BASE_URL}/api/v2/assets/${id}/`,
-          { headers }
+  fetchByProof$(proof: Proof) {
+    return this.list$({ proofHash: getOldProof(proof).hash }).pipe(
+      concatMap(response =>
+        iif(
+          () => response.count > 0,
+          of(response.results[0]),
+          throwError(new NotFoundErrorResponse())
         )
       )
     );
   }
 
-  fetchByProof$(proof: Proof) {
-    return defer(() => this.get$({ proofHash: getOldProof(proof).hash })).pipe(
-      map(listAssetResponse =>
-        listAssetResponse.count >= 0 ? listAssetResponse.results[0] : undefined
-      )
-    );
+  fetchCaptures$({ limit, offset = 0 }: { limit: number; offset?: number }) {
+    return this.list$({ offset, limit, isOriginalOwner: true });
   }
 
-  fetchPostCaptures$(pageSize?: number) {
+  fetchPostCaptures$(options?: { limit?: number; offset?: number }) {
     return iif(
-      () => pageSize !== undefined,
-      this.get$({
-        limit: pageSize,
+      () => options?.limit !== undefined,
+      this.list$({
         isOriginalOwner: false,
         orderBy: 'source_transaction',
+        limit: options?.limit,
+        offset: options?.offset,
       }),
-      this.get$({ isOriginalOwner: false, limit: 1 }).pipe(
-        concatMap(response =>
-          this.get$({
+      this.postCapturesCount$.pipe(
+        concatMap(count =>
+          this.list$({
             isOriginalOwner: false,
             orderBy: 'source_transaction',
-            limit: response.count,
+            limit: count,
           })
         )
       )
     );
   }
 
-  fetchAllOriginallyOwned$(offset = 0, limit = 100) {
-    return defer(async () => this._isFetching$.next(true)).pipe(
-      concatMapTo(this.get$({ offset, limit, isOriginalOwner: true })),
-      tap(() => this._isFetching$.next(false))
-    );
-  }
-
-  fetchAllNotOriginallyOwned$(offset = 0, limit = 100) {
-    return defer(async () => this._isFetching$.next(true)).pipe(
-      concatMapTo(this.get$({ offset, limit, isOriginalOwner: false })),
-      tap(() => this._isFetching$.next(false))
-    );
-  }
-
-  private get$({
+  private list$({
     offset,
     limit,
     orderBy,
@@ -140,7 +116,7 @@ export class DiaBackendAssetRepository {
           params = params.set('proof_hash', `${proofHash}`);
         }
 
-        return this.httpClient.get<ListAssetResponse>(
+        return this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(
           `${BASE_URL}/api/v2/assets/`,
           { headers, params }
         );
@@ -148,7 +124,24 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  downloadFile$(id: string, field: AssetDownloadField) {
+  private read$({ id }: { id: string }) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.get<DiaBackendAsset>(
+          `${BASE_URL}/api/v2/assets/${id}/`,
+          { headers }
+        )
+      ),
+      catchError(err => {
+        if (err instanceof HttpErrorResponse && err.status === 404) {
+          return throwError(new NotFoundErrorResponse(err));
+        }
+        return throwError(err);
+      })
+    );
+  }
+
+  downloadFile$({ id, field }: { id: string; field: AssetDownloadField }) {
     const formData = new FormData();
     formData.append('field', field);
     return defer(() => this.authService.getAuthHeaders()).pipe(
@@ -223,11 +216,6 @@ export interface DiaBackendAsset extends Tuple {
   readonly sharable_copy: string;
   readonly source_transaction: DiaBackendAssetTransaction | null;
   readonly parsed_meta: DiaBackendAssetParsedMeta;
-}
-
-interface ListAssetResponse {
-  count: number;
-  results: DiaBackendAsset[];
 }
 
 export type AssetDownloadField =

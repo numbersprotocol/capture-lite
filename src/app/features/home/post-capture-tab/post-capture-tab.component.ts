@@ -81,8 +81,8 @@ export class PostCaptureTabComponent implements OnInit {
     this.prefetchPostCaptures$.pipe(untilDestroyed(this)).subscribe();
   }
 
-  fetchPostCaptures$(pageSize?: number) {
-    return this.diaBackendAssetRepository.fetchPostCaptures$(pageSize).pipe(
+  fetchPostCaptures$(limit?: number) {
+    return this.diaBackendAssetRepository.fetchPostCaptures$({ limit }).pipe(
       first(),
       map(pagination => pagination.results),
       map(assets => assets.filter(asset => asset.source_transaction)),

@@ -124,7 +124,6 @@ export class DiaBackendAssetUploadingService {
         }
         return throwError(err);
       }),
-      isNonNullable(),
       map(diaBackendAsset => {
         proof.diaBackendAssetId = diaBackendAsset.id;
         return proof;

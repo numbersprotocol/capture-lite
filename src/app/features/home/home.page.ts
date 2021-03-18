@@ -66,7 +66,7 @@ export class HomePage {
     this.onboardingService.isNewLogin = false;
     if (
       !(await this.onboardingService.hasPrefetchedDiaBackendAssets()) &&
-      (await this.diaBackendAssetRepository.getCount()) > 0
+      (await this.diaBackendAssetRepository.capturesCount$.toPromise()) > 0
     ) {
       if (await this.showPrefetchAlert()) {
         return this.dialog.open(PrefetchingDialogComponent, {

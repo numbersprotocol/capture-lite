@@ -38,7 +38,7 @@ export class ShareService {
 
   private async getSharableCopy(asset: DiaBackendAsset) {
     return this.diaBackendAssetRepository
-      .downloadFile$(asset.id, 'sharable_copy')
+      .downloadFile$({ id: asset.id, field: 'sharable_copy' })
       .pipe(
         concatMap(blobToBase64),
         map(imageBase64 => `data:image/jpeg;base64,${imageBase64}`)

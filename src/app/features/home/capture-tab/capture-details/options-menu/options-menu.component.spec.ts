@@ -18,7 +18,9 @@ describe('OptionsMenuComponent', () => {
         { provide: MatBottomSheetRef, useValue: {} },
         {
           provide: MAT_BOTTOM_SHEET_DATA,
-          useValue: { proof: { diaBackendAssetId: '' } },
+          useValue: {
+            proof: { diaBackendAssetId: '', indexedAssets: { hashValue: {} } },
+          },
         },
       ],
     }).compileComponents();

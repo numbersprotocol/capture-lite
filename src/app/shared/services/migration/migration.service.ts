@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
 import { defer } from 'rxjs';
-import { concatMap, first } from 'rxjs/operators';
+import { concatMap, first, pluck } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { MigratingDialogComponent } from '../../core/migrating-dialog/migrating-dialog.component';
 import {
@@ -107,11 +107,11 @@ export class MigrationService {
   }
 
   private async removeLocalPostCaptures() {
-    const allNotOriginallyOwnedDiaBackendAssets = await this.fetchAllNotOriginallyOwned();
+    const postCaptures = await this.fetchAllPostCaptures();
 
     const allProofs = await this.proofRepository.getAll();
     const localPostCaptures = allProofs.filter(proof =>
-      allNotOriginallyOwnedDiaBackendAssets
+      postCaptures
         .map(asset => asset.proof_hash)
         .includes(getOldProof(proof).hash)
     );
@@ -130,7 +130,7 @@ export class MigrationService {
       const {
         results: diaBackendAssets,
       } = await this.diaBackendAssetRepository
-        .fetchAllOriginallyOwned$(currentOffset, limit)
+        .fetchCaptures$({ offset: currentOffset, limit })
         .toPromise();
       if (diaBackendAssets.length === 0) {
         break;
@@ -141,24 +141,11 @@ export class MigrationService {
     return ret;
   }
 
-  private async fetchAllNotOriginallyOwned() {
-    let currentOffset = 0;
-    const limit = 100;
-    const ret: DiaBackendAsset[] = [];
-    while (true) {
-      const {
-        results: diaBackendAssets,
-      } = await this.diaBackendAssetRepository
-        .fetchAllNotOriginallyOwned$(currentOffset, limit)
-        .toPromise();
-
-      if (diaBackendAssets.length === 0) {
-        break;
-      }
-      ret.push(...diaBackendAssets);
-      currentOffset += diaBackendAssets.length;
-    }
-    return ret;
+  private async fetchAllPostCaptures() {
+    return this.diaBackendAssetRepository
+      .fetchPostCaptures$()
+      .pipe(first(), pluck('results'))
+      .toPromise();
   }
 }
 

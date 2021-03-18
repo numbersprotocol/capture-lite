@@ -34,7 +34,7 @@ export class DiaBackendAssetPrefetchingService {
         results: diaBackendAssets,
         count: totalCount,
       } = await this.diaBackendAssetRepository
-        .fetchAllOriginallyOwned$(currentOffset, limit)
+        .fetchCaptures$({ offset: currentOffset, limit })
         .toPromise();
 
       if (diaBackendAssets.length === 0) {
@@ -57,7 +57,7 @@ export class DiaBackendAssetPrefetchingService {
       return;
     }
     const thumbnailBlob = await this.diaBackendAssetRepository
-      .downloadFile$(diaBackendAsset.id, 'asset_file_thumbnail')
+      .downloadFile$({ id: diaBackendAsset.id, field: 'asset_file_thumbnail' })
       .toPromise();
     return this.imageStore.storeThumbnail(
       diaBackendAsset.proof_hash,

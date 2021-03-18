@@ -62,7 +62,7 @@ export class CaptureDetailsPage {
       const [index, meta] = Object.entries(proof.indexedAssets)[0];
       if (!(await this.imageStore.exists(index)) && proof.diaBackendAssetId) {
         const imageBlob = await this.diaBackendAssetRepository
-          .downloadFile$(proof.diaBackendAssetId, 'asset_file')
+          .downloadFile$({ id: proof.diaBackendAssetId, field: 'asset_file' })
           .toPromise();
         await proof.setAssets({ [await blobToBase64(imageBlob)]: meta });
       }
