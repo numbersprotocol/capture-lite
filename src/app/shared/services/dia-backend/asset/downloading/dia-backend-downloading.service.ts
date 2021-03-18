@@ -17,7 +17,7 @@ import {
 @Injectable({
   providedIn: 'root',
 })
-export class DiaBackendDownloadingService {
+export class DiaBackendAssetDownloadingService {
   constructor(
     private readonly assetRepository: DiaBackendAssetRepository,
     private readonly imageStore: ImageStore,

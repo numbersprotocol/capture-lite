@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DiaBackendAssetRepository } from '../dia-backend-asset-repository.service';
-import { DiaBackendDownloadingService } from '../downloading/dia-backend-downloading.service';
+import { DiaBackendAssetDownloadingService } from '../downloading/dia-backend-downloading.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ import { DiaBackendDownloadingService } from '../downloading/dia-backend-downloa
 export class DiaBackendAssetPrefetchingService {
   constructor(
     private readonly assetRepository: DiaBackendAssetRepository,
-    private readonly downloadingService: DiaBackendDownloadingService
+    private readonly downloadingService: DiaBackendAssetDownloadingService
   ) {}
 
   async prefetch(

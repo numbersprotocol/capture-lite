@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, of } from 'rxjs';
-import { catchError, concatMap, map, tap } from 'rxjs/operators';
+import { defer, iif, of } from 'rxjs';
+import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -42,7 +42,9 @@ export class HomePage {
     private readonly dialog: MatDialog,
     private readonly translocoService: TranslocoService,
     private readonly migrationService: MigrationService
-  ) {}
+  ) {
+    this.downloadExpiredPostCaptures();
+  }
 
   ionViewDidEnter() {
     of(this.onboardingService.isNewLogin)
@@ -64,7 +66,9 @@ export class HomePage {
     this.onboardingService.isNewLogin = false;
     if (
       !(await this.onboardingService.hasPrefetchedDiaBackendAssets()) &&
-      (await this.diaBackendAssetRepository.fetchCapturesCount$.toPromise()) > 0
+      (await this.diaBackendAssetRepository.fetchCapturesCount$
+        .pipe(first())
+        .toPromise()) > 0
     ) {
       if (await this.showPrefetchAlert()) {
         return this.dialog.open(PrefetchingDialogComponent, {
@@ -82,6 +86,20 @@ export class HomePage {
       confirmButtonText: this.translocoService.translate('restore'),
       cancelButtonText: this.translocoService.translate('skip'),
     });
+  }
+
+  private downloadExpiredPostCaptures() {
+    return defer(() => this.onboardingService.hasPrefetchedDiaBackendAssets())
+      .pipe(
+        concatMap(hasPrefetched =>
+          iif(
+            () => hasPrefetched,
+            this.diaBackendTransactionRepository.downloadExpired$
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   async capture() {

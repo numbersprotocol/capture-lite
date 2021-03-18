@@ -10,6 +10,7 @@ import {
   BehaviorSubject,
   combineLatest,
   defer,
+  forkJoin,
   Subject,
   throwError,
 } from 'rxjs';
@@ -25,7 +26,9 @@ import {
   tap,
 } from 'rxjs/operators';
 import { Tuple } from '../../database/table/table';
+import { ProofRepository } from '../../repositories/proof/proof-repository.service';
 import { DiaBackendAssetRepository } from '../asset/dia-backend-asset-repository.service';
+import { DiaBackendAssetDownloadingService } from '../asset/downloading/dia-backend-downloading.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { NotFoundErrorResponse } from '../errors';
 import { PaginatedResponse } from '../pagination';
@@ -69,11 +72,49 @@ export class DiaBackendTransactionRepository {
 
   private readonly updated$ = new Subject<{ reason: string }>();
 
+  readonly downloadExpired$ = combineLatest([
+    this.all$,
+    this.proofRepository.all$,
+    this.authService.email$,
+  ]).pipe(
+    first(),
+    map(([transactions, proofs, email]) => {
+      const delieveredAssetIds = transactions.results
+        .filter(t => !t.expired && t.fulfilled_at)
+        .map(t => t.asset.id);
+      return transactions.results.filter(
+        t =>
+          t.expired &&
+          t.sender === email &&
+          !delieveredAssetIds.includes(t.asset.id) &&
+          !proofs.map(p => p.diaBackendAssetId).includes(t.asset.id)
+      );
+    }),
+    concatMap(newlyReturnedTransactions =>
+      forkJoin(
+        newlyReturnedTransactions.map(t =>
+          this.assetRepositroy.fetchById$(t.asset.id).pipe(first())
+        )
+      )
+    ),
+    concatMap(newlyReturnedAssets =>
+      Promise.all(
+        newlyReturnedAssets.map(async a => {
+          if (a) {
+            return this.assetDownloadingService.storeRemoteCapture(a);
+          }
+        })
+      )
+    )
+  );
+
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService,
     private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
-    private readonly assetRepositroy: DiaBackendAssetRepository
+    private readonly assetRepositroy: DiaBackendAssetRepository,
+    private readonly assetDownloadingService: DiaBackendAssetDownloadingService,
+    private readonly proofRepository: ProofRepository
   ) {}
 
   fetchById$(id: string) {
