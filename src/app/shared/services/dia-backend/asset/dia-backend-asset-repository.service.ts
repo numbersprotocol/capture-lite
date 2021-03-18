@@ -33,7 +33,7 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendAssetRepository {
-  readonly capturesCount$ = this.list$({
+  readonly fetchCapturesCount$ = this.list$({
     limit: 1,
     isOriginalOwner: true,
   }).pipe(pluck('count'));
@@ -73,7 +73,7 @@ export class DiaBackendAssetRepository {
     return this.list$({ offset, limit, isOriginalOwner: true });
   }
 
-  fetchPostCaptures$(options?: { limit?: number; offset?: number }) {
+  getPostCaptures$(options?: { limit?: number; offset?: number }) {
     return iif(
       () => options?.limit !== undefined,
       this.list$({

@@ -21,7 +21,7 @@ export class PostCaptureTabComponent {
     switchMap(isConnected =>
       iif(
         () => isConnected,
-        this.diaBackendAssetRepository.fetchPostCaptures$().pipe(
+        this.diaBackendAssetRepository.getPostCaptures$().pipe(
           pluck('results'),
           map(assets => assets.filter(a => a.source_transaction))
         )
