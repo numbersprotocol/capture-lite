@@ -10,6 +10,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { Tuple } from '../../database/table/table';
+import { DiaBackendAssetRepository } from '../asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { BASE_URL } from '../secret';
 import { IgnoredTransactionRepository } from './ignored-transaction-repository.service';
@@ -27,7 +28,8 @@ export class DiaBackendTransactionRepository {
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService,
-    private readonly ignoredTransactionRepository: IgnoredTransactionRepository
+    private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
+    private readonly assetRepositroy: DiaBackendAssetRepository
   ) {}
 
   isFetching$() {
@@ -85,6 +87,11 @@ export class DiaBackendTransactionRepository {
           {},
           { headers }
         )
+      ),
+      tap(() =>
+        this.assetRepositroy.refreshPostCaptures({
+          reason: `${DiaBackendTransactionRepository.name}.${this.accept$.name}`,
+        })
       )
     );
   }

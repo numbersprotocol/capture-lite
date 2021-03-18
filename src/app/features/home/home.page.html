@@ -54,7 +54,6 @@
     <mat-tab-group
       headerPosition="below"
       mat-stretch-tabs
-      (selectedTabChange)="onTapChanged($event)"
       mat-align-tabs="center"
       backgroundColor="primary"
       [disablePagination]="true"
@@ -66,9 +65,7 @@
             class="postcapture-tab-icon"
           ></ion-icon>
         </ng-template>
-        <app-post-capture-tab
-          [focus]="postCaptureTabFocus"
-        ></app-post-capture-tab>
+        <app-post-capture-tab></app-post-capture-tab>
       </mat-tab>
       <mat-tab disabled>
         <ng-template mat-tab-label>

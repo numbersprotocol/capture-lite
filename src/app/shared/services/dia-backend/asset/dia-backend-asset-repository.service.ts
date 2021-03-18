@@ -5,8 +5,14 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer, forkJoin, iif, of, throwError } from 'rxjs';
-import { catchError, concatMap, pluck } from 'rxjs/operators';
+import { defer, forkJoin, iif, of, Subject, throwError } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  first,
+  pluck,
+  repeatWhen,
+} from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
 import { toExtension } from '../../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
@@ -35,7 +41,12 @@ export class DiaBackendAssetRepository {
   private readonly postCapturesCount$ = this.list$({
     limit: 1,
     isOriginalOwner: false,
-  }).pipe(pluck('count'));
+  }).pipe(
+    pluck('count'),
+    repeatWhen(() => this.postCapturesUpdated$)
+  );
+
+  private readonly postCapturesUpdated$ = new Subject<{ reason: string }>();
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -72,6 +83,7 @@ export class DiaBackendAssetRepository {
         offset: options?.offset,
       }),
       this.postCapturesCount$.pipe(
+        first(),
         concatMap(count =>
           this.list$({
             isOriginalOwner: false,
@@ -80,7 +92,7 @@ export class DiaBackendAssetRepository {
           })
         )
       )
-    );
+    ).pipe(repeatWhen(() => this.postCapturesUpdated$));
   }
 
   private list$({
@@ -155,7 +167,7 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  add$(proof: Proof) {
+  addCapture$(proof: Proof) {
     return forkJoin([
       defer(() => this.authService.getAuthHeaders()),
       defer(() => buildFormDataToCreateAsset(proof)),
@@ -170,11 +182,7 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  remove$(asset: DiaBackendAsset) {
-    return this.removeById$(asset.id);
-  }
-
-  removeById$(id: string) {
+  removeCaptureById$(id: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.delete<DeleteAssetResponse>(
@@ -183,6 +191,10 @@ export class DiaBackendAssetRepository {
         )
       )
     );
+  }
+
+  refreshPostCaptures({ reason }: { reason: string }) {
+    this.postCapturesUpdated$.next({ reason });
   }
 }
 

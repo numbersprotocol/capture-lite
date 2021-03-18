@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -29,7 +28,6 @@ export class HomePage {
     // WORKARDOUND: force changeDetection to update badge when returning to App by clicking push notification
     tap(() => this.changeDetectorRef.detectChanges())
   );
-  postCaptureTabFocus = false;
 
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
@@ -88,9 +86,5 @@ export class HomePage {
 
   async capture() {
     return this.captureService.capture();
-  }
-
-  onTapChanged(event: MatTabChangeEvent) {
-    this.postCaptureTabFocus = event.index === 2;
   }
 }

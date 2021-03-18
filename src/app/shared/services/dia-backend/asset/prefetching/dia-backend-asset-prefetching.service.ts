@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { first } from 'rxjs/operators';
 import { blobToBase64 } from '../../../../../utils/encoding/encoding';
 import { OnConflictStrategy } from '../../../database/table/table';
 import { ImageStore } from '../../../image-store/image-store.service';
@@ -58,6 +59,7 @@ export class DiaBackendAssetPrefetchingService {
     }
     const thumbnailBlob = await this.diaBackendAssetRepository
       .downloadFile$({ id: diaBackendAsset.id, field: 'asset_file_thumbnail' })
+      .pipe(first())
       .toPromise();
     return this.imageStore.storeThumbnail(
       diaBackendAsset.proof_hash,
