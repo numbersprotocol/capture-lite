@@ -70,7 +70,7 @@ export class DiaBackendTransactionRepository {
     )
   );
 
-  private readonly updated$ = new Subject<{ reason: string }>();
+  private readonly updated$ = new Subject<{ reason?: string }>();
 
   readonly downloadExpired$ = combineLatest([
     this.all$,
@@ -190,7 +190,10 @@ export class DiaBackendTransactionRepository {
     );
   }
 
-  refresh({ reason }: { reason: string }) {
+  /**
+   * The reason argument is only for debugging purpose for code tracing.
+   */
+  refresh({ reason }: { reason?: string }) {
     this.updated$.next({ reason });
   }
 }
