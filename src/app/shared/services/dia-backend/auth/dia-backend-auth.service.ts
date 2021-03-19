@@ -11,7 +11,6 @@ import {
   map,
   pluck,
   repeatWhen,
-  shareReplay,
   tap,
   timeout,
 } from 'rxjs/operators';
@@ -59,8 +58,7 @@ export class DiaBackendAuthService {
     ),
     pluck('profile_picture_thumbnail'),
     isNonNullable(),
-    repeatWhen(() => this.refreshAvatar$),
-    shareReplay({ bufferSize: 1, refCount: true })
+    repeatWhen(() => this.refreshAvatar$)
   );
 
   constructor(

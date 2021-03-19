@@ -18,8 +18,7 @@ export class TransactionDetailsPage {
   readonly transaction$ = this.route.paramMap.pipe(
     map(params => params.get('id')),
     isNonNullable(),
-    switchMap(id => this.diaBackendTransactionRepository.getById$(id)),
-    isNonNullable(),
+    switchMap(id => this.diaBackendTransactionRepository.fetchById$(id)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
   readonly status$ = this.transaction$.pipe(
