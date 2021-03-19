@@ -1,4 +1,4 @@
-<div *ngIf="networkConnected$ | async" class="tab-content-post">
+<div class="tab-content-post">
   <div class="segment-background">
     <ion-segment mode="ios" [(ngModel)]="categories" scrollable>
       <ion-segment-button value="Photo" checked>
@@ -17,11 +17,7 @@
   </div>
   <div [ngSwitch]="categories" class="sub-content">
     <div *ngSwitchCase="'Photo'">
-      <mat-grid-list
-        *ngIf="networkConnected$ | async"
-        cols="3"
-        gutterSize="8px"
-      >
+      <mat-grid-list cols="3" gutterSize="8px">
         <mat-grid-tile
           *ngFor="
             let postCapture of postCaptures$ | async;
@@ -29,7 +25,7 @@
           "
           [routerLink]="['post-capture-details', { id: postCapture.id }]"
         >
-          <img [src]="postCapture.thumbnailUrl" />
+          <img [src]="postCapture.asset_file_thumbnail" />
         </mat-grid-tile>
       </mat-grid-list>
     </div>

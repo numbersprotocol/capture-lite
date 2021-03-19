@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { first } from 'rxjs/operators';
 import { blobToBase64 } from '../../../../../utils/encoding/encoding';
 import { OnConflictStrategy } from '../../../database/table/table';
 import { ImageStore } from '../../../image-store/image-store.service';
@@ -34,7 +35,7 @@ export class DiaBackendAssetPrefetchingService {
         results: diaBackendAssets,
         count: totalCount,
       } = await this.diaBackendAssetRepository
-        .fetchAllOriginallyOwned$(currentOffset, limit)
+        .fetchCaptures$({ offset: currentOffset, limit })
         .toPromise();
 
       if (diaBackendAssets.length === 0) {
@@ -57,7 +58,8 @@ export class DiaBackendAssetPrefetchingService {
       return;
     }
     const thumbnailBlob = await this.diaBackendAssetRepository
-      .downloadFile$(diaBackendAsset.id, 'asset_file_thumbnail')
+      .downloadFile$({ id: diaBackendAsset.id, field: 'asset_file_thumbnail' })
+      .pipe(first())
       .toPromise();
     return this.imageStore.storeThumbnail(
       diaBackendAsset.proof_hash,
