@@ -46,7 +46,7 @@ export class DiaBackendAssetRepository {
     repeatWhen(() => this.postCapturesUpdated$)
   );
 
-  private readonly postCapturesUpdated$ = new Subject<{ reason: string }>();
+  private readonly postCapturesUpdated$ = new Subject<{ reason?: string }>();
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -193,7 +193,10 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  refreshPostCaptures({ reason }: { reason: string }) {
+  /**
+   * The reason argument is only for debugging purpose for code tracing.
+   */
+  refreshPostCaptures({ reason }: { reason?: string }) {
     this.postCapturesUpdated$.next({ reason });
   }
 }
