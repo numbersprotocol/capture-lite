@@ -230,7 +230,7 @@ export class CaptureDetailsPage {
   }
 }
 
-function isValidGeolocation(proof: Proof) {
+export function isValidGeolocation(proof: Proof) {
   return proof.geolocationLatitude === undefined ||
     proof.geolocationLatitude === 'undefined' ||
     proof.geolocationLongitude === undefined ||
