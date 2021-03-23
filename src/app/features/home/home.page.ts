@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, iif, of } from 'rxjs';
@@ -14,6 +15,8 @@ import { MigrationService } from '../../shared/services/migration/migration.serv
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
+
+const { Browser } = Plugins;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -104,5 +107,12 @@ export class HomePage {
 
   async capture() {
     return this.captureService.capture();
+  }
+
+  // tslint:disable-next-line: prefer-function-over-method
+  async openStore() {
+    return Browser.open({
+      url: 'https://authmedia.net/version-test/store',
+    });
   }
 }
