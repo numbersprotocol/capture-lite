@@ -196,8 +196,8 @@ export class DiaBackendAssetRepository {
   /**
    * The reason argument is only for debugging purpose for code tracing.
    */
-  refreshPostCaptures({ reason }: { reason?: string }) {
-    this.postCapturesUpdated$.next({ reason });
+  refreshPostCaptures(options?: { reason?: string }) {
+    this.postCapturesUpdated$.next({ reason: options?.reason });
   }
 }
 
