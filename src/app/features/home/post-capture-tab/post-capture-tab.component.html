@@ -1,5 +1,5 @@
-<div class="tab-content-post" [ngSwitch]="categories">
-  <ion-segment class="segment" mode="ios" [(ngModel)]="categories" scrollable>
+<div class="segment-content" [ngSwitch]="categories">
+  <ion-segment mode="ios" [(ngModel)]="categories" scrollable>
     <ion-segment-button value="Photo" checked>
       <ion-icon src="/assets/icon/apps.svg" class="series-tab-icon"></ion-icon>
     </ion-segment-button>
@@ -10,7 +10,7 @@
       ></ion-icon>
     </ion-segment-button>
   </ion-segment>
-  <div class="sub-content" *ngSwitchCase="'Photo'">
+  <div class="post-captures" *ngSwitchCase="'Photo'">
     <mat-grid-list cols="3" gutterSize="8px">
       <mat-grid-tile
         *ngFor="
@@ -19,7 +19,7 @@
         "
         [routerLink]="['post-capture-details', { id: postCapture.id }]"
       >
-        <img [src]="postCapture.asset_file_thumbnail" />
+        <img [src]="postCapture.thumbnailUrl" />
       </mat-grid-tile>
     </mat-grid-list>
   </div>

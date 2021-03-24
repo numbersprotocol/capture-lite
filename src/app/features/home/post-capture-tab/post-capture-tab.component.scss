@@ -1,6 +1,23 @@
 :host {
+  display: block;
   padding: 8px;
-  overflow: hidden;
+  height: 100%;
+}
+
+ion-segment {
+  width: 80%;
+  margin: 0 auto 16px;
+  flex-shrink: 0;
+}
+
+.segment-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.post-captures {
+  overflow: auto;
 }
 
 mat-grid-tile {
@@ -12,36 +29,6 @@ mat-grid-tile {
     overflow: hidden;
     border-radius: 4px;
   }
-}
-
-.sub-content {
-  height: calc(100% - 64px);
-  overflow: auto;
-}
-
-.series-wrapper {
-  padding: 10px;
-}
-
-.segment {
-  height: 50px;
-  left: calc((100% - 80vw) / 2);
-  margin-bottom: 20px;
-}
-
-.segment-background {
-  position: absolute;
-  z-index: 3;
-  background: white;
-  height: 60px;
-  width: 100vw;
-}
-
-ion-segment {
-  width: 80vw;
-  left: 10vw;
-  background: #eee;
-  top: 5px;
 }
 
 .series-tab-icon {
