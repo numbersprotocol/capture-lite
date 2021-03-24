@@ -1,3 +1,4 @@
+// tslint:disable: deprecation
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
@@ -54,7 +55,6 @@ export class MigrationService {
   }
 
   private async postMigrate() {
-    await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
     await this.updatePreviousVersion();
   }
 
@@ -86,6 +86,7 @@ export class MigrationService {
   private async to0_15_0() {
     await this.fetchAndUpdateDiaBackendAssetId();
     await this.removeLocalPostCaptures();
+    await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
   }
 
   private async fetchAndUpdateDiaBackendAssetId() {
@@ -106,22 +107,6 @@ export class MigrationService {
     );
   }
 
-  private async removeLocalPostCaptures() {
-    const postCaptures = await this.fetchAllPostCaptures();
-
-    const allProofs = await this.proofRepository.getAll();
-    const localPostCaptures = allProofs.filter(proof =>
-      postCaptures
-        .map(asset => asset.proof_hash)
-        .includes(getOldProof(proof).hash)
-    );
-    await Promise.all(
-      localPostCaptures.map(async postCapture =>
-        this.proofRepository.remove(postCapture)
-      )
-    );
-  }
-
   private async fetchAllOriginallyOwned() {
     let currentOffset = 0;
     const limit = 100;
@@ -139,6 +124,22 @@ export class MigrationService {
       currentOffset += diaBackendAssets.length;
     }
     return ret;
+  }
+
+  private async removeLocalPostCaptures() {
+    const postCaptures = await this.fetchAllPostCaptures();
+
+    const allProofs = await this.proofRepository.getAll();
+    const localPostCaptures = allProofs.filter(proof =>
+      postCaptures
+        .map(asset => asset.proof_hash)
+        .includes(getOldProof(proof).hash)
+    );
+    await Promise.all(
+      localPostCaptures.map(async postCapture =>
+        this.proofRepository.remove(postCapture)
+      )
+    );
   }
 
   private async fetchAllPostCaptures() {
