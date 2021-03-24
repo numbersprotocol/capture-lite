@@ -37,9 +37,12 @@ mat-toolbar {
   }
 }
 
-mat-card img {
+mat-card > img {
   max-width: 100vw;
   width: 100vw;
+  height: 100vw;
+  object-fit: cover;
+  object-position: center;
 }
 
 form mat-form-field {
@@ -53,4 +56,10 @@ form mat-form-field {
 
 .spacer {
   flex: 1 1 auto;
+}
+
+.caption {
+  overflow: visible;
+  padding-left: 16px;
+  height: auto;
 }

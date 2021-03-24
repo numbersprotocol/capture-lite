@@ -19,6 +19,7 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendContact,
   DiaBackendContactRepository,
@@ -91,7 +92,7 @@ export class SendingPostCapturePage {
     this.assetFileUrl$,
   ]).pipe(
     switchMap(async ([asset, contact, assetFileUrl]) => {
-      const fakeAsset: DiaBackendAsset = {
+      const previewAsset: DiaBackendAsset = {
         ...asset,
         asset_file: assetFileUrl ?? asset.asset_file,
         asset_file_thumbnail: assetFileUrl ?? asset.asset_file_thumbnail,
@@ -99,15 +100,19 @@ export class SendingPostCapturePage {
         caption: this.previewCaption,
         source_transaction: {
           id: '',
-          sender: asset.owner,
+          sender: asset.owner_name,
           receiver_email: contact,
           created_at: '',
           fulfilled_at: formatDate(Date.now(), 'short', 'en-US'),
           expired: false,
         },
       };
-      return fakeAsset;
+      return previewAsset;
     })
+  );
+
+  readonly ownerAvatar$ = this.diaBackendAuthService.avatar$.pipe(
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   previewCaption = '';
@@ -123,6 +128,7 @@ export class SendingPostCapturePage {
     private readonly translocoService: TranslocoService,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly blockingActionService: BlockingActionService,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendContactRepository: DiaBackendContactRepository
   ) {}
 

@@ -224,6 +224,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly proof_hash: string;
   readonly is_original_owner: boolean;
   readonly owner: string;
+  readonly owner_name: string;
   readonly asset_file: string;
   readonly asset_file_thumbnail: string;
   readonly information: Partial<SortedProofInformation>;

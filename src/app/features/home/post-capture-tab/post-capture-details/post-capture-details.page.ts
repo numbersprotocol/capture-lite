@@ -31,8 +31,6 @@ export class PostCaptureDetailsPage {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  readonly username$ = this.diaBackendAuthService.username$;
-
   readonly location$ = this.diaBackendAsset$.pipe(
     map(diaBackendAsset => {
       const geolocation = getValidGeolocation(diaBackendAsset);
