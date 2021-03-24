@@ -5,7 +5,7 @@
   <span>{{ t('transactionDetails') }}</span>
 </mat-toolbar>
 <div *transloco="let t" class="page-content">
-  <h4 class="top-time">
+  <h4 class="datetime">
     {{ (transaction$ | async)?.created_at | date: 'short' }}
   </h4>
   <mat-card class="transaction-card">

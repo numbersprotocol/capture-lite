@@ -111,14 +111,13 @@ export class CaptureDetailsPage {
       data: { email: '' },
     });
     const contact$ = dialogRef.afterClosed().pipe(isNonNullable());
-    combineLatest([contact$, this.proof$])
+
+    return combineLatest([contact$, this.proof$])
       .pipe(first(), untilDestroyed(this))
       .subscribe(([contact, proof]) =>
         this.router.navigate(
           ['sending-post-capture', { contact, id: proof.diaBackendAssetId }],
-          {
-            relativeTo: this.route,
-          }
+          { relativeTo: this.route }
         )
       );
   }

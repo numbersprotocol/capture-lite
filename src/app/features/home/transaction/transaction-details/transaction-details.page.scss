@@ -14,35 +14,12 @@ mat-toolbar {
 .page-content {
   padding: 0 0 16px;
 
-  .top-time {
+  .datetime {
     width: 90vw;
     margin-top: 16px;
     margin-left: 5vw;
     margin-right: 5vw;
     text-align: center;
-  }
-
-  button.send-button {
-    width: 90vw;
-    margin-top: 16px;
-    margin-left: 5vw;
-    margin-right: 5vw;
-
-    .send-button-wrapper {
-      display: flex;
-      align-items: center;
-
-      .avatar {
-        height: 32px;
-        width: 32px;
-        margin: 8px;
-        border-radius: 50%;
-        flex-shrink: 0;
-        object-fit: cover;
-        background-image: url('https://gravatar.com/avatar/8db683da3c728970bb776f6cc4048fd2?s=400&d=mp&r=x');
-        background-size: cover;
-      }
-    }
   }
 
   button {
