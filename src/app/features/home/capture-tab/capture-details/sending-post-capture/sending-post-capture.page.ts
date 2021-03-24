@@ -18,6 +18,7 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { getOldProof } from '../../../../../shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../../../shared/services/repositories/proof/proof-repository.service';
@@ -40,6 +41,7 @@ export class SendingPostCapturePage {
     switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
+
   readonly assetFileUrl$ = combineLatest([
     this.asset$,
     this.proofRepository.all$,
@@ -53,20 +55,19 @@ export class SendingPostCapturePage {
       }
     })
   );
+
   readonly contact$ = this.route.paramMap.pipe(
     map(params => params.get('contact')),
     isNonNullable()
   );
-  readonly username$ = this.contact$.pipe(
-    map(contact => contact.substring(0, contact.lastIndexOf('@')))
-  );
+
   readonly previewAsset$ = combineLatest([
     this.asset$,
     this.contact$,
     this.assetFileUrl$,
   ]).pipe(
     switchMap(async ([asset, contact, assetFileUrl]) => {
-      const fakeAsset: DiaBackendAsset = {
+      const previewAsset: DiaBackendAsset = {
         ...asset,
         asset_file: assetFileUrl ?? asset.asset_file,
         asset_file_thumbnail: assetFileUrl ?? asset.asset_file_thumbnail,
@@ -74,17 +75,23 @@ export class SendingPostCapturePage {
         caption: this.previewCaption,
         source_transaction: {
           id: '',
-          sender: asset.owner,
+          sender: asset.owner_name,
           receiver_email: contact,
           created_at: '',
           fulfilled_at: formatDate(Date.now(), 'short', 'en-US'),
           expired: false,
         },
       };
-      return fakeAsset;
+      return previewAsset;
     })
   );
+
+  readonly ownerAvatar$ = this.diaBackendAuthService.avatar$.pipe(
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
   previewCaption = '';
+
   isPreview = false;
 
   constructor(
@@ -95,7 +102,8 @@ export class SendingPostCapturePage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly translocoService: TranslocoService,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
-    private readonly blockingActionService: BlockingActionService
+    private readonly blockingActionService: BlockingActionService,
+    private readonly diaBackendAuthService: DiaBackendAuthService
   ) {}
 
   preview() {

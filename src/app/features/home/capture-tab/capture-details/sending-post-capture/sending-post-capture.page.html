@@ -8,7 +8,7 @@
 <div *transloco="let t" class="page-content">
   <ng-container *ngIf="!isPreview">
     <form #form="ngForm" (ngSubmit)="preview()">
-      <mat-card class="example-card">
+      <mat-card>
         <img mat-card-image [attr.src]="assetFileUrl$ | async" />
         <mat-card-content>
           <mat-form-field appearance="outline">
@@ -39,12 +39,23 @@
   <!-- preview -->
 
   <ng-container *ngIf="isPreview">
-    <app-post-capture-card
-      *ngIf="previewAsset$ | async; let asset"
-      [sharable]="false"
-      [postCapture]="asset"
-    >
-    </app-post-capture-card>
+    <mat-card *ngIf="previewAsset$ | async; let asset">
+      <mat-card-header>
+        <img [attr.src]="ownerAvatar$ | async" mat-card-avatar />
+        <mat-card-title>
+          {{ asset.source_transaction.sender }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ asset.source_transaction.fulfilled_at | date: 'short' }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <img [src]="asset.sharable_copy" mat-card-image />
+      <mat-card-content *ngIf="asset.caption">
+        <p class="caption mat-body">
+          {{ asset.caption }}
+        </p>
+      </mat-card-content>
+    </mat-card>
 
     <button
       (click)="send(previewCaption)"
