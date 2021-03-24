@@ -26,6 +26,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { Tuple } from '../../database/table/table';
+import { OnboardingService } from '../../onboarding/onboarding.service';
 import { ProofRepository } from '../../repositories/proof/proof-repository.service';
 import { DiaBackendAssetRepository } from '../asset/dia-backend-asset-repository.service';
 import { DiaBackendAssetDownloadingService } from '../asset/downloading/dia-backend-downloading.service';
@@ -77,14 +78,17 @@ export class DiaBackendTransactionRepository {
     this.all$,
     this.proofRepository.all$,
     this.authService.email$,
+    defer(() => this.onboardingService.getOnboardingTimestamp()),
   ]).pipe(
     first(),
-    map(([transactions, proofs, email]) => {
+    map(([transactions, proofs, email, onboardingTimestamp]) => {
       const delieveredAssetIds = transactions.results
         .filter(t => !t.expired && t.fulfilled_at)
         .map(t => t.asset.id);
       return transactions.results.filter(
         t =>
+          onboardingTimestamp &&
+          Date.parse(t.created_at) > onboardingTimestamp &&
           t.expired &&
           t.sender === email &&
           !delieveredAssetIds.includes(t.asset.id) &&
@@ -116,7 +120,8 @@ export class DiaBackendTransactionRepository {
     private readonly assetRepositroy: DiaBackendAssetRepository,
     private readonly assetDownloadingService: DiaBackendAssetDownloadingService,
     private readonly proofRepository: ProofRepository,
-    private readonly contactRepository: DiaBackendContactRepository
+    private readonly contactRepository: DiaBackendContactRepository,
+    private readonly onboardingService: OnboardingService
   ) {}
 
   fetchById$(id: string) {
