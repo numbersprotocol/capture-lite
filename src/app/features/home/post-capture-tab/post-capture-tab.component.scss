@@ -1,8 +1,6 @@
 :host {
-  display: block;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-bottom: 8px;
+  padding: 8px;
+  overflow: hidden;
 }
 
 mat-grid-tile {
@@ -17,7 +15,18 @@ mat-grid-tile {
 }
 
 .sub-content {
-  padding-top: 60px;
+  height: calc(100% - 64px);
+  overflow: auto;
+}
+
+.series-wrapper {
+  padding: 10px;
+}
+
+.segment {
+  height: 50px;
+  left: calc((100% - 80vw) / 2);
+  margin-bottom: 20px;
 }
 
 .segment-background {
@@ -37,4 +46,8 @@ ion-segment {
 
 .series-tab-icon {
   height: 40px;
+}
+
+.tab-content-post {
+  height: 100%;
 }

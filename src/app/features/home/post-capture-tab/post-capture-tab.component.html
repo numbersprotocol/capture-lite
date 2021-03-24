@@ -1,42 +1,32 @@
-<div *ngIf="networkConnected$ | async" class="tab-content-post">
-  <div class="segment-background">
-    <ion-segment mode="ios" [(ngModel)]="categories" scrollable>
-      <ion-segment-button value="Photo" checked>
-        <ion-icon
-          src="/assets/icon/apps.svg"
-          class="series-tab-icon"
-        ></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button value="Series">
-        <ion-icon
-          src="/assets/icon/series.svg"
-          class="series-tab-icon"
-        ></ion-icon>
-      </ion-segment-button>
-    </ion-segment>
-  </div>
-  <div [ngSwitch]="categories" class="sub-content">
-    <div *ngSwitchCase="'Photo'">
-      <mat-grid-list
-        *ngIf="networkConnected$ | async"
-        cols="3"
-        gutterSize="8px"
+<div class="tab-content-post" [ngSwitch]="categories">
+  <ion-segment class="segment" mode="ios" [(ngModel)]="categories" scrollable>
+    <ion-segment-button value="Photo" checked>
+      <ion-icon src="/assets/icon/apps.svg" class="series-tab-icon"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="Series">
+      <ion-icon
+        src="/assets/icon/series.svg"
+        class="series-tab-icon"
+      ></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
+  <div class="sub-content" *ngSwitchCase="'Photo'">
+    <mat-grid-list cols="3" gutterSize="8px">
+      <mat-grid-tile
+        *ngFor="
+          let postCapture of postCaptures$ | async;
+          trackBy: trackPostCapture
+        "
+        [routerLink]="['post-capture-details', { id: postCapture.id }]"
       >
-        <mat-grid-tile
-          *ngFor="
-            let postCapture of postCaptures$ | async;
-            trackBy: trackPostCapture
-          "
-          [routerLink]="['post-capture-details', { id: postCapture.id }]"
-        >
-          <img [src]="postCapture.thumbnailUrl" />
-        </mat-grid-tile>
-      </mat-grid-list>
-    </div>
-    <div class="series-wrapper" *ngSwitchCase="'Series'">
-      <app-series-card routerLink="series"></app-series-card>
-      <app-series-card routerLink="series"></app-series-card>
-      <app-series-card routerLink="series"></app-series-card>
-    </div>
+        <img [src]="postCapture.asset_file_thumbnail" />
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <div class="series-wrapper" *ngSwitchCase="'Series'">
+    <app-series-card routerLink="series"></app-series-card>
+    <app-series-card routerLink="series"></app-series-card>
+    <app-series-card routerLink="series"></app-series-card>
   </div>
 </div>
