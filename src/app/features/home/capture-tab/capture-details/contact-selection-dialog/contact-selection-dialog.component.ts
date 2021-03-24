@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { pluck } from 'rxjs/operators';
 import { DiaBackendContactRepository } from '../../../../../shared/services/dia-backend/contact/dia-backend-contact-repository.service';
 import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
 import { FriendInvitationDialogComponent } from './friend-invitation-dialog/friend-invitation-dialog.component';
@@ -12,7 +13,9 @@ import { FriendInvitationDialogComponent } from './friend-invitation-dialog/frie
   styleUrls: ['./contact-selection-dialog.component.scss'],
 })
 export class ContactSelectionDialogComponent {
-  readonly contacts$ = this.diaBackendContactRepository.all$;
+  readonly contacts$ = this.diaBackendContactRepository.all$.pipe(
+    pluck('results')
+  );
   readonly isFetching$ = this.diaBackendContactRepository.isFetching$;
 
   constructor(

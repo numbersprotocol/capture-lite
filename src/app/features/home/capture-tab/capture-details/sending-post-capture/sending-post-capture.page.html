@@ -53,8 +53,11 @@
       color="primary"
     >
       <div class="send-button-wrapper">
-        <div class="avatar"></div>
-        <span>{{ contact$ | async }}</span>
+        <img
+          [attr.src]="(receiver$ | async)?.contact_profile_picture_thumbnail"
+          class="avatar"
+        />
+        <span>{{ (receiver$ | async)?.contact_email }}</span>
         <div class="spacer"></div>
         <mat-icon>send</mat-icon>
       </div>

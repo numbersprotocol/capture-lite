@@ -31,8 +31,7 @@ mat-toolbar {
         border-radius: 50%;
         flex-shrink: 0;
         object-fit: cover;
-        background-image: url('/assets/icon/avatar-placeholder.png');
-        background-size: cover;
+        object-position: center;
       }
     }
   }
