@@ -30,6 +30,7 @@ import { ProofRepository } from '../../repositories/proof/proof-repository.servi
 import { DiaBackendAssetRepository } from '../asset/dia-backend-asset-repository.service';
 import { DiaBackendAssetDownloadingService } from '../asset/downloading/dia-backend-downloading.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
+import { DiaBackendContactRepository } from '../contact/dia-backend-contact-repository.service';
 import { NotFoundErrorResponse } from '../errors';
 import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
@@ -114,7 +115,8 @@ export class DiaBackendTransactionRepository {
     private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
     private readonly assetRepositroy: DiaBackendAssetRepository,
     private readonly assetDownloadingService: DiaBackendAssetDownloadingService,
-    private readonly proofRepository: ProofRepository
+    private readonly proofRepository: ProofRepository,
+    private readonly contactRepository: DiaBackendContactRepository
   ) {}
 
   fetchById$(id: string) {
@@ -169,7 +171,12 @@ export class DiaBackendTransactionRepository {
           { headers }
         )
       ),
-      tap(() => this.refresh({ reason: this.add$.name }))
+      tap(() => {
+        this.refresh({ reason: this.add$.name });
+        this.contactRepository.refresh({
+          reason: `${DiaBackendTransactionRepository.name}.${this.add$.name}`,
+        });
+      })
     );
   }
 
@@ -193,8 +200,8 @@ export class DiaBackendTransactionRepository {
   /**
    * The reason argument is only for debugging purpose for code tracing.
    */
-  refresh({ reason }: { reason?: string }) {
-    this.updated$.next({ reason });
+  refresh(options?: { reason?: string }) {
+    this.updated$.next({ reason: options?.reason });
   }
 }
 
