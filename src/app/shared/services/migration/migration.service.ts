@@ -1,3 +1,4 @@
+// tslint:disable: deprecation
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
@@ -36,8 +37,8 @@ export class MigrationService {
 
   migrate$(skip?: boolean) {
     const runMigrate$ = defer(() => this.preMigrate(skip)).pipe(
-      concatMap(() => this.runMigrateWithProgressDialog(skip)),
-      concatMap(() => this.postMigrate())
+      concatMap(() => this.runMigrateTo0_15_0WithProgressDialog(skip)),
+      concatMap(() => this.postMigrateTo0_15_0())
     );
     return defer(() =>
       this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
@@ -53,12 +54,12 @@ export class MigrationService {
     }
   }
 
-  private async postMigrate() {
+  private async postMigrateTo0_15_0() {
     await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
     await this.updatePreviousVersion();
   }
 
-  private async runMigrateWithProgressDialog(skip?: boolean) {
+  private async runMigrateTo0_15_0WithProgressDialog(skip?: boolean) {
     if (skip) {
       return;
     }
@@ -106,22 +107,6 @@ export class MigrationService {
     );
   }
 
-  private async removeLocalPostCaptures() {
-    const postCaptures = await this.fetchAllPostCaptures();
-
-    const allProofs = await this.proofRepository.getAll();
-    const localPostCaptures = allProofs.filter(proof =>
-      postCaptures
-        .map(asset => asset.proof_hash)
-        .includes(getOldProof(proof).hash)
-    );
-    await Promise.all(
-      localPostCaptures.map(async postCapture =>
-        this.proofRepository.remove(postCapture)
-      )
-    );
-  }
-
   private async fetchAllOriginallyOwned() {
     let currentOffset = 0;
     const limit = 100;
@@ -139,6 +124,22 @@ export class MigrationService {
       currentOffset += diaBackendAssets.length;
     }
     return ret;
+  }
+
+  private async removeLocalPostCaptures() {
+    const postCaptures = await this.fetchAllPostCaptures();
+
+    const allProofs = await this.proofRepository.getAll();
+    const localPostCaptures = allProofs.filter(proof =>
+      postCaptures
+        .map(asset => asset.proof_hash)
+        .includes(getOldProof(proof).hash)
+    );
+    await Promise.all(
+      localPostCaptures.map(async postCapture =>
+        this.proofRepository.remove(postCapture)
+      )
+    );
   }
 
   private async fetchAllPostCaptures() {

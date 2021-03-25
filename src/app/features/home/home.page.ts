@@ -61,7 +61,7 @@ export class HomePage {
   }
 
   private async onboardingRedirect() {
-    if (await this.onboardingService.isOnboarding()) {
+    if (!(await this.onboardingService.getOnboardingTimestamp())) {
       return this.router.navigate(['onboarding/tutorial'], {
         relativeTo: this.route,
       });
