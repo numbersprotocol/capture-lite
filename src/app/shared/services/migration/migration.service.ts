@@ -37,8 +37,8 @@ export class MigrationService {
 
   migrate$(skip?: boolean) {
     const runMigrate$ = defer(() => this.preMigrate(skip)).pipe(
-      concatMap(() => this.runMigrateWithProgressDialog(skip)),
-      concatMap(() => this.postMigrate())
+      concatMap(() => this.runMigrateTo0_15_0WithProgressDialog(skip)),
+      concatMap(() => this.postMigrateTo0_15_0())
     );
     return defer(() =>
       this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
@@ -54,11 +54,12 @@ export class MigrationService {
     }
   }
 
-  private async postMigrate() {
+  private async postMigrateTo0_15_0() {
+    await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
     await this.updatePreviousVersion();
   }
 
-  private async runMigrateWithProgressDialog(skip?: boolean) {
+  private async runMigrateTo0_15_0WithProgressDialog(skip?: boolean) {
     if (skip) {
       return;
     }
@@ -86,7 +87,6 @@ export class MigrationService {
   private async to0_15_0() {
     await this.fetchAndUpdateDiaBackendAssetId();
     await this.removeLocalPostCaptures();
-    await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
   }
 
   private async fetchAndUpdateDiaBackendAssetId() {
