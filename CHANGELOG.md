@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.24.0 - 2021-03-26
+
+### Added
+
+- Show avatar on contact selection dialog. #597
+
+### UI/UX
+
+- Display username instead of email. #590
+- Change the order of Store tab.
+- Change in-app browser toolbar color to the primary color of the theme.
+
+### Fixed
+
+- Avoid fetching expired PostCaptures created before onboarding timestamp. #596
+
 ## 0.23.0 - 2021-03-23
 
 ### Added
