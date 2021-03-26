@@ -113,6 +113,7 @@ export class HomePage {
   async openStore() {
     return Browser.open({
       url: 'https://authmedia.net/version-test/store',
+      toolbarColor: '#564dfc',
     });
   }
 }

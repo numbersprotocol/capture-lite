@@ -161,6 +161,7 @@ export class CaptureDetailsPage {
             defer(() =>
               Browser.open({
                 url: `https://authmedia.net/dia-certificate?mid=${proof.diaBackendAssetId}&token=${token}`,
+                toolbarColor: '#564dfc',
               })
             )
           )
@@ -179,6 +180,7 @@ export class CaptureDetailsPage {
             defer(() =>
               Browser.open({
                 url: `https://maps.google.com/maps?q=${proof.geolocationLatitude},${proof.geolocationLongitude}`,
+                toolbarColor: '#564dfc',
               })
             )
           )

@@ -87,6 +87,7 @@ export class PostCaptureDetailsPage {
         switchMap(([diaBackendAsset, token]) =>
           Browser.open({
             url: `https://authmedia.net/dia-certificate?mid=${diaBackendAsset.id}&token=${token}`,
+            toolbarColor: '#564dfc',
           })
         ),
         untilDestroyed(this)
@@ -102,6 +103,7 @@ export class PostCaptureDetailsPage {
         switchMap(geolocation =>
           Browser.open({
             url: `https://maps.google.com/maps?q=${geolocation.latitude},${geolocation.longitude}`,
+            toolbarColor: '#564dfc',
           })
         ),
         untilDestroyed(this)
