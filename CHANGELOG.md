@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.23.0 - 2021-03-23
+
+### Added
+
+- Open store with in-app browser. #588
+
+### Fixed
+
+- Implement better validation geolocation for showing geo icon. #588
+
+## 0.22.2 - 2021-03-19
+
+### Fixed
+
+- Revert #576 for stable performance on mobile devices. #580
+- Refresh PostCaptures when accept transaction. #581
+- Fetch returned PostCaptures on app start. #587
+
 ## 0.22.1 - 2021-03-16
 
 ### Fixed

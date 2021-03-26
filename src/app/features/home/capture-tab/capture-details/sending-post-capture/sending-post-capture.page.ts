@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer } from 'rxjs';
+import { combineLatest, defer, Observable, of } from 'rxjs';
 import {
+  catchError,
   concatMap,
   concatMapTo,
   first,
@@ -18,6 +19,11 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
+import {
+  DiaBackendContact,
+  DiaBackendContactRepository,
+} from '../../../../../shared/services/dia-backend/contact/dia-backend-contact-repository.service';
 import { DiaBackendTransactionRepository } from '../../../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { getOldProof } from '../../../../../shared/services/repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../../../../../shared/services/repositories/proof/proof-repository.service';
@@ -40,9 +46,10 @@ export class SendingPostCapturePage {
     switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
+
   readonly assetFileUrl$ = combineLatest([
     this.asset$,
-    this.proofRepository.getAll$(),
+    this.proofRepository.all$,
   ]).pipe(
     switchMap(async ([asset, proofs]) => {
       const proof = proofs.find(p => p.diaBackendAssetId === asset.id);
@@ -53,20 +60,39 @@ export class SendingPostCapturePage {
       }
     })
   );
-  readonly contact$ = this.route.paramMap.pipe(
+
+  private readonly receiverEmail$ = this.route.paramMap.pipe(
     map(params => params.get('contact')),
     isNonNullable()
   );
-  readonly username$ = this.contact$.pipe(
+
+  readonly receiver$: Observable<DiaBackendContact> = this.receiverEmail$.pipe(
+    switchMap(email =>
+      this.diaBackendContactRepository.fetchByEmail$(email).pipe(
+        catchError(() =>
+          of({
+            contact_email: email,
+            contact_name: email,
+            contact_profile_picture_thumbnail:
+              '/assets/icon/avatar-placeholder.png',
+          })
+        )
+      )
+    ),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  readonly username$ = this.receiverEmail$.pipe(
     map(contact => contact.substring(0, contact.lastIndexOf('@')))
   );
+
   readonly previewAsset$ = combineLatest([
     this.asset$,
-    this.contact$,
+    this.receiverEmail$,
     this.assetFileUrl$,
   ]).pipe(
     switchMap(async ([asset, contact, assetFileUrl]) => {
-      const fakeAsset: DiaBackendAsset = {
+      const previewAsset: DiaBackendAsset = {
         ...asset,
         asset_file: assetFileUrl ?? asset.asset_file,
         asset_file_thumbnail: assetFileUrl ?? asset.asset_file_thumbnail,
@@ -74,17 +100,23 @@ export class SendingPostCapturePage {
         caption: this.previewCaption,
         source_transaction: {
           id: '',
-          sender: asset.owner,
+          sender: asset.owner_name,
           receiver_email: contact,
           created_at: '',
           fulfilled_at: formatDate(Date.now(), 'short', 'en-US'),
           expired: false,
         },
       };
-      return fakeAsset;
+      return previewAsset;
     })
   );
+
+  readonly ownerAvatar$ = this.diaBackendAuthService.avatar$.pipe(
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
   previewCaption = '';
+
   isPreview = false;
 
   constructor(
@@ -95,7 +127,9 @@ export class SendingPostCapturePage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly translocoService: TranslocoService,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
-    private readonly blockingActionService: BlockingActionService
+    private readonly blockingActionService: BlockingActionService,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendContactRepository: DiaBackendContactRepository
   ) {}
 
   preview() {
@@ -111,7 +145,7 @@ export class SendingPostCapturePage {
   }
 
   async send(captionText: string) {
-    const action$ = combineLatest([this.asset$, this.contact$]).pipe(
+    const action$ = combineLatest([this.asset$, this.receiverEmail$]).pipe(
       first(),
       switchTap(([asset, contact]) =>
         this.diaBackendTransactionRepository.add$(
@@ -139,7 +173,7 @@ export class SendingPostCapturePage {
   }
 
   private removeAsset$(asset: DiaBackendAsset) {
-    return this.proofRepository.getAll$().pipe(
+    return this.proofRepository.all$.pipe(
       first(),
       concatMap(async proofs => {
         const proof = proofs.find(

@@ -54,7 +54,6 @@
     <mat-tab-group
       headerPosition="below"
       mat-stretch-tabs
-      (selectedTabChange)="onTapChanged($event)"
       mat-align-tabs="center"
       backgroundColor="primary"
       [disablePagination]="true"
@@ -66,14 +65,19 @@
             class="postcapture-tab-icon"
           ></ion-icon>
         </ng-template>
-        <app-post-capture-tab
-          [focus]="postCaptureTabFocus"
-        ></app-post-capture-tab>
+        <app-post-capture-tab></app-post-capture-tab>
+      </mat-tab>
+      <mat-tab disabled>
+        <ng-template mat-tab-label>
+          <button (click)="openStore()" mat-icon-button>
+            <mat-icon class="tab-action-button-icon">shopping_bag</mat-icon>
+          </button>
+        </ng-template>
       </mat-tab>
       <mat-tab disabled>
         <ng-template mat-tab-label>
           <button mat-icon-button (click)="capture()">
-            <ion-icon class="camera-tab-icon" name="camera"></ion-icon>
+            <ion-icon class="tab-action-button-icon" name="camera"></ion-icon>
           </button>
         </ng-template>
       </mat-tab>

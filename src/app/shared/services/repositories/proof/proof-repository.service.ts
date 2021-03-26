@@ -14,21 +14,19 @@ export class ProofRepository {
     ProofRepository.name
   );
 
+  readonly all$ = this.table.queryAll$.pipe(
+    distinctUntilChanged(isEqual),
+    map((indexedProofViews: IndexedProofView[]) =>
+      indexedProofViews.map(view =>
+        Proof.fromIndexedProofView(this.imageStore, view)
+      )
+    )
+  );
+
   constructor(
     private readonly database: Database,
     private readonly imageStore: ImageStore
   ) {}
-
-  getAll$() {
-    return this.table.queryAll$.pipe(
-      distinctUntilChanged(isEqual),
-      map((indexedProofViews: IndexedProofView[]) => {
-        return indexedProofViews.map(view =>
-          Proof.fromIndexedProofView(this.imageStore, view)
-        );
-      })
-    );
-  }
 
   async getAll() {
     const views = await this.table.queryAll();

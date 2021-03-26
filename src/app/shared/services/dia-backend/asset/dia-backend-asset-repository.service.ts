@@ -1,14 +1,17 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, defer, forkJoin, iif } from 'rxjs';
+// tslint:disable: no-magic-numbers
 import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { defer, forkJoin, iif, of, Subject, throwError } from 'rxjs';
+import {
+  catchError,
   concatMap,
-  concatMapTo,
-  distinctUntilChanged,
   first,
-  map,
   pluck,
-  tap,
+  repeatWhen,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
 import { toExtension } from '../../../../utils/mime-type';
@@ -22,92 +25,77 @@ import {
 } from '../../repositories/proof/old-proof-adapter';
 import { Proof } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
-import { PaginatedResponse } from '../pagination/paginated-response';
+import { NotFoundErrorResponse } from '../errors';
+import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DiaBackendAssetRepository {
-  private readonly _isFetching$ = new BehaviorSubject(false);
-  readonly isFetching$ = this._isFetching$
-    .asObservable()
-    .pipe(distinctUntilChanged());
+  readonly fetchCapturesCount$ = this.list$({
+    limit: 1,
+    isOriginalOwner: true,
+  }).pipe(pluck('count'));
+
+  private readonly postCapturesCount$ = this.list$({
+    limit: 1,
+    isOriginalOwner: false,
+  }).pipe(
+    pluck('count'),
+    repeatWhen(() => this.postCapturesUpdated$)
+  );
+
+  private readonly postCapturesUpdated$ = new Subject<{ reason?: string }>();
 
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService
   ) {}
 
-  async getCount() {
-    return this.authService.authHeaders$
-      .pipe(
-        concatMap(headers =>
-          this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(
-            `${BASE_URL}/api/v2/assets/`,
-            { headers, params: { is_original_owner: 'true' } }
-          )
-        ),
-        pluck('count'),
-        first()
-      )
-      .toPromise();
-  }
-
   fetchById$(id: string) {
-    return this.authService.authHeaders$.pipe(
-      concatMap(headers =>
-        this.httpClient.get<DiaBackendAsset>(
-          `${BASE_URL}/api/v2/assets/${id}/`,
-          { headers }
-        )
-      )
-    );
+    return this.read$({ id });
   }
 
   fetchByProof$(proof: Proof) {
-    return defer(() => this.get$({ proofHash: getOldProof(proof).hash })).pipe(
-      map(listAssetResponse =>
-        listAssetResponse.count >= 0 ? listAssetResponse.results[0] : undefined
-      )
-    );
-  }
-
-  fetchPostCaptures$(pageSize?: number) {
-    return iif(
-      () => pageSize !== undefined,
-      this.get$({
-        limit: pageSize,
-        isOriginalOwner: false,
-        orderBy: 'source_transaction',
-      }),
-      this.get$({ isOriginalOwner: false, limit: 1 }).pipe(
-        concatMap(response =>
-          this.get$({
-            isOriginalOwner: false,
-            orderBy: 'source_transaction',
-            limit: response.count,
-          })
+    return this.list$({ proofHash: getOldProof(proof).hash }).pipe(
+      concatMap(response =>
+        iif(
+          () => response.count > 0,
+          of(response.results[0]),
+          throwError(new NotFoundErrorResponse())
         )
       )
     );
   }
 
-  fetchAllOriginallyOwned$(offset = 0, limit = 100) {
-    return defer(async () => this._isFetching$.next(true)).pipe(
-      concatMapTo(this.get$({ offset, limit, isOriginalOwner: true })),
-      tap(() => this._isFetching$.next(false))
-    );
+  fetchCaptures$({ limit, offset = 0 }: { limit: number; offset?: number }) {
+    return this.list$({ offset, limit, isOriginalOwner: true });
   }
 
-  fetchAllNotOriginallyOwned$(offset = 0, limit = 100) {
-    return defer(async () => this._isFetching$.next(true)).pipe(
-      concatMapTo(this.get$({ offset, limit, isOriginalOwner: false })),
-      tap(() => this._isFetching$.next(false))
-    );
+  getPostCaptures$(options?: { limit?: number; offset?: number }) {
+    return iif(
+      () => options?.limit !== undefined,
+      this.list$({
+        isOriginalOwner: false,
+        orderBy: 'source_transaction',
+        limit: options?.limit,
+        offset: options?.offset,
+      }),
+      this.postCapturesCount$.pipe(
+        first(),
+        concatMap(count =>
+          this.list$({
+            isOriginalOwner: false,
+            orderBy: 'source_transaction',
+            limit: count,
+          })
+        )
+      )
+    ).pipe(repeatWhen(() => this.postCapturesUpdated$));
   }
 
-  private get$({
+  private list$({
     offset,
     limit,
     orderBy,
@@ -140,7 +128,7 @@ export class DiaBackendAssetRepository {
           params = params.set('proof_hash', `${proofHash}`);
         }
 
-        return this.httpClient.get<ListAssetResponse>(
+        return this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(
           `${BASE_URL}/api/v2/assets/`,
           { headers, params }
         );
@@ -148,7 +136,24 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  downloadFile$(id: string, field: AssetDownloadField) {
+  private read$({ id }: { id: string }) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.get<DiaBackendAsset>(
+          `${BASE_URL}/api/v2/assets/${id}/`,
+          { headers }
+        )
+      ),
+      catchError(err => {
+        if (err instanceof HttpErrorResponse && err.status === 404) {
+          return throwError(new NotFoundErrorResponse(err));
+        }
+        return throwError(err);
+      })
+    );
+  }
+
+  downloadFile$({ id, field }: { id: string; field: AssetDownloadField }) {
     const formData = new FormData();
     formData.append('field', field);
     return defer(() => this.authService.getAuthHeaders()).pipe(
@@ -162,7 +167,7 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  add$(proof: Proof) {
+  addCapture$(proof: Proof) {
     return forkJoin([
       defer(() => this.authService.getAuthHeaders()),
       defer(() => buildFormDataToCreateAsset(proof)),
@@ -177,11 +182,7 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  remove$(asset: DiaBackendAsset) {
-    return this.removeById$(asset.id);
-  }
-
-  removeById$(id: string) {
+  removeCaptureById$(id: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.delete<DeleteAssetResponse>(
@@ -190,6 +191,13 @@ export class DiaBackendAssetRepository {
         )
       )
     );
+  }
+
+  /**
+   * The reason argument is only for debugging purpose for code tracing.
+   */
+  refreshPostCaptures(options?: { reason?: string }) {
+    this.postCapturesUpdated$.next({ reason: options?.reason });
   }
 }
 
@@ -216,6 +224,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly proof_hash: string;
   readonly is_original_owner: boolean;
   readonly owner: string;
+  readonly owner_name: string;
   readonly asset_file: string;
   readonly asset_file_thumbnail: string;
   readonly information: Partial<SortedProofInformation>;
@@ -223,11 +232,6 @@ export interface DiaBackendAsset extends Tuple {
   readonly sharable_copy: string;
   readonly source_transaction: DiaBackendAssetTransaction | null;
   readonly parsed_meta: DiaBackendAssetParsedMeta;
-}
-
-interface ListAssetResponse {
-  count: number;
-  results: DiaBackendAsset[];
 }
 
 export type AssetDownloadField =

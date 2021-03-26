@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { concatMap, map } from 'rxjs/operators';
+import { concatMap, first, map } from 'rxjs/operators';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
 import {
   DiaBackendAsset,
@@ -38,8 +38,9 @@ export class ShareService {
 
   private async getSharableCopy(asset: DiaBackendAsset) {
     return this.diaBackendAssetRepository
-      .downloadFile$(asset.id, 'sharable_copy')
+      .downloadFile$({ id: asset.id, field: 'sharable_copy' })
       .pipe(
+        first(),
         concatMap(blobToBase64),
         map(imageBase64 => `data:image/jpeg;base64,${imageBase64}`)
       )

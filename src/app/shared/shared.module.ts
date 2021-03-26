@@ -10,28 +10,23 @@ import { MaterialModule } from './core/material/material.module';
 import { MigratingDialogComponent } from './core/migrating-dialog/migrating-dialog.component';
 import { SeriesCardComponent } from './core/series-card/series-card.component';
 
+const declarations = [MigratingDialogComponent, SeriesCardComponent];
+
+const imports = [
+  CommonModule,
+  IonicModule,
+  FormsModule,
+  ReactiveFormsModule,
+  HttpClientModule,
+  SafePipeModule,
+  TranslocoModule,
+  MaterialModule,
+  CapacitorPluginsModule,
+];
+
 @NgModule({
-  declarations: [MigratingDialogComponent, SeriesCardComponent],
-  imports: [
-    CommonModule,
-    IonicModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    SafePipeModule,
-    TranslocoModule,
-    MaterialModule,
-    CapacitorPluginsModule,
-  ],
-  exports: [
-    CommonModule,
-    IonicModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SafePipeModule,
-    TranslocoModule,
-    MaterialModule,
-    SeriesCardComponent,
-  ],
+  declarations,
+  imports,
+  exports: [...declarations, ...imports],
 })
 export class SharedModule {}

@@ -2,7 +2,7 @@
 
 <div *transloco="let t" mat-dialog-content>
   <mat-spinner
-    *ngIf="(contacts$ | async)?.length === 0 && isFetching$ | async"
+    *ngIf="(contacts$ | async)?.length === 0 && (isFetching$ | async)"
     diameter="24"
   ></mat-spinner>
   <mat-action-list>
@@ -10,7 +10,13 @@
       *ngFor="let contact of contacts$ | async"
       [mat-dialog-close]="contact.contact_email"
     >
-      <mat-icon mat-list-icon>person</mat-icon>
+      <img
+        matListAvatar
+        [attr.src]="
+          contact.contact_profile_picture_thumbnail ||
+          '/assets/icon/avatar-placeholder.png'
+        "
+      />
       <div mat-line>{{ contact.contact_name || contact.contact_email }}</div>
     </mat-list-item>
     <mat-list-item (click)="openFriendInvitationDialog()">

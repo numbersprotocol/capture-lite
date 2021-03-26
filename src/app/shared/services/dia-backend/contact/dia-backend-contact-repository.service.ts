@@ -1,9 +1,19 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, defer, merge } from 'rxjs';
-import { concatMap, concatMapTo, pluck, tap } from 'rxjs/operators';
+import { BehaviorSubject, defer, iif, of, Subject, throwError } from 'rxjs';
+import {
+  concatMap,
+  concatMapTo,
+  distinctUntilChanged,
+  first,
+  pluck,
+  repeatWhen,
+  tap,
+} from 'rxjs/operators';
 import { Tuple } from '../../database/table/table';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
+import { NotFoundErrorResponse } from '../errors';
+import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
 
 @Injectable({
@@ -11,8 +21,20 @@ import { BASE_URL } from '../secret';
 })
 export class DiaBackendContactRepository {
   private readonly _isFetching$ = new BehaviorSubject(false);
-  private readonly fetchAllCache$ = new BehaviorSubject<DiaBackendContact[]>(
-    []
+
+  readonly isFetching$ = this._isFetching$.pipe(distinctUntilChanged());
+
+  private readonly contactsUpdated$ = new Subject<{ reason?: string }>();
+
+  private readonly allCount$ = this.list$({ limit: 1 }).pipe(
+    pluck('count'),
+    repeatWhen(() => this.contactsUpdated$)
+  );
+
+  readonly all$ = this.allCount$.pipe(
+    first(),
+    concatMap(count => this.list$({ limit: count })),
+    repeatWhen(() => this.contactsUpdated$)
   );
 
   constructor(
@@ -20,35 +42,61 @@ export class DiaBackendContactRepository {
     private readonly authService: DiaBackendAuthService
   ) {}
 
-  isFetching$() {
-    return this._isFetching$.asObservable();
+  fetchByEmail$(email: string) {
+    return this.list$({ limit: 1, email }).pipe(
+      concatMap(response =>
+        iif(
+          () => response.count > 0,
+          of(response.results[0]),
+          throwError(new NotFoundErrorResponse())
+        )
+      )
+    );
   }
 
-  getAll$() {
-    return merge(this.fetchAll$(), this.fetchAllCache$.asObservable());
-  }
-
-  private fetchAll$() {
+  private list$({
+    email,
+    limit,
+    offset,
+  }: {
+    email?: string;
+    limit?: number;
+    offset?: number;
+  }) {
     return defer(async () => this._isFetching$.next(true)).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
-      concatMap(headers =>
-        this.httpClient.get<ListContactResponse>(
+      concatMap(headers => {
+        let params = new HttpParams();
+
+        if (offset !== undefined) {
+          params = params.set('offset', `${offset}`);
+        }
+        if (limit !== undefined) {
+          params = params.set('limit', `${limit}`);
+        }
+        if (email !== undefined) {
+          params = params.set('email', `${email}`);
+        }
+
+        return this.httpClient.get<PaginatedResponse<DiaBackendContact>>(
           `${BASE_URL}/api/v2/contacts/`,
-          { headers }
-        )
-      ),
-      pluck('results'),
-      tap(contacts => this.fetchAllCache$.next(contacts)),
+          { headers, params }
+        );
+      }),
       tap(() => this._isFetching$.next(false))
     );
   }
+
+  /**
+   * The reason argument is only for debugging purpose for code tracing.
+   */
+  refresh(options?: { reason?: string }) {
+    this.contactsUpdated$.next({ reason: options?.reason });
+  }
 }
 
-interface DiaBackendContact extends Tuple {
+export interface DiaBackendContact extends Tuple {
   readonly contact_email: string;
   readonly contact_name: string;
-}
-
-interface ListContactResponse {
-  readonly results: DiaBackendContact[];
+  readonly contact_profile_picture_thumbnail: string | null;
 }

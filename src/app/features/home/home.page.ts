@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, of } from 'rxjs';
-import { catchError, concatMap, map, tap } from 'rxjs/operators';
+import { defer, iif, of } from 'rxjs';
+import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -16,6 +16,8 @@ import { OnboardingService } from '../../shared/services/onboarding/onboarding.s
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 
+const { Browser } = Plugins;
+
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-home',
@@ -24,12 +26,11 @@ import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/pref
 })
 export class HomePage {
   readonly username$ = this.diaBackendAuthService.username$;
-  readonly inboxCount$ = this.diaBackendTransactionRepository.getInbox$().pipe(
+  readonly inboxCount$ = this.diaBackendTransactionRepository.inbox$.pipe(
     map(transactions => transactions.length),
     // WORKARDOUND: force changeDetection to update badge when returning to App by clicking push notification
     tap(() => this.changeDetectorRef.detectChanges())
   );
-  postCaptureTabFocus = false;
 
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
@@ -44,7 +45,9 @@ export class HomePage {
     private readonly dialog: MatDialog,
     private readonly translocoService: TranslocoService,
     private readonly migrationService: MigrationService
-  ) {}
+  ) {
+    this.downloadExpiredPostCaptures();
+  }
 
   ionViewDidEnter() {
     of(this.onboardingService.isNewLogin)
@@ -58,7 +61,7 @@ export class HomePage {
   }
 
   private async onboardingRedirect() {
-    if (await this.onboardingService.isOnboarding()) {
+    if (!(await this.onboardingService.getOnboardingTimestamp())) {
       return this.router.navigate(['onboarding/tutorial'], {
         relativeTo: this.route,
       });
@@ -66,7 +69,9 @@ export class HomePage {
     this.onboardingService.isNewLogin = false;
     if (
       !(await this.onboardingService.hasPrefetchedDiaBackendAssets()) &&
-      (await this.diaBackendAssetRepository.getCount()) > 0
+      (await this.diaBackendAssetRepository.fetchCapturesCount$
+        .pipe(first())
+        .toPromise()) > 0
     ) {
       if (await this.showPrefetchAlert()) {
         return this.dialog.open(PrefetchingDialogComponent, {
@@ -86,11 +91,28 @@ export class HomePage {
     });
   }
 
+  private downloadExpiredPostCaptures() {
+    return defer(() => this.onboardingService.hasPrefetchedDiaBackendAssets())
+      .pipe(
+        concatMap(hasPrefetched =>
+          iif(
+            () => hasPrefetched,
+            this.diaBackendTransactionRepository.downloadExpired$
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
   async capture() {
     return this.captureService.capture();
   }
 
-  onTapChanged(event: MatTabChangeEvent) {
-    this.postCaptureTabFocus = event.index === 2;
+  // tslint:disable-next-line: prefer-function-over-method
+  async openStore() {
+    return Browser.open({
+      url: 'https://authmedia.net/version-test/store',
+    });
   }
 }

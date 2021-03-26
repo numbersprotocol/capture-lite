@@ -12,6 +12,7 @@ import {
   distinctUntilChanged,
   first,
   map,
+  shareReplay,
   switchMap,
   tap,
 } from 'rxjs/operators';
@@ -22,6 +23,7 @@ import { getOldProof } from '../../../shared/services/repositories/proof/old-pro
 import { Proof } from '../../../shared/services/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
+import { isValidGeolocation } from './capture-details/capture-details.page';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -49,9 +51,11 @@ export class CaptureTabComponent {
 
   readonly email$ = this.diaBackendAuthService.email$;
 
-  readonly avatar$ = this.diaBackendAuthService.avatar$;
+  readonly avatar$ = this.diaBackendAuthService.avatar$.pipe(
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
 
-  private readonly proofs$ = this.proofRepository.getAll$();
+  private readonly proofs$ = this.proofRepository.all$;
 
   readonly capturesByDate$ = this.proofs$.pipe(
     map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp)),
@@ -65,9 +69,7 @@ export class CaptureTabComponent {
           thumbnailUrl: await proof.getThumbnailUrl().catch(() => undefined),
           oldProofHash: getOldProof(proof).hash,
           isCollecting: collectingOldProofHashes.has(getOldProof(proof).hash),
-          hasGeolocation:
-            proof.geolocationLatitude !== undefined &&
-            proof.geolocationLongitude !== undefined,
+          hasGeolocation: isValidGeolocation(proof),
         }))
       )
     ),

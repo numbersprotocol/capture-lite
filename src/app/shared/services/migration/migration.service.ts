@@ -1,8 +1,9 @@
+// tslint:disable: deprecation
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';
 import { defer } from 'rxjs';
-import { concatMap, first } from 'rxjs/operators';
+import { concatMap, first, pluck } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { MigratingDialogComponent } from '../../core/migrating-dialog/migrating-dialog.component';
 import {
@@ -36,8 +37,8 @@ export class MigrationService {
 
   migrate$(skip?: boolean) {
     const runMigrate$ = defer(() => this.preMigrate(skip)).pipe(
-      concatMap(() => this.runMigrateWithProgressDialog(skip)),
-      concatMap(() => this.postMigrate())
+      concatMap(() => this.runMigrateTo0_15_0WithProgressDialog(skip)),
+      concatMap(() => this.postMigrateTo0_15_0())
     );
     return defer(() =>
       this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
@@ -53,12 +54,12 @@ export class MigrationService {
     }
   }
 
-  private async postMigrate() {
+  private async postMigrateTo0_15_0() {
     await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
     await this.updatePreviousVersion();
   }
 
-  private async runMigrateWithProgressDialog(skip?: boolean) {
+  private async runMigrateTo0_15_0WithProgressDialog(skip?: boolean) {
     if (skip) {
       return;
     }
@@ -106,12 +107,31 @@ export class MigrationService {
     );
   }
 
+  private async fetchAllOriginallyOwned() {
+    let currentOffset = 0;
+    const limit = 100;
+    const ret: DiaBackendAsset[] = [];
+    while (true) {
+      const {
+        results: diaBackendAssets,
+      } = await this.diaBackendAssetRepository
+        .fetchCaptures$({ offset: currentOffset, limit })
+        .toPromise();
+      if (diaBackendAssets.length === 0) {
+        break;
+      }
+      ret.push(...diaBackendAssets);
+      currentOffset += diaBackendAssets.length;
+    }
+    return ret;
+  }
+
   private async removeLocalPostCaptures() {
-    const allNotOriginallyOwnedDiaBackendAssets = await this.fetchAllNotOriginallyOwned();
+    const postCaptures = await this.fetchAllPostCaptures();
 
     const allProofs = await this.proofRepository.getAll();
     const localPostCaptures = allProofs.filter(proof =>
-      allNotOriginallyOwnedDiaBackendAssets
+      postCaptures
         .map(asset => asset.proof_hash)
         .includes(getOldProof(proof).hash)
     );
@@ -122,43 +142,11 @@ export class MigrationService {
     );
   }
 
-  private async fetchAllOriginallyOwned() {
-    let currentOffset = 0;
-    const limit = 100;
-    const ret: DiaBackendAsset[] = [];
-    while (true) {
-      const {
-        results: diaBackendAssets,
-      } = await this.diaBackendAssetRepository
-        .fetchAllOriginallyOwned$(currentOffset, limit)
-        .toPromise();
-      if (diaBackendAssets.length === 0) {
-        break;
-      }
-      ret.push(...diaBackendAssets);
-      currentOffset += diaBackendAssets.length;
-    }
-    return ret;
-  }
-
-  private async fetchAllNotOriginallyOwned() {
-    let currentOffset = 0;
-    const limit = 100;
-    const ret: DiaBackendAsset[] = [];
-    while (true) {
-      const {
-        results: diaBackendAssets,
-      } = await this.diaBackendAssetRepository
-        .fetchAllNotOriginallyOwned$(currentOffset, limit)
-        .toPromise();
-
-      if (diaBackendAssets.length === 0) {
-        break;
-      }
-      ret.push(...diaBackendAssets);
-      currentOffset += diaBackendAssets.length;
-    }
-    return ret;
+  private async fetchAllPostCaptures() {
+    return this.diaBackendAssetRepository
+      .getPostCaptures$()
+      .pipe(first(), pluck('results'))
+      .toPromise();
   }
 }
 

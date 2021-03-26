@@ -1,5 +1,5 @@
 <div class="segment-content" [ngSwitch]="categories">
-  <ion-segment mode="ios" [(ngModel)]="categories" scrollable>
+  <ion-segment mode="ios" [(ngModel)]="categories">
     <ion-segment-button value="Photo" checked>
       <ion-icon src="/assets/icon/apps.svg" class="series-tab-icon"></ion-icon>
     </ion-segment-button>
@@ -19,7 +19,7 @@
         "
         [routerLink]="['post-capture-details', { id: postCapture.id }]"
       >
-        <img [src]="postCapture.thumbnailUrl" />
+        <ion-img [src]="postCapture.asset_file_thumbnail"></ion-img>
       </mat-grid-tile>
     </mat-grid-list>
   </div>

@@ -1,23 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, defer } from 'rxjs';
-import {
-  catchError,
-  distinctUntilChanged,
-  filter,
-  first,
-  map,
-  startWith,
-  switchMapTo,
-  tap,
-} from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { iif } from 'rxjs';
+import { map, pluck, switchMap } from 'rxjs/operators';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { NetworkService } from '../../../shared/services/network/network.service';
-import { isNonNullable, VOID$ } from '../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -25,84 +14,28 @@ import { isNonNullable, VOID$ } from '../../../utils/rx-operators/rx-operators';
   templateUrl: './post-capture-tab.component.html',
   styleUrls: ['./post-capture-tab.component.scss'],
 })
-export class PostCaptureTabComponent implements OnInit {
-  @Input('focus') set focus(focus: boolean) {
-    this._focus$.next(focus);
-  }
-
+export class PostCaptureTabComponent {
   categories = 'Photo';
-  private readonly _focus$ = new BehaviorSubject(false);
 
-  readonly focus$ = this._focus$.pipe(distinctUntilChanged());
-
-  // tslint:disable-next-line: rxjs-no-explicit-generics
-  private readonly _postCaptures$ = new BehaviorSubject<
-    PostCaptureItem[] | undefined
-  >(undefined);
-
-  readonly postCaptures$ = this._postCaptures$.pipe(
-    isNonNullable(),
-    distinctUntilChanged()
+  readonly postCaptures$ = this.networkService.connected$.pipe(
+    switchMap(isConnected =>
+      iif(
+        () => isConnected,
+        this.diaBackendAssetRepository.getPostCaptures$().pipe(
+          pluck('results'),
+          map(assets => assets.filter(a => a.source_transaction))
+        )
+      )
+    )
   );
-
-  readonly networkConnected$ = this.networkService.connected$;
-
-  readonly onDidNavigate$ = this.router.events.pipe(
-    filter(event => event instanceof NavigationEnd && event?.url === '/home'),
-    startWith(undefined)
-  );
-
-  private readonly refreshPostCaptures$ = combineLatest([
-    this.focus$,
-    this.onDidNavigate$,
-  ]).pipe(
-    filter(([focus]) => focus),
-    switchMapTo(defer(() => this.fetchPostCaptures$())),
-    catchError(err => {
-      console.error(err);
-      return VOID$;
-    })
-  );
-
-  private readonly prefetchSize = 9;
-
-  private readonly prefetchPostCaptures$ = this.fetchPostCaptures$(
-    this.prefetchSize
-  ).pipe(first());
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly networkService: NetworkService,
-    private readonly router: Router
+    private readonly networkService: NetworkService
   ) {}
-
-  ngOnInit() {
-    this.refreshPostCaptures$.pipe(untilDestroyed(this)).subscribe();
-    this.prefetchPostCaptures$.pipe(untilDestroyed(this)).subscribe();
-  }
-
-  fetchPostCaptures$(pageSize?: number) {
-    return this.diaBackendAssetRepository.fetchPostCaptures$(pageSize).pipe(
-      first(),
-      map(pagination => pagination.results),
-      map(assets => assets.filter(asset => asset.source_transaction)),
-      map(assets =>
-        assets.map<PostCaptureItem>(asset => ({
-          id: asset.id,
-          thumbnailUrl: asset.asset_file_thumbnail,
-        }))
-      ),
-      tap(postCapture => this._postCaptures$.next(postCapture))
-    );
-  }
 
   // tslint:disable-next-line: prefer-function-over-method
   trackPostCapture(_: number, item: DiaBackendAsset) {
     return item.id;
   }
-}
-
-interface PostCaptureItem {
-  readonly id: string;
-  readonly thumbnailUrl: string;
 }

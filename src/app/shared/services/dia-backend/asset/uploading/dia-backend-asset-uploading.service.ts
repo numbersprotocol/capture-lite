@@ -14,6 +14,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
+  first,
   map,
   mergeMap,
   retryWhen,
@@ -78,7 +79,7 @@ export class DiaBackendAssetUploadingService {
   private uploadTaskDispatcher$() {
     const taskDebounceTime = 50;
     return combineLatest([
-      this.proofRepository.getAll$().pipe(debounceTime(taskDebounceTime)),
+      this.proofRepository.all$.pipe(debounceTime(taskDebounceTime)),
       this.executionEvent$,
     ]).pipe(
       tap(([proofs, signal]) => {
@@ -117,21 +118,21 @@ export class DiaBackendAssetUploadingService {
 
   private uploadProof$(proof: Proof) {
     const scalingDuration = 1000;
-    return this.diaBackendAssetRepository.add$(proof).pipe(
+    return this.diaBackendAssetRepository.addCapture$(proof).pipe(
+      first(),
       catchError((err: HttpErrorResponse) => {
         if (err.error?.error.type === 'duplicate_asset_not_allowed') {
           return this.diaBackendAssetRepository.fetchByProof$(proof);
         }
         return throwError(err);
       }),
-      isNonNullable(),
       map(diaBackendAsset => {
         proof.diaBackendAssetId = diaBackendAsset.id;
         return proof;
       }),
       retryWhen(err$ =>
         err$.pipe(
-          mergeMap((error, attempt) => {
+          mergeMap((_, attempt) => {
             return timer(2 ** attempt * scalingDuration);
           })
         )
