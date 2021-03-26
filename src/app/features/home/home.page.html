@@ -69,13 +69,6 @@
       </mat-tab>
       <mat-tab disabled>
         <ng-template mat-tab-label>
-          <button (click)="openStore()" mat-icon-button>
-            <mat-icon class="tab-action-button-icon">shopping_bag</mat-icon>
-          </button>
-        </ng-template>
-      </mat-tab>
-      <mat-tab disabled>
-        <ng-template mat-tab-label>
           <button mat-icon-button (click)="capture()">
             <ion-icon class="tab-action-button-icon" name="camera"></ion-icon>
           </button>
@@ -86,6 +79,13 @@
           <mat-icon>account_circle</mat-icon>
         </ng-template>
         <app-capture-tab></app-capture-tab>
+      </mat-tab>
+      <mat-tab disabled>
+        <ng-template mat-tab-label>
+          <button (click)="openStore()" mat-icon-button>
+            <mat-icon class="tab-action-button-icon">shopping_bag</mat-icon>
+          </button>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>
