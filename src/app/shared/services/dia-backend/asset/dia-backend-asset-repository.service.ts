@@ -5,16 +5,30 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer, forkJoin, iif, of, Subject, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  defer,
+  forkJoin,
+  iif,
+  merge,
+  of,
+  ReplaySubject,
+  Subject,
+  throwError,
+} from 'rxjs';
 import {
   catchError,
   concatMap,
   first,
+  map,
   pluck,
   repeatWhen,
+  switchMap,
+  tap,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
 import { toExtension } from '../../../../utils/mime-type';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { Tuple } from '../../database/table/table';
 import {
   getOldProof,
@@ -33,6 +47,14 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendAssetRepository {
+  private readonly postCapturesCache$ = new ReplaySubject<
+    PaginatedResponse<DiaBackendAsset>
+  >(1);
+
+  private readonly postCapturesImageCache$ = new BehaviorSubject(
+    new Map<string, Blob>()
+  );
+
   readonly fetchCapturesCount$ = this.list$({
     limit: 1,
     isOriginalOwner: true,
@@ -73,15 +95,9 @@ export class DiaBackendAssetRepository {
     return this.list$({ offset, limit, isOriginalOwner: true });
   }
 
-  getPostCaptures$(options?: { limit?: number; offset?: number }) {
-    return iif(
-      () => options?.limit !== undefined,
-      this.list$({
-        isOriginalOwner: false,
-        orderBy: 'source_transaction',
-        limit: options?.limit,
-        offset: options?.offset,
-      }),
+  getPostCaptures$() {
+    return merge(
+      this.postCapturesCache$,
       this.postCapturesCount$.pipe(
         first(),
         concatMap(count =>
@@ -90,9 +106,40 @@ export class DiaBackendAssetRepository {
             orderBy: 'source_transaction',
             limit: count,
           })
-        )
+        ),
+        tap(response => this.postCapturesCache$.next(response))
       )
     ).pipe(repeatWhen(() => this.postCapturesUpdated$));
+  }
+
+  getPostCaptureById$(id: string) {
+    return merge(
+      this.postCapturesCache$.pipe(
+        map(postCaptures => postCaptures.results.find(p => p.id === id)),
+        isNonNullable()
+      ),
+      this.fetchById$(id)
+    );
+  }
+
+  getAndCachePostCaptureImage$(postCapture: DiaBackendAsset) {
+    return this.postCapturesImageCache$.pipe(
+      map(cache => cache.get(postCapture.id)),
+      switchMap(image =>
+        iif(
+          () => !!image,
+          of(image).pipe(isNonNullable()),
+          this.downloadFile$({ id: postCapture.id, field: 'asset_file' }).pipe(
+            first(),
+            tap(blob => {
+              const currentCache = this.postCapturesImageCache$.value;
+              currentCache.set(postCapture.id, blob);
+              this.postCapturesImageCache$.next(currentCache);
+            })
+          )
+        )
+      )
+    );
   }
 
   private list$({

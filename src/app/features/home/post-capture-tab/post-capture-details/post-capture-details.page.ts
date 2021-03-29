@@ -5,7 +5,7 @@ import { ActionSheetController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { zip } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { first, map, shareReplay, switchMap } from 'rxjs/operators';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -27,7 +27,16 @@ export class PostCaptureDetailsPage {
   readonly diaBackendAsset$ = this.route.paramMap.pipe(
     map(params => params.get('id')),
     isNonNullable(),
-    switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
+    switchMap(id => this.diaBackendAssetRepository.getPostCaptureById$(id)),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  readonly imageSrc$ = this.diaBackendAsset$.pipe(
+    switchMap(asset =>
+      this.diaBackendAssetRepository.getAndCachePostCaptureImage$(asset)
+    ),
+    first(),
+    map(blob => URL.createObjectURL(blob)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
 

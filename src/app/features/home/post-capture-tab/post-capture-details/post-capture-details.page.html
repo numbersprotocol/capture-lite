@@ -9,7 +9,7 @@
 </mat-toolbar>
 
 <mat-list>
-  <img [attr.src]="(diaBackendAsset$ | async)?.asset_file" />
+  <ion-img [attr.src]="imageSrc$ | async"></ion-img>
   <mat-list-item>
     <mat-icon mat-list-icon>person</mat-icon>
     <div mat-line>
