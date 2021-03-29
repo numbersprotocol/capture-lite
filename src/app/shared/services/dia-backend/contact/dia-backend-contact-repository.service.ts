@@ -54,6 +54,19 @@ export class DiaBackendContactRepository {
     );
   }
 
+  deleteByEmail$(email: string) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.post<ContactDeleteResponse>(
+          `${BASE_URL}/api/v2/contacts/delete/`,
+          { email },
+          { headers }
+        )
+      ),
+      tap(() => this.refresh({ reason: this.deleteByEmail$.name }))
+    );
+  }
+
   private list$({
     email,
     limit,
@@ -100,3 +113,6 @@ export interface DiaBackendContact extends Tuple {
   readonly contact_name: string;
   readonly contact_profile_picture_thumbnail: string | null;
 }
+
+// tslint:disable-next-line: no-empty-interface
+interface ContactDeleteResponse {}

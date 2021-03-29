@@ -54,6 +54,13 @@ const routes: Routes = [
       import('./features/about/about.module').then(m => m.AboutPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'contacts',
+    loadChildren: () =>
+      import('./features/contacts/contacts.module').then(
+        m => m.ContactsPageModule
+      ),
+  },
 ];
 @NgModule({
   imports: [
