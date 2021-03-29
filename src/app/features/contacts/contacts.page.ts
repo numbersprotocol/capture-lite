@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { concatMapTo, pluck, shareReplay } from 'rxjs/operators';
+import { concatMapTo, first, pluck, shareReplay } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
 import {
   DiaBackendContact,
@@ -27,7 +27,7 @@ export class ContactsPage {
   delete(contact: DiaBackendContact) {
     const action$ = this.diaBackendContactRepository
       .deleteByEmail$(contact.contact_email)
-      .pipe(concatMapTo(this.diaBackendContactRepository.all$));
+      .pipe(concatMapTo(this.diaBackendContactRepository.all$), first());
     return this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))
