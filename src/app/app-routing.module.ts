@@ -54,6 +54,20 @@ const routes: Routes = [
       import('./features/about/about.module').then(m => m.AboutPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'image-viewer/:src',
+    loadChildren: () =>
+      import('./shared/core/image-viewer/image-viewer.module').then(
+        m => m.ImageViewerPageModule
+      ),
+  },
+  {
+    path: 'contacts',
+    loadChildren: () =>
+      import('./features/contacts/contacts.module').then(
+        m => m.ContactsPageModule
+      ),
+  },
 ];
 @NgModule({
   imports: [

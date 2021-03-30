@@ -1,0 +1,32 @@
+<ion-header *transloco="let t" class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ t('contacts') }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="none">
+    <ion-item *ngFor="let contact of contacts$ | async; trackBy: trackContact">
+      <ion-avatar slot="start">
+        <img
+          [src]="
+            contact.contact_profile_picture_thumbnail ||
+            '/assets/icon/avatar-placeholder.png'
+          "
+        />
+      </ion-avatar>
+      <ion-label>{{ contact.contact_name || contact.contact_email }}</ion-label>
+      <ion-button
+        (click)="delete(contact)"
+        color="dark"
+        slot="end"
+        fill="clear"
+      >
+        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

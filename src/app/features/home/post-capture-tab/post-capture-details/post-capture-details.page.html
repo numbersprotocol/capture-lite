@@ -8,12 +8,16 @@
   </button>
 </mat-toolbar>
 
-<mat-list>
-  <img [attr.src]="(diaBackendAsset$ | async)?.asset_file" />
+<mat-list *ngIf="diaBackendAsset$ | async as diaBackendAsset">
+  <ion-img
+    *ngIf="imageSrc$ | async as imageSrc"
+    [routerLink]="['/image-viewer', imageSrc]"
+    [src]="imageSrc"
+  ></ion-img>
   <mat-list-item>
     <mat-icon mat-list-icon>person</mat-icon>
     <div mat-line>
-      {{ (diaBackendAsset$ | async)?.source_transaction?.sender_name }}
+      {{ diaBackendAsset.source_transaction?.sender_name }}
     </div>
   </mat-list-item>
   <mat-list-item>
@@ -25,15 +29,13 @@
   <mat-list-item>
     <mat-icon mat-list-icon>access_time</mat-icon>
     <div mat-line>
-      {{
-        (diaBackendAsset$ | async)?.information.proof?.timestamp | date: 'long'
-      }}
+      {{ diaBackendAsset.information.proof?.timestamp | date: 'long' }}
     </div>
   </mat-list-item>
   <mat-list-item>
     <mat-icon svgIcon="media-id-solid-black" mat-list-icon></mat-icon>
     <div mat-line>
-      {{ (diaBackendAsset$ | async)?.id }}
+      {{ diaBackendAsset.id }}
     </div>
   </mat-list-item>
 </mat-list>
