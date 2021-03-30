@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {
   MatBottomSheetRef,
   MAT_BOTTOM_SHEET_DATA,
@@ -10,25 +10,30 @@ describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
   let fixture: ComponentFixture<OptionsMenuComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [OptionsMenuComponent],
-      imports: [SharedTestingModule],
-      providers: [
-        { provide: MatBottomSheetRef, useValue: {} },
-        {
-          provide: MAT_BOTTOM_SHEET_DATA,
-          useValue: {
-            proof: { diaBackendAssetId: '', indexedAssets: { hashValue: {} } },
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [OptionsMenuComponent],
+        imports: [SharedTestingModule],
+        providers: [
+          { provide: MatBottomSheetRef, useValue: {} },
+          {
+            provide: MAT_BOTTOM_SHEET_DATA,
+            useValue: {
+              proof: {
+                diaBackendAssetId: '',
+                indexedAssets: { hashValue: {} },
+              },
+            },
           },
-        },
-      ],
-    }).compileComponents();
+        ],
+      }).compileComponents();
 
-    fixture = TestBed.createComponent(OptionsMenuComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+      fixture = TestBed.createComponent(OptionsMenuComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();
