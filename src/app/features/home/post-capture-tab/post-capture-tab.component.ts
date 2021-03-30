@@ -17,7 +17,9 @@ import { NetworkService } from '../../../shared/services/network/network.service
 export class PostCaptureTabComponent {
   categories = 'Photo';
 
-  readonly postCaptures$ = this.networkService.connected$.pipe(
+  readonly networkConnected$ = this.networkService.connected$;
+
+  readonly postCaptures$ = this.networkConnected$.pipe(
     switchMap(isConnected =>
       iif(
         () => isConnected,
