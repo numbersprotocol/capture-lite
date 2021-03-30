@@ -143,8 +143,7 @@ export class MigrationService {
   }
 
   private async fetchAllPostCaptures() {
-    return this.diaBackendAssetRepository
-      .getPostCaptures$()
+    return this.diaBackendAssetRepository.postCaptures$
       .pipe(first(), pluck('results'))
       .toPromise();
   }

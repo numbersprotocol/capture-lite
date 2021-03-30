@@ -10,8 +10,9 @@
 
 <mat-list *ngIf="diaBackendAsset$ | async as diaBackendAsset">
   <ion-img
-    [routerLink]="['/image-viewer', diaBackendAsset.asset_file]"
-    [src]="diaBackendAsset.asset_file"
+    *ngIf="imageSrc$ | async as imageSrc"
+    [routerLink]="['/image-viewer', imageSrc]"
+    [src]="imageSrc"
   ></ion-img>
   <mat-list-item>
     <mat-icon mat-list-icon>person</mat-icon>
