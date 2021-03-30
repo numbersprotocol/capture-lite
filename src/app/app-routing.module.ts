@@ -61,6 +61,13 @@ const routes: Routes = [
         m => m.ImageViewerPageModule
       ),
   },
+  {
+    path: 'contacts',
+    loadChildren: () =>
+      import('./features/contacts/contacts.module').then(
+        m => m.ContactsPageModule
+      ),
+  },
 ];
 @NgModule({
   imports: [
