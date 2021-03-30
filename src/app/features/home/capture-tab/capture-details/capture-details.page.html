@@ -17,7 +17,12 @@
 
 <div *transloco="let t" class="page-content">
   <mat-list class="content">
-    <img class="proof-image" [attr.src]="imageSrc$ | async" />
+    <ion-img
+      *ngIf="imageSrc$ | async as imageSrc"
+      [routerLink]="['/image-viewer', imageSrc]"
+      class="proof-image"
+      [src]="imageSrc"
+    ></ion-img>
     <mat-list-item>
       <mat-icon mat-list-icon>person</mat-icon>
       <div mat-line>{{ username$ | async }}</div>

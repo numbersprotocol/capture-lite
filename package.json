@@ -44,6 +44,7 @@
     "lodash": "^4.17.20",
     "material-design-icons-iconfont": "^6.1.0",
     "merge-images": "^2.0.0",
+    "ngx-pinch-zoom": "^2.5.5",
     "rxjs": "~6.6.3",
     "safe-pipe": "^1.0.3",
     "tslib": "^2.0.1",

@@ -95,6 +95,7 @@
   "editUsername": "Edit Username",
   "forgetPassword": "Forget Password",
   "resetPassword": "Reset Password",
+  "contacts": "Contacts",
   ".message": "Message",
   "message": {
     "areYouSure": "This action cannot be undone.",
