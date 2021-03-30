@@ -1,6 +1,22 @@
 :host {
   display: block;
+  height: 100%;
+}
+
+.network-status {
+  margin: 0;
   padding: 8px;
+  text-align: center;
+  background-color: var(--ion-color-light);
+  color: darkgray;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.segments {
+  display: flex;
+  padding: 8px;
+  flex-direction: column;
   height: 100%;
 }
 
@@ -8,12 +24,6 @@ ion-segment {
   width: 80%;
   margin: 0 auto 16px;
   flex-shrink: 0;
-}
-
-.segment-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
 .post-captures {

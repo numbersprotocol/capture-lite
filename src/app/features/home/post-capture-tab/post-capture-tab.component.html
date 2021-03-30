@@ -1,4 +1,7 @@
-<div class="segment-content" [ngSwitch]="categories">
+<p *ngIf="(networkConnected$ | async) === false" class="network-status">
+  {{ 'message.networkNotConnected' | transloco }}
+</p>
+<div class="segments" [ngSwitch]="categories">
   <ion-segment mode="ios" [(ngModel)]="categories">
     <ion-segment-button value="Photo" checked>
       <ion-icon src="/assets/icon/apps.svg" class="series-tab-icon"></ion-icon>
