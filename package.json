@@ -55,7 +55,7 @@
     "@angular/compiler-cli": "~11.2.7",
     "@angular/language-service": "~11.2.7",
     "@capacitor/cli": "2.4.5",
-    "@ionic/angular-toolkit": "^2.3.3",
+    "@ionic/angular-toolkit": "^3.1.1",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/lodash": "^4.14.166",
