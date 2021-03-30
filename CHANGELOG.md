@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.25.0 - 2021-03-30
+
+### Added
+
+- Show network status bar on PostCapture tab. #601
+- Cache PostCaptures in memory. #600
+- Implement fullscreen image viewer. #602
+- Implement contacts page to remove contacts. #599
+
+### Code Quality
+
+- Upgrade Angular from 10.0 to 11.0. #603
+
 ## 0.24.0 - 2021-03-26
 
 ### Added
