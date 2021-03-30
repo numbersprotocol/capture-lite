@@ -19,6 +19,7 @@ import {
 import {
   catchError,
   concatMap,
+  distinctUntilChanged,
   first,
   map,
   pluck,
@@ -70,6 +71,24 @@ export class DiaBackendAssetRepository {
 
   private readonly postCapturesUpdated$ = new Subject<{ reason?: string }>();
 
+  readonly postCaptures$ = merge(
+    this.postCapturesCache$,
+    this.postCapturesCount$.pipe(
+      first(),
+      concatMap(count =>
+        this.list$({
+          isOriginalOwner: false,
+          orderBy: 'source_transaction',
+          limit: count,
+        })
+      ),
+      tap(response => this.postCapturesCache$.next(response))
+    )
+  ).pipe(
+    distinctUntilChanged(),
+    repeatWhen(() => this.postCapturesUpdated$)
+  );
+
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService
@@ -93,23 +112,6 @@ export class DiaBackendAssetRepository {
 
   fetchCaptures$({ limit, offset = 0 }: { limit: number; offset?: number }) {
     return this.list$({ offset, limit, isOriginalOwner: true });
-  }
-
-  getPostCaptures$() {
-    return merge(
-      this.postCapturesCache$,
-      this.postCapturesCount$.pipe(
-        first(),
-        concatMap(count =>
-          this.list$({
-            isOriginalOwner: false,
-            orderBy: 'source_transaction',
-            limit: count,
-          })
-        ),
-        tap(response => this.postCapturesCache$.next(response))
-      )
-    ).pipe(repeatWhen(() => this.postCapturesUpdated$));
   }
 
   getPostCaptureById$(id: string) {
