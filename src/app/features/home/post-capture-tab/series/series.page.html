@@ -11,19 +11,19 @@
       class="collection-general"
       *ngFor="let collection of collectionGeneral"
     >
-      <img *ngIf="collection.img" [src]="collection.img" />
+      <img *ngIf="collection.img != null" [src]="collection.img" />
     </mat-grid-tile>
     <mat-grid-tile
       class="collection-special"
       *ngFor="let collection of collectionSpecial"
     >
-      <img *ngIf="collection.img" [src]="collection.img" />
+      <img *ngIf="collection.img != null" [src]="collection.img" />
     </mat-grid-tile>
     <mat-grid-tile
       class="collection-rare"
       *ngFor="let collection of collectionRare"
     >
-      <img *ngIf="collection.img" [src]="collection.img" />
+      <img *ngIf="collection.img != null" [src]="collection.img" />
     </mat-grid-tile>
   </mat-grid-list>
 </div>

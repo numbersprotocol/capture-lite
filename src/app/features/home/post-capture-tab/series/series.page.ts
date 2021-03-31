@@ -19,23 +19,23 @@ export class SeriesPage implements OnInit {
   ) {}
 
   collectionGeneral = [
-    {},
+    { img: null },
     { img: 'https://material.angular.io/assets/img/examples/shiba1.jpg' },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
+    { img: null },
+    { img: null },
+    { img: null },
+    { img: null },
+    { img: null },
+    { img: null },
+    { img: null },
+    { img: null },
+    { img: null },
+    { img: null },
   ];
-  collectionSpecial = [{}, {}, {}];
+  collectionSpecial = [{ img: null }, { img: null }, { img: null }];
   collectionRare = [
-    {},
+    { img: null },
     { img: 'https://material.angular.io/assets/img/examples/shiba2.jpg' },
-    {},
+    { img: null },
   ];
 }
