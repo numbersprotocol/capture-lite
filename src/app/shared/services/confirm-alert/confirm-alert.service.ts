@@ -40,6 +40,7 @@ export class ConfirmAlert {
             },
           ],
           mode: 'md',
+          backdropDismiss: false,
         })
         .then(alertElement => alertElement.present());
     });
