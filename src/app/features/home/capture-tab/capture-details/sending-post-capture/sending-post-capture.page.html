@@ -43,10 +43,10 @@
       <mat-card-header>
         <img [attr.src]="ownerAvatar$ | async" mat-card-avatar />
         <mat-card-title>
-          {{ asset.source_transaction.sender }}
+          {{ asset.source_transaction?.sender }}
         </mat-card-title>
         <mat-card-subtitle>
-          {{ asset.source_transaction.fulfilled_at | date: 'short' }}
+          {{ asset.source_transaction?.fulfilled_at | date: 'short' }}
         </mat-card-subtitle>
       </mat-card-header>
       <img [src]="asset.sharable_copy" mat-card-image />

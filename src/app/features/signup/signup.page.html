@@ -19,7 +19,12 @@
     </button>
   </form>
 
-  <button routerLink="/login" replaceUrl mat-stroked-button color="primary">
+  <button
+    routerLink="/login"
+    [replaceUrl]="true"
+    mat-stroked-button
+    color="primary"
+  >
     {{ t('alreadyHaveAnAccount') }}
   </button>
 </div>

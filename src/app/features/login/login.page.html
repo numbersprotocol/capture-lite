@@ -24,7 +24,12 @@
     {{ t('forgetPassword') }}
   </button>
 
-  <button routerLink="/signup" replaceUrl mat-stroked-button color="primary">
+  <button
+    routerLink="/signup"
+    [replaceUrl]="true"
+    mat-stroked-button
+    color="primary"
+  >
     {{ t('createAnAccount') }}
   </button>
 
