@@ -5,26 +5,25 @@
   <div class="toolbar-spacer"></div>
 </mat-toolbar>
 <div class="page-content">
-  <app-series-card></app-series-card>
+  <app-series-card [src]="cover"></app-series-card>
   <mat-grid-list cols="3" gutterSize="8px">
-    <mat-grid-tile class="collection-general">
-      <img src="https://material.angular.io/assets/img/examples/shiba1.jpg" />
+    <mat-grid-tile
+      class="collection-general"
+      *ngFor="let collection of collectionGeneral"
+    >
+      <img *ngIf="collection.img" [src]="collection.img" />
     </mat-grid-tile>
-    <mat-grid-tile class="collection-general"></mat-grid-tile>
-    <mat-grid-tile class="collection-general"></mat-grid-tile>
-    <mat-grid-tile class="collection-general"></mat-grid-tile>
-    <mat-grid-tile class="collection-general"></mat-grid-tile>
-    <mat-grid-tile class="collection-general">
-      <img src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+    <mat-grid-tile
+      class="collection-special"
+      *ngFor="let collection of collectionSpecial"
+    >
+      <img *ngIf="collection.img" [src]="collection.img" />
     </mat-grid-tile>
-    <mat-grid-tile class="collection-general"></mat-grid-tile>
-    <mat-grid-tile class="collection-general"></mat-grid-tile>
-    <mat-grid-tile class="collection-general"></mat-grid-tile>
-    <mat-grid-tile class="collection-special"></mat-grid-tile>
-    <mat-grid-tile class="collection-special"></mat-grid-tile>
-    <mat-grid-tile class="collection-special"></mat-grid-tile>
-    <mat-grid-tile class="collection-rare"></mat-grid-tile>
-    <mat-grid-tile class="collection-rare"></mat-grid-tile>
-    <mat-grid-tile class="collection-rare"></mat-grid-tile>
+    <mat-grid-tile
+      class="collection-rare"
+      *ngFor="let collection of collectionRare"
+    >
+      <img *ngIf="collection.img" [src]="collection.img" />
+    </mat-grid-tile>
   </mat-grid-list>
 </div>

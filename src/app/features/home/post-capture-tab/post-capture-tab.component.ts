@@ -6,6 +6,10 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import {
+  DiaBackendSeries,
+  DiaBackendSeriesRepository,
+} from '../../../shared/services/dia-backend/series/dia-backend-series-repository.service';
 import { NetworkService } from '../../../shared/services/network/network.service';
 
 @UntilDestroy({ checkProperties: true })
@@ -31,13 +35,31 @@ export class PostCaptureTabComponent {
     )
   );
 
+  // collected=True
+  readonly getSeries$ = this.networkService.connected$.pipe(
+    switchMap(isConnected =>
+      iif(
+        () => isConnected,
+        this.diaBackendSeriesRepository.readSeries$().pipe(
+          pluck('results')
+          // tap(v => console.log(v)),
+          // map(series => series.filter(a => a.in_store == true))
+        )
+      )
+    )
+  );
+
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository,
     private readonly networkService: NetworkService
   ) {}
 
   // eslint-disable-next-line class-methods-use-this
   trackPostCapture(_: number, item: DiaBackendAsset) {
+    return item.id;
+  }
+  trackSeries(_: number, item: DiaBackendSeries) {
     return item.id;
   }
 }

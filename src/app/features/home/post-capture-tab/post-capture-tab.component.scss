@@ -48,3 +48,16 @@ mat-grid-tile {
 .tab-content-post {
   height: 100%;
 }
+
+mat-icon {
+  color: white;
+  z-index: 10;
+}
+
+mat-icon.uploaded {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  font-size: 20px;
+  opacity: 90%;
+}
