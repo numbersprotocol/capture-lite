@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy } from '../../database/table/table';

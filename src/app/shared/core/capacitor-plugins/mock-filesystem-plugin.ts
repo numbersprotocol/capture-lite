@@ -26,7 +26,7 @@ import {
   StatOptions,
   StatResult,
 } from '@capacitor/core';
-import { groupBy } from 'lodash';
+import { groupBy } from 'lodash-es';
 import {
   base64ToString,
   stringToBase64,

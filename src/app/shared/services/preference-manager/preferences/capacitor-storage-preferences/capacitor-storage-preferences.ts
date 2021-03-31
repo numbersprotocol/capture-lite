@@ -1,6 +1,6 @@
 import { StoragePlugin } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { BehaviorSubject, defer, Observable } from 'rxjs';
 import { concatMap, distinctUntilChanged } from 'rxjs/operators';
 import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
