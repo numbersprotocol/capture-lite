@@ -1,9 +1,9 @@
-import { flow, groupBy, mapValues } from 'lodash/fp';
+import { groupBy, mapValues } from 'lodash';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import { MimeType } from '../../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
 import { ImageStore } from '../../image-store/image-store.service';
-import { DefaultFactId, Proof, Signature, Signatures, Truth } from './proof';
+import { DefaultFactId, Proof, Signatures, Truth } from './proof';
 
 /**
  * Only for migration and connection to backend. Subject to change.
@@ -117,26 +117,23 @@ export function getTruth(
     })),
     'provider'
   );
-  const providers = flow(
-    mapValues((value: Record<string, string>[]) =>
-      groupObjectsBy(value, 'name')
-    ),
-    mapValues((value: Record<string, { value: string }[]>) =>
-      mapValues((arr: { value: string }[]) => toNumberOrBoolean(arr[0].value))(
-        value
-      )
-    )
-  )(groupedByProvider);
+
+  const groupedByProviderAndName = mapValues(groupedByProvider, v =>
+    groupObjectsBy(v, 'name')
+  );
+
+  const providers = mapValues(groupedByProviderAndName, value =>
+    mapValues(value, arr => toNumberOrBoolean(arr[0].value))
+  );
+
   return { timestamp: sortedProofInformation.proof.timestamp, providers };
 }
 
 export function getSignatures(oldSignatures: OldSignature[]): Signatures {
-  return flow(
-    mapValues((values: Signature[]) => ({
-      signature: values[0].signature,
-      publicKey: values[0].publicKey,
-    }))
-  )(groupObjectsBy(oldSignatures, 'provider'));
+  return mapValues(groupObjectsBy(oldSignatures, 'provider'), values => ({
+    signature: values[0].signature,
+    publicKey: values[0].publicKey,
+  }));
 }
 
 export function replaceOldDefaultInformationNameWithDefaultFactId(
@@ -160,16 +157,13 @@ export function replaceOldDefaultInformationNameWithDefaultFactId(
 function groupObjectsBy<T extends Record<string, any>>(
   objects: T[],
   key: string
-): Record<string, Partial<T>[]> {
-  return flow(
-    groupBy(key),
-    mapValues((values: T[]) =>
-      values.map(value => {
-        delete value[key];
-        return value;
-      })
-    )
-  )(objects);
+) {
+  return mapValues(groupBy(objects, key), values =>
+    values.map(v => {
+      delete v[key];
+      return v;
+    })
+  );
 }
 
 function toNumberOrBoolean(str: string) {

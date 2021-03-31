@@ -5,7 +5,7 @@ import {
   FilesystemPlugin,
 } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
-import { differenceWith, intersectionWith, isEqual, uniqWith } from 'lodash';
+import { differenceWith, intersectionWith, isEqual, uniqWith } from 'lodash-es';
 import { BehaviorSubject, defer } from 'rxjs';
 import { concatMapTo } from 'rxjs/operators';
 import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';

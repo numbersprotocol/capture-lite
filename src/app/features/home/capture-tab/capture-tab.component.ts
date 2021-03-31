@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { groupBy } from 'lodash';
+import { groupBy } from 'lodash-es';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import {
   catchError,

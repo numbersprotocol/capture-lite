@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { isEqual, reject } from 'lodash';
+import { isEqual, reject } from 'lodash-es';
 import { combineLatest, defer, forkJoin, Observable, Subject } from 'rxjs';
 import {
   concatMap,
