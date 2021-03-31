@@ -10,12 +10,12 @@
   </h4>
   <mat-card class="transaction-card">
     <mat-card-content class="row">
-      <mat-label> {{ (transaction$ | async)?.asset.id }}</mat-label>
+      <mat-label> {{ (transaction$ | async)?.asset?.id }}</mat-label>
       <button [class]="status$ | async" mat-stroked-button disableRipple>
         {{ t('transactionState.' + (status$ | async)) }}
       </button>
     </mat-card-content>
-    <img [src]="(transaction$ | async)?.asset.asset_file_thumbnail" />
+    <img [src]="(transaction$ | async)?.asset?.asset_file_thumbnail" />
     <mat-card-content class="column">
       <mat-label>
         {{ t('sentFrom') }}: {{ (transaction$ | async)?.sender_name }}

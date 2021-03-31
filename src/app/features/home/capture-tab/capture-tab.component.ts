@@ -135,8 +135,8 @@ export class CaptureTabComponent {
 
   // eslint-disable-next-line class-methods-use-this
   keyDescendingOrder(
-    a: KeyValue<number, string>,
-    b: KeyValue<number, string>
+    a: KeyValue<string, CaptureItem[]>,
+    b: KeyValue<string, CaptureItem[]>
   ): number {
     return a.key > b.key ? -1 : b.key > a.key ? 1 : 0;
   }
@@ -164,8 +164,8 @@ export class CaptureTabComponent {
       .subscribe();
   }
 
-  uploadAvatar(fileList: FileList) {
-    return of(fileList.item(0))
+  uploadAvatar(event: Event) {
+    return of((event.target as HTMLInputElement | null)?.files?.item(0))
       .pipe(
         isNonNullable(),
         concatMap(picture =>
