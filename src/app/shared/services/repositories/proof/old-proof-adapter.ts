@@ -1,4 +1,4 @@
-import { groupBy, mapValues } from 'lodash';
+import { groupBy, mapValues } from 'lodash-es';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import { MimeType } from '../../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
