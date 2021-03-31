@@ -1,9 +1,3 @@
-/**
- * Disable the await-promise rule as TSLint cannot correctly identify the return
- * type of crypto.subtle. Need reevaluate after Angular replace deprecated
- * TSLint with ESLint. See: https://github.com/angular/angular-cli/issues/13732
- */
-/* tslint:disable:await-promise */
 import {
   arrayBufferToHex,
   base64ToArrayBuffer,

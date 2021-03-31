@@ -294,16 +294,16 @@ export interface ReadUserResponse {
   readonly email: string;
 }
 
-// tslint:disable-next-line: no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface CreateUserResponse {}
 
-// tslint:disable-next-line: no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface UpdateUserResponse {}
 
-// tslint:disable-next-line: no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ResendActivationEmailResponse {}
 
-// tslint:disable-next-line: no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ResetPasswordResponse {}
 
 type GetAvatarResponse = UploadAvatarResponse;

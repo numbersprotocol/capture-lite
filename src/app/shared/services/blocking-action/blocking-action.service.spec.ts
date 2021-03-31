@@ -47,9 +47,11 @@ describe('BlockingActionService', () => {
 
   it('should throw error if action has error', done => {
     service.run$(errorAction$).subscribe({
-      error: (err: Error) => {
-        expect(err.message).toEqual(errorMessage);
-        done();
+      error: (err: unknown) => {
+        if (err instanceof Error) {
+          expect(err.message).toEqual(errorMessage);
+          done();
+        }
       },
     });
   });

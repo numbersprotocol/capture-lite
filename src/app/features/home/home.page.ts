@@ -28,7 +28,10 @@ export class HomePage {
   readonly username$ = this.diaBackendAuthService.username$;
   readonly inboxCount$ = this.diaBackendTransactionRepository.inbox$.pipe(
     map(transactions => transactions.length),
-    // WORKARDOUND: force changeDetection to update badge when returning to App by clicking push notification
+    /**
+     * WORKARDOUND: force changeDetection to update badge when returning to App
+     * by clicking push notification
+     */
     tap(() => this.changeDetectorRef.detectChanges())
   );
 
@@ -109,7 +112,7 @@ export class HomePage {
     return this.captureService.capture();
   }
 
-  // tslint:disable-next-line: prefer-function-over-method
+  // eslint-disable-next-line class-methods-use-this
   async openStore() {
     return Browser.open({
       url: 'https://authmedia.net/version-test/store',

@@ -32,7 +32,6 @@ import { isValidGeolocation } from './capture-details/capture-details.page';
   styleUrls: ['./capture-tab.component.scss'],
 })
 export class CaptureTabComponent {
-  // tslint:disable-next-line: rxjs-no-explicit-generics
   private readonly _avatarInput$ = new BehaviorSubject<
     HTMLInputElement | undefined
   >(undefined);
@@ -116,7 +115,7 @@ export class CaptureTabComponent {
 
   private updateUsername(username: string) {
     const action$ = this.diaBackendAuthService.updateUser$({ username }).pipe(
-      catchError(err => {
+      catchError((err: unknown) => {
         this.snackBar.open(
           this.translocoService.translate('error.invalidUsername'),
           this.translocoService.translate('dismiss'),
@@ -134,7 +133,7 @@ export class CaptureTabComponent {
       .subscribe();
   }
 
-  // tslint:disable-next-line: prefer-function-over-method
+  // eslint-disable-next-line class-methods-use-this
   keyDescendingOrder(
     a: KeyValue<number, string>,
     b: KeyValue<number, string>
@@ -142,7 +141,7 @@ export class CaptureTabComponent {
     return a.key > b.key ? -1 : b.key > a.key ? 1 : 0;
   }
 
-  // tslint:disable-next-line: prefer-function-over-method
+  // eslint-disable-next-line class-methods-use-this
   trackCaptureGroupByDate(
     _: number,
     item: { key: string; value: CaptureItem[] }
@@ -150,7 +149,7 @@ export class CaptureTabComponent {
     return item.key;
   }
 
-  // tslint:disable-next-line: prefer-function-over-method
+  // eslint-disable-next-line class-methods-use-this
   trackCaptureItem(_: number, item: CaptureItem) {
     return item.oldProofHash;
   }

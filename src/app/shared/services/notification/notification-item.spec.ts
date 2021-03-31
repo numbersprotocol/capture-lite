@@ -1,5 +1,3 @@
-// tslint:disable: no-unbound-method
-
 import { TestBed } from '@angular/core/testing';
 import { LocalNotificationsPlugin, Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
@@ -29,7 +27,7 @@ describe('NotificationItem', () => {
   it('should be created', () => expect(item).toBeTruthy());
 
   it('should be able to notify', async () => {
-    spyOn(console, 'info');
+    spyOn(console, 'log');
     expect(await item.notify(SAMPLE_TITLE, SAMPLE_MESSAGE)).toBeInstanceOf(
       NotificationItem
     );
@@ -38,4 +36,3 @@ describe('NotificationItem', () => {
 
 const SAMPLE_TITLE = 'SAMPLE_TITLE';
 const SAMPLE_MESSAGE = 'SAMPLE_MESSAGE';
-const SAMPLE_ERROR = new Error('SAMPLE_ERROR');

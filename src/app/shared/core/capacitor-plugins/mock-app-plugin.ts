@@ -1,4 +1,4 @@
-// tslint:disable: prefer-function-over-method no-async-without-await
+/* eslint-disable class-methods-use-this, @typescript-eslint/require-await  */
 import {
   AppLaunchUrl,
   AppPlugin,
@@ -11,14 +11,14 @@ export class MockAppPlugin implements AppPlugin {
     return { remove: () => undefined };
   }
 
-  /* tslint:disable:no-empty */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   removeAllListeners(): void {}
 
   exitApp(): never {
     throw new Error('exited');
   }
 
-  async canOpenUrl(options: { url: string }): Promise<{ value: boolean }> {
+  async canOpenUrl(_: { url: string }): Promise<{ value: boolean }> {
     return Promise.resolve({ value: true });
   }
 
@@ -27,12 +27,10 @@ export class MockAppPlugin implements AppPlugin {
   }
 
   async getState(_options?: any): Promise<AppState> {
-    return {
-      isActive: true,
-    };
+    return { isActive: true };
   }
 
-  async openUrl(options: { url: string }): Promise<{ completed: boolean }> {
+  async openUrl(_: { url: string }): Promise<{ completed: boolean }> {
     return Promise.resolve({ completed: true });
   }
 }

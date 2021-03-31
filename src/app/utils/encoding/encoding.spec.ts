@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { MimeType } from '../mime-type';
 import {
   arrayBufferToBase64,

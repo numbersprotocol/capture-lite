@@ -173,8 +173,12 @@ export class SignupPage {
             ],
             { replaceUrl: true }
           ),
-        err => {
-          // TODO: The actual error type can't be determined from response. Fix this after API updates error messages.
+        (err: unknown) => {
+          /**
+           * TODO: The actual error type can't be determined from response. Fix
+           * this after API updates error messages.
+           */
+          // eslint-disable-next-line no-console
           console.error(err);
           this.toastController
             .create({

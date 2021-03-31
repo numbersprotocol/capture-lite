@@ -1,4 +1,4 @@
-// tslint:disable: prefer-function-over-method no-async-without-await
+/* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 import {
   NetworkPlugin,
   NetworkStatus,
@@ -14,7 +14,7 @@ export class MockNetworkPlugin implements NetworkPlugin {
     _eventName: string,
     _listenerFunc: (status: NetworkStatus) => any
   ): PluginListenerHandle {
-    // tslint:disable-next-line: no-empty
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return { remove: () => {} };
   }
 

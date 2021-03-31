@@ -1,3 +1,4 @@
+/* eslint-disable rxjs/no-subject-value */
 import {
   FilesystemDirectory,
   FilesystemEncoding,
@@ -11,15 +12,20 @@ import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
 import { OnConflictStrategy, Table, Tuple } from '../table';
 
 export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
+  private static readonly initializationMutex = new Mutex();
+
   private readonly directory = FilesystemDirectory.Data;
+
   private readonly rootDir = CapacitorFilesystemTable.name;
-  // tslint:disable-next-line: rxjs-no-explicit-generics
   private readonly tuples$ = new BehaviorSubject<T[] | undefined>(undefined);
+
   readonly queryAll$ = defer(() => this.initialize()).pipe(
     concatMapTo(this.tuples$.asObservable()),
     isNonNullable()
   );
+
   private hasInitialized = false;
+
   private readonly mutex = new Mutex();
 
   constructor(
@@ -103,7 +109,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
         this.tuples$.next(
           uniqWith([...(this.tuples$.value ?? []), ...tuples], comparator)
         );
-      } else if (onConflict === OnConflictStrategy.REPLACE) {
+      } else {
         this.tuples$.next(
           uniqWith([...tuples, ...(this.tuples$.value ?? [])], comparator)
         );
@@ -199,8 +205,6 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
       }
     });
   }
-
-  private static readonly initializationMutex = new Mutex();
 }
 
 function assertNoDuplicatedTuples<T>(

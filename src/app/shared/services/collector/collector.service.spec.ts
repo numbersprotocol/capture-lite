@@ -1,4 +1,4 @@
-// tslint:disable: prefer-function-over-method no-unbound-method
+/* eslint-disable class-methods-use-this */
 import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { MimeType } from '../../../utils/mime-type';
@@ -86,6 +86,7 @@ const FACTS: Facts = {
 
 class MockFactsProvider implements FactsProvider {
   readonly id = MockFactsProvider.name;
+  // eslint-disable-next-line @typescript-eslint/require-await
   async provide(_: Assets) {
     return FACTS;
   }
@@ -103,6 +104,7 @@ const SIGNATURE: Signature = {
 };
 class MockSignatureProvider implements SignatureProvider {
   readonly id = MockSignatureProvider.name;
+  // eslint-disable-next-line @typescript-eslint/require-await
   async provide(_: string) {
     return SIGNATURE;
   }

@@ -1,4 +1,4 @@
-// tslint:disable: prefer-function-over-method no-async-without-await
+/* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 import {
   NotificationChannel,
   NotificationChannelList,
@@ -25,7 +25,7 @@ export class MockPushNotificationsPlugin implements PushNotificationsPlugin {
   }
 
   async removeDeliveredNotifications(
-    delivered: PushNotificationDeliveredList
+    _: PushNotificationDeliveredList
   ): Promise<void> {
     throw new Error('Method not implemented.');
   }
@@ -34,11 +34,11 @@ export class MockPushNotificationsPlugin implements PushNotificationsPlugin {
     throw new Error('Method not implemented.');
   }
 
-  async createChannel(channel: NotificationChannel): Promise<void> {
+  async createChannel(_: NotificationChannel): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  async deleteChannel(channel: NotificationChannel): Promise<void> {
+  async deleteChannel(_: NotificationChannel): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -63,18 +63,18 @@ export class MockPushNotificationsPlugin implements PushNotificationsPlugin {
     listenerFunc: (notification: PushNotificationActionPerformed) => void
   ): PluginListenerHandle;
   addListener(
-    eventName:
+    _eventName:
       | 'registration'
       | 'registrationError'
       | 'pushNotificationReceived'
       | 'pushNotificationActionPerformed',
-    listenerFunc:
+    _listenerFunc:
       | ((token: PushNotificationToken) => void)
       | ((error: any) => void)
       | ((notification: PushNotification) => void)
       | ((notification: PushNotificationActionPerformed) => void)
   ): PluginListenerHandle {
-    // tslint:disable-next-line: no-empty
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return { remove: () => {} };
   }
 

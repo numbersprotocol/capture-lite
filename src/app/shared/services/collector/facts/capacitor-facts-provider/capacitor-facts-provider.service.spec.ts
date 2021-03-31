@@ -38,7 +38,7 @@ describe('CapacitorFactsProvider', () => {
 
     await provider.setDeviceInfoCollection(expected);
 
-    provider.isDeviceInfoCollectionEnabled$().subscribe(result => {
+    provider.isDeviceInfoCollectionEnabled$.subscribe(result => {
       expect(result).toEqual(expected);
       done();
     });
@@ -59,7 +59,7 @@ describe('CapacitorFactsProvider', () => {
 
     await provider.setGeolocationInfoCollection(expected);
 
-    provider.isGeolocationInfoCollectionEnabled$().subscribe(result => {
+    provider.isGeolocationInfoCollectionEnabled$.subscribe(result => {
       expect(result).toEqual(expected);
       done();
     });

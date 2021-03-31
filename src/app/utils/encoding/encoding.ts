@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { MimeType } from '../mime-type';
 
 const textEncoder = new TextEncoder();
@@ -23,7 +24,7 @@ export function arrayBufferToHex(arrayBuffer: ArrayBuffer) {
 }
 
 export function hexToArrayBuffer(hex: string) {
-  // tslint:disable-next-line: no-non-null-assertion
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return new Uint8Array(hex.match(/[\da-f]{2}/gi)!.map(h => parseInt(h, 16)))
     .buffer;
 }
@@ -64,7 +65,7 @@ export function base64ToString(base64: string) {
     atob(base64)
       .split('')
       .map(c => {
-        // tslint:disable-next-line: no-magic-numbers
+        // eslint-disable-next-line no-magic-numbers
         return `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`;
       })
       .join('')

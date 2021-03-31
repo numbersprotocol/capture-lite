@@ -19,7 +19,7 @@ export const languages: { [key: string]: string } = {
 export const defaultLanguage =
   Object.entries(languages).find(
     pair => pair[0] === getBrowserCultureLang().toLowerCase()
-  ) || Object.entries(languages)[0];
+  ) ?? Object.entries(languages)[0];
 
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {

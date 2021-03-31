@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Plugins } from '@capacitor/core';
 import { OnConflictStrategy, Table, Tuple } from '../table';
 import { CapacitorFilesystemTable } from './capacitor-filesystem-table';

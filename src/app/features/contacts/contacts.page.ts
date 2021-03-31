@@ -34,7 +34,7 @@ export class ContactsPage {
       .subscribe();
   }
 
-  // tslint:disable-next-line: prefer-function-over-method
+  // eslint-disable-next-line class-methods-use-this
   trackContact(_: number, item: DiaBackendContact) {
     return item.contact_email;
   }

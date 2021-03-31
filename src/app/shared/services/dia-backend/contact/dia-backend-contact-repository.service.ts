@@ -114,5 +114,5 @@ export interface DiaBackendContact extends Tuple {
   readonly contact_profile_picture_thumbnail: string | null;
 }
 
-// tslint:disable-next-line: no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ContactDeleteResponse {}

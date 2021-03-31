@@ -22,7 +22,18 @@ const { Device } = Plugins;
 })
 export class CapacitorFactsProvider implements FactsProvider {
   readonly id = CapacitorFactsProvider.name;
+
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
+
+  readonly isDeviceInfoCollectionEnabled$ = this.preferences.getBoolean$(
+    PrefKeys.COLLECT_DEVICE_INFO,
+    true
+  );
+
+  readonly isGeolocationInfoCollectionEnabled$ = this.preferences.getBoolean$(
+    PrefKeys.COLLECT_LOCATION_INFO,
+    true
+  );
 
   constructor(
     private readonly geolocationService: GeolocationService,
@@ -91,20 +102,12 @@ export class CapacitorFactsProvider implements FactsProvider {
       });
   }
 
-  isDeviceInfoCollectionEnabled$() {
-    return this.preferences.getBoolean$(PrefKeys.COLLECT_DEVICE_INFO, true);
-  }
-
   async isDeviceInfoCollectionEnabled() {
     return this.preferences.getBoolean(PrefKeys.COLLECT_DEVICE_INFO, true);
   }
 
   async setDeviceInfoCollection(enable: boolean) {
     return this.preferences.setBoolean(PrefKeys.COLLECT_DEVICE_INFO, enable);
-  }
-
-  isGeolocationInfoCollectionEnabled$() {
-    return this.preferences.getBoolean$(PrefKeys.COLLECT_LOCATION_INFO, true);
   }
 
   async isGeolocationInfoCollectionEnabled() {
@@ -133,11 +136,11 @@ export class CapacitorFactsProvider implements FactsProvider {
         break;
       default:
         /*
-         * WORKAROUND: iOS/Android location error code is always undefined
-         * the only way to determine the error type on Native platform with the Capacitor Geolocation plugin
-         * is by parsing the message.
-         * But message is not reliable, and iOS doesn't return a expressive error message,
-         * so a fallback message is provided.
+         * WORKAROUND: iOS/Android location error code is always undefined the
+         * only way to determine the error type on Native platform with the
+         * Capacitor Geolocation plugin is by parsing the message.
+         * But message is not reliable, and iOS doesn't return a expressive
+         * error message, so a fallback message is provided.
          */
         if (
           error.message?.toLowerCase().includes('permission') ||

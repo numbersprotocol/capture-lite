@@ -1,4 +1,4 @@
-// tslint:disable: prefer-function-over-method no-async-without-await
+/* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 
 import {
   LocalNotification,
@@ -29,13 +29,13 @@ export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
     throw new Error('Method not implemented.');
   }
 
-  async registerActionTypes(options: {
+  async registerActionTypes(_: {
     types: LocalNotificationActionType[];
   }): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  async cancel(pending: LocalNotificationPendingList): Promise<void> {
+  async cancel(_: LocalNotificationPendingList): Promise<void> {
     return;
   }
 
@@ -43,11 +43,11 @@ export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
     throw new Error('Method not implemented.');
   }
 
-  async createChannel(channel: NotificationChannel): Promise<void> {
+  async createChannel(_: NotificationChannel): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  async deleteChannel(channel: NotificationChannel): Promise<void> {
+  async deleteChannel(_: NotificationChannel): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -68,8 +68,10 @@ export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
     listenerFunc: (notificationAction: LocalNotificationActionPerformed) => void
   ): PluginListenerHandle;
   addListener(
-    eventName: 'localNotificationReceived' | 'localNotificationActionPerformed',
-    listenerFunc:
+    _eventName:
+      | 'localNotificationReceived'
+      | 'localNotificationActionPerformed',
+    _listenerFunc:
       | ((notification: LocalNotification) => void)
       | ((notificationAction: LocalNotificationActionPerformed) => void)
   ): PluginListenerHandle {

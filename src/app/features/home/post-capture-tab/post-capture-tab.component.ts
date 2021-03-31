@@ -36,7 +36,7 @@ export class PostCaptureTabComponent {
     private readonly networkService: NetworkService
   ) {}
 
-  // tslint:disable-next-line: prefer-function-over-method
+  // eslint-disable-next-line class-methods-use-this
   trackPostCapture(_: number, item: DiaBackendAsset) {
     return item.id;
   }

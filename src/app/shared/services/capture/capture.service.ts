@@ -12,7 +12,6 @@ import { ProofRepository } from '../repositories/proof/proof-repository.service'
   providedIn: 'root',
 })
 export class CaptureService {
-  // tslint:disable-next-line: rxjs-no-explicit-generics
   private readonly _collectingOldProofHashes$ = new BehaviorSubject<
     Set<string>
   >(new Set());
@@ -38,12 +37,14 @@ export class CaptureService {
     await this.proofRepository.add(proof);
 
     this._collectingOldProofHashes$.next(
+      // eslint-disable-next-line rxjs/no-subject-value
       this._collectingOldProofHashes$.value.add(getOldProof(proof).hash)
     );
     const collected = await this.collectorService.run(
       await proof.getAssets(),
       proof.timestamp
     );
+    // eslint-disable-next-line rxjs/no-subject-value
     const newCollectingOldProofHashes = this._collectingOldProofHashes$.value;
     newCollectingOldProofHashes.delete(getOldProof(proof).hash);
     this._collectingOldProofHashes$.next(newCollectingOldProofHashes);

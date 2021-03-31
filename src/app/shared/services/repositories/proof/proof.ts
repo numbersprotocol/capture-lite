@@ -8,7 +8,10 @@ import {
 } from '../../image-store/image-store.service';
 
 export class Proof {
+  static signatureProviders = new Map<string, SignatureVerifier>();
+
   diaBackendAssetId?: string = undefined;
+
   isCollected = false;
 
   get timestamp() {
@@ -27,6 +30,54 @@ export class Proof {
     return this.getFactValue(DefaultFactId.GEOLOCATION_LONGITUDE);
   }
   readonly indexedAssets: IndexedAssets = {};
+
+  static async from(
+    imageStore: ImageStore,
+    assets: Assets,
+    truth: Truth,
+    signatures: Signatures
+  ) {
+    const proof = new Proof(imageStore, truth, signatures);
+    await proof.setAssets(assets);
+    return proof;
+  }
+
+  /**
+   * Create a Proof from IndexedProofView. This method should only be used when
+   * you sure the Proof has already store its raw assets to ImageStore by calling
+   * Proof.from() or Proof.parse() before.
+   * @param imageStore The singleton ImageStore service.
+   * @param indexedProofView The view without assets with base64.
+   */
+  static fromIndexedProofView(
+    imageStore: ImageStore,
+    indexedProofView: IndexedProofView
+  ) {
+    const proof = new Proof(
+      imageStore,
+      indexedProofView.truth,
+      indexedProofView.signatures
+    );
+    proof.setIndexedAssets(indexedProofView.indexedAssets);
+    proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
+    proof.isCollected = indexedProofView.isCollected ?? false;
+    return proof;
+  }
+
+  static registerSignatureProvider(id: string, provider: SignatureVerifier) {
+    Proof.signatureProviders.set(id, provider);
+  }
+
+  static unregisterSignatureProvider(id: string) {
+    Proof.signatureProviders.delete(id);
+  }
+
+  static async parse(imageStore: ImageStore, json: string) {
+    const parsed = JSON.parse(json) as SerializedProof;
+    const proof = new Proof(imageStore, parsed.truth, parsed.signatures);
+    await proof.setAssets(parsed.assets);
+    return proof;
+  }
 
   constructor(
     private readonly imageStore: ImageStore,
@@ -49,7 +100,7 @@ export class Proof {
   }
 
   setIndexedAssets(indexedAssets: IndexedAssets) {
-    // @ts-ignore
+    // @ts-expect-error: initialize lazily
     this.indexedAssets = indexedAssets;
     return indexedAssets;
   }
@@ -135,56 +186,6 @@ export class Proof {
         this.imageStore.delete(index)
       )
     );
-  }
-
-  static signatureProviders = new Map<string, SignatureVerifier>();
-
-  static async from(
-    imageStore: ImageStore,
-    assets: Assets,
-    truth: Truth,
-    signatures: Signatures
-  ) {
-    const proof = new Proof(imageStore, truth, signatures);
-    await proof.setAssets(assets);
-    return proof;
-  }
-
-  /**
-   * Create a Proof from IndexedProofView. This method should only be used when
-   * you sure the Proof has already store its raw assets to ImageStore by calling
-   * Proof.from() or Proof.parse() before.
-   * @param imageStore The singleton ImageStore service.
-   * @param indexedProofView The view without assets with base64.
-   */
-  static fromIndexedProofView(
-    imageStore: ImageStore,
-    indexedProofView: IndexedProofView
-  ) {
-    const proof = new Proof(
-      imageStore,
-      indexedProofView.truth,
-      indexedProofView.signatures
-    );
-    proof.setIndexedAssets(indexedProofView.indexedAssets);
-    proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
-    proof.isCollected = indexedProofView.isCollected ?? false;
-    return proof;
-  }
-
-  static registerSignatureProvider(id: string, provider: SignatureVerifier) {
-    Proof.signatureProviders.set(id, provider);
-  }
-
-  static unregisterSignatureProvider(id: string) {
-    Proof.signatureProviders.delete(id);
-  }
-
-  static async parse(imageStore: ImageStore, json: string) {
-    const parsed = JSON.parse(json) as SerializedProof;
-    const proof = new Proof(imageStore, parsed.truth, parsed.signatures);
-    await proof.setAssets(parsed.assets);
-    return proof;
   }
 }
 

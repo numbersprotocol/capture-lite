@@ -23,7 +23,7 @@ export class InformationPage {
     isNonNullable(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
-  readonly timestamp$ = this.proof$.pipe(map(proof => proof?.timestamp));
+  readonly timestamp$ = this.proof$.pipe(map(proof => proof.timestamp));
   readonly oldProofHash$ = this.proof$.pipe(
     map(proof => getOldProof(proof).hash)
   );

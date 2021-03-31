@@ -110,8 +110,12 @@ export class LoginPage {
     const action$ = this.diaBackendAuthService
       .login$(this.model.email, this.model.password)
       .pipe(
-        catchError((error: TimeoutError | HttpErrorResponse) => {
-          this.showLoginErrorMessage(error);
+        catchError((error: unknown) => {
+          if (
+            error instanceof TimeoutError ||
+            error instanceof HttpErrorResponse
+          )
+            this.showLoginErrorMessage(error);
           throw error;
         }),
         tap(_ => (this.onboardingService.isNewLogin = true))
@@ -128,7 +132,7 @@ export class LoginPage {
     this.diaBackendAuthService
       .resendActivationEmail$(this.model.email)
       .pipe(
-        catchError(err => {
+        catchError((err: unknown) => {
           this.snackbar.open(
             this.translocoService.translate('error.loginNoEmailToActivate'),
             this.translocoService.translate('dismiss'),
@@ -222,7 +226,7 @@ export class LoginPage {
     );
     return defer(() => this.blockingActionService.run$(action$))
       .pipe(
-        catchError(err => {
+        catchError((err: unknown) => {
           this.snackbar.open(
             this.translocoService.translate('error.invalidEmail'),
             this.translocoService.translate('dismiss'),

@@ -69,7 +69,7 @@ export class ProfilePage {
 
   private updateUsername(username: string) {
     const action$ = this.diaBackendAuthService.updateUser$({ username }).pipe(
-      catchError(err => {
+      catchError((err: unknown) => {
         this.snackBar.open(
           this.translocoService.translate('error.invalidUsername'),
           this.translocoService.translate('dismiss'),
@@ -99,7 +99,7 @@ export class ProfilePage {
       concatMapTo(defer(() => this.database.clear())),
       concatMapTo(defer(() => this.preferenceManager.clear())),
       concatMapTo(defer(reloadApp)),
-      catchError(err => this.presentErrorToast(err))
+      catchError((err: unknown) => this.presentErrorToast(err))
     );
     return defer(() =>
       this.confirmAlert.present({

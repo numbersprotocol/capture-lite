@@ -1,4 +1,3 @@
-// tslint:disable: no-magic-numbers
 import {
   HttpClient,
   HttpErrorResponse,
@@ -134,6 +133,7 @@ export class DiaBackendAssetRepository {
           this.downloadFile$({ id: postCapture.id, field: 'asset_file' }).pipe(
             first(),
             tap(blob => {
+              // eslint-disable-next-line rxjs/no-subject-value
               const currentCache = this.postCapturesImageCache$.value;
               currentCache.set(postCapture.id, blob);
               this.postCapturesImageCache$.next(currentCache);
@@ -193,7 +193,8 @@ export class DiaBackendAssetRepository {
           { headers }
         )
       ),
-      catchError(err => {
+      catchError((err: unknown) => {
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         if (err instanceof HttpErrorResponse && err.status === 404) {
           return throwError(new NotFoundErrorResponse(err));
         }
@@ -290,7 +291,7 @@ export type AssetDownloadField =
 
 type CreateAssetResponse = DiaBackendAsset;
 
-// tslint:disable-next-line: no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface DeleteAssetResponse {}
 
 async function buildFormDataToCreateAsset(proof: Proof) {

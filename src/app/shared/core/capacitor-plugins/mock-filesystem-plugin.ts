@@ -1,4 +1,5 @@
-// tslint:disable: no-non-null-assertion prefer-function-over-method no-async-without-await
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 import {
   CopyOptions,
   CopyResult,
@@ -35,7 +36,7 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
   private readonly files = new Map<string, string>();
 
   async readFile(options: FileReadOptions): Promise<FileReadResult> {
-    const path = `${options.directory || ''}/${options.path}`;
+    const path = `${options.directory ?? ''}/${options.path}`;
     if (!this.files.has(path)) {
       throw new Error(`File ${path} does not exist.`);
     }
@@ -48,7 +49,7 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
   }
 
   async writeFile(options: FileWriteOptions): Promise<FileWriteResult> {
-    const path = `${options.directory || ''}/${options.path}`;
+    const path = `${options.directory ?? ''}/${options.path}`;
     if (!options.encoding) {
       this.files.set(path, options.data);
     } else {
@@ -65,16 +66,16 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
   }
 
   async deleteFile(options: FileDeleteOptions): Promise<FileDeleteResult> {
-    const path = `${options.directory || ''}/${options.path}`;
+    const path = `${options.directory ?? ''}/${options.path}`;
     this.files.delete(path);
     return {};
   }
 
-  async mkdir(options: MkdirOptions): Promise<MkdirResult> {
+  async mkdir(_: MkdirOptions): Promise<MkdirResult> {
     return {};
   }
 
-  async rmdir(options: RmdirOptions): Promise<RmdirResult> {
+  async rmdir(_: RmdirOptions): Promise<RmdirResult> {
     throw new Error('Method not implemented.');
   }
 
@@ -82,8 +83,9 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
     const directorys = groupBy([...this.files.keys()], path =>
       path.substring(0, path.lastIndexOf('/'))
     );
-    const targetDirectory = `${options.directory || ''}${options.path}`;
+    const targetDirectory = `${options.directory ?? ''}${options.path}`;
     const directory = directorys[targetDirectory];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!directory) {
       return { files: [] };
     }
@@ -94,25 +96,25 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
     };
   }
 
-  async getUri(options: GetUriOptions): Promise<GetUriResult> {
+  async getUri(_: GetUriOptions): Promise<GetUriResult> {
     throw new Error('Method not implemented.');
   }
 
-  async stat(options: StatOptions): Promise<StatResult> {
+  async stat(_: StatOptions): Promise<StatResult> {
     throw new Error('Method not implemented.');
   }
 
-  async rename(options: RenameOptions): Promise<RenameResult> {
+  async rename(_: RenameOptions): Promise<RenameResult> {
     throw new Error('Method not implemented.');
   }
 
-  async copy(options: CopyOptions): Promise<CopyResult> {
+  async copy(_: CopyOptions): Promise<CopyResult> {
     throw new Error('Method not implemented.');
   }
 
   addListener(
-    eventName: string,
-    listenerFunc: () => any
+    _eventName: string,
+    _listenerFunc: () => any
   ): PluginListenerHandle {
     throw new Error('Method not implemented.');
   }

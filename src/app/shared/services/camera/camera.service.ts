@@ -57,7 +57,7 @@ export interface Photo {
 function cameraPhotoToPhoto(cameraPhoto: CameraPhoto): Photo {
   return {
     mimeType: fromExtension(cameraPhoto.format),
-    // tslint:disable-next-line: no-non-null-assertion
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     base64: cameraPhoto.base64String!,
   };
 }

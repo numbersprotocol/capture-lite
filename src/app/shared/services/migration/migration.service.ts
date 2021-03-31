@@ -1,4 +1,3 @@
-// tslint:disable: deprecation
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Plugins } from '@capacitor/core';

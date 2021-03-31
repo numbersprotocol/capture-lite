@@ -8,7 +8,6 @@ import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
   providedIn: 'root',
 })
 export class PushNotificationService {
-  // tslint:disable-next-line: rxjs-no-explicit-generics
   private readonly token$ = new BehaviorSubject<string | undefined>(undefined);
   private readonly pushData$ = new Subject<{ [key: string]: string }>();
 

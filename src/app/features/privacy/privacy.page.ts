@@ -9,8 +9,10 @@ import { CapacitorFactsProvider } from '../../shared/services/collector/facts/ca
   styleUrls: ['./privacy.page.scss'],
 })
 export class PrivacyPage {
-  readonly isDeviceInfoCollectionEnabled$ = this.capacitorFactsProvider.isDeviceInfoCollectionEnabled$();
-  readonly isLocationInfoCollectionEnabled$ = this.capacitorFactsProvider.isGeolocationInfoCollectionEnabled$();
+  readonly isDeviceInfoCollectionEnabled$ = this.capacitorFactsProvider
+    .isDeviceInfoCollectionEnabled$;
+  readonly isLocationInfoCollectionEnabled$ = this.capacitorFactsProvider
+    .isGeolocationInfoCollectionEnabled$;
 
   constructor(
     private readonly capacitorFactsProvider: CapacitorFactsProvider

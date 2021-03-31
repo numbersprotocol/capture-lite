@@ -1,4 +1,5 @@
-// tslint:disable: prefer-function-over-method no-async-without-await no-non-null-assertion
+/* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { PluginListenerHandle, StoragePlugin } from '@capacitor/core';
 
 export class MockStoragePlugin implements StoragePlugin {
@@ -25,8 +26,8 @@ export class MockStoragePlugin implements StoragePlugin {
   }
 
   addListener(
-    eventName: string,
-    listenerFunc: () => any
+    _eventName: string,
+    _listenerFunc: () => any
   ): PluginListenerHandle {
     throw new Error('Method not implemented.');
   }

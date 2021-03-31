@@ -5,6 +5,8 @@ import { PreferenceManager } from '../preference-manager/preference-manager.serv
   providedIn: 'root',
 })
 export class OnboardingService {
+  private static readonly UNKNOWN_ONBOARDING_TIMESTAMP = 0;
+
   private readonly preferences = this.preferenceManager.getPreferences(
     OnboardingService.name
   );
@@ -17,12 +19,10 @@ export class OnboardingService {
     if (await this.preferences.getBoolean(PrefKeys.HAS_MIGRATED, false)) {
       return;
     }
-    // tslint:disable-next-line: deprecation
     const isOnboarding = await this.isOnboarding();
     if (!isOnboarding) {
       await this.onboard();
     } else {
-      // tslint:disable-next-line: deprecation
       await this.setIsOnboarding(false);
     }
     await this.preferences.setBoolean(PrefKeys.HAS_MIGRATED, true);
@@ -32,7 +32,6 @@ export class OnboardingService {
    * @deprecated use `getOnboardingTimestamp` instead
    */
   async isOnboarding() {
-    // tslint:disable-next-line: deprecation
     return this.preferences.getBoolean(PrefKeys.IS_ONBOARDING, true);
   }
 
@@ -59,7 +58,6 @@ export class OnboardingService {
    * @deprecated use `onboard` instead
    */
   async setIsOnboarding(value: boolean) {
-    // tslint:disable-next-line: deprecation
     return this.preferences.setBoolean(PrefKeys.IS_ONBOARDING, value);
   }
 
@@ -76,8 +74,6 @@ export class OnboardingService {
       value
     );
   }
-
-  private static readonly UNKNOWN_ONBOARDING_TIMESTAMP = 0;
 }
 
 const enum PrefKeys {

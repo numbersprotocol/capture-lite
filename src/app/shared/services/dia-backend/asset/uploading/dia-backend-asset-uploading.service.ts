@@ -37,7 +37,6 @@ export class DiaBackendAssetUploadingService {
     DiaBackendAssetUploadingService.name
   );
   private readonly _taskQueue$ = new BehaviorSubject<Proof[]>([]);
-  // tslint:disable-next-line: rxjs-no-explicit-generics
   private readonly _pendingTasks$ = new BehaviorSubject<number | undefined>(
     undefined
   );
@@ -118,10 +117,14 @@ export class DiaBackendAssetUploadingService {
 
   private uploadProof$(proof: Proof) {
     const scalingDuration = 1000;
+    const attempBase = 2;
     return this.diaBackendAssetRepository.addCapture$(proof).pipe(
       first(),
-      catchError((err: HttpErrorResponse) => {
-        if (err.error?.error.type === 'duplicate_asset_not_allowed') {
+      catchError((err: unknown) => {
+        if (
+          err instanceof HttpErrorResponse &&
+          err.error?.error.type === 'duplicate_asset_not_allowed'
+        ) {
           return this.diaBackendAssetRepository.fetchByProof$(proof);
         }
         return throwError(err);
@@ -133,7 +136,7 @@ export class DiaBackendAssetUploadingService {
       retryWhen(err$ =>
         err$.pipe(
           mergeMap((_, attempt) => {
-            return timer(2 ** attempt * scalingDuration);
+            return timer(attempBase ** attempt * scalingDuration);
           })
         )
       )

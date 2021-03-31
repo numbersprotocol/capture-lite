@@ -32,7 +32,7 @@ export class CapacitorStoragePreferences implements Preferences {
   get$(key: string, defaultValue: string): Observable<string>;
   get$(key: string, defaultValue: SupportedTypes): Observable<SupportedTypes> {
     return defer(() => this.initializeValue(key, defaultValue)).pipe(
-      // tslint:disable-next-line: no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       concatMap(() => this.subjects.get(key)!.asObservable()),
       isNonNullable(),
       distinctUntilChanged(isEqual)
@@ -57,13 +57,14 @@ export class CapacitorStoragePreferences implements Preferences {
     defaultValue: SupportedTypes
   ): Promise<SupportedTypes> {
     await this.initializeValue(key, defaultValue);
-    // tslint:disable-next-line: no-non-null-assertion
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, rxjs/no-subject-value
     return this.subjects.get(key)!.value;
   }
 
   private async initializeValue(key: string, defaultValue: SupportedTypes) {
     if (this.subjects.has(key)) {
       const subject$ = this.subjects.get(key);
+      // eslint-disable-next-line rxjs/no-subject-value
       if (subject$?.value === undefined) {
         subject$?.next(defaultValue);
       }
@@ -72,7 +73,6 @@ export class CapacitorStoragePreferences implements Preferences {
     const value = await this.loadValue(key, defaultValue);
     this.subjects.set(
       key,
-      // tslint:disable-next-line: rxjs-no-explicit-generics
       new BehaviorSubject<SupportedTypes | undefined>(value)
     );
   }
@@ -114,11 +114,10 @@ export class CapacitorStoragePreferences implements Preferences {
       if (!this.subjects.has(key)) {
         this.subjects.set(
           key,
-          // tslint:disable-next-line: rxjs-no-explicit-generics
           new BehaviorSubject<SupportedTypes | undefined>(value)
         );
       }
-      // tslint:disable-next-line: no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const subject$ = this.subjects.get(
         key
       )! as BehaviorSubject<SupportedTypes>;

@@ -125,27 +125,21 @@ export class CaptureDetailsPage {
   openOptionsMenu() {
     this.proof$
       .pipe(
-        tap(proof => {
-          const bottomSheetRef = this.bottomSheet.open(OptionsMenuComponent, {
-            data: { proof },
-          });
-          bottomSheetRef
+        concatMap(proof =>
+          this.bottomSheet
+            .open(OptionsMenuComponent, { data: { proof } })
             .afterDismissed()
-            .pipe(
-              tap((option?: Option) => {
-                if (option === Option.Share) {
-                  this.share();
-                } else if (option === Option.Transfer) {
-                  this.openContactSelectionDialog();
-                } else if (option === Option.Delete) {
-                  this.remove();
-                } else if (option === Option.ViewCertificate) {
-                  this.openCertificate();
-                }
-              }),
-              untilDestroyed(this)
-            )
-            .subscribe();
+        ),
+        tap((option?: Option) => {
+          if (option === Option.Share) {
+            this.share();
+          } else if (option === Option.Transfer) {
+            this.openContactSelectionDialog();
+          } else if (option === Option.Delete) {
+            this.remove();
+          } else if (option === Option.ViewCertificate) {
+            this.openCertificate();
+          }
         }),
         untilDestroyed(this)
       )
@@ -196,7 +190,7 @@ export class CaptureDetailsPage {
         concatMap(proof =>
           iif(
             () => proof.diaBackendAssetId !== undefined,
-            // tslint:disable-next-line: no-non-null-assertion
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             this.diaBackendAssetRepository.fetchById$(proof.diaBackendAssetId!)
           )
         ),

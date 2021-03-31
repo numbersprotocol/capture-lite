@@ -1,4 +1,4 @@
-// tslint:disable: no-magic-numbers
+/* eslint-disable no-magic-numbers */
 
 import {
   HttpClient,
@@ -104,11 +104,9 @@ export class DiaBackendTransactionRepository {
     ),
     concatMap(newlyReturnedAssets =>
       Promise.all(
-        newlyReturnedAssets.map(async a => {
-          if (a) {
-            return this.assetDownloadingService.storeRemoteCapture(a);
-          }
-        })
+        newlyReturnedAssets.map(async asset =>
+          this.assetDownloadingService.storeRemoteCapture(asset)
+        )
       )
     )
   );
@@ -129,6 +127,7 @@ export class DiaBackendTransactionRepository {
   }
 
   private list$({ offset, limit }: { offset?: number; limit?: number }) {
+    // eslint-disable-next-line @typescript-eslint/require-await
     return defer(async () => this._isFetching$.next(true)).pipe(
       concatMapTo(defer(() => this.authService.getAuthHeaders())),
       concatMap(headers => {
@@ -158,7 +157,8 @@ export class DiaBackendTransactionRepository {
           { headers }
         )
       ),
-      catchError(err => {
+      catchError((err: unknown) => {
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         if (err instanceof HttpErrorResponse && err.status === 404) {
           return throwError(new NotFoundErrorResponse(err));
         }
@@ -226,5 +226,5 @@ export interface DiaBackendTransaction extends Tuple {
 
 type CreateTransactionResponse = DiaBackendTransaction;
 
-// tslint:disable-next-line: no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface AcceptTransactionResponse {}

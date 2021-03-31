@@ -12,7 +12,8 @@ export class NotificationItem {
   ) {}
 
   async notify(title: string, body: string) {
-    console.info(`${title}: ${body}`);
+    // eslint-disable-next-line no-console
+    console.log(`${title}: ${body}`);
     return this.schedule({ id: this.id, title, body });
   }
 

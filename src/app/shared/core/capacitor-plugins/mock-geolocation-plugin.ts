@@ -1,4 +1,4 @@
-// tslint:disable: prefer-function-over-method no-async-without-await
+/* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 import {
   GeolocationOptions,
   GeolocationPlugin,

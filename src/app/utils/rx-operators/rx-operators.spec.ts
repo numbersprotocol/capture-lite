@@ -1,4 +1,4 @@
-// tslint:disable: no-null-keyword
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { of } from 'rxjs';
 import { toArray } from 'rxjs/operators';
 import { isNonNullable, switchTap, switchTapTo } from './rx-operators';
