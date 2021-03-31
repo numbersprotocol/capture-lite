@@ -1,6 +1,8 @@
+import { Capacitor } from '@capacitor/core';
 import { sha256WithString } from '../../../../utils/crypto/crypto';
 import { sortObjectDeeplyByKey } from '../../../../utils/immutable/immutable';
 import { MimeType } from '../../../../utils/mime-type';
+import { toDataUrl } from '../../../../utils/url';
 import { Tuple } from '../../database/table/table';
 import {
   ImageStore,
@@ -116,6 +118,15 @@ export class Proof {
       assetEntries.push([base64, meta]);
     }
     return Object.fromEntries(assetEntries);
+  }
+
+  async getFirstAssetUrl() {
+    if (Capacitor.isNative)
+      return Capacitor.convertFileSrc(
+        await this.imageStore.getUri(Object.keys(this.indexedAssets)[0])
+      );
+    const [base64, meta] = Object.entries(await this.getAssets())[0];
+    return toDataUrl(base64, meta.mimeType);
   }
 
   async getThumbnailUrl() {

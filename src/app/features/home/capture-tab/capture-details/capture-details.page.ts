@@ -30,7 +30,6 @@ import {
   switchTap,
   VOID$,
 } from '../../../../utils/rx-operators/rx-operators';
-import { toDataUrl } from '../../../../utils/url';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import {
   Option,
@@ -67,10 +66,8 @@ export class CaptureDetailsPage {
           .toPromise();
         await proof.setAssets({ [await blobToBase64(imageBlob)]: meta });
       }
-      return proof.getAssets();
-    }),
-    map(assets => Object.entries(assets)[0]),
-    map(([base64, assetMeta]) => toDataUrl(base64, assetMeta.mimeType))
+      return proof.getFirstAssetUrl();
+    })
   );
 
   readonly isRegistered$ = this.proof$.pipe(
