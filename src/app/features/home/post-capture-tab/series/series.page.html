@@ -6,7 +6,7 @@
 </mat-toolbar>
 <div class="page-content">
   <div class="series-image">
-    <ion-img [src]="cover"></ion-img>
+    <ion-img [src]="cover$ | async"></ion-img>
   </div>
   <mat-grid-list cols="3" gutterSize="8px">
     <mat-grid-tile

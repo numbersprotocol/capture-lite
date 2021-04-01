@@ -1,7 +1,7 @@
 // tslint:disable: no-magic-numbers
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer, ReplaySubject, throwError } from 'rxjs';
+import { defer, throwError } from 'rxjs';
 import { catchError, concatMap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { NotFoundErrorResponse } from '../errors';
@@ -12,9 +12,6 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendSeriesRepository {
-  private readonly postCapturesCache$ = new ReplaySubject<
-    PaginatedResponse<DiaBackendSeries>
-  >(1);
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService
