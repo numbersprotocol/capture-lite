@@ -1,11 +1,9 @@
-<ion-header *transloco="let t" class="ion-no-border">
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>{{ t('contacts') }}</ion-title>
-  </ion-toolbar>
-</ion-header>
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('contacts') }}</span>
+</mat-toolbar>
 
 <ion-content>
   <ion-list lines="none">
