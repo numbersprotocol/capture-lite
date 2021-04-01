@@ -17,25 +17,23 @@ export class DiaBackendSeriesRepository {
     private readonly authService: DiaBackendAuthService
   ) {}
 
-  fetchSeries$() {
-    return defer(() => this.authService.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.get<PaginatedResponse<DiaBackendSeries>>(
-          `${BASE_URL}/api/v2/series/`,
-          {
-            headers,
-          }
-        )
-      ),
-      catchError((err: unknown) => {
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        if (err instanceof HttpErrorResponse && err.status === 404) {
-          return throwError(new NotFoundErrorResponse(err));
+  readonly fetchSeries$ = defer(() => this.authService.getAuthHeaders()).pipe(
+    concatMap(headers =>
+      this.httpClient.get<PaginatedResponse<DiaBackendSeries>>(
+        `${BASE_URL}/api/v2/series/`,
+        {
+          headers,
         }
-        return throwError(err);
-      })
-    );
-  }
+      )
+    ),
+    catchError((err: unknown) => {
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+      if (err instanceof HttpErrorResponse && err.status === 404) {
+        return throwError(new NotFoundErrorResponse(err));
+      }
+      return throwError(err);
+    })
+  );
 }
 
 export interface DiaBackendSeries {

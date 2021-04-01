@@ -36,7 +36,7 @@ export class PostCaptureTabComponent {
     switchMap(isConnected =>
       iif(
         () => isConnected,
-        this.diaBackendSeriesRepository.fetchSeries$().pipe(pluck('results'))
+        this.diaBackendSeriesRepository.fetchSeries$.pipe(pluck('results'))
       )
     )
   );
