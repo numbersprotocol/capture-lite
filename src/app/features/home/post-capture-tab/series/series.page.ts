@@ -8,11 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class SeriesPage implements OnInit {
   id: string | null | undefined;
   cover: string | null | undefined;
-  async ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.cover = this.route.snapshot.paramMap.get('cover');
-  }
-  collectionGeneral = [
+  collectionGeneral: Array<object> = [
     { img: null },
     { img: 'https://material.angular.io/assets/img/examples/shiba1.jpg' },
     { img: null },
@@ -26,12 +22,21 @@ export class SeriesPage implements OnInit {
     { img: null },
     { img: null },
   ];
-  collectionSpecial = [{ img: null }, { img: null }, { img: null }];
-  collectionRare = [
+  collectionSpecial: Array<object> = [
+    { img: null },
+    { img: null },
+    { img: null },
+  ];
+  collectionRare: Array<object> = [
     { img: null },
     { img: 'https://material.angular.io/assets/img/examples/shiba2.jpg' },
     { img: null },
   ];
+
+  async ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.cover = this.route.snapshot.paramMap.get('cover');
+  }
 
   constructor(
     private readonly router: Router,
