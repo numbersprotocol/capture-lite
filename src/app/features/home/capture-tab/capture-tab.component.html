@@ -6,24 +6,7 @@
 </div>
 <mat-card *transloco="let t" class="user-card">
   <mat-card-header>
-    <ion-img
-      *ngIf="avatar$ | async as avatar; else avatarPlaceholder"
-      [src]="avatar"
-      (click)="selectAvatar()"
-      mat-card-avatar
-    ></ion-img>
-    <ng-template #avatarPlaceholder>
-      <mat-icon (click)="selectAvatar()" mat-card-avatar>
-        add_a_photo
-      </mat-icon>
-    </ng-template>
-    <input
-      #avatarInput
-      (change)="uploadAvatar($event)"
-      type="file"
-      accept="image/jpeg"
-      class="avatar-input"
-    />
+    <app-avatar mat-card-avatar></app-avatar>
     <mat-card-title>
       {{ username$ | async }}
       <button mat-button (click)="editUsername()">

@@ -30,21 +30,9 @@ div.mat-title {
   font-size: 16px;
 }
 
-.mat-card-avatar {
-  background-color: azure;
-  width: 2em;
-  height: 2em;
-  font-size: 2em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  object-fit: cover;
-  object-position: center;
-  overflow: hidden;
-}
-
-.avatar-input {
-  display: none;
+app-avatar {
+  width: 64px;
+  height: 64px;
 }
 
 .capture-container {

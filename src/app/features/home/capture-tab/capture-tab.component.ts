@@ -1,28 +1,18 @@
 import { formatDate, KeyValue } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash-es';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import {
-  catchError,
-  concatMap,
-  distinctUntilChanged,
-  first,
-  map,
-  shareReplay,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { combineLatest, of } from 'rxjs';
+import { catchError, concatMap, map, switchMap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/services/blocking-action/blocking-action.service';
 import { CaptureService } from '../../../shared/services/capture/capture.service';
 import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../shared/services/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
-import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { isValidGeolocation } from './capture-details/capture-details.page';
 
 @UntilDestroy({ checkProperties: true })
@@ -32,27 +22,9 @@ import { isValidGeolocation } from './capture-details/capture-details.page';
   styleUrls: ['./capture-tab.component.scss'],
 })
 export class CaptureTabComponent {
-  private readonly _avatarInput$ = new BehaviorSubject<
-    HTMLInputElement | undefined
-  >(undefined);
-
-  private readonly avatarInput$ = this._avatarInput$.pipe(
-    isNonNullable(),
-    distinctUntilChanged()
-  );
-
-  @ViewChild('avatarInput')
-  set avatarInput(value: ElementRef<HTMLInputElement>) {
-    this._avatarInput$.next(value.nativeElement);
-  }
-
   readonly username$ = this.diaBackendAuthService.username$;
 
   readonly email$ = this.diaBackendAuthService.email$;
-
-  readonly avatar$ = this.diaBackendAuthService.avatar$.pipe(
-    shareReplay({ bufferSize: 1, refCount: true })
-  );
 
   private readonly proofs$ = this.proofRepository.all$;
 
@@ -152,28 +124,6 @@ export class CaptureTabComponent {
   // eslint-disable-next-line class-methods-use-this
   trackCaptureItem(_: number, item: CaptureItem) {
     return item.oldProofHash;
-  }
-
-  selectAvatar() {
-    return this.avatarInput$
-      .pipe(
-        first(),
-        tap(inputElement => inputElement.click()),
-        untilDestroyed(this)
-      )
-      .subscribe();
-  }
-
-  uploadAvatar(event: Event) {
-    return of((event.target as HTMLInputElement | null)?.files?.item(0))
-      .pipe(
-        isNonNullable(),
-        concatMap(picture =>
-          this.diaBackendAuthService.uploadAvatar$({ picture })
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
   }
 }
 
