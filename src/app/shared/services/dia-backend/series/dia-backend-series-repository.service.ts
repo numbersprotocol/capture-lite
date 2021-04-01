@@ -3,7 +3,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { defer, Subject, throwError } from 'rxjs';
 import { catchError, concatMap } from 'rxjs/operators';
-import { Tuple } from '../../database/table/table';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { NotFoundErrorResponse } from '../errors';
 import { BASE_URL } from '../secret';
@@ -37,14 +36,14 @@ export class DiaBackendSeriesRepository {
   }
 }
 
-export interface DiaBackendSeries extends Tuple {
+export interface DiaBackendSeries {
   readonly id: string;
   readonly collections: string;
-  readonly in_store: boolean | null;
+  readonly in_store: boolean | null | undefined;
   readonly owner: string;
   readonly owner_name: string;
   readonly type: string;
-  readonly cover_image: string;
+  readonly cover_image: string | null | undefined;
   readonly title: string;
   readonly collected: boolean;
   readonly description: string;
