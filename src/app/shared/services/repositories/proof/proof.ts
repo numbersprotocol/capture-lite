@@ -33,6 +33,12 @@ export class Proof {
   }
   readonly indexedAssets: IndexedAssets = {};
 
+  constructor(
+    private readonly imageStore: ImageStore,
+    readonly truth: Truth,
+    readonly signatures: Signatures
+  ) {}
+
   static async from(
     imageStore: ImageStore,
     assets: Assets,
@@ -80,12 +86,6 @@ export class Proof {
     await proof.setAssets(parsed.assets);
     return proof;
   }
-
-  constructor(
-    private readonly imageStore: ImageStore,
-    readonly truth: Truth,
-    readonly signatures: Signatures
-  ) {}
 
   async setAssets(assets: Assets) {
     const indexedAssetEntries: [string, AssetMeta][] = [];

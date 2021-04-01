@@ -69,6 +69,22 @@
           "error",
           { "checkArrowFunctions": false }
         ],
+        "@typescript-eslint/member-ordering": [
+          "error",
+          {
+            "default": [
+              "static-field",
+              "abstract-field",
+              "instance-field",
+              "decorated-field",
+              "constructor",
+              "static-method",
+              "abstract-method",
+              "instance-method",
+              "decorated-method"
+            ]
+          }
+        ],
         "@angular-eslint/component-class-suffix": [
           "error",
           {
