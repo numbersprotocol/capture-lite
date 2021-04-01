@@ -15,19 +15,19 @@
 
 .segments {
   display: flex;
-  padding: 8px;
   flex-direction: column;
   height: 100%;
 }
 
 ion-segment {
   width: 80%;
-  margin: 0 auto 16px;
+  margin: 8px auto 16px;
   flex-shrink: 0;
 }
 
 .post-captures {
   overflow: auto;
+  padding: 8px;
 }
 
 mat-grid-tile {
