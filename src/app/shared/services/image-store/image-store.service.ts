@@ -184,6 +184,8 @@ export class ImageStore {
   async getUri(index: string) {
     await this.initialize();
     const extension = await this.getExtension(index);
+    if (!extension)
+      throw new Error(`Cannot get extension with index: ${index}`);
     const result = await this.filesystemPlugin.getUri({
       directory: this.directory,
       path: `${this.rootDir}/${index}.${extension}`,
