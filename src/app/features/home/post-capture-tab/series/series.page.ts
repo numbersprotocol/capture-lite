@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-series',
   templateUrl: './series.page.html',
   styleUrls: ['./series.page.scss'],
 })
-export class SeriesPage implements OnInit {
-  id: string | null | undefined;
-  cover: string | null | undefined;
-  collectionGeneral = [
+export class SeriesPage {
+  readonly id = this.route.snapshot.paramMap.get('id');
+  readonly cover = this.route.snapshot.paramMap.get('cover');
+
+  readonly collectionGeneral = [
     { img: null },
     { img: 'https://material.angular.io/assets/img/examples/shiba1.jpg' },
     { img: null },
@@ -22,20 +23,12 @@ export class SeriesPage implements OnInit {
     { img: null },
     { img: null },
   ];
-  collectionSpecial = [{ img: null }, { img: null }, { img: null }];
-  collectionRare = [
+  readonly collectionSpecial = [{ img: null }, { img: null }, { img: null }];
+  readonly collectionRare = [
     { img: null },
     { img: 'https://material.angular.io/assets/img/examples/shiba2.jpg' },
     { img: null },
   ];
 
-  async ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.cover = this.route.snapshot.paramMap.get('cover');
-  }
-
-  constructor(
-    private readonly router: Router,
-    private readonly route: ActivatedRoute
-  ) {}
+  constructor(private readonly route: ActivatedRoute) {}
 }

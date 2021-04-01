@@ -32,12 +32,11 @@ export class PostCaptureTabComponent {
     )
   );
 
-  // collected=True
-  readonly getSeries$ = this.networkService.connected$.pipe(
+  readonly series$ = this.networkService.connected$.pipe(
     switchMap(isConnected =>
       iif(
         () => isConnected,
-        this.diaBackendSeriesRepository.readSeries$().pipe(
+        this.diaBackendSeriesRepository.fetchSeries$().pipe(
           pluck('results')
           // map(series => series.filter(a => a.in_store == true))
         )

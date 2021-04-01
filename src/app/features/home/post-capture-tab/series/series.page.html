@@ -5,25 +5,27 @@
   <div class="toolbar-spacer"></div>
 </mat-toolbar>
 <div class="page-content">
-  <app-series-card [src]="cover"></app-series-card>
+  <div class="series-image">
+    <ion-img [src]="cover"></ion-img>
+  </div>
   <mat-grid-list cols="3" gutterSize="8px">
     <mat-grid-tile
       class="collection-general"
       *ngFor="let collection of collectionGeneral"
     >
-      <img *ngIf="collection.img != null" [src]="collection.img" />
+      <ion-img *ngIf="collection.img" [src]="collection.img"></ion-img>
     </mat-grid-tile>
     <mat-grid-tile
       class="collection-special"
       *ngFor="let collection of collectionSpecial"
     >
-      <img *ngIf="collection.img != null" [src]="collection.img" />
+      <ion-img *ngIf="collection.img" [src]="collection.img"></ion-img>
     </mat-grid-tile>
     <mat-grid-tile
       class="collection-rare"
       *ngFor="let collection of collectionRare"
     >
-      <img *ngIf="collection.img != null" [src]="collection.img" />
+      <ion-img *ngIf="collection.img" [src]="collection.img"></ion-img>
     </mat-grid-tile>
   </mat-grid-list>
 </div>

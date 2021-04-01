@@ -7,10 +7,10 @@
   margin: 0;
   padding: 8px;
   text-align: center;
-  background-color: var(--ion-color-light);
   color: darkgray;
   font-weight: 500;
   font-size: 0.9em;
+  background-color: var(--ion-color-light);
 }
 
 .segments {
@@ -54,10 +54,29 @@ mat-icon {
   z-index: 10;
 }
 
-mat-icon.uploaded {
+mat-icon.from-store {
   position: absolute;
   bottom: 5px;
   left: 5px;
   font-size: 20px;
   opacity: 90%;
+}
+
+.series-image {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 300px;
+  max-width: 500px;
+  max-height: 300px;
+  overflow: hidden;
+  box-sizing: border-box;
+  box-shadow: 4px 0 4px #a5a5a5;
+  border-radius: 5px;
+
+  ion-img {
+    object-fit: cover;
+    object-position: center;
+    height: 100%;
+  }
 }

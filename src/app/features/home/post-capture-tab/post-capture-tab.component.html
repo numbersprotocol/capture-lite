@@ -23,18 +23,18 @@
         [routerLink]="['post-capture-details', { id: postCapture.id }]"
       >
         <ion-img [src]="postCapture.asset_file_thumbnail"></ion-img>
-        <mat-icon class="uploaded">shopping_bag</mat-icon>
+        <mat-icon class="from-store">shopping_bag</mat-icon>
       </mat-grid-tile>
     </mat-grid-list>
   </div>
 
   <div class="series-wrapper" *ngSwitchCase="'Series'">
-    <app-series-card routerLink="series"></app-series-card>
-    <app-series-card
-      *ngFor="let series of getSeries$ | async"
-      [src]="series.cover_image"
+    <div
+      class="series-image"
+      *ngFor="let series of series$ | async"
       [routerLink]="['series', { id: series.id, cover: series.cover_image }]"
     >
-    </app-series-card>
+      <ion-img [src]="series.cover_image"></ion-img>
+    </div>
   </div>
 </div>
