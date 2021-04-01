@@ -4,13 +4,10 @@
 <div class="segments" [ngSwitch]="categories">
   <ion-segment mode="ios" [(ngModel)]="categories">
     <ion-segment-button value="Photo" checked>
-      <ion-icon src="/assets/icon/apps.svg" class="series-tab-icon"></ion-icon>
+      <ion-icon src="/assets/icon/apps.svg" class="segment"></ion-icon>
     </ion-segment-button>
     <ion-segment-button value="Series">
-      <ion-icon
-        src="/assets/icon/series.svg"
-        class="series-tab-icon"
-      ></ion-icon>
+      <ion-icon src="/assets/icon/series.svg" class="segment"></ion-icon>
     </ion-segment-button>
   </ion-segment>
   <div class="post-captures" *ngSwitchCase="'Photo'">
@@ -28,13 +25,12 @@
     </mat-grid-list>
   </div>
 
-  <div class="series-wrapper" *ngSwitchCase="'Series'">
-    <div
-      class="series-image"
+  <div class="series" *ngSwitchCase="'Series'">
+    <ion-card
       *ngFor="let series of series$ | async"
       [routerLink]="['series', { id: series.id, cover: series.cover_image }]"
     >
       <ion-img [src]="series.cover_image"></ion-img>
-    </div>
+    </ion-card>
   </div>
 </div>

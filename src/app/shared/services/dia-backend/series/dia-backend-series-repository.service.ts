@@ -1,4 +1,3 @@
-// tslint:disable: no-magic-numbers
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { defer, throwError } from 'rxjs';
@@ -12,11 +11,6 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendSeriesRepository {
-  constructor(
-    private readonly httpClient: HttpClient,
-    private readonly authService: DiaBackendAuthService
-  ) {}
-
   readonly fetchSeries$ = defer(() => this.authService.getAuthHeaders()).pipe(
     concatMap(headers =>
       this.httpClient.get<PaginatedResponse<DiaBackendSeries>>(
@@ -34,6 +28,11 @@ export class DiaBackendSeriesRepository {
       return throwError(err);
     })
   );
+
+  constructor(
+    private readonly httpClient: HttpClient,
+    private readonly authService: DiaBackendAuthService
+  ) {}
 }
 
 export interface DiaBackendSeries {
