@@ -1,4 +1,4 @@
-// tslint:disable: no-implicit-dependencies prefer-function-over-method
+/* eslint-disable class-methods-use-this */
 import { browser, by, element } from 'protractor';
 
 export class AppPage {
