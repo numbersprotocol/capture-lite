@@ -12,12 +12,6 @@ export class SeriesPage implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.cover = this.route.snapshot.paramMap.get('cover');
   }
-
-  constructor(
-    private readonly router: Router,
-    private readonly route: ActivatedRoute
-  ) {}
-
   collectionGeneral = [
     { img: null },
     { img: 'https://material.angular.io/assets/img/examples/shiba1.jpg' },
@@ -38,4 +32,9 @@ export class SeriesPage implements OnInit {
     { img: 'https://material.angular.io/assets/img/examples/shiba2.jpg' },
     { img: null },
   ];
+
+  constructor(
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
+  ) {}
 }

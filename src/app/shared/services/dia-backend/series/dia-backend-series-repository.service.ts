@@ -27,6 +27,7 @@ export class DiaBackendSeriesRepository {
         })
       ),
       catchError(err => {
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         if (err instanceof HttpErrorResponse && err.status === 404) {
           return throwError(new NotFoundErrorResponse(err));
         }
