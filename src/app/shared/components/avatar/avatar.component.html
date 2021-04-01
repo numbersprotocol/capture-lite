@@ -1,0 +1,10 @@
+<ion-img
+  *ngIf="avatar$ | async as avatar; else placeholder"
+  [src]="avatar"
+  (click)="selectAvatar()"
+></ion-img>
+<ng-template #placeholder>
+  <mat-icon (click)="selectAvatar()">add_a_photo</mat-icon>
+</ng-template>
+
+<input #input (change)="uploadAvatar($event)" type="file" accept="image/jpeg" />

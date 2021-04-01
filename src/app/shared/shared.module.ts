@@ -4,12 +4,17 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
+import { AvatarComponent } from './components/avatar/avatar.component';
+import { MigratingDialogComponent } from './components/migrating-dialog/migrating-dialog.component';
+import { SeriesCardComponent } from './components/series-card/series-card.component';
 import { CapacitorPluginsModule } from './core/capacitor-plugins/capacitor-plugins.module';
 import { MaterialModule } from './core/material/material.module';
-import { MigratingDialogComponent } from './core/migrating-dialog/migrating-dialog.component';
-import { SeriesCardComponent } from './core/series-card/series-card.component';
 
-const declarations = [MigratingDialogComponent, SeriesCardComponent];
+const declarations = [
+  MigratingDialogComponent,
+  SeriesCardComponent,
+  AvatarComponent,
+];
 
 const imports = [
   CommonModule,
