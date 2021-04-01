@@ -14,24 +14,28 @@ export class SeriesPage {
   );
 
   readonly collectionGeneral = [
-    { img: null },
+    { img: undefined },
     { img: 'https://material.angular.io/assets/img/examples/shiba1.jpg' },
-    { img: null },
-    { img: null },
-    { img: null },
-    { img: null },
-    { img: null },
-    { img: null },
-    { img: null },
-    { img: null },
-    { img: null },
-    { img: null },
+    { img: undefined },
+    { img: undefined },
+    { img: undefined },
+    { img: undefined },
+    { img: undefined },
+    { img: undefined },
+    { img: undefined },
+    { img: undefined },
+    { img: undefined },
+    { img: undefined },
   ];
-  readonly collectionSpecial = [{ img: null }, { img: null }, { img: null }];
+  readonly collectionSpecial = [
+    { img: undefined },
+    { img: undefined },
+    { img: undefined },
+  ];
   readonly collectionRare = [
-    { img: null },
+    { img: undefined },
     { img: 'https://material.angular.io/assets/img/examples/shiba2.jpg' },
-    { img: null },
+    { img: undefined },
   ];
 
   constructor(private readonly route: ActivatedRoute) {}
