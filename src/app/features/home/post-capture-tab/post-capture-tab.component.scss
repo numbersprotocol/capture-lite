@@ -7,44 +7,63 @@
   margin: 0;
   padding: 8px;
   text-align: center;
-  background-color: var(--ion-color-light);
   color: darkgray;
   font-weight: 500;
   font-size: 0.9em;
+  background-color: var(--ion-color-light);
 }
 
 .segments {
   display: flex;
-  padding: 8px;
   flex-direction: column;
   height: 100%;
 }
 
 ion-segment {
   width: 80%;
-  margin: 0 auto 16px;
+  margin: 8px auto;
   flex-shrink: 0;
+
+  ion-icon.segment {
+    height: 40px;
+  }
 }
 
 .post-captures {
   overflow: auto;
-}
+  padding: 8px;
 
-mat-grid-tile {
-  ion-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    overflow: hidden;
-    border-radius: 4px;
+  mat-grid-tile {
+    ion-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    mat-icon.from-store {
+      color: white;
+      z-index: 10;
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      font-size: 20px;
+      opacity: 90%;
+    }
   }
 }
 
-.series-tab-icon {
-  height: 40px;
-}
+.series {
+  height: auto;
+  overflow: auto;
 
-.tab-content-post {
-  height: 100%;
+  ion-card {
+    ion-img {
+      height: 300px;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
 }
