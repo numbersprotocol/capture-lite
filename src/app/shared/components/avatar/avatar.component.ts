@@ -4,6 +4,7 @@ import { of, ReplaySubject } from 'rxjs';
 import { concatMap, first, shareReplay, tap } from 'rxjs/operators';
 import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
+import { NetworkService } from '../../services/network/network.service';
 
 @UntilDestroy()
 @Component({
@@ -12,6 +13,8 @@ import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backe
   styleUrls: ['./avatar.component.scss'],
 })
 export class AvatarComponent {
+  readonly networkConnected$ = this.networkService.connected$;
+
   private readonly avatarInput$ = new ReplaySubject<HTMLInputElement>(1);
 
   @ViewChild('input')
@@ -23,7 +26,10 @@ export class AvatarComponent {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  constructor(private readonly diaBackendAuthService: DiaBackendAuthService) {}
+  constructor(
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly networkService: NetworkService
+  ) {}
 
   selectAvatar() {
     return this.avatarInput$
