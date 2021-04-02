@@ -81,12 +81,10 @@ export class DiaBackendAssetRepository {
           limit: count,
         })
       ),
-      tap(response => this.postCapturesCache$.next(response))
+      tap(response => this.postCapturesCache$.next(response)),
+      repeatWhen(() => this.postCapturesUpdated$)
     )
-  ).pipe(
-    distinctUntilChanged(),
-    repeatWhen(() => this.postCapturesUpdated$)
-  );
+  ).pipe(distinctUntilChanged());
 
   constructor(
     private readonly httpClient: HttpClient,
