@@ -1,7 +1,10 @@
 import { Capacitor } from '@capacitor/core';
+import { defer, iif, of } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 import { sha256WithString } from '../../../../utils/crypto/crypto';
 import { sortObjectDeeplyByKey } from '../../../../utils/immutable/immutable';
 import { MimeType } from '../../../../utils/mime-type';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { toDataUrl } from '../../../../utils/url';
 import { Tuple } from '../../database/table/table';
 import {
@@ -31,7 +34,27 @@ export class Proof {
   get geolocationLongitude() {
     return this.getFactValue(DefaultFactId.GEOLOCATION_LONGITUDE);
   }
+
   readonly indexedAssets: IndexedAssets = {};
+
+  readonly thumbnailUrl$ = defer(async () =>
+    Object.entries(this.indexedAssets).find(([_, meta]) =>
+      meta.mimeType.startsWith('image')
+    )
+  ).pipe(
+    concatMap(imageAsset =>
+      iif(
+        () => imageAsset === undefined,
+        of(undefined),
+        of(imageAsset).pipe(
+          isNonNullable(),
+          concatMap(([index, assetMeta]) =>
+            this.imageStore.getThumbnailUrl$(index, assetMeta.mimeType)
+          )
+        )
+      )
+    )
+  );
 
   constructor(
     private readonly imageStore: ImageStore,
@@ -127,17 +150,6 @@ export class Proof {
       );
     const [base64, meta] = Object.entries(await this.getAssets())[0];
     return toDataUrl(base64, meta.mimeType);
-  }
-
-  async getThumbnailUrl() {
-    const imageAsset = Object.entries(this.indexedAssets).find(([_, meta]) =>
-      meta.mimeType.startsWith('image')
-    );
-    if (imageAsset === undefined) {
-      return undefined;
-    }
-    const [index, assetMeta] = imageAsset;
-    return this.imageStore.getThumbnailUrl(index, assetMeta.mimeType);
   }
 
   getFactValue(id: string) {

@@ -6,5 +6,6 @@
     "source.fixAll.stylelint": true,
     "source.organizeImports": true
   },
-  "typescript.preferences.importModuleSpecifier": "relative"
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "vsicons.presets.angular": true
 }
