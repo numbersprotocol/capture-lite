@@ -30,7 +30,11 @@
       *ngFor="let series of seriesList$ | async"
       [routerLink]="['series', { id: series.id }]"
     >
-      <ion-img *ngIf="series.cover_image" [src]="series.cover_image"></ion-img>
+      <ion-img
+        [src]="
+          series.cover_image || '/assets/image/series-cover-placeholder.png'
+        "
+      ></ion-img>
     </ion-card>
   </div>
 </div>
