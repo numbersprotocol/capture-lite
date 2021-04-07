@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Plugins } from '@capacitor/core';
+import { first } from 'rxjs/operators';
 import { FILESYSTEM_PLUGIN } from '../../../shared/core/capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { stringToBase64 } from '../../../utils/encoding/encoding';
@@ -47,7 +48,7 @@ describe('ImageStore', () => {
 
   it('should delete file with index and thumbnail', async () => {
     const index = await store.write(FILE, MIME_TYPE);
-    await store.getThumbnailUrl(index, MIME_TYPE);
+    await store.getThumbnailUrl$(index, MIME_TYPE);
 
     await store.delete(index);
 
@@ -99,10 +100,15 @@ describe('ImageStore', () => {
     }
   });
 
-  it('should read thumbnail', async () => {
+  it('should read thumbnail', async done => {
     const index = await store.write(FILE, MIME_TYPE);
-    const thumbnailFile = await store.getThumbnailUrl(index, MIME_TYPE);
-    expect(thumbnailFile).toBeTruthy();
+    store
+      .getThumbnailUrl$(index, MIME_TYPE)
+      .pipe(first())
+      .subscribe(thumbnailFile => {
+        expect(thumbnailFile).toBeTruthy();
+        done();
+      });
   });
 
   it('should clear all files', async () => {

@@ -1,11 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { FilesystemDirectory, FilesystemPlugin } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
-import ImageBlobReduce from 'image-blob-reduce';
+import Compressor from 'compressorjs';
+import { defer, iif, merge, of } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
 import { FILESYSTEM_PLUGIN } from '../../../shared/core/capacitor-plugins/capacitor-plugins.module';
 import { sha256WithBase64 } from '../../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
 import { MimeType, toExtension } from '../../../utils/mime-type';
+import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { toDataUrl } from '../../../utils/url';
 import { Database } from '../database/database.service';
 import { OnConflictStrategy, Tuple } from '../database/table/table';
@@ -13,8 +16,6 @@ import { OnConflictStrategy, Tuple } from '../database/table/table';
 // TODO: Implement a CacheStore service to cache the thumb and other files, such
 //       as the image thumb from backend. User should be able to clear the cache
 //       freely. Finally, extract ImageStore.thumbnailTable to CacheStore.
-
-const imageBlobReduce = new ImageBlobReduce();
 
 @Injectable({
   providedIn: 'root',
@@ -122,13 +123,23 @@ export class ImageStore {
     return result.files.includes(`${index}.${extension}`);
   }
 
-  async getThumbnailUrl(index: string, mimeType: MimeType) {
-    const thumbnail = await this.getThumbnail(index);
-
-    if (thumbnail) {
-      return toDataUrl(await this.read(thumbnail.thumbnailIndex), mimeType);
-    }
-    return toDataUrl(await this.setThumbnail(index, mimeType), mimeType);
+  getThumbnailUrl$(index: string, mimeType: MimeType) {
+    return defer(() => this.getThumbnail(index)).pipe(
+      concatMap(thumbnail =>
+        iif(
+          () => !!thumbnail,
+          of(thumbnail).pipe(
+            isNonNullable(),
+            concatMap(t => this.read(t.thumbnailIndex))
+          ),
+          merge(
+            defer(() => this.read(index)),
+            defer(() => this.setThumbnail(index, mimeType))
+          )
+        )
+      ),
+      map(base64 => toDataUrl(base64, mimeType))
+    );
   }
 
   private async setThumbnail(index: string, mimeType: MimeType) {
@@ -139,8 +150,9 @@ export class ImageStore {
   private async makeThumbnail(index: string, mimeType: MimeType) {
     const thumbnailSize = 100;
     const blob = await base64ToBlob(await this.read(index), mimeType);
-    const thumbnailBlob = await imageBlobReduce.toBlob(blob, {
-      max: thumbnailSize,
+    const thumbnailBlob = await makeThumbnail({
+      image: blob,
+      width: thumbnailSize,
     });
     return blobToBase64(thumbnailBlob);
   }
@@ -256,4 +268,19 @@ interface Thumbnail extends Tuple {
 export const enum OnWriteExistStrategy {
   IGNORE,
   REPLACE,
+}
+
+async function makeThumbnail({ image, width }: { image: Blob; width: number }) {
+  return new Promise<Blob>((resolve, reject) => {
+    new Compressor(image, {
+      quality: 0.6,
+      width,
+      success(result) {
+        resolve(result);
+      },
+      error(err) {
+        reject(err);
+      },
+    });
+  });
 }
