@@ -1,5 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
-import { FilesystemDirectory, FilesystemPlugin } from '@capacitor/core';
+import {
+  Capacitor,
+  FilesystemDirectory,
+  FilesystemPlugin,
+} from '@capacitor/core';
 import { Mutex } from 'async-mutex';
 import Compressor from 'compressorjs';
 import { defer, iif, merge, of } from 'rxjs';
@@ -130,15 +134,17 @@ export class ImageStore {
           () => !!thumbnail,
           of(thumbnail).pipe(
             isNonNullable(),
-            concatMap(t => this.read(t.thumbnailIndex))
+            concatMap(t => this.read(t.thumbnailIndex)),
+            map(base64 => toDataUrl(base64, mimeType))
           ),
           merge(
-            defer(() => this.read(index)),
-            defer(() => this.setThumbnail(index, mimeType))
+            defer(() => this.getUrl(index, mimeType)),
+            defer(() => this.setThumbnail(index, mimeType)).pipe(
+              map(base64 => toDataUrl(base64, mimeType))
+            )
           )
         )
-      ),
-      map(base64 => toDataUrl(base64, mimeType))
+      )
     );
   }
 
@@ -203,6 +209,16 @@ export class ImageStore {
       path: `${this.rootDir}/${index}.${extension}`,
     });
     return result.uri;
+  }
+
+  /**
+   * Use this method when loading large image. Read data as base64 string
+   * directly when dealing with small image for better performance.
+   */
+  async getUrl(index: string, mimeType: MimeType) {
+    if (Capacitor.isNative)
+      return Capacitor.convertFileSrc(await this.getUri(index));
+    return toDataUrl(await this.read(index), mimeType);
   }
 
   private async getExtension(index: string) {
