@@ -83,7 +83,7 @@ export class AppComponent {
     this.iconRegistry.addSvgIcon(
       'media-id-solid-black',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        '/assets/icon/media-id-solid-black.svg'
+        '/assets/images/media-id-solid-black.svg'
       )
     );
   }

@@ -6,7 +6,9 @@
 <div *ngIf="series$ | async as series" class="page-content">
   <ion-card>
     <ion-img
-      [src]="series.cover_image || '/assets/image/series-cover-placeholder.png'"
+      [src]="
+        series.cover_image || '/assets/images/series-cover-placeholder.png'
+      "
     ></ion-img>
   </ion-card>
   <mat-grid-list cols="3" gutterSize="8px">

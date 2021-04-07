@@ -74,7 +74,7 @@ export class SendingPostCapturePage {
             contact_email: email,
             contact_name: email,
             contact_profile_picture_thumbnail:
-              '/assets/icon/avatar-placeholder.png',
+              '/assets/images/avatar-placeholder.png',
           })
         )
       )
