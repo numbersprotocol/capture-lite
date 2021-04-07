@@ -13,7 +13,7 @@
   ion-spinner {
     width: 48px;
     height: 48px;
-    opacity: 50%;
+    opacity: 0.5;
 
     --color: white;
   }
@@ -30,7 +30,7 @@ ion-icon.collecting {
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-  opacity: 30%;
+  opacity: 0.3;
   font-size: 24px;
 }
 
@@ -39,7 +39,7 @@ ion-icon.uploaded {
   bottom: 9px;
   left: 5px;
   font-size: 13px;
-  opacity: 30%;
+  opacity: 0.3;
 }
 
 ion-icon.located {
@@ -47,7 +47,7 @@ ion-icon.located {
   bottom: 8px;
   left: 23px;
   font-size: 16px;
-  opacity: 30%;
+  opacity: 0.3;
 }
 
 ion-img {

@@ -18,6 +18,7 @@
     "value-no-vendor-prefix": true,
     "shorthand-property-no-redundant-values": true,
     "selector-no-vendor-prefix": true,
-    "at-rule-no-vendor-prefix": true
+    "at-rule-no-vendor-prefix": true,
+    "alpha-value-notation": "number"
   }
 }

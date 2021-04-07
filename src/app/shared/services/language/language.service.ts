@@ -11,7 +11,7 @@ import { PreferenceManager } from '../preference-manager/preference-manager.serv
 })
 export class LanguageService {
   private readonly preferences = this.preferenceManager.getPreferences(
-    LanguageService.name
+    'LanguageService'
   );
   readonly languages = languages;
   readonly defaultLanguage = defaultLanguage;

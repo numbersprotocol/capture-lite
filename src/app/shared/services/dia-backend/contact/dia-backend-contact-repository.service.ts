@@ -63,7 +63,7 @@ export class DiaBackendContactRepository {
           { headers }
         )
       ),
-      tap(() => this.refresh({ reason: this.deleteByEmail$.name }))
+      tap(() => this.refresh({ reason: 'this.deleteByEmail$' }))
     );
   }
 

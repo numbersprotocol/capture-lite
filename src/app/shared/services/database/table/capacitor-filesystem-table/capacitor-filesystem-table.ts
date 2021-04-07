@@ -16,7 +16,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
 
   private readonly directory = FilesystemDirectory.Data;
 
-  private readonly rootDir = CapacitorFilesystemTable.name;
+  private readonly rootDir = 'CapacitorFilesystemTable';
   private readonly tuples$ = new BehaviorSubject<T[] | undefined>(undefined);
 
   readonly queryAll$ = defer(() => this.initialize()).pipe(

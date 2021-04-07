@@ -8,7 +8,7 @@ export class OnboardingService {
   private static readonly UNKNOWN_ONBOARDING_TIMESTAMP = 0;
 
   private readonly preferences = this.preferenceManager.getPreferences(
-    OnboardingService.name
+    'OnboardingService'
   );
 
   isNewLogin = false;

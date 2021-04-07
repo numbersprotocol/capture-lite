@@ -177,9 +177,9 @@ export class DiaBackendTransactionRepository {
         )
       ),
       tap(() => {
-        this.refresh({ reason: this.add$.name });
+        this.refresh({ reason: 'this.add$' });
         this.contactRepository.refresh({
-          reason: `${DiaBackendTransactionRepository.name}.${this.add$.name}`,
+          reason: `DiaBackendTransactionRepository.this.add$`,
         });
       })
     );
@@ -195,7 +195,7 @@ export class DiaBackendTransactionRepository {
         )
       ),
       tap(() => {
-        const reason = `${DiaBackendTransactionRepository.name}.${this.accept$.name}`;
+        const reason = `DiaBackendTransactionRepository.this.accept$`;
         this.refresh({ reason });
         this.assetRepositroy.refreshPostCaptures({ reason });
       })

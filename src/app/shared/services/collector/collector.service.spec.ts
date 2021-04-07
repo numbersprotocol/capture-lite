@@ -85,7 +85,7 @@ const FACTS: Facts = {
 };
 
 class MockFactsProvider implements FactsProvider {
-  readonly id = MockFactsProvider.name;
+  readonly id = 'MockFactsProvider';
   // eslint-disable-next-line @typescript-eslint/require-await
   async provide(_: Assets) {
     return FACTS;
@@ -103,7 +103,7 @@ const SIGNATURE: Signature = {
   publicKey: PUBLIC_KEY,
 };
 class MockSignatureProvider implements SignatureProvider {
-  readonly id = MockSignatureProvider.name;
+  readonly id = 'MockSignatureProvider';
   // eslint-disable-next-line @typescript-eslint/require-await
   async provide(_: string) {
     return SIGNATURE;

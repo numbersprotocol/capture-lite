@@ -22,7 +22,7 @@ const { Device } = Plugins;
 })
 export class MigrationService {
   private readonly preferences = this.preferenceManager.getPreferences(
-    MigrationService.name
+    'MigrationService'
   );
 
   constructor(

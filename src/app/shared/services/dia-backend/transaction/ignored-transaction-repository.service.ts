@@ -10,7 +10,7 @@ import { Tuple } from '../../database/table/table';
 })
 export class IgnoredTransactionRepository {
   private readonly table = this.database.getTable<IgnoredTransaction>(
-    IgnoredTransactionRepository.name
+    'IgnoredTransactionRepository'
   );
 
   readonly all$: Observable<string[]> = this.table.queryAll$.pipe(

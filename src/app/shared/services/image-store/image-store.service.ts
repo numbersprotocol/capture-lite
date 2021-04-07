@@ -22,14 +22,14 @@ import { OnConflictStrategy, Tuple } from '../database/table/table';
 })
 export class ImageStore {
   private readonly directory = FilesystemDirectory.Data;
-  private readonly rootDir = ImageStore.name;
+  private readonly rootDir = 'ImageStore';
   private readonly mutex = new Mutex();
   private hasInitialized = false;
   private readonly extensionTable = this.database.getTable<ImageExtension>(
-    `${ImageStore.name}_extension`
+    `ImageStore_extension`
   );
   private readonly thumbnailTable = this.database.getTable<Thumbnail>(
-    `${ImageStore.name}_thumbnail`
+    `ImageStore_thumbnail`
   );
 
   constructor(

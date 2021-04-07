@@ -29,7 +29,7 @@ export class DiaBackendNotificationService {
           return defer(() => this.notifyTransactionReceived()).pipe(
             tap(() =>
               this.transactionRepository.refresh({
-                reason: `${this.pushNotificationService.getPushData$.name}.${data.app_message_type}`,
+                reason: `this.pushNotificationService.getPushData$.${data.app_message_type}`,
               })
             )
           );
@@ -38,7 +38,7 @@ export class DiaBackendNotificationService {
           return defer(() => this.notifyTransactionExpired()).pipe(
             tap(() =>
               this.transactionRepository.refresh({
-                reason: `${this.pushNotificationService.getPushData$.name}.${data.app_message_type}`,
+                reason: `this.pushNotificationService.getPushData$.${data.app_message_type}`,
               })
             )
           );

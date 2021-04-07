@@ -27,7 +27,7 @@ const { Device, Storage } = Plugins;
 })
 export class DiaBackendAuthService {
   private readonly preferences = this.preferenceManager.getPreferences(
-    DiaBackendAuthService.name
+    'DiaBackendAuthService'
   );
   private readonly loginTimeout = 20000;
 

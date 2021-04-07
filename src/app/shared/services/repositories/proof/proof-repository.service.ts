@@ -11,7 +11,7 @@ import { IndexedProofView, Proof } from './proof';
 })
 export class ProofRepository {
   private readonly table = this.database.getTable<IndexedProofView>(
-    ProofRepository.name
+    'ProofRepository'
   );
 
   readonly all$ = this.table.queryAll$.pipe(

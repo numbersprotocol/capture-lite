@@ -34,7 +34,7 @@ import { DiaBackendAssetRepository } from '../dia-backend-asset-repository.servi
 })
 export class DiaBackendAssetUploadingService {
   private readonly preferences = this.preferenceManager.getPreferences(
-    DiaBackendAssetUploadingService.name
+    'DiaBackendAssetUploadingService'
   );
   private readonly _taskQueue$ = new BehaviorSubject<Proof[]>([]);
   private readonly _pendingTasks$ = new BehaviorSubject<number | undefined>(

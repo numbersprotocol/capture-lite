@@ -21,7 +21,7 @@ const { Device } = Plugins;
   providedIn: 'root',
 })
 export class CapacitorFactsProvider implements FactsProvider {
-  readonly id = CapacitorFactsProvider.name;
+  readonly id = 'CapacitorFactsProvider';
 
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
