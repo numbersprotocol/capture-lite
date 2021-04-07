@@ -15,7 +15,7 @@ export class SeriesPage {
 
   readonly collectionGeneral = [
     { img: undefined },
-    { img: 'https://material.angular.io/assets/img/examples/shiba1.jpg' },
+    { img: undefined },
     { img: undefined },
     { img: undefined },
     { img: undefined },
@@ -34,7 +34,7 @@ export class SeriesPage {
   ];
   readonly collectionRare = [
     { img: undefined },
-    { img: 'https://material.angular.io/assets/img/examples/shiba2.jpg' },
+    { img: undefined },
     { img: undefined },
   ];
 
