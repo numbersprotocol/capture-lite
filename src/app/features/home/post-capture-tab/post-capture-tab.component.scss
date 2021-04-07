@@ -60,8 +60,13 @@ ion-segment {
   overflow: auto;
 
   ion-card {
+    height: 300px;
+    display: flex;
+    background-color: lightgray;
+
     ion-img {
-      height: 300px;
+      height: 100%;
+      width: 100%;
       object-fit: cover;
       object-position: center;
     }

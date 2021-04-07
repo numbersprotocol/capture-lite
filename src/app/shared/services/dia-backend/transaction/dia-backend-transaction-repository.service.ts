@@ -159,9 +159,8 @@ export class DiaBackendTransactionRepository {
       ),
       catchError((err: unknown) => {
         // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        if (err instanceof HttpErrorResponse && err.status === 404) {
+        if (err instanceof HttpErrorResponse && err.status === 404)
           return throwError(new NotFoundErrorResponse(err));
-        }
         return throwError(err);
       })
     );

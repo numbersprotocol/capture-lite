@@ -3,28 +3,20 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
 </mat-toolbar>
-<div class="page-content">
+<div *ngIf="series$ | async as series" class="page-content">
   <ion-card>
-    <ion-img [src]="cover$ | async"></ion-img>
+    <ion-img *ngIf="series.cover_image" [src]="series.cover_image"></ion-img>
   </ion-card>
   <mat-grid-list cols="3" gutterSize="8px">
-    <mat-grid-tile
-      class="collection-general"
-      *ngFor="let collection of collectionGeneral"
-    >
-      <ion-img *ngIf="collection.img" [src]="collection.img"></ion-img>
-    </mat-grid-tile>
-    <mat-grid-tile
-      class="collection-special"
-      *ngFor="let collection of collectionSpecial"
-    >
-      <ion-img *ngIf="collection.img" [src]="collection.img"></ion-img>
-    </mat-grid-tile>
-    <mat-grid-tile
-      class="collection-rare"
-      *ngFor="let collection of collectionRare"
-    >
-      <ion-img *ngIf="collection.img" [src]="collection.img"></ion-img>
-    </mat-grid-tile>
+    <ng-container *ngFor="let collection of series.collections">
+      <mat-grid-tile *ngFor="let asset of collection.assets">
+        <div>
+          <ion-img
+            *ngIf="asset.collected"
+            [src]="asset.sharable_copy"
+          ></ion-img>
+        </div>
+      </mat-grid-tile>
+    </ng-container>
   </mat-grid-list>
 </div>

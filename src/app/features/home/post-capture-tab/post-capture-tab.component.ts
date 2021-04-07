@@ -16,7 +16,7 @@ import { NetworkService } from '../../../shared/services/network/network.service
   styleUrls: ['./post-capture-tab.component.scss'],
 })
 export class PostCaptureTabComponent {
-  categories = 'Photo';
+  categories: 'photo' | 'series' = 'photo';
 
   readonly networkConnected$ = this.networkService.connected$;
 
@@ -32,11 +32,11 @@ export class PostCaptureTabComponent {
     )
   );
 
-  readonly series$ = this.networkService.connected$.pipe(
+  readonly seriesList$ = this.networkService.connected$.pipe(
     switchMap(isConnected =>
       iif(
         () => isConnected,
-        this.diaBackendSeriesRepository.fetchSeries$.pipe(pluck('results'))
+        this.diaBackendSeriesRepository.fetchSeriesList$.pipe(pluck('results'))
       )
     )
   );
