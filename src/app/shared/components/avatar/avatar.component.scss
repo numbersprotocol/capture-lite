@@ -1,0 +1,16 @@
+:host {
+  overflow: hidden;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+  object-position: center;
+  background: azure;
+  border-radius: 50%;
+}
+
+input {
+  display: none;
+}

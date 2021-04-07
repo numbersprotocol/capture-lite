@@ -1,6 +1,11 @@
+import { Capacitor } from '@capacitor/core';
+import { defer, iif, of } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 import { sha256WithString } from '../../../../utils/crypto/crypto';
 import { sortObjectDeeplyByKey } from '../../../../utils/immutable/immutable';
 import { MimeType } from '../../../../utils/mime-type';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import { toDataUrl } from '../../../../utils/url';
 import { Tuple } from '../../database/table/table';
 import {
   ImageStore,
@@ -29,7 +34,33 @@ export class Proof {
   get geolocationLongitude() {
     return this.getFactValue(DefaultFactId.GEOLOCATION_LONGITUDE);
   }
+
   readonly indexedAssets: IndexedAssets = {};
+
+  readonly thumbnailUrl$ = defer(async () =>
+    Object.entries(this.indexedAssets).find(([_, meta]) =>
+      meta.mimeType.startsWith('image')
+    )
+  ).pipe(
+    concatMap(imageAsset =>
+      iif(
+        () => imageAsset === undefined,
+        of(undefined),
+        of(imageAsset).pipe(
+          isNonNullable(),
+          concatMap(([index, assetMeta]) =>
+            this.imageStore.getThumbnailUrl$(index, assetMeta.mimeType)
+          )
+        )
+      )
+    )
+  );
+
+  constructor(
+    private readonly imageStore: ImageStore,
+    readonly truth: Truth,
+    readonly signatures: Signatures
+  ) {}
 
   static async from(
     imageStore: ImageStore,
@@ -79,12 +110,6 @@ export class Proof {
     return proof;
   }
 
-  constructor(
-    private readonly imageStore: ImageStore,
-    readonly truth: Truth,
-    readonly signatures: Signatures
-  ) {}
-
   async setAssets(assets: Assets) {
     const indexedAssetEntries: [string, AssetMeta][] = [];
     for (const [base64, meta] of Object.entries(assets)) {
@@ -118,15 +143,13 @@ export class Proof {
     return Object.fromEntries(assetEntries);
   }
 
-  async getThumbnailUrl() {
-    const imageAsset = Object.entries(this.indexedAssets).find(([_, meta]) =>
-      meta.mimeType.startsWith('image')
-    );
-    if (imageAsset === undefined) {
-      return undefined;
-    }
-    const [index, assetMeta] = imageAsset;
-    return this.imageStore.getThumbnailUrl(index, assetMeta.mimeType);
+  async getFirstAssetUrl() {
+    if (Capacitor.isNative)
+      return Capacitor.convertFileSrc(
+        await this.imageStore.getUri(Object.keys(this.indexedAssets)[0])
+      );
+    const [base64, meta] = Object.entries(await this.getAssets())[0];
+    return toDataUrl(base64, meta.mimeType);
   }
 
   getFactValue(id: string) {

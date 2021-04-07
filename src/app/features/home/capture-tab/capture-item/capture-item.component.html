@@ -1,0 +1,23 @@
+<div *ngIf="isCollecting$ | async" class="collecting-spinner-container">
+  <ion-spinner></ion-spinner>
+</div>
+<ion-icon
+  *ngIf="isCollecting$ | async"
+  name="hourglass-outline"
+  class="collecting"
+></ion-icon>
+<ion-icon
+  *ngIf="hasUploaded$ | async"
+  src="/assets/icon/media-id.svg"
+  class="uploaded"
+>
+</ion-icon>
+<ion-icon
+  *ngIf="hasGeolocation$ | async"
+  src="/assets/icon/location.svg"
+  class="located"
+></ion-icon>
+<ion-img
+  *ngIf="thumbnailUrl$ | async as thumbnailUrl"
+  [src]="thumbnailUrl"
+></ion-img>

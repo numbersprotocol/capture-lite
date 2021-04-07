@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
 import { CameraService, Photo } from '../camera/camera.service';
 import { CollectorService } from '../collector/collector.service';
 import { ImageStore } from '../image-store/image-store.service';
@@ -15,9 +14,7 @@ export class CaptureService {
   private readonly _collectingOldProofHashes$ = new BehaviorSubject<
     Set<string>
   >(new Set());
-  readonly collectingOldProofHashes$ = this._collectingOldProofHashes$
-    .asObservable()
-    .pipe(distinctUntilChanged());
+  readonly collectingOldProofHashes$ = this._collectingOldProofHashes$;
 
   constructor(
     private readonly cameraService: CameraService,

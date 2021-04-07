@@ -57,7 +57,7 @@ const routes: Routes = [
   {
     path: 'image-viewer/:src',
     loadChildren: () =>
-      import('./shared/core/image-viewer/image-viewer.module').then(
+      import('./shared/pages/image-viewer/image-viewer.module').then(
         m => m.ImageViewerPageModule
       ),
   },

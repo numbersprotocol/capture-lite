@@ -1,20 +1,13 @@
 mat-toolbar {
-  color: white;
-
-  .mat-icon {
-    color: white;
-  }
-
   span {
-    color: white;
     padding-right: 40px;
   }
 }
 
-.numbers-logo {
-  display: block;
-  width: 50%;
-  margin: 10vw auto;
+app-avatar {
+  width: 64px;
+  height: 64px;
+  margin: 16px auto;
 }
 
 button.expand {

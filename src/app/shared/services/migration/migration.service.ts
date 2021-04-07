@@ -4,7 +4,7 @@ import { Plugins } from '@capacitor/core';
 import { defer } from 'rxjs';
 import { concatMap, first, pluck } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
-import { MigratingDialogComponent } from '../../core/migrating-dialog/migrating-dialog.component';
+import { MigratingDialogComponent } from '../../components/migrating-dialog/migrating-dialog.component';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,

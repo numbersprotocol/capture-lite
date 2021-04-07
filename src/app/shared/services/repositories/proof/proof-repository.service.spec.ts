@@ -51,7 +51,9 @@ describe('ProofRepository', () => {
     await repo.add(proof1);
 
     repo.all$.subscribe(proofs => {
-      expect(proofs).toEqual([proof1]);
+      expect(proofs.map(p => p.indexedAssets)).toEqual(
+        [proof1].map(p => p.indexedAssets)
+      );
       done();
     });
   });
@@ -69,7 +71,9 @@ describe('ProofRepository', () => {
     await repo.remove(sameProof1);
 
     repo.all$.subscribe(proofs => {
-      expect(proofs).toEqual([proof2]);
+      expect(proofs.map(p => p.indexedAssets)).toEqual(
+        [proof2].map(p => p.indexedAssets)
+      );
       done();
     });
   });
@@ -89,7 +93,9 @@ describe('ProofRepository', () => {
     );
 
     repo.all$.subscribe(proofs => {
-      expect(proofs).toEqual([sameTimestampProof]);
+      expect(proofs.map(p => p.indexedAssets)).toEqual(
+        [sameTimestampProof].map(p => p.indexedAssets)
+      );
       done();
     });
   });

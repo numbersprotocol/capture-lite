@@ -1,6 +1,3 @@
-<p *ngIf="(networkConnected$ | async) === false" class="network-status">
-  {{ 'message.networkNotConnected' | transloco }}
-</p>
 <div class="segments" [ngSwitch]="categories">
   <ion-segment mode="ios" [(ngModel)]="categories">
     <ion-segment-button value="Photo" checked>
@@ -10,6 +7,9 @@
       <ion-icon src="/assets/icon/series.svg" class="segment"></ion-icon>
     </ion-segment-button>
   </ion-segment>
+  <p *ngIf="(networkConnected$ | async) === false" class="network-status">
+    {{ 'message.networkNotConnected' | transloco }}
+  </p>
   <div class="post-captures" *ngSwitchCase="'Photo'">
     <mat-grid-list cols="3" gutterSize="8px">
       <mat-grid-tile

@@ -30,21 +30,9 @@ div.mat-title {
   font-size: 16px;
 }
 
-.mat-card-avatar {
-  background-color: azure;
-  width: 2em;
-  height: 2em;
-  font-size: 2em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  object-fit: cover;
-  object-position: center;
-  overflow: hidden;
-}
-
-.avatar-input {
-  display: none;
+app-avatar {
+  width: 64px;
+  height: 64px;
 }
 
 .capture-container {
@@ -52,64 +40,9 @@ div.mat-title {
   padding-right: 16px;
 }
 
-.capture-item {
-  height: 30vw;
+app-capture-item {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  object-fit: cover;
   border-radius: 4px;
-
-  .collecting-spinner-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-    z-index: 9;
-
-    ion-spinner {
-      width: 48px;
-      height: 48px;
-      opacity: 50%;
-
-      --color: white;
-    }
-  }
-
-  ion-icon {
-    color: white;
-    z-index: 10;
-  }
-
-  ion-icon.collecting {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-    opacity: 30%;
-    font-size: 24px;
-  }
-
-  ion-icon.uploaded {
-    position: absolute;
-    bottom: 9px;
-    left: 5px;
-    font-size: 13px;
-    opacity: 30%;
-  }
-
-  ion-icon.located {
-    position: absolute;
-    bottom: 8px;
-    left: 23px;
-    font-size: 16px;
-    opacity: 30%;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: inherit;
-  }
 }
