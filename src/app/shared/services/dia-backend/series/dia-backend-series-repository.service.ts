@@ -15,12 +15,13 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendSeriesRepository {
-  private readonly fetchSeriesCount$ = this.fetch$({ limit: 1 }).pipe(
-    pluck('count')
-  );
+  private readonly fetchCollectedSeriesCount$ = this.fetch$({
+    limit: 1,
+    collected: true,
+  }).pipe(pluck('count'));
 
-  readonly fetchSeriesList$ = this.fetchSeriesCount$.pipe(
-    switchMap(count => this.fetch$({ limit: count }))
+  readonly fetchCollectedSeriesList$ = this.fetchCollectedSeriesCount$.pipe(
+    switchMap(count => this.fetch$({ limit: count, collected: true }))
   );
 
   constructor(
@@ -32,13 +33,22 @@ export class DiaBackendSeriesRepository {
     return this.read$(id);
   }
 
-  private fetch$(options?: { limit?: number }) {
+  private fetch$({
+    limit,
+    collected,
+  }: {
+    limit?: number;
+    collected?: boolean;
+  }) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         let params = new HttpParams();
 
-        if (options?.limit !== undefined) {
-          params = params.set('limit', `${options.limit}`);
+        if (limit !== undefined) {
+          params = params.set('limit', `${limit}`);
+        }
+        if (collected !== undefined) {
+          params = params.set('collected', `${collected}`);
         }
         return this.httpClient.get<PaginatedResponse<DiaBackendSeries>>(
           `${BASE_URL}/api/v2/series/`,

@@ -27,7 +27,7 @@
 
   <div class="series" *ngSwitchCase="'series'">
     <ion-card
-      *ngFor="let series of seriesList$ | async"
+      *ngFor="let series of collectedSeriesList$ | async"
       [routerLink]="['series', { id: series.id }]"
     >
       <ion-img
