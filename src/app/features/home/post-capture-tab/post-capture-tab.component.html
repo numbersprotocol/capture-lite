@@ -1,16 +1,16 @@
 <div class="segments" [ngSwitch]="categories">
   <ion-segment mode="ios" [(ngModel)]="categories">
-    <ion-segment-button value="Photo" checked>
-      <ion-icon src="/assets/icon/apps.svg" class="segment"></ion-icon>
+    <ion-segment-button value="photo" checked>
+      <ion-icon src="/assets/images/apps.svg" class="segment"></ion-icon>
     </ion-segment-button>
-    <ion-segment-button value="Series">
-      <ion-icon src="/assets/icon/series.svg" class="segment"></ion-icon>
+    <ion-segment-button value="series">
+      <ion-icon src="/assets/images/series.svg" class="segment"></ion-icon>
     </ion-segment-button>
   </ion-segment>
   <p *ngIf="(networkConnected$ | async) === false" class="network-status">
     {{ 'message.networkNotConnected' | transloco }}
   </p>
-  <div class="post-captures" *ngSwitchCase="'Photo'">
+  <div class="post-captures" *ngSwitchCase="'photo'">
     <mat-grid-list cols="3" gutterSize="8px">
       <mat-grid-tile
         *ngFor="
@@ -25,12 +25,16 @@
     </mat-grid-list>
   </div>
 
-  <div class="series" *ngSwitchCase="'Series'">
+  <div class="series" *ngSwitchCase="'series'">
     <ion-card
-      *ngFor="let series of series$ | async"
-      [routerLink]="['series', { id: series.id, cover: series.cover_image }]"
+      *ngFor="let series of collectedSeriesList$ | async"
+      [routerLink]="['series', { id: series.id }]"
     >
-      <ion-img [src]="series.cover_image"></ion-img>
+      <ion-img
+        [src]="
+          series.cover_image || '/assets/images/series-cover-placeholder.png'
+        "
+      ></ion-img>
     </ion-card>
   </div>
 </div>
