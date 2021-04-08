@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.27.1 - 2021-04-08
+
+### UI/UX
+
+- Update tutorial pages.
+- Remove mock from-store icons.
+
+### Code Quality
+
+- Bump dependecies and enable dependabot integration.
+
+### Fixed
+
+- Replace `ion-img` with `img` to avoid a lazy loading bug. `72b260`
+
 ## 0.27.0 - 2021-04-07
 
 ### Added
