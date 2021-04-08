@@ -9,36 +9,52 @@
           xmlns:xlink="http://www.w3.org/1999/xlink"
           x="0px"
           y="0px"
-          viewBox="0 0 359 639"
-          enable-background="new 0 0 359 639"
+          viewBox="0 0 360 639"
+          enable-background="new 0 0 360 639"
           xml:space="preserve"
         >
-          <g id="Mdxwnq.tif">
-            <image
-              overflow="visible"
-              width="359"
-              height="639"
-              id="Layer_0"
-              xlink:href="/assets/images/tutorial-capture.png"
-              transform="matrix(1 0 0 1 0 -0.7244)"
-            ></image>
-          </g>
-          <rect y="0" fill="none" width="359" height="639" />
-          <text
-            transform="matrix(1 0 0 1 99.8826 163.0703)"
-            fill="#FFFFFF"
-            font-family="'NotoSansCJKtc-Bold-B5pc-H'"
-            font-size="24px"
-          >
-            {{ t('viewCaptures') }}
+          <image
+            overflow="visible"
+            width="360"
+            height="639"
+            xlink:href="/assets/images/tutorial-1.png"
+          ></image>
+          <text transform="matrix(1 0 0 1 88.6169 279.2624)">
+            <tspan
+              x="0"
+              y="0"
+              fill="#FFFFFF"
+              font-family="'jf-openhuninn-1.1'"
+              font-size="24px"
+            >
+              {{ t('tutorial.switchBetween0') }}
+            </tspan>
+            <tspan
+              x="-12.6"
+              y="28.8"
+              fill="#FFFFFF"
+              font-family="'jf-openhuninn-1.1'"
+              font-size="24px"
+            >
+              {{ t('tutorial.switchBetween1') }}
+            </tspan>
+            <tspan
+              x="4.8"
+              y="57.6"
+              fill="#FFFFFF"
+              font-family="'jf-openhuninn-1.1'"
+              font-size="24px"
+            >
+              {{ t('tutorial.switchBetween2') }}
+            </tspan>
           </text>
           <text
-            transform="matrix(1 0 0 1 67.4452 475.0788)"
+            transform="matrix(1 0 0 1 41.7676 519.6104)"
             fill="#FFFFFF"
-            font-family="'NotoSansCJKtc-Bold-B5pc-H'"
+            font-family="'jf-openhuninn-1.1'"
             font-size="24px"
           >
-            {{ t('takeCaptures') }}
+            {{ t('tutorial.viewYourCollections') }}
           </text>
         </svg>
       </ng-container>
@@ -59,40 +75,27 @@
           enable-background="new 0 0 360 639"
           xml:space="preserve"
         >
-          <g id="_x37_wnSn3.tif">
-            <image
-              overflow="visible"
-              width="360"
-              height="639"
-              id="Layer_0"
-              xlink:href="/assets/images/tutorial-tabs.png"
-              transform="matrix(1.0048 0 0 1 -1.0098 -6.932185e-02)"
-            ></image>
-          </g>
-          <rect y="0" fill="none" width="360" height="639" />
+          <image
+            overflow="visible"
+            width="359"
+            height="639"
+            xlink:href="/assets/images/tutorial-2.png"
+          ></image>
           <text
-            transform="matrix(1 0 0 1 107.5967 481.5746)"
+            transform="matrix(1 0 0 1 27.7647 460.2997)"
             fill="#FFFFFF"
-            font-family="'NotoSansCJKtc-Bold-B5pc-H'"
+            font-family="'jf-openhuninn-1.1'"
             font-size="24px"
           >
-            {{ t('switchPages') }}
+            {{ t('tutorial.createCaptures') }}
           </text>
           <text
-            transform="matrix(1 0 0 1 163.2176 244.5042)"
+            transform="matrix(1 0 0 1 92.1624 397.8444)"
             fill="#FFFFFF"
-            font-family="'NotoSansCJKtc-Bold-B5pc-H'"
+            font-family="'jf-openhuninn-1.1'"
             font-size="24px"
           >
-            {{ t('newMessages') }}
-          </text>
-          <text
-            transform="matrix(1 0 0 1 107.8657 47.2354)"
-            fill="#FFFFFF"
-            font-family="'NotoSansCJKtc-Bold-B5pc-H'"
-            font-size="24px"
-          >
-            {{ t('histories') }}
+            {{ t('tutorial.viewCreatedCaptures') }}
           </text>
         </svg>
       </ng-container>
@@ -113,24 +116,79 @@
           enable-background="new 0 0 360 639"
           xml:space="preserve"
         >
-          <g id="xRudo9.tif">
-            <image
-              overflow="visible"
-              width="360"
-              height="639"
-              id="Layer_0"
-              xlink:href="/assets/images/tutorial-post-capture.png"
-            ></image>
-          </g>
-          <rect y="0" fill="none" width="360" height="639" />
+          <image
+            overflow="visible"
+            width="360"
+            height="639"
+            xlink:href="/assets/images/tutorial-3.png"
+          ></image>
           <text
-            transform="matrix(1 0 0 1 180.8422 114.877)"
+            transform="matrix(1 0 0 1 168.3539 116.3548)"
             fill="#FFFFFF"
-            font-family="'NotoSansCJKtc-Bold-B5pc-H'"
+            font-family="'jf-openhuninn-1.1'"
             font-size="24px"
           >
-            {{ t('moreActions') }}
+            {{ t('tutorial.openCertificateZH') }}
           </text>
+          <text
+            transform="matrix(1 0 0 1 118.3539 116.3548)"
+            fill="#FFFFFF"
+            font-family="'jf-openhuninn-1.1'"
+            font-size="24px"
+          >
+            {{ t('tutorial.openCertificateEN') }}
+          </text>
+        </svg>
+      </ng-container>
+      <button (click)="slides.slideNext()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
+    </ion-slide>
+    <ion-slide>
+      <ng-container>
+        <svg
+          version="1.1"
+          id="圖層_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 360 639"
+          enable-background="new 0 0 360 639"
+          xml:space="preserve"
+        >
+          <image
+            overflow="visible"
+            width="360"
+            height="639"
+            xlink:href="/assets/images/tutorial-4.png"
+          ></image>
+          <text
+            transform="matrix(1 0 0 1 127.9265 50.9048)"
+            fill="#FFFFFF"
+            font-family="'jf-openhuninn-1.1'"
+            font-size="24px"
+          >
+            {{ t('tutorial.histories') }}
+          </text>
+          <g>
+            <text
+              transform="matrix(1 0 0 1 159.2167 218.531)"
+              fill="#FFFFFF"
+              font-family="'jf-openhuninn-1.1'"
+              font-size="24px"
+            >
+              {{ t('tutorial.messageInbox') }}
+            </text>
+            <text
+              transform="matrix(1 0 0 1 90.1938 526.1228)"
+              fill="#FFFFFF"
+              font-family="'jf-openhuninn-1.1'"
+              font-size="24px"
+            >
+              {{ t('tutorial.browseCaptureClub') }}
+            </text>
+          </g>
         </svg>
       </ng-container>
       <button routerLink="/home" mat-stroked-button>
