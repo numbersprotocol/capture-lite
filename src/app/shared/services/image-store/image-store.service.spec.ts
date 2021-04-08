@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Plugins } from '@capacitor/core';
-import { first } from 'rxjs/operators';
+import { defer } from 'rxjs';
+import { concatMap, first } from 'rxjs/operators';
 import { FILESYSTEM_PLUGIN } from '../../../shared/core/capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { stringToBase64 } from '../../../utils/encoding/encoding';
@@ -100,11 +101,12 @@ describe('ImageStore', () => {
     }
   });
 
-  it('should read thumbnail', async done => {
-    const index = await store.write(FILE, MIME_TYPE);
-    store
-      .getThumbnailUrl$(index, MIME_TYPE)
-      .pipe(first())
+  it('should read thumbnail', done => {
+    defer(() => store.write(FILE, MIME_TYPE))
+      .pipe(
+        concatMap(index => store.getThumbnailUrl$(index, MIME_TYPE)),
+        first()
+      )
       .subscribe(thumbnailFile => {
         expect(thumbnailFile).toBeTruthy();
         done();

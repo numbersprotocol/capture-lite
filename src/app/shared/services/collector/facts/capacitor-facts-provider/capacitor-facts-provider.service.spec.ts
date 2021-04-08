@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { defer } from 'rxjs';
+import { concatMapTo } from 'rxjs/operators';
 import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
 import { Assets, isFacts } from '../../../repositories/proof/proof';
 import { CapacitorFactsProvider } from './capacitor-facts-provider.service';
@@ -33,15 +35,15 @@ describe('CapacitorFactsProvider', () => {
     expect(await provider.isDeviceInfoCollectionEnabled()).toEqual(expected);
   });
 
-  it('should get if collecting device info enabled by Observable', async done => {
+  it('should get if collecting device info enabled by Observable', done => {
     const expected = true;
 
-    await provider.setDeviceInfoCollection(expected);
-
-    provider.isDeviceInfoCollectionEnabled$.subscribe(result => {
-      expect(result).toEqual(expected);
-      done();
-    });
+    defer(() => provider.setDeviceInfoCollection(expected))
+      .pipe(concatMapTo(provider.isDeviceInfoCollectionEnabled$))
+      .subscribe(result => {
+        expect(result).toEqual(expected);
+        done();
+      });
   });
 
   it('should get if collecting location info enabled by value', async () => {
@@ -54,14 +56,14 @@ describe('CapacitorFactsProvider', () => {
     );
   });
 
-  it('should get if collecting location info enabled by Observable', async done => {
+  it('should get if collecting location info enabled by Observable', done => {
     const expected = true;
 
-    await provider.setGeolocationInfoCollection(expected);
-
-    provider.isGeolocationInfoCollectionEnabled$.subscribe(result => {
-      expect(result).toEqual(expected);
-      done();
-    });
+    defer(() => provider.setGeolocationInfoCollection(expected))
+      .pipe(concatMapTo(provider.isGeolocationInfoCollectionEnabled$))
+      .subscribe(result => {
+        expect(result).toEqual(expected);
+        done();
+      });
   });
 });

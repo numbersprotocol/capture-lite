@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { TestBed } from '@angular/core/testing';
-import { first } from 'rxjs/operators';
+import { defer } from 'rxjs';
+import { concatMap, first } from 'rxjs/operators';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { verifyWithSha256AndEcdsa } from '../../../../utils/crypto/crypto';
 import { MimeType } from '../../../../utils/mime-type';
@@ -69,27 +70,35 @@ describe('Proof', () => {
     expect(await proof.getId()).toEqual(await another.getId());
   });
 
-  it('should have thumbnail when its assets have images', async done => {
-    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID);
-
-    proof.thumbnailUrl$.pipe(first()).subscribe(url => {
-      expect(url).toBeTruthy();
-      done();
-    });
+  it('should have thumbnail when its assets have images', done => {
+    defer(() => Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES_VALID))
+      .pipe(
+        concatMap(proof => proof.thumbnailUrl$),
+        first()
+      )
+      .subscribe(url => {
+        expect(url).toBeTruthy();
+        done();
+      });
   });
 
-  it('should not have thumbnail when its assets do not have image', async done => {
-    proof = await Proof.from(
-      imageStore,
-      { aGVsbG8K: { mimeType: 'application/octet-stream' } },
-      TRUTH,
-      SIGNATURES_VALID
-    );
-
-    proof.thumbnailUrl$.pipe(first()).subscribe(url => {
-      expect(url).toBeUndefined();
-      done();
-    });
+  it('should not have thumbnail when its assets do not have image', done => {
+    defer(() =>
+      Proof.from(
+        imageStore,
+        { aGVsbG8K: { mimeType: 'application/octet-stream' } },
+        TRUTH,
+        SIGNATURES_VALID
+      )
+    )
+      .pipe(
+        concatMap(proof => proof.thumbnailUrl$),
+        first()
+      )
+      .subscribe(url => {
+        expect(url).toBeUndefined();
+        done();
+      });
   });
 
   it('should get any device name when exists', async () => {

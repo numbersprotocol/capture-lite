@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { defer } from 'rxjs';
+import { concatMapTo } from 'rxjs/operators';
 import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
 import { sortObjectDeeplyByKey } from '../../../../../utils/immutable/immutable';
 import { isSignature, SignedTargets } from '../../../repositories/proof/proof';
@@ -25,22 +27,22 @@ describe('WebCryptoApiSignatureProvider', () => {
     expect(await provider.getPrivateKey()).toBeTruthy();
   });
 
-  it('should get public key by Observable after initialization', async done => {
-    await provider.initialize();
-
-    provider.getPublicKey$().subscribe(result => {
-      expect(result).toBeTruthy();
-      done();
-    });
+  it('should get public key by Observable after initialization', done => {
+    defer(() => provider.initialize())
+      .pipe(concatMapTo(provider.publicKey$))
+      .subscribe(result => {
+        expect(result).toBeTruthy();
+        done();
+      });
   });
 
-  it('should get private key by Observable after initialization', async done => {
-    await provider.initialize();
-
-    provider.getPrivateKey$().subscribe(result => {
-      expect(result).toBeTruthy();
-      done();
-    });
+  it('should get private key by Observable after initialization', done => {
+    defer(() => provider.initialize())
+      .pipe(concatMapTo(provider.privateKey$))
+      .subscribe(result => {
+        expect(result).toBeTruthy();
+        done();
+      });
   });
 
   it('should initialize idempotently', async () => {

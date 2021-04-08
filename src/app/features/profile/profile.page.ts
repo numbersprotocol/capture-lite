@@ -26,8 +26,8 @@ const { Clipboard } = Plugins;
 export class ProfilePage {
   readonly username$ = this.diaBackendAuthService.username$;
   readonly email$ = this.diaBackendAuthService.email$;
-  readonly publicKey$ = this.webCryptoApiSignatureProvider.getPublicKey$();
-  readonly privateKey$ = this.webCryptoApiSignatureProvider.getPrivateKey$();
+  readonly publicKey$ = this.webCryptoApiSignatureProvider.publicKey$;
+  readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
 
   constructor(
     private readonly database: Database,

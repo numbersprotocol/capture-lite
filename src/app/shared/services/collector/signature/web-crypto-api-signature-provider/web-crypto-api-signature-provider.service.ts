@@ -12,7 +12,12 @@ import { SignatureProvider } from '../signature-provider';
 })
 export class WebCryptoApiSignatureProvider implements SignatureProvider {
   readonly id = 'WebCryptoApiSignatureProvider';
+
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
+
+  readonly publicKey$ = this.preferences.getString$(PrefKeys.PUBLIC_KEY);
+
+  readonly privateKey$ = this.preferences.getString$(PrefKeys.PRIVATE_KEY);
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
 
@@ -37,16 +42,8 @@ export class WebCryptoApiSignatureProvider implements SignatureProvider {
     return { signature, publicKey };
   }
 
-  getPublicKey$() {
-    return this.preferences.getString$(PrefKeys.PUBLIC_KEY);
-  }
-
   async getPublicKey() {
     return this.preferences.getString(PrefKeys.PUBLIC_KEY);
-  }
-
-  getPrivateKey$() {
-    return this.preferences.getString$(PrefKeys.PRIVATE_KEY);
   }
 
   async getPrivateKey() {

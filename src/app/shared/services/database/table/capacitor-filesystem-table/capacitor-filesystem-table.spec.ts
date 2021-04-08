@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Plugins } from '@capacitor/core';
+import { defer } from 'rxjs';
+import { concatMapTo } from 'rxjs/operators';
 import { OnConflictStrategy, Table, Tuple } from '../table';
 import { CapacitorFilesystemTable } from './capacitor-filesystem-table';
 
@@ -29,14 +31,16 @@ describe('CapacitorFilesystemTable', () => {
     expect(tuples).toEqual([]);
   });
 
-  it('should emit new query on inserting tuple', async done => {
-    await table.insert([TUPLE1]);
-    await table.insert([TUPLE2]);
-
-    table.queryAll$.subscribe(tuples => {
-      expect(tuples).toEqual([TUPLE1, TUPLE2]);
-      done();
-    });
+  it('should emit new query on inserting tuple', done => {
+    defer(async () => {
+      await table.insert([TUPLE1]);
+      await table.insert([TUPLE2]);
+    })
+      .pipe(concatMapTo(table.queryAll$))
+      .subscribe(tuples => {
+        expect(tuples).toEqual([TUPLE1, TUPLE2]);
+        done();
+      });
   });
 
   it('should throw on inserting same tuple', async () => {
@@ -125,40 +129,46 @@ describe('CapacitorFilesystemTable', () => {
     expect(all).toEqual([sameIdTuple, TUPLE2]);
   });
 
-  it('should remove by tuple contents not reference', async done => {
+  it('should remove by tuple contents not reference', done => {
     const sameTuple: TestTuple = { ...TUPLE1 };
 
-    await table.insert([TUPLE1]);
-    await table.delete([sameTuple]);
-
-    table.queryAll$.subscribe(tuples => {
-      expect(tuples).toEqual([]);
-      done();
-    });
+    defer(async () => {
+      await table.insert([TUPLE1]);
+      await table.delete([sameTuple]);
+    })
+      .pipe(concatMapTo(table.queryAll$))
+      .subscribe(tuples => {
+        expect(tuples).toEqual([]);
+        done();
+      });
   });
 
-  it('should not emit removed tuples', async done => {
+  it('should not emit removed tuples', done => {
     const sameTuple1: TestTuple = { ...TUPLE1 };
 
-    await table.insert([TUPLE1, TUPLE2]);
-    await table.delete([sameTuple1]);
-
-    table.queryAll$.subscribe(tuples => {
-      expect(tuples).toEqual([TUPLE2]);
-      done();
-    });
+    defer(async () => {
+      await table.insert([TUPLE1, TUPLE2]);
+      await table.delete([sameTuple1]);
+    })
+      .pipe(concatMapTo(table.queryAll$))
+      .subscribe(tuples => {
+        expect(tuples).toEqual([TUPLE2]);
+        done();
+      });
   });
 
-  it('should not emit removed tuples with comparator', async done => {
+  it('should not emit removed tuples with comparator', done => {
     const sameIdTuple1: TestTuple = { ...TUPLE2, id: TUPLE1_ID };
 
-    await table.insert([TUPLE1, TUPLE2]);
-    await table.delete([sameIdTuple1], (x, y) => x.id === y.id);
-
-    table.queryAll$.subscribe(tuples => {
-      expect(tuples).toEqual([TUPLE2]);
-      done();
-    });
+    defer(async () => {
+      await table.insert([TUPLE1, TUPLE2]);
+      await table.delete([sameIdTuple1], (x, y) => x.id === y.id);
+    })
+      .pipe(concatMapTo(table.queryAll$))
+      .subscribe(tuples => {
+        expect(tuples).toEqual([TUPLE2]);
+        done();
+      });
   });
 
   it('should throw on deleting non-existent tuples', async () => {
@@ -171,7 +181,7 @@ describe('CapacitorFilesystemTable', () => {
     await expectAsync(table.delete([TUPLE1], () => false)).toBeRejected();
   });
 
-  it('should insert atomically', async done => {
+  it('should insert atomically', done => {
     const tupleCount = 100;
     const expectedTuples: TestTuple[] = [...Array(tupleCount).keys()].map(
       value => ({
@@ -183,15 +193,15 @@ describe('CapacitorFilesystemTable', () => {
       })
     );
 
-    await Promise.all(expectedTuples.map(tuple => table.insert([tuple])));
-
-    table.queryAll$.subscribe(tuples => {
-      expect(tuples).toEqual(expectedTuples);
-      done();
-    });
+    defer(() => Promise.all(expectedTuples.map(tuple => table.insert([tuple]))))
+      .pipe(concatMapTo(table.queryAll$))
+      .subscribe(tuples => {
+        expect(tuples).toEqual(expectedTuples);
+        done();
+      });
   });
 
-  it('should delete atomically', async done => {
+  it('should delete atomically', done => {
     const tupleCount = 100;
     const sourceTuple: TestTuple[] = [...Array(tupleCount).keys()].map(
       value => ({
@@ -203,14 +213,15 @@ describe('CapacitorFilesystemTable', () => {
       })
     );
 
-    await table.insert(sourceTuple);
-
-    await Promise.all(sourceTuple.map(tuple => table.delete([tuple])));
-
-    table.queryAll$.subscribe(tuples => {
-      expect(tuples).toEqual([]);
-      done();
-    });
+    defer(async () => {
+      await table.insert(sourceTuple);
+      await Promise.all(sourceTuple.map(tuple => table.delete([tuple])));
+    })
+      .pipe(concatMapTo(table.queryAll$))
+      .subscribe(tuples => {
+        expect(tuples).toEqual([]);
+        done();
+      });
   });
 
   it('should wipe all data after clear', async () => {
@@ -239,7 +250,7 @@ describe('CapacitorFilesystemTable', () => {
     expect(await table.queryAll()).toEqual([]);
   });
 
-  it('should emit empty data after clear', async done => {
+  it('should emit empty data after clear', done => {
     let counter = 0;
 
     table.queryAll$.subscribe(value => {
@@ -254,12 +265,13 @@ describe('CapacitorFilesystemTable', () => {
       counter += 1;
     });
 
-    await table.insert([TUPLE1]);
-
-    await table.clear();
+    defer(async () => {
+      await table.insert([TUPLE1]);
+      await table.clear();
+    }).subscribe();
   });
 
-  it('should update proofs', async done => {
+  it('should update proofs', done => {
     const tupleCount = 100;
     const sourceTuple: TestTuple[] = [...Array(tupleCount).keys()].map(
       value => ({
@@ -279,14 +291,16 @@ describe('CapacitorFilesystemTable', () => {
         address: { country: '', city: '' },
       })
     );
-    await table.insert(sourceTuple);
 
-    await table.update(expectedTuple, (x, y) => x.id === y.id);
-
-    table.queryAll$.subscribe(tuples => {
-      expect(tuples).toEqual(expectedTuple);
-      done();
-    });
+    defer(async () => {
+      await table.insert(sourceTuple);
+      await table.update(expectedTuple, (x, y) => x.id === y.id);
+    })
+      .pipe(concatMapTo(table.queryAll$))
+      .subscribe(tuples => {
+        expect(tuples).toEqual(expectedTuple);
+        done();
+      });
   });
 });
 

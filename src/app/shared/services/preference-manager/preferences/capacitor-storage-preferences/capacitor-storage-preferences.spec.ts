@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Plugins } from '@capacitor/core';
-import { zip } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { defer, zip } from 'rxjs';
+import { concatMapTo, first } from 'rxjs/operators';
 import { STORAGE_PLUGIN } from '../../../../../shared/core/capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
 import { Preferences } from '../preferences';
@@ -75,37 +75,40 @@ describe('CapacitorStoragePreferences', () => {
     expect(str).toEqual(defaultValue);
   });
 
-  it('should get the same boolean Observable set previously', async done => {
+  it('should get the same boolean Observable set previously', done => {
     const key = 'key';
     const value = true;
-    await preferences.setBoolean(key, value);
 
-    preferences.getBoolean$(key).subscribe(result => {
-      expect(result).toEqual(value);
-      done();
-    });
+    defer(() => preferences.setBoolean(key, value))
+      .pipe(concatMapTo(preferences.getBoolean$(key)))
+      .subscribe(result => {
+        expect(result).toEqual(value);
+        done();
+      });
   });
 
-  it('should get the same number Observable set previously', async done => {
+  it('should get the same number Observable set previously', done => {
     const key = 'key';
     const value = 99;
-    await preferences.setNumber(key, value);
 
-    preferences.getNumber$(key).subscribe(result => {
-      expect(result).toEqual(value);
-      done();
-    });
+    defer(() => preferences.setNumber(key, value))
+      .pipe(concatMapTo(preferences.getNumber$(key)))
+      .subscribe(result => {
+        expect(result).toEqual(value);
+        done();
+      });
   });
 
-  it('should get the same string Observable set previously', async done => {
+  it('should get the same string Observable set previously', done => {
     const key = 'key';
     const value = 'value';
-    await preferences.setString(key, value);
 
-    preferences.getString$(key).subscribe(result => {
-      expect(result).toEqual(value);
-      done();
-    });
+    defer(() => preferences.setString(key, value))
+      .pipe(concatMapTo(preferences.getString$(key)))
+      .subscribe(result => {
+        expect(result).toEqual(value);
+        done();
+      });
   });
 
   it('should get the same boolean value set previously', async () => {
@@ -135,7 +138,7 @@ describe('CapacitorStoragePreferences', () => {
     expect(result).toEqual(value);
   });
 
-  it('should set boolean atomically', async done => {
+  it('should set boolean atomically', done => {
     const key = 'key';
     const operationCount = 100;
     const lastBoolean = true;
@@ -144,29 +147,31 @@ describe('CapacitorStoragePreferences', () => {
       lastBoolean,
     ];
 
-    await Promise.all(booleans.map(bool => preferences.setBoolean(key, bool)));
-
-    preferences.getBoolean$(key).subscribe(result => {
-      expect(result).toEqual(lastBoolean);
-      done();
-    });
+    defer(() =>
+      Promise.all(booleans.map(bool => preferences.setBoolean(key, bool)))
+    )
+      .pipe(concatMapTo(preferences.getBoolean$(key)))
+      .subscribe(result => {
+        expect(result).toEqual(lastBoolean);
+        done();
+      });
   });
 
-  it('should set number atomically', async done => {
+  it('should set number atomically', done => {
     const key = 'key';
     const operationCount = 100;
     const lastNumber = -20;
     const numbers: number[] = [...Array(operationCount - 1).keys(), lastNumber];
 
-    await Promise.all(numbers.map(n => preferences.setNumber(key, n)));
-
-    preferences.getNumber$(key).subscribe(result => {
-      expect(result).toEqual(lastNumber);
-      done();
-    });
+    defer(() => Promise.all(numbers.map(n => preferences.setNumber(key, n))))
+      .pipe(concatMapTo(preferences.getNumber$(key)))
+      .subscribe(result => {
+        expect(result).toEqual(lastNumber);
+        done();
+      });
   });
 
-  it('should set string atomically', async done => {
+  it('should set string atomically', done => {
     const key = 'key';
     const operationCount = 1000;
     const lastString = 'last';
@@ -175,15 +180,17 @@ describe('CapacitorStoragePreferences', () => {
       lastString,
     ];
 
-    await Promise.all(strings.map(str => preferences.setString(key, str)));
-
-    preferences.getString$(key).subscribe(result => {
-      expect(result).toEqual(lastString);
-      done();
-    });
+    defer(() =>
+      Promise.all(strings.map(str => preferences.setString(key, str)))
+    )
+      .pipe(concatMapTo(preferences.getString$(key)))
+      .subscribe(result => {
+        expect(result).toEqual(lastString);
+        done();
+      });
   });
 
-  it('should remove all values after clear', async done => {
+  it('should remove all values after clear', done => {
     const booleanKey = 'booleanKey';
     const booleanValue = true;
     const defaultBooleanValue = false;
@@ -194,18 +201,23 @@ describe('CapacitorStoragePreferences', () => {
     const stringValue = 'stringValue';
     const defaultStringValue = 'defaultStringValue';
 
-    await preferences.setBoolean(booleanKey, booleanValue);
-    await preferences.setNumber(numberKey, numberValue);
-    await preferences.setString(stringKey, stringValue);
+    defer(async () => {
+      await preferences.setBoolean(booleanKey, booleanValue);
+      await preferences.setNumber(numberKey, numberValue);
+      await preferences.setString(stringKey, stringValue);
 
-    await preferences.clear();
-
-    zip(
-      preferences.getBoolean$(booleanKey, defaultBooleanValue),
-      preferences.getNumber$(numberKey, defaultNumberValue),
-      preferences.getString$(stringKey, defaultStringValue)
-    )
-      .pipe(first())
+      await preferences.clear();
+    })
+      .pipe(
+        concatMapTo(
+          zip(
+            preferences.getBoolean$(booleanKey, defaultBooleanValue),
+            preferences.getNumber$(numberKey, defaultNumberValue),
+            preferences.getString$(stringKey, defaultStringValue)
+          )
+        ),
+        first()
+      )
       .subscribe(([booleanResult, numberResult, stringResult]) => {
         expect(booleanResult).toEqual(defaultBooleanValue);
         expect(numberResult).toEqual(defaultNumberValue);

@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { defer } from 'rxjs';
+import { concatMap, concatMapTo, tap } from 'rxjs/operators';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { MimeType } from '../../../../utils/mime-type';
 import { ImageStore } from '../../image-store/image-store.service';
@@ -47,57 +49,67 @@ describe('ProofRepository', () => {
     });
   });
 
-  it('should emit new query on adding proof', async done => {
-    await repo.add(proof1);
-
-    repo.all$.subscribe(proofs => {
-      expect(proofs.map(p => p.indexedAssets)).toEqual(
-        [proof1].map(p => p.indexedAssets)
-      );
-      done();
-    });
+  it('should emit new query on adding proof', done => {
+    defer(() => repo.add(proof1))
+      .pipe(concatMapTo(repo.all$))
+      .subscribe(proofs => {
+        expect(proofs.map(p => p.indexedAssets)).toEqual(
+          [proof1].map(p => p.indexedAssets)
+        );
+        done();
+      });
   });
 
-  it('should not emit removed proofs', async done => {
-    await repo.add(proof1);
-    await repo.add(proof2);
-    const sameProof1 = await Proof.from(
-      imageStore,
-      PROOF1_ASSETS,
-      PROOF1_TRUTH,
-      PROOF1_SIGNATURES_VALID
-    );
-
-    await repo.remove(sameProof1);
-
-    repo.all$.subscribe(proofs => {
-      expect(proofs.map(p => p.indexedAssets)).toEqual(
-        [proof2].map(p => p.indexedAssets)
+  it('should not emit removed proofs', done => {
+    defer(async () => {
+      await repo.add(proof1);
+      await repo.add(proof2);
+      const sameProof1 = await Proof.from(
+        imageStore,
+        PROOF1_ASSETS,
+        PROOF1_TRUTH,
+        PROOF1_SIGNATURES_VALID
       );
-      done();
-    });
+
+      await repo.remove(sameProof1);
+    })
+      .pipe(concatMapTo(repo.all$))
+      .subscribe(proofs => {
+        expect(proofs.map(p => p.indexedAssets)).toEqual(
+          [proof2].map(p => p.indexedAssets)
+        );
+        done();
+      });
   });
 
-  it('should emit updated proof', async done => {
-    const sameTimestampProof = await Proof.from(
-      imageStore,
-      PROOF2_ASSETS,
-      PROOF1_TRUTH,
-      PROOF1_SIGNATURES_VALID
-    );
-    await repo.add(proof1);
-
-    await repo.update(
-      [sameTimestampProof],
-      (x, y) => x.timestamp === y.timestamp
-    );
-
-    repo.all$.subscribe(proofs => {
-      expect(proofs.map(p => p.indexedAssets)).toEqual(
-        [sameTimestampProof].map(p => p.indexedAssets)
-      );
-      done();
-    });
+  it('should emit updated proof', done => {
+    defer(() =>
+      Proof.from(
+        imageStore,
+        PROOF2_ASSETS,
+        PROOF1_TRUTH,
+        PROOF1_SIGNATURES_VALID
+      )
+    )
+      .pipe(
+        concatMap(sameTimestampProof =>
+          defer(async () => {
+            await repo.add(proof1);
+            await repo.update(
+              [sameTimestampProof],
+              (x, y) => x.timestamp === y.timestamp
+            );
+          }).pipe(
+            concatMapTo(repo.all$),
+            tap(proofs =>
+              expect(proofs.map(p => p.indexedAssets)).toEqual(
+                [sameTimestampProof].map(p => p.indexedAssets)
+              )
+            )
+          )
+        )
+      )
+      .subscribe(() => done());
   });
 });
 
