@@ -16,8 +16,9 @@
       <mat-grid-tile *ngFor="let asset of collection.assets">
         <div>
           <ion-img
-            *ngIf="asset.collected"
-            [src]="asset.sharable_copy"
+            *ngIf="true"
+            [routerLink]="['../post-capture-details', { id: asset.id }]"
+            [src]="asset.asset_file_thumbnail"
           ></ion-img>
         </div>
       </mat-grid-tile>

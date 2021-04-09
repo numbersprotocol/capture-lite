@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { zip } from 'rxjs';
@@ -56,8 +56,13 @@ export class PostCaptureDetailsPage {
     private readonly translocoService: TranslocoService,
     private readonly actionSheetController: ActionSheetController,
     private readonly shareService: ShareService,
-    private readonly diaBackendAuthService: DiaBackendAuthService
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly navController: NavController
   ) {}
+
+  back() {
+    this.navController.back();
+  }
 
   async openOptionsMenu() {
     const actionSheet = await this.actionSheetController.create({
@@ -128,7 +133,12 @@ function getValidGeolocation(diaBackendAsset: DiaBackendAsset) {
   const longitude = diaBackendAsset.information.information?.find(
     info => info.name === OldDefaultInformationName.GEOLOCATION_LONGITUDE
   )?.value;
-  if (latitude && longitude) {
+  if (
+    latitude &&
+    longitude &&
+    latitude !== 'undefined' &&
+    longitude !== 'undefined'
+  ) {
     return { latitude, longitude };
   }
   return undefined;

@@ -81,7 +81,7 @@ export interface DiaBackendSeries {
   readonly collections: {
     readonly assets: {
       readonly id: string;
-      readonly sharable_copy: string;
+      readonly asset_file_thumbnail: string;
       readonly collected: boolean;
     }[];
   }[];

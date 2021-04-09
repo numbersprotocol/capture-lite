@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" *transloco="let t">
-  <button routerLink=".." routerDirection="back" mat-icon-button>
+  <button (click)="back()" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
   <div class="toolbar-spacer"></div>
@@ -17,7 +17,10 @@
   <mat-list-item>
     <mat-icon mat-list-icon>person</mat-icon>
     <div mat-line>
-      {{ diaBackendAsset.source_transaction?.sender_name }}
+      {{
+        diaBackendAsset.source_transaction?.sender_name ||
+          diaBackendAsset.creator_name
+      }}
     </div>
   </mat-list-item>
   <mat-list-item>
