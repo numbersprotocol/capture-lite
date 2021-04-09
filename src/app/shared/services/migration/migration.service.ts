@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Plugins } from '@capacitor/core';
 import { defer } from 'rxjs';
 import { concatMap, first, pluck } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
@@ -14,8 +13,7 @@ import { OnboardingService } from '../onboarding/onboarding.service';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
-
-const { Device } = Plugins;
+import { VersionService } from '../version/version.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +29,8 @@ export class MigrationService {
     private readonly networkService: NetworkService,
     private readonly proofRepository: ProofRepository,
     private readonly preferenceManager: PreferenceManager,
-    private readonly onboardingService: OnboardingService
+    private readonly onboardingService: OnboardingService,
+    private readonly versionService: VersionService
   ) {}
 
   migrate$(skip?: boolean) {
@@ -79,8 +78,10 @@ export class MigrationService {
   }
 
   async updatePreviousVersion() {
-    const { appVersion } = await Device.getInfo();
-    return this.preferences.setString(PrefKeys.PREVIOUS_VERSION, appVersion);
+    return this.preferences.setString(
+      PrefKeys.PREVIOUS_VERSION,
+      await this.versionService.version$.pipe(first()).toPromise()
+    );
   }
 
   private async to0_15_0() {

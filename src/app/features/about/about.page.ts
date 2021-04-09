@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
-import { Plugins } from '@capacitor/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { defer } from 'rxjs';
-import { pluck } from 'rxjs/operators';
-
-const { Device } = Plugins;
+import { VersionService } from '../../shared/services/version/version.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -13,5 +9,7 @@ const { Device } = Plugins;
   styleUrls: ['./about.page.scss'],
 })
 export class AboutPage {
-  readonly version$ = defer(() => Device.getInfo()).pipe(pluck('appVersion'));
+  readonly version$ = this.versionService.version$;
+
+  constructor(private readonly versionService: VersionService) {}
 }
