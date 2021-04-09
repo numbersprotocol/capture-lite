@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { Component } from '@angular/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { OnboardingService } from '../../../../shared/services/onboarding/onboarding.service';
 
 @UntilDestroy({ checkProperties: true })
@@ -8,10 +8,8 @@ import { OnboardingService } from '../../../../shared/services/onboarding/onboar
   templateUrl: './tutorial.page.html',
   styleUrls: ['./tutorial.page.scss'],
 })
-export class TutorialPage implements OnInit {
-  constructor(private readonly onboardingService: OnboardingService) {}
-
-  async ngOnInit() {
-    return this.onboardingService.onboard();
+export class TutorialPage {
+  constructor(private readonly onboardingService: OnboardingService) {
+    this.onboardingService.onboard$().pipe(untilDestroyed(this)).subscribe();
   }
 }

@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
+import { forkJoin } from 'rxjs';
+import { concatMap, first } from 'rxjs/operators';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
+import { VersionService } from '../version/version.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +16,10 @@ export class OnboardingService {
 
   isNewLogin = false;
 
-  constructor(private readonly preferenceManager: PreferenceManager) {}
+  constructor(
+    private readonly preferenceManager: PreferenceManager,
+    private readonly versionService: VersionService
+  ) {}
 
   private async migrate() {
     if (await this.preferences.getBoolean(PrefKeys.HAS_MIGRATED, false)) {
@@ -21,7 +27,7 @@ export class OnboardingService {
     }
     const isOnboarding = await this.isOnboarding();
     if (!isOnboarding) {
-      await this.onboard();
+      await this.onboard$();
     } else {
       await this.setIsOnboarding(false);
     }
@@ -47,11 +53,19 @@ export class OnboardingService {
     return timestamp;
   }
 
-  async onboard() {
-    return this.preferences.setNumber(
-      PrefKeys.ONBOARDING_TIMESTAMP,
-      Date.now()
-    );
+  onboard$() {
+    return forkJoin([
+      this.preferences.setNumber(PrefKeys.ONBOARDING_TIMESTAMP, Date.now()),
+      this.versionService.version$.pipe(
+        first(),
+        concatMap(version =>
+          this.preferences.setString(
+            PrefKeys.HAS_SHOWN_TUTORIAL_VERSION,
+            version
+          )
+        )
+      ),
+    ]);
   }
 
   /**
@@ -74,6 +88,10 @@ export class OnboardingService {
       value
     );
   }
+
+  async hasShownTutorialVersion() {
+    return this.preferences.getString(PrefKeys.HAS_SHOWN_TUTORIAL_VERSION, '');
+  }
 }
 
 const enum PrefKeys {
@@ -84,4 +102,5 @@ const enum PrefKeys {
   ONBOARDING_TIMESTAMP = 'ONBOARDING_TIMESTAMP',
   HAS_PREFETCHED_DIA_BACKEND_ASSETS = 'HAS_PREFETCHED_DIA_BACKEND_ASSETS',
   HAS_MIGRATED = 'HAS_MIGRATED',
+  HAS_SHOWN_TUTORIAL_VERSION = 'HAS_SHOWN_TUTORIAL_VERSION',
 }

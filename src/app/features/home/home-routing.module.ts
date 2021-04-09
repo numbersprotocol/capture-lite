@@ -27,7 +27,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'onboarding/tutorial',
+    path: 'tutorial',
     loadChildren: () =>
       import('./onboarding/tutorial/tutorial.module').then(
         m => m.TutorialPageModule
