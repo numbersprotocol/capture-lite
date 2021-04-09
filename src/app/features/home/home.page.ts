@@ -25,7 +25,10 @@ const { Browser } = Plugins;
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
+  selectedTabIndex = 0;
+
   readonly username$ = this.diaBackendAuthService.username$;
+
   readonly inboxCount$ = this.diaBackendTransactionRepository.inbox$.pipe(
     map(transactions => transactions.length),
     /**
@@ -109,7 +112,9 @@ export class HomePage {
   }
 
   async capture() {
-    return this.captureService.capture();
+    await this.captureService.capture();
+    const captureIndex = 2;
+    this.selectedTabIndex = captureIndex;
   }
 
   // eslint-disable-next-line class-methods-use-this
