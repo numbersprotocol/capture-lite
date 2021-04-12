@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { SharedTestingModule } from '../../shared-testing.module';
-import { ImageViewerPage } from './image-viewer.page';
+import { MediaViewerPage } from './media-viewer.page';
 
-describe('ImageViewerPage', () => {
-  let component: ImageViewerPage;
-  let fixture: ComponentFixture<ImageViewerPage>;
+describe('MediaViewerPage', () => {
+  let component: MediaViewerPage;
+  let fixture: ComponentFixture<MediaViewerPage>;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [ImageViewerPage],
+        declarations: [MediaViewerPage],
         imports: [SharedTestingModule, PinchZoomModule],
       }).compileComponents();
 
-      fixture = TestBed.createComponent(ImageViewerPage);
+      fixture = TestBed.createComponent(MediaViewerPage);
       component = fixture.componentInstance;
       fixture.detectChanges();
     })

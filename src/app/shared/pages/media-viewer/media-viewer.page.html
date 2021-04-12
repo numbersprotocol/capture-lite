@@ -1,0 +1,16 @@
+<ion-button (click)="dismiss()" color="light" fill="clear" class="dismiss">
+  <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+</ion-button>
+
+<ng-container *ngIf="isImage$ | async">
+  <pinch-zoom *ngIf="src$ | async as src">
+    <img [src]="src" />
+  </pinch-zoom>
+</ng-container>
+
+<video
+  *ngIf="isVideo$ | async"
+  [attr.src]="src$ | async"
+  controls
+  autoplay
+></video>

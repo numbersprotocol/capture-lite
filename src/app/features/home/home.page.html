@@ -93,6 +93,11 @@
         <ion-img
           src="/assets/images/coming-soon-store.gif"
           class="coming-soon-store"
+          [routerLink]="[
+            '/media-viewer',
+            'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
+            { mimeType: 'video/mp4' }
+          ]"
         ></ion-img>
       </mat-tab>
     </mat-tab-group>
