@@ -6,7 +6,6 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendSeriesRepository } from '../../../shared/services/dia-backend/series/dia-backend-series-repository.service';
 import { NetworkService } from '../../../shared/services/network/network.service';
 
 @UntilDestroy({ checkProperties: true })
@@ -32,20 +31,8 @@ export class PostCaptureTabComponent {
     )
   );
 
-  readonly collectedSeriesList$ = this.networkService.connected$.pipe(
-    switchMap(isConnected =>
-      iif(
-        () => isConnected,
-        this.diaBackendSeriesRepository.fetchCollectedSeriesList$.pipe(
-          pluck('results')
-        )
-      )
-    )
-  );
-
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository,
     private readonly networkService: NetworkService
   ) {}
 

@@ -86,12 +86,14 @@
         </ng-template>
         <app-capture-tab></app-capture-tab>
       </mat-tab>
-      <mat-tab disabled>
+      <mat-tab>
         <ng-template mat-tab-label>
-          <button (click)="openStore()" mat-icon-button>
-            <mat-icon class="tab-action-button-icon">shopping_bag</mat-icon>
-          </button>
+          <mat-icon>shopping_bag</mat-icon>
         </ng-template>
+        <ion-img
+          src="/assets/images/coming-soon-store.gif"
+          class="coming-soon-store"
+        ></ion-img>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>

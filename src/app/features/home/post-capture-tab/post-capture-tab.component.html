@@ -25,15 +25,8 @@
   </div>
 
   <div class="series" *ngSwitchCase="'series'">
-    <ion-card
-      *ngFor="let series of collectedSeriesList$ | async"
-      [routerLink]="['series', { id: series.id }]"
-    >
-      <ion-img
-        [src]="
-          series.cover_image || '/assets/images/series-cover-placeholder.png'
-        "
-      ></ion-img>
+    <ion-card>
+      <ion-img src="/assets/images/coming-soon-series.gif"></ion-img>
     </ion-card>
   </div>
 </div>

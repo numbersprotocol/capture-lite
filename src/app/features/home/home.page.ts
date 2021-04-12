@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, iif, of } from 'rxjs';
@@ -16,9 +15,7 @@ import { OnboardingService } from '../../shared/services/onboarding/onboarding.s
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 
-const { Browser } = Plugins;
-
-@UntilDestroy({ checkProperties: true })
+@UntilDestroy()
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -115,13 +112,5 @@ export class HomePage {
     await this.captureService.capture();
     const captureIndex = 2;
     this.selectedTabIndex = captureIndex;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async openStore() {
-    return Browser.open({
-      url: 'https://authmedia.net/version-test/store',
-      toolbarColor: '#564dfc',
-    });
   }
 }
