@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.27.2 - 2021-04-12
+
+### UI/UX
+
+- Show tutorial for store/series release. #622
+- Change `selectedIndex` of home tabs to capture tab after capturing. #623
+
+### Fixed
+
+- Replace series view and store tab with coming soon images. #625
+- Update tutorial images and text.
+
 ## 0.27.1 - 2021-04-08
 
 ### UI/UX
