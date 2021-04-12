@@ -87,15 +87,16 @@
   ".message": "Message",
   "tutorial": {
     "switchBetween0": "Switch between",
-    "switchBetween1": "Capture view and",
+    "switchBetween1": "Image view and",
     "switchBetween2": "Collection view",
     "viewYourCollections": "View your collections",
     "createCaptures": "Create Captures",
     "viewCreatedCaptures": "View created Captures",
     "openCertificate": "Open certificate",
+    "viewMore": "View more",
     "histories": "History",
     "messageInbox": "Message inbox",
-    "browseCaptureClub": "Browse Capture Club"
+    "browseCaptureClub": "Browse CaptureClub"
   },
   "message": {
     "areYouSure": "This action cannot be undone.",
