@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
 import { MimeType } from '../../../../utils/mime-type';
-import { ImageStore } from '../../image-store/image-store.service';
+import { MediaStore } from '../../media-store/media-store.service';
 import {
   AssetMeta,
   Assets,
@@ -23,13 +23,13 @@ import {
 
 describe('old-proof-adapter', () => {
   let proof: Proof;
-  let imageStore: ImageStore;
+  let imageStore: MediaStore;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
-    imageStore = TestBed.inject(ImageStore);
+    imageStore = TestBed.inject(MediaStore);
     proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES);
   });
 

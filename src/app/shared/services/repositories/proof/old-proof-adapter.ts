@@ -2,7 +2,7 @@ import { groupBy, mapValues } from 'lodash-es';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import { MimeType } from '../../../../utils/mime-type';
 import { Tuple } from '../../database/table/table';
-import { ImageStore } from '../../image-store/image-store.service';
+import { MediaStore } from '../../media-store/media-store.service';
 import { DefaultFactId, Proof, Signatures, Truth } from './proof';
 
 /**
@@ -91,7 +91,7 @@ export function getOldSignatures(proof: Proof): OldSignature[] {
 }
 
 export async function getProof(
-  imageStore: ImageStore,
+  imageStore: MediaStore,
   raw: Blob,
   sortedProofInformation: SortedProofInformation,
   oldSignatures: OldSignature[]

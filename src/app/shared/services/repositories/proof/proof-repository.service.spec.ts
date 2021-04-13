@@ -3,7 +3,7 @@ import { defer } from 'rxjs';
 import { concatMap, concatMapTo, tap } from 'rxjs/operators';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { MimeType } from '../../../../utils/mime-type';
-import { ImageStore } from '../../image-store/image-store.service';
+import { MediaStore } from '../../media-store/media-store.service';
 import {
   AssetMeta,
   Assets,
@@ -18,13 +18,13 @@ describe('ProofRepository', () => {
   let repo: ProofRepository;
   let proof1: Proof;
   let proof2: Proof;
-  let imageStore: ImageStore;
+  let imageStore: MediaStore;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
-    imageStore = TestBed.inject(ImageStore);
+    imageStore = TestBed.inject(MediaStore);
     repo = TestBed.inject(ProofRepository);
     proof1 = await Proof.from(
       imageStore,

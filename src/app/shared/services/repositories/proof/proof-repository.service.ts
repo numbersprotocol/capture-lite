@@ -3,7 +3,7 @@ import { isEqual } from 'lodash-es';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy } from '../../database/table/table';
-import { ImageStore } from '../../image-store/image-store.service';
+import { MediaStore } from '../../media-store/media-store.service';
 import { IndexedProofView, Proof } from './proof';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class ProofRepository {
 
   constructor(
     private readonly database: Database,
-    private readonly imageStore: ImageStore
+    private readonly imageStore: MediaStore
   ) {}
 
   async getAll() {

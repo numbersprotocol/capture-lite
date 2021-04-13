@@ -31,7 +31,6 @@ import {
   isNonNullable,
   switchTap,
 } from '../../../../../utils/rx-operators/rx-operators';
-import { toDataUrl } from '../../../../../utils/url';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -47,6 +46,11 @@ export class SendingPostCapturePage {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
+  readonly mimeType$ = this.asset$.pipe(
+    map(asset => asset.information.proof?.mimeType),
+    isNonNullable()
+  );
+
   readonly assetFileUrl$ = combineLatest([
     this.asset$,
     this.proofRepository.all$,
@@ -54,9 +58,7 @@ export class SendingPostCapturePage {
     switchMap(async ([asset, proofs]) => {
       const proof = proofs.find(p => p.diaBackendAssetId === asset.id);
       if (proof) {
-        const proofAssets = await proof.getAssets();
-        const [base64, meta] = Object.entries(proofAssets)[0];
-        return toDataUrl(base64, meta.mimeType);
+        return proof.getFirstAssetUrl();
       }
     })
   );

@@ -27,7 +27,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
-import { toExtension } from '../../../../utils/mime-type';
+import { MimeType, toExtension } from '../../../../utils/mime-type';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { Tuple } from '../../database/table/table';
 import {
@@ -260,7 +260,7 @@ export interface DiaBackendAssetTransaction extends Tuple {
 
 export interface DiaBackendAssetParsedMeta extends Tuple {
   readonly proof_hash: string;
-  readonly mime_type?: string;
+  readonly mime_type?: MimeType;
   readonly capture_time?: number;
   readonly capture_device?: string;
   readonly capture_latitude?: string;

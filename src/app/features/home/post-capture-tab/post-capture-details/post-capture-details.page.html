@@ -9,11 +9,16 @@
 </mat-toolbar>
 
 <mat-list *ngIf="diaBackendAsset$ | async as diaBackendAsset">
-  <ion-img
+  <app-media
     *ngIf="imageSrc$ | async as imageSrc"
-    [routerLink]="['/media-viewer', imageSrc]"
+    [routerLink]="[
+      '/media-viewer',
+      imageSrc,
+      { mimeType: diaBackendAsset.parsed_meta.mime_type }
+    ]"
     [src]="imageSrc"
-  ></ion-img>
+    [mimeType]="diaBackendAsset.parsed_meta.mime_type"
+  ></app-media>
   <mat-list-item>
     <mat-icon mat-list-icon>person</mat-icon>
     <div mat-line>

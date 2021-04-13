@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CameraService, Photo } from '../camera/camera.service';
 import { CollectorService } from '../collector/collector.service';
-import { ImageStore } from '../image-store/image-store.service';
+import { MediaStore } from '../media-store/media-store.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
 import { Proof } from '../repositories/proof/proof';
 import { ProofRepository } from '../repositories/proof/proof-repository.service';
@@ -19,7 +19,7 @@ export class CaptureService {
   constructor(
     private readonly cameraService: CameraService,
     private readonly proofRepository: ProofRepository,
-    private readonly imageStore: ImageStore,
+    private readonly imageStore: MediaStore,
     private readonly collectorService: CollectorService
   ) {}
 

@@ -19,7 +19,7 @@ import { BlockingActionService } from '../../../../shared/services/blocking-acti
 import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { ImageStore } from '../../../../shared/services/image-store/image-store.service';
+import { MediaStore } from '../../../../shared/services/media-store/media-store.service';
 import { getOldProof } from '../../../../shared/services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../../shared/services/repositories/proof/proof';
 import { ProofRepository } from '../../../../shared/services/repositories/proof/proof-repository.service';
@@ -56,7 +56,12 @@ export class CaptureDetailsPage {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  readonly imageSrc$ = this.proof$.pipe(
+  readonly mimeType$ = this.proof$.pipe(
+    switchMap(proof => proof.getFirstAssetMeta()),
+    map(meta => meta.mimeType)
+  );
+
+  readonly assetSrc$ = this.proof$.pipe(
     switchMap(async proof => {
       const [index, meta] = Object.entries(proof.indexedAssets)[0];
       if (!(await this.imageStore.exists(index)) && proof.diaBackendAssetId) {
@@ -97,7 +102,7 @@ export class CaptureDetailsPage {
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly imageStore: ImageStore,
+    private readonly imageStore: MediaStore,
     private readonly shareService: ShareService
   ) {}
 
