@@ -109,8 +109,8 @@ export class HomePage {
   }
 
   async capture() {
-    await this.captureService.capture();
     const captureIndex = 2;
     this.selectedTabIndex = captureIndex;
+    await this.captureService.capture();
   }
 }
