@@ -5,7 +5,7 @@ import { concatMap, first } from 'rxjs/operators';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { verifyWithSha256AndEcdsa } from '../../../../utils/crypto/crypto';
 import { MimeType } from '../../../../utils/mime-type';
-import { ImageStore } from '../../image-store/image-store.service';
+import { MediaStore } from '../../media-store/media-store.service';
 import {
   AssetMeta,
   Assets,
@@ -22,7 +22,7 @@ import {
 
 describe('Proof', () => {
   let proof: Proof;
-  let imageStore: ImageStore;
+  let imageStore: MediaStore;
 
   beforeAll(() => {
     Proof.registerSignatureProvider(SIGNATURE_PROVIDER_ID, {
@@ -36,7 +36,7 @@ describe('Proof', () => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
-    imageStore = TestBed.inject(ImageStore);
+    imageStore = TestBed.inject(MediaStore);
   });
 
   it('should get the same assets with the parameter of factory method', async () => {

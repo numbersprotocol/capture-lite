@@ -16,13 +16,13 @@
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
-  <mat-list class="content">
-    <ion-img
-      *ngIf="imageSrc$ | async as imageSrc"
-      [routerLink]="['/image-viewer', imageSrc]"
-      class="proof-image"
-      [src]="imageSrc"
-    ></ion-img>
+  <mat-list *ngIf="assetSrc$ | async as assetSrc" class="content">
+    <app-media
+      *ngIf="mimeType$ | async as mimeType"
+      [src]="assetSrc"
+      [mimeType]="mimeType"
+      [routerLink]="['/media-viewer', assetSrc, { mimeType: mimeType }]"
+    ></app-media>
     <mat-list-item>
       <mat-icon mat-list-icon>person</mat-icon>
       <div mat-line>{{ username$ | async }}</div>

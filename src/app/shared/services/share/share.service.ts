@@ -6,7 +6,7 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
-import { ImageStore } from '../image-store/image-store.service';
+import { MediaStore } from '../media-store/media-store.service';
 const { Share } = Plugins;
 
 @Injectable({
@@ -18,7 +18,7 @@ export class ShareService {
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly imageStore: ImageStore
+    private readonly imageStore: MediaStore
   ) {}
 
   async share(asset: DiaBackendAsset) {

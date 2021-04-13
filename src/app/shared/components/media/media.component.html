@@ -1,0 +1,10 @@
+<ng-container *ngIf="src$ | async as src">
+  <img *ngIf="isImage$ | async" [src]="src" />
+  <video
+    *ngIf="isVideo$ | async"
+    [src]="src"
+    autoplay
+    [muted]="'muted'"
+    playsinline
+  ></video>
+</ng-container>

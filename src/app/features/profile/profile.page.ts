@@ -12,7 +12,7 @@ import { WebCryptoApiSignatureProvider } from '../../shared/services/collector/s
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { Database } from '../../shared/services/database/database.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { ImageStore } from '../../shared/services/image-store/image-store.service';
+import { MediaStore } from '../../shared/services/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/services/preference-manager/preference-manager.service';
 
 const { Clipboard } = Plugins;
@@ -32,7 +32,7 @@ export class ProfilePage {
   constructor(
     private readonly database: Database,
     private readonly preferenceManager: PreferenceManager,
-    private readonly imageStore: ImageStore,
+    private readonly imageStore: MediaStore,
     private readonly blockingActionService: BlockingActionService,
     private readonly toastController: ToastController,
     private readonly translocoService: TranslocoService,

@@ -6,14 +6,13 @@ import {
 } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
 import Compressor from 'compressorjs';
-import { defer, iif, merge, of } from 'rxjs';
+import { defer, merge } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
-import { FILESYSTEM_PLUGIN } from '../../../shared/core/capacitor-plugins/capacitor-plugins.module';
 import { sha256WithBase64 } from '../../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
 import { MimeType, toExtension } from '../../../utils/mime-type';
-import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { toDataUrl } from '../../../utils/url';
+import { FILESYSTEM_PLUGIN } from '../../core/capacitor-plugins/capacitor-plugins.module';
 import { Database } from '../database/database.service';
 import { OnConflictStrategy, Tuple } from '../database/table/table';
 
@@ -24,7 +23,7 @@ import { OnConflictStrategy, Tuple } from '../database/table/table';
 @Injectable({
   providedIn: 'root',
 })
-export class ImageStore {
+export class MediaStore {
   private readonly directory = FilesystemDirectory.Data;
   private readonly rootDir = 'ImageStore';
   private readonly mutex = new Mutex();
@@ -92,10 +91,10 @@ export class ImageStore {
   private async _write(index: string, base64: string, mimeType: MimeType) {
     await this.initialize();
     return this.mutex.runExclusive(async () => {
-      const imageExtension = await this.setImageExtension(index, mimeType);
+      const mediaExtension = await this.setMediaExtension(index, mimeType);
       await this.filesystemPlugin.writeFile({
         directory: this.directory,
-        path: `${this.rootDir}/${index}.${imageExtension.extension}`,
+        path: `${this.rootDir}/${index}.${mediaExtension.extension}`,
         data: base64,
         recursive: true,
       });
@@ -112,7 +111,7 @@ export class ImageStore {
         directory: this.directory,
         path: `${this.rootDir}/${index}.${extension}`,
       });
-      await this.deleteImageExtension(index);
+      await this.deleteMediaExtension(index);
       return index;
     });
   }
@@ -129,22 +128,24 @@ export class ImageStore {
 
   getThumbnailUrl$(index: string, mimeType: MimeType) {
     return defer(() => this.getThumbnail(index)).pipe(
-      concatMap(thumbnail =>
-        iif(
-          () => !!thumbnail,
-          of(thumbnail).pipe(
-            isNonNullable(),
-            concatMap(t => this.read(t.thumbnailIndex)),
+      concatMap(thumbnail => {
+        if (thumbnail) {
+          return defer(() => this.read(thumbnail.thumbnailIndex)).pipe(
             map(base64 => toDataUrl(base64, mimeType))
-          ),
-          merge(
-            defer(() => this.getUrl(index, mimeType)),
-            defer(() => this.setThumbnail(index, mimeType)).pipe(
-              map(base64 => toDataUrl(base64, mimeType))
-            )
+          );
+        }
+        if (mimeType.startsWith('video')) {
+          return defer(() => this.setThumbnail(index, mimeType)).pipe(
+            map(base64 => toDataUrl(base64, mimeType))
+          );
+        }
+        return merge(
+          defer(() => this.getUrl(index, mimeType)),
+          defer(() => this.setThumbnail(index, mimeType)).pipe(
+            map(base64 => toDataUrl(base64, mimeType))
           )
-        )
-      )
+        );
+      })
     );
   }
 
@@ -156,10 +157,12 @@ export class ImageStore {
   private async makeThumbnail(index: string, mimeType: MimeType) {
     const thumbnailSize = 100;
     const blob = await base64ToBlob(await this.read(index), mimeType);
-    const thumbnailBlob = await makeThumbnail({
-      image: blob,
-      width: thumbnailSize,
-    });
+    const thumbnailBlob = mimeType.startsWith('video')
+      ? await makeVideoThumbnail({ video: blob, width: thumbnailSize })
+      : await makeImageThumbnail({
+          image: blob,
+          width: thumbnailSize,
+        });
     return blobToBase64(thumbnailBlob);
   }
 
@@ -222,17 +225,17 @@ export class ImageStore {
   }
 
   private async getExtension(index: string) {
-    return (await this.getImageExtension(index))?.extension;
+    return (await this.getMediaExtension(index))?.extension;
   }
 
-  private async getImageExtension(index: string) {
-    const imageExtensions = await this.extensionTable.queryAll();
-    return imageExtensions.find(
-      imageExtension => imageExtension.imageIndex === index
+  private async getMediaExtension(index: string) {
+    const mediaExtensions = await this.extensionTable.queryAll();
+    return mediaExtensions.find(
+      mediaExtension => mediaExtension.imageIndex === index
     );
   }
 
-  private async setImageExtension(index: string, mimeType: MimeType) {
+  private async setMediaExtension(index: string, mimeType: MimeType) {
     return (
       await this.extensionTable.insert(
         [{ imageIndex: index, extension: toExtension(mimeType) }],
@@ -241,8 +244,8 @@ export class ImageStore {
     )[0];
   }
 
-  private async deleteImageExtension(index: string) {
-    const imageExtension = await this.getImageExtension(index);
+  private async deleteMediaExtension(index: string) {
+    const imageExtension = await this.getMediaExtension(index);
     if (!imageExtension) {
       return index;
     }
@@ -286,10 +289,18 @@ export const enum OnWriteExistStrategy {
   REPLACE,
 }
 
-async function makeThumbnail({ image, width }: { image: Blob; width: number }) {
+async function makeImageThumbnail({
+  image,
+  width,
+  quality = 0.6,
+}: {
+  image: Blob;
+  width: number;
+  quality?: number;
+}) {
   return new Promise<Blob>((resolve, reject) => {
     new Compressor(image, {
-      quality: 0.6,
+      quality,
       width,
       success(result) {
         resolve(result);
@@ -298,5 +309,49 @@ async function makeThumbnail({ image, width }: { image: Blob; width: number }) {
         reject(err);
       },
     });
+  });
+}
+
+async function makeVideoThumbnail({
+  video,
+  width,
+  quality = 0.6,
+}: {
+  video: Blob;
+  width: number;
+  quality?: number;
+}) {
+  return new Promise<Blob>((resolve, reject) => {
+    const videoElement = document.createElement('video');
+    const canvas = document.createElement('canvas');
+    videoElement.addEventListener('error', reject);
+    canvas.addEventListener('error', reject);
+    videoElement.addEventListener('canplay', () => {
+      canvas.width = videoElement.videoWidth;
+      canvas.height = videoElement.videoHeight;
+      const context = canvas.getContext('2d');
+      if (!context) reject(TypeError('2d context is undefined.'));
+      else {
+        context.drawImage(
+          videoElement,
+          0,
+          0,
+          videoElement.videoWidth,
+          videoElement.videoHeight
+        );
+        canvas.toBlob(
+          blob => {
+            if (blob)
+              resolve(makeImageThumbnail({ image: blob, width, quality }));
+            else reject(TypeError('canvas.toBlob is null.'));
+          },
+          video.type,
+          quality
+        );
+      }
+    });
+    videoElement.preload = 'auto';
+    videoElement.src = URL.createObjectURL(video);
+    videoElement.load();
   });
 }
