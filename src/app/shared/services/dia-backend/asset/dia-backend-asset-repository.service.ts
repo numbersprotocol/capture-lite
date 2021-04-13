@@ -121,7 +121,7 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  getAndCachePostCaptureImage$(postCapture: DiaBackendAsset) {
+  getAndCachePostCaptureMedia$(postCapture: DiaBackendAsset) {
     return this.postCapturesImageCache$.pipe(
       map(cache => cache.get(postCapture.id)),
       switchMap(image =>

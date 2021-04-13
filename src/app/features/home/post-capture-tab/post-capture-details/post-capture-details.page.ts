@@ -31,9 +31,9 @@ export class PostCaptureDetailsPage {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  readonly imageSrc$ = this.diaBackendAsset$.pipe(
+  readonly mediaSrc$ = this.diaBackendAsset$.pipe(
     switchMap(asset =>
-      this.diaBackendAssetRepository.getAndCachePostCaptureImage$(asset)
+      this.diaBackendAssetRepository.getAndCachePostCaptureMedia$(asset)
     ),
     first(),
     map(blob => URL.createObjectURL(blob)),

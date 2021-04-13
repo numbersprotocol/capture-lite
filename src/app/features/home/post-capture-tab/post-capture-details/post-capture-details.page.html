@@ -10,13 +10,13 @@
 
 <mat-list *ngIf="diaBackendAsset$ | async as diaBackendAsset">
   <app-media
-    *ngIf="imageSrc$ | async as imageSrc"
+    *ngIf="mediaSrc$ | async as mediaSrc"
     [routerLink]="[
       '/media-viewer',
-      imageSrc,
+      mediaSrc,
       { mimeType: diaBackendAsset.parsed_meta.mime_type }
     ]"
-    [src]="imageSrc"
+    [src]="mediaSrc"
     [mimeType]="diaBackendAsset.parsed_meta.mime_type"
   ></app-media>
   <mat-list-item>
