@@ -19,7 +19,7 @@
   <mat-list class="content">
     <ion-img
       *ngIf="imageSrc$ | async as imageSrc"
-      [routerLink]="['/image-viewer', imageSrc]"
+      [routerLink]="['/media-viewer', imageSrc]"
       class="proof-image"
       [src]="imageSrc"
     ></ion-img>

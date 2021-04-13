@@ -11,7 +11,7 @@
 <mat-list *ngIf="diaBackendAsset$ | async as diaBackendAsset">
   <ion-img
     *ngIf="imageSrc$ | async as imageSrc"
-    [routerLink]="['/image-viewer', imageSrc]"
+    [routerLink]="['/media-viewer', imageSrc]"
     [src]="imageSrc"
   ></ion-img>
   <mat-list-item>
