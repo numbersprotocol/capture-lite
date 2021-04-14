@@ -17,4 +17,10 @@
   src="/assets/images/location.svg"
   class="located"
 ></ion-icon>
-<img *ngIf="thumbnailUrl$ | async as thumbnailUrl" [src]="thumbnailUrl" />
+<ion-icon *ngIf="isVideo$ | async" name="videocam" class="is-video"></ion-icon>
+<img
+  *ngIf="thumbnailUrl$ | async as thumbnailUrl"
+  loading="lazy"
+  decoding="async"
+  [src]="thumbnailUrl"
+/>

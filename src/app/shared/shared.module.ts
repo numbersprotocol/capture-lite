@@ -9,11 +9,13 @@ import { MediaComponent } from './components/media/media.component';
 import { MigratingDialogComponent } from './components/migrating-dialog/migrating-dialog.component';
 import { CapacitorPluginsModule } from './core/capacitor-plugins/capacitor-plugins.module';
 import { MaterialModule } from './core/material/material.module';
+import { StartsWithPipe } from './pipes/starts-with/starts-with.pipe';
 
 const declarations = [
   MigratingDialogComponent,
   AvatarComponent,
   MediaComponent,
+  StartsWithPipe,
 ];
 
 const imports = [
