@@ -3,7 +3,8 @@ import {
   MatBottomSheetRef,
   MAT_BOTTOM_SHEET_DATA,
 } from '@angular/material/bottom-sheet';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { catchError, distinctUntilChanged } from 'rxjs/operators';
+import { ErrorService } from '../../../../../shared/modules/error/error.service';
 import { DiaBackendAssetRepository } from '../../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { Proof } from '../../../../../shared/services/repositories/proof/proof';
 @Component({
@@ -15,12 +16,16 @@ export class OptionsMenuComponent {
   readonly options = Option;
   readonly asset$ = this.diaBackendAssetRepository
     .fetchByProof$(this.data.proof)
-    .pipe(distinctUntilChanged());
+    .pipe(
+      distinctUntilChanged(),
+      catchError((err: unknown) => this.errorService.toastError$(err))
+    );
 
   constructor(
     private readonly bottomSheetRef: MatBottomSheetRef<OptionsMenuComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) readonly data: { proof: Proof },
-    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly errorService: ErrorService
   ) {}
 
   openLink(option: Option) {

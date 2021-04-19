@@ -12,8 +12,9 @@ import { DiaBackendAssetRepository } from '../../shared/services/dia-backend/ass
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import {
-  LocationPermissionDeniedError,
-  LocationUnknownError,
+  GeolocationPermissionDeniedError,
+  GeolocationTimeoutError,
+  GeolocationUnknownError,
 } from '../../shared/services/geolocation/geolocation.service';
 import { MigrationService } from '../../shared/services/migration/migration.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
@@ -32,6 +33,7 @@ export class HomePage {
   readonly username$ = this.diaBackendAuthService.username$;
 
   readonly inboxCount$ = this.diaBackendTransactionRepository.inbox$.pipe(
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     map(transactions => transactions.length),
     /**
      * WORKARDOUND: force changeDetection to update badge when returning to App
@@ -64,6 +66,7 @@ export class HomePage {
         concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
         catchError(() => VOID$),
         switchTapTo(defer(() => this.onboardingRedirect())),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();
@@ -109,6 +112,7 @@ export class HomePage {
             this.diaBackendTransactionRepository.downloadExpired$
           )
         ),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();
@@ -122,13 +126,17 @@ export class HomePage {
     })
       .pipe(
         catchError((err: unknown) => {
-          if (err instanceof LocationPermissionDeniedError)
+          if (err instanceof GeolocationPermissionDeniedError)
             return this.errorService.toastError$(
               this.translocoService.translate(
                 'error.geolocation.permissionDeniedError'
               )
             );
-          if (err instanceof LocationUnknownError)
+          if (err instanceof GeolocationTimeoutError)
+            return this.errorService.toastError$(
+              this.translocoService.translate('error.geolocation.timeoutError')
+            );
+          if (err instanceof GeolocationUnknownError)
             return this.errorService.toastError$(
               this.translocoService.translate('error.geolocation.unknownError')
             );

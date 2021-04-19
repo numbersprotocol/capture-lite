@@ -101,7 +101,7 @@ export class GeolocationService {
 
 async function getTimer(timeout: number) {
   return new Promise<undefined>((_, reject) =>
-    setTimeout(() => reject(new LocationUnknownError()), timeout)
+    setTimeout(() => reject(new GeolocationUnknownError()), timeout)
   );
 }
 
@@ -122,10 +122,14 @@ interface Coordinates {
   readonly longitude: number;
 }
 
-export class LocationPermissionDeniedError extends BaseError {
-  readonly name = 'LocationPermissionDeniedError';
+export class GeolocationPermissionDeniedError extends BaseError {
+  readonly name = 'GeolocationPermissionDeniedError';
 }
 
-export class LocationUnknownError extends BaseError {
-  readonly name = 'LocationUnknownError';
+export class GeolocationTimeoutError extends BaseError {
+  readonly name = 'GeolocationTimeoutError';
+}
+
+export class GeolocationUnknownError extends BaseError {
+  readonly name = 'GeolocationUnknownError';
 }

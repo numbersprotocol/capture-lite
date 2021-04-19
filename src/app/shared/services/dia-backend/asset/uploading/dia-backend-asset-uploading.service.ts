@@ -123,7 +123,7 @@ export class DiaBackendAssetUploadingService {
       catchError((err: unknown) => {
         if (
           err instanceof HttpErrorResponse &&
-          err.error?.error.type === 'duplicate_asset_not_allowed'
+          err.error.error.type === 'duplicate_asset_not_allowed'
         ) {
           return this.diaBackendAssetRepository.fetchByProof$(proof);
         }

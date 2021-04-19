@@ -7,6 +7,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, defer, iif, zip } from 'rxjs';
 import {
+  catchError,
   concatMap,
   concatMapTo,
   first,
@@ -15,6 +16,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
+import { ErrorService } from '../../../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -67,7 +69,10 @@ export class CaptureDetailsPage {
       if (!(await this.imageStore.exists(index)) && proof.diaBackendAssetId) {
         const imageBlob = await this.diaBackendAssetRepository
           .downloadFile$({ id: proof.diaBackendAssetId, field: 'asset_file' })
-          .pipe(first())
+          .pipe(
+            first(),
+            catchError((err: unknown) => this.errorService.toastError$(err))
+          )
           .toPromise();
         await proof.setAssets({ [await blobToBase64(imageBlob)]: meta });
       }
@@ -103,7 +108,8 @@ export class CaptureDetailsPage {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly imageStore: MediaStore,
-    private readonly shareService: ShareService
+    private readonly shareService: ShareService,
+    private readonly errorService: ErrorService
   ) {}
 
   openContactSelectionDialog() {
@@ -197,6 +203,7 @@ export class CaptureDetailsPage {
           )
         ),
         concatMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();
@@ -215,6 +222,7 @@ export class CaptureDetailsPage {
         })
       ),
       concatMap(proof => this.proofRepository.remove(proof)),
+      catchError((err: unknown) => this.errorService.toastError$(err)),
       concatMapTo(defer(() => this.router.navigate(['..'])))
     );
     const result = await this.confirmAlert.present();

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { iif } from 'rxjs';
-import { map, pluck, switchMap } from 'rxjs/operators';
+import { catchError, map, pluck, switchMap } from 'rxjs/operators';
+import { ErrorService } from '../../../shared/modules/error/error.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -29,7 +30,8 @@ export class PostCaptureTabComponent {
           map(assets => assets.filter(a => a.source_transaction))
         )
       )
-    )
+    ),
+    catchError((err: unknown) => this.errorService.toastError$(err))
   );
 
   readonly collectedSeriesList$ = this.networkService.connected$.pipe(
@@ -37,7 +39,8 @@ export class PostCaptureTabComponent {
       iif(
         () => isConnected,
         this.diaBackendSeriesRepository.fetchCollectedSeriesList$.pipe(
-          pluck('results')
+          pluck('results'),
+          catchError((err: unknown) => this.errorService.toastError$(err))
         )
       )
     )
@@ -46,7 +49,8 @@ export class PostCaptureTabComponent {
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository,
-    private readonly networkService: NetworkService
+    private readonly networkService: NetworkService,
+    private readonly errorService: ErrorService
   ) {}
 
   // eslint-disable-next-line class-methods-use-this

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map, shareReplay } from 'rxjs/operators';
+import { catchError, map, shareReplay } from 'rxjs/operators';
+import { ErrorService } from '../../../shared/modules/error/error.service';
 import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { getStatus } from './transaction-details/transaction-details.page';
@@ -13,6 +14,7 @@ import { getStatus } from './transaction-details/transaction-details.page';
 })
 export class TransactionPage {
   readonly transactionsWithStatus$ = this.diaBackendTransactionRepository.all$.pipe(
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     map(transactions =>
       transactions.results.map(transaction => ({
         ...transaction,
@@ -26,6 +28,7 @@ export class TransactionPage {
 
   constructor(
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository
+    private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
+    private readonly errorService: ErrorService
   ) {}
 }

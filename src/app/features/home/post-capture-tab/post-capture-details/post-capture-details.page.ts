@@ -5,7 +5,8 @@ import { ActionSheetController, NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { zip } from 'rxjs';
-import { first, map, shareReplay, switchMap } from 'rxjs/operators';
+import { catchError, first, map, shareReplay, switchMap } from 'rxjs/operators';
+import { ErrorService } from '../../../../shared/modules/error/error.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -28,6 +29,7 @@ export class PostCaptureDetailsPage {
     map(params => params.get('id')),
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.getPostCaptureById$(id)),
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
@@ -35,6 +37,7 @@ export class PostCaptureDetailsPage {
     switchMap(asset =>
       this.diaBackendAssetRepository.getAndCachePostCaptureMedia$(asset)
     ),
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     first(),
     map(blob => URL.createObjectURL(blob)),
     shareReplay({ bufferSize: 1, refCount: true })
@@ -57,7 +60,8 @@ export class PostCaptureDetailsPage {
     private readonly actionSheetController: ActionSheetController,
     private readonly shareService: ShareService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly navController: NavController
+    private readonly navController: NavController,
+    private readonly errorService: ErrorService
   ) {}
 
   back() {

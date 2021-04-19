@@ -3,8 +3,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
-import { TimeoutError } from 'rxjs';
-import { concatMap, first, map } from 'rxjs/operators';
+import { NEVER, TimeoutError } from 'rxjs';
+import { concatMap, concatMapTo, first, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +26,7 @@ export class ErrorService {
             authenticationError,
             notFoundError,
             serverInternalError,
+            internetError,
             timeoutError,
             unknownError,
           }) => {
@@ -39,6 +40,7 @@ export class ErrorService {
                 return notFoundError;
               if (error.status >= HttpErrorCode.INTERNAL)
                 return serverInternalError;
+              return internetError;
             }
             if (error instanceof TimeoutError) return timeoutError;
             if (error instanceof Error) return error.message;
@@ -56,7 +58,8 @@ export class ErrorService {
                   resolve(error);
                 })
             )
-        )
+        ),
+        concatMapTo(NEVER)
       );
   }
 }

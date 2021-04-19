@@ -141,11 +141,12 @@
     "authenticationError": "You have been logged out. Please manually login again.",
     "notFoundError": "The data cannot be found. Please try again later and make sure you have the permission.",
     "serverInternalError": "Server internal error. Please try again later.",
+    "internetError": "Internet connection error. Please check your Internet connection quality.",
     "timeoutError": "Operation timeout. Please try again later.",
     "unknownError": "An error has occurred. Please try again later.",
     "geolocation": {
       "permissionDeniedError": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
-      "timeout": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",
+      "timeoutError": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",
       "unknownError": "Location is not available at this Capture; possibly due to permission error, weak network connectivity or GPS signals."
     },
     "prefetch": {

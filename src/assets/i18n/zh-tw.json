@@ -136,7 +136,29 @@
     "resetPasswordEnterEmail": "請輸入您的註冊信箱以重新設定密碼。",
     "resetPasswordEmailSent": "重新設定密碼的連結已經寄送至您註冊的電子信箱，請開啟您的電子信箱並點擊該連結以重新設定密碼。"
   },
-  "error": {},
+  "error": {
+    "validationError": "操作或輸入有誤，請確認您的操作正確。",
+    "authenticationError": "您已經被登出，請手動重新登入。",
+    "notFoundError": "資料無法取得，請稍後再試並確定擁有該資料的存取權限。",
+    "serverInternalError": "伺服器內部錯誤，請稍後再試。",
+    "internetError": "網路連線錯誤，請確認您的連線品質是否良好。",
+    "timeoutError": "操作逾時，請稍後再試。",
+    "unknownError": "錯誤發生，請稍後再試。",
+    "geolocation": {
+      "permissionDeniedError": "位置存取被拒絕。如欲使用 Capture App 的完整功能，請開啟位置權限。",
+      "timeoutError": "取得位置資訊花費過長。可能原因為網路連線或 GPS 信號不穩。",
+      "unknownError": "暫時無法取得位置資訊。可能原因為位置存取被拒、網路連線或 GPS 信號不穩。"
+    },
+    "prefetch": {
+      "connectError": "由於網路連線問題，本次照片載入失敗，下次打開 App 時會自動重試。",
+      "connectErrorTitle": "載入瞬時影像失敗"
+    },
+    "diaBackend": {
+      "user_is_not_active": "帳號未啟用。請透過您收到的帳號驗證信啟用帳號。",
+      "incorrect_login_credentials": "不正確的電子郵件或密碼。",
+      "untrusted_client": "不受信任的客戶端。"
+    }
+  },
   "transactionState": {
     "accepted": "已接收",
     "delivered": "已送出",

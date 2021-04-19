@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { ErrorService } from '../../../../shared/modules/error/error.service';
 import { DiaBackendSeriesRepository } from '../../../../shared/services/dia-backend/series/dia-backend-series-repository.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 @Component({
@@ -15,11 +16,13 @@ export class SeriesPage {
   );
 
   readonly series$ = this.id$.pipe(
-    switchMap(id => this.diaBackendSeriesRepository.fetchById$(id))
+    switchMap(id => this.diaBackendSeriesRepository.fetchById$(id)),
+    catchError((err: unknown) => this.errorService.toastError$(err))
   );
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository
+    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository,
+    private readonly errorService: ErrorService
   ) {}
 }

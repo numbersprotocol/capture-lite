@@ -4,9 +4,9 @@ import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { BaseError } from '../../../../modules/error/errors';
 import {
+  GeolocationPermissionDeniedError,
   GeolocationService,
-  LocationPermissionDeniedError,
-  LocationUnknownError,
+  GeolocationUnknownError,
 } from '../../../geolocation/geolocation.service';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import {
@@ -109,8 +109,8 @@ export class CapacitorFactsProvider implements FactsProvider {
           (error.message.toLowerCase().includes('permission') ||
             error.message.toLowerCase().includes('denied'))
         )
-          throw new LocationPermissionDeniedError();
-        throw new LocationUnknownError();
+          throw new GeolocationPermissionDeniedError();
+        throw new GeolocationUnknownError();
       });
   }
 

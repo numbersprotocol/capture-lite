@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { catchError, map, shareReplay, switchMap } from 'rxjs/operators';
+import { ErrorService } from '../../../../shared/modules/error/error.service';
 import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendTransaction,
@@ -19,6 +20,7 @@ export class TransactionDetailsPage {
     map(params => params.get('id')),
     isNonNullable(),
     switchMap(id => this.diaBackendTransactionRepository.fetchById$(id)),
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
   readonly status$ = this.transaction$.pipe(
@@ -30,7 +32,8 @@ export class TransactionDetailsPage {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
-    private readonly diaBackendAuthService: DiaBackendAuthService
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly errorService: ErrorService
   ) {}
 }
 

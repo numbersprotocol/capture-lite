@@ -13,6 +13,7 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
+import { ErrorService } from '../../../../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../../../../shared/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../../shared/services/confirm-alert/confirm-alert.service';
 import {
@@ -43,6 +44,7 @@ export class SendingPostCapturePage {
     map(params => params.get('id')),
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
@@ -131,7 +133,8 @@ export class SendingPostCapturePage {
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly blockingActionService: BlockingActionService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly diaBackendContactRepository: DiaBackendContactRepository
+    private readonly diaBackendContactRepository: DiaBackendContactRepository,
+    private readonly errorService: ErrorService
   ) {}
 
   preview() {
@@ -159,7 +162,8 @@ export class SendingPostCapturePage {
       concatMap(([asset]) => this.removeAsset$(asset)),
       concatMapTo(
         defer(() => this.router.navigate(['../..'], { relativeTo: this.route }))
-      )
+      ),
+      catchError((err: unknown) => this.errorService.toastError$(err))
     );
 
     const result = await this.confirmAlert.present({
