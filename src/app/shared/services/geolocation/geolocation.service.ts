@@ -101,7 +101,7 @@ export class GeolocationService {
 
 async function getTimer(timeout: number) {
   return new Promise<undefined>((_, reject) =>
-    setTimeout(() => reject(new GeolocationUnknownError()), timeout)
+    setTimeout(() => reject(new GeolocationTimeoutError()), timeout)
   );
 }
 

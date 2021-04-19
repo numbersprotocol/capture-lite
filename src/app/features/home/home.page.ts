@@ -11,11 +11,6 @@ import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.
 import { DiaBackendAssetRepository } from '../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import {
-  GeolocationPermissionDeniedError,
-  GeolocationTimeoutError,
-  GeolocationUnknownError,
-} from '../../shared/services/geolocation/geolocation.service';
 import { MigrationService } from '../../shared/services/migration/migration.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
@@ -125,23 +120,7 @@ export class HomePage {
       return this.captureService.capture();
     })
       .pipe(
-        catchError((err: unknown) => {
-          if (err instanceof GeolocationPermissionDeniedError)
-            return this.errorService.toastError$(
-              this.translocoService.translate(
-                'error.geolocation.permissionDeniedError'
-              )
-            );
-          if (err instanceof GeolocationTimeoutError)
-            return this.errorService.toastError$(
-              this.translocoService.translate('error.geolocation.timeoutError')
-            );
-          if (err instanceof GeolocationUnknownError)
-            return this.errorService.toastError$(
-              this.translocoService.translate('error.geolocation.unknownError')
-            );
-          return this.errorService.toastError$(err);
-        }),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();
