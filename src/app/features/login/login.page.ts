@@ -7,10 +7,17 @@ import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { combineLatest, defer, TimeoutError } from 'rxjs';
-import { catchError, concatMap, concatMapTo, map, tap } from 'rxjs/operators';
+import { combineLatest, defer } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  concatMapTo,
+  map,
+  tap,
+  timeout,
+} from 'rxjs/operators';
+import { ErrorService } from '../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
-import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
 import { EMAIL_REGEXP } from '../../utils/validation';
@@ -23,8 +30,11 @@ import { EMAIL_REGEXP } from '../../utils/validation';
 })
 export class LoginPage {
   readonly form = new FormGroup({});
+
   readonly model: LoginFormModel = { email: '', password: '' };
+
   fields: FormlyFieldConfig[] = [];
+
   showResendEmailButton = false;
 
   constructor(
@@ -34,8 +44,8 @@ export class LoginPage {
     private readonly router: Router,
     private readonly snackbar: MatSnackBar,
     private readonly onboardingService: OnboardingService,
+    private readonly errorService: ErrorService,
     private readonly route: ActivatedRoute,
-    private readonly confirmAlert: ConfirmAlert,
     private readonly alertController: AlertController
   ) {
     this.createFormFields();
@@ -107,75 +117,56 @@ export class LoginPage {
 
   onSubmit() {
     this.showResendEmailButton = false;
+
+    const timeoutDue = 20000;
     const action$ = this.diaBackendAuthService
       .login$(this.model.email, this.model.password)
       .pipe(
-        catchError((error: unknown) => {
-          if (
-            error instanceof TimeoutError ||
-            error instanceof HttpErrorResponse
-          )
-            this.showLoginErrorMessage(error);
-          throw error;
-        }),
+        timeout(timeoutDue),
+        catchError((err: unknown) => this.handleLoginError$(err)),
         tap(_ => (this.onboardingService.isNewLogin = true))
       );
-    this.blockingActionService
+
+    return this.blockingActionService
       .run$(action$, {
         message: this.translocoService.translate('message.pleaseWait'),
       })
-      .pipe(untilDestroyed(this))
-      .subscribe(() => this.router.navigate(['home'], { replaceUrl: true }));
+      .pipe(
+        concatMapTo(
+          defer(() => this.router.navigate(['home'], { replaceUrl: true }))
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private handleLoginError$(error: unknown) {
+    if (
+      error instanceof HttpErrorResponse &&
+      error.error?.type === 'user_is_not_active'
+    ) {
+      this.showResendEmailButton = true;
+      return this.errorService.presentError$(
+        this.translocoService.translate('error.loginUserNotActiveError')
+      );
+    }
+    return this.errorService.presentError$(error);
   }
 
   resendEmail() {
     this.diaBackendAuthService
       .resendActivationEmail$(this.model.email)
       .pipe(
-        catchError((err: unknown) => {
+        tap(() =>
           this.snackbar.open(
-            this.translocoService.translate('error.loginNoEmailToActivate'),
+            this.translocoService.translate('message.verificationEmailSent'),
             this.translocoService.translate('dismiss'),
-            {
-              duration: 4000,
-              panelClass: ['snackbar-error'],
-            }
-          );
-          throw err;
-        }),
+            { duration: 4000 }
+          )
+        ),
         untilDestroyed(this)
       )
-      .subscribe(() => {
-        this.snackbar.open(
-          this.translocoService.translate('message.verificationEmailSent'),
-          this.translocoService.translate('dismiss'),
-          { duration: 4000 }
-        );
-      });
-  }
-
-  private showLoginErrorMessage(error: TimeoutError | HttpErrorResponse) {
-    let message;
-    if (error instanceof TimeoutError) {
-      message = this.translocoService.translate('error.loginTimeoutError');
-    } else if (error instanceof HttpErrorResponse) {
-      if (error.error?.type === 'user_is_not_active') {
-        message = this.translocoService.translate(
-          'error.loginUserNotActiveError'
-        );
-        this.showResendEmailButton = true;
-      } else {
-        message = this.translocoService.translate(
-          'error.loginHttpResponseError'
-        );
-      }
-    } else {
-      message = this.translocoService.translate('error.loginUnkownError');
-    }
-    this.snackbar.open(message, this.translocoService.translate('dismiss'), {
-      duration: 4000,
-      panelClass: ['snackbar-error'],
-    });
+      .subscribe();
   }
 
   async forgetPassword() {
@@ -214,31 +205,14 @@ export class LoginPage {
             message: this.translocoService.translate(
               'message.resetPasswordEmailSent'
             ),
-            buttons: [
-              {
-                text: this.translocoService.translate('ok'),
-              },
-            ],
+            buttons: [{ text: this.translocoService.translate('ok') }],
           })
         )
       ),
       concatMap(alertElement => alertElement.present())
     );
     return defer(() => this.blockingActionService.run$(action$))
-      .pipe(
-        catchError((err: unknown) => {
-          this.snackbar.open(
-            this.translocoService.translate('error.invalidEmail'),
-            this.translocoService.translate('dismiss'),
-            {
-              duration: 4000,
-              panelClass: ['snackbar-error'],
-            }
-          );
-          throw err;
-        }),
-        untilDestroyed(this)
-      )
+      .pipe(untilDestroyed(this))
       .subscribe();
   }
 }

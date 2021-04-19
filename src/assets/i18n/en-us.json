@@ -141,19 +141,16 @@
     "authenticationError": "You have been logged out. Please manually login again.",
     "notFoundError": "The data cannot be found. Please try again later and make sure you have the permission.",
     "serverInternalError": "Server internal error. Please try again later.",
+    "timeoutError": "Operation timeout. Please try again later.",
     "unknownError": "An error has occurred. Please try again later.",
-    "loginTimeoutError": "Connection timeout. Please try again later.",
-    "loginHttpResponseError": "The email address or password you entered is invalid.",
     "loginUserNotActiveError": "Account is not active. Please activate the account from the activation email you received.",
-    "loginUnkownError": "Unknown error. Please try again later.",
     "locationPermissionDenied": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
     "locationPositionUnavailable": "Location is not available at this Capture; possibly due to weak network connectivity or GPS signals.",
     "locationTimeout": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",
     "locationUnknownError": "Location is not available at this Capture; possibly due to permission error, weak network connectivity or GPS signals.",
     "prefetchError": "Photo restore does not complete due to bad network connections. It will continue when you re-open the app next time.",
     "prefetchErrorTitle": "Fail to pull old Captures",
-    "invalidUsername": "Invalid username",
-    "invalidEmail": "Invalid email"
+    "invalidUsername": "Invalid username"
   },
   "transactionState": {
     "accepted": "Accepted",

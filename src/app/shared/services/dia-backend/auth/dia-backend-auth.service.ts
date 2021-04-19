@@ -12,7 +12,6 @@ import {
   pluck,
   repeatWhen,
   tap,
-  timeout,
 } from 'rxjs/operators';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { LanguageService } from '../../language/language.service';
@@ -29,7 +28,6 @@ export class DiaBackendAuthService {
   private readonly preferences = this.preferenceManager.getPreferences(
     'DiaBackendAuthService'
   );
-  private readonly loginTimeout = 20000;
 
   readonly hasLoggedIn$ = this.preferences
     .getString$(PrefKeys.TOKEN)
@@ -113,7 +111,6 @@ export class DiaBackendAuthService {
         password,
       })
       .pipe(
-        timeout(this.loginTimeout),
         concatMap(response => this.setToken(response.auth_token)),
         concatMapTo(this.readUser$()),
         concatMap(response =>

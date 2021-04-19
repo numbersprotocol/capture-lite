@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
+import { TimeoutError } from 'rxjs';
 import { concatMap, first, map } from 'rxjs/operators';
 
 @Injectable({
@@ -25,6 +26,7 @@ export class ErrorService {
             authenticationError,
             notFoundError,
             serverInternalError,
+            timeoutError,
             unknownError,
           }) => {
             if (typeof error === 'string') return error;
@@ -38,6 +40,7 @@ export class ErrorService {
               if (error.status >= HttpErrorCode.INTERNAL)
                 return serverInternalError;
             }
+            if (error instanceof TimeoutError) return timeoutError;
             if (error instanceof Error) return error.message;
             return unknownError;
           }
