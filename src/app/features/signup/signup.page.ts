@@ -158,7 +158,7 @@ export class SignupPage {
     const action$ = this.diaBackendAuthService
       .createUser$(this.model.username, this.model.email, this.model.password)
       .pipe(
-        catchError((err: unknown) => this.errorService.presentError$(err)),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         first(),
         concatMapTo(
           defer(() =>

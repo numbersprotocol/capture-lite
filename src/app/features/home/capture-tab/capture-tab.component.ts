@@ -5,7 +5,7 @@ import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash-es';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/services/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
@@ -68,19 +68,7 @@ export class CaptureTabComponent {
   }
 
   private updateUsername(username: string) {
-    const action$ = this.diaBackendAuthService.updateUser$({ username }).pipe(
-      catchError((err: unknown) => {
-        this.snackBar.open(
-          this.translocoService.translate('error.invalidUsername'),
-          this.translocoService.translate('dismiss'),
-          {
-            duration: 4000,
-            panelClass: ['snackbar-error'],
-          }
-        );
-        throw err;
-      })
-    );
+    const action$ = this.diaBackendAuthService.updateUser$({ username });
     return this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))

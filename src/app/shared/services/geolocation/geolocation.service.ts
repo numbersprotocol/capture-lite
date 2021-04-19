@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { GeolocationPlugin } from '@capacitor/core';
 import { GEOLOCATION_PLUGIN } from '../../core/capacitor-plugins/capacitor-plugins.module';
+import { BaseError } from '../../modules/error/errors';
 
 // As most of the geolocation plugins are buggy due to the rapid-updating nature
 // of the related APIs in native platforms, wrap the plugin as an adapter.
@@ -99,11 +100,9 @@ export class GeolocationService {
 }
 
 async function getTimer(timeout: number) {
-  return new Promise<undefined>((_, reject) => {
-    setTimeout(() => {
-      reject(new GeolocationError(GeolocationErrorCode.TIMEOUT));
-    }, timeout);
-  });
+  return new Promise<undefined>((_, reject) =>
+    setTimeout(() => reject(new LocationUnknownError()), timeout)
+  );
 }
 
 export interface GetCurrentPositionOptions {
@@ -123,13 +122,10 @@ interface Coordinates {
   readonly longitude: number;
 }
 
-export class GeolocationError {
-  constructor(readonly code: GeolocationErrorCode, readonly message?: string) {}
+export class LocationPermissionDeniedError extends BaseError {
+  readonly name = 'LocationPermissionDeniedError';
 }
 
-export const enum GeolocationErrorCode {
-  NOT_USED,
-  PERMISSION_DENIED,
-  POSITION_UNAVAILABLE,
-  TIMEOUT,
+export class LocationUnknownError extends BaseError {
+  readonly name = 'LocationUnknownError';
 }

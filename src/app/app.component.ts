@@ -4,7 +4,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { concatMap } from 'rxjs/operators';
+import { catchError, concatMap } from 'rxjs/operators';
+import { ErrorService } from './shared/modules/error/error.service';
 import { CameraService } from './shared/services/camera/camera.service';
 import { CaptureService } from './shared/services/capture/capture.service';
 import { CollectorService } from './shared/services/collector/collector.service';
@@ -35,6 +36,7 @@ export class AppComponent {
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     private readonly captureService: CaptureService,
     private readonly cameraService: CameraService,
+    private readonly errorService: ErrorService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
@@ -66,6 +68,7 @@ export class AppComponent {
     this.cameraService.restoreKilledCaptureEvent$
       .pipe(
         concatMap(photo => this.captureService.capture(photo)),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();

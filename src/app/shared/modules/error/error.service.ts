@@ -15,7 +15,7 @@ export class ErrorService {
     private readonly toastController: ToastController
   ) {}
 
-  presentError$<T = unknown>(error: T) {
+  toastError$<T = unknown>(error: T) {
     return this.translocoService
       .selectTranslateObject<{ [key: string]: string }>('error')
       .pipe(

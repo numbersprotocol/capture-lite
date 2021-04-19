@@ -146,11 +146,11 @@ export class LoginPage {
       error.error?.type === 'user_is_not_active'
     ) {
       this.showResendEmailButton = true;
-      return this.errorService.presentError$(
-        this.translocoService.translate('error.loginUserNotActiveError')
+      return this.errorService.toastError$(
+        this.translocoService.translate('error.login.userNotActiveError')
       );
     }
-    return this.errorService.presentError$(error);
+    return this.errorService.toastError$(error);
   }
 
   resendEmail() {

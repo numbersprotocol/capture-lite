@@ -68,19 +68,7 @@ export class ProfilePage {
   }
 
   private updateUsername(username: string) {
-    const action$ = this.diaBackendAuthService.updateUser$({ username }).pipe(
-      catchError((err: unknown) => {
-        this.snackBar.open(
-          this.translocoService.translate('error.invalidUsername'),
-          this.translocoService.translate('dismiss'),
-          {
-            duration: 4000,
-            panelClass: ['snackbar-error'],
-          }
-        );
-        throw err;
-      })
-    );
+    const action$ = this.diaBackendAuthService.updateUser$({ username });
     return this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))
@@ -99,7 +87,7 @@ export class ProfilePage {
       concatMapTo(defer(() => this.database.clear())),
       concatMapTo(defer(() => this.preferenceManager.clear())),
       concatMapTo(defer(reloadApp)),
-      catchError((err: unknown) => this.errorService.presentError$(err))
+      catchError((err: unknown) => this.errorService.toastError$(err))
     );
     return defer(() =>
       this.confirmAlert.present({

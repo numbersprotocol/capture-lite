@@ -5,11 +5,16 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, iif, of } from 'rxjs';
 import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
+import { ErrorService } from '../../shared/modules/error/error.service';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import {
+  LocationPermissionDeniedError,
+  LocationUnknownError,
+} from '../../shared/services/geolocation/geolocation.service';
 import { MigrationService } from '../../shared/services/migration/migration.service';
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
@@ -47,7 +52,8 @@ export class HomePage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly dialog: MatDialog,
     private readonly translocoService: TranslocoService,
-    private readonly migrationService: MigrationService
+    private readonly migrationService: MigrationService,
+    private readonly errorService: ErrorService
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -108,9 +114,28 @@ export class HomePage {
       .subscribe();
   }
 
-  async capture() {
-    const captureIndex = 2;
-    this.selectedTabIndex = captureIndex;
-    await this.captureService.capture();
+  capture() {
+    return defer(() => {
+      const captureIndex = 2;
+      this.selectedTabIndex = captureIndex;
+      return this.captureService.capture();
+    })
+      .pipe(
+        catchError((err: unknown) => {
+          if (err instanceof LocationPermissionDeniedError)
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'error.geolocation.permissionDeniedError'
+              )
+            );
+          if (err instanceof LocationUnknownError)
+            return this.errorService.toastError$(
+              this.translocoService.translate('error.geolocation.unknownError')
+            );
+          return this.errorService.toastError$(err);
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 }

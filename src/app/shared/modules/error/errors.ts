@@ -1,4 +1,4 @@
-export abstract class ErrorBase extends Error {
+export abstract class BaseError extends Error {
   abstract readonly name: string;
 
   constructor(source?: unknown) {
@@ -9,6 +9,6 @@ export abstract class ErrorBase extends Error {
   }
 }
 
-export class NotImplementedError extends ErrorBase {
+export class NotImplementedError extends BaseError {
   readonly name = 'NotImplementedError';
 }
