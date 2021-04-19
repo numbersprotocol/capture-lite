@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,12 +20,14 @@ import { EMAIL_REGEXP } from '../../utils/validation';
 })
 export class SignupPage {
   form = new FormGroup({});
+
   model: SignupFormModel = {
     email: '',
     username: '',
     password: '',
     confirmPassword: '',
   };
+
   fields: FormlyFieldConfig[] = [];
 
   constructor(
@@ -158,7 +161,6 @@ export class SignupPage {
     const action$ = this.diaBackendAuthService
       .createUser$(this.model.username, this.model.email, this.model.password)
       .pipe(
-        catchError((err: unknown) => this.errorService.toastError$(err)),
         first(),
         concatMapTo(
           defer(() =>
@@ -170,7 +172,17 @@ export class SignupPage {
               { replaceUrl: true }
             )
           )
-        )
+        ),
+        catchError((err: unknown) => {
+          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+          if (err instanceof HttpErrorResponse && err.status === 401)
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'error.diaBackend.untrusted_client'
+              )
+            );
+          return this.errorService.toastError$(err);
+        })
       );
 
     this.blockingActionService

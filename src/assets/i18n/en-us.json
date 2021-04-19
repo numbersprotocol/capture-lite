@@ -143,9 +143,6 @@
     "serverInternalError": "Server internal error. Please try again later.",
     "timeoutError": "Operation timeout. Please try again later.",
     "unknownError": "An error has occurred. Please try again later.",
-    "login": {
-      "userNotActiveError": "Account is not active. Please activate the account from the activation email you received."
-    },
     "geolocation": {
       "permissionDeniedError": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
       "timeout": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",
@@ -154,6 +151,11 @@
     "prefetch": {
       "connectError": "Photo restore does not complete due to bad network connections. It will continue when you re-open the app next time.",
       "connectErrorTitle": "Fail to pull old Captures"
+    },
+    "diaBackend": {
+      "user_is_not_active": "Account is not active. Please activate the account from the activation email you received.",
+      "incorrect_login_credentials": "Incorrect email or password.",
+      "untrusted_client": "Untrusted client."
     }
   },
   "transactionState": {

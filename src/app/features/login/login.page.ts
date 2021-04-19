@@ -140,21 +140,24 @@ export class LoginPage {
       .subscribe();
   }
 
-  private handleLoginError$(error: unknown) {
-    if (
-      error instanceof HttpErrorResponse &&
-      error.error?.type === 'user_is_not_active'
-    ) {
-      this.showResendEmailButton = true;
-      return this.errorService.toastError$(
-        this.translocoService.translate('error.login.userNotActiveError')
-      );
+  private handleLoginError$(err: unknown) {
+    if (err instanceof HttpErrorResponse) {
+      const errorType = err.error.error.type;
+      if (
+        errorType === 'user_is_not_active' ||
+        errorType === 'incorrect_login_credentials'
+      ) {
+        this.showResendEmailButton = true;
+        return this.errorService.toastError$(
+          this.translocoService.translate(`error.diaBackend.${errorType}`)
+        );
+      }
     }
-    return this.errorService.toastError$(error);
+    return this.errorService.toastError$(err);
   }
 
   resendEmail() {
-    this.diaBackendAuthService
+    return this.diaBackendAuthService
       .resendActivationEmail$(this.model.email)
       .pipe(
         tap(() =>
@@ -164,6 +167,7 @@ export class LoginPage {
             { duration: 4000 }
           )
         ),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();
@@ -209,7 +213,8 @@ export class LoginPage {
           })
         )
       ),
-      concatMap(alertElement => alertElement.present())
+      concatMap(alertElement => alertElement.present()),
+      catchError((err: unknown) => this.errorService.toastError$(err))
     );
     return defer(() => this.blockingActionService.run$(action$))
       .pipe(untilDestroyed(this))

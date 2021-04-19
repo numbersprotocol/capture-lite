@@ -68,7 +68,9 @@ export class ProfilePage {
   }
 
   private updateUsername(username: string) {
-    const action$ = this.diaBackendAuthService.updateUser$({ username });
+    const action$ = this.diaBackendAuthService
+      .updateUser$({ username })
+      .pipe(catchError((err: unknown) => this.errorService.toastError$(err)));
     return this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))

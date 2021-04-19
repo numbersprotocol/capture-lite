@@ -1,11 +1,11 @@
 import { formatDate, KeyValue } from '@angular/common';
 import { Component } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash-es';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { ErrorService } from '../../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../../shared/services/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
@@ -39,7 +39,7 @@ export class CaptureTabComponent {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService,
-    private readonly snackBar: MatSnackBar,
+    private readonly errorService: ErrorService,
     private readonly blockingActionService: BlockingActionService
   ) {}
 
@@ -68,7 +68,9 @@ export class CaptureTabComponent {
   }
 
   private updateUsername(username: string) {
-    const action$ = this.diaBackendAuthService.updateUser$({ username });
+    const action$ = this.diaBackendAuthService
+      .updateUser$({ username })
+      .pipe(catchError((err: unknown) => this.errorService.toastError$(err)));
     return this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))
