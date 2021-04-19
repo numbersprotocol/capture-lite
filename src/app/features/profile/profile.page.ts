@@ -1,12 +1,12 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, iif } from 'rxjs';
 import { catchError, concatMap, concatMapTo } from 'rxjs/operators';
+import { ErrorService } from '../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
 import { WebCryptoApiSignatureProvider } from '../../shared/services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
@@ -34,7 +34,7 @@ export class ProfilePage {
     private readonly preferenceManager: PreferenceManager,
     private readonly imageStore: MediaStore,
     private readonly blockingActionService: BlockingActionService,
-    private readonly toastController: ToastController,
+    private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
     private readonly snackBar: MatSnackBar,
     private readonly diaBackendAuthService: DiaBackendAuthService,
@@ -99,7 +99,7 @@ export class ProfilePage {
       concatMapTo(defer(() => this.database.clear())),
       concatMapTo(defer(() => this.preferenceManager.clear())),
       concatMapTo(defer(reloadApp)),
-      catchError((err: unknown) => this.presentErrorToast(err))
+      catchError((err: unknown) => this.errorService.presentError$(err))
     );
     return defer(() =>
       this.confirmAlert.present({
@@ -113,16 +113,6 @@ export class ProfilePage {
         untilDestroyed(this)
       )
       .subscribe();
-  }
-
-  private async presentErrorToast(err: any) {
-    return this.toastController
-      .create({
-        message:
-          err instanceof HttpErrorResponse ? err.message : JSON.stringify(err),
-        duration: 4000,
-      })
-      .then(toast => toast.present());
   }
 }
 

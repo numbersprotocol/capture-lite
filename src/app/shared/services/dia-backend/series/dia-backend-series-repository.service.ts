@@ -1,13 +1,8 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams,
-} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer, throwError } from 'rxjs';
-import { catchError, concatMap, pluck, switchMap } from 'rxjs/operators';
+import { defer } from 'rxjs';
+import { concatMap, pluck, switchMap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
-import { NotFoundErrorResponse } from '../errors';
 import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
 
@@ -65,13 +60,7 @@ export class DiaBackendSeriesRepository {
           `${BASE_URL}/api/v2/series/${id}/`,
           { headers }
         )
-      ),
-      catchError((err: unknown) => {
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        if (err instanceof HttpErrorResponse && err.status === 404)
-          return throwError(new NotFoundErrorResponse(err));
-        return throwError(err);
-      })
+      )
     );
   }
 }

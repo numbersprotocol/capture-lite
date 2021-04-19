@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { combineLatest } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { combineLatest, defer } from 'rxjs';
+import { catchError, concatMapTo, first, tap } from 'rxjs/operators';
+import { ErrorService } from '../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
 import { EMAIL_REGEXP } from '../../utils/validation';
@@ -30,7 +30,7 @@ export class SignupPage {
   constructor(
     private readonly blockingActionService: BlockingActionService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly toastController: ToastController,
+    private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
     private readonly router: Router
   ) {
@@ -155,42 +155,28 @@ export class SignupPage {
   }
 
   onSubmit() {
-    const action$ = this.diaBackendAuthService.createUser$(
-      this.model.username,
-      this.model.email,
-      this.model.password
-    );
+    const action$ = this.diaBackendAuthService
+      .createUser$(this.model.username, this.model.email, this.model.password)
+      .pipe(
+        catchError((err: unknown) => this.errorService.presentError$(err)),
+        first(),
+        concatMapTo(
+          defer(() =>
+            this.router.navigate(
+              [
+                '/login',
+                { email: this.model.email, password: this.model.password },
+              ],
+              { replaceUrl: true }
+            )
+          )
+        )
+      );
 
     this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))
-      .subscribe(
-        () =>
-          this.router.navigate(
-            [
-              '/login',
-              { email: this.model.email, password: this.model.password },
-            ],
-            { replaceUrl: true }
-          ),
-        (err: unknown) => {
-          /**
-           * TODO: The actual error type can't be determined from response. Fix
-           * this after API updates error messages.
-           */
-          // eslint-disable-next-line no-console
-          console.error(err);
-          this.toastController
-            .create({
-              message: this.translocoService.translate(
-                'message.emailAlreadyExists'
-              ),
-              duration: 4000,
-              color: 'danger',
-            })
-            .then(toast => toast.present());
-        }
-      );
+      .subscribe();
   }
 }
 

@@ -1,21 +1,7 @@
-/* eslint-disable no-magic-numbers */
-
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams,
-} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, combineLatest, defer, forkJoin, Subject } from 'rxjs';
 import {
-  BehaviorSubject,
-  combineLatest,
-  defer,
-  forkJoin,
-  Subject,
-  throwError,
-} from 'rxjs';
-import {
-  catchError,
   concatMap,
   concatMapTo,
   distinctUntilChanged,
@@ -32,7 +18,6 @@ import { DiaBackendAssetRepository } from '../asset/dia-backend-asset-repository
 import { DiaBackendAssetDownloadingService } from '../asset/downloading/dia-backend-downloading.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { DiaBackendContactRepository } from '../contact/dia-backend-contact-repository.service';
-import { NotFoundErrorResponse } from '../errors';
 import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
 import { IgnoredTransactionRepository } from './ignored-transaction-repository.service';
@@ -156,13 +141,7 @@ export class DiaBackendTransactionRepository {
           `${BASE_URL}/api/v2/transactions/${id}/`,
           { headers }
         )
-      ),
-      catchError((err: unknown) => {
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        if (err instanceof HttpErrorResponse && err.status === 404)
-          return throwError(new NotFoundErrorResponse(err));
-        return throwError(err);
-      })
+      )
     );
   }
 
