@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
-import { NEVER, TimeoutError } from 'rxjs';
+import { EMPTY, TimeoutError } from 'rxjs';
 import { concatMap, concatMapTo, first, map } from 'rxjs/operators';
 
 @Injectable({
@@ -59,7 +59,7 @@ export class ErrorService {
                 })
             )
         ),
-        concatMapTo(NEVER)
+        concatMapTo(EMPTY)
       );
   }
 }
