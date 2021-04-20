@@ -44,17 +44,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>授權『capture-lite』拍攝照片以紀錄並儲存當下的環境資訊</string>
+	<string>Grant camera permission to capture and store the environmental information at the moment.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>授權『capture-lite』持續的取得你所在的地理位置資訊並紀錄與儲存當下的環境資訊</string>
+	<string>Grant GPS permission to continuously record and store the geolocation information of your Captures.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>授權『capture-lite』取得你所在的地理位置資訊並紀錄與儲存當下的環境資訊</string>
+	<string>Grant GPS permission to snapshot the geolocation information at the capturing moment.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>授權『capture-lite』錄制影片或錄之音訊以紀錄並儲存當下的環境資訊</string>
+	<string>Grant camera and microphone permission to record video and audio.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>授權『capture-lite』儲存拍攝的照片與影片至你的圖片庫</string>
+	<string>Grant write access permission to your Photo library to export the moments you captured.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>授權『capture-lite』存取你的圖片庫獲取拍攝的照片與影片</string>
+	<string>Grant read access permission to your Photo library to retrieve the moments you captured.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
