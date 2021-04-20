@@ -1,24 +1,26 @@
 import { Component } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
+import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, iif, zip } from 'rxjs';
+import { combineLatest, defer, iif, of, throwError, zip } from 'rxjs';
 import {
+  catchError,
   concatMap,
   concatMapTo,
   first,
   map,
   shareReplay,
   switchMap,
-  tap,
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../shared/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
+import { NotFoundErrorResponse } from '../../../../shared/services/dia-backend/errors';
 import { MediaStore } from '../../../../shared/services/media-store/media-store.service';
 import { getOldProof } from '../../../../shared/services/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../../shared/services/repositories/proof/proof';
@@ -31,10 +33,6 @@ import {
   VOID$,
 } from '../../../../utils/rx-operators/rx-operators';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
-import {
-  Option,
-  OptionsMenuComponent,
-} from './options-menu/options-menu.component';
 
 const { Browser } = Plugins;
 
@@ -54,6 +52,14 @@ export class CaptureDetailsPage {
     }),
     isNonNullable(),
     shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  readonly diaBackendAsset$ = this.proof$.pipe(
+    switchMap(proof => this.diaBackendAssetRepository.fetchByProof$(proof)),
+    catchError((err: unknown) => {
+      if (err instanceof NotFoundErrorResponse) return of(undefined);
+      return throwError(err);
+    })
   );
 
   readonly mimeType$ = this.proof$.pipe(
@@ -97,13 +103,13 @@ export class CaptureDetailsPage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly blockingActionService: BlockingActionService,
     private readonly dialog: MatDialog,
-    private readonly bottomSheet: MatBottomSheet,
     private readonly translocoService: TranslocoService,
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly imageStore: MediaStore,
-    private readonly shareService: ShareService
+    private readonly shareService: ShareService,
+    private readonly actionSheetController: ActionSheetController
   ) {}
 
   openContactSelectionDialog() {
@@ -125,24 +131,69 @@ export class CaptureDetailsPage {
   }
 
   openOptionsMenu() {
-    this.proof$
+    combineLatest([
+      this.proof$,
+      this.diaBackendAsset$,
+      this.translocoService.selectTranslateObject({
+        'message.shareCapture': null,
+        'message.transferCapture': null,
+        'message.deleteCapture': null,
+        'message.viewBlockchainCertificate': null,
+      }),
+    ])
       .pipe(
-        concatMap(proof =>
-          this.bottomSheet
-            .open(OptionsMenuComponent, { data: { proof } })
-            .afterDismissed()
+        first(),
+        concatMap(
+          ([
+            proof,
+            diaBackendAsset,
+            [
+              messageShareCapture,
+              messageTransferCapture,
+              messageDeleteCapture,
+              messageViewBlockchainCertificate,
+            ],
+          ]) =>
+            new Promise<void>(resolve => {
+              const buttons: ActionSheetButton[] = [];
+              if (proof.diaBackendAssetId && diaBackendAsset?.sharable_copy) {
+                buttons.push({
+                  text: messageShareCapture,
+                  handler: () => {
+                    this.share();
+                    resolve();
+                  },
+                });
+              }
+              if (proof.diaBackendAssetId) {
+                buttons.push({
+                  text: messageTransferCapture,
+                  handler: () => {
+                    this.openContactSelectionDialog();
+                    resolve();
+                  },
+                });
+              }
+              buttons.push({
+                text: messageDeleteCapture,
+                handler: () => {
+                  this.remove().then(() => resolve());
+                },
+              });
+              if (proof.diaBackendAssetId) {
+                buttons.push({
+                  text: messageViewBlockchainCertificate,
+                  handler: () => {
+                    this.openCertificate();
+                    resolve();
+                  },
+                });
+              }
+              this.actionSheetController
+                .create({ buttons })
+                .then(sheet => sheet.present());
+            })
         ),
-        tap((option?: Option) => {
-          if (option === Option.Share) {
-            this.share();
-          } else if (option === Option.Transfer) {
-            this.openContactSelectionDialog();
-          } else if (option === Option.Delete) {
-            this.remove();
-          } else if (option === Option.ViewCertificate) {
-            this.openCertificate();
-          }
-        }),
         untilDestroyed(this)
       )
       .subscribe();
