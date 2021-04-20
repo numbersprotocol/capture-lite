@@ -59,6 +59,11 @@ export class CaptureItemComponent {
     map(proof => isValidGeolocation(proof))
   );
 
+  readonly isVideo$ = this.proof$.pipe(
+    concatMap(proof => proof.getFirstAssetMeta()),
+    map(meta => meta.mimeType.startsWith('video'))
+  );
+
   constructor(
     private readonly captureService: CaptureService,
     private readonly router: Router,
