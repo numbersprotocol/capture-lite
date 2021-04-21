@@ -142,7 +142,7 @@ export class LoginPage {
 
   private handleLoginError$(err: unknown) {
     if (err instanceof HttpErrorResponse) {
-      const errorType = err.error.error.type;
+      const errorType = err.error.error?.type;
       if (
         errorType === 'user_is_not_active' ||
         errorType === 'incorrect_login_credentials'
