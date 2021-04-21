@@ -6,7 +6,7 @@ import { ActionSheetController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, iif, zip } from 'rxjs';
+import { combineLatest, defer, iif, of, zip } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -55,8 +55,7 @@ export class CaptureDetailsPage {
   );
 
   readonly diaBackendAsset$ = this.proof$.pipe(
-    switchMap(proof => this.diaBackendAssetRepository.fetchByProof$(proof)),
-    catchError((err: unknown) => this.errorService.toastError$(err))
+    switchMap(proof => this.diaBackendAssetRepository.fetchByProof$(proof))
   );
 
   readonly mimeType$ = this.proof$.pipe(
@@ -134,7 +133,7 @@ export class CaptureDetailsPage {
   openOptionsMenu() {
     combineLatest([
       this.proof$,
-      this.diaBackendAsset$,
+      this.diaBackendAsset$.pipe(catchError(() => of(undefined))),
       this.translocoService.selectTranslateObject({
         'message.shareCapture': null,
         'message.transferCapture': null,
@@ -157,7 +156,7 @@ export class CaptureDetailsPage {
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
-              if (proof.diaBackendAssetId && diaBackendAsset.sharable_copy) {
+              if (proof.diaBackendAssetId && diaBackendAsset?.sharable_copy) {
                 buttons.push({
                   text: messageShareCapture,
                   handler: () => {
