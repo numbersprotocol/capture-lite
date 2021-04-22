@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, iif, of } from 'rxjs';
+import { defer, EMPTY, iif, of } from 'rxjs';
 import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
 import { ErrorService } from '../../shared/modules/error/error.service';
 import { CaptureService } from '../../shared/services/capture/capture.service';
@@ -123,7 +123,11 @@ export class HomePage {
       return this.captureService.capture();
     })
       .pipe(
-        catchError((err: unknown) => this.errorService.toastError$(err)),
+        catchError((err: unknown) => {
+          if (err !== 'User cancelled photos app')
+            return this.errorService.toastError$(err);
+          return EMPTY;
+        }),
         untilDestroyed(this)
       )
       .subscribe();
