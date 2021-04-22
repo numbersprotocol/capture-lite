@@ -13,6 +13,11 @@
         </a>
       </mat-list-item>
       <mat-list-item>
+        <a routerLink="capture-club" (click)="sidenav.close()" mat-list-item>
+          CaptureClub
+        </a>
+      </mat-list-item>
+      <mat-list-item>
         <a routerLink="/contacts" (click)="sidenav.close()" mat-list-item>
           {{ t('contacts') }}
         </a>
@@ -86,15 +91,6 @@
           <mat-icon>account_circle</mat-icon>
         </ng-template>
         <app-capture-tab></app-capture-tab>
-      </mat-tab>
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>shopping_bag</mat-icon>
-        </ng-template>
-        <ion-img
-          src="/assets/images/coming-soon-store.gif"
-          class="coming-soon-store"
-        ></ion-img>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>

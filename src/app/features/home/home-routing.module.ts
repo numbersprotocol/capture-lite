@@ -40,6 +40,13 @@ const routes: Routes = [
         './post-capture-tab/post-capture-details/post-capture-details.module'
       ).then(m => m.PostCaptureDetailsPageModule),
   },
+  {
+    path: 'capture-club',
+    loadChildren: () =>
+      import('./capture-club/capture-club.module').then(
+        m => m.CaptureClubPageModule
+      ),
+  },
 ];
 
 @NgModule({
