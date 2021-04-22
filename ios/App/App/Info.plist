@@ -44,17 +44,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Grant camera permission to capture and store the environmental information at the moment.</string>
+	<string>Grant camera permission to take photos and video.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Grant GPS permission to continuously record and store the geolocation information of your Captures.</string>
+	<string>Grant GPS permission to automatically append location information to your photos and videos</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Grant GPS permission to snapshot the geolocation information at the capturing moment.</string>
+	<string>Grant GPS permission to append location information to your photos and videos</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Grant camera and microphone permission to record video and audio.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Grant write access permission to your Photo library to export the moments you captured.</string>
+	<string>Grant write access permission to your local storage to export the photos and videos you took.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Grant read access permission to your Photo library to retrieve the moments you captured.</string>
+	<string>Grant read access permission to your local storage to read the photos and videos you took.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
