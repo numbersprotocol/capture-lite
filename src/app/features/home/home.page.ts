@@ -109,7 +109,7 @@ export class HomePage {
   }
 
   async capture() {
-    const captureIndex = 2;
+    const captureIndex = 0;
     this.selectedTabIndex = captureIndex;
     await this.captureService.capture();
   }
