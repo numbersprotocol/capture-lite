@@ -72,12 +72,9 @@
     >
       <mat-tab>
         <ng-template mat-tab-label>
-          <ion-icon
-            src="/assets/images/post-capture.svg"
-            class="postcapture-tab-icon"
-          ></ion-icon>
+          <mat-icon>account_circle</mat-icon>
         </ng-template>
-        <app-post-capture-tab></app-post-capture-tab>
+        <app-capture-tab></app-capture-tab>
       </mat-tab>
       <mat-tab disabled>
         <ng-template mat-tab-label>
@@ -88,9 +85,12 @@
       </mat-tab>
       <mat-tab>
         <ng-template mat-tab-label>
-          <mat-icon>account_circle</mat-icon>
+          <ion-icon
+            src="/assets/images/post-capture.svg"
+            class="postcapture-tab-icon"
+          ></ion-icon>
         </ng-template>
-        <app-capture-tab></app-capture-tab>
+        <app-post-capture-tab></app-post-capture-tab>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>
