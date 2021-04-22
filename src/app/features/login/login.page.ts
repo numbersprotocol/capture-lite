@@ -147,7 +147,8 @@ export class LoginPage {
         errorType === 'user_is_not_active' ||
         errorType === 'incorrect_login_credentials'
       ) {
-        this.showResendEmailButton = true;
+        if (errorType === 'user_is_not_active')
+          this.showResendEmailButton = true;
         return this.errorService.toastError$(
           this.translocoService.translate(`error.diaBackend.${errorType}`)
         );
