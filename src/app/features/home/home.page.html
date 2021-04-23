@@ -49,30 +49,17 @@
         <mat-icon>history</mat-icon>
       </button>
       <button routerLink="inbox" mat-icon-button>
-        <mat-icon
-          matBadge="&#8288;"
-          [matBadgeHidden]="
+        <mat-icon matBadge="&#8288;" [matBadgeHidden]="
             (inboxCount$ | async) === null || (inboxCount$ | async) === 0
-          "
-          matBadgeSize="small"
-          matBadgeColor="warn"
-        >
-          email</mat-icon
-        >
+          " matBadgeSize="small" matBadgeColor="warn">
+          email</mat-icon>
       </button>
     </mat-toolbar>
-    <mat-tab-group
-      headerPosition="below"
-      mat-stretch-tabs
-      mat-align-tabs="center"
-      backgroundColor="primary"
-      [disablePagination]="true"
-      [(selectedIndex)]="selectedTabIndex"
-      animationDuration="0ms"
-    >
+    <mat-tab-group headerPosition="below" mat-stretch-tabs mat-align-tabs="center" backgroundColor="primary"
+      [disablePagination]="true" [(selectedIndex)]="selectedTabIndex" animationDuration="0ms">
       <mat-tab>
         <ng-template mat-tab-label>
-          <mat-icon>account_circle</mat-icon>
+          <mat-icon>apps</mat-icon>
         </ng-template>
         <app-capture-tab></app-capture-tab>
       </mat-tab>
@@ -85,10 +72,7 @@
       </mat-tab>
       <mat-tab>
         <ng-template mat-tab-label>
-          <ion-icon
-            src="/assets/images/post-capture.svg"
-            class="postcapture-tab-icon"
-          ></ion-icon>
+          <mat-icon>move_to_inbox</mat-icon>
         </ng-template>
         <app-post-capture-tab></app-post-capture-tab>
       </mat-tab>
