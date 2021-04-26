@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.27.9 - 2021-04-26
+
+This release is for CaptureClub beta-launch event. Thus, we need to fix the
+minor version to 27 even though we have added features.
+
+### Added
+
+- Show supporting video on IPFS. #640
+- Add option to view asset on CaptureClub.
+
 ## 0.27.8 - 2021-04-23
 
 ### Changed
