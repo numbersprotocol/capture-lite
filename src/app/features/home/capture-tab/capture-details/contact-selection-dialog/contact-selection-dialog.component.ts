@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, pluck } from 'rxjs/operators';
 import { ErrorService } from '../../../../../shared/modules/error/error.service';
+import { AndroidBackButtonService } from '../../../../../shared/services/android-back-button/android-back-button.service';
 import { DiaBackendContactRepository } from '../../../../../shared/services/dia-backend/contact/dia-backend-contact-repository.service';
 import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
 import { FriendInvitationDialogComponent } from './friend-invitation-dialog/friend-invitation-dialog.component';
@@ -24,8 +25,14 @@ export class ContactSelectionDialogComponent {
     private readonly dialog: MatDialog,
     private readonly dialogRef: MatDialogRef<ContactSelectionDialogComponent>,
     private readonly diaBackendContactRepository: DiaBackendContactRepository,
-    private readonly errorService: ErrorService
-  ) {}
+    private readonly errorService: ErrorService,
+    private readonly androidBackButtonService: AndroidBackButtonService
+  ) {
+    this.androidBackButtonService
+      .closeMatDialog$(dialogRef)
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
 
   openFriendInvitationDialog() {
     const nestedDialogRef = this.dialog.open(FriendInvitationDialogComponent, {
