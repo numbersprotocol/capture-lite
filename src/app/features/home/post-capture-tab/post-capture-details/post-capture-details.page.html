@@ -41,4 +41,9 @@
       {{ diaBackendAsset.id }}
     </div>
   </mat-list-item>
+  <video
+    *ngIf="supportinFileUrl$ | async as supportinFileUrl"
+    [src]="supportinFileUrl"
+    controls
+  ></video>
 </mat-list>

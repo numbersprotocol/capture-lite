@@ -50,6 +50,16 @@ export class PostCaptureDetailsPage {
     })
   );
 
+  readonly supportinFileUrl$ = this.diaBackendAsset$.pipe(
+    map(diaBackendAsset => {
+      if (!diaBackendAsset.supporting_file) return undefined;
+      return diaBackendAsset.supporting_file.replace(
+        'ipfs://',
+        'https://ipfs.io/ipfs/'
+      );
+    })
+  );
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
