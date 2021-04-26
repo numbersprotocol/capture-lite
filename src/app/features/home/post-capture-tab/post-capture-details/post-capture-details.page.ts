@@ -5,7 +5,7 @@ import { ActionSheetController, NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { zip } from 'rxjs';
-import { first, map, shareReplay, switchMap } from 'rxjs/operators';
+import { concatMap, first, map, shareReplay, switchMap } from 'rxjs/operators';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -74,6 +74,12 @@ export class PostCaptureDetailsPage {
           },
         },
         {
+          text: this.translocoService.translate('message.viewOnCaptureClub'),
+          handler: () => {
+            this.openCaptureClub();
+          },
+        },
+        {
           text: this.translocoService.translate(
             'message.viewBlockchainCertificate'
           ),
@@ -90,6 +96,21 @@ export class PostCaptureDetailsPage {
     return this.diaBackendAsset$
       .pipe(
         switchMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private openCaptureClub() {
+    return this.diaBackendAsset$
+      .pipe(
+        first(),
+        concatMap(diaBackendAsset =>
+          Browser.open({
+            url: `https://captureclub.cc/asset?mid=${diaBackendAsset.id}`,
+            toolbarColor: '#564dfc',
+          })
+        ),
         untilDestroyed(this)
       )
       .subscribe();

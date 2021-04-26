@@ -131,6 +131,7 @@
     "shareCapture": "Share Capture",
     "transferCapture": "Transfer Capture",
     "deleteCapture": "Delete Capture",
+    "viewOnCaptureClub": "View on CaptureClub",
     "viewBlockchainCertificate": "View blockchain certificate",
     "confirmLogout": "Your local data will be wipe out after logout. You can restore your Captures after login again.",
     "resetPasswordEnterEmail": "To reset the password, you have to enter your registered email.",
