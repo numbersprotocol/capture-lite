@@ -136,7 +136,8 @@
     "confirmLogout": "所有您的本地資料將會在登出後清除。再次登入後可以復原您的拍攝。",
     "invalidUsername": "不允許的使用者名稱",
     "resetPasswordEnterEmail": "請輸入您的註冊信箱以重新設定密碼。",
-    "resetPasswordEmailSent": "重新設定密碼的連結已經寄送至您註冊的電子信箱，請開啟您的電子信箱並點擊該連結以重新設定密碼。"
+    "resetPasswordEmailSent": "重新設定密碼的連結已經寄送至您註冊的電子信箱，請開啟您的電子信箱並點擊該連結以重新設定密碼。",
+    "viewSupportingVideoOnIpfs": "於 IPFS 檢視附件影片"
   },
   "error": {
     "loginTimeoutError": "連線逾時。請稍候再試。",

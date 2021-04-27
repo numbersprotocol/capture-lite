@@ -4,7 +4,7 @@ import { Plugins } from '@capacitor/core';
 import { ActionSheetController, NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { zip } from 'rxjs';
+import { EMPTY, zip } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap } from 'rxjs/operators';
 import {
   DiaBackendAsset,
@@ -50,16 +50,6 @@ export class PostCaptureDetailsPage {
     })
   );
 
-  readonly supportinFileUrl$ = this.diaBackendAsset$.pipe(
-    map(diaBackendAsset => {
-      if (!diaBackendAsset.supporting_file) return undefined;
-      return diaBackendAsset.supporting_file.replace(
-        'ipfs://',
-        'https://ipfs.io/ipfs/'
-      );
-    })
-  );
-
   constructor(
     private readonly route: ActivatedRoute,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
@@ -97,6 +87,14 @@ export class PostCaptureDetailsPage {
             this.openCertificate();
           },
         },
+        {
+          text: this.translocoService.translate(
+            'message.viewSupportingVideoOnIpfs'
+          ),
+          handler: () => {
+            this.openIpfsSupportingVideo();
+          },
+        },
       ],
     });
     return actionSheet.present();
@@ -105,6 +103,7 @@ export class PostCaptureDetailsPage {
   private share() {
     return this.diaBackendAsset$
       .pipe(
+        first(),
         switchMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
         untilDestroyed(this)
       )
@@ -129,6 +128,7 @@ export class PostCaptureDetailsPage {
   private openCertificate() {
     return zip(this.diaBackendAsset$, this.diaBackendAuthService.token$)
       .pipe(
+        first(),
         switchMap(([diaBackendAsset, token]) =>
           Browser.open({
             url: `https://authmedia.net/dia-certificate?mid=${diaBackendAsset.id}&token=${token}`,
@@ -143,6 +143,7 @@ export class PostCaptureDetailsPage {
   openMap() {
     return this.diaBackendAsset$
       .pipe(
+        first(),
         map(getValidGeolocation),
         isNonNullable(),
         switchMap(geolocation =>
@@ -151,6 +152,25 @@ export class PostCaptureDetailsPage {
             toolbarColor: '#564dfc',
           })
         ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  openIpfsSupportingVideo() {
+    return this.diaBackendAsset$
+      .pipe(
+        first(),
+        switchMap(diaBackendAsset => {
+          if (!diaBackendAsset.supporting_file) return EMPTY;
+          return Browser.open({
+            url: diaBackendAsset.supporting_file.replace(
+              'ipfs://',
+              'https://ipfs.io/ipfs/'
+            ),
+            toolbarColor: '#564dfc',
+          });
+        }),
         untilDestroyed(this)
       )
       .subscribe();
