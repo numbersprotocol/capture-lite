@@ -36,6 +36,16 @@ Re-release to update Android `versionCode`.
 - Support video view. #627
 - Re-add series view.
 
+## 0.27.12 - 2021-04-27
+
+### Fixed
+
+- Show IPFS supporting files if the URL is valid.
+
+### Changed
+
+- Move the order of optional menus on PostCapture details page.
+
 ## 0.27.11 - 2021-04-27
 
 ### Fixed
