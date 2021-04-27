@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { ActionSheetController, NavController } from '@ionic/angular';
+import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { EMPTY, zip } from 'rxjs';
+import { combineLatest, EMPTY, zip } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap } from 'rxjs/operators';
 import {
   DiaBackendAsset,
@@ -64,40 +65,65 @@ export class PostCaptureDetailsPage {
     this.navController.back();
   }
 
-  async openOptionsMenu() {
-    const actionSheet = await this.actionSheetController.create({
-      buttons: [
-        {
-          text: this.translocoService.translate('message.shareCapture'),
-          handler: () => {
-            this.share();
-          },
-        },
-        {
-          text: this.translocoService.translate('message.viewOnCaptureClub'),
-          handler: () => {
-            this.openCaptureClub();
-          },
-        },
-        {
-          text: this.translocoService.translate(
-            'message.viewBlockchainCertificate'
-          ),
-          handler: () => {
-            this.openCertificate();
-          },
-        },
-        {
-          text: this.translocoService.translate(
-            'message.viewSupportingVideoOnIpfs'
-          ),
-          handler: () => {
-            this.openIpfsSupportingVideo();
-          },
-        },
-      ],
-    });
-    return actionSheet.present();
+  openOptionsMenu() {
+    return combineLatest([
+      this.diaBackendAsset$,
+      this.translocoService.selectTranslateObject({
+        'message.shareCapture': null,
+        'message.viewOnCaptureClub': null,
+        'message.viewBlockchainCertificate': null,
+        'message.viewSupportingVideoOnIpfs': null,
+      }),
+    ])
+      .pipe(
+        first(),
+        concatMap(
+          ([
+            diaBackendAsset,
+            [
+              shareCapture,
+              viewOnCaptureClub,
+              viewBlockchainCertificate,
+              viewSupportingVideoOnIpfs,
+            ],
+          ]) => {
+            const buttons: ActionSheetButton[] = [
+              {
+                text: shareCapture,
+                handler: () => {
+                  this.share();
+                },
+              },
+            ];
+            if (diaBackendAsset.source_type === 'store') {
+              buttons.push({
+                text: viewOnCaptureClub,
+                handler: () => {
+                  this.openCaptureClub();
+                },
+              });
+            }
+            buttons.push(
+              {
+                text: viewBlockchainCertificate,
+                handler: () => {
+                  this.openCertificate();
+                },
+              },
+              {
+                text: viewSupportingVideoOnIpfs,
+                handler: () => {
+                  this.openIpfsSupportingVideo();
+                },
+              }
+            );
+            return this.actionSheetController.create({ buttons });
+          }
+        ),
+        concatMap(actionSheet => actionSheet.present()),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   private share() {
