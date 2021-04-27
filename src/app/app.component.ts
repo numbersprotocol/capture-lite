@@ -5,6 +5,7 @@ import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, concatMap } from 'rxjs/operators';
+import { ErrorReportService } from './shared/modules/error/error-report.service';
 import { ErrorService } from './shared/modules/error/error.service';
 import { CameraService } from './shared/services/camera/camera.service';
 import { CaptureService } from './shared/services/capture/capture.service';
@@ -37,6 +38,7 @@ export class AppComponent {
     private readonly captureService: CaptureService,
     private readonly cameraService: CameraService,
     private readonly errorService: ErrorService,
+    errorReportService: ErrorReportService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
@@ -44,6 +46,7 @@ export class AppComponent {
     diaBackendNotificationService: DiaBackendNotificationService,
     uploadService: DiaBackendAssetUploadingService
   ) {
+    errorReportService.initialize$.pipe(untilDestroyed(this)).subscribe();
     notificationService.requestPermission();
     pushNotificationService.register();
     langaugeService.initialize();
