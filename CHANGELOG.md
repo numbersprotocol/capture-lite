@@ -36,6 +36,12 @@ Re-release to update Android `versionCode`.
 - Support video view. #627
 - Re-add series view.
 
+## 0.27.11 - 2021-04-27
+
+### Fixed
+
+- Remove view on CaptureClub option on Capture details page.
+
 ## 0.27.10 - 2021-04-27
 
 ### Changed
