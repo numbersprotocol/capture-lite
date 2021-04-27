@@ -33,5 +33,4 @@ export enum Option {
   Transfer,
   Delete,
   ViewCertificate,
-  ViewOnCaptureClub,
 }

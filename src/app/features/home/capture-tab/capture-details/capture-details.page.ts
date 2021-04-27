@@ -136,30 +136,8 @@ export class CaptureDetailsPage {
             this.remove();
           } else if (option === Option.ViewCertificate) {
             this.openCertificate();
-          } else if (option === Option.ViewOnCaptureClub) {
-            this.openCaptureClub();
           }
         }),
-        untilDestroyed(this)
-      )
-      .subscribe();
-  }
-
-  private openCaptureClub() {
-    return this.proof$
-      .pipe(
-        first(),
-        concatMap(proof =>
-          iif(
-            () => !!proof.diaBackendAssetId,
-            defer(() =>
-              Browser.open({
-                url: `https://captureclub.cc/asset?mid=${proof.diaBackendAssetId}`,
-                toolbarColor: '#564dfc',
-              })
-            )
-          )
-        ),
         untilDestroyed(this)
       )
       .subscribe();

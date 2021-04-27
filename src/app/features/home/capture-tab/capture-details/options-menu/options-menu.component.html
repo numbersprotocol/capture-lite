@@ -19,13 +19,6 @@
   <a
     *ngIf="data.proof.diaBackendAssetId"
     mat-list-item
-    (click)="openLink(options.ViewOnCaptureClub)"
-  >
-    <span mat-line>{{ t('message.viewOnCaptureClub') }}</span>
-  </a>
-  <a
-    *ngIf="data.proof.diaBackendAssetId"
-    mat-list-item
     (click)="openLink(options.ViewCertificate)"
   >
     <span mat-line>{{ t('message.viewBlockchainCertificate') }}</span>
