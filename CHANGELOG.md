@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.27.10 - 2021-04-27
+
+### Changed
+
+- View IPFS supporting files on in-app browser.
+- Show view CaptureClub option if the source of the DIA backend asset is 'store'.
+
 ## 0.27.9 - 2021-04-26
 
 This release is for CaptureClub beta-launch event. Thus, we need to fix the
