@@ -2,10 +2,18 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { ActionSheetController, NavController } from '@ionic/angular';
+import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { zip } from 'rxjs';
-import { catchError, first, map, shareReplay, switchMap } from 'rxjs/operators';
+import { combineLatest, EMPTY, zip } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  first,
+  map,
+  shareReplay,
+  switchMap,
+} from 'rxjs/operators';
 import { ErrorService } from '../../../../shared/modules/error/error.service';
 import {
   DiaBackendAsset,
@@ -68,32 +76,87 @@ export class PostCaptureDetailsPage {
     this.navController.back();
   }
 
-  async openOptionsMenu() {
-    const actionSheet = await this.actionSheetController.create({
-      buttons: [
-        {
-          text: this.translocoService.translate('message.shareCapture'),
-          handler: () => {
-            this.share();
-          },
-        },
-        {
-          text: this.translocoService.translate(
-            'message.viewBlockchainCertificate'
-          ),
-          handler: () => {
-            this.openCertificate();
-          },
-        },
-      ],
-    });
-    return actionSheet.present();
+  openOptionsMenu() {
+    return combineLatest([
+      this.diaBackendAsset$,
+      this.translocoService.selectTranslateObject({
+        'message.shareCapture': null,
+        'message.viewOnCaptureClub': null,
+        'message.viewBlockchainCertificate': null,
+        'message.viewSupportingVideoOnIpfs': null,
+      }),
+    ])
+      .pipe(
+        first(),
+        concatMap(
+          ([
+            diaBackendAsset,
+            [
+              shareCapture,
+              viewOnCaptureClub,
+              viewBlockchainCertificate,
+              viewSupportingVideoOnIpfs,
+            ],
+          ]) => {
+            const buttons: ActionSheetButton[] = [
+              {
+                text: shareCapture,
+                handler: () => {
+                  this.share();
+                },
+              },
+            ];
+            if (diaBackendAsset.source_type === 'store') {
+              buttons.push({
+                text: viewOnCaptureClub,
+                handler: () => {
+                  this.openCaptureClub();
+                },
+              });
+            }
+            buttons.push(
+              {
+                text: viewBlockchainCertificate,
+                handler: () => {
+                  this.openCertificate();
+                },
+              },
+              {
+                text: viewSupportingVideoOnIpfs,
+                handler: () => {
+                  this.openIpfsSupportingVideo();
+                },
+              }
+            );
+            return this.actionSheetController.create({ buttons });
+          }
+        ),
+        concatMap(actionSheet => actionSheet.present()),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   private share() {
     return this.diaBackendAsset$
       .pipe(
+        first(),
         switchMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private openCaptureClub() {
+    return this.diaBackendAsset$
+      .pipe(
+        first(),
+        concatMap(diaBackendAsset =>
+          Browser.open({
+            url: `https://captureclub.cc/asset?mid=${diaBackendAsset.id}`,
+            toolbarColor: '#564dfc',
+          })
+        ),
         untilDestroyed(this)
       )
       .subscribe();
@@ -102,6 +165,7 @@ export class PostCaptureDetailsPage {
   private openCertificate() {
     return zip(this.diaBackendAsset$, this.diaBackendAuthService.token$)
       .pipe(
+        first(),
         switchMap(([diaBackendAsset, token]) =>
           Browser.open({
             url: `https://authmedia.net/dia-certificate?mid=${diaBackendAsset.id}&token=${token}`,
@@ -116,6 +180,7 @@ export class PostCaptureDetailsPage {
   openMap() {
     return this.diaBackendAsset$
       .pipe(
+        first(),
         map(getValidGeolocation),
         isNonNullable(),
         switchMap(geolocation =>
@@ -124,6 +189,25 @@ export class PostCaptureDetailsPage {
             toolbarColor: '#564dfc',
           })
         ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  openIpfsSupportingVideo() {
+    return this.diaBackendAsset$
+      .pipe(
+        first(),
+        switchMap(diaBackendAsset => {
+          if (!diaBackendAsset.supporting_file) return EMPTY;
+          return Browser.open({
+            url: diaBackendAsset.supporting_file.replace(
+              'ipfs://',
+              'https://ipfs.io/ipfs/'
+            ),
+            toolbarColor: '#564dfc',
+          });
+        }),
         untilDestroyed(this)
       )
       .subscribe();

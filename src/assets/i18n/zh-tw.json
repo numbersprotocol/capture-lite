@@ -131,10 +131,12 @@
     "shareCapture": "分享瞬時影像",
     "transferCapture": "轉移瞬時影像",
     "deleteCapture": "刪除瞬時影像",
+    "viewOnCaptureClub": "在 CaptureClub 檢視",
     "viewBlockchainCertificate": "檢視區塊鏈證書",
     "confirmLogout": "所有您的本地資料將會在登出後清除。再次登入後可以復原您的拍攝。",
     "resetPasswordEnterEmail": "請輸入您的註冊信箱以重新設定密碼。",
-    "resetPasswordEmailSent": "重新設定密碼的連結已經寄送至您註冊的電子信箱，請開啟您的電子信箱並點擊該連結以重新設定密碼。"
+    "resetPasswordEmailSent": "重新設定密碼的連結已經寄送至您註冊的電子信箱，請開啟您的電子信箱並點擊該連結以重新設定密碼。",
+    "viewSupportingVideoOnIpfs": "於 IPFS 檢視附件影片"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",

@@ -131,10 +131,12 @@
     "shareCapture": "Share Capture",
     "transferCapture": "Transfer Capture",
     "deleteCapture": "Delete Capture",
+    "viewOnCaptureClub": "View on CaptureClub",
     "viewBlockchainCertificate": "View blockchain certificate",
     "confirmLogout": "Your local data will be wipe out after logout. You can restore your Captures after login again.",
     "resetPasswordEnterEmail": "To reset the password, you have to enter your registered email.",
-    "resetPasswordEmailSent": "An email has been sent to your registered email inbox. To reset your password, please click the link in the email."
+    "resetPasswordEmailSent": "An email has been sent to your registered email inbox. To reset your password, please click the link in the email.",
+    "viewSupportingVideoOnIpfs": "View supporting video on IPFS"
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",

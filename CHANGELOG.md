@@ -36,6 +36,46 @@ Re-release to update Android `versionCode`.
 - Support video view. #627
 - Re-add series view.
 
+## 0.27.10 - 2021-04-27
+
+### Changed
+
+- View IPFS supporting files on in-app browser.
+- Show view CaptureClub option if the source of the DIA backend asset is 'store'.
+
+## 0.27.9 - 2021-04-26
+
+This release is for CaptureClub beta-launch event. Thus, we need to fix the
+minor version to 27 even though we have added features.
+
+### Added
+
+- Show supporting video on IPFS. #640
+- Add option to view asset on CaptureClub.
+
+## 0.27.8 - 2021-04-23
+
+### Changed
+
+- Remove CaptureClub in home drawer.
+
+## 0.27.7 - 2021-04-23
+
+### Changed
+
+- Revert home tab icons.
+
+## 0.27.6 - 2021-04-22
+
+### Changed
+
+- Move CaptureStore tab to drawer.
+- Update tutorial screenshots.
+
+### Fixed
+
+- Update i18n for NS usage descriptions.
+
 ## 0.27.5 - 2021-04-20
 
 ### Fixed

@@ -272,6 +272,8 @@ export interface DiaBackendAsset extends Tuple {
   readonly source_transaction: DiaBackendAssetTransaction | null;
   readonly parsed_meta: DiaBackendAssetParsedMeta;
   readonly creator_name: string;
+  readonly supporting_file: string | null;
+  readonly source_type: 'original' | 'post_capture' | 'store';
 }
 
 export type AssetDownloadField =

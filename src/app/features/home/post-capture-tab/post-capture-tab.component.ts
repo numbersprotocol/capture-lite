@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { iif } from 'rxjs';
-import { catchError, map, pluck, switchMap } from 'rxjs/operators';
+import { catchError, pluck, switchMap } from 'rxjs/operators';
 import { ErrorService } from '../../../shared/modules/error/error.service';
 import {
   DiaBackendAsset,
@@ -25,10 +25,7 @@ export class PostCaptureTabComponent {
     switchMap(isConnected =>
       iif(
         () => isConnected,
-        this.diaBackendAssetRepository.postCaptures$.pipe(
-          pluck('results'),
-          map(assets => assets.filter(a => a.source_transaction))
-        )
+        this.diaBackendAssetRepository.postCaptures$.pipe(pluck('results'))
       )
     ),
     catchError((err: unknown) => this.errorService.toastError$(err))
