@@ -87,14 +87,21 @@ export class PostCaptureDetailsPage {
               viewSupportingVideoOnIpfs,
             ],
           ]) => {
-            const buttons: ActionSheetButton[] = [
-              {
-                text: shareCapture,
+            const buttons: ActionSheetButton[] = [];
+            if (diaBackendAsset.supporting_file) {
+              buttons.push({
+                text: viewSupportingVideoOnIpfs,
                 handler: () => {
-                  this.share();
+                  this.openIpfsSupportingVideo();
                 },
+              });
+            }
+            buttons.push({
+              text: shareCapture,
+              handler: () => {
+                this.share();
               },
-            ];
+            });
             if (diaBackendAsset.source_type === 'store') {
               buttons.push({
                 text: viewOnCaptureClub,
@@ -103,20 +110,12 @@ export class PostCaptureDetailsPage {
                 },
               });
             }
-            buttons.push(
-              {
-                text: viewBlockchainCertificate,
-                handler: () => {
-                  this.openCertificate();
-                },
+            buttons.push({
+              text: viewBlockchainCertificate,
+              handler: () => {
+                this.openCertificate();
               },
-              {
-                text: viewSupportingVideoOnIpfs,
-                handler: () => {
-                  this.openIpfsSupportingVideo();
-                },
-              }
-            );
+            });
             return this.actionSheetController.create({ buttons });
           }
         ),
