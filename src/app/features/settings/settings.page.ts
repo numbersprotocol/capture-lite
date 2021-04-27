@@ -14,7 +14,8 @@ export class SettingsPage {
 
   constructor(private readonly languageService: LanguageService) {}
 
-  async setCurrentLanguage(languageKey: string) {
-    return this.languageService.setCurrentLanguage(languageKey);
+  async setCurrentLanguage(event: Event) {
+    const customEvent = event as CustomEvent<HTMLIonSelectElement>;
+    return this.languageService.setCurrentLanguage(customEvent.detail.value);
   }
 }
