@@ -1,10 +1,12 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, iif, of } from 'rxjs';
+import { defer, EMPTY, iif, of } from 'rxjs';
 import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
+import { ErrorService } from '../../shared/modules/error/error.service';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
@@ -14,6 +16,8 @@ import { MigrationService } from '../../shared/services/migration/migration.serv
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
+
+const { Browser } = Plugins;
 
 @UntilDestroy()
 @Component({
@@ -27,6 +31,7 @@ export class HomePage {
   readonly username$ = this.diaBackendAuthService.username$;
 
   readonly inboxCount$ = this.diaBackendTransactionRepository.inbox$.pipe(
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     map(transactions => transactions.length),
     /**
      * WORKARDOUND: force changeDetection to update badge when returning to App
@@ -47,7 +52,8 @@ export class HomePage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly dialog: MatDialog,
     private readonly translocoService: TranslocoService,
-    private readonly migrationService: MigrationService
+    private readonly migrationService: MigrationService,
+    private readonly errorService: ErrorService
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -58,6 +64,7 @@ export class HomePage {
         concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
         catchError(() => VOID$),
         switchTapTo(defer(() => this.onboardingRedirect())),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();
@@ -103,14 +110,34 @@ export class HomePage {
             this.diaBackendTransactionRepository.downloadExpired$
           )
         ),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();
   }
 
-  async capture() {
-    const captureIndex = 0;
-    this.selectedTabIndex = captureIndex;
-    await this.captureService.capture();
+  capture() {
+    return defer(() => {
+      const captureIndex = 2;
+      this.selectedTabIndex = captureIndex;
+      return this.captureService.capture();
+    })
+      .pipe(
+        catchError((err: unknown) => {
+          if (err !== 'User cancelled photos app')
+            return this.errorService.toastError$(err);
+          return EMPTY;
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async openCaptureClub() {
+    return Browser.open({
+      url: 'https://captureclub.cc/',
+      toolbarColor: '#564dfc',
+    });
   }
 }

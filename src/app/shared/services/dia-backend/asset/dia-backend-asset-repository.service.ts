@@ -16,7 +16,6 @@ import {
   throwError,
 } from 'rxjs';
 import {
-  catchError,
   concatMap,
   distinctUntilChanged,
   first,
@@ -27,7 +26,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../../utils/encoding/encoding';
-import { toExtension } from '../../../../utils/mime-type';
+import { MimeType, toExtension } from '../../../../utils/mime-type';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { Tuple } from '../../database/table/table';
 import {
@@ -39,7 +38,6 @@ import {
 } from '../../repositories/proof/old-proof-adapter';
 import { Proof } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
-import { NotFoundErrorResponse } from '../errors';
 import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
 
@@ -101,7 +99,7 @@ export class DiaBackendAssetRepository {
         iif(
           () => response.count > 0,
           of(response.results[0]),
-          throwError(new NotFoundErrorResponse())
+          throwError(new HttpErrorResponse({ status: 404 }))
         )
       )
     );
@@ -121,7 +119,7 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  getAndCachePostCaptureImage$(postCapture: DiaBackendAsset) {
+  getAndCachePostCaptureMedia$(postCapture: DiaBackendAsset) {
     return this.postCapturesImageCache$.pipe(
       map(cache => cache.get(postCapture.id)),
       switchMap(image =>
@@ -190,14 +188,7 @@ export class DiaBackendAssetRepository {
           `${BASE_URL}/api/v2/assets/${id}/`,
           { headers }
         )
-      ),
-      catchError((err: unknown) => {
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        if (err instanceof HttpErrorResponse && err.status === 404) {
-          return throwError(new NotFoundErrorResponse(err));
-        }
-        return throwError(err);
-      })
+      )
     );
   }
 
@@ -260,7 +251,7 @@ export interface DiaBackendAssetTransaction extends Tuple {
 
 export interface DiaBackendAssetParsedMeta extends Tuple {
   readonly proof_hash: string;
-  readonly mime_type?: string;
+  readonly mime_type?: MimeType;
   readonly capture_time?: number;
   readonly capture_device?: string;
   readonly capture_latitude?: string;

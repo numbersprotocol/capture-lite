@@ -9,6 +9,7 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TranslocoRootModule } from './shared/core/transloco/transloco-root.module';
+import { ErrorModule } from './shared/modules/error/error.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -23,6 +24,7 @@ import { SharedModule } from './shared/shared.module';
     TranslocoRootModule,
     FormlyModule.forRoot({ extras: { lazyRender: true } }),
     FormlyMaterialModule,
+    ErrorModule.forRoot(),
   ],
   providers: [
     {

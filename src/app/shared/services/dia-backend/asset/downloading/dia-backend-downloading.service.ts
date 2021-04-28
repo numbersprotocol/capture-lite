@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { blobToBase64 } from '../../../../../utils/encoding/encoding';
 import { OnConflictStrategy } from '../../../database/table/table';
-import { ImageStore } from '../../../image-store/image-store.service';
+import { MediaStore } from '../../../media-store/media-store.service';
 import {
   getSignatures,
   getTruth,
@@ -20,7 +20,7 @@ import {
 export class DiaBackendAssetDownloadingService {
   constructor(
     private readonly assetRepository: DiaBackendAssetRepository,
-    private readonly imageStore: ImageStore,
+    private readonly imageStore: MediaStore,
     private readonly proofRepository: ProofRepository
   ) {}
 

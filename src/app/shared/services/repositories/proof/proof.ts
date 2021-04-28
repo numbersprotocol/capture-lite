@@ -6,9 +6,9 @@ import { MimeType } from '../../../../utils/mime-type';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { Tuple } from '../../database/table/table';
 import {
-  ImageStore,
+  MediaStore,
   OnWriteExistStrategy,
-} from '../../image-store/image-store.service';
+} from '../../media-store/media-store.service';
 
 export class Proof {
   static signatureProviders = new Map<string, SignatureVerifier>();
@@ -36,15 +36,16 @@ export class Proof {
   readonly indexedAssets: IndexedAssets = {};
 
   readonly thumbnailUrl$ = defer(async () =>
-    Object.entries(this.indexedAssets).find(([_, meta]) =>
-      meta.mimeType.startsWith('image')
+    Object.entries(this.indexedAssets).find(
+      ([_, meta]) =>
+        meta.mimeType.startsWith('image') || meta.mimeType.startsWith('video')
     )
   ).pipe(
-    concatMap(imageAsset =>
+    concatMap(mediaAsset =>
       iif(
-        () => imageAsset === undefined,
+        () => mediaAsset === undefined,
         of(undefined),
-        of(imageAsset).pipe(
+        of(mediaAsset).pipe(
           isNonNullable(),
           concatMap(([index, assetMeta]) =>
             this.imageStore.getThumbnailUrl$(index, assetMeta.mimeType)
@@ -55,13 +56,13 @@ export class Proof {
   );
 
   constructor(
-    private readonly imageStore: ImageStore,
+    private readonly imageStore: MediaStore,
     readonly truth: Truth,
     readonly signatures: Signatures
   ) {}
 
   static async from(
-    imageStore: ImageStore,
+    imageStore: MediaStore,
     assets: Assets,
     truth: Truth,
     signatures: Signatures
@@ -79,7 +80,7 @@ export class Proof {
    * @param indexedProofView The view without assets with base64.
    */
   static fromIndexedProofView(
-    imageStore: ImageStore,
+    imageStore: MediaStore,
     indexedProofView: IndexedProofView
   ) {
     const proof = new Proof(
@@ -101,7 +102,7 @@ export class Proof {
     Proof.signatureProviders.delete(id);
   }
 
-  static async parse(imageStore: ImageStore, json: string) {
+  static async parse(imageStore: MediaStore, json: string) {
     const parsed = JSON.parse(json) as SerializedProof;
     const proof = new Proof(imageStore, parsed.truth, parsed.signatures);
     await proof.setAssets(parsed.assets);
@@ -144,6 +145,11 @@ export class Proof {
   async getFirstAssetUrl() {
     const [index, meta] = Object.entries(this.indexedAssets)[0];
     return this.imageStore.getUrl(index, meta.mimeType);
+  }
+
+  async getFirstAssetMeta() {
+    const asset = Object.entries(this.indexedAssets)[0];
+    return asset[1];
   }
 
   getFactValue(id: string) {

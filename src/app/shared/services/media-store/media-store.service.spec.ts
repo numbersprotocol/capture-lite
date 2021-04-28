@@ -2,23 +2,23 @@ import { TestBed } from '@angular/core/testing';
 import { Plugins } from '@capacitor/core';
 import { defer } from 'rxjs';
 import { concatMap, first } from 'rxjs/operators';
-import { FILESYSTEM_PLUGIN } from '../../../shared/core/capacitor-plugins/capacitor-plugins.module';
-import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { stringToBase64 } from '../../../utils/encoding/encoding';
 import { MimeType } from '../../../utils/mime-type';
-import { ImageStore } from './image-store.service';
+import { FILESYSTEM_PLUGIN } from '../../core/capacitor-plugins/capacitor-plugins.module';
+import { SharedTestingModule } from '../../shared-testing.module';
+import { MediaStore } from './media-store.service';
 
 const { Filesystem } = Plugins;
 
-describe('ImageStore', () => {
-  let store: ImageStore;
+describe('MediaStore', () => {
+  let store: MediaStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
       providers: [{ provide: FILESYSTEM_PLUGIN, useValue: Filesystem }],
     });
-    store = TestBed.inject(ImageStore);
+    store = TestBed.inject(MediaStore);
   });
 
   afterEach(async () => store.drop());

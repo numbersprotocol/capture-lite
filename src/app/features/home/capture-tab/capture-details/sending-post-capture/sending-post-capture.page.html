@@ -8,8 +8,13 @@
 <div *transloco="let t" class="page-content">
   <ng-container *ngIf="!isPreview">
     <form #form="ngForm" (ngSubmit)="preview()">
-      <mat-card>
-        <img mat-card-image [attr.src]="assetFileUrl$ | async" />
+      <mat-card *ngIf="assetFileUrl$ | async as assetFileUrl">
+        <app-media
+          *ngIf="mimeType$ | async as mimeType"
+          mat-card-image
+          [src]="assetFileUrl"
+          [mimeType]="mimeType"
+        ></app-media>
         <mat-card-content>
           <mat-form-field appearance="outline">
             <mat-label>{{ t('.message') }}</mat-label>
@@ -39,9 +44,14 @@
   <!-- preview -->
 
   <ng-container *ngIf="isPreview">
-    <mat-card *ngIf="previewAsset$ | async; let asset">
+    <mat-card *ngIf="previewAsset$ | async as asset">
       <mat-card-header>
-        <img [attr.src]="ownerAvatar$ | async" mat-card-avatar />
+        <img
+          [attr.src]="
+            (ownerAvatar$ | async) || '/assets/images/avatar-placeholder.png'
+          "
+          mat-card-avatar
+        />
         <mat-card-title>
           {{ asset.source_transaction?.sender }}
         </mat-card-title>
@@ -49,7 +59,12 @@
           {{ asset.source_transaction?.fulfilled_at | date: 'short' }}
         </mat-card-subtitle>
       </mat-card-header>
-      <img [src]="asset.sharable_copy" mat-card-image />
+      <app-media
+        *ngIf="mimeType$ | async as mimeType"
+        [src]="asset.sharable_copy"
+        [mimeType]="mimeType"
+        mat-card-image
+      ></app-media>
       <mat-card-content *ngIf="asset.caption">
         <p class="caption mat-body">
           {{ asset.caption }}
@@ -65,7 +80,10 @@
     >
       <div class="send-button-wrapper">
         <img
-          [attr.src]="(receiver$ | async)?.contact_profile_picture_thumbnail"
+          [attr.src]="
+            (receiver$ | async)?.contact_profile_picture_thumbnail ||
+            '/assets/images/avatar-placeholder.png'
+          "
           class="avatar"
         />
         <span>{{ (receiver$ | async)?.contact_email }}</span>

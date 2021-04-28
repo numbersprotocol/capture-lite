@@ -1,4 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, defer, iif, of, Subject, throwError } from 'rxjs';
 import {
@@ -12,7 +16,6 @@ import {
 } from 'rxjs/operators';
 import { Tuple } from '../../database/table/table';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
-import { NotFoundErrorResponse } from '../errors';
 import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
 
@@ -48,7 +51,7 @@ export class DiaBackendContactRepository {
         iif(
           () => response.count > 0,
           of(response.results[0]),
-          throwError(new NotFoundErrorResponse())
+          throwError(new HttpErrorResponse({ status: 404 }))
         )
       )
     );

@@ -69,7 +69,7 @@
         <ng-template mat-tab-label>
           <mat-icon>apps</mat-icon>
         </ng-template>
-        <app-capture-tab></app-capture-tab>
+        <app-post-capture-tab></app-post-capture-tab>
       </mat-tab>
       <mat-tab disabled>
         <ng-template mat-tab-label>
@@ -80,9 +80,16 @@
       </mat-tab>
       <mat-tab>
         <ng-template mat-tab-label>
-          <mat-icon>move_to_inbox</mat-icon>
+          <mat-icon>account_circle</mat-icon>
         </ng-template>
-        <app-post-capture-tab></app-post-capture-tab>
+        <app-capture-tab></app-capture-tab>
+      </mat-tab>
+      <mat-tab disabled>
+        <ng-template mat-tab-label>
+          <button mat-icon-button (click)="openCaptureClub()">
+            <mat-icon class="tab-action-button-icon">shopping_bag</mat-icon>
+          </button>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>

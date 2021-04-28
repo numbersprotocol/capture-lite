@@ -42,10 +42,32 @@ ion-segment {
       overflow: hidden;
       border-radius: 4px;
     }
+
+    ion-icon.is-video {
+      color: white;
+      z-index: 10;
+      position: absolute;
+      opacity: 0.3;
+      top: 8px;
+      right: 8px;
+      font-size: 16px;
+    }
   }
 }
 
 .series {
   height: auto;
   overflow: auto;
+
+  ion-card {
+    height: 300px;
+    display: flex;
+
+    ion-img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
 }

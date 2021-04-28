@@ -19,14 +19,28 @@
         "
         [routerLink]="['post-capture-details', { id: postCapture.id }]"
       >
+        <ng-container *ngIf="postCapture.parsed_meta.mime_type as mimeType">
+          <ion-icon
+            *ngIf="mimeType | startsWith: 'video'"
+            name="videocam"
+            class="is-video"
+          ></ion-icon
+        ></ng-container>
         <ion-img [src]="postCapture.asset_file_thumbnail"></ion-img>
       </mat-grid-tile>
     </mat-grid-list>
   </div>
 
   <div class="series" *ngSwitchCase="'series'">
-    <ion-card>
-      <ion-img src="/assets/images/coming-soon-series.gif"></ion-img>
+    <ion-card
+      *ngFor="let series of collectedSeriesList$ | async"
+      [routerLink]="['series', { id: series.id }]"
+    >
+      <ion-img
+        [src]="
+          series.cover_image || '/assets/images/series-cover-placeholder.png'
+        "
+      ></ion-img>
     </ion-card>
   </div>
 </div>

@@ -55,10 +55,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'image-viewer/:src',
+    path: 'media-viewer/:src',
     loadChildren: () =>
-      import('./shared/pages/image-viewer/image-viewer.module').then(
-        m => m.ImageViewerPageModule
+      import('./shared/pages/media-viewer/media-viewer.module').then(
+        m => m.MediaViewerPageModule
       ),
   },
   {

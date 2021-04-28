@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { iif } from 'rxjs';
-import { pluck, switchMap } from 'rxjs/operators';
+import { catchError, pluck, switchMap } from 'rxjs/operators';
+import { ErrorService } from '../../../shared/modules/error/error.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendSeriesRepository } from '../../../shared/services/dia-backend/series/dia-backend-series-repository.service';
 import { NetworkService } from '../../../shared/services/network/network.service';
 
 @UntilDestroy({ checkProperties: true })
@@ -25,12 +27,27 @@ export class PostCaptureTabComponent {
         () => isConnected,
         this.diaBackendAssetRepository.postCaptures$.pipe(pluck('results'))
       )
+    ),
+    catchError((err: unknown) => this.errorService.toastError$(err))
+  );
+
+  readonly collectedSeriesList$ = this.networkService.connected$.pipe(
+    switchMap(isConnected =>
+      iif(
+        () => isConnected,
+        this.diaBackendSeriesRepository.fetchCollectedSeriesList$.pipe(
+          pluck('results'),
+          catchError((err: unknown) => this.errorService.toastError$(err))
+        )
+      )
     )
   );
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly networkService: NetworkService
+    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository,
+    private readonly networkService: NetworkService,
+    private readonly errorService: ErrorService
   ) {}
 
   // eslint-disable-next-line class-methods-use-this

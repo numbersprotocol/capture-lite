@@ -1,18 +1,18 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, iif } from 'rxjs';
 import { catchError, concatMap, concatMapTo } from 'rxjs/operators';
+import { ErrorService } from '../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
 import { WebCryptoApiSignatureProvider } from '../../shared/services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
 import { Database } from '../../shared/services/database/database.service';
 import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { ImageStore } from '../../shared/services/image-store/image-store.service';
+import { MediaStore } from '../../shared/services/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/services/preference-manager/preference-manager.service';
 
 const { Clipboard } = Plugins;
@@ -32,9 +32,9 @@ export class ProfilePage {
   constructor(
     private readonly database: Database,
     private readonly preferenceManager: PreferenceManager,
-    private readonly imageStore: ImageStore,
+    private readonly imageStore: MediaStore,
     private readonly blockingActionService: BlockingActionService,
-    private readonly toastController: ToastController,
+    private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
     private readonly snackBar: MatSnackBar,
     private readonly diaBackendAuthService: DiaBackendAuthService,
@@ -68,19 +68,9 @@ export class ProfilePage {
   }
 
   private updateUsername(username: string) {
-    const action$ = this.diaBackendAuthService.updateUser$({ username }).pipe(
-      catchError((err: unknown) => {
-        this.snackBar.open(
-          this.translocoService.translate('error.invalidUsername'),
-          this.translocoService.translate('dismiss'),
-          {
-            duration: 4000,
-            panelClass: ['snackbar-error'],
-          }
-        );
-        throw err;
-      })
-    );
+    const action$ = this.diaBackendAuthService
+      .updateUser$({ username })
+      .pipe(catchError((err: unknown) => this.errorService.toastError$(err)));
     return this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))
@@ -99,7 +89,7 @@ export class ProfilePage {
       concatMapTo(defer(() => this.database.clear())),
       concatMapTo(defer(() => this.preferenceManager.clear())),
       concatMapTo(defer(reloadApp)),
-      catchError((err: unknown) => this.presentErrorToast(err))
+      catchError((err: unknown) => this.errorService.toastError$(err))
     );
     return defer(() =>
       this.confirmAlert.present({
@@ -113,16 +103,6 @@ export class ProfilePage {
         untilDestroyed(this)
       )
       .subscribe();
-  }
-
-  private async presentErrorToast(err: any) {
-    return this.toastController
-      .create({
-        message:
-          err instanceof HttpErrorResponse ? err.message : JSON.stringify(err),
-        duration: 4000,
-      })
-      .then(toast => toast.present());
   }
 }
 

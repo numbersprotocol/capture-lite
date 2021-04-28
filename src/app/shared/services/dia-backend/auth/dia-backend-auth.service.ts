@@ -12,13 +12,12 @@ import {
   pluck,
   repeatWhen,
   tap,
-  timeout,
 } from 'rxjs/operators';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { LanguageService } from '../../language/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
-import { BASE_URL } from '../secret';
+import { BASE_URL, TRUSTED_CLIENT_KEY } from '../secret';
 
 const { Device, Storage } = Plugins;
 
@@ -29,7 +28,6 @@ export class DiaBackendAuthService {
   private readonly preferences = this.preferenceManager.getPreferences(
     'DiaBackendAuthService'
   );
-  private readonly loginTimeout = 20000;
 
   readonly hasLoggedIn$ = this.preferences
     .getString$(PrefKeys.TOKEN)
@@ -113,7 +111,6 @@ export class DiaBackendAuthService {
         password,
       })
       .pipe(
-        timeout(this.loginTimeout),
         concatMap(response => this.setToken(response.auth_token)),
         concatMapTo(this.readUser$()),
         concatMap(response =>
@@ -137,11 +134,15 @@ export class DiaBackendAuthService {
   }
 
   createUser$(username: string, email: string, password: string) {
-    return this.httpClient.post<CreateUserResponse>(`${BASE_URL}/auth/users/`, {
-      username,
-      email,
-      password,
-    });
+    return this.httpClient.post<CreateUserResponse>(
+      `${BASE_URL}/auth/users/`,
+      {
+        username,
+        email,
+        password,
+      },
+      { headers: { 'x-api-key': TRUSTED_CLIENT_KEY } }
+    );
   }
 
   resendActivationEmail$(email: string) {
@@ -162,7 +163,7 @@ export class DiaBackendAuthService {
     );
   }
 
-  updateLanguage$(headers: { [header: string]: string | string[] }) {
+  private updateLanguage$(headers: { [header: string]: string | string[] }) {
     return this.languageService.currentLanguageKey$.pipe(
       distinctUntilChanged(isEqual),
       concatMap(language =>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { concatMapTo, first, shareReplay } from 'rxjs/operators';
+import { catchError, concatMapTo, first, shareReplay } from 'rxjs/operators';
+import { ErrorService } from '../../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../../shared/services/blocking-action/blocking-action.service';
 import { DiaBackendTransactionRepository } from '../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { IgnoredTransactionRepository } from '../../../shared/services/dia-backend/transaction/ignored-transaction-repository.service';
@@ -13,6 +14,7 @@ import { IgnoredTransactionRepository } from '../../../shared/services/dia-backe
 })
 export class InboxPage {
   readonly receivedTransactions$ = this.diaBackendTransactionRepository.inbox$.pipe(
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
@@ -21,7 +23,8 @@ export class InboxPage {
   constructor(
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
-    private readonly blockingActionService: BlockingActionService
+    private readonly blockingActionService: BlockingActionService,
+    private readonly errorService: ErrorService
   ) {}
 
   accept(id: string) {
@@ -31,7 +34,10 @@ export class InboxPage {
 
     this.blockingActionService
       .run$(action$)
-      .pipe(untilDestroyed(this))
+      .pipe(
+        catchError((err: unknown) => this.errorService.toastError$(err)),
+        untilDestroyed(this)
+      )
       .subscribe();
   }
 

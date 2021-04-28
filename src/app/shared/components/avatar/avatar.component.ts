@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, ReplaySubject } from 'rxjs';
-import { concatMap, first, shareReplay, tap } from 'rxjs/operators';
+import { catchError, concatMap, first, shareReplay, tap } from 'rxjs/operators';
 import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
+import { ErrorService } from '../../modules/error/error.service';
 import { DiaBackendAuthService } from '../../services/dia-backend/auth/dia-backend-auth.service';
 import { NetworkService } from '../../services/network/network.service';
 
@@ -28,7 +29,8 @@ export class AvatarComponent {
 
   constructor(
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly networkService: NetworkService
+    private readonly networkService: NetworkService,
+    private readonly errorService: ErrorService
   ) {}
 
   selectAvatar() {
@@ -48,6 +50,7 @@ export class AvatarComponent {
         concatMap(picture =>
           this.diaBackendAuthService.uploadAvatar$({ picture })
         ),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();

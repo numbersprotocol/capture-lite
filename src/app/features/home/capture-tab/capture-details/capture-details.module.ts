@@ -4,7 +4,6 @@ import { CaptureDetailsPageRoutingModule } from './capture-details-routing.modul
 import { CaptureDetailsPage } from './capture-details.page';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import { FriendInvitationDialogComponent } from './contact-selection-dialog/friend-invitation-dialog/friend-invitation-dialog.component';
-import { OptionsMenuComponent } from './options-menu/options-menu.component';
 
 @NgModule({
   imports: [SharedModule, CaptureDetailsPageRoutingModule],
@@ -12,7 +11,6 @@ import { OptionsMenuComponent } from './options-menu/options-menu.component';
     CaptureDetailsPage,
     ContactSelectionDialogComponent,
     FriendInvitationDialogComponent,
-    OptionsMenuComponent,
   ],
 })
 export class CaptureDetailsPageModule {}

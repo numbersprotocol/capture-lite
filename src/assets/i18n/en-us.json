@@ -84,6 +84,7 @@
   "forgetPassword": "Forget Password",
   "resetPassword": "Reset Password",
   "contacts": "Contacts",
+  "errorReport": "Error Report",
   ".message": "Message",
   "tutorial": {
     "switchBetween0": "Switch between",
@@ -114,7 +115,7 @@
     "pleaseWait": "Please wait...",
     "copiedToClipboard": "Has copied to clipboard.",
     "invitationEmail": "Enter friend's email to send the invitation.",
-    "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://docs.google.com/document/d/1ZtD-E4-zcnh8DxQCSgR1Efhb9UooJMr7fb7bzPENd24/edit?usp=sharing\" target=\"_blank\">Terms</a> and <a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">Privacy Policy</a>.",
+    "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://ipfs.io/ipfs/QmR2AB2qc1fbsTtf77WXmQn3fyNZskLUt1EG4Qoxxnt6Up\" target=\"_blank\">Privacy Policy</a>.",
     "sendPostCaptureAlert": "After this Capture is sent, the ownership will be transferred to the selected friend. Are you sure?",
     "transactionReceived": "A new Capture received.",
     "transactionExpired": "A Capture you sent is returned.",
@@ -139,18 +140,27 @@
     "viewSupportingVideoOnIpfs": "View supporting video on IPFS"
   },
   "error": {
-    "loginTimeoutError": "Connection timeout. Please try again later.",
-    "loginHttpResponseError": "The email address or password you entered is invalid.",
-    "loginUserNotActiveError": "Account is not active. Please activate the account from the activation email you received.",
-    "loginUnkownError": "Unknown error. Please try again later.",
-    "locationPermissionDenied": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
-    "locationPositionUnavailable": "Location is not available at this Capture; possibly due to weak network connectivity or GPS signals.",
-    "locationTimeout": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",
-    "locationUnknownError": "Location is not available at this Capture; possibly due to permission error, weak network connectivity or GPS signals.",
-    "prefetchError": "Photo restore does not complete due to bad network connections. It will continue when you re-open the app next time.",
-    "prefetchErrorTitle": "Fail to pull old Captures",
-    "invalidUsername": "Invalid username",
-    "invalidEmail": "Invalid email"
+    "validationError": "Invalid operation. Please check your input again.",
+    "authenticationError": "You have been logged out. Please manually login again.",
+    "notFoundError": "The data cannot be found. Please try again later and make sure you have the permission.",
+    "serverInternalError": "Server internal error. Please try again later.",
+    "internetError": "Internet connection error. Please check your Internet connection quality.",
+    "timeoutError": "Operation timeout. Please try again later.",
+    "unknownError": "An error has occurred. Please try again later.",
+    "geolocation": {
+      "permissionDeniedError": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
+      "timeoutError": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",
+      "unknownError": "Location is not available at this Capture; possibly due to permission error, weak network connectivity or GPS signals."
+    },
+    "prefetch": {
+      "connectError": "Photo restore does not complete due to bad network connections. It will continue when you re-open the app next time.",
+      "connectErrorTitle": "Fail to pull old Captures"
+    },
+    "diaBackend": {
+      "user_is_not_active": "Account is not active. Please activate the account from the activation email you received.",
+      "incorrect_login_credentials": "Incorrect email or password.",
+      "untrusted_client": "Untrusted client."
+    }
   },
   "transactionState": {
     "accepted": "Accepted",

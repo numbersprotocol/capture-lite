@@ -37,7 +37,8 @@
           {
             "ignore": [0, 1, -1],
             "ignoreDefaultValues": true,
-            "ignoreReadonlyClassProperties": true
+            "ignoreReadonlyClassProperties": true,
+            "ignoreEnums": true
           }
         ],
         "@typescript-eslint/explicit-module-boundary-types": "off",

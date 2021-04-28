@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ImageStore } from '../image-store/image-store.service';
+import { MediaStore } from '../media-store/media-store.service';
 import {
   Assets,
   getSerializedSortedSignedTargets,
@@ -18,7 +18,7 @@ export class CollectorService {
   private readonly factsProviders = new Set<FactsProvider>();
   private readonly signatureProviders = new Set<SignatureProvider>();
 
-  constructor(private readonly imageStore: ImageStore) {}
+  constructor(private readonly imageStore: MediaStore) {}
 
   async run(assets: Assets, capturedTimestamp: number) {
     const truth = await this.collectTruth(assets, capturedTimestamp);

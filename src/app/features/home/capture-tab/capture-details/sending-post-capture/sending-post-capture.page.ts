@@ -13,6 +13,7 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
+import { ErrorService } from '../../../../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../../../../shared/services/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../../shared/services/confirm-alert/confirm-alert.service';
 import {
@@ -31,7 +32,6 @@ import {
   isNonNullable,
   switchTap,
 } from '../../../../../utils/rx-operators/rx-operators';
-import { toDataUrl } from '../../../../../utils/url';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -44,7 +44,13 @@ export class SendingPostCapturePage {
     map(params => params.get('id')),
     isNonNullable(),
     switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  readonly mimeType$ = this.asset$.pipe(
+    map(asset => asset.information.proof?.mimeType),
+    isNonNullable()
   );
 
   readonly assetFileUrl$ = combineLatest([
@@ -54,9 +60,7 @@ export class SendingPostCapturePage {
     switchMap(async ([asset, proofs]) => {
       const proof = proofs.find(p => p.diaBackendAssetId === asset.id);
       if (proof) {
-        const proofAssets = await proof.getAssets();
-        const [base64, meta] = Object.entries(proofAssets)[0];
-        return toDataUrl(base64, meta.mimeType);
+        return proof.getFirstAssetUrl();
       }
     })
   );
@@ -129,7 +133,8 @@ export class SendingPostCapturePage {
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly blockingActionService: BlockingActionService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly diaBackendContactRepository: DiaBackendContactRepository
+    private readonly diaBackendContactRepository: DiaBackendContactRepository,
+    private readonly errorService: ErrorService
   ) {}
 
   preview() {
@@ -157,7 +162,8 @@ export class SendingPostCapturePage {
       concatMap(([asset]) => this.removeAsset$(asset)),
       concatMapTo(
         defer(() => this.router.navigate(['../..'], { relativeTo: this.route }))
-      )
+      ),
+      catchError((err: unknown) => this.errorService.toastError$(err))
     );
 
     const result = await this.confirmAlert.present({

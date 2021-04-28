@@ -33,13 +33,11 @@ export class PrefetchingDialogComponent {
     } catch {
       this.dialogRef.close();
       const alert = await this.alertController.create({
-        header: this.translocoService.translate('error.prefetchErrorTitle'),
-        message: this.translocoService.translate('error.prefetchError'),
-        buttons: [
-          {
-            text: this.translocoService.translate('ok'),
-          },
-        ],
+        header: this.translocoService.translate(
+          'error.prefetch.connectErrorTitle'
+        ),
+        message: this.translocoService.translate('error.prefetch.connectError'),
+        buttons: [{ text: this.translocoService.translate('ok') }],
         mode: 'md',
       });
       await alert.present();

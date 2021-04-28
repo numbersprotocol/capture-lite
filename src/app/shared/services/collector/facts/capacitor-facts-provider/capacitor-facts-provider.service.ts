@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
+import { ErrorService } from '../../../../modules/error/error.service';
+import { BaseError } from '../../../../modules/error/errors';
 import {
-  GeolocationError,
-  GeolocationErrorCode,
+  GeolocationPermissionDeniedError,
   GeolocationService,
+  GeolocationTimeoutError,
+  GeolocationUnknownError,
 } from '../../../geolocation/geolocation.service';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import {
@@ -38,7 +40,7 @@ export class CapacitorFactsProvider implements FactsProvider {
   constructor(
     private readonly geolocationService: GeolocationService,
     private readonly preferenceManager: PreferenceManager,
-    private readonly snackBar: MatSnackBar,
+    private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService
   ) {}
 
@@ -94,10 +96,44 @@ export class CapacitorFactsProvider implements FactsProvider {
         maximumAge: defaultGeolocationAge,
         timeout: defaultGeolocationTimeout,
       })
-      .catch((error: any) => {
-        if (error instanceof GeolocationError) {
-          this.showGeolocationPostiionErrorMessage(error);
-        }
+      .catch((err: unknown) => {
+        if (err instanceof BaseError) throw err;
+        /*
+         * WORKAROUND: iOS/Android location error code is always undefined the
+         * only way to determine the error type on Native platform with the
+         * Capacitor Geolocation plugin is by parsing the message.
+         * But message is not reliable, and iOS doesn't return a expressive
+         * error message, so a fallback message is provided.
+         */
+        if (
+          err instanceof Error &&
+          (err.message.toLowerCase().includes('permission') ||
+            err.message.toLowerCase().includes('denied'))
+        )
+          throw new GeolocationPermissionDeniedError();
+        throw new GeolocationUnknownError();
+      })
+      .catch((err: unknown) => {
+        if (err instanceof GeolocationPermissionDeniedError)
+          this.errorService
+            .toastError$(
+              this.translocoService.translate(
+                'error.geolocation.permissionDeniedError'
+              )
+            )
+            .toPromise();
+        if (err instanceof GeolocationTimeoutError)
+          this.errorService
+            .toastError$(
+              this.translocoService.translate('error.geolocation.timeoutError')
+            )
+            .toPromise();
+        if (err instanceof GeolocationUnknownError)
+          this.errorService
+            .toastError$(
+              this.translocoService.translate('error.geolocation.unknownError')
+            )
+            .toPromise();
         return undefined;
       });
   }
@@ -116,49 +152,6 @@ export class CapacitorFactsProvider implements FactsProvider {
 
   async setGeolocationInfoCollection(enable: boolean) {
     return this.preferences.setBoolean(PrefKeys.COLLECT_LOCATION_INFO, enable);
-  }
-
-  private showGeolocationPostiionErrorMessage(error: GeolocationError) {
-    let message = '';
-    switch (error.code) {
-      case GeolocationErrorCode.PERMISSION_DENIED:
-        message = this.translocoService.translate(
-          'error.locationPermissionDenied'
-        );
-        break;
-      case GeolocationErrorCode.POSITION_UNAVAILABLE:
-        message = this.translocoService.translate(
-          'error.locationPositionUnavailable'
-        );
-        break;
-      case GeolocationErrorCode.TIMEOUT:
-        message = this.translocoService.translate('error.locationTimeout');
-        break;
-      default:
-        /*
-         * WORKAROUND: iOS/Android location error code is always undefined the
-         * only way to determine the error type on Native platform with the
-         * Capacitor Geolocation plugin is by parsing the message.
-         * But message is not reliable, and iOS doesn't return a expressive
-         * error message, so a fallback message is provided.
-         */
-        if (
-          error.message?.toLowerCase().includes('permission') ||
-          error.message?.toLowerCase().includes('denied')
-        ) {
-          message = this.translocoService.translate(
-            'error.locationPermissionDenied'
-          );
-        } else {
-          message = this.translocoService.translate(
-            'error.locationUnknownError'
-          );
-        }
-        break;
-    }
-    this.snackBar.open(message, this.translocoService.translate('dismiss'), {
-      duration: 4000,
-    });
   }
 }
 

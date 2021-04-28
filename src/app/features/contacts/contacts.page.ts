@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { concatMapTo, first, pluck, shareReplay } from 'rxjs/operators';
+import {
+  catchError,
+  concatMapTo,
+  first,
+  pluck,
+  shareReplay,
+} from 'rxjs/operators';
+import { ErrorService } from '../../shared/modules/error/error.service';
 import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
 import {
   DiaBackendContact,
@@ -16,12 +23,14 @@ import {
 export class ContactsPage {
   readonly contacts$ = this.diaBackendContactRepository.all$.pipe(
     pluck('results'),
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
   constructor(
     private readonly diaBackendContactRepository: DiaBackendContactRepository,
-    private readonly blockingActionService: BlockingActionService
+    private readonly blockingActionService: BlockingActionService,
+    private readonly errorService: ErrorService
   ) {}
 
   delete(contact: DiaBackendContact) {
@@ -30,7 +39,10 @@ export class ContactsPage {
       .pipe(concatMapTo(this.diaBackendContactRepository.all$), first());
     return this.blockingActionService
       .run$(action$)
-      .pipe(untilDestroyed(this))
+      .pipe(
+        catchError((err: unknown) => this.errorService.toastError$(err)),
+        untilDestroyed(this)
+      )
       .subscribe();
   }
 

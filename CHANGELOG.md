@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.30.0 - 2021-04-28
+
+### Added
+
+- Integrate Sentry error report. #641
+
+## 0.29.2 - 2021-04-21
+
+### Fixed
+
+- Show optional menus without network connection on capture-details page.
+
+## 0.29.1 - 2021-04-20
+
+Re-release to update Android `versionCode`.
+
+## 0.29.0 - 2021-04-20
+
+### Added
+
+- Show video icon on thumbnail if the media type is video. #629
+- Catch and toast error messages on HTTP error responses.
+- Enable CaptureClub.
+
+### Fixed
+
+- Fix orientation bug on Android API 26.
+- Replace `MatBottomSheet` with `ActionSheetController` to handle Android back button. #628
+- Change NS usage description to English.
+
+## 0.28.0 - 2021-04-13
+
+### Added
+
+- Support video view. #627
+- Re-add series view.
+
 ## 0.27.12 - 2021-04-27
 
 ### Fixed
