@@ -84,6 +84,7 @@
   "forgetPassword": "忘記密碼",
   "resetPassword": "重設密碼",
   "contacts": "聯絡人",
+  "errorReport": "錯誤回報",
   ".message": "訊息",
   "tutorial": {
     "switchBetween0": "切換影像與收藏模式",

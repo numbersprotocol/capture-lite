@@ -5,22 +5,32 @@
   <span>{{ t('settings') }}</span>
 </mat-toolbar>
 
-<div class="page-content">
-  <mat-list *transloco="let t">
-    <mat-list-item>
-      <mat-icon mat-list-icon>language</mat-icon>
-      <div mat-line>{{ t('languages') }}</div>
-      <mat-select
+<ion-content *transloco="let t">
+  <ion-list lines="none">
+    <ion-item>
+      <ion-icon name="language" slot="start"></ion-icon>
+      <ion-label>{{ t('languages') }}</ion-label>
+      <ion-select
         [value]="currentLanguageKey$ | async"
-        (selectionChange)="setCurrentLanguage($event.value)"
+        (ionChange)="setCurrentLanguage($event)"
+        slot="end"
       >
-        <mat-option
+        <ion-select-option
           *ngFor="let language of langauges | keyvalue"
           [value]="language.key"
         >
           {{ language.value }}
-        </mat-option>
-      </mat-select>
-    </mat-list-item>
-  </mat-list>
-</div>
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="bug" slot="start"></ion-icon>
+      <ion-label>{{ t('errorReport') }}</ion-label>
+      <ion-toggle
+        [checked]="errorReportEnabled$ | async"
+        (ionChange)="setErrorReportEnabled($event)"
+        slot="end"
+      ></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>
