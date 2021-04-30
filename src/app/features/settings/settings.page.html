@@ -23,14 +23,5 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item>
-      <ion-icon name="bug" slot="start"></ion-icon>
-      <ion-label>{{ t('errorReport') }}</ion-label>
-      <ion-toggle
-        [checked]="errorReportEnabled$ | async"
-        (ionChange)="setErrorReportEnabled($event)"
-        slot="end"
-      ></ion-toggle>
-    </ion-item>
   </ion-list>
 </ion-content>
