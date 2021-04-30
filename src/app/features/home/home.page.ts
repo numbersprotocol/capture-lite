@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, EMPTY, iif, of } from 'rxjs';
@@ -16,8 +15,6 @@ import { MigrationService } from '../../shared/services/migration/migration.serv
 import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
-
-const { Browser } = Plugins;
 
 @UntilDestroy()
 @Component({
@@ -131,13 +128,5 @@ export class HomePage {
         untilDestroyed(this)
       )
       .subscribe();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async openCaptureClub() {
-    return Browser.open({
-      url: 'https://captureclub.cc/',
-      toolbarColor: '#564dfc',
-    });
   }
 }
