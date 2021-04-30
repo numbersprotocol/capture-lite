@@ -18,6 +18,11 @@
         </a>
       </mat-list-item>
       <mat-list-item>
+        <a (click)="sidenav.close(); openCaptureClub()" mat-list-item>
+          CaptureClub
+        </a>
+      </mat-list-item>
+      <mat-list-item>
         <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>
           {{ t('settings') }}
         </a>
@@ -83,13 +88,6 @@
           <mat-icon>account_circle</mat-icon>
         </ng-template>
         <app-capture-tab></app-capture-tab>
-      </mat-tab>
-      <mat-tab disabled>
-        <ng-template mat-tab-label>
-          <button mat-icon-button (click)="openCaptureClub()">
-            <mat-icon class="tab-action-button-icon">shopping_bag</mat-icon>
-          </button>
-        </ng-template>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>

@@ -68,7 +68,7 @@ export class CapacitorFactsProvider implements FactsProvider {
       MEM_USED: deviceInfo?.memUsed,
       DISK_FREE: deviceInfo?.diskFree,
       DISK_TOTAL: deviceInfo?.diskTotal,
-      BETTERY_LEVEL: deviceInfo?.batteryLevel,
+      BATTERY_LEVEL: deviceInfo?.batteryLevel,
       IS_CHARGING: deviceInfo?.isCharging,
     };
   }
