@@ -37,7 +37,7 @@
     "@ngneat/transloco": "^2.20.1",
     "@ngneat/until-destroy": "^8.0.4",
     "@ngx-formly/core": "^5.10.15",
-    "@ngx-formly/material": "^5.10.15",
+    "@ngx-formly/material": "^5.10.18",
     "@ngx-formly/schematics": "^5.10.15",
     "@sentry/angular": "^6.3.1",
     "@sentry/tracing": "^6.3.1",
