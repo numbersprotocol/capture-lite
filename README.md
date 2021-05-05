@@ -49,7 +49,7 @@ npm run test
 Run tests in headless mode.
 
 ```bash
-npm run test-ci
+npm run test.ci
 ```
 
 Lint the projects.

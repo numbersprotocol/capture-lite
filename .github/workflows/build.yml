@@ -43,7 +43,7 @@ jobs:
         run: npm install
 
       - name: Test
-        run: npm run test-ci
+        run: npm run test.ci
 
       - name: Upload coverage reports
         uses: codacy/codacy-coverage-reporter-action@master
