@@ -7,7 +7,9 @@
 
 <ion-content>
   <ion-list lines="none">
-    <ion-item *ngFor="let contact of contacts$ | async; trackBy: trackContact">
+    <ion-item
+      *ngFor="let contact of contacts$ | ngrxPush; trackBy: trackContact"
+    >
       <ion-avatar slot="start">
         <img
           [src]="

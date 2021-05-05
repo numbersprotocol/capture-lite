@@ -11,7 +11,7 @@
       <mat-icon mat-list-icon>perm_device_information</mat-icon>
       <div mat-line>{{ t('collectDeviceInfo') }}</div>
       <mat-slide-toggle
-        [checked]="isDeviceInfoCollectionEnabled$ | async"
+        [checked]="isDeviceInfoCollectionEnabled$ | ngrxPush"
         (change)="setDeviceInfoCollection($event.checked)"
       ></mat-slide-toggle>
     </mat-list-item>
@@ -19,7 +19,7 @@
       <mat-icon mat-list-icon>my_location</mat-icon>
       <div mat-line>{{ t('collectLocationInfo') }}</div>
       <mat-slide-toggle
-        [checked]="isLocationInfoCollectionEnabled$ | async"
+        [checked]="isLocationInfoCollectionEnabled$ | ngrxPush"
         (change)="setLocationInfoCollection($event.checked)"
       ></mat-slide-toggle>
     </mat-list-item>

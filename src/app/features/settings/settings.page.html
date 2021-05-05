@@ -11,7 +11,7 @@
       <ion-icon name="language" slot="start"></ion-icon>
       <ion-label>{{ t('languages') }}</ion-label>
       <ion-select
-        [value]="currentLanguageKey$ | async"
+        [value]="currentLanguageKey$ | ngrxPush"
         (ionChange)="setCurrentLanguage($event)"
         slot="end"
       >

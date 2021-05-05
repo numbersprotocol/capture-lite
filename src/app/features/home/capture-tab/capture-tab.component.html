@@ -1,26 +1,20 @@
-<div
-  *ngIf="(capturesByDate$ | async) === null"
-  class="loading-spinner-container"
->
-  <ion-spinner></ion-spinner>
-</div>
 <mat-card *transloco="let t" class="user-card">
   <mat-card-header>
     <app-avatar mat-card-avatar></app-avatar>
     <mat-card-title>
-      {{ username$ | async }}
+      {{ username$ | ngrxPush }}
       <button mat-button (click)="editUsername()">
         <mat-icon class="edit-icon">edit</mat-icon>
       </button>
     </mat-card-title>
-    <mat-card-subtitle>{{ email$ | async }} </mat-card-subtitle>
+    <mat-card-subtitle>{{ email$ | ngrxPush }} </mat-card-subtitle>
   </mat-card-header>
 </mat-card>
 <app-uploading-bar></app-uploading-bar>
 <div class="capture-container">
   <ng-container
     *ngFor="
-      let group of capturesByDate$ | async | keyvalue: keyDescendingOrder;
+      let group of capturesByDate$ | ngrxPush | keyvalue: keyDescendingOrder;
       trackBy: trackCaptureGroupByDate
     "
   >

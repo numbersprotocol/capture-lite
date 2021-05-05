@@ -5,7 +5,14 @@ import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, EMPTY, iif, of } from 'rxjs';
-import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
+import {
+  catchError,
+  concatMap,
+  first,
+  map,
+  startWith,
+  tap,
+} from 'rxjs/operators';
 import { ErrorService } from '../../shared/modules/error/error.service';
 import { CaptureService } from '../../shared/services/capture/capture.service';
 import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
@@ -30,14 +37,15 @@ export class HomePage {
 
   readonly username$ = this.diaBackendAuthService.username$;
 
-  readonly inboxCount$ = this.diaBackendTransactionRepository.inbox$.pipe(
+  readonly hasNewInbox$ = this.diaBackendTransactionRepository.inbox$.pipe(
     catchError((err: unknown) => this.errorService.toastError$(err)),
-    map(transactions => transactions.length),
+    map(transactions => !!transactions.length),
     /**
      * WORKARDOUND: force changeDetection to update badge when returning to App
      * by clicking push notification
      */
-    tap(() => this.changeDetectorRef.detectChanges())
+    tap(() => this.changeDetectorRef.detectChanges()),
+    startWith(false)
   );
 
   constructor(

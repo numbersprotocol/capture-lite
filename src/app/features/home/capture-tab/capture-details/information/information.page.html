@@ -12,21 +12,21 @@
       <mat-icon mat-list-icon>access_time</mat-icon>
       <div mat-line>{{ t('timestamp') }}</div>
       <div mat-line>
-        {{ timestamp$ | async | date: 'long' }}
+        {{ timestamp$ | ngrxPush | date: 'long' }}
       </div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>code</mat-icon>
       <div mat-line>{{ t('hash') }}</div>
-      <div mat-line>{{ oldProofHash$ | async }}</div>
+      <div mat-line>{{ oldProofHash$ | ngrxPush }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>image</mat-icon>
       <div mat-line>{{ t('mimeType') }}</div>
-      <div mat-line>{{ mimeType$ | async }}</div>
+      <div mat-line>{{ mimeType$ | ngrxPush }}</div>
     </mat-list-item>
 
-    <ng-container *ngIf="facts$ | async as facts">
+    <ng-container *ngrxLet="facts$ as facts">
       <div mat-subheader>{{ t('information') }}</div>
       <mat-list-item *ngFor="let fact of facts | keyvalue">
         <mat-icon mat-list-icon>information</mat-icon>
@@ -39,12 +39,12 @@
     <mat-list-item>
       <mat-icon mat-list-icon>policy</mat-icon>
       <div mat-line>{{ t('signature') }}</div>
-      <div mat-line>{{ (signature$ | async)?.signature }}</div>
+      <div mat-line>{{ (signature$ | ngrxPush)?.signature }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>lock</mat-icon>
       <div mat-line>{{ t('publicKey') }}</div>
-      <div mat-line>{{ (signature$ | async)?.publicKey }}</div>
+      <div mat-line>{{ (signature$ | ngrxPush)?.publicKey }}</div>
     </mat-list-item>
   </mat-list>
 </div>

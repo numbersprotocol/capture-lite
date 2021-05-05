@@ -6,7 +6,7 @@
   <button
     (click)="openContactSelectionDialog()"
     mat-icon-button
-    *ngIf="isRegistered$ | async"
+    *ngIf="isRegistered$ | ngrxPush"
   >
     <mat-icon>send</mat-icon>
   </button>
@@ -16,24 +16,24 @@
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
-  <mat-list *ngIf="assetSrc$ | async as assetSrc" class="content">
+  <mat-list *ngrxLet="assetSrc$ as assetSrc" class="content">
     <app-media
-      *ngIf="mimeType$ | async as mimeType"
+      *ngrxLet="mimeType$ as mimeType"
       [src]="assetSrc"
       [mimeType]="mimeType"
       [routerLink]="['/media-viewer', assetSrc, { mimeType: mimeType }]"
     ></app-media>
     <mat-list-item>
       <mat-icon mat-list-icon>person</mat-icon>
-      <div mat-line>{{ username$ | async }}</div>
+      <div mat-line>{{ username$ | ngrxPush }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>place</mat-icon>
       <div mat-line (click)="openMap()">
-        {{ location$ | async }}
+        {{ location$ | ngrxPush }}
       </div>
     </mat-list-item>
-    <ng-container *ngIf="proof$ | async as proof">
+    <ng-container *ngrxLet="proof$ as proof">
       <mat-list-item>
         <mat-icon mat-list-icon>access_time</mat-icon>
         <div mat-line>
@@ -43,7 +43,7 @@
       <mat-list-item>
         <mat-icon svgIcon="media-id-solid-black" mat-list-icon></mat-icon>
         <div mat-line>
-          <ng-container *ngIf="isRegistered$ | async; else notRegistered">
+          <ng-container *ngIf="isRegistered$ | ngrxPush; else notRegistered">
             {{ proof.diaBackendAssetId }}
           </ng-container>
           <ng-template #notRegistered>{{ t('notRegistered') }}</ng-template>

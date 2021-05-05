@@ -1,6 +1,6 @@
-<ng-container *ngIf="networkConnected$ | async; else offline">
+<ng-container *ngIf="networkConnected$ | ngrxPush; else offline">
   <ion-img
-    *ngIf="avatar$ | async as avatar; else placeholder"
+    *ngIf="avatar$ | ngrxPush as avatar; else placeholder"
     [src]="avatar"
     (click)="selectAvatar()"
   ></ion-img>

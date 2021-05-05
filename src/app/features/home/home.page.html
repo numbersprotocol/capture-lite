@@ -4,7 +4,7 @@
       <button (click)="sidenav.toggle()" mat-icon-button>
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <span>{{ username$ | async }}</span>
+      <span>{{ username$ | ngrxPush }}</span>
     </mat-toolbar>
     <mat-nav-list>
       <mat-list-item>
@@ -50,10 +50,9 @@
       </button>
       <button routerLink="inbox" mat-icon-button>
         <mat-icon
+          *ngrxLet="hasNewInbox$ as hasNewInbox"
           matBadge="&#8288;"
-          [matBadgeHidden]="
-            (inboxCount$ | async) === null || (inboxCount$ | async) === 0
-          "
+          [matBadgeHidden]="!hasNewInbox"
           matBadgeSize="small"
           matBadgeColor="warn"
         >

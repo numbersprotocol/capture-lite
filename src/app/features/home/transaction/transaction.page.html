@@ -9,7 +9,7 @@
   <mat-list>
     <ng-container
       *ngFor="
-        let transaction of transactionsWithStatus$ | async;
+        let transaction of transactionsWithStatus$ | ngrxPush;
         last as isLast
       "
     >
@@ -20,11 +20,11 @@
         <div mat-line>{{ transaction.asset.id }}</div>
         <div mat-line>{{ transaction.created_at | date: 'short' }}</div>
         <button
-          [class]="transaction.status | async"
+          [class]="transaction.status | ngrxPush"
           mat-stroked-button
           disableRipple
         >
-          {{ t('transactionState.' + (transaction.status | async)) }}
+          {{ t('transactionState.' + (transaction.status | ngrxPush)) }}
         </button>
       </mat-list-item>
       <mat-divider *ngIf="!isLast"></mat-divider>

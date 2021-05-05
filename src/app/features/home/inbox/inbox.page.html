@@ -8,15 +8,18 @@
 <div *transloco="let t" class="page-content">
   <span
     *ngIf="
-      (receivedTransactions$ | async)?.length === 0 &&
-      (isFetching$ | async) === false
+      (receivedTransactions$ | ngrxPush)?.length === 0 &&
+      (isFetching$ | ngrxPush) === false
     "
     class="empty-inbox"
     >{{ t('emptyInbox') }}</span
   >
   <mat-list>
     <ng-container
-      *ngFor="let postCapture of receivedTransactions$ | async; last as isLast"
+      *ngFor="
+        let postCapture of receivedTransactions$ | ngrxPush;
+        last as isLast
+      "
     >
       <mat-list-item>
         <img matListAvatar [src]="postCapture.asset.asset_file_thumbnail" />

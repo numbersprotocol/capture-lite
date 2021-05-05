@@ -8,9 +8,9 @@
   </button>
 </mat-toolbar>
 
-<mat-list *ngIf="diaBackendAsset$ | async as diaBackendAsset">
+<mat-list *ngrxLet="diaBackendAsset$ as diaBackendAsset">
   <app-media
-    *ngIf="mediaSrc$ | async as mediaSrc"
+    *ngrxLet="mediaSrc$ as mediaSrc"
     [routerLink]="[
       '/media-viewer',
       mediaSrc,
@@ -31,7 +31,7 @@
   <mat-list-item>
     <mat-icon mat-list-icon>place</mat-icon>
     <div mat-line (click)="openMap()">
-      {{ location$ | async }}
+      {{ location$ | ngrxPush }}
     </div>
   </mat-list-item>
   <mat-list-item>

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
+import { ReactiveComponentModule } from '@ngrx/component';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { MediaComponent } from './components/media/media.component';
 import { MigratingDialogComponent } from './components/migrating-dialog/migrating-dialog.component';
@@ -27,6 +28,7 @@ const imports = [
   TranslocoModule,
   MaterialModule,
   CapacitorPluginsModule,
+  ReactiveComponentModule,
 ];
 
 @NgModule({

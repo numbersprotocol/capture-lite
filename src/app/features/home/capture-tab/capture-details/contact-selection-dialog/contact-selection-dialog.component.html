@@ -2,12 +2,12 @@
 
 <div *transloco="let t" mat-dialog-content>
   <mat-spinner
-    *ngIf="(contacts$ | async)?.length === 0 && (isFetching$ | async)"
+    *ngIf="(contacts$ | ngrxPush)?.length === 0 && (isFetching$ | ngrxPush)"
     diameter="24"
   ></mat-spinner>
   <mat-action-list>
     <mat-list-item
-      *ngFor="let contact of contacts$ | async"
+      *ngFor="let contact of contacts$ | ngrxPush"
       [mat-dialog-close]="contact.contact_email"
     >
       <img

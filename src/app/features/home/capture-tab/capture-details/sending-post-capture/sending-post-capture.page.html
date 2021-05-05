@@ -8,9 +8,9 @@
 <div *transloco="let t" class="page-content">
   <ng-container *ngIf="!isPreview">
     <form #form="ngForm" (ngSubmit)="preview()">
-      <mat-card *ngIf="assetFileUrl$ | async as assetFileUrl">
+      <mat-card *ngrxLet="mimeType$ as mimeType">
         <app-media
-          *ngIf="mimeType$ | async as mimeType"
+          *ngIf="assetFileUrl$ | ngrxPush as assetFileUrl"
           mat-card-image
           [src]="assetFileUrl"
           [mimeType]="mimeType"
@@ -44,11 +44,11 @@
   <!-- preview -->
 
   <ng-container *ngIf="isPreview">
-    <mat-card *ngIf="previewAsset$ | async as asset">
+    <mat-card *ngrxLet="previewAsset$ as asset">
       <mat-card-header>
         <img
           [attr.src]="
-            (ownerAvatar$ | async) || '/assets/images/avatar-placeholder.png'
+            (ownerAvatar$ | ngrxPush) || '/assets/images/avatar-placeholder.png'
           "
           mat-card-avatar
         />
@@ -60,7 +60,7 @@
         </mat-card-subtitle>
       </mat-card-header>
       <app-media
-        *ngIf="mimeType$ | async as mimeType"
+        *ngrxLet="mimeType$ as mimeType"
         [src]="asset.sharable_copy"
         [mimeType]="mimeType"
         mat-card-image
@@ -81,12 +81,12 @@
       <div class="send-button-wrapper">
         <img
           [attr.src]="
-            (receiver$ | async)?.contact_profile_picture_thumbnail ||
+            (receiver$ | ngrxPush)?.contact_profile_picture_thumbnail ||
             '/assets/images/avatar-placeholder.png'
           "
           class="avatar"
         />
-        <span>{{ (receiver$ | async)?.contact_email }}</span>
+        <span>{{ (receiver$ | ngrxPush)?.contact_email }}</span>
         <div class="spacer"></div>
         <mat-icon>send</mat-icon>
       </div>

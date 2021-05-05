@@ -1,25 +1,29 @@
-<div *ngIf="isCollecting$ | async" class="collecting-spinner-container">
+<div *ngIf="isCollecting$ | ngrxPush" class="collecting-spinner-container">
   <ion-spinner></ion-spinner>
 </div>
 <ion-icon
-  *ngIf="isCollecting$ | async"
+  *ngIf="isCollecting$ | ngrxPush"
   name="hourglass-outline"
   class="collecting"
 ></ion-icon>
 <ion-icon
-  *ngIf="hasUploaded$ | async"
+  *ngIf="hasUploaded$ | ngrxPush"
   src="/assets/images/media-id.svg"
   class="uploaded"
 >
 </ion-icon>
 <ion-icon
-  *ngIf="hasGeolocation$ | async"
+  *ngIf="hasGeolocation$ | ngrxPush"
   src="/assets/images/location.svg"
   class="located"
 ></ion-icon>
-<ion-icon *ngIf="isVideo$ | async" name="videocam" class="is-video"></ion-icon>
+<ion-icon
+  *ngIf="isVideo$ | ngrxPush"
+  name="videocam"
+  class="is-video"
+></ion-icon>
 <img
-  *ngIf="thumbnailUrl$ | async as thumbnailUrl"
+  *ngIf="thumbnailUrl$ | ngrxPush as thumbnailUrl"
   loading="lazy"
   decoding="async"
   [src]="thumbnailUrl"

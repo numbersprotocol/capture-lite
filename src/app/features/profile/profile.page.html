@@ -10,7 +10,7 @@
     <mat-list-item>
       <mat-icon mat-list-icon>account_circle</mat-icon>
       <div mat-line>{{ t('username') }}</div>
-      <div mat-line>{{ username$ | async }}</div>
+      <div mat-line>{{ username$ | ngrxPush }}</div>
       <button (click)="editUsername()" mat-icon-button>
         <mat-icon>edit</mat-icon>
       </button>
@@ -18,14 +18,14 @@
     <mat-list-item>
       <mat-icon mat-list-icon>email</mat-icon>
       <div mat-line>{{ t('email') }}</div>
-      <div mat-line>{{ email$ | async }}</div>
+      <div mat-line>{{ email$ | ngrxPush }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>lock</mat-icon>
       <div mat-line>{{ t('publicKey') }}</div>
-      <div mat-line>{{ publicKey$ | async }}</div>
+      <div mat-line>{{ publicKey$ | ngrxPush }}</div>
       <button
-        *ngIf="publicKey$ | async as publicKey"
+        *ngIf="publicKey$ | ngrxPush as publicKey"
         (click)="copyToClipboard(publicKey)"
         mat-icon-button
       >
@@ -35,9 +35,9 @@
     <mat-list-item>
       <mat-icon mat-list-icon>vpn_key</mat-icon>
       <div mat-line>{{ t('privateKey') }}</div>
-      <div mat-line>{{ privateKey$ | async }}</div>
+      <div mat-line>{{ privateKey$ | ngrxPush }}</div>
       <button
-        *ngIf="privateKey$ | async as privateKey"
+        *ngIf="privateKey$ | ngrxPush as privateKey"
         (click)="copyToClipboard(privateKey)"
         mat-icon-button
       >

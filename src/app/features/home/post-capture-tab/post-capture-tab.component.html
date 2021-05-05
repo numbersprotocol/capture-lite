@@ -7,14 +7,14 @@
       <ion-icon src="/assets/images/series.svg" class="segment"></ion-icon>
     </ion-segment-button>
   </ion-segment>
-  <p *ngIf="(networkConnected$ | async) === false" class="network-status">
+  <p *ngIf="(networkConnected$ | ngrxPush) === false" class="network-status">
     {{ 'message.networkNotConnected' | transloco }}
   </p>
   <div class="post-captures" *ngSwitchCase="'photo'">
     <mat-grid-list cols="3" gutterSize="8px">
       <mat-grid-tile
         *ngFor="
-          let postCapture of postCaptures$ | async;
+          let postCapture of postCaptures$ | ngrxPush;
           trackBy: trackPostCapture
         "
         [routerLink]="['post-capture-details', { id: postCapture.id }]"
@@ -33,7 +33,7 @@
 
   <div class="series" *ngSwitchCase="'series'">
     <ion-card
-      *ngFor="let series of collectedSeriesList$ | async"
+      *ngFor="let series of collectedSeriesList$ | ngrxPush"
       [routerLink]="['series', { id: series.id }]"
     >
       <ion-img

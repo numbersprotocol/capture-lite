@@ -1,7 +1,7 @@
-<ng-container *ngIf="src$ | async as src">
-  <img *ngIf="isImage$ | async" [src]="src" />
+<ng-container *ngrxLet="src$ as src">
+  <img *ngIf="isImage$ | ngrxPush" [src]="src" />
   <video
-    *ngIf="isVideo$ | async"
+    *ngIf="isVideo$ | ngrxPush"
     [src]="src"
     autoplay
     [muted]="'muted'"

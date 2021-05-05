@@ -10,7 +10,7 @@
     <mat-list-item>
       <mat-icon mat-list-icon>update</mat-icon>
       <div mat-line>{{ t('version') }}</div>
-      <div mat-line>{{ version$ | async }}</div>
+      <div mat-line>{{ version$ | ngrxPush }}</div>
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>help</mat-icon>
