@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CameraService, Photo } from '../camera/camera.service';
+import { MimeType } from '../../../utils/mime-type';
 import { CollectorService } from '../collector/collector.service';
 import { MediaStore } from '../media-store/media-store.service';
 import { getOldProof } from '../repositories/proof/old-proof-adapter';
@@ -17,17 +17,15 @@ export class CaptureService {
   readonly collectingOldProofHashes$ = this._collectingOldProofHashes$;
 
   constructor(
-    private readonly cameraService: CameraService,
     private readonly proofRepository: ProofRepository,
     private readonly imageStore: MediaStore,
     private readonly collectorService: CollectorService
   ) {}
 
-  async capture(restoredPhoto?: Photo) {
-    const photo = restoredPhoto ?? (await this.cameraService.takePhoto());
+  async capture(source: Media) {
     const proof = await Proof.from(
       this.imageStore,
-      { [photo.base64]: { mimeType: photo.mimeType } },
+      { [source.base64]: { mimeType: source.mimeType } },
       { timestamp: Date.now(), providers: {} },
       {}
     );
@@ -51,4 +49,9 @@ export class CaptureService {
       (x, y) => getOldProof(x).hash === getOldProof(y).hash
     );
   }
+}
+
+export interface Media {
+  readonly mimeType: MimeType;
+  readonly base64: string;
 }

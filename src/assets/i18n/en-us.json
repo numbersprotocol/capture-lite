@@ -84,6 +84,8 @@
   "forgetPassword": "Forget Password",
   "resetPassword": "Reset Password",
   "contacts": "Contacts",
+  "takePicture": "Take Picture",
+  "recordVideo": "Record Video",
   ".message": "Message",
   "tutorial": {
     "switchBetween0": "Switch between",
