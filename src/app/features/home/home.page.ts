@@ -118,7 +118,7 @@ export class HomePage {
 
   capture() {
     return defer(() => {
-      const captureIndex = 2;
+      const captureIndex = 0;
       this.selectedTabIndex = captureIndex;
       return this.captureService.capture();
     })
