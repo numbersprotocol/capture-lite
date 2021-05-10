@@ -20,11 +20,12 @@
         <div mat-line>{{ transaction.asset.id }}</div>
         <div mat-line>{{ transaction.created_at | date: 'short' }}</div>
         <button
-          [class]="transaction.status | ngrxPush"
+          *ngrxLet="transaction.status as status"
+          [class]="status"
           mat-stroked-button
           disableRipple
         >
-          {{ t('transactionState.' + (transaction.status | ngrxPush)) }}
+          {{ t('transactionState.' + status) }}
         </button>
       </mat-list-item>
       <mat-divider *ngIf="!isLast"></mat-divider>
