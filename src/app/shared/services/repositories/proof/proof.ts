@@ -48,7 +48,7 @@ export class Proof {
         of(mediaAsset).pipe(
           isNonNullable(),
           concatMap(([index, assetMeta]) =>
-            this.imageStore.getThumbnailUrl$(index, assetMeta.mimeType)
+            this.mediaStore.getThumbnailUrl$(index, assetMeta.mimeType)
           )
         )
       )
@@ -56,35 +56,35 @@ export class Proof {
   );
 
   constructor(
-    private readonly imageStore: MediaStore,
+    private readonly mediaStore: MediaStore,
     readonly truth: Truth,
     readonly signatures: Signatures
   ) {}
 
   static async from(
-    imageStore: MediaStore,
+    mediaStore: MediaStore,
     assets: Assets,
     truth: Truth,
     signatures: Signatures
   ) {
-    const proof = new Proof(imageStore, truth, signatures);
+    const proof = new Proof(mediaStore, truth, signatures);
     await proof.setAssets(assets);
     return proof;
   }
 
   /**
    * Create a Proof from IndexedProofView. This method should only be used when
-   * you sure the Proof has already store its raw assets to ImageStore by calling
+   * you sure the Proof has already store its raw assets to MediaStore by calling
    * Proof.from() or Proof.parse() before.
-   * @param imageStore The singleton ImageStore service.
+   * @param mediaStore The singleton MediaStore service.
    * @param indexedProofView The view without assets with base64.
    */
   static fromIndexedProofView(
-    imageStore: MediaStore,
+    mediaStore: MediaStore,
     indexedProofView: IndexedProofView
   ) {
     const proof = new Proof(
-      imageStore,
+      mediaStore,
       indexedProofView.truth,
       indexedProofView.signatures
     );
@@ -102,9 +102,9 @@ export class Proof {
     Proof.signatureProviders.delete(id);
   }
 
-  static async parse(imageStore: MediaStore, json: string) {
+  static async parse(mediaStore: MediaStore, json: string) {
     const parsed = JSON.parse(json) as SerializedProof;
-    const proof = new Proof(imageStore, parsed.truth, parsed.signatures);
+    const proof = new Proof(mediaStore, parsed.truth, parsed.signatures);
     await proof.setAssets(parsed.assets);
     return proof;
   }
@@ -112,7 +112,7 @@ export class Proof {
   async setAssets(assets: Assets) {
     const indexedAssetEntries: [string, AssetMeta][] = [];
     for (const [base64, meta] of Object.entries(assets)) {
-      const index = await this.imageStore.write(
+      const index = await this.mediaStore.write(
         base64,
         meta.mimeType,
         OnWriteExistStrategy.IGNORE
@@ -136,7 +136,7 @@ export class Proof {
   async getAssets() {
     const assetEntries: [string, AssetMeta][] = [];
     for (const [index, meta] of Object.entries(this.indexedAssets)) {
-      const base64 = await this.imageStore.read(index);
+      const base64 = await this.mediaStore.read(index);
       assetEntries.push([base64, meta]);
     }
     return Object.fromEntries(assetEntries);
@@ -144,7 +144,7 @@ export class Proof {
 
   async getFirstAssetUrl() {
     const [index, meta] = Object.entries(this.indexedAssets)[0];
-    return this.imageStore.getUrl(index, meta.mimeType);
+    return this.mediaStore.getUrl(index, meta.mimeType);
   }
 
   async getFirstAssetMeta() {
@@ -206,7 +206,7 @@ export class Proof {
   async destroy() {
     await Promise.all(
       Object.keys(this.indexedAssets).map(index =>
-        this.imageStore.delete(index)
+        this.mediaStore.delete(index)
       )
     );
   }

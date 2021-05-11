@@ -20,7 +20,7 @@ import {
 export class DiaBackendAssetDownloadingService {
   constructor(
     private readonly assetRepository: DiaBackendAssetRepository,
-    private readonly imageStore: MediaStore,
+    private readonly mediaStore: MediaStore,
     private readonly proofRepository: ProofRepository
   ) {}
 
@@ -37,7 +37,7 @@ export class DiaBackendAssetDownloadingService {
       .downloadFile$({ id: diaBackendAsset.id, field: 'asset_file_thumbnail' })
       .pipe(first())
       .toPromise();
-    return this.imageStore.storeThumbnail(
+    return this.mediaStore.storeThumbnail(
       diaBackendAsset.proof_hash,
       await blobToBase64(thumbnailBlob),
       diaBackendAsset.information.proof.mimeType
@@ -52,7 +52,7 @@ export class DiaBackendAssetDownloadingService {
       return;
     }
     const proof = new Proof(
-      this.imageStore,
+      this.mediaStore,
       getTruth({
         proof: diaBackendAsset.information.proof,
         information: diaBackendAsset.information.information,

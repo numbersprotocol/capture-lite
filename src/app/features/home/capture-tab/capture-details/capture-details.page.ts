@@ -66,15 +66,15 @@ export class CaptureDetailsPage {
   readonly assetSrc$ = this.proof$.pipe(
     switchMap(async proof => {
       const [index, meta] = Object.entries(proof.indexedAssets)[0];
-      if (!(await this.imageStore.exists(index)) && proof.diaBackendAssetId) {
-        const imageBlob = await this.diaBackendAssetRepository
+      if (!(await this.mediaStore.exists(index)) && proof.diaBackendAssetId) {
+        const mediaBlob = await this.diaBackendAssetRepository
           .downloadFile$({ id: proof.diaBackendAssetId, field: 'asset_file' })
           .pipe(
             first(),
             catchError((err: unknown) => this.errorService.toastError$(err))
           )
           .toPromise();
-        await proof.setAssets({ [await blobToBase64(imageBlob)]: meta });
+        await proof.setAssets({ [await blobToBase64(mediaBlob)]: meta });
       }
       return proof.getFirstAssetUrl();
     })
@@ -106,7 +106,7 @@ export class CaptureDetailsPage {
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly imageStore: MediaStore,
+    private readonly mediaStore: MediaStore,
     private readonly shareService: ShareService,
     private readonly errorService: ErrorService,
     private readonly actionSheetController: ActionSheetController
