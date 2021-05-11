@@ -5,6 +5,7 @@ export type MimeType =
   | 'image/png'
   | 'image/svg+xml'
   | 'video/mp4'
+  | 'video/quicktime'
   | 'application/octet-stream';
 
 export function toExtension(mimeType: MimeType) {
@@ -15,6 +16,8 @@ export function toExtension(mimeType: MimeType) {
       return 'png';
     case 'video/mp4':
       return 'mp4';
+    case 'video/quicktime':
+      return 'mov';
     case 'application/octet-stream':
       return 'bin';
     default:
@@ -31,6 +34,8 @@ export function fromExtension(extension: string): MimeType {
       return 'image/png';
     case 'mp4':
       return 'video/mp4';
+    case 'mov':
+      return 'video/quicktime';
     case 'bin':
       return 'application/octet-stream';
     default:
