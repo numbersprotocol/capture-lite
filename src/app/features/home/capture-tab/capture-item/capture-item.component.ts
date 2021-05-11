@@ -1,4 +1,5 @@
 import { Component, HostListener, Input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, iif, of, ReplaySubject } from 'rxjs';
@@ -37,6 +38,10 @@ export class CaptureItemComponent {
   readonly thumbnailUrl$ = this.proof$.pipe(
     distinctUntilChanged((x, y) => getOldProof(x).hash === getOldProof(y).hash),
     switchMap(proof => proof.thumbnailUrl$),
+    map(url => {
+      if (url) return this.sanitizer.bypassSecurityTrustUrl(url);
+      return url;
+    }),
     catchError(() => of(undefined)),
     shareReplay({ bufferSize: 1, refCount: true })
   );
@@ -67,7 +72,8 @@ export class CaptureItemComponent {
   constructor(
     private readonly captureService: CaptureService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly sanitizer: DomSanitizer
   ) {}
 
   @HostListener('click')
