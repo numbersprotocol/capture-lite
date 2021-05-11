@@ -167,7 +167,6 @@
     "returned": "Returned",
     "missed": "Returned",
     "inProgress": "In Progress",
-    "waitingToBeAccepted": "In Progress",
-    "null": "Not Provided"
+    "waitingToBeAccepted": "In Progress"
   }
 }
