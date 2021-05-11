@@ -18,13 +18,13 @@ export class CaptureService {
 
   constructor(
     private readonly proofRepository: ProofRepository,
-    private readonly imageStore: MediaStore,
+    private readonly mediaStore: MediaStore,
     private readonly collectorService: CollectorService
   ) {}
 
   async capture(source: Media) {
     const proof = await Proof.from(
-      this.imageStore,
+      this.mediaStore,
       { [source.base64]: { mimeType: source.mimeType } },
       { timestamp: Date.now(), providers: {} },
       {}

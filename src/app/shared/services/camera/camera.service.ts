@@ -8,7 +8,7 @@ import {
 } from '@capacitor/core';
 import { Subject } from 'rxjs';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
-import { fromExtension } from '../../../utils/mime-type';
+import { fromExtension, MimeType } from '../../../utils/mime-type';
 import {
   APP_PLUGIN,
   CAMERA_PLUGIN,
@@ -68,12 +68,12 @@ export class CameraService {
         )
           reject(new VideoRecordError(`File type: ${file?.type}`));
         else
-          blobToBase64(file).then(base64 => {
+          blobToBase64(file).then(base64 =>
             resolve({
               base64,
-              mimeType: 'video/mp4',
-            });
-          });
+              mimeType: file.type as MimeType,
+            })
+          );
       };
       inputElement.click();
     });

@@ -23,14 +23,14 @@ import {
 
 describe('old-proof-adapter', () => {
   let proof: Proof;
-  let imageStore: MediaStore;
+  let mediaStore: MediaStore;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
-    imageStore = TestBed.inject(MediaStore);
-    proof = await Proof.from(imageStore, ASSETS, TRUTH, SIGNATURES);
+    mediaStore = TestBed.inject(MediaStore);
+    proof = await Proof.from(mediaStore, ASSETS, TRUTH, SIGNATURES);
   });
 
   it('should convert Proof to OldProof', () => {
@@ -70,7 +70,7 @@ describe('old-proof-adapter', () => {
   it('should convert SortedProofInformation with raw Blob to Proof', async () => {
     const blob = await base64ToBlob(ASSET1_BASE64, ASSET1_MIMETYPE);
     const convertedProof = await getProof(
-      imageStore,
+      mediaStore,
       blob,
       SORTED_PROOF_INFORMATION,
       OLD_SIGNATURES
