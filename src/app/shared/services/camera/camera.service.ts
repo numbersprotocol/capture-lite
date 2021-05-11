@@ -57,17 +57,23 @@ export class CameraService {
       inputElement.accept = 'video/*';
       inputElement.type = 'file';
       inputElement.setAttribute('capture', 'environment');
+      // Safari/Webkit quirk: input element must be attached to body in order to work
+      document.body.appendChild(inputElement);
       inputElement.onchange = event => {
+        document.body.removeChild(inputElement);
         const file = (event.target as HTMLInputElement | null)?.files?.item(0);
-        if (!file || file.type !== 'video/mp4')
+        if (
+          !file ||
+          (file.type !== 'video/mp4' && file.type !== 'video/quicktime')
+        )
           reject(new VideoRecordError(`File type: ${file?.type}`));
         else
-          blobToBase64(file).then(base64 =>
+          blobToBase64(file).then(base64 => {
             resolve({
               base64,
               mimeType: 'video/mp4',
-            })
-          );
+            });
+          });
       };
       inputElement.click();
     });
