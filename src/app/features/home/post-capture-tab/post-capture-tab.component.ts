@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { iif } from 'rxjs';
 import { catchError, pluck, switchMap } from 'rxjs/operators';
-import { ErrorService } from '../../../shared/modules/error/error.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
-} from '../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendSeriesRepository } from '../../../shared/services/dia-backend/series/dia-backend-series-repository.service';
-import { NetworkService } from '../../../shared/services/network/network.service';
+} from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendSeriesRepository } from '../../../shared/dia-backend/series/dia-backend-series-repository.service';
+import { ErrorService } from '../../../shared/error/error.service';
+import { NetworkService } from '../../../shared/network/network.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

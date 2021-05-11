@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { OnboardingService } from '../../../../shared/services/onboarding/onboarding.service';
+import { OnboardingService } from '../../../../shared/onboarding/onboarding.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

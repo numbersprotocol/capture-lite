@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
-import { getOldProof } from '../../../../../shared/services/repositories/proof/old-proof-adapter';
-import { ProofRepository } from '../../../../../shared/services/repositories/proof/proof-repository.service';
+import { getOldProof } from '../../../../../shared/repositories/proof/old-proof-adapter';
+import { ProofRepository } from '../../../../../shared/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })

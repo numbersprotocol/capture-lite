@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, pluck } from 'rxjs/operators';
-import { ErrorService } from '../../../../../shared/modules/error/error.service';
-import { AndroidBackButtonService } from '../../../../../shared/services/android-back-button/android-back-button.service';
-import { DiaBackendContactRepository } from '../../../../../shared/services/dia-backend/contact/dia-backend-contact-repository.service';
+import { AndroidBackButtonService } from '../../../../../shared/android-back-button/android-back-button.service';
+import { DiaBackendContactRepository } from '../../../../../shared/dia-backend/contact/dia-backend-contact-repository.service';
+import { ErrorService } from '../../../../../shared/error/error.service';
 import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
 import { FriendInvitationDialogComponent } from './friend-invitation-dialog/friend-invitation-dialog.component';
 

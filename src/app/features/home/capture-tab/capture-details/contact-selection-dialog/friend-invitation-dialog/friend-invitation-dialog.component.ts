@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { AndroidBackButtonService } from '../../../../../../shared/services/android-back-button/android-back-button.service';
+import { AndroidBackButtonService } from '../../../../../../shared/android-back-button/android-back-button.service';
 
 @UntilDestroy()
 @Component({

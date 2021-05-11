@@ -7,9 +7,9 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { combineLatest, defer } from 'rxjs';
 import { catchError, concatMapTo, first, tap } from 'rxjs/operators';
-import { ErrorService } from '../../shared/modules/error/error.service';
-import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
-import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
+import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
+import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
+import { ErrorService } from '../../shared/error/error.service';
 import { EMAIL_REGEXP } from '../../utils/validation';
 
 @UntilDestroy({ checkProperties: true })

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { LanguageService } from '../../shared/services/language/language.service';
+import { LanguageService } from '../../shared/language/service/language.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

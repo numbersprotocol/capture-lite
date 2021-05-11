@@ -3,9 +3,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { Platform } from '@ionic/angular';
 import { AppComponent } from './app.component';
-import { CapacitorPluginsTestingModule } from './shared/core/capacitor-plugins/capacitor-plugins-testing.module';
-import { MaterialTestingModule } from './shared/core/material/material-testing.module';
-import { getTranslocoTestingModule } from './shared/core/transloco/transloco-testing.module';
+import { CapacitorPluginsTestingModule } from './shared/capacitor-plugins/capacitor-plugins-testing.module';
+import { getTranslocoTestingModule } from './shared/language/transloco/transloco-testing.module';
+import { MaterialTestingModule } from './shared/material/material-testing.module';
 
 describe('AppComponent', () => {
   let platformReadySpy: Promise<void>;

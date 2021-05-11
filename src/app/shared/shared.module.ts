@@ -5,11 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
 import { ReactiveComponentModule } from '@ngrx/component';
-import { AvatarComponent } from './components/avatar/avatar.component';
-import { MediaComponent } from './components/media/media.component';
-import { MigratingDialogComponent } from './components/migrating-dialog/migrating-dialog.component';
-import { CapacitorPluginsModule } from './core/capacitor-plugins/capacitor-plugins.module';
-import { MaterialModule } from './core/material/material.module';
+import { AvatarComponent } from './avatar/avatar.component';
+import { CapacitorPluginsModule } from './capacitor-plugins/capacitor-plugins.module';
+import { MaterialModule } from './material/material.module';
+import { MediaComponent } from './media/component/media.component';
+import { MigratingDialogComponent } from './migration/migrating-dialog/migrating-dialog.component';
 import { StartsWithPipe } from './pipes/starts-with/starts-with.pipe';
 
 const declarations = [

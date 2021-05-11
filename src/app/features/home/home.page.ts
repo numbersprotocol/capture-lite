@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
+import { ActionSheetController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, EMPTY, iif, of } from 'rxjs';
@@ -13,14 +14,15 @@ import {
   startWith,
   tap,
 } from 'rxjs/operators';
-import { ErrorService } from '../../shared/modules/error/error.service';
-import { CaptureService } from '../../shared/services/capture/capture.service';
-import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
-import { DiaBackendAssetRepository } from '../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { DiaBackendTransactionRepository } from '../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import { MigrationService } from '../../shared/services/migration/migration.service';
-import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
+import { CameraService } from '../../shared/camera/camera.service';
+import { CaptureService, Media } from '../../shared/capture/capture.service';
+import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
+import { DiaBackendAssetRepository } from '../../shared/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendTransactionRepository } from '../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { ErrorService } from '../../shared/error/error.service';
+import { MigrationService } from '../../shared/migration/service/migration.service';
+import { OnboardingService } from '../../shared/onboarding/onboarding.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 
@@ -61,7 +63,9 @@ export class HomePage {
     private readonly dialog: MatDialog,
     private readonly translocoService: TranslocoService,
     private readonly migrationService: MigrationService,
-    private readonly errorService: ErrorService
+    private readonly errorService: ErrorService,
+    private readonly cameraService: CameraService,
+    private readonly actionSheetController: ActionSheetController
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -128,9 +132,10 @@ export class HomePage {
     return defer(() => {
       const captureIndex = 0;
       this.selectedTabIndex = captureIndex;
-      return this.captureService.capture();
+      return this.presentCaptureActions$();
     })
       .pipe(
+        concatMap(media => this.captureService.capture(media)),
         catchError((err: unknown) => {
           if (err !== 'User cancelled photos app')
             return this.errorService.toastError$(err);
@@ -139,6 +144,36 @@ export class HomePage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  private presentCaptureActions$() {
+    return this.translocoService
+      .selectTranslateObject({
+        takePicture: null,
+        recordVideo: null,
+      })
+      .pipe(
+        first(),
+        concatMap(
+          ([takePicture, recordVideo]) =>
+            new Promise<Media>(resolve =>
+              this.actionSheetController
+                .create({
+                  buttons: [
+                    {
+                      text: takePicture,
+                      handler: () => resolve(this.cameraService.takePhoto()),
+                    },
+                    {
+                      text: recordVideo,
+                      handler: () => resolve(this.cameraService.recordVideo()),
+                    },
+                  ],
+                })
+                .then(sheet => sheet.present())
+            )
+        )
+      );
   }
 
   // eslint-disable-next-line class-methods-use-this

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { CapacitorFactsProvider } from '../../shared/services/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
+import { CapacitorFactsProvider } from '../../shared/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

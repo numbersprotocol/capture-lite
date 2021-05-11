@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 // Configure Angular `secret.ts` file path
-const targetPath = './src/app/shared/services/dia-backend/secret.ts';
+const targetPath = './src/app/shared/dia-backend/secret.ts';
 
 // `secret.ts` file structure
 const envConfigFile = `

@@ -7,12 +7,12 @@ import {
   pluck,
   shareReplay,
 } from 'rxjs/operators';
-import { ErrorService } from '../../shared/modules/error/error.service';
-import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
+import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
 import {
   DiaBackendContact,
   DiaBackendContactRepository,
-} from '../../shared/services/dia-backend/contact/dia-backend-contact-repository.service';
+} from '../../shared/dia-backend/contact/dia-backend-contact-repository.service';
+import { ErrorService } from '../../shared/error/error.service';
 
 @UntilDestroy()
 @Component({

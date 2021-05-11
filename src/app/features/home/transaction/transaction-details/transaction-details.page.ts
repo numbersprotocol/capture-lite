@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { catchError, map, shareReplay, switchMap } from 'rxjs/operators';
-import { ErrorService } from '../../../../shared/modules/error/error.service';
-import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendTransaction,
   DiaBackendTransactionRepository,
-} from '../../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
+} from '../../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { ErrorService } from '../../../../shared/error/error.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 @UntilDestroy({ checkProperties: true })
 @Component({

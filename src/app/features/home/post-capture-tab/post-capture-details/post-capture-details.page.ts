@@ -14,14 +14,14 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
-import { ErrorService } from '../../../../shared/modules/error/error.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
-} from '../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendAuthService } from '../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { OldDefaultInformationName } from '../../../../shared/services/repositories/proof/old-proof-adapter';
-import { ShareService } from '../../../../shared/services/share/share.service';
+} from '../../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { ErrorService } from '../../../../shared/error/error.service';
+import { OldDefaultInformationName } from '../../../../shared/repositories/proof/old-proof-adapter';
+import { ShareService } from '../../../../shared/share/share.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 
 const { Browser } = Plugins;

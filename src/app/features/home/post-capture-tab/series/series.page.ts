@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { ErrorService } from '../../../../shared/modules/error/error.service';
-import { DiaBackendSeriesRepository } from '../../../../shared/services/dia-backend/series/dia-backend-series-repository.service';
+import { DiaBackendSeriesRepository } from '../../../../shared/dia-backend/series/dia-backend-series-repository.service';
+import { ErrorService } from '../../../../shared/error/error.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 @Component({
   selector: 'app-series',

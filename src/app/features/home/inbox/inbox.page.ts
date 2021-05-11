@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, concatMapTo, first, shareReplay } from 'rxjs/operators';
-import { ErrorService } from '../../../shared/modules/error/error.service';
-import { BlockingActionService } from '../../../shared/services/blocking-action/blocking-action.service';
-import { DiaBackendTransactionRepository } from '../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import { IgnoredTransactionRepository } from '../../../shared/services/dia-backend/transaction/ignored-transaction-repository.service';
+import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import { DiaBackendTransactionRepository } from '../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { IgnoredTransactionRepository } from '../../../shared/dia-backend/transaction/ignored-transaction-repository.service';
+import { ErrorService } from '../../../shared/error/error.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

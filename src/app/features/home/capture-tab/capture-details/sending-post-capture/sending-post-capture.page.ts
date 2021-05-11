@@ -13,21 +13,21 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
-import { ErrorService } from '../../../../../shared/modules/error/error.service';
-import { BlockingActionService } from '../../../../../shared/services/blocking-action/blocking-action.service';
-import { ConfirmAlert } from '../../../../../shared/services/confirm-alert/confirm-alert.service';
+import { BlockingActionService } from '../../../../../shared/blocking-action/blocking-action.service';
+import { ConfirmAlert } from '../../../../../shared/confirm-alert/confirm-alert.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
-} from '../../../../../shared/services/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendAuthService } from '../../../../../shared/services/dia-backend/auth/dia-backend-auth.service';
+} from '../../../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendContact,
   DiaBackendContactRepository,
-} from '../../../../../shared/services/dia-backend/contact/dia-backend-contact-repository.service';
-import { DiaBackendTransactionRepository } from '../../../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
-import { getOldProof } from '../../../../../shared/services/repositories/proof/old-proof-adapter';
-import { ProofRepository } from '../../../../../shared/services/repositories/proof/proof-repository.service';
+} from '../../../../../shared/dia-backend/contact/dia-backend-contact-repository.service';
+import { DiaBackendTransactionRepository } from '../../../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { ErrorService } from '../../../../../shared/error/error.service';
+import { getOldProof } from '../../../../../shared/repositories/proof/old-proof-adapter';
+import { ProofRepository } from '../../../../../shared/repositories/proof/proof-repository.service';
 import {
   isNonNullable,
   switchTap,

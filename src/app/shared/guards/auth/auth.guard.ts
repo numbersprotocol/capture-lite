@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendAuthService } from '../../dia-backend/auth/dia-backend-auth.service';
 
 @Injectable({
   providedIn: 'root',

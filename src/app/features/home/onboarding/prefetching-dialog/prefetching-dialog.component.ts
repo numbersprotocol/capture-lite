@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
-import { DiaBackendAssetPrefetchingService } from '../../../../shared/services/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
-import { OnboardingService } from '../../../../shared/services/onboarding/onboarding.service';
+import { DiaBackendAssetPrefetchingService } from '../../../../shared/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
+import { OnboardingService } from '../../../../shared/onboarding/onboarding.service';
 
 @Component({
   selector: 'app-prefetching-dialog',

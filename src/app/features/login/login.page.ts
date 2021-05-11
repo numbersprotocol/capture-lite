@@ -16,10 +16,10 @@ import {
   tap,
   timeout,
 } from 'rxjs/operators';
-import { ErrorService } from '../../shared/modules/error/error.service';
-import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
-import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { OnboardingService } from '../../shared/services/onboarding/onboarding.service';
+import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
+import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
+import { ErrorService } from '../../shared/error/error.service';
+import { OnboardingService } from '../../shared/onboarding/onboarding.service';
 import { EMAIL_REGEXP } from '../../utils/validation';
 
 @UntilDestroy({ checkProperties: true })

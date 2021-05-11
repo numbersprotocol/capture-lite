@@ -57,7 +57,7 @@ const routes: Routes = [
   {
     path: 'media-viewer/:src',
     loadChildren: () =>
-      import('./shared/pages/media-viewer/media-viewer.module').then(
+      import('./shared/media/media-viewer/media-viewer.module').then(
         m => m.MediaViewerPageModule
       ),
   },

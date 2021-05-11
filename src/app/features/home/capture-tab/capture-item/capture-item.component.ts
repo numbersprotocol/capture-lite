@@ -11,9 +11,9 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
-import { CaptureService } from '../../../../shared/services/capture/capture.service';
-import { getOldProof } from '../../../../shared/services/repositories/proof/old-proof-adapter';
-import { Proof } from '../../../../shared/services/repositories/proof/proof';
+import { CaptureService } from '../../../../shared/capture/capture.service';
+import { getOldProof } from '../../../../shared/repositories/proof/old-proof-adapter';
+import { Proof } from '../../../../shared/repositories/proof/proof';
 import { isValidGeolocation } from '../capture-details/capture-details.page';
 
 @UntilDestroy()

@@ -6,14 +6,14 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, iif } from 'rxjs';
 import { catchError, concatMap, concatMapTo } from 'rxjs/operators';
-import { ErrorService } from '../../shared/modules/error/error.service';
-import { BlockingActionService } from '../../shared/services/blocking-action/blocking-action.service';
-import { WebCryptoApiSignatureProvider } from '../../shared/services/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
-import { ConfirmAlert } from '../../shared/services/confirm-alert/confirm-alert.service';
-import { Database } from '../../shared/services/database/database.service';
-import { DiaBackendAuthService } from '../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { MediaStore } from '../../shared/services/media-store/media-store.service';
-import { PreferenceManager } from '../../shared/services/preference-manager/preference-manager.service';
+import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
+import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
+import { Database } from '../../shared/database/database.service';
+import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
+import { ErrorService } from '../../shared/error/error.service';
+import { MediaStore } from '../../shared/media/media-store/media-store.service';
+import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
 
 const { Clipboard } = Plugins;
 
@@ -32,7 +32,7 @@ export class ProfilePage {
   constructor(
     private readonly database: Database,
     private readonly preferenceManager: PreferenceManager,
-    private readonly imageStore: MediaStore,
+    private readonly mediaStore: MediaStore,
     private readonly blockingActionService: BlockingActionService,
     private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
@@ -85,7 +85,7 @@ export class ProfilePage {
   }
 
   logout() {
-    const action$ = defer(() => this.imageStore.clear()).pipe(
+    const action$ = defer(() => this.mediaStore.clear()).pipe(
       concatMapTo(defer(() => this.database.clear())),
       concatMapTo(defer(() => this.preferenceManager.clear())),
       concatMapTo(defer(reloadApp)),

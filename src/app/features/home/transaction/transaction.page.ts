@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { catchError, map, shareReplay } from 'rxjs/operators';
-import { ErrorService } from '../../../shared/modules/error/error.service';
-import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { DiaBackendTransactionRepository } from '../../../shared/services/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendTransactionRepository } from '../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { ErrorService } from '../../../shared/error/error.service';
 import { getStatus } from './transaction-details/transaction-details.page';
 
 @UntilDestroy({ checkProperties: true })

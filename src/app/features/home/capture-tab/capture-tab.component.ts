@@ -5,12 +5,12 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash-es';
 import { catchError, map } from 'rxjs/operators';
-import { ErrorService } from '../../../shared/modules/error/error.service';
-import { BlockingActionService } from '../../../shared/services/blocking-action/blocking-action.service';
-import { DiaBackendAuthService } from '../../../shared/services/dia-backend/auth/dia-backend-auth.service';
-import { getOldProof } from '../../../shared/services/repositories/proof/old-proof-adapter';
-import { Proof } from '../../../shared/services/repositories/proof/proof';
-import { ProofRepository } from '../../../shared/services/repositories/proof/proof-repository.service';
+import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { ErrorService } from '../../../shared/error/error.service';
+import { getOldProof } from '../../../shared/repositories/proof/old-proof-adapter';
+import { Proof } from '../../../shared/repositories/proof/proof';
+import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

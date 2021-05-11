@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { VersionService } from '../../shared/services/version/version.service';
+import { VersionService } from '../../shared/version/version.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
