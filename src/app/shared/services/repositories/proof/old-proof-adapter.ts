@@ -91,7 +91,7 @@ export function getOldSignatures(proof: Proof): OldSignature[] {
 }
 
 export async function getProof(
-  imageStore: MediaStore,
+  mediaStore: MediaStore,
   raw: Blob,
   sortedProofInformation: SortedProofInformation,
   oldSignatures: OldSignature[]
@@ -99,7 +99,7 @@ export async function getProof(
   const base64 = await blobToBase64(raw);
 
   return Proof.from(
-    imageStore,
+    mediaStore,
     { [base64]: { mimeType: raw.type as MimeType } },
     getTruth(sortedProofInformation),
     getSignatures(oldSignatures)

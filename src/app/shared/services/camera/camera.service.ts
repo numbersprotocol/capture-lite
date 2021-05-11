@@ -7,17 +7,19 @@ import {
   CameraSource,
 } from '@capacitor/core';
 import { Subject } from 'rxjs';
+import { blobToBase64 } from '../../../utils/encoding/encoding';
 import { fromExtension, MimeType } from '../../../utils/mime-type';
 import {
   APP_PLUGIN,
   CAMERA_PLUGIN,
 } from '../../core/capacitor-plugins/capacitor-plugins.module';
+import { Media } from '../capture/capture.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CameraService {
-  private readonly killedCapturedPhotoEvent$ = new Subject<Photo>();
+  private readonly killedCapturedPhotoEvent$ = new Subject<Media>();
   readonly restoreKilledCaptureEvent$ = this.killedCapturedPhotoEvent$.asObservable();
 
   constructor(
@@ -38,7 +40,7 @@ export class CameraService {
     });
   }
 
-  async takePhoto(): Promise<Photo> {
+  async takePhoto(): Promise<Media> {
     const cameraPhoto = await this.cameraPlugin.getPhoto({
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
@@ -47,17 +49,45 @@ export class CameraService {
     });
     return cameraPhotoToPhoto(cameraPhoto);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  async recordVideo(): Promise<Media> {
+    return new Promise<Media>((resolve, reject) => {
+      const inputElement = document.createElement('input');
+      inputElement.accept = 'video/*';
+      inputElement.type = 'file';
+      inputElement.setAttribute('capture', 'environment');
+      // Safari/Webkit quirk: input element must be attached to body in order to work
+      document.body.appendChild(inputElement);
+      inputElement.onchange = event => {
+        document.body.removeChild(inputElement);
+        const file = (event.target as HTMLInputElement | null)?.files?.item(0);
+        if (
+          !file ||
+          (file.type !== 'video/mp4' && file.type !== 'video/quicktime')
+        )
+          reject(new VideoRecordError(`File type: ${file?.type}`));
+        else
+          blobToBase64(file).then(base64 =>
+            resolve({
+              base64,
+              mimeType: file.type as MimeType,
+            })
+          );
+      };
+      inputElement.click();
+    });
+  }
 }
 
-export interface Photo {
-  readonly mimeType: MimeType;
-  readonly base64: string;
-}
-
-function cameraPhotoToPhoto(cameraPhoto: CameraPhoto): Photo {
+function cameraPhotoToPhoto(cameraPhoto: CameraPhoto): Media {
   return {
     mimeType: fromExtension(cameraPhoto.format),
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     base64: cameraPhoto.base64String!,
   };
+}
+
+export class VideoRecordError extends Error {
+  readonly name = 'VideoRecordError';
 }

@@ -18,7 +18,7 @@ export class ShareService {
 
   constructor(
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly imageStore: MediaStore
+    private readonly mediaStore: MediaStore
   ) {}
 
   async share(asset: DiaBackendAsset) {
@@ -32,8 +32,8 @@ export class ShareService {
 
   private async createFileUrl(dataUri: string) {
     const base64 = dataUri.split(',')[1];
-    const index = await this.imageStore.write(base64, this.defaultMimetype);
-    return this.imageStore.getUri(index);
+    const index = await this.mediaStore.write(base64, this.defaultMimetype);
+    return this.mediaStore.getUri(index);
   }
 
   private async getSharableCopy(asset: DiaBackendAsset) {

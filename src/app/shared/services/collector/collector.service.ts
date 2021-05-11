@@ -18,12 +18,12 @@ export class CollectorService {
   private readonly factsProviders = new Set<FactsProvider>();
   private readonly signatureProviders = new Set<SignatureProvider>();
 
-  constructor(private readonly imageStore: MediaStore) {}
+  constructor(private readonly mediaStore: MediaStore) {}
 
   async run(assets: Assets, capturedTimestamp: number) {
     const truth = await this.collectTruth(assets, capturedTimestamp);
     const signatures = await this.signTargets({ assets, truth });
-    const proof = await Proof.from(this.imageStore, assets, truth, signatures);
+    const proof = await Proof.from(this.mediaStore, assets, truth, signatures);
     proof.isCollected = true;
     return proof;
   }

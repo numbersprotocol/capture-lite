@@ -18,19 +18,19 @@ export class ProofRepository {
     distinctUntilChanged(isEqual),
     map((indexedProofViews: IndexedProofView[]) =>
       indexedProofViews.map(view =>
-        Proof.fromIndexedProofView(this.imageStore, view)
+        Proof.fromIndexedProofView(this.mediaStore, view)
       )
     )
   );
 
   constructor(
     private readonly database: Database,
-    private readonly imageStore: MediaStore
+    private readonly mediaStore: MediaStore
   ) {}
 
   async getAll() {
     const views = await this.table.queryAll();
-    return views.map(view => Proof.fromIndexedProofView(this.imageStore, view));
+    return views.map(view => Proof.fromIndexedProofView(this.mediaStore, view));
   }
 
   async add(proof: Proof, onConflict = OnConflictStrategy.ABORT) {
@@ -54,8 +54,8 @@ export class ProofRepository {
       proofs.map(proof => proof.getIndexedProofView()),
       (x, y) =>
         comparator(
-          Proof.fromIndexedProofView(this.imageStore, x),
-          Proof.fromIndexedProofView(this.imageStore, y)
+          Proof.fromIndexedProofView(this.mediaStore, x),
+          Proof.fromIndexedProofView(this.mediaStore, y)
         )
     );
     return proofs;

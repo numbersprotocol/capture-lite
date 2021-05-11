@@ -18,22 +18,22 @@ describe('ProofRepository', () => {
   let repo: ProofRepository;
   let proof1: Proof;
   let proof2: Proof;
-  let imageStore: MediaStore;
+  let mediaStore: MediaStore;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [SharedTestingModule],
     });
-    imageStore = TestBed.inject(MediaStore);
+    mediaStore = TestBed.inject(MediaStore);
     repo = TestBed.inject(ProofRepository);
     proof1 = await Proof.from(
-      imageStore,
+      mediaStore,
       PROOF1_ASSETS,
       PROOF1_TRUTH,
       PROOF1_SIGNATURES_VALID
     );
     proof2 = await Proof.from(
-      imageStore,
+      mediaStore,
       PROOF2_ASSETS,
       PROOF2_TRUTH,
       PROOF2_SIGNATURES_INVALID
@@ -65,7 +65,7 @@ describe('ProofRepository', () => {
       await repo.add(proof1);
       await repo.add(proof2);
       const sameProof1 = await Proof.from(
-        imageStore,
+        mediaStore,
         PROOF1_ASSETS,
         PROOF1_TRUTH,
         PROOF1_SIGNATURES_VALID
@@ -85,7 +85,7 @@ describe('ProofRepository', () => {
   it('should emit updated proof', done => {
     defer(() =>
       Proof.from(
-        imageStore,
+        mediaStore,
         PROOF2_ASSETS,
         PROOF1_TRUTH,
         PROOF1_SIGNATURES_VALID

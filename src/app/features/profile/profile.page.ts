@@ -32,7 +32,7 @@ export class ProfilePage {
   constructor(
     private readonly database: Database,
     private readonly preferenceManager: PreferenceManager,
-    private readonly imageStore: MediaStore,
+    private readonly mediaStore: MediaStore,
     private readonly blockingActionService: BlockingActionService,
     private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
@@ -85,7 +85,7 @@ export class ProfilePage {
   }
 
   logout() {
-    const action$ = defer(() => this.imageStore.clear()).pipe(
+    const action$ = defer(() => this.mediaStore.clear()).pipe(
       concatMapTo(defer(() => this.database.clear())),
       concatMapTo(defer(() => this.preferenceManager.clear())),
       concatMapTo(defer(reloadApp)),
