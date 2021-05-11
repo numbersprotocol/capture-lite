@@ -153,7 +153,6 @@ export class MediaStore {
 
   private async setThumbnail(index: string, mimeType: MimeType) {
     const thumbnailBase64 = await this.makeThumbnail(index, mimeType);
-    console.log('thumbnailBase64', thumbnailBase64);
     return this.storeThumbnail(index, thumbnailBase64, mimeType);
   }
 
@@ -224,7 +223,9 @@ export class MediaStore {
   async getUrl(index: string, mimeType: MimeType) {
     if (Capacitor.isNative)
       return Capacitor.convertFileSrc(await this.getUri(index));
-    return toDataUrl(await this.read(index), mimeType);
+    return URL.createObjectURL(
+      await base64ToBlob(await this.read(index), mimeType)
+    );
   }
 
   private async getExtension(index: string) {
