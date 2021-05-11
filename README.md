@@ -122,7 +122,7 @@ Bump version in `android/app/build.gradle`.
 ```gradle
 android {
     defaultConfig {
-        versionCode <versionCode++>
+        versionCode <versionCode += a_diff*100 + b_diff*10 + c_diff>
         versionName "a.b.c"
     }
 }
