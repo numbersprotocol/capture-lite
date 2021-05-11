@@ -127,22 +127,24 @@ export class MediaStore {
   }
 
   getThumbnailUrl$(index: string, mimeType: MimeType) {
+    const isVideo = mimeType.startsWith('video');
+    const thumbnailMimeType = isVideo ? 'image/jpeg' : mimeType;
     return defer(() => this.getThumbnail(index)).pipe(
       concatMap(thumbnail => {
         if (thumbnail) {
           return defer(() => this.read(thumbnail.thumbnailIndex)).pipe(
-            map(base64 => toDataUrl(base64, mimeType))
+            map(base64 => toDataUrl(base64, thumbnailMimeType))
           );
         }
-        if (mimeType.startsWith('video')) {
+        if (isVideo) {
           return defer(() => this.setThumbnail(index, mimeType)).pipe(
-            map(base64 => toDataUrl(base64, mimeType))
+            map(base64 => toDataUrl(base64, thumbnailMimeType))
           );
         }
         return merge(
-          defer(() => this.getUrl(index, mimeType)),
-          defer(() => this.setThumbnail(index, mimeType)).pipe(
-            map(base64 => toDataUrl(base64, mimeType))
+          defer(() => this.getUrl(index, thumbnailMimeType)),
+          defer(() => this.setThumbnail(index, thumbnailMimeType)).pipe(
+            map(base64 => toDataUrl(base64, thumbnailMimeType))
           )
         );
       })
@@ -151,6 +153,7 @@ export class MediaStore {
 
   private async setThumbnail(index: string, mimeType: MimeType) {
     const thumbnailBase64 = await this.makeThumbnail(index, mimeType);
+    console.log('thumbnailBase64', thumbnailBase64);
     return this.storeThumbnail(index, thumbnailBase64, mimeType);
   }
 
