@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import {
   Capacitor,
@@ -5,12 +6,13 @@ import {
   FilesystemPlugin,
 } from '@capacitor/core';
 import { Mutex } from 'async-mutex';
+import { writeFile } from 'capacitor-blob-writer';
 import Compressor from 'compressorjs';
 import { defer, merge } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { sha256WithBase64 } from '../../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
-import { MimeType, toExtension } from '../../../utils/mime-type';
+import { fromExtension, MimeType, toExtension } from '../../../utils/mime-type';
 import { toDataUrl } from '../../../utils/url';
 import { FILESYSTEM_PLUGIN } from '../../capacitor-plugins/capacitor-plugins.module';
 import { Database } from '../../database/database.service';
@@ -38,7 +40,8 @@ export class MediaStore {
   constructor(
     @Inject(FILESYSTEM_PLUGIN)
     private readonly filesystemPlugin: FilesystemPlugin,
-    private readonly database: Database
+    private readonly database: Database,
+    private readonly httpClient: HttpClient
   ) {}
 
   private async initialize() {
@@ -61,7 +64,18 @@ export class MediaStore {
     });
   }
 
-  async read(index: string) {
+  async read(index: string): Promise<string> {
+    await this.initialize();
+    const extension = await this.getExtension(index);
+    if (!extension) throw new Error(`Cannot get extension of ${index}.`);
+    const url = await this.getUrl(index, fromExtension(extension));
+    const blob = await this.httpClient
+      .get(url, { responseType: 'blob' })
+      .toPromise();
+    return blobToBase64(blob);
+  }
+
+  async readWithFileSystem(index: string) {
     await this.initialize();
     const extension = await this.getExtension(index);
     const result = await this.filesystemPlugin.readFile({
@@ -82,9 +96,7 @@ export class MediaStore {
       return this._write(index, base64, mimeType);
     }
     const exists = await this.exists(index);
-    if (exists) {
-      return index;
-    }
+    if (exists) return index;
     return this._write(index, base64, mimeType);
   }
 
@@ -92,12 +104,22 @@ export class MediaStore {
     await this.initialize();
     return this.mutex.runExclusive(async () => {
       const mediaExtension = await this.setMediaExtension(index, mimeType);
-      await this.filesystemPlugin.writeFile({
-        directory: this.directory,
-        path: `${this.rootDir}/${index}.${mediaExtension.extension}`,
-        data: base64,
-        recursive: true,
-      });
+      if (Capacitor.isNative) {
+        const blob = await base64ToBlob(base64, mimeType);
+        await writeFile({
+          directory: this.directory,
+          path: `${this.rootDir}/${index}.${mediaExtension.extension}`,
+          data: blob,
+          recursive: true,
+        });
+      } else {
+        await this.filesystemPlugin.writeFile({
+          directory: this.directory,
+          path: `${this.rootDir}/${index}.${mediaExtension.extension}`,
+          data: base64,
+          recursive: true,
+        });
+      }
       return index;
     });
   }
@@ -158,11 +180,13 @@ export class MediaStore {
 
   private async makeThumbnail(index: string, mimeType: MimeType) {
     const thumbnailSize = 100;
-    const blob = await base64ToBlob(await this.read(index), mimeType);
     const thumbnailBlob = mimeType.startsWith('video')
-      ? await makeVideoThumbnail({ video: blob, width: thumbnailSize })
+      ? await makeVideoThumbnail({
+          videoUrl: await this.getUrl(index, mimeType),
+          width: thumbnailSize,
+        })
       : await makeImageThumbnail({
-          image: blob,
+          image: await base64ToBlob(await this.read(index), mimeType),
           width: thumbnailSize,
         });
     return blobToBase64(thumbnailBlob);
@@ -224,7 +248,7 @@ export class MediaStore {
     if (Capacitor.isNative)
       return Capacitor.convertFileSrc(await this.getUri(index));
     return URL.createObjectURL(
-      await base64ToBlob(await this.read(index), mimeType)
+      await base64ToBlob(await this.readWithFileSystem(index), mimeType)
     );
   }
 
@@ -317,11 +341,11 @@ async function makeImageThumbnail({
 }
 
 async function makeVideoThumbnail({
-  video,
+  videoUrl,
   width,
   quality = 0.6,
 }: {
-  video: Blob;
+  videoUrl: string;
   width: number;
   quality?: number;
 }) {
@@ -349,13 +373,13 @@ async function makeVideoThumbnail({
               resolve(makeImageThumbnail({ image: blob, width, quality }));
             else reject(TypeError('canvas.toBlob is null.'));
           },
-          video.type,
+          'image/jpeg',
           quality
         );
       }
     });
     videoElement.preload = 'auto';
-    videoElement.src = URL.createObjectURL(video);
+    videoElement.src = videoUrl;
     videoElement.load();
   });
 }
