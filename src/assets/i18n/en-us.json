@@ -86,6 +86,7 @@
   "contacts": "Contacts",
   "takePicture": "Take Picture",
   "recordVideo": "Record Video",
+  "videoLimitation": "Video Limitation",
   ".message": "Message",
   "tutorial": {
     "switchBetween0": "Switch between",
@@ -138,7 +139,9 @@
     "confirmLogout": "Your local data will be wipe out after logout. You can restore your Captures after login again.",
     "resetPasswordEnterEmail": "To reset the password, you have to enter your registered email.",
     "resetPasswordEmailSent": "An email has been sent to your registered email inbox. To reset your password, please click the link in the email.",
-    "viewSupportingVideoOnIpfs": "View supporting video on IPFS"
+    "viewSupportingVideoOnIpfs": "View supporting video on IPFS",
+    "videoLimitation": "Capture App DOES NOT support video recording longer than 10 secs. Recording longer than 10 secs will not be saved.",
+    "yesIUnderstand": "Yes, I understand"
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",

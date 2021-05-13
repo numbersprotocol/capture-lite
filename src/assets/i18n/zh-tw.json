@@ -86,6 +86,7 @@
   "contacts": "聯絡人",
   "takePicture": "拍攝照片",
   "recordVideo": "錄製影片",
+  "videoLimitation": "影片錄製限制",
   ".message": "訊息",
   "tutorial": {
     "switchBetween0": "切換影像與收藏模式",
@@ -138,7 +139,9 @@
     "confirmLogout": "所有您的本地資料將會在登出後清除。再次登入後可以復原您的拍攝。",
     "resetPasswordEnterEmail": "請輸入您的註冊信箱以重新設定密碼。",
     "resetPasswordEmailSent": "重新設定密碼的連結已經寄送至您註冊的電子信箱，請開啟您的電子信箱並點擊該連結以重新設定密碼。",
-    "viewSupportingVideoOnIpfs": "於 IPFS 檢視附件影片"
+    "viewSupportingVideoOnIpfs": "於 IPFS 檢視附件影片",
+    "videoLimitation": "錄製的影片長度需小於 10 秒鐘。",
+    "yesIUnderstand": "我了解"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",

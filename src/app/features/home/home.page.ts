@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, EMPTY, iif, of } from 'rxjs';
@@ -65,7 +65,8 @@ export class HomePage {
     private readonly migrationService: MigrationService,
     private readonly errorService: ErrorService,
     private readonly cameraService: CameraService,
-    private readonly actionSheetController: ActionSheetController
+    private readonly actionSheetController: ActionSheetController,
+    private readonly alertController: AlertController
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -166,7 +167,7 @@ export class HomePage {
                     },
                     {
                       text: recordVideo,
-                      handler: () => resolve(this.cameraService.recordVideo()),
+                      handler: () => resolve(this.recordVideo()),
                     },
                   ],
                 })
@@ -174,6 +175,24 @@ export class HomePage {
             )
         )
       );
+  }
+
+  private async recordVideo() {
+    return new Promise<Media>(resolve => {
+      this.alertController
+        .create({
+          header: this.translocoService.translate('videoLimitation'),
+          message: this.translocoService.translate('message.videoLimitation'),
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: this.translocoService.translate('message.yesIUnderstand'),
+              handler: () => resolve(this.cameraService.recordVideo()),
+            },
+          ],
+        })
+        .then(alert => alert.present());
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
