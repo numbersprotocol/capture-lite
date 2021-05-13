@@ -66,6 +66,7 @@ jobs:
   deploy-app-store:
     runs-on: macos-latest
     timeout-minutes: 120
+    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v2
