@@ -55,7 +55,10 @@ export class PostCaptureDetailsPage {
     map(diaBackendAsset => {
       const geolocation = getValidGeolocation(diaBackendAsset);
       if (geolocation) {
-        return `${geolocation.latitude}, ${geolocation.longitude}`;
+        const fixedLength = 6;
+        return `${Number(geolocation.latitude).toFixed(fixedLength)}, ${Number(
+          geolocation.longitude
+        ).toFixed(fixedLength)}`;
       }
       return this.translocoService.translate<string>('locationNotProvided');
     })

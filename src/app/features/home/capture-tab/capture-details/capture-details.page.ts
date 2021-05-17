@@ -86,8 +86,15 @@ export class CaptureDetailsPage {
 
   readonly location$ = this.proof$.pipe(
     map(proof => {
-      if (isValidGeolocation(proof)) {
-        return `${proof.geolocationLatitude}, ${proof.geolocationLongitude}`;
+      if (
+        isValidGeolocation(proof) &&
+        typeof proof.geolocationLatitude === 'number' &&
+        typeof proof.geolocationLongitude === 'number'
+      ) {
+        const fixedLength = 6;
+        return `${proof.geolocationLatitude.toFixed(
+          fixedLength
+        )}, ${proof.geolocationLongitude.toFixed(fixedLength)}`;
       }
       return this.translocoService.translate('locationNotProvided');
     })
