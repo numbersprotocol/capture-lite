@@ -18,6 +18,7 @@ import {
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../shared/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../../shared/confirm-alert/confirm-alert.service';
+import { ContactSelectionDialogComponent } from '../../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import { DiaBackendAssetRepository } from '../../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../../shared/error/error.service';
@@ -32,7 +33,6 @@ import {
   switchTap,
   VOID$,
 } from '../../../../utils/rx-operators/rx-operators';
-import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 
 const { Browser } = Plugins;
 

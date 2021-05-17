@@ -60,9 +60,8 @@ export class SendingPostCapturePage {
   ]).pipe(
     switchMap(async ([asset, proofs]) => {
       const proof = proofs.find(p => p.diaBackendAssetId === asset.id);
-      if (proof) {
-        return proof.getFirstAssetUrl();
-      }
+      if (proof) return proof.getFirstAssetUrl();
+      return asset.asset_file;
     })
   );
 
@@ -99,9 +98,9 @@ export class SendingPostCapturePage {
     switchMap(async ([asset, contact, assetFileUrl]) => {
       const previewAsset: DiaBackendAsset = {
         ...asset,
-        asset_file: assetFileUrl ?? asset.asset_file,
-        asset_file_thumbnail: assetFileUrl ?? asset.asset_file_thumbnail,
-        sharable_copy: assetFileUrl ?? asset.sharable_copy,
+        asset_file: assetFileUrl,
+        asset_file_thumbnail: assetFileUrl,
+        sharable_copy: assetFileUrl,
         caption: this.previewCaption,
         source_transaction: {
           id: '',
@@ -162,9 +161,7 @@ export class SendingPostCapturePage {
         )
       ),
       concatMap(([asset]) => this.removeAsset$(asset)),
-      concatMapTo(
-        defer(() => this.router.navigate(['../..'], { relativeTo: this.route }))
-      ),
+      concatMapTo(defer(() => this.router.navigate(['/home']))),
       catchError((err: unknown) => this.errorService.toastError$(err))
     );
 

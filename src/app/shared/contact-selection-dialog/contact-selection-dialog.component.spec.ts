@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
+import { SharedTestingModule } from '../shared-testing.module';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog.component';
 
 describe('ContactSelectionDialogComponent', () => {
