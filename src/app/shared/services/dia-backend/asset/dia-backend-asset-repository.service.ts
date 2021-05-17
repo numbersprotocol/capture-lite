@@ -251,7 +251,6 @@ export interface DiaBackendAssetTransaction extends Tuple {
 
 export interface DiaBackendAssetParsedMeta extends Tuple {
   readonly proof_hash: string;
-  readonly mime_type?: MimeType;
   readonly capture_time?: number;
   readonly capture_device?: string;
   readonly capture_latitude?: string;
@@ -266,6 +265,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly owner_name: string;
   readonly asset_file: string;
   readonly asset_file_thumbnail: string;
+  readonly asset_file_mime_type: MimeType;
   readonly information: Partial<SortedProofInformation>;
   readonly signature: OldSignature[];
   readonly sharable_copy: string;

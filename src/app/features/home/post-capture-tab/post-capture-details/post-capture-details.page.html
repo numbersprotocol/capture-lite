@@ -14,10 +14,10 @@
     [routerLink]="[
       '/media-viewer',
       mediaSrc,
-      { mimeType: diaBackendAsset.parsed_meta.mime_type }
+      { mimeType: diaBackendAsset.asset_file_mime_type }
     ]"
     [src]="mediaSrc"
-    [mimeType]="diaBackendAsset.parsed_meta.mime_type"
+    [mimeType]="diaBackendAsset.asset_file_mime_type"
   ></app-media>
   <mat-list-item>
     <mat-icon mat-list-icon>person</mat-icon>
