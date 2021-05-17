@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import { OnConflictStrategy } from '../../../database/table/table';
+import { HttpErrorCode } from '../../../error/error.service';
 import { MediaStore } from '../../../media/media-store/media-store.service';
 import {
   getSignatures,
@@ -25,7 +27,15 @@ export class DiaBackendAssetDownloadingService {
   ) {}
 
   async storeRemoteCapture(diaBackendAsset: DiaBackendAsset) {
-    await this.storeAssetThumbnail(diaBackendAsset);
+    try {
+      await this.storeAssetThumbnail(diaBackendAsset);
+    } catch (e: unknown) {
+      if (
+        !(e instanceof HttpErrorResponse) ||
+        !(e.status === HttpErrorCode.NOT_FOUND)
+      )
+        throw e;
+    }
     return this.storeIndexedProof(diaBackendAsset);
   }
 
