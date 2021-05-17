@@ -228,7 +228,8 @@ export class DiaBackendAssetRepository {
           `${BASE_URL}/api/v2/assets/${id}/`,
           { headers }
         )
-      )
+      ),
+      tap(() => this.refreshPostCaptures({ reason: 'removeCaptureById' }))
     );
   }
 
