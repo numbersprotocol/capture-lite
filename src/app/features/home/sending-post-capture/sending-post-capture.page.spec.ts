@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { SharedTestingModule } from '../../../../../shared/shared-testing.module';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { SendingPostCapturePage } from './sending-post-capture.page';
 
 describe('SendingPostCapturePage', () => {

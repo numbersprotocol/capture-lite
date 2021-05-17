@@ -131,7 +131,7 @@ export class CaptureDetailsPage {
       .pipe(first(), untilDestroyed(this))
       .subscribe(([contact, proof]) =>
         this.router.navigate(
-          ['sending-post-capture', { contact, id: proof.diaBackendAssetId }],
+          ['../sending-post-capture', { contact, id: proof.diaBackendAssetId }],
           { relativeTo: this.route }
         )
       );
