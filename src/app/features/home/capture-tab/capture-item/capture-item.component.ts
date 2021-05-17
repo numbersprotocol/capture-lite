@@ -40,7 +40,7 @@ export class CaptureItemComponent {
     switchMap(proof => proof.thumbnailUrl$),
     map(url => {
       if (url) return this.sanitizer.bypassSecurityTrustUrl(url);
-      return url;
+      return undefined;
     }),
     catchError(() => of(undefined)),
     shareReplay({ bufferSize: 1, refCount: true })
@@ -68,6 +68,8 @@ export class CaptureItemComponent {
     concatMap(proof => proof.getFirstAssetMeta()),
     map(meta => meta.mimeType.startsWith('video'))
   );
+
+  readonly isThumbnailMissing$ = this.thumbnailUrl$.pipe(map(url => !url));
 
   constructor(
     private readonly captureService: CaptureService,
