@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { defer, Observable, of } from 'rxjs';
-import { catchError, first, map } from 'rxjs/operators';
+import { defer, iif, Observable, of } from 'rxjs';
+import { catchError, first, map, switchMap } from 'rxjs/operators';
 import SwiperCore, { Virtual } from 'swiper/core';
 import {
   DiaBackendAsset,
@@ -16,6 +17,7 @@ import { OldDefaultInformationName } from '../../../shared/repositories/proof/ol
 import { Proof } from '../../../shared/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
+import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 
 SwiperCore.use([Virtual]);
 
@@ -26,9 +28,16 @@ SwiperCore.use([Virtual]);
   styleUrls: ['./details.page.scss'],
 })
 export class DetailsPage {
-  readonly detailedCaptures$: Observable<
-    DetailedCapture[]
-  > = this.proofRepository.all$.pipe(
+  readonly type$ = this.route.paramMap.pipe(
+    map(params => params.get('type')),
+    isNonNullable()
+  );
+
+  readonly detailedCaptures$: Observable<DetailedCapture[]> = this.type$.pipe(
+    switchMap(type => iif(() => type === 'capture', this.fromCaptures$))
+  );
+
+  readonly fromCaptures$ = this.proofRepository.all$.pipe(
     map(proofs =>
       proofs
         .sort((a, b) => b.timestamp - a.timestamp)
@@ -53,7 +62,8 @@ export class DetailsPage {
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly errorService: ErrorService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly route: ActivatedRoute
   ) {}
 
   navigateBack() {
