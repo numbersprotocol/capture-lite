@@ -6,15 +6,17 @@ import { ActionSheetController, NavController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, EMPTY, zip } from 'rxjs';
+import { combineLatest, defer, EMPTY, zip } from 'rxjs';
 import {
   catchError,
   concatMap,
+  concatMapTo,
   first,
   map,
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
+import { BlockingActionService } from '../../../../shared/blocking-action/blocking-action.service';
 import { ContactSelectionDialogComponent } from '../../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import {
   DiaBackendAsset,
@@ -76,6 +78,7 @@ export class PostCaptureDetailsPage {
     private readonly navController: NavController,
     private readonly errorService: ErrorService,
     private readonly dialog: MatDialog,
+    private readonly blockingActionService: BlockingActionService,
     private readonly router: Router
   ) {}
 
@@ -107,6 +110,7 @@ export class PostCaptureDetailsPage {
       this.translocoService.selectTranslateObject({
         'message.shareCapture': null,
         'message.viewOnCaptureClub': null,
+        'message.deleteCapture': null,
         'message.viewBlockchainCertificate': null,
         'message.viewSupportingVideoOnIpfs': null,
       }),
@@ -119,6 +123,7 @@ export class PostCaptureDetailsPage {
             [
               shareCapture,
               viewOnCaptureClub,
+              deleteCapture,
               viewBlockchainCertificate,
               viewSupportingVideoOnIpfs,
             ],
@@ -146,6 +151,12 @@ export class PostCaptureDetailsPage {
                 },
               });
             }
+            buttons.push({
+              text: deleteCapture,
+              handler: () => {
+                this.deleteCapture();
+              },
+            });
             buttons.push({
               text: viewBlockchainCertificate,
               handler: () => {
@@ -183,6 +194,22 @@ export class PostCaptureDetailsPage {
         ),
         untilDestroyed(this)
       )
+      .subscribe();
+  }
+
+  private deleteCapture() {
+    const action$ = this.diaBackendAsset$.pipe(
+      first(),
+      concatMap(asset =>
+        this.diaBackendAssetRepository.removeCaptureById$(asset.id)
+      ),
+      catchError((err: unknown) => this.errorService.toastError$(err)),
+      concatMapTo(defer(() => this.router.navigate(['..'])))
+    );
+
+    return this.blockingActionService
+      .run$(action$)
+      .pipe(untilDestroyed(this))
       .subscribe();
   }
 
