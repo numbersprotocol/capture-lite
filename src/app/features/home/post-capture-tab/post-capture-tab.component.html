@@ -19,7 +19,7 @@
         "
         [routerLink]="['post-capture-details', { id: postCapture.id }]"
       >
-        <ng-container *ngIf="postCapture.parsed_meta.mime_type as mimeType">
+        <ng-container *ngIf="postCapture.asset_file_mime_type as mimeType">
           <ion-icon
             *ngIf="mimeType | startsWith: 'video'"
             name="videocam"
