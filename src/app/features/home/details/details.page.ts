@@ -22,6 +22,8 @@ import {
   distinctUntilChanged,
   first,
   map,
+  pluck,
+  shareReplay,
   switchMap,
   tap,
 } from 'rxjs/operators';
@@ -67,7 +69,9 @@ export class DetailsPage {
   );
 
   readonly detailedCaptures$: Observable<DetailedCapture[]> = this.type$.pipe(
-    switchMap(type => iif(() => type === 'capture', this.fromCaptures$))
+    switchMap(type =>
+      iif(() => type === 'capture', this.fromCaptures$, this.fromPostCaptures$)
+    )
   );
 
   private readonly fromCaptures$ = this.proofRepository.all$.pipe(
@@ -85,6 +89,23 @@ export class DetailsPage {
               this.translocoService
             )
         )
+    )
+  );
+
+  private readonly fromPostCaptures$ = this.diaBackendAssetRepository.postCaptures$.pipe(
+    pluck('results'),
+    map(postCaptures =>
+      postCaptures.map(
+        p =>
+          new DetailedCapture(
+            p,
+            this.mediaStore,
+            this.diaBackendAssetRepository,
+            this.errorService,
+            this.diaBackendAuthService,
+            this.translocoService
+          )
+      )
     )
   );
 
@@ -370,24 +391,35 @@ class DetailedCapture {
       ? getOldProof(this.proofOrDiaBackendAsset).hash
       : this.proofOrDiaBackendAsset.proof_hash;
 
-  readonly mediaUrl$ = defer(async () => {
+  readonly mediaUrl$ = defer(() => {
     if (this.proofOrDiaBackendAsset instanceof Proof) {
       const proof = this.proofOrDiaBackendAsset;
-      const [index, meta] = Object.entries(proof.indexedAssets)[0];
-      if (!(await this.mediaStore.exists(index)) && proof.diaBackendAssetId) {
-        const mediaBlob = await this.diaBackendAssetRepository
-          .downloadFile$({ id: proof.diaBackendAssetId, field: 'asset_file' })
-          .pipe(
-            first(),
-            catchError((err: unknown) => this.errorService.toastError$(err))
-          )
-          .toPromise();
-        await proof.setAssets({ [await blobToBase64(mediaBlob)]: meta });
-      }
-      return proof.getFirstAssetUrl();
+      return defer(async () => {
+        const [index, meta] = Object.entries(proof.indexedAssets)[0];
+        if (!(await this.mediaStore.exists(index)) && proof.diaBackendAssetId) {
+          const mediaBlob = await this.diaBackendAssetRepository
+            .downloadFile$({ id: proof.diaBackendAssetId, field: 'asset_file' })
+            .pipe(
+              first(),
+              catchError((err: unknown) => this.errorService.toastError$(err))
+            )
+            .toPromise();
+          await proof.setAssets({ [await blobToBase64(mediaBlob)]: meta });
+        }
+        return proof.getFirstAssetUrl();
+      });
     }
 
-    return this.proofOrDiaBackendAsset.asset_file;
+    return this.diaBackendAsset$.pipe(
+      isNonNullable(),
+      switchMap(asset =>
+        this.diaBackendAssetRepository.getAndCachePostCaptureMedia$(asset)
+      ),
+      catchError((err: unknown) => this.errorService.toastError$(err)),
+      first(),
+      map(blob => URL.createObjectURL(blob)),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
   });
 
   readonly mediaMimeType$ = defer(async () => {
