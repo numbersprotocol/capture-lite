@@ -47,6 +47,8 @@
     <mat-card *ngrxLet="previewAsset$ as asset">
       <mat-card-header>
         <img
+          decoding="async"
+          loading="lazy"
           [attr.src]="
             (ownerAvatar$ | ngrxPush) || '/assets/images/avatar-placeholder.png'
           "
@@ -80,6 +82,8 @@
     >
       <div class="send-button-wrapper">
         <img
+          decoding="async"
+          loading="lazy"
           [attr.src]="
             (receiver$ | ngrxPush)?.contact_profile_picture_thumbnail ||
             '/assets/images/avatar-placeholder.png'

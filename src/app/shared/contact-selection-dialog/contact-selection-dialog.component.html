@@ -11,6 +11,8 @@
       [mat-dialog-close]="contact.contact_email"
     >
       <img
+        decoding="async"
+        loading="lazy"
         matListAvatar
         [attr.src]="
           contact.contact_profile_picture_thumbnail ||

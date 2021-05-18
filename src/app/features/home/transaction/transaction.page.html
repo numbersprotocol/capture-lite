@@ -16,7 +16,12 @@
       <mat-list-item
         [routerLink]="['transaction-details', { id: transaction.id }]"
       >
-        <img matListAvatar [src]="transaction.asset.asset_file_thumbnail" />
+        <img
+          decoding="async"
+          loading="lazy"
+          matListAvatar
+          [src]="transaction.asset.asset_file_thumbnail"
+        />
         <div mat-line>{{ transaction.asset.id }}</div>
         <div mat-line>{{ transaction.created_at | date: 'short' }}</div>
         <button
