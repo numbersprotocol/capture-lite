@@ -14,13 +14,6 @@ const routes: Routes = [
         m => m.InformationPageModule
       ),
   },
-  {
-    path: 'sending-post-capture',
-    loadChildren: () =>
-      import('./sending-post-capture/sending-post-capture.module').then(
-        m => m.SendingPostCapturePageModule
-      ),
-  },
 ];
 
 @NgModule({

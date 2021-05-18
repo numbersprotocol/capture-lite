@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, pluck } from 'rxjs/operators';
-import { AndroidBackButtonService } from '../../../../../shared/android-back-button/android-back-button.service';
-import { DiaBackendContactRepository } from '../../../../../shared/dia-backend/contact/dia-backend-contact-repository.service';
-import { ErrorService } from '../../../../../shared/error/error.service';
-import { isNonNullable } from '../../../../../utils/rx-operators/rx-operators';
+import { isNonNullable } from '../../utils/rx-operators/rx-operators';
+import { AndroidBackButtonService } from '../android-back-button/android-back-button.service';
+import { DiaBackendContactRepository } from '../dia-backend/contact/dia-backend-contact-repository.service';
+import { ErrorService } from '../error/error.service';
 import { FriendInvitationDialogComponent } from './friend-invitation-dialog/friend-invitation-dialog.component';
 
 @UntilDestroy()

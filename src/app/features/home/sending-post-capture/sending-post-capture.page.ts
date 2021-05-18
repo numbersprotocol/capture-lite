@@ -1,6 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, defer, Observable, of } from 'rxjs';
@@ -13,25 +14,25 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
-import { BlockingActionService } from '../../../../../shared/blocking-action/blocking-action.service';
-import { ConfirmAlert } from '../../../../../shared/confirm-alert/confirm-alert.service';
+import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
-} from '../../../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendAuthService } from '../../../../../shared/dia-backend/auth/dia-backend-auth.service';
+} from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendContact,
   DiaBackendContactRepository,
-} from '../../../../../shared/dia-backend/contact/dia-backend-contact-repository.service';
-import { DiaBackendTransactionRepository } from '../../../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
-import { ErrorService } from '../../../../../shared/error/error.service';
-import { getOldProof } from '../../../../../shared/repositories/proof/old-proof-adapter';
-import { ProofRepository } from '../../../../../shared/repositories/proof/proof-repository.service';
+} from '../../../shared/dia-backend/contact/dia-backend-contact-repository.service';
+import { DiaBackendTransactionRepository } from '../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { ErrorService } from '../../../shared/error/error.service';
+import { getOldProof } from '../../../shared/repositories/proof/old-proof-adapter';
+import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import {
   isNonNullable,
   switchTap,
-} from '../../../../../utils/rx-operators/rx-operators';
+} from '../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -59,9 +60,8 @@ export class SendingPostCapturePage {
   ]).pipe(
     switchMap(async ([asset, proofs]) => {
       const proof = proofs.find(p => p.diaBackendAssetId === asset.id);
-      if (proof) {
-        return proof.getFirstAssetUrl();
-      }
+      if (proof) return proof.getFirstAssetUrl();
+      return asset.asset_file;
     })
   );
 
@@ -98,9 +98,9 @@ export class SendingPostCapturePage {
     switchMap(async ([asset, contact, assetFileUrl]) => {
       const previewAsset: DiaBackendAsset = {
         ...asset,
-        asset_file: assetFileUrl ?? asset.asset_file,
-        asset_file_thumbnail: assetFileUrl ?? asset.asset_file_thumbnail,
-        sharable_copy: assetFileUrl ?? asset.sharable_copy,
+        asset_file: assetFileUrl,
+        asset_file_thumbnail: assetFileUrl,
+        sharable_copy: assetFileUrl,
         caption: this.previewCaption,
         source_transaction: {
           id: '',
@@ -134,7 +134,8 @@ export class SendingPostCapturePage {
     private readonly blockingActionService: BlockingActionService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendContactRepository: DiaBackendContactRepository,
-    private readonly errorService: ErrorService
+    private readonly errorService: ErrorService,
+    private readonly navController: NavController
   ) {}
 
   preview() {
@@ -145,7 +146,7 @@ export class SendingPostCapturePage {
     if (this.isPreview) {
       this.isPreview = false;
     } else {
-      this.router.navigate(['..'], { relativeTo: this.route });
+      this.navController.back();
     }
   }
 
@@ -160,9 +161,7 @@ export class SendingPostCapturePage {
         )
       ),
       concatMap(([asset]) => this.removeAsset$(asset)),
-      concatMapTo(
-        defer(() => this.router.navigate(['../..'], { relativeTo: this.route }))
-      ),
+      concatMapTo(defer(() => this.router.navigate(['/home']))),
       catchError((err: unknown) => this.errorService.toastError$(err))
     );
 

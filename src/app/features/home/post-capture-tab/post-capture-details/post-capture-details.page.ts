@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { ActionSheetController, NavController } from '@ionic/angular';
@@ -16,6 +17,7 @@ import {
   switchMap,
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../../../shared/blocking-action/blocking-action.service';
+import { ContactSelectionDialogComponent } from '../../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -75,12 +77,31 @@ export class PostCaptureDetailsPage {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly navController: NavController,
     private readonly errorService: ErrorService,
+    private readonly dialog: MatDialog,
     private readonly blockingActionService: BlockingActionService,
     private readonly router: Router
   ) {}
 
   back() {
     this.navController.back();
+  }
+
+  openContactSelectionDialog() {
+    const dialogRef = this.dialog.open(ContactSelectionDialogComponent, {
+      minWidth: '90%',
+      autoFocus: false,
+      data: { email: '' },
+    });
+    const contact$ = dialogRef.afterClosed().pipe(isNonNullable());
+
+    return combineLatest([contact$, this.diaBackendAsset$])
+      .pipe(first(), untilDestroyed(this))
+      .subscribe(([contact, diaBackendAsset]) =>
+        this.router.navigate(
+          ['../sending-post-capture', { contact, id: diaBackendAsset.id }],
+          { relativeTo: this.route }
+        )
+      );
   }
 
   openOptionsMenu() {

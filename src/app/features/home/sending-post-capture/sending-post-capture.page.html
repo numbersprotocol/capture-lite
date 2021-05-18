@@ -10,7 +10,7 @@
     <form #form="ngForm" (ngSubmit)="preview()">
       <mat-card *ngrxLet="mimeType$ as mimeType">
         <app-media
-          *ngIf="assetFileUrl$ | ngrxPush as assetFileUrl"
+          *ngrxLet="assetFileUrl$ as assetFileUrl"
           mat-card-image
           [src]="assetFileUrl"
           [mimeType]="mimeType"

@@ -157,7 +157,10 @@ export class DiaBackendTransactionRepository {
       tap(() => {
         this.refresh({ reason: 'this.add$' });
         this.contactRepository.refresh({
-          reason: `DiaBackendTransactionRepository.this.add$`,
+          reason: `DiaBackendTransactionRepository.add$`,
+        });
+        this.assetRepositroy.refreshPostCaptures({
+          reason: `DiaBackendTransactionRepository.add$`,
         });
       })
     );
