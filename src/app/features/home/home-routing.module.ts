@@ -54,6 +54,11 @@ const routes: Routes = [
         m => m.SendingPostCapturePageModule
       ),
   },
+  {
+    path: 'details',
+    loadChildren: () =>
+      import('./details/details.module').then(m => m.DetailsPageModule),
+  },
 ];
 
 @NgModule({
