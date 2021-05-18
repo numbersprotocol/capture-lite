@@ -1,0 +1,20 @@
+ion-content {
+  ion-item {
+    --padding-start: 48px;
+    --padding-end: 48px;
+    --min-height: 0;
+
+    ion-icon {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  ion-button {
+    --box-shadow: 0;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+}

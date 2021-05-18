@@ -1,7 +1,48 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>details</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="navigateBack()">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="send" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content *transloco="let t">
+  <app-media
+    src="https://picsum.photos/1080/1000"
+    mimeType="image/jpeg"
+  ></app-media>
+  <ion-list lines="none">
+    <ion-item>
+      <ion-icon name="person" color="black" slot="start"></ion-icon>
+      <ion-label>username here</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="location" color="black" slot="start"></ion-icon>
+      <ion-label>geolocation here</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="time" color="black" slot="start"></ion-icon>
+      <ion-label>timestamp here</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon
+        src="/assets/images/media-id-solid-black.svg"
+        slot="start"
+      ></ion-icon>
+      <ion-label>mid here</ion-label>
+    </ion-item>
+  </ion-list>
+  <div class="text-center">
+    <ion-button>{{ t('moreInformation') }}</ion-button>
+  </div>
+</ion-content>
