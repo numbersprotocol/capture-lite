@@ -2,10 +2,17 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { defer, iif, Observable, of } from 'rxjs';
-import { catchError, first, map, switchMap } from 'rxjs/operators';
-import SwiperCore, { Virtual } from 'swiper/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { combineLatest, defer, iif, Observable, of, ReplaySubject } from 'rxjs';
+import {
+  catchError,
+  distinctUntilChanged,
+  first,
+  map,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
+import SwiperCore, { Swiper, Virtual } from 'swiper/core';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -13,7 +20,10 @@ import {
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { MediaStore } from '../../../shared/media/media-store/media-store.service';
-import { OldDefaultInformationName } from '../../../shared/repositories/proof/old-proof-adapter';
+import {
+  getOldProof,
+  OldDefaultInformationName,
+} from '../../../shared/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../shared/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
@@ -28,7 +38,7 @@ SwiperCore.use([Virtual]);
   styleUrls: ['./details.page.scss'],
 })
 export class DetailsPage {
-  readonly type$ = this.route.paramMap.pipe(
+  private readonly type$ = this.route.paramMap.pipe(
     map(params => params.get('type')),
     isNonNullable()
   );
@@ -37,7 +47,7 @@ export class DetailsPage {
     switchMap(type => iif(() => type === 'capture', this.fromCaptures$))
   );
 
-  readonly fromCaptures$ = this.proofRepository.all$.pipe(
+  private readonly fromCaptures$ = this.proofRepository.all$.pipe(
     map(proofs =>
       proofs
         .sort((a, b) => b.timestamp - a.timestamp)
@@ -55,6 +65,45 @@ export class DetailsPage {
     )
   );
 
+  private readonly initialId$ = this.route.paramMap.pipe(
+    map(params => params.get('id')),
+    isNonNullable()
+  );
+
+  readonly initialSlideIndex$ = combineLatest([
+    this.initialId$,
+    this.detailedCaptures$,
+  ]).pipe(
+    first(),
+    map(([initialId, detailedCaptures]) =>
+      detailedCaptures.findIndex(c => c.id === initialId)
+    )
+  );
+
+  private readonly initializeActiveDetailedCapture$ = combineLatest([
+    this.initialId$,
+    this.detailedCaptures$,
+  ]).pipe(
+    first(),
+    map(([initialId, detailedCaptures]) =>
+      detailedCaptures.find(c => c.id === initialId)
+    ),
+    isNonNullable(),
+    tap(initialDetailedCapture =>
+      this._activeDetailedCapture$.next(initialDetailedCapture)
+    )
+  );
+
+  private readonly swiper$ = new ReplaySubject<Swiper>(1);
+
+  private readonly _activeDetailedCapture$ = new ReplaySubject<DetailedCapture>(
+    1
+  );
+
+  readonly activeDetailedCapture$ = this._activeDetailedCapture$.pipe(
+    distinctUntilChanged()
+  );
+
   constructor(
     private readonly navController: NavController,
     private readonly proofRepository: ProofRepository,
@@ -64,14 +113,47 @@ export class DetailsPage {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly translocoService: TranslocoService,
     private readonly route: ActivatedRoute
-  ) {}
+  ) {
+    this.initializeActiveDetailedCapture$
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
 
   navigateBack() {
     return this.navController.back();
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  trackDetailedCapture(_: number, item: DetailedCapture) {
+    return item.id;
+  }
+
+  onSwiperCreated(swiper: Swiper) {
+    this.swiper$.next(swiper);
+  }
+
+  onSlidesChanged() {
+    return combineLatest([this.swiper$, this.detailedCaptures$])
+      .pipe(
+        first(),
+        tap(([swiper, detailedCaptures]) =>
+          this._activeDetailedCapture$.next(
+            detailedCaptures[swiper.activeIndex]
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
 }
 
 class DetailedCapture {
+  get id() {
+    if (this.proofOrDiaBackendAsset instanceof Proof)
+      return getOldProof(this.proofOrDiaBackendAsset).hash;
+    return this.proofOrDiaBackendAsset.id;
+  }
+
   readonly mediaUrl$ = defer(async () => {
     if (this.proofOrDiaBackendAsset instanceof Proof) {
       const proof = this.proofOrDiaBackendAsset;

@@ -1,16 +1,18 @@
-ion-content {
-  .swiper {
-    height: 100%;
-    width: 100%;
-  }
+.content {
+  overflow: auto;
+}
 
-  .slide {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 100%;
-    overflow: auto;
-  }
+.swiper {
+  height: 100%;
+  width: 100%;
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  overflow: auto;
 
   ion-item {
     --padding-start: 48px;
