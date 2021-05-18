@@ -8,13 +8,6 @@ const routes: Routes = [
     component: HomePage,
   },
   {
-    path: 'capture-details',
-    loadChildren: () =>
-      import('./capture-tab/capture-details/capture-details.module').then(
-        m => m.CaptureDetailsPageModule
-      ),
-  },
-  {
     path: 'inbox',
     loadChildren: () =>
       import('./inbox/inbox.module').then(m => m.InboxPageModule),

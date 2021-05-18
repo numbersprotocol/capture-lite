@@ -15,7 +15,7 @@ import {
 import { CaptureService } from '../../../../shared/capture/capture.service';
 import { getOldProof } from '../../../../shared/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../../shared/repositories/proof/proof';
-import { isValidGeolocation } from '../capture-details/capture-details.page';
+import { normalizeGeolocation } from '../../details/details.page';
 
 @UntilDestroy()
 @Component({
@@ -61,7 +61,13 @@ export class CaptureItemComponent {
   );
 
   readonly hasGeolocation$ = this.proof$.pipe(
-    map(proof => isValidGeolocation(proof))
+    map(
+      proof =>
+        !!normalizeGeolocation({
+          latitude: proof.geolocationLatitude,
+          longitude: proof.geolocationLongitude,
+        })
+    )
   );
 
   readonly isVideo$ = this.proof$.pipe(

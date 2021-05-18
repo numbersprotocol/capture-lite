@@ -1,12 +1,24 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { Plugins } from '@capacitor/core';
+import { ActionSheetController, NavController } from '@ionic/angular';
+import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, iif, Observable, of, ReplaySubject } from 'rxjs';
+import {
+  combineLatest,
+  defer,
+  EMPTY,
+  iif,
+  Observable,
+  of,
+  ReplaySubject,
+} from 'rxjs';
 import {
   catchError,
+  concatMap,
+  concatMapTo,
   distinctUntilChanged,
   first,
   map,
@@ -14,6 +26,8 @@ import {
   tap,
 } from 'rxjs/operators';
 import SwiperCore, { Swiper, Virtual } from 'swiper/core';
+import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import {
   DiaBackendAsset,
@@ -28,10 +42,17 @@ import {
 } from '../../../shared/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../shared/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
+import { ShareService } from '../../../shared/share/share.service';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
-import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
+import {
+  isNonNullable,
+  switchTap,
+  VOID$,
+} from '../../../utils/rx-operators/rx-operators';
 
 SwiperCore.use([Virtual]);
+
+const { Browser } = Plugins;
 
 @UntilDestroy()
 @Component({
@@ -127,7 +148,11 @@ export class DetailsPage {
     private readonly translocoService: TranslocoService,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly actionSheetController: ActionSheetController,
+    private readonly shareService: ShareService,
+    private readonly confirmAlert: ConfirmAlert,
+    private readonly blockingActionService: BlockingActionService
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -178,6 +203,160 @@ export class DetailsPage {
         )
       );
   }
+
+  openOptionsMenu() {
+    combineLatest([
+      this.activeDetailedCapture$,
+      this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
+      this.translocoService.selectTranslateObject({
+        'message.shareCapture': null,
+        'message.transferCapture': null,
+        'message.deleteCapture': null,
+        'message.viewBlockchainCertificate': null,
+      }),
+    ])
+      .pipe(
+        first(),
+        concatMap(
+          ([
+            detailedCapture,
+            diaBackendAsset,
+            [
+              messageShareCapture,
+              messageTransferCapture,
+              messageDeleteCapture,
+              messageViewBlockchainCertificate,
+            ],
+          ]) =>
+            new Promise<void>(resolve => {
+              const buttons: ActionSheetButton[] = [];
+              if (detailedCapture.id && diaBackendAsset?.sharable_copy) {
+                buttons.push({
+                  text: messageShareCapture,
+                  handler: () => {
+                    this.share();
+                    resolve();
+                  },
+                });
+              }
+              if (detailedCapture.id) {
+                buttons.push({
+                  text: messageTransferCapture,
+                  handler: () => {
+                    this.openContactSelectionDialog();
+                    resolve();
+                  },
+                });
+              }
+              buttons.push({
+                text: messageDeleteCapture,
+                handler: () => {
+                  this.remove().then(() => resolve());
+                },
+              });
+              if (detailedCapture.id) {
+                buttons.push({
+                  text: messageViewBlockchainCertificate,
+                  handler: () => {
+                    this.openCertificate();
+                    resolve();
+                  },
+                });
+              }
+              this.actionSheetController
+                .create({ buttons })
+                .then(sheet => sheet.present());
+            })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private share() {
+    this.activeDetailedCapture$
+      .pipe(
+        first(),
+        concatMap(
+          activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
+        ),
+        isNonNullable(),
+        concatMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  openCertificate() {
+    combineLatest([
+      this.activeDetailedCapture$,
+      this.diaBackendAuthService.token$,
+    ])
+      .pipe(
+        first(),
+        concatMap(([detailedCapture, token]) =>
+          defer(() =>
+            Browser.open({
+              url: `https://authmedia.net/dia-certificate?mid=${detailedCapture.id}&token=${token}`,
+              toolbarColor: '#564dfc',
+            })
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private async remove() {
+    const action$ = this.activeDetailedCapture$.pipe(
+      first(),
+      switchTap(activeDetailedCapture =>
+        defer(() => {
+          if (activeDetailedCapture.id) {
+            return this.diaBackendAssetRepository.removeCaptureById$(
+              activeDetailedCapture.id
+            );
+          }
+          return VOID$;
+        })
+      ),
+      concatMap(activeDetailedCapture => activeDetailedCapture.proof$),
+      concatMap(proof => {
+        if (proof) return this.proofRepository.remove(proof);
+        return VOID$;
+      }),
+      catchError((err: unknown) => this.errorService.toastError$(err)),
+      concatMapTo(defer(() => this.router.navigate(['..'])))
+    );
+    const result = await this.confirmAlert.present();
+    if (result) {
+      this.blockingActionService
+        .run$(action$)
+        .pipe(untilDestroyed(this))
+        .subscribe();
+    }
+  }
+
+  openMap() {
+    return this.activeDetailedCapture$
+      .pipe(
+        first(),
+        switchMap(capture => capture.geolocation$),
+        concatMap(geolocation =>
+          defer(() => {
+            if (geolocation)
+              return Browser.open({
+                url: `https://maps.google.com/maps?q=${geolocation.latitude},${geolocation.longitude}`,
+                toolbarColor: '#564dfc',
+              });
+            return EMPTY;
+          })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
 }
 
 class DetailedCapture {
@@ -223,23 +402,26 @@ class DetailedCapture {
     return of(this.proofOrDiaBackendAsset.creator_name);
   });
 
-  readonly location$ = defer(async () => {
-    const fixedLength = 6;
-    let geolocation: { latitude: number; longitude: number } | undefined;
+  readonly geolocation$ = defer(async () => {
     if (this.proofOrDiaBackendAsset instanceof Proof) {
-      geolocation = normalizeGeolocation({
+      return normalizeGeolocation({
         latitude: this.proofOrDiaBackendAsset.geolocationLatitude,
         longitude: this.proofOrDiaBackendAsset.geolocationLongitude,
       });
-    } else {
-      geolocation = getGeolocation(this.proofOrDiaBackendAsset);
     }
-    if (geolocation)
-      return `${geolocation.latitude.toFixed(
-        fixedLength
-      )}, ${geolocation.longitude.toFixed(fixedLength)}`;
-    return this.translocoService.translate<string>('locationNotProvided');
+    return getGeolocation(this.proofOrDiaBackendAsset);
   });
+
+  readonly locationDisplay$ = this.geolocation$.pipe(
+    map(geolocation => {
+      const fixedLength = 6;
+      if (geolocation)
+        return `${geolocation.latitude.toFixed(
+          fixedLength
+        )}, ${geolocation.longitude.toFixed(fixedLength)}`;
+      return this.translocoService.translate<string>('locationNotProvided');
+    })
+  );
 
   readonly timestamp$ = defer(async () => {
     if (this.proofOrDiaBackendAsset instanceof Proof)
@@ -247,10 +429,18 @@ class DetailedCapture {
     return this.proofOrDiaBackendAsset.information.proof?.timestamp;
   });
 
-  readonly mediaId$ = defer(async () => {
+  readonly diaBackendAsset$ = defer(() => {
     if (this.proofOrDiaBackendAsset instanceof Proof)
-      return this.proofOrDiaBackendAsset.diaBackendAssetId;
-    return this.proofOrDiaBackendAsset.id;
+      return this.diaBackendAssetRepository
+        .fetchByProof$(this.proofOrDiaBackendAsset)
+        .pipe(catchError(() => of(undefined)));
+    return of(this.proofOrDiaBackendAsset);
+  });
+
+  readonly proof$ = defer(async () => {
+    if (this.proofOrDiaBackendAsset instanceof Proof)
+      return this.proofOrDiaBackendAsset;
+    return undefined;
   });
 
   constructor(
@@ -273,7 +463,7 @@ function getGeolocation(diaBackendAsset: DiaBackendAsset) {
   return normalizeGeolocation({ latitude, longitude });
 }
 
-function normalizeGeolocation({
+export function normalizeGeolocation({
   latitude,
   longitude,
 }: {
