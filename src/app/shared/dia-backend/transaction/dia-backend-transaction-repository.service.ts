@@ -107,7 +107,6 @@ export class DiaBackendTransactionRepository {
   private fetchInbox$({ offset, limit }: { offset?: number; limit?: number }) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
-        console.log('headers', headers);
         let params = new HttpParams();
 
         if (offset !== undefined) {
