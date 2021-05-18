@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -13,6 +14,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import SwiperCore, { Swiper, Virtual } from 'swiper/core';
+import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -66,28 +68,39 @@ export class DetailsPage {
   );
 
   private readonly initialId$ = this.route.paramMap.pipe(
-    map(params => params.get('id')),
-    isNonNullable()
+    map(params => params.get('id'))
+  );
+
+  private readonly initialHash$ = this.route.paramMap.pipe(
+    map(parmas => parmas.get('hash'))
   );
 
   readonly initialSlideIndex$ = combineLatest([
     this.initialId$,
+    this.initialHash$,
     this.detailedCaptures$,
   ]).pipe(
     first(),
-    map(([initialId, detailedCaptures]) =>
-      detailedCaptures.findIndex(c => c.id === initialId)
-    )
+    map(([initialId, initialHash, detailedCaptures]) => {
+      if (initialId) return detailedCaptures.findIndex(c => c.id === initialId);
+      if (initialHash)
+        return detailedCaptures.findIndex(c => c.hash === initialHash);
+      return 0;
+    })
   );
 
   private readonly initializeActiveDetailedCapture$ = combineLatest([
     this.initialId$,
+    this.initialHash$,
     this.detailedCaptures$,
   ]).pipe(
     first(),
-    map(([initialId, detailedCaptures]) =>
-      detailedCaptures.find(c => c.id === initialId)
-    ),
+    map(([initialId, initialHash, detailedCaptures]) => {
+      if (initialId) return detailedCaptures.find(c => c.id === initialId);
+      if (initialHash)
+        return detailedCaptures.find(c => c.hash === initialHash);
+      return undefined;
+    }),
     isNonNullable(),
     tap(initialDetailedCapture =>
       this._activeDetailedCapture$.next(initialDetailedCapture)
@@ -112,7 +125,9 @@ export class DetailsPage {
     private readonly errorService: ErrorService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly translocoService: TranslocoService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog,
+    private readonly router: Router
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -145,14 +160,36 @@ export class DetailsPage {
       )
       .subscribe();
   }
+
+  openContactSelectionDialog() {
+    const dialogRef = this.dialog.open(ContactSelectionDialogComponent, {
+      minWidth: '90%',
+      autoFocus: false,
+      data: { email: '' },
+    });
+    const contact$ = dialogRef.afterClosed().pipe(isNonNullable());
+
+    return combineLatest([contact$, this.activeDetailedCapture$])
+      .pipe(first(), untilDestroyed(this))
+      .subscribe(([contact, detailedCapture]) =>
+        this.router.navigate(
+          ['../sending-post-capture', { contact, id: detailedCapture.id }],
+          { relativeTo: this.route }
+        )
+      );
+  }
 }
 
 class DetailedCapture {
-  get id() {
-    if (this.proofOrDiaBackendAsset instanceof Proof)
-      return getOldProof(this.proofOrDiaBackendAsset).hash;
-    return this.proofOrDiaBackendAsset.id;
-  }
+  readonly id =
+    this.proofOrDiaBackendAsset instanceof Proof
+      ? this.proofOrDiaBackendAsset.diaBackendAssetId
+      : this.proofOrDiaBackendAsset.id;
+
+  readonly hash =
+    this.proofOrDiaBackendAsset instanceof Proof
+      ? getOldProof(this.proofOrDiaBackendAsset).hash
+      : this.proofOrDiaBackendAsset.proof_hash;
 
   readonly mediaUrl$ = defer(async () => {
     if (this.proofOrDiaBackendAsset instanceof Proof) {

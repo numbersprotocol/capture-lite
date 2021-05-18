@@ -90,7 +90,7 @@ export class CaptureItemComponent {
               first(),
               concatMap(oldProofHash =>
                 this.router.navigate(
-                  ['details', { type: 'capture', id: oldProofHash }],
+                  ['details', { type: 'capture', hash: oldProofHash }],
                   {
                     relativeTo: this.route,
                   }
