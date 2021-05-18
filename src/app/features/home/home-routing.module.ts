@@ -27,13 +27,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'post-capture-details',
-    loadChildren: () =>
-      import(
-        './post-capture-tab/post-capture-details/post-capture-details.module'
-      ).then(m => m.PostCaptureDetailsPageModule),
-  },
-  {
     path: 'series',
     loadChildren: () =>
       import('./post-capture-tab/series/series.module').then(

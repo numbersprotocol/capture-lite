@@ -232,8 +232,10 @@ export class DetailsPage {
       this.translocoService.selectTranslateObject({
         'message.shareCapture': null,
         'message.transferCapture': null,
+        'message.viewOnCaptureClub': null,
         'message.deleteCapture': null,
         'message.viewBlockchainCertificate': null,
+        'message.viewSupportingVideoOnIpfs': null,
       }),
     ])
       .pipe(
@@ -245,12 +247,22 @@ export class DetailsPage {
             [
               messageShareCapture,
               messageTransferCapture,
+              messageViewOnCaptureClub,
               messageDeleteCapture,
               messageViewBlockchainCertificate,
+              messageViewSupportingVideoOnIpfs,
             ],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
+              if (diaBackendAsset?.supporting_file) {
+                buttons.push({
+                  text: messageViewSupportingVideoOnIpfs,
+                  handler: () => {
+                    this.openIpfsSupportingVideo();
+                  },
+                });
+              }
               if (detailedCapture.id && diaBackendAsset?.sharable_copy) {
                 buttons.push({
                   text: messageShareCapture,
@@ -266,6 +278,14 @@ export class DetailsPage {
                   handler: () => {
                     this.openContactSelectionDialog();
                     resolve();
+                  },
+                });
+              }
+              if (diaBackendAsset?.source_type === 'store') {
+                buttons.push({
+                  text: messageViewOnCaptureClub,
+                  handler: () => {
+                    this.openCaptureClub();
                   },
                 });
               }
@@ -289,6 +309,29 @@ export class DetailsPage {
                 .then(sheet => sheet.present());
             })
         ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private openIpfsSupportingVideo() {
+    return this.activeDetailedCapture$
+      .pipe(
+        first(),
+        switchMap(
+          activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
+        ),
+        isNonNullable(),
+        switchMap(diaBackendAsset => {
+          if (!diaBackendAsset.supporting_file) return EMPTY;
+          return Browser.open({
+            url: diaBackendAsset.supporting_file.replace(
+              'ipfs://',
+              'https://ipfs.io/ipfs/'
+            ),
+            toolbarColor: '#564dfc',
+          });
+        }),
         untilDestroyed(this)
       )
       .subscribe();
@@ -323,6 +366,25 @@ export class DetailsPage {
               toolbarColor: '#564dfc',
             })
           )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private openCaptureClub() {
+    return this.activeDetailedCapture$
+      .pipe(
+        first(),
+        switchMap(
+          activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
+        ),
+        isNonNullable(),
+        concatMap(diaBackendAsset =>
+          Browser.open({
+            url: `https://captureclub.cc/asset?mid=${diaBackendAsset.id}`,
+            toolbarColor: '#564dfc',
+          })
         ),
         untilDestroyed(this)
       )
