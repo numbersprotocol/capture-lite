@@ -16,33 +16,55 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *transloco="let t">
-  <app-media
-    src="https://picsum.photos/1080/1000"
-    mimeType="image/jpeg"
-  ></app-media>
-  <ion-list lines="none">
-    <ion-item>
-      <ion-icon name="person" color="black" slot="start"></ion-icon>
-      <ion-label>username here</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="location" color="black" slot="start"></ion-icon>
-      <ion-label>geolocation here</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="time" color="black" slot="start"></ion-icon>
-      <ion-label>timestamp here</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon
-        src="/assets/images/media-id-solid-black.svg"
-        slot="start"
-      ></ion-icon>
-      <ion-label>mid here</ion-label>
-    </ion-item>
-  </ion-list>
-  <div class="text-center">
-    <ion-button>{{ t('moreInformation') }}</ion-button>
-  </div>
+<ion-content *ngrxLet="detailedCaptures$ as detailedCaptures">
+  <swiper
+    [virtual]="true"
+    [resistanceRatio]="0"
+    [observeSlideChildren]="true"
+    [resizeObserver]="true"
+    [observeParents]="true"
+    class="swiper"
+  >
+    <ng-template swiperSlide *ngFor="let detailedCapture of detailedCaptures">
+      <div class="slide">
+        <app-media
+          [src]="detailedCapture.mediaUrl$ | ngrxPush"
+          [mimeType]="detailedCapture.mediaMimeType$ | ngrxPush"
+        ></app-media>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-icon name="person" color="black" slot="start"></ion-icon>
+            <ion-label>{{ detailedCapture.creator$ | ngrxPush }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="location" color="black" slot="start"></ion-icon>
+            <ion-label>{{ detailedCapture.location$ | ngrxPush }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="time" color="black" slot="start"></ion-icon>
+            <ion-label>{{ detailedCapture.timestamp$ | ngrxPush }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon
+              src="/assets/images/media-id-solid-black.svg"
+              slot="start"
+            ></ion-icon>
+            <ion-label
+              *ngIf="
+                detailedCapture.mediaId$ | ngrxPush as mediaId;
+                else notRegistered
+              "
+              >{{ mediaId }}</ion-label
+            >
+            <ng-template #notRegistered>
+              {{ 'notRegistered' | transloco }}
+            </ng-template>
+          </ion-item>
+        </ion-list>
+        <div class="text-center">
+          <ion-button>{{ 'moreInformation' | transloco }}</ion-button>
+        </div>
+      </div>
+    </ng-template>
+  </swiper>
 </ion-content>
