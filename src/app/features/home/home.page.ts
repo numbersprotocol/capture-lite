@@ -41,7 +41,7 @@ export class HomePage {
 
   readonly hasNewInbox$ = this.diaBackendTransactionRepository.inbox$.pipe(
     catchError((err: unknown) => this.errorService.toastError$(err)),
-    map(transactions => !!transactions.length),
+    map(transactions => transactions.count !== 0),
     /**
      * WORKARDOUND: force changeDetection to update badge when returning to App
      * by clicking push notification
