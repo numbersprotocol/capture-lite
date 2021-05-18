@@ -27,10 +27,18 @@
   >
     <ng-template swiperSlide *ngFor="let detailedCapture of detailedCaptures">
       <div class="slide">
-        <app-media
-          [src]="detailedCapture.mediaUrl$ | ngrxPush"
-          [mimeType]="detailedCapture.mediaMimeType$ | ngrxPush"
-        ></app-media>
+        <ng-container *ngrxLet="detailedCapture.mediaUrl$ as mediaUrl">
+          <app-media
+            *ngrxLet="detailedCapture.mediaMimeType$ as mediaMimeType"
+            [src]="mediaUrl"
+            [mimeType]="mediaMimeType"
+            [routerLink]="[
+              '/media-viewer',
+              mediaUrl,
+              { mimeType: mediaMimeType }
+            ]"
+          ></app-media>
+        </ng-container>
         <ion-list lines="none">
           <ion-item>
             <ion-icon name="person" color="black" slot="start"></ion-icon>
