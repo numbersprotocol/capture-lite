@@ -87,6 +87,7 @@
   "takePicture": "拍攝照片",
   "recordVideo": "錄製影片",
   "videoLimitation": "影片錄製限制",
+  "notDisclosed": "未公開",
   ".message": "訊息",
   "tutorial": {
     "switchBetween0": "切換影像與收藏模式",
