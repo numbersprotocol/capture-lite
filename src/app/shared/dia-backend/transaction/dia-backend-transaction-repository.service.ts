@@ -20,7 +20,6 @@ import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { DiaBackendContactRepository } from '../contact/dia-backend-contact-repository.service';
 import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
-import { IgnoredTransactionRepository } from './ignored-transaction-repository.service';
 
 @Injectable({
   providedIn: 'root',
@@ -35,26 +34,21 @@ export class DiaBackendTransactionRepository {
     repeatWhen(() => this.updated$)
   );
 
+  private readonly inboxCount$ = this.listInbox$({ limit: 1 }).pipe(
+    pluck('count'),
+    repeatWhen(() => this.updated$)
+  );
+
   readonly all$ = this.allCount$.pipe(
     first(),
     concatMap(count => this.list$({ limit: count })),
     repeatWhen(() => this.updated$)
   );
 
-  readonly inbox$ = combineLatest([
-    this.all$,
-    this.ignoredTransactionRepository.all$,
-    this.authService.email$,
-  ]).pipe(
-    map(([transactions, ignoredTransactions, email]) =>
-      transactions.results.filter(
-        transaction =>
-          transaction.receiver_email === email &&
-          !transaction.fulfilled_at &&
-          !transaction.expired &&
-          !ignoredTransactions.includes(transaction.id)
-      )
-    )
+  readonly inbox$ = this.inboxCount$.pipe(
+    first(),
+    concatMap(count => this.listInbox$({ limit: count })),
+    repeatWhen(() => this.updated$)
   );
 
   private readonly updated$ = new Subject<{ reason?: string }>();
@@ -99,7 +93,6 @@ export class DiaBackendTransactionRepository {
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService,
-    private readonly ignoredTransactionRepository: IgnoredTransactionRepository,
     private readonly assetRepositroy: DiaBackendAssetRepository,
     private readonly assetDownloadingService: DiaBackendAssetDownloadingService,
     private readonly proofRepository: ProofRepository,
@@ -109,6 +102,25 @@ export class DiaBackendTransactionRepository {
 
   fetchById$(id: string) {
     return this.read$({ id });
+  }
+
+  private listInbox$({ offset, limit }: { offset?: number; limit?: number }) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers => {
+        let params = new HttpParams();
+
+        if (offset !== undefined) {
+          params = params.set('offset', `${offset}`);
+        }
+        if (limit !== undefined) {
+          params = params.set('limit', `${limit}`);
+        }
+        return this.httpClient.get<PaginatedResponse<DiaBackendTransaction>>(
+          `${BASE_URL}/api/v2/transactions/inbox/`,
+          { headers, params }
+        );
+      })
+    );
   }
 
   private list$({ offset, limit }: { offset?: number; limit?: number }) {
@@ -177,6 +189,23 @@ export class DiaBackendTransactionRepository {
       ),
       tap(() => {
         const reason = `DiaBackendTransactionRepository.this.accept$`;
+        this.refresh({ reason });
+        this.assetRepositroy.refreshPostCaptures({ reason });
+      })
+    );
+  }
+
+  ignore$(id: string) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.post<AcceptTransactionResponse>(
+          `${BASE_URL}/api/v2/transactions/${id}/ignore/`,
+          {},
+          { headers }
+        )
+      ),
+      tap(() => {
+        const reason = `DiaBackendTransactionRepository.this.ignore$`;
         this.refresh({ reason });
         this.assetRepositroy.refreshPostCaptures({ reason });
       })
