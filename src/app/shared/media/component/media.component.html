@@ -1,5 +1,10 @@
 <ng-container *ngrxLet="src$ as src">
-  <img *ngIf="isImage$ | ngrxPush" [src]="src" />
+  <img
+    decoding="async"
+    loading="lazy"
+    *ngIf="isImage$ | ngrxPush"
+    [src]="src"
+  />
   <video
     *ngIf="isVideo$ | ngrxPush"
     [src]="src"

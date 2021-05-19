@@ -17,7 +17,7 @@
           let postCapture of postCaptures$ | ngrxPush;
           trackBy: trackPostCapture
         "
-        [routerLink]="['post-capture-details', { id: postCapture.id }]"
+        [routerLink]="['details', { type: 'post-capture', id: postCapture.id }]"
       >
         <ng-container *ngIf="postCapture.asset_file_mime_type as mimeType">
           <ion-icon

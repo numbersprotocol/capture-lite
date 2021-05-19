@@ -1,0 +1,37 @@
+.content {
+  overflow: auto;
+}
+
+.swiper {
+  height: 100%;
+  width: 100%;
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  overflow: auto;
+
+  ion-item {
+    --padding-start: 48px;
+    --padding-end: 48px;
+    --min-height: 0;
+
+    ion-icon {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  ion-button {
+    --box-shadow: 0;
+
+    margin-bottom: 16px;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+}

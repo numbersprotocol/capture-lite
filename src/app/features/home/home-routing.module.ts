@@ -8,13 +8,6 @@ const routes: Routes = [
     component: HomePage,
   },
   {
-    path: 'capture-details',
-    loadChildren: () =>
-      import('./capture-tab/capture-details/capture-details.module').then(
-        m => m.CaptureDetailsPageModule
-      ),
-  },
-  {
     path: 'inbox',
     loadChildren: () =>
       import('./inbox/inbox.module').then(m => m.InboxPageModule),
@@ -34,13 +27,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'post-capture-details',
-    loadChildren: () =>
-      import(
-        './post-capture-tab/post-capture-details/post-capture-details.module'
-      ).then(m => m.PostCaptureDetailsPageModule),
-  },
-  {
     path: 'series',
     loadChildren: () =>
       import('./post-capture-tab/series/series.module').then(
@@ -53,6 +39,11 @@ const routes: Routes = [
       import('./sending-post-capture/sending-post-capture.module').then(
         m => m.SendingPostCapturePageModule
       ),
+  },
+  {
+    path: 'details',
+    loadChildren: () =>
+      import('./details/details.module').then(m => m.DetailsPageModule),
   },
 ];
 

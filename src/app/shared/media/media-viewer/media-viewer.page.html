@@ -4,7 +4,7 @@
 
 <ng-container *ngIf="isImage$ | ngrxPush">
   <pinch-zoom *ngrxLet="src$ as src">
-    <img [src]="src" />
+    <img decoding="async" loading="lazy" [src]="src" />
   </pinch-zoom>
 </ng-container>
 

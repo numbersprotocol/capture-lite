@@ -22,7 +22,12 @@
       "
     >
       <mat-list-item>
-        <img matListAvatar [src]="postCapture.asset.asset_file_thumbnail" />
+        <img
+          decoding="async"
+          loading="lazy"
+          matListAvatar
+          [src]="postCapture.asset.asset_file_thumbnail"
+        />
         <div mat-line>{{ postCapture.asset.id }}</div>
         <div mat-line>{{ t('sentFrom') + ' ' + postCapture.sender_name }}</div>
         <div mat-line>{{ postCapture.created_at | date: 'short' }}</div>

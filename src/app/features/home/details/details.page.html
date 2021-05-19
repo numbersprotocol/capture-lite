@@ -1,0 +1,97 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="navigateBack()">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button
+        *ngIf="
+          (isReadonly$ | ngrxPush) === false &&
+          (activeDetailedCapture$ | ngrxPush)?.id
+        "
+        (click)="openContactSelectionDialog()"
+      >
+        <ion-icon name="send" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button
+        *ngIf="(isReadonly$ | ngrxPush) === false"
+        (click)="openOptionsMenu()"
+      >
+        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<div class="content" *ngrxLet="detailedCaptures$ as detailedCaptures">
+  <swiper
+    *ngrxLet="initialSlideIndex$ as initialSlideIndex"
+    [virtual]="true"
+    [initialSlide]="initialSlideIndex"
+    [resistanceRatio]="0"
+    [observeSlideChildren]="true"
+    [resizeObserver]="true"
+    [observeParents]="true"
+    (swiper)="onSwiperCreated($event)"
+    (slideChange)="onSlidesChanged()"
+    class="swiper"
+  >
+    <ng-template
+      swiperSlide
+      *ngFor="
+        let detailedCapture of detailedCaptures;
+        trackBy: trackDetailedCapture
+      "
+    >
+      <div class="slide">
+        <ng-container *ngrxLet="detailedCapture.mediaUrl$ as mediaUrl">
+          <app-media
+            *ngrxLet="detailedCapture.mediaMimeType$ as mediaMimeType"
+            [src]="mediaUrl"
+            [mimeType]="mediaMimeType"
+            [routerLink]="[
+              '/media-viewer',
+              mediaUrl,
+              { mimeType: mediaMimeType }
+            ]"
+          ></app-media>
+        </ng-container>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-icon name="person" color="black" slot="start"></ion-icon>
+            <ion-label>{{ detailedCapture.creator$ | ngrxPush }}</ion-label>
+          </ion-item>
+          <ion-item (click)="openMap()">
+            <ion-icon name="location" color="black" slot="start"></ion-icon>
+            <ion-label>
+              {{ detailedCapture.locationDisplay$ | ngrxPush }}
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="time" color="black" slot="start"></ion-icon>
+            <ion-label>
+              {{
+                (detailedCapture.timestamp$ | ngrxPush | date: 'long') ||
+                  ('notDisclosed' | transloco)
+              }}
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon
+              src="/assets/images/media-id-solid-black.svg"
+              slot="start"
+            ></ion-icon>
+            <ion-label *ngIf="detailedCapture.id; else notRegistered">
+              {{ detailedCapture.id }}
+            </ion-label>
+            <ng-template #notRegistered>
+              {{ 'notRegistered' | transloco }}
+            </ng-template>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ng-template>
+  </swiper>
+</div>

@@ -20,7 +20,11 @@
         {{ t('transactionState.' + status) }}
       </button>
     </mat-card-content>
-    <img [src]="(transaction$ | ngrxPush)?.asset?.asset_file_thumbnail" />
+    <img
+      decoding="async"
+      loading="lazy"
+      [src]="(transaction$ | ngrxPush)?.asset?.asset_file_thumbnail"
+    />
     <mat-card-content class="column">
       <mat-label>
         {{ t('sentFrom') }}: {{ (transaction$ | ngrxPush)?.sender_name }}
