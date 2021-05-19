@@ -34,7 +34,7 @@ export class DiaBackendTransactionRepository {
     repeatWhen(() => this.updated$)
   );
 
-  private readonly inboxCount$ = this.fetchInbox$({ limit: 1 }).pipe(
+  private readonly inboxCount$ = this.listInbox$({ limit: 1 }).pipe(
     pluck('count'),
     repeatWhen(() => this.updated$)
   );
@@ -47,7 +47,7 @@ export class DiaBackendTransactionRepository {
 
   readonly inbox$ = this.inboxCount$.pipe(
     first(),
-    concatMap(count => this.fetchInbox$({ limit: count })),
+    concatMap(count => this.listInbox$({ limit: count })),
     repeatWhen(() => this.updated$)
   );
 
@@ -104,7 +104,7 @@ export class DiaBackendTransactionRepository {
     return this.read$({ id });
   }
 
-  private fetchInbox$({ offset, limit }: { offset?: number; limit?: number }) {
+  private listInbox$({ offset, limit }: { offset?: number; limit?: number }) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         let params = new HttpParams();
