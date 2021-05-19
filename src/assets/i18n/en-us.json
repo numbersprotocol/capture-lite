@@ -69,7 +69,6 @@
   "sentFrom": "Sent from",
   "receiver": "Receiver",
   "location": "Location",
-  "locationNotProvided": "Location Not Disclosed",
   "transactionReceived": "New Capture Received",
   "transactionExpired": "A Sent Capture is Returned",
   "dismiss": "Dismiss",

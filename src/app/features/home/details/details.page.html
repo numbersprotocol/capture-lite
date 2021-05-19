@@ -59,13 +59,18 @@
           </ion-item>
           <ion-item (click)="openMap()">
             <ion-icon name="location" color="black" slot="start"></ion-icon>
-            <ion-label>{{
-              detailedCapture.locationDisplay$ | ngrxPush
-            }}</ion-label>
+            <ion-label>
+              {{ detailedCapture.locationDisplay$ | ngrxPush }}
+            </ion-label>
           </ion-item>
           <ion-item>
             <ion-icon name="time" color="black" slot="start"></ion-icon>
-            <ion-label>{{ detailedCapture.timestamp$ | ngrxPush }}</ion-label>
+            <ion-label>
+              {{
+                (detailedCapture.timestamp$ | ngrxPush | date: 'long') ||
+                  ('notDisclosed' | transloco)
+              }}
+            </ion-label>
           </ion-item>
           <ion-item (click)="openCertificate()">
             <ion-icon

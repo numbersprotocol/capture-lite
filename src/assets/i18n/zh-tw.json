@@ -69,7 +69,6 @@
   "sentFrom": "發送自",
   "receiver": "收件人",
   "location": "位置",
-  "locationNotProvided": "沒有位置資訊",
   "transactionReceived": "收到新的瞬時影像",
   "transactionExpired": "瞬時影像被退回",
   "dismiss": "關閉",
