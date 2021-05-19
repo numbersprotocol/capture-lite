@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.32.0 - 2021-05-19
+
+### Added
+
+- Implement swipable details page. #689
+- Support PostCapture transfer. #687
+- Support PostCapture deletion. #686
+
+### Changed
+
+- Display **Not Disclosed** if no created timestamp.
+- Remove email icon on friend-invitation dialog.
+- Fix geolocation coordinate to 6 digits.
+- Maintain ignored transactions from DIA backend. #690
+- Make series details page readonly.
+
+### Fixed
+
+- Replace deprecated `FirebaseInstanceId` with `FirebaseMessaging` token. #688
+
 ## 0.31.2 - 2021-05-17
 
 ### Fixed
