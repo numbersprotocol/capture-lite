@@ -39,6 +39,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reorganize shared services, components and modules.
 
+## 0.30.6 - 2021-05-17
+
+Re-release for exceptions occur in pre-release workflow.
+
+## 0.30.5 - 2021-05-17
+
+### Fixed
+
+- Replace `DiaBackendAsset.parsed_meta.mime_type` with `DiaBackendAsset.asset_file_mime_type` to avoid undefined value.
+
 ## 0.30.4 - 2021-05-10
 
 Re-release for exceptions occur in pre-release workflow.
