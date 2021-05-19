@@ -37,10 +37,13 @@
       {{ location$ | ngrxPush }}
     </div>
   </mat-list-item>
-  <mat-list-item>
+  <mat-list-item *transloco="let t">
     <mat-icon mat-list-icon>access_time</mat-icon>
     <div mat-line>
-      {{ diaBackendAsset.information.proof?.timestamp | date: 'long' }}
+      {{
+        (diaBackendAsset.information.proof?.timestamp | date: 'long') ||
+          t('notDisclosed')
+      }}
     </div>
   </mat-list-item>
   <mat-list-item>
