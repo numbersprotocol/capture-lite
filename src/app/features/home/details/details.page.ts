@@ -10,7 +10,6 @@ import {
   combineLatest,
   defer,
   EMPTY,
-  iif,
   Observable,
   of,
   ReplaySubject,
@@ -68,10 +67,21 @@ export class DetailsPage {
     isNonNullable()
   );
 
+  private readonly initialId$ = this.route.paramMap.pipe(
+    map(params => params.get('id'))
+  );
+
+  private readonly initialHash$ = this.route.paramMap.pipe(
+    map(parmas => parmas.get('hash'))
+  );
+
   readonly detailedCaptures$: Observable<DetailedCapture[]> = this.type$.pipe(
-    switchMap(type =>
-      iif(() => type === 'capture', this.fromCaptures$, this.fromPostCaptures$)
-    )
+    switchMap(type => {
+      if (type === 'capture') return this.fromCaptures$;
+      if (type === 'post-capture') return this.fromPostCaptures$;
+      if (type === 'series') return this.fromSeries$;
+      return EMPTY;
+    })
   );
 
   private readonly fromCaptures$ = this.proofRepository.all$.pipe(
@@ -109,12 +119,19 @@ export class DetailsPage {
     )
   );
 
-  private readonly initialId$ = this.route.paramMap.pipe(
-    map(params => params.get('id'))
-  );
-
-  private readonly initialHash$ = this.route.paramMap.pipe(
-    map(parmas => parmas.get('hash'))
+  private readonly fromSeries$ = this.initialId$.pipe(
+    isNonNullable(),
+    switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
+    map(diaBackendAsset => [
+      new DetailedCapture(
+        diaBackendAsset,
+        this.mediaStore,
+        this.diaBackendAssetRepository,
+        this.errorService,
+        this.diaBackendAuthService,
+        this.translocoService
+      ),
+    ])
   );
 
   readonly initialSlideIndex$ = combineLatest([
@@ -158,6 +175,8 @@ export class DetailsPage {
   readonly activeDetailedCapture$ = this._activeDetailedCapture$.pipe(
     distinctUntilChanged()
   );
+
+  readonly isReadonly$ = this.type$.pipe(map(type => type === 'series'));
 
   constructor(
     private readonly navController: NavController,

@@ -17,7 +17,7 @@
         <div>
           <ion-img
             *ngIf="asset.collected"
-            [routerLink]="['../post-capture-details', { id: asset.id }]"
+            [routerLink]="['../details', { type: 'series', id: asset.id }]"
             [src]="asset.asset_file_thumbnail"
           ></ion-img>
         </div>
