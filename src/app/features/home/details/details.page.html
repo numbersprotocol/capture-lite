@@ -3,18 +3,21 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
   <div class="toolbar-spacer"></div>
+  <ng-container *ngrxLet="activeDetailedCapture$ as activeDetailedCapture">
+    <button
+      *ngIf="
+        (isFromSeriesPage$ | ngrxPush) === false &&
+        !activeDetailedCapture.isFromStore &&
+        activeDetailedCapture.id
+      "
+      (click)="openContactSelectionDialog()"
+      mat-icon-button
+    >
+      <mat-icon>send</mat-icon>
+    </button>
+  </ng-container>
   <button
-    *ngIf="
-      (isReadonly$ | ngrxPush) === false &&
-      (activeDetailedCapture$ | ngrxPush)?.id
-    "
-    (click)="openContactSelectionDialog()"
-    mat-icon-button
-  >
-    <mat-icon>send</mat-icon>
-  </button>
-  <button
-    *ngIf="(isReadonly$ | ngrxPush) === false"
+    *ngIf="(isFromSeriesPage$ | ngrxPush) === false"
     (click)="openOptionsMenu()"
     mat-icon-button
   >
