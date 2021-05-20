@@ -24,7 +24,11 @@ export class WebCryptoApiSignatureProvider implements SignatureProvider {
   async initialize() {
     const originalPublicKey = await this.getPublicKey();
     const originalPrivateKey = await this.getPrivateKey();
-    if (originalPublicKey.length === 0 || originalPrivateKey.length === 0) {
+    if (
+      originalPublicKey.length === 0 ||
+      originalPrivateKey.length === 0 ||
+      !originalPublicKey.startsWith('0x')
+    ) {
       const account = createEthAccount();
       await this.preferences.setString(PrefKeys.PUBLIC_KEY, account.address);
       await this.preferences.setString(
