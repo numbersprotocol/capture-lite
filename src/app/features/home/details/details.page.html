@@ -46,18 +46,15 @@
       "
     >
       <div class="slide">
-        <ng-container *ngrxLet="detailedCapture.mediaUrl$ as mediaUrl">
-          <app-media
-            *ngrxLet="detailedCapture.mediaMimeType$ as mediaMimeType"
-            [src]="mediaUrl"
-            [mimeType]="mediaMimeType"
-            [routerLink]="[
-              '/media-viewer',
-              mediaUrl,
-              { mimeType: mediaMimeType }
-            ]"
-          ></app-media>
-        </ng-container>
+        <app-media
+          [src]="detailedCapture.mediaUrl$ | ngrxPush"
+          [mimeType]="detailedCapture.mediaMimeType$ | ngrxPush"
+          [routerLink]="[
+            '/media-viewer',
+            detailedCapture.mediaUrl$ | ngrxPush,
+            { mimeType: detailedCapture.mediaMimeType$ | ngrxPush }
+          ]"
+        ></app-media>
         <ion-list lines="none">
           <ion-item>
             <ion-icon name="person" color="black" slot="start"></ion-icon>

@@ -1,6 +1,7 @@
 :host {
   display: block;
   object-fit: contain;
+  animation: loading 2.5s ease-in-out alternate infinite;
 }
 
 img,
