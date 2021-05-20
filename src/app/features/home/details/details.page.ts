@@ -176,7 +176,7 @@ export class DetailsPage {
     distinctUntilChanged()
   );
 
-  readonly isReadonly$ = this.type$.pipe(map(type => type === 'series'));
+  readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
   constructor(
     private readonly navController: NavController,
@@ -291,7 +291,7 @@ export class DetailsPage {
                   },
                 });
               }
-              if (detailedCapture.id) {
+              if (!detailedCapture.isFromStore && detailedCapture.id) {
                 buttons.push({
                   text: messageTransferCapture,
                   handler: () => {
@@ -555,6 +555,11 @@ class DetailedCapture {
       return this.proofOrDiaBackendAsset;
     return undefined;
   });
+
+  readonly isFromStore =
+    this.proofOrDiaBackendAsset instanceof Proof
+      ? false
+      : this.proofOrDiaBackendAsset.source_type === 'store';
 
   constructor(
     private readonly proofOrDiaBackendAsset: Proof | DiaBackendAsset,
