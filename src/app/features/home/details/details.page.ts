@@ -176,7 +176,7 @@ export class DetailsPage {
     distinctUntilChanged()
   );
 
-  readonly isReadonly$ = this.type$.pipe(map(type => type === 'series'));
+  readonly isSeries$ = this.type$.pipe(map(type => type === 'series'));
 
   constructor(
     private readonly navController: NavController,
