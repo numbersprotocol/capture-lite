@@ -14,7 +14,11 @@
     "lib": ["es2019", "dom"],
     "strict": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "stream": ["node_modules/stream-browserify"],
+      "process": ["node_modules/process"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

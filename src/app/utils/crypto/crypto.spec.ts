@@ -1,10 +1,4 @@
-import {
-  createEcKeyPair,
-  sha256WithBase64,
-  sha256WithString,
-  signWithSha256AndEcdsa,
-  verifyWithSha256AndEcdsa,
-} from './crypto';
+import { sha256WithBase64, sha256WithString } from './crypto';
 
 describe('crypto', () => {
   it('should hash string with SHA256', async () => {
@@ -21,30 +15,5 @@ describe('crypto', () => {
       'e57ee9f15034c399f4e0db906e79f195acbdcc9f30a8846732ea2b271de91e13';
     const hash = await sha256WithBase64(value);
     expect(hash).toEqual(expected);
-  });
-
-  it('should sign and verify with valid signature from SHA256 and ECDSA', async () => {
-    const message = 'hello';
-    const keyPair = await createEcKeyPair();
-    const signature = await signWithSha256AndEcdsa(message, keyPair.privateKey);
-    const result = await verifyWithSha256AndEcdsa(
-      message,
-      signature,
-      keyPair.publicKey
-    );
-    expect(result).toBeTrue();
-  });
-
-  it('should sign and verify with invalid signature from SHA256 and ECDSA', async () => {
-    const message = 'hello';
-    const keyPair = await createEcKeyPair();
-    const signature = await signWithSha256AndEcdsa(message, keyPair.privateKey);
-    const anotherKeyPair = await createEcKeyPair();
-    const result = await verifyWithSha256AndEcdsa(
-      message,
-      signature,
-      anotherKeyPair.publicKey
-    );
-    expect(result).toBeFalse();
   });
 });
