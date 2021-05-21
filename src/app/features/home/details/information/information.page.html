@@ -1,0 +1,50 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('informationDetails') }}</span>
+</mat-toolbar>
+
+<div class="page-content">
+  <mat-list *transloco="let t">
+    <div mat-subheader>{{ t('digitalAsset') }}</div>
+    <mat-list-item>
+      <mat-icon mat-list-icon>access_time</mat-icon>
+      <div mat-line>{{ t('timestamp') }}</div>
+      <div mat-line>
+        {{ timestamp$ | ngrxPush | date: 'long' }}
+      </div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>code</mat-icon>
+      <div mat-line>{{ t('hash') }}</div>
+      <div mat-line>{{ oldProofHash$ | ngrxPush }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>image</mat-icon>
+      <div mat-line>{{ t('mimeType') }}</div>
+      <div mat-line>{{ mimeType$ | ngrxPush }}</div>
+    </mat-list-item>
+
+    <ng-container *ngrxLet="facts$ as facts">
+      <div mat-subheader>{{ t('information') }}</div>
+      <mat-list-item *ngFor="let fact of facts | keyvalue">
+        <mat-icon mat-list-icon>information</mat-icon>
+        <div mat-line>{{ fact.key }}</div>
+        <div mat-line>{{ fact.value }}</div>
+      </mat-list-item>
+    </ng-container>
+
+    <div mat-subheader>{{ t('signature') }}</div>
+    <mat-list-item>
+      <mat-icon mat-list-icon>policy</mat-icon>
+      <div mat-line>{{ t('signature') }}</div>
+      <div mat-line>{{ (signature$ | ngrxPush)?.signature }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>lock</mat-icon>
+      <div mat-line>{{ t('publicKey') }}</div>
+      <div mat-line>{{ (signature$ | ngrxPush)?.publicKey }}</div>
+    </mat-list-item>
+  </mat-list>
+</div>
