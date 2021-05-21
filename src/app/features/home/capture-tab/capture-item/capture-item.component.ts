@@ -15,7 +15,7 @@ import {
 import { CaptureService } from '../../../../shared/capture/capture.service';
 import { getOldProof } from '../../../../shared/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../../shared/repositories/proof/proof';
-import { normalizeGeolocation } from '../../details/details.page';
+import { normalizeGeolocation } from '../../details/information/session/information-session.service';
 
 @UntilDestroy()
 @Component({

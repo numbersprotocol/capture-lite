@@ -1,29 +1,29 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-button (click)="navigateBack()">
-        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button
-        *ngIf="
-          (isReadonly$ | ngrxPush) === false &&
-          (activeDetailedCapture$ | ngrxPush)?.id
-        "
-        (click)="openContactSelectionDialog()"
-      >
-        <ion-icon name="send" slot="icon-only"></ion-icon>
-      </ion-button>
-      <ion-button
-        *ngIf="(isReadonly$ | ngrxPush) === false"
-        (click)="openOptionsMenu()"
-      >
-        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div class="toolbar-spacer"></div>
+  <ng-container *ngrxLet="activeDetailedCapture$ as activeDetailedCapture">
+    <button
+      *ngIf="
+        (isFromSeriesPage$ | ngrxPush) === false &&
+        !activeDetailedCapture.isFromStore &&
+        activeDetailedCapture.id
+      "
+      (click)="openContactSelectionDialog()"
+      mat-icon-button
+    >
+      <mat-icon>send</mat-icon>
+    </button>
+  </ng-container>
+  <button
+    *ngIf="(isFromSeriesPage$ | ngrxPush) === false"
+    (click)="openOptionsMenu()"
+    mat-icon-button
+  >
+    <mat-icon>more_vert</mat-icon>
+  </button>
+</mat-toolbar>
 
 <div class="content" *ngrxLet="detailedCaptures$ as detailedCaptures">
   <swiper
@@ -91,6 +91,11 @@
             </ng-template>
           </ion-item>
         </ion-list>
+        <div class="text-center">
+          <ion-button routerLink="information">
+            {{ 'moreInformation' | transloco }}
+          </ion-button>
+        </div>
       </div>
     </ng-template>
   </swiper>
