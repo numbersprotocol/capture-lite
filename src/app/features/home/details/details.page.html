@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" *transloco="let t">
-  <button (click)="navigateBack()" mat-icon-button>
+  <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
   <div class="toolbar-spacer"></div>
@@ -91,6 +91,11 @@
             </ng-template>
           </ion-item>
         </ion-list>
+        <div class="text-center">
+          <ion-button routerLink="information">
+            {{ 'moreInformation' | transloco }}
+          </ion-button>
+        </div>
       </div>
     </ng-template>
   </swiper>
