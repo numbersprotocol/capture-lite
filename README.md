@@ -10,7 +10,7 @@
 
 ## Getting Started
 
-Node 14.15.1+ and NPM 7+ is required.
+Node 16.2.0+ and NPM 7.13.0+ is required.
 
 Install the dependencies.
 
