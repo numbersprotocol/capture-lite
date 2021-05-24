@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
-  createEcKeyPair,
-  signWithSha256AndEcdsa,
+  createEthAccount,
+  loadEthAccount,
 } from '../../../../utils/crypto/crypto';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import { Signature } from '../../../repositories/proof/proof';
@@ -24,22 +24,26 @@ export class WebCryptoApiSignatureProvider implements SignatureProvider {
   async initialize() {
     const originalPublicKey = await this.getPublicKey();
     const originalPrivateKey = await this.getPrivateKey();
-    if (originalPublicKey.length === 0 || originalPrivateKey.length === 0) {
-      const { publicKey, privateKey } = await createEcKeyPair();
-      await this.preferences.setString(PrefKeys.PUBLIC_KEY, publicKey);
-      await this.preferences.setString(PrefKeys.PRIVATE_KEY, privateKey);
+    if (
+      originalPublicKey.length === 0 ||
+      originalPrivateKey.length === 0 ||
+      !originalPublicKey.startsWith('0x')
+    ) {
+      const account = createEthAccount();
+      await this.preferences.setString(PrefKeys.PUBLIC_KEY, account.address);
+      await this.preferences.setString(
+        PrefKeys.PRIVATE_KEY,
+        account.privateKey
+      );
     }
   }
 
   async provide(serializedSortedSignedTargets: string): Promise<Signature> {
     await this.initialize();
-    const privateKey = await this.getPrivateKey();
-    const signature = await signWithSha256AndEcdsa(
-      serializedSortedSignedTargets,
-      privateKey
-    );
+    const account = loadEthAccount(await this.getPrivateKey());
+    const sign = account.sign(serializedSortedSignedTargets);
     const publicKey = await this.getPublicKey();
-    return { signature, publicKey };
+    return { signature: sign.signature, publicKey };
   }
 
   async getPublicKey() {
