@@ -2,9 +2,11 @@
   <ion-segment mode="ios" [(ngModel)]="categories">
     <ion-segment-button value="photo" checked>
       <ion-icon src="/assets/images/apps.svg" class="segment"></ion-icon>
+      <ion-icon src="/assets/images/apps_dark.svg" class="segment_dark"></ion-icon>
     </ion-segment-button>
     <ion-segment-button value="series">
       <ion-icon src="/assets/images/series.svg" class="segment"></ion-icon>
+      <ion-icon src="/assets/images/series_dark.svg" class="segment_dark"></ion-icon>
     </ion-segment-button>
   </ion-segment>
   <p *ngIf="(networkConnected$ | ngrxPush) === false" class="network-status">
@@ -12,8 +14,7 @@
   </p>
   <div class="post-captures" *ngSwitchCase="'photo'">
     <mat-grid-list cols="3" gutterSize="8px">
-      <mat-grid-tile
-        *ngFor="
+      <mat-grid-tile *ngFor="
           let postCapture of postCaptures$ | ngrxPush;
           trackBy: trackPostCapture
         "
@@ -37,15 +38,10 @@
   </div>
 
   <div class="series" *ngSwitchCase="'series'">
-    <ion-card
-      *ngFor="let series of collectedSeriesList$ | ngrxPush"
-      [routerLink]="['series', { id: series.id }]"
-    >
-      <ion-img
-        [src]="
+    <ion-card *ngFor="let series of collectedSeriesList$ | ngrxPush" [routerLink]="['series', { id: series.id }]">
+      <ion-img [src]="
           series.cover_image || '/assets/images/series-cover-placeholder.png'
-        "
-      ></ion-img>
+        "></ion-img>
     </ion-card>
   </div>
 </div>

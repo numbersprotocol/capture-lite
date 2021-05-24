@@ -6,21 +6,15 @@
 </mat-toolbar>
 
 <div *transloco="let t" class="page-content">
-  <span
-    *ngIf="
+  <span *ngIf="
       (receivedTransactions$ | ngrxPush)?.length === 0 &&
       (isFetching$ | ngrxPush) === false
-    "
-    class="empty-inbox"
-    >{{ t('emptyInbox') }}</span
-  >
+    " class="empty-inbox">{{ t('emptyInbox') }}</span>
   <mat-list>
-    <ng-container
-      *ngFor="
+    <ng-container *ngFor="
         let postCapture of receivedTransactions$ | ngrxPush;
         last as isLast
-      "
-    >
+      ">
       <mat-list-item>
         <img
           decoding="async"
@@ -32,18 +26,10 @@
         <div mat-line>{{ t('sentFrom') + ' ' + postCapture.sender_name }}</div>
         <div mat-line>{{ postCapture.created_at | date: 'short' }}</div>
         <div class="action" mat-line>
-          <button
-            (click)="ignore(postCapture.id)"
-            mat-stroked-button
-            color="primary"
-          >
+          <button (click)="ignore(postCapture.id)" mat-stroked-button color="primary">
             {{ t('ignore') }}
           </button>
-          <button
-            (click)="accept(postCapture.id)"
-            mat-flat-button
-            color="primary"
-          >
+          <button (click)="accept(postCapture.id)" mat-flat-button color="primary">
             {{ t('accept') }}
           </button>
         </div>

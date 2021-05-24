@@ -3,6 +3,16 @@
     margin: 36px auto 0;
   }
 
+  @media (prefers-color-scheme: dark) {
+    background-color: #36393f;
+    color: white;
+  }
+
+  @media (prefers-color-scheme: light) {
+    background-color: white;
+    color: black;
+  }
+
   span.empty-inbox {
     display: flex;
     width: 100%;

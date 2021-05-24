@@ -14,3 +14,13 @@
 input {
   display: none;
 }
+
+mat-icon {
+  @media (prefers-color-scheme: dark) {
+    color: black;
+  }
+
+  @media (prefers-color-scheme: light) {
+    color: azure;
+  }
+}

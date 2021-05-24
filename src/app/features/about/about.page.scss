@@ -3,3 +3,28 @@ mat-toolbar {
     padding-right: 40px;
   }
 }
+
+.page-content {
+  @media (prefers-color-scheme: dark) {
+    background-color: #36393f;
+    mat-icon {
+      color: white;
+    }
+
+    div[mat-line] {
+      color: white;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    background-color: white;
+
+    mat-icon {
+      color: black;
+    }
+
+    div[mat-line] {
+      color: black;
+    }
+  }
+}
