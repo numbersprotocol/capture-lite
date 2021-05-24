@@ -4,7 +4,9 @@
   </button>
   <span>{{ t('profile') }}</span>
 </mat-toolbar>
-<app-avatar></app-avatar>
+<div class="avatar">
+  <app-avatar></app-avatar>
+</div>
 <div *transloco="let t" class="page-content">
   <mat-list>
     <mat-list-item>
@@ -24,11 +26,7 @@
       <mat-icon mat-list-icon>lock</mat-icon>
       <div mat-line>{{ t('publicKey') }}</div>
       <div mat-line>{{ publicKey$ | ngrxPush }}</div>
-      <button
-        *ngIf="publicKey$ | ngrxPush as publicKey"
-        (click)="copyToClipboard(publicKey)"
-        mat-icon-button
-      >
+      <button *ngIf="publicKey$ | ngrxPush as publicKey" (click)="copyToClipboard(publicKey)" mat-icon-button>
         <mat-icon>content_copy</mat-icon>
       </button>
     </mat-list-item>
@@ -36,11 +34,7 @@
       <mat-icon mat-list-icon>vpn_key</mat-icon>
       <div mat-line>{{ t('privateKey') }}</div>
       <div mat-line>{{ privateKey$ | ngrxPush }}</div>
-      <button
-        *ngIf="privateKey$ | ngrxPush as privateKey"
-        (click)="copyToClipboard(privateKey)"
-        mat-icon-button
-      >
+      <button *ngIf="privateKey$ | ngrxPush as privateKey" (click)="copyToClipboard(privateKey)" mat-icon-button>
         <mat-icon>content_copy</mat-icon>
       </button>
     </mat-list-item>
