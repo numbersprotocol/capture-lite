@@ -16,6 +16,13 @@
   height: 100%;
   overflow: auto;
 
+  app-media {
+    min-height: 50%;
+    height: 50%;
+    object-fit: cover;
+    object-position: center;
+  }
+
   ion-item {
     --padding-start: 48px;
     --padding-end: 48px;

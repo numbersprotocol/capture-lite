@@ -82,3 +82,13 @@ ion-button {
     color: white;
   }
 }
+
+@keyframes loading {
+  0% {
+    background-color: var(--loading-background-start);
+  }
+
+  100% {
+    background-color: var(--loading-background-end);
+  }
+}
