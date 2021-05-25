@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.33.0 - 2021-05-25
+
+### Added
+
+- Open certificate on clicking media ID.
+- Show store icon on PostCapture grid if from store.
+
+### Changed
+
+- Use ETH wallet signature. #692
+- Fix media height on `DetailsPage`.
+- Show loading animation on media background.
+- Bump node.js version to 16.2.0.
+
+### Fixed
+
+- Avoid screen rotation on iOS. #700
+
 ## 0.32.2 - 2021-05-21
 
 ### Fixed
