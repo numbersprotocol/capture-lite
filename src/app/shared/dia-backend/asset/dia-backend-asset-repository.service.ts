@@ -60,7 +60,7 @@ export class DiaBackendAssetRepository {
 
   private readonly postCapturesCount$ = this.list$({
     limit: 1,
-    isOriginalOwner: false,
+    orderBy: 'source_transaction',
   }).pipe(
     pluck('count'),
     repeatWhen(() => this.postCapturesUpdated$)
@@ -74,7 +74,6 @@ export class DiaBackendAssetRepository {
       first(),
       concatMap(count =>
         this.list$({
-          isOriginalOwner: false,
           orderBy: 'source_transaction',
           limit: count,
         })
