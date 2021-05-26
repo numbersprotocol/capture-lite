@@ -24,8 +24,13 @@
             *ngIf="mimeType | startsWith: 'video'"
             name="videocam"
             class="is-video"
-          ></ion-icon
-        ></ng-container>
+          ></ion-icon>
+        </ng-container>
+        <ion-icon
+          *ngIf="postCapture.source_type === 'store'"
+          name="storefront"
+          class="is-from-store"
+        ></ion-icon>
         <ion-img [src]="postCapture.asset_file_thumbnail"></ion-img>
       </mat-grid-tile>
     </mat-grid-list>

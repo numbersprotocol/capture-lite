@@ -17,7 +17,6 @@ mat-grid-list {
     div {
       width: 100%;
       height: 100%;
-      background-color: lightgray;
       overflow: hidden;
       border-radius: 4px;
 
@@ -27,6 +26,35 @@ mat-grid-list {
         object-fit: cover;
         object-position: center;
       }
+
+      .missing {
+        width: 60%;
+        height: 60%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .airdrop {
+      background-color: #a0aaff;
+    }
+
+    .common {
+      background-color: #cbd4db;
+    }
+
+    .special {
+      background-color: #c5f4ed;
+    }
+
+    .rare {
+      background-color: #ffeea9;
+    }
+
+    .legendary {
+      background-color: #ffb1b1;
     }
   }
 }

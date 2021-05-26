@@ -43,14 +43,22 @@ ion-segment {
       border-radius: 4px;
     }
 
-    ion-icon.is-video {
+    ion-icon {
       color: white;
       z-index: 10;
       position: absolute;
       opacity: 0.3;
+      font-size: 16px;
+    }
+
+    ion-icon.is-video {
       top: 8px;
       right: 8px;
-      font-size: 16px;
+    }
+
+    ion-icon.is-from-store {
+      top: 8px;
+      left: 8px;
     }
   }
 }

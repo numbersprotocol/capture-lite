@@ -73,6 +73,7 @@ export interface DiaBackendSeries {
       readonly asset_file_thumbnail: string;
       readonly collected: boolean;
     }[];
+    readonly collection_type: string;
   }[];
   readonly in_store: boolean | null;
   readonly cover_image: string | null;
