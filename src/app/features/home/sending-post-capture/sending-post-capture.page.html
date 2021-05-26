@@ -95,5 +95,13 @@
         <mat-icon>send</mat-icon>
       </div>
     </button>
+
+    <div class="checkbox">
+      <ion-checkbox
+        slot="start"
+        [(ngModel)]="shouldCreateContact"
+      ></ion-checkbox>
+      <ion-label>{{ t('addTheReceiverToContacts') }}</ion-label>
+    </div>
   </ng-container>
 </div>

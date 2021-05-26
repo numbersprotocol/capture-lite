@@ -157,12 +157,27 @@ export class DiaBackendTransactionRepository {
     );
   }
 
-  add$(assetId: string, targetEmail: string, caption: string) {
+  add$({
+    assetId,
+    targetEmail,
+    caption,
+    createContact = true,
+  }: {
+    assetId: string;
+    targetEmail: string;
+    caption: string;
+    createContact?: boolean;
+  }) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post<CreateTransactionResponse>(
           `${BASE_URL}/api/v2/transactions/`,
-          { asset_id: assetId, email: targetEmail, caption },
+          {
+            asset_id: assetId,
+            email: targetEmail,
+            caption,
+            create_contact: createContact,
+          },
           { headers }
         )
       ),

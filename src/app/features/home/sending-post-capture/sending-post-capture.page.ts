@@ -123,6 +123,8 @@ export class SendingPostCapturePage {
 
   isPreview = false;
 
+  shouldCreateContact = true;
+
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -154,11 +156,12 @@ export class SendingPostCapturePage {
     const action$ = combineLatest([this.asset$, this.receiverEmail$]).pipe(
       first(),
       switchTap(([asset, contact]) =>
-        this.diaBackendTransactionRepository.add$(
-          asset.id,
-          contact,
-          captionText
-        )
+        this.diaBackendTransactionRepository.add$({
+          assetId: asset.id,
+          targetEmail: contact,
+          caption: captionText,
+          createContact: this.shouldCreateContact,
+        })
       ),
       concatMap(([asset]) => this.removeAsset$(asset)),
       concatMapTo(defer(() => this.router.navigate(['/home']))),
