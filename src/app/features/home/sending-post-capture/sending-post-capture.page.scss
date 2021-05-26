@@ -7,6 +7,12 @@ mat-toolbar {
 .page-content {
   padding-bottom: 16px;
 
+  app-media {
+    height: 50vh;
+    object-fit: cover;
+    object-position: center;
+  }
+
   button.send-button {
     width: 90vw;
     margin-top: 16px;
