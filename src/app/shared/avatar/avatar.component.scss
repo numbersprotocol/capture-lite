@@ -7,7 +7,7 @@
   justify-content: center;
   object-fit: cover;
   object-position: center;
-  background: azure;
+  background-color: turquoise;
   border-radius: 50%;
 }
 
@@ -16,11 +16,5 @@ input {
 }
 
 mat-icon {
-  @media (prefers-color-scheme: dark) {
-    color: black;
-  }
-
-  @media (prefers-color-scheme: light) {
-    color: azure;
-  }
+  color: black;
 }

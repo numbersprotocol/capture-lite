@@ -82,7 +82,7 @@ mat-tab-group {
   flex-grow: 1;
 
   @media (prefers-color-scheme: dark) {
-    background-color: #36393f;
+    background-color: var(--capture-color-dark-background);
     color: white;
   }
 

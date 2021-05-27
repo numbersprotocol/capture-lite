@@ -6,7 +6,8 @@ mat-toolbar {
 
 .page-content {
   @media (prefers-color-scheme: dark) {
-    background-color: #36393f;
+    background-color: var(--capture-color-dark-background);
+
     mat-icon {
       color: white;
     }

@@ -4,13 +4,19 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    background-color: #36393f;
-    color: white;
+    background-color: var(--capture-color-dark-background);
+
+    div[mat-line] {
+      color: white;
+    }
   }
 
   @media (prefers-color-scheme: light) {
     background-color: white;
-    color: black;
+
+    div[mat-line] {
+      color: black;
+    }
   }
 
   span.empty-inbox {
