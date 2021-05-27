@@ -40,7 +40,7 @@ html {
 body {
   width: 100vw;
   height: 100vh;
-  background-color: #564dfc; //dark
+  background-color: var(--ion-color-primary);
   // background-image: linear-gradient(to bottom, #8EC3C3 50%, #fff 50%);
   // margin-top: 0px !important; /* Status bar height on iOS 10 */
 
@@ -76,6 +76,18 @@ mat-toolbar {
   span {
     flex-grow: 1;
     text-align: center;
+  }
+}
+
+.mat-dialog-container {
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--capture-color-dark-contrast);
+    color: white;
+  }
+
+  @media (prefers-color-scheme: light) {
+    background-color: black;
+    color: black;
   }
 }
 

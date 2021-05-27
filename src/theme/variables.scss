@@ -189,12 +189,14 @@ $app-theme: mat-light-theme(
    */
 
   body {
-    --ion-color-primary: #428cff;
-    --ion-color-primary-rgb: 66, 140, 255;
+    --capture-color-dark-background: #36393f;
+    --capture-color-dark-contrast: rgb(68, 68, 68);
+    --ion-color-primary: #564dfc;
+    --ion-color-primary-rgb: 86, 77, 252;
     --ion-color-primary-contrast: white;
     --ion-color-primary-contrast-rgb: 255, 255, 255;
-    --ion-color-primary-shade: #3a7be0;
-    --ion-color-primary-tint: #5598ff;
+    --ion-color-primary-shade: #4c44de;
+    --ion-color-primary-tint: #675ffc;
     --ion-color-secondary: #50c8ff;
     --ion-color-secondary-rgb: 80, 200, 255;
     --ion-color-secondary-contrast: white;
