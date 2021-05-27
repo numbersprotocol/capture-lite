@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.34.0 - 2021-05-27
+
+### Added
+
+- Show different background color based on collection type.
+- Implement checkbox to add PostCapture receiver to contacts.
+
+### Fixed
+
+- Avoid prefetching `DiaBackendAsset`s without `source_transaction`.
+
 ## 0.33.1 - 2021-05-26
 
 ### Fixed
