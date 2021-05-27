@@ -53,7 +53,7 @@ export class DiaBackendAssetRepository {
     new Map<string, Blob>()
   );
 
-  readonly fetchCapturesCount$ = this.list$({
+  readonly fetchOriginallyOwnedCount$ = this.list$({
     limit: 1,
     isOriginalOwner: true,
   }).pipe(pluck('count'));
@@ -104,7 +104,13 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  fetchCaptures$({ limit, offset = 0 }: { limit: number; offset?: number }) {
+  fetchOriginallyOwned$({
+    limit,
+    offset = 0,
+  }: {
+    limit: number;
+    offset?: number;
+  }) {
     return this.list$({ offset, limit, isOriginalOwner: true });
   }
 

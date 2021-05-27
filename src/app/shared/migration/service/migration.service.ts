@@ -115,7 +115,7 @@ export class MigrationService {
       const {
         results: diaBackendAssets,
       } = await this.diaBackendAssetRepository
-        .fetchCaptures$({ offset: currentOffset, limit })
+        .fetchOriginallyOwned$({ offset: currentOffset, limit })
         .toPromise();
       if (diaBackendAssets.length === 0) {
         break;

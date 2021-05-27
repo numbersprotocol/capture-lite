@@ -92,7 +92,7 @@ export class HomePage {
     this.onboardingService.isNewLogin = false;
     if (
       !(await this.onboardingService.hasPrefetchedDiaBackendAssets()) &&
-      (await this.diaBackendAssetRepository.fetchCapturesCount$
+      (await this.diaBackendAssetRepository.fetchOriginallyOwnedCount$
         .pipe(first())
         .toPromise()) > 0
     ) {

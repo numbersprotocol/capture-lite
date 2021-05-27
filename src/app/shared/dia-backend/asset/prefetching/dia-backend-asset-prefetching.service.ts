@@ -22,7 +22,7 @@ export class DiaBackendAssetPrefetchingService {
         results: diaBackendAssets,
         count: totalCount,
       } = await this.assetRepository
-        .fetchCaptures$({ offset: currentOffset, limit })
+        .fetchOriginallyOwned$({ offset: currentOffset, limit })
         .toPromise();
 
       if (diaBackendAssets.length === 0) {
@@ -30,7 +30,8 @@ export class DiaBackendAssetPrefetchingService {
       }
       await Promise.all(
         diaBackendAssets.map(async diaBackendAsset => {
-          await this.downloadingService.storeRemoteCapture(diaBackendAsset);
+          if (diaBackendAsset.source_transaction === null)
+            await this.downloadingService.storeRemoteCapture(diaBackendAsset);
           currentCount += 1;
           onStored(currentCount, totalCount);
         })
