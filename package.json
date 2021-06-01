@@ -63,7 +63,7 @@
     "@angular-eslint/schematics": "~4.2.0",
     "@angular-eslint/template-parser": "~4.2.0",
     "@angular/cli": "~11.2.8",
-    "@angular/compiler": "~11.2.9",
+    "@angular/compiler": "~12.0.2",
     "@angular/compiler-cli": "~11.2.12",
     "@angular/language-service": "~11.2.12",
     "@capacitor/cli": "~2.4.7",
