@@ -8,32 +8,61 @@
     </mat-toolbar>
     <mat-nav-list>
       <mat-list-item>
-        <a class="mat-title" routerLink="/profile" (click)="sidenav.close()" mat-list-item>
+        <a
+          class="mat-title"
+          routerLink="/profile"
+          (click)="sidenav.close()"
+          mat-list-item
+        >
           {{ t('profile') }}
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a class="mat-title" routerLink="/contacts" (click)="sidenav.close()" mat-list-item>
+        <a
+          class="mat-title"
+          routerLink="/contacts"
+          (click)="sidenav.close()"
+          mat-list-item
+        >
           {{ t('contacts') }}
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a class="mat-title" routerLink="/settings" (click)="sidenav.close()" mat-list-item>
+        <a
+          class="mat-title"
+          routerLink="/settings"
+          (click)="sidenav.close()"
+          mat-list-item
+        >
           {{ t('settings') }}
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a class="mat-title" (click)="sidenav.close(); openCaptureClub()" mat-list-item>
+        <a
+          class="mat-title"
+          (click)="sidenav.close(); openCaptureClub()"
+          mat-list-item
+        >
           CaptureClub
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a class="mat-title" routerLink="/privacy" (click)="sidenav.close()" mat-list-item>
+        <a
+          class="mat-title"
+          routerLink="/privacy"
+          (click)="sidenav.close()"
+          mat-list-item
+        >
           {{ t('privacy') }}
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a class="mat-title" routerLink="/about" (click)="sidenav.close()" mat-list-item>
+        <a
+          class="mat-title"
+          routerLink="/about"
+          (click)="sidenav.close()"
+          mat-list-item
+        >
           {{ t('about') }}
         </a>
       </mat-list-item>
@@ -49,13 +78,26 @@
         <mat-icon>history</mat-icon>
       </button>
       <button routerLink="inbox" mat-icon-button>
-        <mat-icon *ngrxLet="hasNewInbox$ as hasNewInbox" matBadge="&#8288;" [matBadgeHidden]="!hasNewInbox"
-          matBadgeSize="small" matBadgeColor="warn">
-          email</mat-icon>
+        <mat-icon
+          *ngrxLet="hasNewInbox$ as hasNewInbox"
+          matBadge="&#8288;"
+          [matBadgeHidden]="!hasNewInbox"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+        >
+          email</mat-icon
+        >
       </button>
     </mat-toolbar>
-    <mat-tab-group headerPosition="below" mat-stretch-tabs mat-align-tabs="center" backgroundColor="primary"
-      [disablePagination]="true" [(selectedIndex)]="selectedTabIndex" animationDuration="0ms">
+    <mat-tab-group
+      headerPosition="below"
+      mat-stretch-tabs
+      mat-align-tabs="center"
+      backgroundColor="primary"
+      [disablePagination]="true"
+      [(selectedIndex)]="selectedTabIndex"
+      animationDuration="0ms"
+    >
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon>apps</mat-icon>
