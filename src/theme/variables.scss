@@ -190,7 +190,7 @@ $app-theme: mat-light-theme(
 
   body {
     --capture-color-dark-background: #36393f;
-    --capture-color-dark-contrast: rgb(68, 68, 68);
+    --capture-color-dark-contrast: #444;
     --ion-color-primary: #564dfc;
     --ion-color-primary-rgb: 86, 77, 252;
     --ion-color-primary-contrast: white;
@@ -281,7 +281,7 @@ $app-theme: mat-light-theme(
     --ion-color-step-900: #e6e6e6;
     --ion-color-step-950: #f2f2f2;
     --ion-toolbar-background: #0d0d0d;
-    --ion-item-background: #36393f;
+    --ion-item-background: black;
     --ion-card-background: #1c1c1d;
   }
 
@@ -315,7 +315,7 @@ $app-theme: mat-light-theme(
     --ion-color-step-850: #dbdbdb;
     --ion-color-step-900: #e7e7e7;
     --ion-color-step-950: #f3f3f3;
-    --ion-item-background: #36393f;
+    --ion-item-background: #1e1e1e;
     --ion-toolbar-background: #1f1f1f;
     --ion-tab-bar-background: #1f1f1f;
     --ion-card-background: #1e1e1e;

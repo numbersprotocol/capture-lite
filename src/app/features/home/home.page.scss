@@ -11,12 +11,12 @@ mat-sidenav {
   width: 60%;
 
   @media (prefers-color-scheme: dark) {
-    background-color: rgb(59, 59, 59); //Dark
+    background-color: var(--capture-color-dark-background);
     color: white; //Dark
   }
 
   @media (prefers-color-scheme: light) {
-    background-color: white; //Dark
+    background-color: white;
     color: black;
   }
 }
