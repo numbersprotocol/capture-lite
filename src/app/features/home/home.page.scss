@@ -9,6 +9,46 @@ mat-sidenav-container {
 
 mat-sidenav {
   width: 60%;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--capture-color-dark-background);
+    color: white; //Dark
+  }
+
+  @media (prefers-color-scheme: light) {
+    background-color: white;
+    color: black;
+  }
+}
+
+.mat-title {
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+
+  @media (prefers-color-scheme: light) {
+    color: black;
+  }
+}
+
+.a {
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+
+  @media (prefers-color-scheme: light) {
+    color: black;
+  }
+}
+
+mat-list-item {
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+
+  @media (prefers-color-scheme: light) {
+    color: black;
+  }
 }
 
 mat-sidenav-content {
@@ -40,4 +80,14 @@ mat-tab-group {
 /* stylelint-disable-next-line selector-pseudo-element-no-unknown */
 :host ::ng-deep .mat-tab-body-wrapper {
   flex-grow: 1;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--capture-color-dark-background);
+    color: white;
+  }
+
+  @media (prefers-color-scheme: light) {
+    background-color: white; //Dark
+    color: black;
+  }
 }

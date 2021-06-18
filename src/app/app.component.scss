@@ -1,0 +1,9 @@
+ion-app {
+  @media (prefers-color-scheme: light) {
+    background-color: white;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--capture-color-dark-background);
+  }
+}
