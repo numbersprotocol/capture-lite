@@ -20,10 +20,6 @@ app-avatar {
   margin: 16px auto;
 }
 
-button.expand {
-  margin-bottom: 8px;
-}
-
 .page-content {
   @media (prefers-color-scheme: dark) {
     background-color: var(--capture-color-dark-background);
@@ -33,6 +29,11 @@ button.expand {
     }
 
     div[mat-line] {
+      color: white;
+    }
+
+    button.expand {
+      margin-bottom: 8px;
       color: white;
     }
   }
@@ -46,6 +47,10 @@ button.expand {
 
     div[mat-line] {
       color: black;
+    }
+
+    button.expand {
+      margin-bottom: 8px;
     }
   }
 }

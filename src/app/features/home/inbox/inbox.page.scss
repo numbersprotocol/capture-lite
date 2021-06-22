@@ -26,6 +26,14 @@
     align-items: center;
     justify-content: center;
     padding-top: 80px;
+
+    @media (prefers-color-scheme: dark) {
+      color: white;
+    }
+
+    @media (prefers-color-scheme: light) {
+      color: black;
+    }
   }
 
   mat-list-item {

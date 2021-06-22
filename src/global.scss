@@ -85,6 +85,24 @@ mat-toolbar {
   }
 }
 
+.mat-form-field-wrapper {
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+}
+
+.mat-form-field-empty.mat-form-field-label {
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+}
+
+.mat-form-field-underline {
+  @media (prefers-color-scheme: dark) {
+    background-color: white;
+  }
+}
+
 button.expand {
   width: calc(100vw - 16px);
   margin: 0 8px;
