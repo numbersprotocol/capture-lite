@@ -173,7 +173,7 @@ export class Proof {
 
   async isVerified() {
     const signedTargets: SignedTargets = {
-      assets: await this.getAssets(),
+      indexedAssets: this.indexedAssets,
       truth: this.truth,
     };
     const serializedSortedSignedTargets = getSerializedSortedSignedTargets(
@@ -216,7 +216,7 @@ export interface Assets {
   readonly [base64: string]: AssetMeta;
 }
 
-interface IndexedAssets extends Tuple {
+export interface IndexedAssets extends Tuple {
   readonly [index: string]: AssetMeta;
 }
 
@@ -287,11 +287,12 @@ export function isSignature(value: any): value is Signature {
 
 interface SerializedProof {
   readonly assets: Assets;
+  readonly indexedAssets?: IndexedAssets;
   readonly truth: Truth;
   readonly signatures: Signatures;
 }
 
-export type SignedTargets = Pick<SerializedProof, 'assets' | 'truth'>;
+export type SignedTargets = Pick<SerializedProof, 'indexedAssets' | 'truth'>;
 
 export function getSerializedSortedSignedTargets(signedTargets: SignedTargets) {
   return JSON.stringify(sortObjectDeeplyByKey(signedTargets as any).toJSON());

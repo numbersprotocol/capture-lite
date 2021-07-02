@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { sha256WithBase64 } from '../../utils/crypto/crypto';
 import { MediaStore } from '../media/media-store/media-store.service';
 import {
   Assets,
   getSerializedSortedSignedTargets,
+  IndexedAssets,
   Proof,
   Signatures,
   SignedTargets,
@@ -22,7 +24,11 @@ export class CollectorService {
 
   async run(assets: Assets, capturedTimestamp: number) {
     const truth = await this.collectTruth(assets, capturedTimestamp);
-    const signatures = await this.signTargets({ assets, truth });
+    const [base64, assetMeta] = Object.entries(assets)[0];
+    const indexedAssets: IndexedAssets = Object.fromEntries([
+      [await sha256WithBase64(base64), assetMeta],
+    ]);
+    const signatures = await this.signTargets({ indexedAssets, truth });
     const proof = await Proof.from(this.mediaStore, assets, truth, signatures);
     proof.isCollected = true;
     return proof;
