@@ -12,6 +12,7 @@ import {
   DefaultFactId,
   Facts,
   getSerializedSortedSignedTargets,
+  IndexedAssets,
   isFacts,
   isSignature,
   Proof,
@@ -261,10 +262,10 @@ describe('Proof utils', () => {
 
   it('should get serialized sorted SignedTargets', () => {
     const signedTargets: SignedTargets = {
-      assets: ASSETS,
+      indexedAssets: INDEXED_ASSETS,
       truth: TRUTH,
     };
-    const expected = `{"assets":{"${ASSET2_BASE64}":{"mimeType":"${ASSET2_MIMETYPE}"},"${ASSET1_BASE64}":{"mimeType":"${ASSET1_MIMETYPE}"}},"truth":{"providers":{"${CAPACITOR}":{"${DefaultFactId.DEVICE_NAME}":"${DEVICE_NAME_VALUE2}","${DefaultFactId.GEOLOCATION_LATITUDE}":${GEOLOCATION_LATITUDE2},"${DefaultFactId.GEOLOCATION_LONGITUDE}":${GEOLOCATION_LONGITUDE2},"${HUMIDITY}":${HUMIDITY_VALUE}},"${INFO_SNAPSHOT}":{"${DefaultFactId.DEVICE_NAME}":"${DEVICE_NAME_VALUE1}","${DefaultFactId.GEOLOCATION_LATITUDE}":${GEOLOCATION_LATITUDE1},"${DefaultFactId.GEOLOCATION_LONGITUDE}":${GEOLOCATION_LONGITUDE1}}},"timestamp":${TIMESTAMP}}}`;
+    const expected = `{"indexedAssets":{"${ASSET1_SHA256SUM}":{"mimeType":"${ASSET1_MIMETYPE}"},"${ASSET2_SHA256SUM}":{"mimeType":"${ASSET2_MIMETYPE}"}},"truth":{"providers":{"${CAPACITOR}":{"${DefaultFactId.DEVICE_NAME}":"${DEVICE_NAME_VALUE2}","${DefaultFactId.GEOLOCATION_LATITUDE}":${GEOLOCATION_LATITUDE2},"${DefaultFactId.GEOLOCATION_LONGITUDE}":${GEOLOCATION_LONGITUDE2},"${HUMIDITY}":${HUMIDITY_VALUE}},"${INFO_SNAPSHOT}":{"${DefaultFactId.DEVICE_NAME}":"${DEVICE_NAME_VALUE1}","${DefaultFactId.GEOLOCATION_LATITUDE}":${GEOLOCATION_LATITUDE1},"${DefaultFactId.GEOLOCATION_LONGITUDE}":${GEOLOCATION_LONGITUDE1}}},"timestamp":${TIMESTAMP}}}`;
     expect(getSerializedSortedSignedTargets(signedTargets)).toEqual(expected);
   });
 });
@@ -272,14 +273,22 @@ describe('Proof utils', () => {
 const ASSET1_MIMETYPE: MimeType = 'image/png';
 const ASSET1_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAABAaVRYdENyZWF0aW9uIFRpbWUAAAAAADIwMjDlubTljYHkuIDmnIgxMOaXpSAo6YCx5LqMKSAyMOaZgjU55YiGMzfnp5JnJvHNAAAAFUlEQVQImWM0MTH5z4AFMGETxCsBAHRhAaHOZzVQAAAAAElFTkSuQmCC';
+const ASSET1_SHA256SUM =
+  '0e87c3cdb045ae9c4a10f63cc615ee4bbf0f2ff9dca6201f045a4cb276cf3122';
 const ASSET1_META: AssetMeta = { mimeType: ASSET1_MIMETYPE };
 const ASSET2_MIMETYPE: MimeType = 'image/png';
 const ASSET2_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABHNCSVQICAgIfAhkiAAAABZJREFUCJlj/Pnz538GJMDEgAYICwAAAbkD8p660MIAAAAASUVORK5CYII=';
+const ASSET2_SHA256SUM =
+  '9ab91ffaddceb1a5952c6f4dfec0bd3f21248a4f8d12071edfa21da116b4a5a7';
 const ASSET2_META: AssetMeta = { mimeType: ASSET2_MIMETYPE };
 const ASSETS: Assets = {
   [ASSET1_BASE64]: ASSET1_META,
   [ASSET2_BASE64]: ASSET2_META,
+};
+const INDEXED_ASSETS: IndexedAssets = {
+  [ASSET1_SHA256SUM]: ASSET1_META,
+  [ASSET2_SHA256SUM]: ASSET2_META,
 };
 const INFO_SNAPSHOT = 'INFO_SNAPSHOT';
 const CAPACITOR = 'CAPACITOR';
@@ -315,8 +324,11 @@ const TRUTH_EMPTY: Truth = {
 };
 const SIGNATURE_PROVIDER_ID = 'CAPTURE';
 const VALID_SIGNATURE =
-  '0x9d7c16861f6fb8f9db61b7801463a611faa08cb7219dd6bb8a0bdf89ab34a490644f7e003935ad30e5a9daf2e51930654e9274e21e9c63095c686294e265330b1c';
-const PUBLIC_KEY = '0x482D769CaA3aaA1317281617deaF7402453fD97f';
+  '0xf05d1142c3ec087019d4b320f6596c45c297d18bce2471b1cbf49f3489081bc96a2e1db0f347c83b51f4d30b487e2d86ff5cb8b103bd0f8088308bf37ff34d3e1c';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const PRIVATE_KEY =
+  '0x8e898500c38a0398c06af6e9b7f566f1c4d98b19b47821701c774f0880bb3b9e';
+const PUBLIC_KEY = '0xcF24CfBedC5D48d958CB4824809FD39FF2B65ebe';
 const SIGNATURES_VALID: Signatures = {
   [SIGNATURE_PROVIDER_ID]: {
     signature: VALID_SIGNATURE,
