@@ -154,8 +154,8 @@ export class MediaStore {
     return defer(() => this.getThumbnail(index)).pipe(
       concatMap(thumbnail => {
         if (thumbnail) {
-          return defer(() => this.read(thumbnail.thumbnailIndex)).pipe(
-            map(base64 => toDataUrl(base64, thumbnailMimeType))
+          return defer(() =>
+            this.getUrl(thumbnail.thumbnailIndex, thumbnailMimeType)
           );
         }
         if (isVideo) {
