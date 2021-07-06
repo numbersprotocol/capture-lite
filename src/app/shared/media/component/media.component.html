@@ -1,15 +1,18 @@
-<ng-container *ngrxLet="src$ as src">
-  <img
-    decoding="async"
-    loading="lazy"
-    *ngIf="isImage$ | ngrxPush"
-    [src]="src"
-  />
-  <video
-    *ngIf="isVideo$ | ngrxPush"
-    [src]="src"
-    autoplay
-    [muted]="'muted'"
-    playsinline
-  ></video>
-</ng-container>
+<div *ngIf="isLoading$ | ngrxPush" class="loading-spinner-container">
+  <ion-spinner></ion-spinner>
+</div>
+<img
+  decoding="async"
+  loading="lazy"
+  *ngIf="isImage$ | ngrxPush"
+  [src]="src$ | ngrxPush"
+  (load)="onImageLoaded()"
+/>
+<video
+  *ngIf="isVideo$ | ngrxPush"
+  [src]="src$ | ngrxPush"
+  autoplay
+  [muted]="'muted'"
+  playsinline
+  (loadeddata)="onVideoLoaded()"
+></video>

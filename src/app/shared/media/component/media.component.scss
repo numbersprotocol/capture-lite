@@ -12,3 +12,20 @@ video {
   object-fit: inherit;
   object-position: inherit;
 }
+
+.loading-spinner-container {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  z-index: 9;
+
+  ion-spinner {
+    width: 64px;
+    height: 64px;
+    opacity: 0.5;
+
+    --color: white;
+  }
+}

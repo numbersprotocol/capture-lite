@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MimeType } from '../../../utils/mime-type';
 
@@ -11,6 +11,7 @@ import { MimeType } from '../../../utils/mime-type';
 })
 export class MediaComponent {
   readonly src$ = new ReplaySubject<SafeUrl>(1);
+  readonly isLoading$ = new BehaviorSubject<boolean>(true);
 
   @Input()
   set src(value: string | undefined) {
@@ -33,4 +34,14 @@ export class MediaComponent {
   );
 
   constructor(private readonly sanitizer: DomSanitizer) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  onImageLoaded() {
+    this.isLoading$.next(false);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  onVideoLoaded() {
+    this.isLoading$.next(false);
+  }
 }
