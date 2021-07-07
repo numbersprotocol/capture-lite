@@ -50,7 +50,7 @@ export class DiaBackendAssetDownloadingService {
     return this.mediaStore.storeThumbnail(
       diaBackendAsset.proof_hash,
       await blobToBase64(thumbnailBlob),
-      diaBackendAsset.information.proof.mimeType
+      'image/jpeg'
     );
   }
 
