@@ -151,6 +151,9 @@ export class MediaStore {
   getThumbnailUrl$(index: string, mimeType: MimeType) {
     const isVideo = mimeType.startsWith('video');
     const thumbnailMimeType = isVideo ? 'image/jpeg' : mimeType;
+    const createThumbnail$ = defer(() =>
+      this.setThumbnail(index, mimeType)
+    ).pipe(map(base64 => toDataUrl(base64, thumbnailMimeType)));
     return defer(() => this.getThumbnail(index)).pipe(
       concatMap(thumbnail => {
         if (thumbnail) {
@@ -159,15 +162,11 @@ export class MediaStore {
           );
         }
         if (isVideo) {
-          return defer(() => this.setThumbnail(index, mimeType)).pipe(
-            map(base64 => toDataUrl(base64, thumbnailMimeType))
-          );
+          return createThumbnail$;
         }
         return merge(
           defer(() => this.getUrl(index, thumbnailMimeType)),
-          defer(() => this.setThumbnail(index, thumbnailMimeType)).pipe(
-            map(base64 => toDataUrl(base64, thumbnailMimeType))
-          )
+          createThumbnail$
         );
       })
     );
@@ -175,7 +174,9 @@ export class MediaStore {
 
   private async setThumbnail(index: string, mimeType: MimeType) {
     const thumbnailBase64 = await this.makeThumbnail(index, mimeType);
-    return this.storeThumbnail(index, thumbnailBase64, mimeType);
+    const isVideo = mimeType.startsWith('video');
+    const thumbnailMimeType = isVideo ? 'image/jpeg' : mimeType;
+    return this.storeThumbnail(index, thumbnailBase64, thumbnailMimeType);
   }
 
   private async makeThumbnail(index: string, mimeType: MimeType) {
@@ -245,11 +246,28 @@ export class MediaStore {
    * directly when dealing with small image for better performance.
    */
   async getUrl(index: string, mimeType: MimeType) {
-    if (Capacitor.isNative)
+    if (Capacitor.isNative) {
+      // Workaround to fix urls (thumbnails) saved as incorrect mimeType.
+      await this.fixIncorrectExtension(index, mimeType);
       return Capacitor.convertFileSrc(await this.getUri(index));
+    }
     return URL.createObjectURL(
       await base64ToBlob(await this.readWithFileSystem(index), mimeType)
     );
+  }
+
+  private async fixIncorrectExtension(
+    index: string,
+    expectedMimeType: MimeType
+  ) {
+    const extension = await this.getExtension(index);
+    if (extension) {
+      if (fromExtension(extension) !== expectedMimeType) {
+        const base64 = await this.read(index);
+        await this._write(index, base64, expectedMimeType);
+      }
+    }
+    return index;
   }
 
   private async getExtension(index: string) {
@@ -267,7 +285,7 @@ export class MediaStore {
     return (
       await this.extensionTable.insert(
         [{ imageIndex: index, extension: toExtension(mimeType) }],
-        OnConflictStrategy.IGNORE
+        OnConflictStrategy.REPLACE
       )
     )[0];
   }
