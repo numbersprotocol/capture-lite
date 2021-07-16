@@ -197,16 +197,16 @@ export class HomePage {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async openCaptureClub() {
-    return this.diaBackendAuthService.token$
+  openCaptureClub() {
+    this.diaBackendAuthService.token$
       .pipe(
         first(),
-        switchMap(token => {
-          return Browser.open({
+        switchMap(token =>
+          Browser.open({
             url: `https://captureclub.cc/?token=${token}`,
             toolbarColor: '#564dfc',
-          });
-        }),
+          })
+        ),
         untilDestroyed(this)
       )
       .subscribe();

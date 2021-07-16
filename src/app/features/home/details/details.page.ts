@@ -6,14 +6,7 @@ import { ActionSheetController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import {
-  combineLatest,
-  defer,
-  EMPTY,
-  Observable,
-  of,
-  ReplaySubject,
-} from 'rxjs';
+import { combineLatest, defer, EMPTY, Observable, ReplaySubject } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -386,18 +379,17 @@ export class DetailsPage {
   }
 
   private openCaptureClub() {
-    return combineLatest([
-      this.activeDetailedCapture$,
+    combineLatest([
+      this.activeDetailedCapture$.pipe(
+        switchMap(
+          activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
+        ),
+        isNonNullable()
+      ),
       this.diaBackendAuthService.token$,
     ])
       .pipe(
         first(),
-        concatMap(([activeDetailedCapture, token]) =>
-          combineLatest([
-            activeDetailedCapture.diaBackendAsset$.pipe(isNonNullable()),
-            of(token),
-          ])
-        ),
         concatMap(([diaBackendAsset, token]) =>
           Browser.open({
             url: `https://captureclub.cc/asset?mid=${diaBackendAsset.id}&token=${token}`,
