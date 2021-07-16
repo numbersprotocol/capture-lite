@@ -379,16 +379,20 @@ export class DetailsPage {
   }
 
   private openCaptureClub() {
-    return this.activeDetailedCapture$
-      .pipe(
-        first(),
+    combineLatest([
+      this.activeDetailedCapture$.pipe(
         switchMap(
           activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
         ),
-        isNonNullable(),
-        concatMap(diaBackendAsset =>
+        isNonNullable()
+      ),
+      this.diaBackendAuthService.token$,
+    ])
+      .pipe(
+        first(),
+        concatMap(([diaBackendAsset, token]) =>
           Browser.open({
-            url: `https://captureclub.cc/asset?mid=${diaBackendAsset.id}`,
+            url: `https://captureclub.cc/asset?mid=${diaBackendAsset.id}&token=${token}`,
             toolbarColor: '#564dfc',
           })
         ),

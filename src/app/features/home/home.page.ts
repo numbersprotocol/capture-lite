@@ -12,6 +12,7 @@ import {
   first,
   map,
   startWith,
+  switchMap,
   tap,
 } from 'rxjs/operators';
 import { CameraService } from '../../shared/camera/camera.service';
@@ -196,10 +197,18 @@ export class HomePage {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async openCaptureClub() {
-    return Browser.open({
-      url: 'https://captureclub.cc/',
-      toolbarColor: '#564dfc',
-    });
+  openCaptureClub() {
+    this.diaBackendAuthService.token$
+      .pipe(
+        first(),
+        switchMap(token =>
+          Browser.open({
+            url: `https://captureclub.cc/?token=${token}`,
+            toolbarColor: '#564dfc',
+          })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 }
