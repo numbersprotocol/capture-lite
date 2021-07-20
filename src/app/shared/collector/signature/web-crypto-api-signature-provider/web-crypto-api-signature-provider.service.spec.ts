@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { defer } from 'rxjs';
 import { concatMapTo } from 'rxjs/operators';
 import { sortObjectDeeplyByKey } from '../../../../utils/immutable/immutable';
-import { isSignature, SignedTargets } from '../../../repositories/proof/proof';
+import { isSignature, SignedMessage } from '../../../repositories/proof/proof';
 import { SharedTestingModule } from '../../../shared-testing.module';
 import { WebCryptoApiSignatureProvider } from './web-crypto-api-signature-provider.service';
 
@@ -56,14 +56,19 @@ describe('WebCryptoApiSignatureProvider', () => {
   });
 
   it('should provide signature', async () => {
-    const signedTargets: SignedTargets = {
-      indexedAssets: {},
-      truth: { timestamp: 0, providers: {} },
+    const signedMessage: SignedMessage = {
+      spec_version: '',
+      recorder: '',
+      created_at: 0,
+      proof_hash: '',
+      asset_mime_type: '',
+      caption: '',
+      information: {},
     };
-    const serializedSortedSignedTargets = JSON.stringify(
-      sortObjectDeeplyByKey(signedTargets as any).toJSON()
+    const serializedSortedSignedMessage = JSON.stringify(
+      sortObjectDeeplyByKey(signedMessage as any).toJSON()
     );
-    const signature = await provider.provide(serializedSortedSignedTargets);
+    const signature = await provider.provide(serializedSortedSignedMessage);
 
     expect(isSignature(signature)).toBeTrue();
   });

@@ -36,7 +36,10 @@ import {
   OldSignature,
   SortedProofInformation,
 } from '../../repositories/proof/old-proof-adapter';
-import { Proof } from '../../repositories/proof/proof';
+import {
+  getSerializedSortedSignedMessage,
+  Proof,
+} from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
@@ -296,8 +299,12 @@ async function buildFormDataToCreateAsset(proof: Proof) {
   const formData = new FormData();
 
   const info = await getSortedProofInformation(proof);
+  const signedMessage = await proof.generateSignedMessage();
+  const serializedSignedMessage = getSerializedSortedSignedMessage(
+    signedMessage
+  );
   formData.set('meta', JSON.stringify(info));
-
+  formData.set('signed_metadata', serializedSignedMessage);
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
 
   const fileBase64 = Object.keys(await proof.getAssets())[0];
