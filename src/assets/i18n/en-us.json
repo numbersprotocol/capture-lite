@@ -168,7 +168,7 @@
     }
   },
   "transactionState": {
-    "accepted": "Accepted",
+    "received": "Received",
     "delivered": "Delivered",
     "returned": "Returned",
     "missed": "Returned",
