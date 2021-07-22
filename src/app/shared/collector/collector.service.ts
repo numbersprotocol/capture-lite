@@ -23,10 +23,15 @@ export class CollectorService {
   async run(assets: Assets, capturedTimestamp: number) {
     const truth = await this.collectTruth(assets, capturedTimestamp);
     const proof = await Proof.from(this.mediaStore, assets, truth);
+    await this.generateSignature(proof);
+    proof.isCollected = true;
+    return proof;
+  }
+
+  async generateSignature(proof: Proof) {
     const signedMessage = await proof.generateSignedMessage();
     const signatures = await this.signMessage(signedMessage);
     proof.setSignatures(signatures);
-    proof.isCollected = true;
     return proof;
   }
 

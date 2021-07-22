@@ -11,6 +11,9 @@ import {
   OnWriteExistStrategy,
 } from '../../media/media-store/media-store.service';
 
+const RECORDER = 'Capture';
+const SIGNATURE_VERSION = '2.0.0';
+
 export class Proof {
   static signatureProviders = new Map<string, SignatureVerifier>();
 
@@ -19,6 +22,8 @@ export class Proof {
   isCollected = false;
 
   signatures: Signatures = {};
+
+  signatureVersion?: string = undefined;
 
   get timestamp() {
     return this.truth.timestamp;
@@ -100,6 +105,7 @@ export class Proof {
     proof.setIndexedAssets(indexedProofView.indexedAssets);
     proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
     proof.isCollected = indexedProofView.isCollected ?? false;
+    proof.signatureVersion = indexedProofView.signatureVersion;
     return proof;
   }
 
@@ -140,7 +146,12 @@ export class Proof {
 
   setSignatures(signatures: Signatures) {
     this.signatures = signatures;
+    this.setSignatureVersion();
     return signatures;
+  }
+
+  setSignatureVersion() {
+    this.signatureVersion = SIGNATURE_VERSION;
   }
 
   async getId() {
@@ -191,8 +202,8 @@ export class Proof {
 
   async generateSignedMessage() {
     const signedMessage: SignedMessage = {
-      spec_version: '2.0.0',
-      recorder: 'Capture',
+      spec_version: SIGNATURE_VERSION,
+      recorder: RECORDER,
       created_at: this.truth.timestamp,
       location_latitude: this.geolocationLatitude,
       location_longitude: this.geolocationLongitude,
@@ -244,6 +255,7 @@ export class Proof {
       indexedAssets: this.indexedAssets,
       truth: this.truth,
       signatures: this.signatures,
+      signatureVersion: this.signatureVersion,
       diaBackendAssetId: this.diaBackendAssetId,
       isCollected: this.isCollected,
     };
@@ -365,6 +377,7 @@ export interface IndexedProofView extends Tuple {
   readonly indexedAssets: IndexedAssets;
   readonly truth: Truth;
   readonly signatures: Signatures;
+  readonly signatureVersion?: string;
   readonly diaBackendAssetId?: string;
   readonly isCollected?: boolean;
 }

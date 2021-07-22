@@ -27,7 +27,7 @@ import {
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { MimeType, toExtension } from '../../../utils/mime-type';
-import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
+import { isNonNullable, VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { Tuple } from '../../database/table/table';
 import {
   getOldProof,
@@ -229,6 +229,24 @@ export class DiaBackendAssetRepository {
     );
   }
 
+  updateCaptureSignature$(proof: Proof) {
+    const update$ = forkJoin([
+      defer(() => this.authService.getAuthHeaders()),
+      defer(() => buildFormDataToUpdateSignature(proof)),
+    ]).pipe(
+      concatMap(([headers, formData]) =>
+        this.httpClient.patch<UpdateAssetResponse>(
+          `${BASE_URL}/api/v2/assets/${proof.diaBackendAssetId}/`,
+          formData,
+          { headers }
+        )
+      )
+    );
+    return defer(() =>
+      iif(() => proof.diaBackendAssetId === undefined, VOID$, update$)
+    );
+  }
+
   removeCaptureById$(id: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
@@ -277,6 +295,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly asset_file_mime_type: MimeType;
   readonly information: Partial<SortedProofInformation>;
   readonly signature: OldSignature[];
+  readonly signed_metadata: string;
   readonly sharable_copy: string;
   readonly source_transaction: DiaBackendAssetTransaction | null;
   readonly parsed_meta: DiaBackendAssetParsedMeta;
@@ -291,6 +310,7 @@ export type AssetDownloadField =
   | 'sharable_copy';
 
 type CreateAssetResponse = DiaBackendAsset;
+type UpdateAssetResponse = DiaBackendAsset;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface DeleteAssetResponse {}
@@ -317,5 +337,16 @@ async function buildFormDataToCreateAsset(proof: Proof) {
 
   formData.set('asset_file_mime_type', mimeType);
 
+  return formData;
+}
+
+async function buildFormDataToUpdateSignature(proof: Proof) {
+  const formData = new FormData();
+  const signedMessage = await proof.generateSignedMessage();
+  const serializedSignedMessage = getSerializedSortedSignedMessage(
+    signedMessage
+  );
+  formData.set('signed_metadata', serializedSignedMessage);
+  formData.set('signature', JSON.stringify(getOldSignatures(proof)));
   return formData;
 }
