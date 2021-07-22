@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -28,6 +29,8 @@ export class ProfilePage {
   readonly email$ = this.diaBackendAuthService.email$;
   readonly publicKey$ = this.webCryptoApiSignatureProvider.publicKey$;
   readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
+  readonly phoneVerified$ = this.diaBackendAuthService.phoneVerified$;
+  readonly emailVerified$ = this.diaBackendAuthService.emailVerified$;
 
   constructor(
     private readonly database: Database,
@@ -40,8 +43,12 @@ export class ProfilePage {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     private readonly confirmAlert: ConfirmAlert,
-    private readonly alertController: AlertController
-  ) {}
+    private readonly alertController: AlertController,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
+  ) {
+    this.diaBackendAuthService.syncProfile$().subscribe();
+  }
 
   async editUsername() {
     const alert = await this.alertController.create({
@@ -75,6 +82,18 @@ export class ProfilePage {
       .run$(action$)
       .pipe(untilDestroyed(this))
       .subscribe();
+  }
+
+  async phoneVerification() {
+    return this.router.navigate(['phone-verification'], {
+      relativeTo: this.route,
+    });
+  }
+
+  async emailVerification() {
+    return this.router.navigate(['email-verification'], {
+      relativeTo: this.route,
+    });
   }
 
   async copyToClipboard(value: string) {

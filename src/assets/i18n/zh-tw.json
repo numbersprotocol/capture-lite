@@ -37,6 +37,7 @@
   "high": "高",
   "device": "設備",
   "email": "電子郵件",
+  "phone": "手機",
   "password": "密碼",
   "confirmPassword": "再次輸入密碼",
   "bringTrustIntoData": "Bring Trust Into Data",
@@ -89,6 +90,23 @@
   "notDisclosed": "未公開",
   "addTheReceiverToContacts": "新增收件人至聯絡人清單",
   ".message": "訊息",
+  "send": "發送",
+  "resend": "重新發送",
+  "resendIn": "重新發送 {{ secondsRemained }}秒",
+  "verification": {
+    "verification": "驗證",
+    "clickToVerify": "點擊驗證",
+    "phoneVerification": "手機驗證",
+    "phoneVerificationInstruction": "請檢查手機收到的六位數字驗證碼",
+    "enterPhoneNumber": "輸入手機號碼",
+    "phonePlaceHolder": "+886 請輸入國際碼",
+    "enterVerificationCode": "輸入簡訊驗證碼",
+    "verificationCodePlaceHolder": "請輸入六位數字驗證碼",
+    "emailVerification": "電子郵件驗證",
+    "emailVerificationInstruction": "驗證連結將會寄送至註冊的電子郵件地址",
+    "verify": "驗證",
+    "verified": "已驗證"
+  },
   "tutorial": {
     "switchBetween0": "切換影像與收藏模式",
     "switchBetween1": " ",
@@ -142,7 +160,8 @@
     "resetPasswordEmailSent": "重新設定密碼的連結已經寄送至您註冊的電子信箱，請開啟您的電子信箱並點擊該連結以重新設定密碼。",
     "viewSupportingVideoOnIpfs": "於 IPFS 檢視附件影片",
     "videoLimitation": "錄製的影片長度需小於 10 秒鐘。",
-    "yesIUnderstand": "我了解"
+    "yesIUnderstand": "我了解",
+    "verificationSuccess": "驗證成功"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",
@@ -164,7 +183,10 @@
     "diaBackend": {
       "user_is_not_active": "帳號未啟用。請透過您收到的帳號驗證信啟用帳號。",
       "incorrect_login_credentials": "不正確的電子郵件或密碼。",
-      "untrusted_client": "不受信任的客戶端。"
+      "untrusted_client": "不受信任的客戶端。",
+      "phone_verification_failed": "驗證碼錯誤",
+      "user_is_email_verified": "此電子郵件已驗證",
+      "user_not_found": "此電子郵件尚未註冊 Capture 帳號"
     }
   },
   "transactionState": {

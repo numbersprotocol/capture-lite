@@ -1,0 +1,41 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('verification.verification') }}</span>
+</mat-toolbar>
+<div *transloco="let t" class="page-content">
+  <h1>{{ t('verification.emailVerification') }}</h1>
+  <p>{{ t('verification.emailVerificationInstruction') }}</p>
+  <p class="email">{{ email$ | ngrxPush }}</p>
+  <button
+    *ngIf="!hasSentEmailVerification"
+    mat-stroked-button
+    type="submit"
+    class="submit-button"
+    color="primary"
+    (click)="sendEmailVerification()"
+  >
+    {{ t('send') }}
+  </button>
+  <button
+    *ngIf="secondsRemained !== 0"
+    mat-stroked-button
+    disabled="true"
+    type="submit"
+    color="primary"
+    class="submit-button"
+  >
+    {{ t('resendIn', { secondsRemained: secondsRemained }) }}
+  </button>
+  <button
+    *ngIf="secondsRemained === 0 && hasSentEmailVerification"
+    mat-stroked-button
+    type="submit"
+    color="primary"
+    class="submit-button"
+    (click)="sendEmailVerification()"
+  >
+    {{ t('resend') }}
+  </button>
+</div>
