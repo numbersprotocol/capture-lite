@@ -168,7 +168,7 @@
     }
   },
   "transactionState": {
-    "accepted": "已接收",
+    "received": "已接收",
     "delivered": "已送出",
     "returned": "已退回",
     "missed": "已退回",
