@@ -7,7 +7,15 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { combineLatest, timer } from 'rxjs';
-import { catchError, first, map, take, tap } from 'rxjs/operators';
+import {
+  catchError,
+  finalize,
+  first,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../shared/error/error.service';
@@ -31,7 +39,6 @@ export class PhoneVerificationPage {
   verificationCodeModel: verificationCodeModel = { verificationCode: '' };
   verificationCodeFields: FormlyFieldConfig[] = [];
 
-  readonly RESEND_INTERVAL: number = 60;
   hasSentPhoneVerification = false;
   secondsRemained = 0;
 
@@ -110,65 +117,69 @@ export class PhoneVerificationPage {
   }
 
   onPhoneNumberFormSubmit() {
-    const ONE_SECOND = 1000;
+    const RESEND_COOLDOWN_TICKS = 60;
+    const TICK_INTERVAL = 1000;
+    const countdown$ = timer(0, TICK_INTERVAL).pipe(
+      take(RESEND_COOLDOWN_TICKS),
+      map(tick => RESEND_COOLDOWN_TICKS - tick - 1),
+      tap(cooldown => (this.secondsRemained = cooldown)),
+      finalize(() => (this.secondsRemained = 0))
+    );
     const action$ = this.diaBackendAuthService
       .sendPhoneVerification$(this.phoneNumberModel.phoneNumber)
-      .pipe(
-        catchError((err: unknown) => this.errorService.toastError$(err)),
-        tap(() => {
-          this.hasSentPhoneVerification = true;
-          timer(0, ONE_SECOND)
-            .pipe(
-              take(this.RESEND_INTERVAL),
-              map(i => this.RESEND_INTERVAL - i - 1)
-            )
-            .subscribe(val => {
-              this.secondsRemained = val;
-            });
-        })
-      );
+      .pipe(catchError((err: unknown) => this.errorService.toastError$(err)));
     return this.blockingActionService
       .run$(action$, {
         message: this.translocoService.translate('message.pleaseWait'),
       })
-      .pipe(untilDestroyed(this))
+      .pipe(
+        tap(() => (this.hasSentPhoneVerification = true)),
+        switchMap(() => countdown$),
+        untilDestroyed(this)
+      )
       .subscribe();
   }
 
   onVerificationCodeFormSubmit() {
-    const THREE_SECONDS = 3000;
+    const CLOSE_DELAY = 3000;
+    const countdown$ = timer(CLOSE_DELAY).pipe(
+      first(),
+      finalize(() =>
+        this.router.navigate(['..'], {
+          relativeTo: this.route,
+        })
+      )
+    );
     const action$ = this.diaBackendAuthService
       .verifyPhoneVerification$(
         this.phoneNumberModel.phoneNumber,
         this.verificationCodeModel.verificationCode
       )
-      .pipe(
-        catchError((err: unknown) => this.handleVerificationError$(err)),
-        tap(() => {
-          this.snackBar.open(
-            this.translocoService.translate('message.verificationSuccess')
-          );
-          timer(THREE_SECONDS)
-            .pipe(first())
-            .subscribe(() => {
-              return this.router.navigate(['..'], {
-                relativeTo: this.route,
-              });
-            });
-        })
-      );
+      .pipe(catchError((err: unknown) => this.handleVerificationError$(err)));
     return this.blockingActionService
       .run$(action$, {
         message: this.translocoService.translate('message.pleaseWait'),
       })
-      .pipe(untilDestroyed(this))
+      .pipe(
+        tap(() =>
+          this.snackBar.open(
+            this.translocoService.translate('message.verificationSuccess')
+          )
+        ),
+        switchMap(() => countdown$),
+        untilDestroyed(this)
+      )
       .subscribe();
   }
 
   private handleVerificationError$(err: unknown) {
     if (err instanceof HttpErrorResponse) {
       const errorType = err.error.error?.type;
-      if (errorType === 'phone_verification_failed')
+      if (
+        errorType === 'phone_verification_failed' ||
+        errorType === 'phone_verification_code_expired' ||
+        errorType === 'throttled'
+      )
         return this.errorService.toastError$(
           this.translocoService.translate(`error.diaBackend.${errorType}`)
         );

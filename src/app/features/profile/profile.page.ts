@@ -46,8 +46,13 @@ export class ProfilePage {
     private readonly alertController: AlertController,
     private readonly router: Router,
     private readonly route: ActivatedRoute
-  ) {
-    this.diaBackendAuthService.syncProfile$().subscribe();
+  ) {}
+
+  ionViewWillEnter() {
+    this.diaBackendAuthService
+      .syncProfile$()
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 
   async editUsername() {

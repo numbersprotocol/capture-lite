@@ -1,8 +1,17 @@
 import { Component } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, timer } from 'rxjs';
-import { catchError, first, map, switchMap, take, tap } from 'rxjs/operators';
+import { timer } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  finalize,
+  first,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../shared/error/error.service';
@@ -16,7 +25,6 @@ import { ErrorService } from '../../../shared/error/error.service';
 export class EmailVerificationPage {
   hasSentEmailVerification = false;
   secondsRemained = 0;
-  readonly RESEND_INTERVAL: number = 60;
 
   readonly emailVerified$ = this.diaBackendAuthService.emailVerified$;
   readonly email$ = this.diaBackendAuthService.email$;
@@ -29,30 +37,30 @@ export class EmailVerificationPage {
   ) {}
 
   async sendEmailVerification() {
-    const ONE_SECOND = 1000;
-    const action$ = defer(() => this.email$).pipe(
+    const RESEND_COOLDOWN_TICKS = 60;
+    const TICK_INTERVAL = 1000;
+    const countdown$ = timer(0, TICK_INTERVAL).pipe(
+      take(RESEND_COOLDOWN_TICKS),
+      map(tick => RESEND_COOLDOWN_TICKS - tick - 1),
+      tap(cooldown => (this.secondsRemained = cooldown)),
+      finalize(() => (this.secondsRemained = 0))
+    );
+    const action$ = this.email$.pipe(
       first(),
-      switchMap(email =>
+      concatMap(email =>
         this.diaBackendAuthService.resendActivationEmail$(email)
       ),
-      catchError((err: unknown) => this.errorService.toastError$(err)),
-      tap(() => {
-        this.hasSentEmailVerification = true;
-        timer(0, ONE_SECOND)
-          .pipe(
-            take(this.RESEND_INTERVAL),
-            map(i => this.RESEND_INTERVAL - i - 1)
-          )
-          .subscribe(val => {
-            this.secondsRemained = val;
-          });
-      })
+      catchError((err: unknown) => this.errorService.toastError$(err))
     );
     return this.blockingActionService
       .run$(action$, {
         message: this.translocoService.translate('message.pleaseWait'),
       })
-      .pipe(untilDestroyed(this))
+      .pipe(
+        tap(() => (this.hasSentEmailVerification = true)),
+        switchMap(() => countdown$),
+        untilDestroyed(this)
+      )
       .subscribe();
   }
 }

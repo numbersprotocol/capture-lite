@@ -103,7 +103,7 @@
     "enterVerificationCode": "Enter SMS verification code",
     "verificationCodePlaceHolder": "Please enter 6-digit verification code",
     "emailVerification": "Email Verification",
-    "emailVerificationInstruction": "The activation link will be sent to the registered email address",
+    "emailVerificationInstruction": "Please follow the instruction from the received email to verify your email.",
     "verify": "Verfiy",
     "verified": "Verified"
   },
@@ -185,6 +185,8 @@
       "incorrect_login_credentials": "Incorrect email or password.",
       "untrusted_client": "Untrusted client.",
       "phone_verification_failed": "Incorrect verification code",
+      "phone_verification_code_expired": "The verification code has been expired",
+      "throttled": "Too frequent request",
       "user_is_email_verified": "The email address has beed verified",
       "user_not_found": "There is no account registered with the email address"
     }

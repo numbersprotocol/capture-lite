@@ -120,15 +120,7 @@ export class DiaBackendAuthService {
       })
       .pipe(
         concatMap(response => this.setToken(response.auth_token)),
-        concatMapTo(this.readUser$()),
-        concatMap(response => {
-          return forkJoin([
-            this.setUsername(response.username),
-            this.setEmail(response.email),
-            this.setPhoneVerfied(response.phone_verified),
-            this.setEmailVerfied(response.email_verified),
-          ]);
-        }),
+        concatMapTo(this.syncProfile$()),
         map(([username, _email]) => ({ username, email: _email }))
       );
   }
@@ -264,14 +256,12 @@ export class DiaBackendAuthService {
         )
       ),
       concatMapTo(this.readUser$()),
-      concatMap(response =>
-        forkJoin([this.setPhoneVerfied(response.phone_verified)])
-      )
+      concatMap(response => this.setPhoneVerfied(response.phone_verified))
     );
   }
 
   syncProfile$() {
-    return defer(() => this.readUser$()).pipe(
+    return this.readUser$().pipe(
       concatMap(response => {
         return forkJoin([
           this.setUsername(response.username),

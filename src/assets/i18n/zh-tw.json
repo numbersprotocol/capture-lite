@@ -103,7 +103,7 @@
     "enterVerificationCode": "輸入簡訊驗證碼",
     "verificationCodePlaceHolder": "請輸入六位數字驗證碼",
     "emailVerification": "電子郵件驗證",
-    "emailVerificationInstruction": "驗證連結將會寄送至註冊的電子郵件地址",
+    "emailVerificationInstruction": "請遵從收到電子郵件中的指示，完成驗證電子郵件。",
     "verify": "驗證",
     "verified": "已驗證"
   },
@@ -185,6 +185,8 @@
       "incorrect_login_credentials": "不正確的電子郵件或密碼。",
       "untrusted_client": "不受信任的客戶端。",
       "phone_verification_failed": "驗證碼錯誤",
+      "phone_verification_code_expired": "驗證碼已過期",
+      "throttled": "短時間內傳送過多請求",
       "user_is_email_verified": "此電子郵件已驗證",
       "user_not_found": "此電子郵件尚未註冊 Capture 帳號"
     }
