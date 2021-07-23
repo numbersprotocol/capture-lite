@@ -1,0 +1,79 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('verification.verification') }}</span>
+</mat-toolbar>
+<div *transloco="let t" class="page-content">
+  <h1>{{ t('verification.verification') }}</h1>
+  <p>{{ t('verification.phoneVerificationInstruction') }}</p>
+  <form [formGroup]="phoneNumberForm" (ngSubmit)="onPhoneNumberFormSubmit()">
+    <formly-form
+      [model]="phoneNumberModel"
+      [fields]="phoneNumberFields"
+      [form]="phoneNumberForm"
+    ></formly-form>
+    <button
+      *ngIf="!hasSentPhoneVerification"
+      mat-stroked-button
+      [disabled]="!phoneNumberForm.valid"
+      type="submit"
+      color="primary"
+      class="submit-button"
+    >
+      {{ t('send') }}
+    </button>
+    <button
+      *ngIf="secondsRemained !== 0"
+      mat-stroked-button
+      disabled="true"
+      type="submit"
+      color="primary"
+      class="submit-button"
+    >
+      {{ t('resendIn', { secondsRemained: secondsRemained }) }}
+    </button>
+    <button
+      *ngIf="secondsRemained === 0 && hasSentPhoneVerification"
+      mat-stroked-button
+      [disabled]="!phoneNumberForm.valid"
+      type="submit"
+      color="primary"
+      class="submit-button"
+    >
+      {{ t('resend') }}
+    </button>
+  </form>
+  <form
+    *ngIf="hasSentPhoneVerification"
+    [formGroup]="verificationCodeForm"
+    (ngSubmit)="onVerificationCodeFormSubmit()"
+  >
+    <formly-form
+      [model]="verificationCodeModel"
+      [fields]="verificationCodeFields"
+      [form]="verificationCodeForm"
+    ></formly-form>
+    <button
+      *ngIf="phoneVerified$ | ngrxPush as phoneVerified; else notVerified"
+      mat-stroked-button
+      [disabled]="true"
+      type="submit"
+      color="primary"
+      class="submit-button"
+    >
+      {{ t('verification.verified') }}
+    </button>
+    <ng-template #notVerified>
+      <button
+        mat-stroked-button
+        [disabled]="!verificationCodeForm.valid"
+        type="submit"
+        color="primary"
+        class="submit-button"
+      >
+        {{ t('verification.verify') }}
+      </button>
+    </ng-template>
+  </form>
+</div>
