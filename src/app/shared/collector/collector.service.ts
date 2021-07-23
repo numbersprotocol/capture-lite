@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { sha256WithBase64 } from '../../utils/crypto/crypto';
 import { MediaStore } from '../media/media-store/media-store.service';
 import {
   Assets,
-  getSerializedSortedSignedTargets,
-  IndexedAssets,
+  getSerializedSortedSignedMessage,
   Proof,
   Signatures,
-  SignedTargets,
+  SignedMessage,
   Truth,
 } from '../repositories/proof/proof';
 import { FactsProvider } from './facts/facts-provider';
@@ -24,13 +22,16 @@ export class CollectorService {
 
   async run(assets: Assets, capturedTimestamp: number) {
     const truth = await this.collectTruth(assets, capturedTimestamp);
-    const [base64, assetMeta] = Object.entries(assets)[0];
-    const indexedAssets: IndexedAssets = Object.fromEntries([
-      [await sha256WithBase64(base64), assetMeta],
-    ]);
-    const signatures = await this.signTargets({ indexedAssets, truth });
-    const proof = await Proof.from(this.mediaStore, assets, truth, signatures);
+    const proof = await Proof.from(this.mediaStore, assets, truth);
+    await this.generateSignature(proof);
     proof.isCollected = true;
+    return proof;
+  }
+
+  async generateSignature(proof: Proof) {
+    const signedMessage = await proof.generateSignedMessage();
+    const signatures = await this.signMessage(signedMessage);
+    proof.setSignatures(signatures);
     return proof;
   }
 
@@ -51,15 +52,15 @@ export class CollectorService {
     };
   }
 
-  private async signTargets(targets: SignedTargets): Promise<Signatures> {
-    const serializedSortedSignedTargets = getSerializedSortedSignedTargets(
-      targets
+  private async signMessage(message: SignedMessage): Promise<Signatures> {
+    const serializedSortedSignedMessage = getSerializedSortedSignedMessage(
+      message
     );
     return Object.fromEntries(
       await Promise.all(
         [...this.signatureProviders].map(async provider => [
           provider.id,
-          await provider.provide(serializedSortedSignedTargets),
+          await provider.provide(serializedSortedSignedMessage),
         ])
       )
     );
