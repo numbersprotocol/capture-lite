@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.36.0 - 2021-07-27
+
+### Added
+
+- Add phone verification and email verification feature. #781 #783
+
+- Darkmode for Android and iOS. #678 #782 #796
+
+### Changed
+
+- Generate v2 signed message and signature and migrate data when upgrading. #778 #779
+
+- Activity text `Accepted` changed to `Received`.
+
+### Fixed
+
+- iOS video recording display issue. #747
+
 ## 0.35.0 - 2021-07-16
 
 ### Added
