@@ -3,6 +3,22 @@
     margin: 36px auto 0;
   }
 
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--capture-color-dark-background);
+
+    div[mat-line] {
+      color: white;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    background-color: white;
+
+    div[mat-line] {
+      color: black;
+    }
+  }
+
   span.empty-inbox {
     display: flex;
     width: 100%;
@@ -10,6 +26,14 @@
     align-items: center;
     justify-content: center;
     padding-top: 80px;
+
+    @media (prefers-color-scheme: dark) {
+      color: white;
+    }
+
+    @media (prefers-color-scheme: light) {
+      color: black;
+    }
   }
 
   mat-list-item {
