@@ -29,7 +29,8 @@ public class MainActivity extends BridgeActivity {
   @Override
   public void onResume() {
     super.onResume();
-    setDarkMode();
+    // Disabled for Android dark mode display issue
+    // setDarkMode();
   }
 
   @Override
