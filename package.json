@@ -38,7 +38,7 @@
     "@ngneat/until-destroy": "^8.1.0",
     "@ngrx/component": "^11.1.1",
     "@ngx-formly/core": "^5.10.21",
-    "@ngx-formly/material": "^5.10.21",
+    "@ngx-formly/material": "^5.10.22",
     "@ngx-formly/schematics": "^5.10.21",
     "async-mutex": "^0.3.1",
     "buffer": "^5.7.1",
