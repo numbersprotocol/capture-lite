@@ -35,7 +35,7 @@
     "@ionic/core": "^5.6.11",
     "@ionic/pwa-elements": "^3.0.2",
     "@ngneat/transloco": "^2.22.0",
-    "@ngneat/until-destroy": "^8.1.0",
+    "@ngneat/until-destroy": "^8.1.1",
     "@ngrx/component": "^11.1.1",
     "@ngx-formly/core": "^5.10.21",
     "@ngx-formly/material": "^5.10.21",
