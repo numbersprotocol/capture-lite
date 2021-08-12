@@ -11,11 +11,13 @@ import {
   Assets,
   DefaultFactId,
   Facts,
-  getSerializedSortedSignedMessage,
+  getSerializedSortedSignedTargets,
+  IndexedAssets,
   isFacts,
   isSignature,
   Proof,
   Signatures,
+  SignedTargets,
   Truth,
 } from './proof';
 
@@ -233,16 +235,6 @@ describe('Proof', () => {
 });
 
 describe('Proof utils', () => {
-  let proof: Proof;
-  let mediaStore: MediaStore;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [SharedTestingModule],
-    });
-    mediaStore = TestBed.inject(MediaStore);
-  });
-
   it('should check is Facts', () => {
     expect(isFacts({})).toBeTrue();
     expect(isFacts(FACTS_INFO_SNAPSHOT)).toBeTrue();
@@ -268,11 +260,13 @@ describe('Proof utils', () => {
     expect(isSignature('a')).toBeFalse();
   });
 
-  it('should get serialized sorted SignedTargets', async () => {
-    proof = await Proof.from(mediaStore, ASSETS, TRUTH);
-    const signedMessage = await proof.generateSignedMessage();
-    const expected = `{"asset_mime_type":"${ASSET1_MIMETYPE}","caption":"","created_at":${TIMESTAMP},"device_name":"${DEVICE_NAME_VALUE1}","information":{"device.device_name":"${DEVICE_NAME_VALUE2}","device.humidity":0.8,"geolocation.geolocation_latitude":${GEOLOCATION_LATITUDE2},"geolocation.geolocation_longitude":${GEOLOCATION_LONGITUDE2}},"location_latitude":${GEOLOCATION_LATITUDE1},"location_longitude":${GEOLOCATION_LONGITUDE1},"proof_hash":"${ASSET1_SHA256SUM}","recorder":"Capture","spec_version":"2.0.0"}`;
-    expect(getSerializedSortedSignedMessage(signedMessage)).toEqual(expected);
+  it('should get serialized sorted SignedTargets', () => {
+    const signedTargets: SignedTargets = {
+      indexedAssets: INDEXED_ASSETS,
+      truth: TRUTH,
+    };
+    const expected = `{"indexedAssets":{"${ASSET1_SHA256SUM}":{"mimeType":"${ASSET1_MIMETYPE}"},"${ASSET2_SHA256SUM}":{"mimeType":"${ASSET2_MIMETYPE}"}},"truth":{"providers":{"${CAPACITOR}":{"${DefaultFactId.DEVICE_NAME}":"${DEVICE_NAME_VALUE2}","${DefaultFactId.GEOLOCATION_LATITUDE}":${GEOLOCATION_LATITUDE2},"${DefaultFactId.GEOLOCATION_LONGITUDE}":${GEOLOCATION_LONGITUDE2},"${HUMIDITY}":${HUMIDITY_VALUE}},"${INFO_SNAPSHOT}":{"${DefaultFactId.DEVICE_NAME}":"${DEVICE_NAME_VALUE1}","${DefaultFactId.GEOLOCATION_LATITUDE}":${GEOLOCATION_LATITUDE1},"${DefaultFactId.GEOLOCATION_LONGITUDE}":${GEOLOCATION_LONGITUDE1}}},"timestamp":${TIMESTAMP}}}`;
+    expect(getSerializedSortedSignedTargets(signedTargets)).toEqual(expected);
   });
 });
 
@@ -285,10 +279,16 @@ const ASSET1_META: AssetMeta = { mimeType: ASSET1_MIMETYPE };
 const ASSET2_MIMETYPE: MimeType = 'image/png';
 const ASSET2_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABHNCSVQICAgIfAhkiAAAABZJREFUCJlj/Pnz538GJMDEgAYICwAAAbkD8p660MIAAAAASUVORK5CYII=';
+const ASSET2_SHA256SUM =
+  '9ab91ffaddceb1a5952c6f4dfec0bd3f21248a4f8d12071edfa21da116b4a5a7';
 const ASSET2_META: AssetMeta = { mimeType: ASSET2_MIMETYPE };
 const ASSETS: Assets = {
   [ASSET1_BASE64]: ASSET1_META,
   [ASSET2_BASE64]: ASSET2_META,
+};
+const INDEXED_ASSETS: IndexedAssets = {
+  [ASSET1_SHA256SUM]: ASSET1_META,
+  [ASSET2_SHA256SUM]: ASSET2_META,
 };
 const INFO_SNAPSHOT = 'INFO_SNAPSHOT';
 const CAPACITOR = 'CAPACITOR';
@@ -324,7 +324,7 @@ const TRUTH_EMPTY: Truth = {
 };
 const SIGNATURE_PROVIDER_ID = 'CAPTURE';
 const VALID_SIGNATURE =
-  '0x79e85e5ee8722c3379d4a1a429df5756d38d68bcf6e3b8973e71d3d20348c57a0e993bec465637bf36e10c4a0a184df44ebbca63588720172f7bc64463fc8fca1c';
+  '0xf05d1142c3ec087019d4b320f6596c45c297d18bce2471b1cbf49f3489081bc96a2e1db0f347c83b51f4d30b487e2d86ff5cb8b103bd0f8088308bf37ff34d3e1c';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PRIVATE_KEY =
   '0x8e898500c38a0398c06af6e9b7f566f1c4d98b19b47821701c774f0880bb3b9e';

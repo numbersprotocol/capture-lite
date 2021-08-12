@@ -54,15 +54,12 @@ export class CameraService {
   async recordVideo(): Promise<Media> {
     return new Promise<Media>((resolve, reject) => {
       const inputElement = document.createElement('input');
-      let isFileSelected = false;
       inputElement.accept = 'video/*';
       inputElement.type = 'file';
       inputElement.setAttribute('capture', 'environment');
-      inputElement.setAttribute('hidden', 'true');
       // Safari/Webkit quirk: input element must be attached to body in order to work
       document.body.appendChild(inputElement);
       inputElement.onchange = event => {
-        isFileSelected = true;
         document.body.removeChild(inputElement);
         const file = (event.target as HTMLInputElement | null)?.files?.item(0);
         if (
@@ -78,16 +75,6 @@ export class CameraService {
             })
           );
       };
-      const delayedTime = 300;
-      window.addEventListener(
-        'focus',
-        () => {
-          setTimeout(() => {
-            if (!isFileSelected) document.body.removeChild(inputElement);
-          }, delayedTime);
-        },
-        { once: true }
-      );
       inputElement.click();
     });
   }

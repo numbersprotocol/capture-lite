@@ -75,7 +75,6 @@ export class DiaBackendAssetDownloadingService {
       },
     });
     proof.diaBackendAssetId = diaBackendAsset.id;
-    if (diaBackendAsset.signed_metadata) proof.setSignatureVersion();
     return this.proofRepository.add(proof, OnConflictStrategy.REPLACE);
   }
 }

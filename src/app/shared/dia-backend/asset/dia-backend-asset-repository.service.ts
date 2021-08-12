@@ -27,7 +27,7 @@ import {
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { MimeType, toExtension } from '../../../utils/mime-type';
-import { isNonNullable, VOID$ } from '../../../utils/rx-operators/rx-operators';
+import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { Tuple } from '../../database/table/table';
 import {
   getOldProof,
@@ -36,10 +36,7 @@ import {
   OldSignature,
   SortedProofInformation,
 } from '../../repositories/proof/old-proof-adapter';
-import {
-  getSerializedSortedSignedMessage,
-  Proof,
-} from '../../repositories/proof/proof';
+import { Proof } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
@@ -229,24 +226,6 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  updateCaptureSignature$(proof: Proof) {
-    const update$ = forkJoin([
-      defer(() => this.authService.getAuthHeaders()),
-      defer(() => buildFormDataToUpdateSignature(proof)),
-    ]).pipe(
-      concatMap(([headers, formData]) =>
-        this.httpClient.patch<UpdateAssetResponse>(
-          `${BASE_URL}/api/v2/assets/${proof.diaBackendAssetId}/`,
-          formData,
-          { headers }
-        )
-      )
-    );
-    return defer(() =>
-      iif(() => proof.diaBackendAssetId === undefined, VOID$, update$)
-    );
-  }
-
   removeCaptureById$(id: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
@@ -295,7 +274,6 @@ export interface DiaBackendAsset extends Tuple {
   readonly asset_file_mime_type: MimeType;
   readonly information: Partial<SortedProofInformation>;
   readonly signature: OldSignature[];
-  readonly signed_metadata: string;
   readonly sharable_copy: string;
   readonly source_transaction: DiaBackendAssetTransaction | null;
   readonly parsed_meta: DiaBackendAssetParsedMeta;
@@ -310,7 +288,6 @@ export type AssetDownloadField =
   | 'sharable_copy';
 
 type CreateAssetResponse = DiaBackendAsset;
-type UpdateAssetResponse = DiaBackendAsset;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface DeleteAssetResponse {}
@@ -319,12 +296,8 @@ async function buildFormDataToCreateAsset(proof: Proof) {
   const formData = new FormData();
 
   const info = await getSortedProofInformation(proof);
-  const signedMessage = await proof.generateSignedMessage();
-  const serializedSignedMessage = getSerializedSortedSignedMessage(
-    signedMessage
-  );
   formData.set('meta', JSON.stringify(info));
-  formData.set('signed_metadata', serializedSignedMessage);
+
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
 
   const fileBase64 = Object.keys(await proof.getAssets())[0];
@@ -337,16 +310,5 @@ async function buildFormDataToCreateAsset(proof: Proof) {
 
   formData.set('asset_file_mime_type', mimeType);
 
-  return formData;
-}
-
-async function buildFormDataToUpdateSignature(proof: Proof) {
-  const formData = new FormData();
-  const signedMessage = await proof.generateSignedMessage();
-  const serializedSignedMessage = getSerializedSortedSignedMessage(
-    signedMessage
-  );
-  formData.set('signed_metadata', serializedSignedMessage);
-  formData.set('signature', JSON.stringify(getOldSignatures(proof)));
   return formData;
 }
