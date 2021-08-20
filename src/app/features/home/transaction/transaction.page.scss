@@ -5,24 +5,6 @@ mat-toolbar {
 }
 
 .page-content {
-  @media (prefers-color-scheme: dark) {
-    background-color: var(--capture-color-dark-background);
-
-    div[mat-line] {
-      margin: 4px 0;
-      color: white;
-    }
-  }
-
-  @media (prefers-color-scheme: light) {
-    background-color: white;
-
-    div[mat-line] {
-      margin: 4px 0;
-      color: black;
-    }
-  }
-
   mat-spinner {
     margin: 36px auto 0;
   }

@@ -7,27 +7,6 @@ mat-toolbar {
 .page-content {
   padding: 0 0 16px;
 
-  @media (prefers-color-scheme: dark) {
-    background-color: var(--capture-color-dark-background);
-
-    .datetime {
-      color: white;
-    }
-
-    .transaction-card {
-      background-color: #444;
-      color: white;
-    }
-  }
-
-  @media (prefers-color-scheme: light) {
-    background-color: white;
-
-    .datetime {
-      color: black;
-    }
-  }
-
   .datetime {
     width: 90vw;
     margin-top: 16px;

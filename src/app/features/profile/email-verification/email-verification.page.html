@@ -10,7 +10,7 @@
   <p class="email">{{ email$ | ngrxPush }}</p>
   <button
     *ngIf="!hasSentEmailVerification"
-    mat-stroked-button
+    mat-raised-button
     type="submit"
     class="submit-button"
     color="primary"
@@ -20,7 +20,7 @@
   </button>
   <button
     *ngIf="secondsRemained !== 0"
-    mat-stroked-button
+    mat-raised-button
     disabled="true"
     type="submit"
     color="primary"
@@ -30,7 +30,7 @@
   </button>
   <button
     *ngIf="secondsRemained === 0 && hasSentEmailVerification"
-    mat-stroked-button
+    mat-raised-button
     type="submit"
     color="primary"
     class="submit-button"

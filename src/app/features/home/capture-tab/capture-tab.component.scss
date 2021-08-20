@@ -6,7 +6,6 @@
 div.mat-title {
   margin: 26px 0 0;
   font-size: medium;
-  color: white; //Dark
 }
 
 .user-card {
@@ -14,26 +13,7 @@ div.mat-title {
   padding-left: 16px;
   padding-right: 16px;
   box-shadow: none;
-
-  @media (prefers-color-scheme: dark) {
-    background-color: var(--capture-color-dark-background);
-    color: white;
-  }
-
-  @media (prefers-color-scheme: light) {
-    background-color: white;
-    color: black;
-  }
-}
-
-mat-card-subtitle {
-  @media (prefers-color-scheme: dark) {
-    color: white; //Dark
-  }
-
-  @media (prefers-color-scheme: light) {
-    color: black;
-  }
+  background-color: var(--capture-color-dark-background, white) !important;
 }
 
 .user {

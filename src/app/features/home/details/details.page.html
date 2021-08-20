@@ -57,17 +57,17 @@
         ></app-media>
         <ion-list lines="none">
           <ion-item>
-            <ion-icon name="person" color="black" slot="start"></ion-icon>
+            <ion-icon name="person" slot="start"></ion-icon>
             <ion-label>{{ detailedCapture.creator$ | ngrxPush }}</ion-label>
           </ion-item>
           <ion-item (click)="openMap()">
-            <ion-icon name="location" color="black" slot="start"></ion-icon>
+            <ion-icon name="location" slot="start"></ion-icon>
             <ion-label>
               {{ detailedCapture.locationDisplay$ | ngrxPush }}
             </ion-label>
           </ion-item>
           <ion-item>
-            <ion-icon name="time" color="black" slot="start"></ion-icon>
+            <ion-icon name="time" slot="start"></ion-icon>
             <ion-label>
               {{
                 (detailedCapture.timestamp$ | ngrxPush | date: 'long') ||
