@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-// import { App } from '@capacitor/app';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -60,23 +59,20 @@ export class AppComponent {
     this.registerIcon();
   }
 
-  setDarkMode() {
-    let dark =
+  static setDarkMode() {
+    const usedDark =
       window.navigator.userAgent.includes('AndroidDarkMode') ||
       window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.body.classList.toggle('dark', dark);
+    document.body.classList.toggle('dark', usedDark);
   }
 
   async initializeApp() {
     await this.platform.ready();
-    // App.addListener('appStateChange', (state: AppState) => {
-    //   console.log('Fuck', state.isActive);
-    // });
     await SplashScreen.hide();
-    this.setDarkMode();
-    // this.platform.resume.subscribe(() => {
-    //   this.setDarkMode();
-    // });
+    AppComponent.setDarkMode();
+    this.platform.resume.subscribe(() => {
+      AppComponent.setDarkMode();
+    });
   }
 
   private restoreAppState() {
