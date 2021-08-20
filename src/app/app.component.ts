@@ -60,19 +60,16 @@ export class AppComponent {
   }
 
   static setDarkMode() {
-    const usedDark =
+    const dark =
       window.navigator.userAgent.includes('AndroidDarkMode') ||
       window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.body.classList.toggle('dark', usedDark);
+    document.body.classList.toggle('dark', dark);
   }
 
   async initializeApp() {
     await this.platform.ready();
     await SplashScreen.hide();
     AppComponent.setDarkMode();
-    this.platform.resume.subscribe(() => {
-      AppComponent.setDarkMode();
-    });
   }
 
   private restoreAppState() {
