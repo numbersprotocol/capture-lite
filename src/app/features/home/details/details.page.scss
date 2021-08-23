@@ -5,6 +5,41 @@
 .content {
   height: 100%;
   overflow: auto;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--capture-color-dark-background);
+
+    ion-list {
+      background-color: var(--capture-color-dark-background);
+    }
+
+    item-content {
+      background-color: var(--capture-color-dark-background);
+    }
+
+    color: white;
+
+    mat-icon {
+      color: white;
+    }
+
+    div[mat-line] {
+      color: white;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    background-color: white;
+    color: black;
+
+    mat-icon {
+      color: black;
+    }
+
+    div[mat-line] {
+      color: black;
+    }
+  }
 }
 
 .swiper {

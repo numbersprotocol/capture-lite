@@ -37,6 +37,7 @@
   "high": "High",
   "device": "Device",
   "email": "Email",
+  "phone": "Phone",
   "password": "Password",
   "confirmPassword": "Confirm Password",
   "bringTrustIntoData": "Bring Trust Into Data",
@@ -89,6 +90,23 @@
   "notDisclosed": "Not Disclosed",
   "addTheReceiverToContacts": "Add the Receiver to Contacts",
   ".message": "Message",
+  "send": "Send",
+  "resend": "Re-send",
+  "resendIn": "Re-send {{ secondsRemained }}s",
+  "verification": {
+    "verification": "Verification",
+    "clickToVerify": "Click me to verify",
+    "phoneVerification": "Phone Verification",
+    "phoneVerificationInstruction": "Please check you mobile phone and get the 6-digit verification code",
+    "enterPhoneNumber": "Enter your phone number",
+    "phonePlaceHolder": "+886 Please enter international phone number",
+    "enterVerificationCode": "Enter SMS verification code",
+    "verificationCodePlaceHolder": "Please enter 6-digit verification code",
+    "emailVerification": "Email Verification",
+    "emailVerificationInstruction": "Please follow the instruction from the received email to verify your email.",
+    "verify": "Verfiy",
+    "verified": "Verified"
+  },
   "tutorial": {
     "switchBetween0": "Switch between",
     "switchBetween1": "Image view and",
@@ -142,7 +160,8 @@
     "resetPasswordEmailSent": "An email has been sent to your registered email inbox. To reset your password, please click the link in the email.",
     "viewSupportingVideoOnIpfs": "View supporting video on IPFS",
     "videoLimitation": "Capture App DOES NOT support video recording longer than 10 secs. Recording longer than 10 secs will not be saved.",
-    "yesIUnderstand": "Yes, I understand"
+    "yesIUnderstand": "Yes, I understand",
+    "verificationSuccess": "Success"
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",
@@ -164,11 +183,16 @@
     "diaBackend": {
       "user_is_not_active": "Account is not active. Please activate the account from the activation email you received.",
       "incorrect_login_credentials": "Incorrect email or password.",
-      "untrusted_client": "Untrusted client."
+      "untrusted_client": "Untrusted client.",
+      "phone_verification_failed": "Incorrect verification code",
+      "phone_verification_code_expired": "The verification code has been expired",
+      "throttled": "Too frequent request",
+      "user_is_email_verified": "The email address has beed verified",
+      "user_not_found": "There is no account registered with the email address"
     }
   },
   "transactionState": {
-    "accepted": "Accepted",
+    "received": "Received",
     "delivered": "Delivered",
     "returned": "Returned",
     "missed": "Returned",

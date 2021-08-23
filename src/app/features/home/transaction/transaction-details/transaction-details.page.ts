@@ -57,7 +57,7 @@ export async function getStatus(
   if (transaction.sender === resolvedEmail) {
     return Status.Delivered;
   }
-  return Status.Accepted;
+  return Status.Received;
 }
 
 enum Status {
@@ -66,5 +66,5 @@ enum Status {
   Returned = 'returned',
   Missed = 'missed',
   Delivered = 'delivered',
-  Accepted = 'accepted',
+  Received = 'received',
 }

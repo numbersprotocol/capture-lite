@@ -4,7 +4,9 @@
   </button>
   <span>{{ t('profile') }}</span>
 </mat-toolbar>
-<app-avatar></app-avatar>
+<div class="avatar">
+  <app-avatar></app-avatar>
+</div>
 <div *transloco="let t" class="page-content">
   <mat-list>
     <mat-list-item>
@@ -13,6 +15,68 @@
       <div mat-line>{{ username$ | ngrxPush }}</div>
       <button (click)="editUsername()" mat-icon-button>
         <mat-icon>edit</mat-icon>
+      </button>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>contact_phone</mat-icon>
+      <div mat-line>{{ t('verification.phoneVerification') }}</div>
+      <div
+        mat-line
+        *ngIf="
+          phoneVerified$ | ngrxPush as phoneVerified;
+          else phoneNotVerifiedTxt
+        "
+      >
+        {{ t('verification.verified') }}
+      </div>
+      <ng-template #phoneNotVerifiedTxt>
+        <div mat-line (click)="phoneVerification()">
+          {{ t('verification.clickToVerify') }}
+        </div>
+      </ng-template>
+      <button mat-icon-button>
+        <mat-icon
+          *ngIf="
+            phoneVerified$ | ngrxPush as phoneVerified;
+            else phoneNotVerifiedBtn
+          "
+          class="success-icon"
+          >check_circle</mat-icon
+        >
+        <ng-template #phoneNotVerifiedBtn>
+          <mat-icon class="warn-icon">error</mat-icon>
+        </ng-template>
+      </button>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>contact_mail</mat-icon>
+      <div mat-line>{{ t('verification.emailVerification') }}</div>
+      <div
+        mat-line
+        *ngIf="
+          emailVerified$ | ngrxPush as emailVerified;
+          else emailNotVerifiedTxt
+        "
+      >
+        {{ t('verification.verified') }}
+      </div>
+      <ng-template #emailNotVerifiedTxt>
+        <div mat-line (click)="emailVerification()">
+          {{ t('verification.clickToVerify') }}
+        </div>
+      </ng-template>
+      <button mat-icon-button>
+        <mat-icon
+          *ngIf="
+            emailVerified$ | ngrxPush as emailVerified;
+            else emailNotVerifiedBtn
+          "
+          class="success-icon"
+          >check_circle</mat-icon
+        >
+        <ng-template #emailNotVerifiedBtn>
+          <mat-icon class="warn-icon">error</mat-icon>
+        </ng-template>
       </button>
     </mat-list-item>
     <mat-list-item>
@@ -45,7 +109,7 @@
       </button>
     </mat-list-item>
   </mat-list>
-  <button (click)="logout()" class="expand" color="primary" mat-stroked-button>
+  <button (click)="logout()" class="expand" color="primary" mat-raised-button>
     {{ t('logout') }}
   </button>
 </div>

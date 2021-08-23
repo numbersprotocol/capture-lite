@@ -59,6 +59,14 @@ export class DiaBackendAuthService {
     repeatWhen(() => this.refreshAvatar$)
   );
 
+  readonly phoneVerified$ = this.preferences.getBoolean$(
+    PrefKeys.PHONE_VERIFIED
+  );
+
+  readonly emailVerified$ = this.preferences.getBoolean$(
+    PrefKeys.EMAIL_VERIFIED
+  );
+
   constructor(
     private readonly httpClient: HttpClient,
     private readonly languageService: LanguageService,
@@ -112,13 +120,7 @@ export class DiaBackendAuthService {
       })
       .pipe(
         concatMap(response => this.setToken(response.auth_token)),
-        concatMapTo(this.readUser$()),
-        concatMap(response =>
-          forkJoin([
-            this.setUsername(response.username),
-            this.setEmail(response.email),
-          ])
-        ),
+        concatMapTo(this.syncProfile$()),
         map(([username, _email]) => ({ username, email: _email }))
       );
   }
@@ -232,6 +234,45 @@ export class DiaBackendAuthService {
     );
   }
 
+  sendPhoneVerification$(phoneNumber: string) {
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.post<SendPhoneVerificationResponse>(
+          `${BASE_URL}/auth/users/send-phone-verification/`,
+          { phone_number: phoneNumber },
+          { headers }
+        )
+      )
+    );
+  }
+
+  verifyPhoneVerification$(phoneNumber: string, verificationCode: string) {
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.post<VerifyPhoneVerificationResponse>(
+          `${BASE_URL}/auth/users/verify-phone-verification/`,
+          { phone_number: phoneNumber, verification_code: verificationCode },
+          { headers }
+        )
+      ),
+      concatMapTo(this.readUser$()),
+      concatMap(response => this.setPhoneVerfied(response.phone_verified))
+    );
+  }
+
+  syncProfile$() {
+    return this.readUser$().pipe(
+      concatMap(response => {
+        return forkJoin([
+          this.setUsername(response.username),
+          this.setEmail(response.email),
+          this.setPhoneVerfied(response.phone_verified),
+          this.setEmailVerfied(response.email_verified),
+        ]);
+      })
+    );
+  }
+
   async hasLoggedIn() {
     await this.migrate();
     const token = await this.preferences.getString(PrefKeys.TOKEN);
@@ -273,12 +314,30 @@ export class DiaBackendAuthService {
   private async setToken(value: string) {
     return this.preferences.setString(PrefKeys.TOKEN, value);
   }
+
+  private async setPhoneVerfied(value: boolean) {
+    return this.preferences.setBoolean(PrefKeys.PHONE_VERIFIED, value);
+  }
+
+  async getPhoneVerified() {
+    return this.preferences.getBoolean(PrefKeys.PHONE_VERIFIED);
+  }
+
+  private async setEmailVerfied(value: boolean) {
+    return this.preferences.setBoolean(PrefKeys.EMAIL_VERIFIED, value);
+  }
+
+  async getEmailVerified() {
+    return this.preferences.getBoolean(PrefKeys.EMAIL_VERIFIED);
+  }
 }
 
 const enum PrefKeys {
   TOKEN = 'TOKEN',
   USERNAME = 'USERNAME',
   EMAIL = 'EMAIL',
+  EMAIL_VERIFIED = 'EMAIL_VERIFIED',
+  PHONE_VERIFIED = 'PHONE_VERIFIED',
 }
 
 interface LoginResult {
@@ -293,6 +352,8 @@ export interface LoginResponse {
 export interface ReadUserResponse {
   readonly username: string;
   readonly email: string;
+  readonly phone_verified: boolean;
+  readonly email_verified: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -306,6 +367,12 @@ interface ResendActivationEmailResponse {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ResetPasswordResponse {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface SendPhoneVerificationResponse {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface VerifyPhoneVerificationResponse {}
 
 type GetAvatarResponse = UploadAvatarResponse;
 

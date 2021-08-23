@@ -24,8 +24,30 @@ ion-segment {
   margin: 8px auto;
   flex-shrink: 0;
 
+  .segment {
+    display: initial;
+  }
+
+  .segment_dark {
+    display: none;
+  }
+
   ion-icon.segment {
     height: 40px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .segment {
+      display: none;
+    }
+
+    .segment_dark {
+      display: initial;
+    }
+
+    ion-icon.segment_dark {
+      height: 40px;
+    }
   }
 }
 

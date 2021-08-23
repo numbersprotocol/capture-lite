@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { defer } from 'rxjs';
-import { concatMap, first, pluck } from 'rxjs/operators';
+import { defer, forkJoin, iif } from 'rxjs';
+import { concatMap, defaultIfEmpty, first, map, pluck } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
+import { CollectorService } from '../../collector/collector.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -24,6 +25,7 @@ export class MigrationService {
   );
 
   constructor(
+    private readonly collectorService: CollectorService,
     private readonly dialog: MatDialog,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly networkService: NetworkService,
@@ -34,16 +36,22 @@ export class MigrationService {
   ) {}
 
   migrate$(skip?: boolean) {
-    const runMigrate$ = defer(() => this.preMigrate(skip)).pipe(
+    const runMigrateTo0_15_0$ = defer(() => this.preMigrateTo0_15_0(skip)).pipe(
       concatMap(() => this.runMigrateTo0_15_0WithProgressDialog(skip)),
       concatMap(() => this.postMigrateTo0_15_0())
     );
     return defer(() =>
       this.preferences.getBoolean(PrefKeys.TO_0_15_0, false)
-    ).pipe(concatMap(hasMigrated => (hasMigrated ? VOID$ : runMigrate$)));
+    ).pipe(
+      concatMap(hasMigratedTo0_15_0 =>
+        hasMigratedTo0_15_0 ? VOID$ : runMigrateTo0_15_0$
+      ),
+      concatMap(() => this.runMigrateFrom0_35_0$()),
+      concatMap(() => this.updatePreviousVersion())
+    );
   }
 
-  private async preMigrate(skip?: boolean) {
+  private async preMigrateTo0_15_0(skip?: boolean) {
     if (
       !skip &&
       !(await this.onboardingService.hasPrefetchedDiaBackendAssets())
@@ -54,7 +62,6 @@ export class MigrationService {
 
   private async postMigrateTo0_15_0() {
     await this.preferences.setBoolean(PrefKeys.TO_0_15_0, true);
-    await this.updatePreviousVersion();
   }
 
   private async runMigrateTo0_15_0WithProgressDialog(skip?: boolean) {
@@ -75,6 +82,47 @@ export class MigrationService {
     } finally {
       dialogRef.close();
     }
+  }
+
+  runMigrateFrom0_35_0$() {
+    const targetVersion = '0.35.0';
+    return this.preferences.getString$(PrefKeys.PREVIOUS_VERSION).pipe(
+      first(),
+      concatMap(previousVersion =>
+        iif(
+          () => isEqualOrLowerThanTargetVersion(previousVersion, targetVersion),
+          this.generateAndUpdateSignatureForUnversionedProofs$(),
+          VOID$
+        )
+      )
+    );
+  }
+
+  generateAndUpdateSignatureForUnversionedProofs$() {
+    return this.proofRepository.all$.pipe(
+      first(),
+      map(proofs => proofs.filter(proof => !proof.signatureVersion)),
+      concatMap(proofs =>
+        forkJoin(
+          proofs.map(proof => this.collectorService.generateSignature(proof))
+        ).pipe(defaultIfEmpty(proofs))
+      ),
+      concatMap(proofs =>
+        forkJoin(
+          proofs.map(proof =>
+            this.diaBackendAssetRepository.updateCaptureSignature$(proof)
+          )
+        ).pipe(
+          defaultIfEmpty(),
+          concatMap(() =>
+            this.proofRepository.update(
+              proofs,
+              (x, y) => getOldProof(x).hash === getOldProof(y).hash
+            )
+          )
+        )
+      )
+    );
   }
 
   async updatePreviousVersion() {
@@ -152,4 +200,21 @@ export class MigrationService {
 const enum PrefKeys {
   TO_0_15_0 = 'TO_0_15_0',
   PREVIOUS_VERSION = 'PREVIOUS_VERSION',
+}
+
+function isEqualOrLowerThanTargetVersion(
+  currentVersion: string | undefined,
+  targetVersion: string
+) {
+  if (!currentVersion) return true;
+  const currentVersionArray = currentVersion.split('.');
+  const targetVersionArray = targetVersion.split('.');
+  currentVersionArray.forEach((versionNumber, index) => {
+    if (versionNumber > targetVersionArray[index]) {
+      return false;
+    } else if (versionNumber < targetVersionArray[index]) {
+      return true;
+    }
+  });
+  return true;
 }

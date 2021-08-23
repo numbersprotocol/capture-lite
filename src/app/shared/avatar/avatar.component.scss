@@ -7,10 +7,14 @@
   justify-content: center;
   object-fit: cover;
   object-position: center;
-  background: azure;
+  background-color: turquoise;
   border-radius: 50%;
 }
 
 input {
   display: none;
+}
+
+mat-icon {
+  color: black;
 }

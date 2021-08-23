@@ -2,9 +2,12 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { DiaBackendAssetPrefetchingService } from '../../../../shared/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
+import { MigrationService } from '../../../../shared/migration/service/migration.service';
 import { OnboardingService } from '../../../../shared/onboarding/onboarding.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-prefetching-dialog',
   templateUrl: './prefetching-dialog.component.html',
@@ -14,13 +17,19 @@ export class PrefetchingDialogComponent {
   progress = 0;
 
   constructor(
+    private readonly alertController: AlertController,
     private readonly dialogRef: MatDialogRef<PrefetchingDialogComponent>,
     private readonly diaBackendAssetPrefetchingService: DiaBackendAssetPrefetchingService,
+    private readonly migrationService: MigrationService,
     private readonly onboardingService: OnboardingService,
-    private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService
   ) {
-    this.prefetch();
+    this.prefetch().finally(() => {
+      this.migrationService
+        .generateAndUpdateSignatureForUnversionedProofs$()
+        .pipe(untilDestroyed(this))
+        .subscribe();
+    });
   }
 
   private async prefetch() {
