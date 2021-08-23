@@ -56,7 +56,8 @@ ion-app {
 }
 
 .ion-page {
-  background-color: white;
+  color: var(--ion-text-color, black);
+  background-color: var(--capture-color-dark-background, white);
 }
 
 .page-content {
@@ -71,6 +72,10 @@ mat-toolbar {
     flex-grow: 1;
     text-align: center;
   }
+}
+
+mat-tab-body {
+  background-color: var(--capture-color-dark-background, white);
 }
 
 .mat-dialog-container {

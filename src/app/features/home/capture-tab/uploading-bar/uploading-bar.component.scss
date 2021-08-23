@@ -4,28 +4,11 @@
   justify-content: stretch;
   transition: all 1s;
 
-  @media (prefers-color-scheme: dark) {
-    background-color: #7e7e7e; //Dark
-
-    .text {
-      flex-grow: 1;
-      font-size: 0.7em;
-      margin-left: 10px;
-      margin-right: 10px;
-      color: white; //Dark
-    }
-  }
-
-  @media (prefers-color-scheme: light) {
-    background-color: gainsboro;
-
-    .text {
-      flex-grow: 1;
-      font-size: 0.7em;
-      margin-left: 10px;
-      margin-right: 10px;
-      color: darkgray;
-    }
+  .text {
+    flex-grow: 1;
+    font-size: 0.7em;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
   .spacer-text {
@@ -36,6 +19,10 @@
     margin-left: 10px;
     margin-right: 10px;
   }
+}
+
+#thin-upload-bar {
+  height: 32px;
 }
 
 .spacer {

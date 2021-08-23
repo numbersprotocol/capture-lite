@@ -10,6 +10,7 @@ import com.equimaps.capacitorblobwriter.BlobWriter;
 import java.util.ArrayList;
 import android.content.res.Configuration;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 public class MainActivity extends BridgeActivity {
   void setDarkMode() {
@@ -17,12 +18,19 @@ public class MainActivity extends BridgeActivity {
     // @reference: https://github.com/ionic-team/capacitor/discussions/1978#discussioncomment-708439
     final int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
     WebSettings webSettings = this.bridge.getWebView().getSettings();
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-        final int forceDark;
-        forceDark = nightModeFlags == Configuration.UI_MODE_NIGHT_YES
-                ? WebSettings.FORCE_DARK_ON
-                : WebSettings.FORCE_DARK_OFF;
-        webSettings.setForceDark(forceDark);
+    String darkMode = " AndroidDarkMode";
+    if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+      String userAgent = webSettings.getUserAgentString();
+      if (!userAgent.contains(darkMode)) {
+        userAgent = userAgent + darkMode;
+        webSettings.setUserAgentString(userAgent);
+      }
+    } else {
+      String userAgent = webSettings.getUserAgentString();
+      if (userAgent.contains(darkMode)) {
+        userAgent = userAgent.replace(darkMode, "");
+        webSettings.setUserAgentString(userAgent);
+      }
     }
   }
 

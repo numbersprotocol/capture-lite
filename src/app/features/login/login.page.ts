@@ -185,6 +185,7 @@ export class LoginPage {
           name: 'email',
           label: this.translocoService.translate('email'),
           type: 'email',
+          placeholder: 'Email',
         },
       ],
       buttons: [
