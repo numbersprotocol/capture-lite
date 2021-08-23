@@ -6,6 +6,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash-es';
 import { catchError, map } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import { DiaBackendAssetPrefetchingService } from '../../../shared/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { getOldProof } from '../../../shared/repositories/proof/old-proof-adapter';
@@ -37,6 +38,7 @@ export class CaptureTabComponent {
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendAssetPrefetchingService: DiaBackendAssetPrefetchingService,
     private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService,
     private readonly errorService: ErrorService,
@@ -93,5 +95,15 @@ export class CaptureTabComponent {
   // eslint-disable-next-line class-methods-use-this
   trackCaptureItem(_: number, item: Proof) {
     return getOldProof(item).hash;
+  }
+
+  async refreshCaptures(event: any) {
+    try {
+      await this.diaBackendAssetPrefetchingService.prefetch();
+    } catch (err) {
+      this.errorService.toastError$(err).subscribe();
+    } finally {
+      event.target.complete();
+    }
   }
 }

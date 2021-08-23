@@ -1,122 +1,124 @@
-<mat-sidenav-container *transloco="let t">
-  <mat-sidenav #sidenav mode="over" autoFocus="false">
-    <mat-toolbar color="primary">
-      <button (click)="sidenav.toggle()" mat-icon-button>
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <span>{{ username$ | ngrxPush }}</span>
-    </mat-toolbar>
-    <mat-nav-list>
-      <mat-list-item>
-        <a
-          class="mat-title"
-          routerLink="/profile"
-          (click)="sidenav.close()"
-          mat-list-item
-        >
-          {{ t('profile') }}
-        </a>
-      </mat-list-item>
-      <mat-list-item>
-        <a
-          class="mat-title"
-          routerLink="/contacts"
-          (click)="sidenav.close()"
-          mat-list-item
-        >
-          {{ t('contacts') }}
-        </a>
-      </mat-list-item>
-      <mat-list-item>
-        <a
-          class="mat-title"
-          routerLink="/settings"
-          (click)="sidenav.close()"
-          mat-list-item
-        >
-          {{ t('settings') }}
-        </a>
-      </mat-list-item>
-      <mat-list-item>
-        <a
-          class="mat-title"
-          (click)="sidenav.close(); openCaptureClub()"
-          mat-list-item
-        >
-          CaptureClub
-        </a>
-      </mat-list-item>
-      <mat-list-item>
-        <a
-          class="mat-title"
-          routerLink="/privacy"
-          (click)="sidenav.close()"
-          mat-list-item
-        >
-          {{ t('privacy') }}
-        </a>
-      </mat-list-item>
-      <mat-list-item>
-        <a
-          class="mat-title"
-          routerLink="/about"
-          (click)="sidenav.close()"
-          mat-list-item
-        >
-          {{ t('about') }}
-        </a>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button (click)="sidenav.toggle()" mat-icon-button>
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span class="toolbar-spacer"></span>
-      <button routerLink="transaction" mat-icon-button>
-        <mat-icon>history</mat-icon>
-      </button>
-      <button routerLink="inbox" mat-icon-button>
-        <mat-icon
-          *ngrxLet="hasNewInbox$ as hasNewInbox"
-          matBadge="&#8288;"
-          [matBadgeHidden]="!hasNewInbox"
-          matBadgeSize="small"
-          matBadgeColor="warn"
-        >
-          email</mat-icon
-        >
-      </button>
-    </mat-toolbar>
-    <mat-tab-group
-      headerPosition="below"
-      mat-stretch-tabs
-      mat-align-tabs="center"
-      backgroundColor="primary"
-      [disablePagination]="true"
-      [(selectedIndex)]="selectedTabIndex"
-      animationDuration="0ms"
-    >
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>apps</mat-icon>
-        </ng-template>
-        <app-capture-tab></app-capture-tab>
-      </mat-tab>
-      <mat-tab disabled>
-        <ng-template mat-tab-label>
-          <button mat-icon-button (click)="capture()">
-            <mat-icon class="tab-action-button-icon">camera_alt</mat-icon>
-          </button>
-        </ng-template>
-      </mat-tab>
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>move_to_inbox</mat-icon>
-        </ng-template>
-        <app-post-capture-tab></app-post-capture-tab>
-      </mat-tab>
-    </mat-tab-group>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<ion-content>
+  <mat-sidenav-container *transloco="let t">
+    <mat-sidenav #sidenav mode="over" autoFocus="false">
+      <mat-toolbar color="primary">
+        <button (click)="sidenav.toggle()" mat-icon-button>
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span>{{ username$ | ngrxPush }}</span>
+      </mat-toolbar>
+      <mat-nav-list>
+        <mat-list-item>
+          <a
+            class="mat-title"
+            routerLink="/profile"
+            (click)="sidenav.close()"
+            mat-list-item
+          >
+            {{ t('profile') }}
+          </a>
+        </mat-list-item>
+        <mat-list-item>
+          <a
+            class="mat-title"
+            routerLink="/contacts"
+            (click)="sidenav.close()"
+            mat-list-item
+          >
+            {{ t('contacts') }}
+          </a>
+        </mat-list-item>
+        <mat-list-item>
+          <a
+            class="mat-title"
+            routerLink="/settings"
+            (click)="sidenav.close()"
+            mat-list-item
+          >
+            {{ t('settings') }}
+          </a>
+        </mat-list-item>
+        <mat-list-item>
+          <a
+            class="mat-title"
+            (click)="sidenav.close(); openCaptureClub()"
+            mat-list-item
+          >
+            CaptureClub
+          </a>
+        </mat-list-item>
+        <mat-list-item>
+          <a
+            class="mat-title"
+            routerLink="/privacy"
+            (click)="sidenav.close()"
+            mat-list-item
+          >
+            {{ t('privacy') }}
+          </a>
+        </mat-list-item>
+        <mat-list-item>
+          <a
+            class="mat-title"
+            routerLink="/about"
+            (click)="sidenav.close()"
+            mat-list-item
+          >
+            {{ t('about') }}
+          </a>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-toolbar color="primary">
+        <button (click)="sidenav.toggle()" mat-icon-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span class="toolbar-spacer"></span>
+        <button routerLink="transaction" mat-icon-button>
+          <mat-icon>history</mat-icon>
+        </button>
+        <button routerLink="inbox" mat-icon-button>
+          <mat-icon
+            *ngrxLet="hasNewInbox$ as hasNewInbox"
+            matBadge="&#8288;"
+            [matBadgeHidden]="!hasNewInbox"
+            matBadgeSize="small"
+            matBadgeColor="warn"
+          >
+            email</mat-icon
+          >
+        </button>
+      </mat-toolbar>
+      <mat-tab-group
+        headerPosition="below"
+        mat-stretch-tabs
+        mat-align-tabs="center"
+        backgroundColor="primary"
+        [disablePagination]="true"
+        [(selectedIndex)]="selectedTabIndex"
+        animationDuration="0ms"
+      >
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon>apps</mat-icon>
+          </ng-template>
+          <app-capture-tab></app-capture-tab>
+        </mat-tab>
+        <mat-tab disabled>
+          <ng-template mat-tab-label>
+            <button mat-icon-button (click)="capture()">
+              <mat-icon class="tab-action-button-icon">camera_alt</mat-icon>
+            </button>
+          </ng-template>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon>move_to_inbox</mat-icon>
+          </ng-template>
+          <app-post-capture-tab></app-post-capture-tab>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ion-content>
