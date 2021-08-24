@@ -6,9 +6,7 @@
   <ng-container *ngrxLet="activeDetailedCapture$ as activeDetailedCapture">
     <button
       *ngIf="
-        (isFromSeriesPage$ | ngrxPush) === false &&
-        !activeDetailedCapture.isFromStore &&
-        activeDetailedCapture.id
+        (isFromSeriesPage$ | ngrxPush) === false && activeDetailedCapture.id
       "
       (click)="openContactSelectionDialog()"
       mat-icon-button
