@@ -193,7 +193,7 @@ $dark-theme: mat-dark-theme(
 }
 
 body.dark {
-  @include angular-material-theme($dark-theme);
+  @include angular-material-color($dark-theme);
 
   --capture-color-dark-background: #36393f;
   --capture-color-dark-contrast: #444;
