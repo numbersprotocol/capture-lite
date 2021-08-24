@@ -4,9 +4,9 @@ import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash-es';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, finalize, map } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
-import { DiaBackendAssetPrefetchingService } from '../../../shared/dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
+import { DiaBackendAsseRefreshingService } from '../../../shared/dia-backend/asset/refreshing/dia-backend-asset-refreshing.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { getOldProof } from '../../../shared/repositories/proof/old-proof-adapter';
@@ -38,7 +38,7 @@ export class CaptureTabComponent {
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly diaBackendAssetPrefetchingService: DiaBackendAssetPrefetchingService,
+    private readonly diaBackendAssetRefreshingService: DiaBackendAsseRefreshingService,
     private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService,
     private readonly errorService: ErrorService,
@@ -97,13 +97,10 @@ export class CaptureTabComponent {
     return getOldProof(item).hash;
   }
 
-  async refreshCaptures(event: any) {
-    try {
-      await this.diaBackendAssetPrefetchingService.prefetch();
-    } catch (err) {
-      this.errorService.toastError$(err).subscribe();
-    } finally {
-      event.target.complete();
-    }
+  refreshCaptures(event: Event) {
+    this.diaBackendAssetRefreshingService
+      .refresh()
+      .pipe(finalize(() => (<CustomEvent>event).detail.complete()))
+      .subscribe();
   }
 }
