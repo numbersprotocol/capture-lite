@@ -1,6 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EMPTY, forkJoin, from } from 'rxjs';
+import { EMPTY, forkJoin } from 'rxjs';
 import { catchError, concatMap, first } from 'rxjs/operators';
+import { HttpErrorCode } from '../../../error/error.service';
 import { ProofRepository } from '../../../repositories/proof/proof-repository.service';
 import { DiaBackendAssetRepository } from '../dia-backend-asset-repository.service';
 import { DiaBackendAssetPrefetchingService } from '../prefetching/dia-backend-asset-prefetching.service';
@@ -18,22 +20,24 @@ export class DiaBackendAsseRefreshingService {
   refresh() {
     return this.proofRepository.all$.pipe(
       first(),
-      concatMap(async proofs =>
+      concatMap(proofs =>
         forkJoin(
-          proofs.map(async proof =>
-            this.assetRepository
-              .fetchByProof$(proof)
-              .pipe(
-                catchError(async () => {
-                  await this.proofRepository.remove(proof);
-                  return EMPTY;
-                })
-              )
-              .subscribe()
+          proofs.map(proof =>
+            this.assetRepository.fetchByProof$(proof).pipe(
+              catchError((err: unknown) => {
+                if (
+                  err instanceof HttpErrorResponse &&
+                  err.status === HttpErrorCode.NOT_FOUND
+                ) {
+                  this.proofRepository.remove(proof);
+                }
+                return EMPTY;
+              })
+            )
           )
         )
       ),
-      concatMap(() => from(this.diaBackendAssetPrefetchingService.prefetch()))
+      concatMap(() => this.diaBackendAssetPrefetchingService.prefetch())
     );
   }
 }
