@@ -10,7 +10,6 @@ import com.equimaps.capacitorblobwriter.BlobWriter;
 import java.util.ArrayList;
 import android.content.res.Configuration;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
 
 public class MainActivity extends BridgeActivity {
   void setDarkMode() {
