@@ -1,5 +1,7 @@
-<div *ngIf="isLoading$ | ngrxPush" class="loading-spinner-container">
-  <ion-spinner></ion-spinner>
+<div class="wrapper" *ngIf="isLoading$ | ngrxPush">
+  <div class="loading-spinner-container">
+    <ion-spinner></ion-spinner>
+  </div>
 </div>
 <ng-container *ngrxLet="src$ as src">
   <img
