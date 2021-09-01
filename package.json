@@ -40,7 +40,7 @@
     "@ngx-formly/core": "^5.10.21",
     "@ngx-formly/material": "^5.10.21",
     "@ngx-formly/schematics": "^5.10.21",
-    "async-mutex": "^0.3.1",
+    "async-mutex": "^0.3.2",
     "buffer": "^5.7.1",
     "capacitor-blob-writer": "^0.2.1",
     "compressorjs": "^1.0.7",
