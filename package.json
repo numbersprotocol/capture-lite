@@ -42,7 +42,7 @@
     "@ngx-formly/schematics": "^5.10.21",
     "async-mutex": "^0.3.1",
     "buffer": "^5.7.1",
-    "capacitor-blob-writer": "^0.2.1",
+    "capacitor-blob-writer": "^0.2.4",
     "compressorjs": "^1.0.7",
     "immutable": "^4.0.0-rc.12",
     "lodash-es": "^4.17.21",
