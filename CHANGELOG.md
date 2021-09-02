@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.38.0 - 2021-08-24
+
+### Added
+
+- Allow sending PostCapture acquired from store.
+- Can pull down to refresh Capture tab to sync with backend.
+
+### Changed
+
+- Add back all changes in 0.36.0 and fixed dark mode display issue.
+
+## 0.37.0 - 2021-08-12
+
+### Changed
+
+- Revert all changes in 0.36.0
+
 ## 0.36.0 - 2021-07-27
 
 ### Added
