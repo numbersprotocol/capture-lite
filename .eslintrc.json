@@ -31,7 +31,7 @@
           }
         ],
         "class-methods-use-this": "error",
-        "no-magic-numbers": "off", // must disable the base rule as it can report incorrect errors
+        "no-magic-numbers": "off",
         "@typescript-eslint/no-magic-numbers": [
           "error",
           {
@@ -45,7 +45,9 @@
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": [
           "error",
-          { "argsIgnorePattern": "^_" }
+          {
+            "argsIgnorePattern": "^_"
+          }
         ],
         "@typescript-eslint/array-type": "error",
         "no-constant-condition": "off",
@@ -68,7 +70,9 @@
         "@typescript-eslint/prefer-ts-expect-error": "error",
         "@typescript-eslint/promise-function-async": [
           "error",
-          { "checkArrowFunctions": false }
+          {
+            "checkArrowFunctions": false
+          }
         ],
         "@typescript-eslint/member-ordering": [
           "error",
