@@ -10,9 +10,8 @@ import { IndexedProofView, Proof } from './proof';
   providedIn: 'root',
 })
 export class ProofRepository {
-  private readonly table = this.database.getTable<IndexedProofView>(
-    'ProofRepository'
-  );
+  private readonly table =
+    this.database.getTable<IndexedProofView>('ProofRepository');
 
   readonly all$ = this.table.queryAll$.pipe(
     distinctUntilChanged(isEqual),

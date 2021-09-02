@@ -89,22 +89,23 @@ export class DetailsPage {
     )
   );
 
-  private readonly fromPostCaptures$ = this.diaBackendAssetRepository.postCaptures$.pipe(
-    pluck('results'),
-    map(postCaptures =>
-      postCaptures.map(
-        p =>
-          new DetailedCapture(
-            p,
-            this.mediaStore,
-            this.diaBackendAssetRepository,
-            this.errorService,
-            this.diaBackendAuthService,
-            this.translocoService
-          )
+  private readonly fromPostCaptures$ =
+    this.diaBackendAssetRepository.postCaptures$.pipe(
+      pluck('results'),
+      map(postCaptures =>
+        postCaptures.map(
+          p =>
+            new DetailedCapture(
+              p,
+              this.mediaStore,
+              this.diaBackendAssetRepository,
+              this.errorService,
+              this.diaBackendAuthService,
+              this.translocoService
+            )
+        )
       )
-    )
-  );
+    );
 
   private readonly fromSeries$ = this.initialId$.pipe(
     isNonNullable(),
@@ -163,7 +164,8 @@ export class DetailsPage {
     distinctUntilChanged(),
     tap(
       detailedCapture =>
-        (this.informationSessionService.activatedDetailedCapture = detailedCapture)
+        (this.informationSessionService.activatedDetailedCapture =
+          detailedCapture)
     )
   );
 

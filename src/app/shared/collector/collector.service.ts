@@ -53,9 +53,8 @@ export class CollectorService {
   }
 
   private async signMessage(message: SignedMessage): Promise<Signatures> {
-    const serializedSortedSignedMessage = getSerializedSortedSignedMessage(
-      message
-    );
+    const serializedSortedSignedMessage =
+      getSerializedSortedSignedMessage(message);
     return Object.fromEntries(
       await Promise.all(
         [...this.signatureProviders].map(async provider => [

@@ -10,9 +10,8 @@ import { VersionService } from '../version/version.service';
 export class OnboardingService {
   private static readonly UNKNOWN_ONBOARDING_TIMESTAMP = 0;
 
-  private readonly preferences = this.preferenceManager.getPreferences(
-    'OnboardingService'
-  );
+  private readonly preferences =
+    this.preferenceManager.getPreferences('OnboardingService');
 
   isNewLogin = false;
 

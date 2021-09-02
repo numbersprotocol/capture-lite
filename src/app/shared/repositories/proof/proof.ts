@@ -233,9 +233,8 @@ export class Proof {
 
   async isVerified() {
     const signedMessage: SignedMessage = await this.generateSignedMessage();
-    const serializedSortedSignedMessage = getSerializedSortedSignedMessage(
-      signedMessage
-    );
+    const serializedSortedSignedMessage =
+      getSerializedSortedSignedMessage(signedMessage);
     const results = await Promise.all(
       Object.entries(this.signatures).map(([id, signature]) =>
         Proof.signatureProviders

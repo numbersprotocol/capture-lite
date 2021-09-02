@@ -20,9 +20,8 @@ import { MigratingDialogComponent } from '../migrating-dialog/migrating-dialog.c
   providedIn: 'root',
 })
 export class MigrationService {
-  private readonly preferences = this.preferenceManager.getPreferences(
-    'MigrationService'
-  );
+  private readonly preferences =
+    this.preferenceManager.getPreferences('MigrationService');
 
   constructor(
     private readonly collectorService: CollectorService,
@@ -138,7 +137,8 @@ export class MigrationService {
   }
 
   private async fetchAndUpdateDiaBackendAssetId() {
-    const allOriginallyOwnedDiaBackendAssets = await this.fetchAllOriginallyOwned();
+    const allOriginallyOwnedDiaBackendAssets =
+      await this.fetchAllOriginallyOwned();
     const allProofs = await this.proofRepository.getAll();
     const proofsToBeUpdated = allProofs
       .filter(proof => !proof.diaBackendAssetId)
@@ -160,9 +160,7 @@ export class MigrationService {
     const limit = 100;
     const ret: DiaBackendAsset[] = [];
     while (true) {
-      const {
-        results: diaBackendAssets,
-      } = await this.diaBackendAssetRepository
+      const { results: diaBackendAssets } = await this.diaBackendAssetRepository
         .fetchOriginallyOwned$({ offset: currentOffset, limit })
         .toPromise();
       if (diaBackendAssets.length === 0) {

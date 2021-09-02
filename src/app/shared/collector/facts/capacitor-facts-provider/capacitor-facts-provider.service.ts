@@ -74,7 +74,8 @@ export class CapacitorFactsProvider implements FactsProvider {
   }
 
   private async collectDeviceInfo() {
-    const isDeviceInfoCollectionEnabled = await this.isDeviceInfoCollectionEnabled();
+    const isDeviceInfoCollectionEnabled =
+      await this.isDeviceInfoCollectionEnabled();
     if (!isDeviceInfoCollectionEnabled) {
       return;
     }
@@ -84,7 +85,8 @@ export class CapacitorFactsProvider implements FactsProvider {
   private async collectLocationInfo(capturedTimestamp: number) {
     const defaultGeolocationAge = 30000;
     const defaultGeolocationTimeout = 20000;
-    const isLocationInfoCollectionEnabled = await this.isGeolocationInfoCollectionEnabled();
+    const isLocationInfoCollectionEnabled =
+      await this.isGeolocationInfoCollectionEnabled();
     if (!isLocationInfoCollectionEnabled) {
       return undefined;
     }

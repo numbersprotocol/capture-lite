@@ -18,12 +18,10 @@ export class DiaBackendAssetPrefetchingService {
     let currentCount = 0;
     const limit = 100;
     while (true) {
-      const {
-        results: diaBackendAssets,
-        count: totalCount,
-      } = await this.assetRepository
-        .fetchOriginallyOwned$({ offset: currentOffset, limit })
-        .toPromise();
+      const { results: diaBackendAssets, count: totalCount } =
+        await this.assetRepository
+          .fetchOriginallyOwned$({ offset: currentOffset, limit })
+          .toPromise();
 
       if (diaBackendAssets.length === 0) {
         break;

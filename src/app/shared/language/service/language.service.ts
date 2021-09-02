@@ -7,9 +7,8 @@ import { defaultLanguage, languages } from '../transloco/transloco-root.module';
   providedIn: 'root',
 })
 export class LanguageService {
-  private readonly preferences = this.preferenceManager.getPreferences(
-    'LanguageService'
-  );
+  private readonly preferences =
+    this.preferenceManager.getPreferences('LanguageService');
   readonly languages = languages;
   readonly defaultLanguage = defaultLanguage;
   readonly currentLanguageKey$ = this.preferences.getString$(
