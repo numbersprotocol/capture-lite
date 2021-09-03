@@ -76,6 +76,9 @@ export class HomePage {
     of(this.onboardingService.isNewLogin)
       .pipe(
         concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
+        concatMap(() =>
+          this.migrationService.createOrImportDiaBackendAssetWallet$()
+        ),
         catchError(() => VOID$),
         switchTapTo(defer(() => this.onboardingRedirect())),
         catchError((err: unknown) => this.errorService.toastError$(err)),

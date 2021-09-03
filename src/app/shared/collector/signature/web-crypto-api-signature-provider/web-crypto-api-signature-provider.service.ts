@@ -53,6 +53,11 @@ export class WebCryptoApiSignatureProvider implements SignatureProvider {
   async getPrivateKey() {
     return this.preferences.getString(PrefKeys.PRIVATE_KEY);
   }
+
+  async importKeys(publicKey: string, privateKey: string) {
+    await this.preferences.setString(PrefKeys.PUBLIC_KEY, publicKey);
+    await this.preferences.setString(PrefKeys.PRIVATE_KEY, privateKey);
+  }
 }
 
 const enum PrefKeys {

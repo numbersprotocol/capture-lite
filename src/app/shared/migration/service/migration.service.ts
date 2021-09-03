@@ -1,13 +1,24 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { defer, forkJoin, iif } from 'rxjs';
-import { concatMap, defaultIfEmpty, first, map, pluck } from 'rxjs/operators';
+import {
+  catchError,
+  concatMap,
+  defaultIfEmpty,
+  first,
+  map,
+  pluck,
+} from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { CollectorService } from '../../collector/collector.service';
+import { WebCryptoApiSignatureProvider } from '../../collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendWalletService } from '../../dia-backend/wallet/dia-backend-wallet.service';
+import { HttpErrorCode } from '../../error/error.service';
 import { NetworkService } from '../../network/network.service';
 import { OnboardingService } from '../../onboarding/onboarding.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
@@ -27,11 +38,13 @@ export class MigrationService {
     private readonly collectorService: CollectorService,
     private readonly dialog: MatDialog,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly diaBackendWalletService: DiaBackendWalletService,
     private readonly networkService: NetworkService,
     private readonly proofRepository: ProofRepository,
     private readonly preferenceManager: PreferenceManager,
     private readonly onboardingService: OnboardingService,
-    private readonly versionService: VersionService
+    private readonly versionService: VersionService,
+    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider
   ) {}
 
   migrate$(skip?: boolean) {
@@ -45,7 +58,7 @@ export class MigrationService {
       concatMap(hasMigratedTo0_15_0 =>
         hasMigratedTo0_15_0 ? VOID$ : runMigrateTo0_15_0$
       ),
-      concatMap(() => this.runMigrateFrom0_35_0$()),
+      concatMap(() => this.runMigrateFrom0_38_1$()),
       concatMap(() => this.updatePreviousVersion())
     );
   }
@@ -83,15 +96,52 @@ export class MigrationService {
     }
   }
 
-  runMigrateFrom0_35_0$() {
-    const targetVersion = '0.35.0';
+  runMigrateFrom0_38_1$() {
+    const targetVersion = '0.38.1';
     return this.preferences.getString$(PrefKeys.PREVIOUS_VERSION).pipe(
       first(),
       concatMap(previousVersion =>
         iif(
           () => isEqualOrLowerThanTargetVersion(previousVersion, targetVersion),
-          this.generateAndUpdateSignatureForUnversionedProofs$(),
+          this.migrationActions0_38_1$(),
           VOID$
+        )
+      )
+    );
+  }
+
+  migrationActions0_38_1$() {
+    return this.createOrImportDiaBackendAssetWallet$().pipe(
+      concatMap(() => this.generateAndUpdateSignatureForUnversionedProofs$())
+    );
+  }
+
+  createOrImportDiaBackendAssetWallet$() {
+    /**
+     * Deal with backend's asset wallet with the following logic:
+     * 1. If backend asset wallet already exists, replace App's keys with asset wallet's keys.
+     * 2. If not, upload App's keys to create an asset wallet.
+     */
+    return this.diaBackendWalletService.getAssetWallet$().pipe(
+      catchError((err: unknown) => {
+        if (
+          err instanceof HttpErrorResponse &&
+          err.status === HttpErrorCode.NOT_FOUND
+        ) {
+          return defer(() =>
+            this.webCryptoApiSignatureProvider.getPrivateKey()
+          ).pipe(
+            concatMap(privateKey =>
+              this.diaBackendWalletService.setAssetWallet$(privateKey)
+            )
+          );
+        }
+        throw err;
+      }),
+      concatMap(assetWallet =>
+        this.webCryptoApiSignatureProvider.importKeys(
+          assetWallet.address,
+          assetWallet.private_key
         )
       )
     );
