@@ -30,12 +30,10 @@ export class MediaStore {
   private readonly rootDir = 'ImageStore';
   private readonly mutex = new Mutex();
   private hasInitialized = false;
-  private readonly extensionTable = this.database.getTable<ImageExtension>(
-    `ImageStore_extension`
-  );
-  private readonly thumbnailTable = this.database.getTable<Thumbnail>(
-    `ImageStore_thumbnail`
-  );
+  private readonly extensionTable =
+    this.database.getTable<ImageExtension>(`ImageStore_extension`);
+  private readonly thumbnailTable =
+    this.database.getTable<Thumbnail>(`ImageStore_thumbnail`);
 
   constructor(
     @Inject(FILESYSTEM_PLUGIN)

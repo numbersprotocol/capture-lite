@@ -18,11 +18,12 @@ import { ErrorService } from '../../../shared/error/error.service';
   styleUrls: ['./inbox.page.scss'],
 })
 export class InboxPage {
-  readonly receivedTransactions$ = this.diaBackendTransactionRepository.inbox$.pipe(
-    pluck('results'),
-    catchError((err: unknown) => this.errorService.toastError$(err)),
-    shareReplay({ bufferSize: 1, refCount: true })
-  );
+  readonly receivedTransactions$ =
+    this.diaBackendTransactionRepository.inbox$.pipe(
+      pluck('results'),
+      catchError((err: unknown) => this.errorService.toastError$(err)),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
 
   readonly isFetching$ = this.diaBackendTransactionRepository.isFetching$;
 

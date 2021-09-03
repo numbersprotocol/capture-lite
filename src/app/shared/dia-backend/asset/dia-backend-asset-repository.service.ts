@@ -321,9 +321,8 @@ async function buildFormDataToCreateAsset(proof: Proof) {
 
   const info = await getSortedProofInformation(proof);
   const signedMessage = await proof.generateSignedMessage();
-  const serializedSignedMessage = getSerializedSortedSignedMessage(
-    signedMessage
-  );
+  const serializedSignedMessage =
+    getSerializedSortedSignedMessage(signedMessage);
   formData.set('meta', JSON.stringify(info));
   formData.set('signed_metadata', serializedSignedMessage);
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
@@ -344,9 +343,8 @@ async function buildFormDataToCreateAsset(proof: Proof) {
 async function buildFormDataToUpdateSignature(proof: Proof) {
   const formData = new FormData();
   const signedMessage = await proof.generateSignedMessage();
-  const serializedSignedMessage = getSerializedSortedSignedMessage(
-    signedMessage
-  );
+  const serializedSignedMessage =
+    getSerializedSortedSignedMessage(signedMessage);
   formData.set('signed_metadata', serializedSignedMessage);
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
   return formData;

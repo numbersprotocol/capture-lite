@@ -16,6 +16,11 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
+      "assert": ["node_modules/assert"],
+      "crypto": ["node_modules/crypto-browserify"],
+      "http": ["node_modules/stream-http"],
+      "https": ["node_modules/https-browserify"],
+      "os": ["node_modules/os-browserify"],
       "stream": ["node_modules/stream-browserify"],
       "process": ["node_modules/process"]
     }

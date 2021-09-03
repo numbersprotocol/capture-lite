@@ -20,7 +20,8 @@ import { Media } from '../capture/capture.service';
 })
 export class CameraService {
   private readonly killedCapturedPhotoEvent$ = new Subject<Media>();
-  readonly restoreKilledCaptureEvent$ = this.killedCapturedPhotoEvent$.asObservable();
+  readonly restoreKilledCaptureEvent$ =
+    this.killedCapturedPhotoEvent$.asObservable();
 
   constructor(
     @Inject(APP_PLUGIN)

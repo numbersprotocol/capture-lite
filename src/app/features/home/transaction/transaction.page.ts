@@ -13,16 +13,17 @@ import { getStatus } from './transaction-details/transaction-details.page';
   styleUrls: ['./transaction.page.scss'],
 })
 export class TransactionPage {
-  readonly transactionsWithStatus$ = this.diaBackendTransactionRepository.all$.pipe(
-    catchError((err: unknown) => this.errorService.toastError$(err)),
-    map(transactions =>
-      transactions.results.map(transaction => ({
-        ...transaction,
-        status: getStatus(transaction, this.diaBackendAuthService.getEmail()),
-      }))
-    ),
-    shareReplay({ bufferSize: 1, refCount: true })
-  );
+  readonly transactionsWithStatus$ =
+    this.diaBackendTransactionRepository.all$.pipe(
+      catchError((err: unknown) => this.errorService.toastError$(err)),
+      map(transactions =>
+        transactions.results.map(transaction => ({
+          ...transaction,
+          status: getStatus(transaction, this.diaBackendAuthService.getEmail()),
+        }))
+      ),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
 
   readonly isFetching$ = this.diaBackendTransactionRepository.isFetching$;
 
