@@ -100,7 +100,7 @@ export class PhoneVerificationPage {
                     type: 'input',
                     templateOptions: {
                       label: enterVerificationCodeTranslation,
-                      type: 'tel',
+                      type: 'number',
                       placeholder: verificationCodePlaceHolderTranslation,
                       required: true,
                       pattern: VERIFICATION_CODE_REGEXP,
