@@ -9,61 +9,32 @@
       </mat-toolbar>
       <mat-nav-list>
         <mat-list-item>
-          <a
-            class="mat-title"
-            routerLink="/profile"
-            (click)="sidenav.close()"
-            mat-list-item
-          >
+          <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>
             {{ t('profile') }}
           </a>
         </mat-list-item>
         <mat-list-item>
-          <a
-            class="mat-title"
-            routerLink="/contacts"
-            (click)="sidenav.close()"
-            mat-list-item
-          >
+          <a routerLink="/contacts" (click)="sidenav.close()" mat-list-item>
             {{ t('contacts') }}
           </a>
         </mat-list-item>
         <mat-list-item>
-          <a
-            class="mat-title"
-            routerLink="/settings"
-            (click)="sidenav.close()"
-            mat-list-item
-          >
+          <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>
             {{ t('settings') }}
           </a>
         </mat-list-item>
         <mat-list-item>
-          <a
-            class="mat-title"
-            (click)="sidenav.close(); openCaptureClub()"
-            mat-list-item
-          >
+          <a (click)="sidenav.close(); openCaptureClub()" mat-list-item>
             CaptureClub
           </a>
         </mat-list-item>
         <mat-list-item>
-          <a
-            class="mat-title"
-            routerLink="/privacy"
-            (click)="sidenav.close()"
-            mat-list-item
-          >
+          <a routerLink="/privacy" (click)="sidenav.close()" mat-list-item>
             {{ t('privacy') }}
           </a>
         </mat-list-item>
         <mat-list-item>
-          <a
-            class="mat-title"
-            routerLink="/about"
-            (click)="sidenav.close()"
-            mat-list-item
-          >
+          <a routerLink="/about" (click)="sidenav.close()" mat-list-item>
             {{ t('about') }}
           </a>
         </mat-list-item>
