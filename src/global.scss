@@ -78,36 +78,6 @@ mat-tab-body {
   background-color: var(--capture-color-dark-background, white);
 }
 
-.mat-dialog-container {
-  @media (prefers-color-scheme: dark) {
-    background-color: var(--capture-color-dark-contrast);
-    color: white;
-  }
-
-  @media (prefers-color-scheme: light) {
-    background-color: white;
-    color: black;
-  }
-}
-
-.mat-form-field-wrapper {
-  @media (prefers-color-scheme: dark) {
-    color: white;
-  }
-}
-
-.mat-form-field-empty.mat-form-field-label {
-  @media (prefers-color-scheme: dark) {
-    color: white;
-  }
-}
-
-.mat-form-field-underline {
-  @media (prefers-color-scheme: dark) {
-    background-color: white;
-  }
-}
-
 button.expand {
   width: calc(100vw - 16px);
   margin: 0 8px;

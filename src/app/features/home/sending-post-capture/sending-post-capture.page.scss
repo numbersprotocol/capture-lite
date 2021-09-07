@@ -7,61 +7,6 @@ mat-toolbar {
 .page-content {
   padding-bottom: 16px;
 
-  @media (prefers-color-scheme: dark) {
-    background-color: var(--capture-color-dark-background);
-
-    p {
-      background-color: var(--capture-color-dark-contrast);
-      color: white;
-    }
-
-    mat-card {
-      background-color: var(--capture-color-dark-contrast);
-      color: white;
-    }
-
-    mat-card-content {
-      background-color: var(--capture-color-dark-contrast);
-      color: white;
-    }
-
-    mat-card-title {
-      color: white;
-    }
-
-    mat-card-subtitle {
-      color: white;
-    }
-
-    textarea {
-      color: white;
-    }
-
-    mat-label {
-      color: white;
-    }
-
-    ion-label {
-      color: white;
-    }
-  }
-
-  @media (prefers-color-scheme: light) {
-    background-color: white;
-
-    textarea {
-      color: black;
-    }
-
-    mat-label {
-      color: black;
-    }
-
-    ion-label {
-      color: black;
-    }
-  }
-
   app-media {
     object-fit: cover;
     object-position: center;
