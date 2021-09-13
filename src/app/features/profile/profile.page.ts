@@ -5,13 +5,14 @@ import { Plugins } from '@capacitor/core';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, iif } from 'rxjs';
+import { defer, forkJoin, iif } from 'rxjs';
 import { catchError, concatMap, concatMapTo } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
 import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { Database } from '../../shared/database/database.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../shared/error/error.service';
 import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
@@ -31,6 +32,8 @@ export class ProfilePage {
   readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
   readonly phoneVerified$ = this.diaBackendAuthService.phoneVerified$;
   readonly emailVerified$ = this.diaBackendAuthService.emailVerified$;
+  readonly captBalance$ = this.diaBackendWalletService.captBalance$;
+  readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
 
   constructor(
     private readonly database: Database,
@@ -45,12 +48,15 @@ export class ProfilePage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly alertController: AlertController,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly diaBackendWalletService: DiaBackendWalletService
   ) {}
 
   ionViewWillEnter() {
-    this.diaBackendAuthService
-      .syncProfile$()
+    forkJoin([
+      this.diaBackendAuthService.syncProfile$(),
+      this.diaBackendWalletService.syncCaptBalance$(),
+    ])
       .pipe(untilDestroyed(this))
       .subscribe();
   }
