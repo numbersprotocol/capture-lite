@@ -54,8 +54,8 @@ export class DetailsPage {
     isNonNullable()
   );
 
-  private readonly initialId$ = this.route.paramMap.pipe(
-    map(params => params.get('id'))
+  private readonly initialCid$ = this.route.paramMap.pipe(
+    map(params => params.get('cid'))
   );
 
   private readonly initialHash$ = this.route.paramMap.pipe(
@@ -107,9 +107,9 @@ export class DetailsPage {
       )
     );
 
-  private readonly fromSeries$ = this.initialId$.pipe(
+  private readonly fromSeries$ = this.initialCid$.pipe(
     isNonNullable(),
-    switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
+    switchMap(cid => this.diaBackendAssetRepository.fetchByCid$(cid)),
     map(diaBackendAsset => [
       new DetailedCapture(
         diaBackendAsset,
@@ -123,13 +123,14 @@ export class DetailsPage {
   );
 
   readonly initialSlideIndex$ = combineLatest([
-    this.initialId$,
+    this.initialCid$,
     this.initialHash$,
     this.detailedCaptures$,
   ]).pipe(
     first(),
-    map(([initialId, initialHash, detailedCaptures]) => {
-      if (initialId) return detailedCaptures.findIndex(c => c.id === initialId);
+    map(([initialCid, initialHash, detailedCaptures]) => {
+      if (initialCid)
+        return detailedCaptures.findIndex(c => c.cid === initialCid);
       if (initialHash)
         return detailedCaptures.findIndex(c => c.hash === initialHash);
       return 0;
@@ -137,13 +138,13 @@ export class DetailsPage {
   );
 
   private readonly initializeActiveDetailedCapture$ = combineLatest([
-    this.initialId$,
+    this.initialCid$,
     this.initialHash$,
     this.detailedCaptures$,
   ]).pipe(
     first(),
-    map(([initialId, initialHash, detailedCaptures]) => {
-      if (initialId) return detailedCaptures.find(c => c.id === initialId);
+    map(([initialCid, initialHash, detailedCaptures]) => {
+      if (initialCid) return detailedCaptures.find(c => c.cid === initialCid);
       if (initialHash)
         return detailedCaptures.find(c => c.hash === initialHash);
       return undefined;
@@ -227,7 +228,7 @@ export class DetailsPage {
       .pipe(first(), untilDestroyed(this))
       .subscribe(([contact, detailedCapture]) =>
         this.router.navigate(
-          ['../sending-post-capture', { contact, id: detailedCapture.id }],
+          ['../sending-post-capture', { contact, cid: detailedCapture.cid }],
           { relativeTo: this.route }
         )
       );
@@ -408,9 +409,9 @@ export class DetailsPage {
       first(),
       switchTap(activeDetailedCapture =>
         defer(() => {
-          if (activeDetailedCapture.id) {
+          if (activeDetailedCapture.cid) {
             return this.diaBackendAssetRepository.removeCaptureById$(
-              activeDetailedCapture.id
+              activeDetailedCapture.cid
             );
           }
           return VOID$;

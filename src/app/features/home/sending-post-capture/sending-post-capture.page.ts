@@ -42,9 +42,9 @@ import {
 })
 export class SendingPostCapturePage {
   readonly asset$ = this.route.paramMap.pipe(
-    map(params => params.get('id')),
+    map(params => params.get('cid')),
     isNonNullable(),
-    switchMap(id => this.diaBackendAssetRepository.fetchById$(id)),
+    switchMap(cid => this.diaBackendAssetRepository.fetchByCid$(cid)),
     catchError((err: unknown) => this.errorService.toastError$(err)),
     shareReplay({ bufferSize: 1, refCount: true })
   );

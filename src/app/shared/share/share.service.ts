@@ -40,7 +40,7 @@ export class ShareService {
 
   private async getCaiFile(asset: DiaBackendAsset) {
     return this.diaBackendAssetRepository
-      .fetchById$(asset.id)
+      .fetchByCid$(asset.cid)
       .pipe(
         first(),
         map(diaBackendAsset => diaBackendAsset.cai_file),

@@ -46,7 +46,7 @@ export class DiaBackendSeriesRepository {
           params = params.set('collected', `${collected}`);
         }
         return this.httpClient.get<PaginatedResponse<DiaBackendSeries>>(
-          `${BASE_URL}/api/v2/series/`,
+          `${BASE_URL}/api/v3/series/`,
           { headers, params }
         );
       })
@@ -57,7 +57,7 @@ export class DiaBackendSeriesRepository {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.get<DiaBackendSeries>(
-          `${BASE_URL}/api/v2/series/${id}/`,
+          `${BASE_URL}/api/v3/series/${id}/`,
           { headers }
         )
       )
@@ -70,6 +70,7 @@ export interface DiaBackendSeries {
   readonly collections: {
     readonly assets: {
       readonly id: string;
+      readonly cid: string;
       readonly asset_file_thumbnail: string;
       readonly collected: boolean;
     }[];

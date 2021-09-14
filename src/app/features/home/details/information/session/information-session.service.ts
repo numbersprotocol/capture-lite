@@ -32,6 +32,11 @@ export class DetailedCapture {
       ? this.proofOrDiaBackendAsset.diaBackendAssetId
       : this.proofOrDiaBackendAsset.id;
 
+  readonly cid =
+    this.proofOrDiaBackendAsset instanceof Proof
+      ? this.proofOrDiaBackendAsset.cid
+      : this.proofOrDiaBackendAsset.cid;
+
   readonly hash =
     this.proofOrDiaBackendAsset instanceof Proof
       ? getOldProof(this.proofOrDiaBackendAsset).hash
@@ -42,9 +47,9 @@ export class DetailedCapture {
       const proof = this.proofOrDiaBackendAsset;
       return defer(async () => {
         const [index, meta] = Object.entries(proof.indexedAssets)[0];
-        if (!(await this.mediaStore.exists(index)) && proof.diaBackendAssetId) {
+        if (!(await this.mediaStore.exists(index)) && proof.cid) {
           const mediaBlob = await this.diaBackendAssetRepository
-            .downloadFile$({ id: proof.diaBackendAssetId, field: 'asset_file' })
+            .downloadFile$({ cid: proof.cid, field: 'asset_file' })
             .pipe(
               first(),
               catchError((err: unknown) => this.errorService.toastError$(err))

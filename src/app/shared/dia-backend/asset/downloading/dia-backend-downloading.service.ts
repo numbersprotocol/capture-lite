@@ -44,7 +44,10 @@ export class DiaBackendAssetDownloadingService {
       return;
     }
     const thumbnailBlob = await this.assetRepository
-      .downloadFile$({ id: diaBackendAsset.id, field: 'asset_file_thumbnail' })
+      .downloadFile$({
+        cid: diaBackendAsset.cid,
+        field: 'asset_file_thumbnail',
+      })
       .pipe(first())
       .toPromise();
     return this.mediaStore.storeThumbnail(
@@ -75,6 +78,7 @@ export class DiaBackendAssetDownloadingService {
       },
     });
     proof.diaBackendAssetId = diaBackendAsset.id;
+    proof.cid = diaBackendAsset.cid;
     if (diaBackendAsset.signed_metadata) proof.setSignatureVersion();
     return this.proofRepository.add(proof, OnConflictStrategy.REPLACE);
   }

@@ -61,7 +61,7 @@ export class DiaBackendContactRepository {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post<ContactDeleteResponse>(
-          `${BASE_URL}/api/v2/contacts/delete/`,
+          `${BASE_URL}/api/v3/contacts/delete/`,
           { email },
           { headers }
         )
@@ -95,7 +95,7 @@ export class DiaBackendContactRepository {
         }
 
         return this.httpClient.get<PaginatedResponse<DiaBackendContact>>(
-          `${BASE_URL}/api/v2/contacts/`,
+          `${BASE_URL}/api/v3/contacts/`,
           { headers, params }
         );
       }),

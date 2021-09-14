@@ -91,8 +91,8 @@ export class DiaBackendAssetRepository {
     private readonly authService: DiaBackendAuthService
   ) {}
 
-  fetchById$(id: string) {
-    return this.read$({ id });
+  fetchByCid$(cid: string) {
+    return this.read$({ cid });
   }
 
   fetchByProof$(proof: Proof) {
@@ -117,13 +117,13 @@ export class DiaBackendAssetRepository {
     return this.list$({ offset, limit, isOriginalOwner: true });
   }
 
-  getPostCaptureById$(id: string) {
+  getPostCaptureById$(cid: string) {
     return merge(
       this.postCapturesCache$.pipe(
-        map(postCaptures => postCaptures.results.find(p => p.id === id)),
+        map(postCaptures => postCaptures.results.find(p => p.cid === cid)),
         isNonNullable()
       ),
-      this.fetchById$(id)
+      this.fetchByCid$(cid)
     );
   }
 
@@ -134,7 +134,10 @@ export class DiaBackendAssetRepository {
         iif(
           () => !!image,
           of(image).pipe(isNonNullable()),
-          this.downloadFile$({ id: postCapture.id, field: 'asset_file' }).pipe(
+          this.downloadFile$({
+            cid: postCapture.cid,
+            field: 'asset_file',
+          }).pipe(
             first(),
             tap(blob => {
               // eslint-disable-next-line rxjs/no-subject-value
@@ -182,31 +185,31 @@ export class DiaBackendAssetRepository {
         }
 
         return this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(
-          `${BASE_URL}/api/v2/assets/`,
+          `${BASE_URL}/api/v3/assets/`,
           { headers, params }
         );
       })
     );
   }
 
-  private read$({ id }: { id: string }) {
+  private read$({ cid }: { cid: string }) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.get<DiaBackendAsset>(
-          `${BASE_URL}/api/v2/assets/${id}/`,
+          `${BASE_URL}/api/v3/assets/${cid}/`,
           { headers }
         )
       )
     );
   }
 
-  downloadFile$({ id, field }: { id: string; field: AssetDownloadField }) {
+  downloadFile$({ cid, field }: { cid: string; field: AssetDownloadField }) {
     const formData = new FormData();
     formData.append('field', field);
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post(
-          `${BASE_URL}/api/v2/assets/${id}/download/`,
+          `${BASE_URL}/api/v3/assets/${cid}/download/`,
           formData,
           { headers, responseType: 'blob' }
         )
@@ -221,7 +224,7 @@ export class DiaBackendAssetRepository {
     ]).pipe(
       concatMap(([headers, formData]) =>
         this.httpClient.post<CreateAssetResponse>(
-          `${BASE_URL}/api/v2/assets/`,
+          `${BASE_URL}/api/v3/assets/`,
           formData,
           { headers }
         )
@@ -236,7 +239,7 @@ export class DiaBackendAssetRepository {
     ]).pipe(
       concatMap(([headers, formData]) =>
         this.httpClient.patch<UpdateAssetResponse>(
-          `${BASE_URL}/api/v2/assets/${proof.diaBackendAssetId}/`,
+          `${BASE_URL}/api/v3/assets/${proof.diaBackendAssetId}/`,
           formData,
           { headers }
         )
@@ -247,11 +250,11 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  removeCaptureById$(id: string) {
+  removeCaptureById$(cid: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.delete<DeleteAssetResponse>(
-          `${BASE_URL}/api/v2/assets/${id}/`,
+          `${BASE_URL}/api/v3/assets/${cid}/`,
           { headers }
         )
       ),
@@ -286,6 +289,7 @@ export interface DiaBackendAssetParsedMeta extends Tuple {
 
 export interface DiaBackendAsset extends Tuple {
   readonly id: string;
+  readonly cid: string;
   readonly proof_hash: string;
   readonly is_original_owner: boolean;
   readonly owner: string;

@@ -19,6 +19,8 @@ export class Proof {
 
   diaBackendAssetId?: string = undefined;
 
+  cid?: string = undefined;
+
   isCollected = false;
 
   signatures: Signatures = {};
@@ -104,6 +106,7 @@ export class Proof {
     );
     proof.setIndexedAssets(indexedProofView.indexedAssets);
     proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
+    proof.cid = indexedProofView.cid;
     proof.isCollected = indexedProofView.isCollected ?? false;
     proof.signatureVersion = indexedProofView.signatureVersion;
     return proof;
@@ -256,6 +259,7 @@ export class Proof {
       signatures: this.signatures,
       signatureVersion: this.signatureVersion,
       diaBackendAssetId: this.diaBackendAssetId,
+      cid: this.cid,
       isCollected: this.isCollected,
     };
   }
@@ -378,6 +382,7 @@ export interface IndexedProofView extends Tuple {
   readonly signatures: Signatures;
   readonly signatureVersion?: string;
   readonly diaBackendAssetId?: string;
+  readonly cid?: string;
   readonly isCollected?: boolean;
 }
 
