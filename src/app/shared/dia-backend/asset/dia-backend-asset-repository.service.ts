@@ -182,7 +182,7 @@ export class DiaBackendAssetRepository {
         }
 
         return this.httpClient.get<PaginatedResponse<DiaBackendAsset>>(
-          `${BASE_URL}/api/v2/assets/`,
+          `${BASE_URL}/api/v3/assets/`,
           { headers, params }
         );
       })
@@ -193,7 +193,7 @@ export class DiaBackendAssetRepository {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.get<DiaBackendAsset>(
-          `${BASE_URL}/api/v2/assets/${id}/`,
+          `${BASE_URL}/api/v3/assets/${id}/`,
           { headers }
         )
       )
@@ -206,7 +206,7 @@ export class DiaBackendAssetRepository {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post(
-          `${BASE_URL}/api/v2/assets/${id}/download/`,
+          `${BASE_URL}/api/v3/assets/${id}/download/`,
           formData,
           { headers, responseType: 'blob' }
         )
@@ -221,7 +221,7 @@ export class DiaBackendAssetRepository {
     ]).pipe(
       concatMap(([headers, formData]) =>
         this.httpClient.post<CreateAssetResponse>(
-          `${BASE_URL}/api/v2/assets/`,
+          `${BASE_URL}/api/v3/assets/`,
           formData,
           { headers }
         )
@@ -236,7 +236,7 @@ export class DiaBackendAssetRepository {
     ]).pipe(
       concatMap(([headers, formData]) =>
         this.httpClient.patch<UpdateAssetResponse>(
-          `${BASE_URL}/api/v2/assets/${proof.diaBackendAssetId}/`,
+          `${BASE_URL}/api/v3/assets/${proof.diaBackendAssetId}/`,
           formData,
           { headers }
         )
@@ -251,7 +251,7 @@ export class DiaBackendAssetRepository {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.delete<DeleteAssetResponse>(
-          `${BASE_URL}/api/v2/assets/${id}/`,
+          `${BASE_URL}/api/v3/assets/${id}/`,
           { headers }
         )
       ),

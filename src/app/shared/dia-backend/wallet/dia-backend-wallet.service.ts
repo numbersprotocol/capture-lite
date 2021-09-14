@@ -30,7 +30,7 @@ export class DiaBackendWalletService {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         return this.httpClient.get<DiaBackendWallet>(
-          `${BASE_URL}/api/v2/wallets/asset-wallet/`,
+          `${BASE_URL}/api/v3/wallets/asset-wallet/`,
           { headers }
         );
       })
@@ -43,7 +43,7 @@ export class DiaBackendWalletService {
         const formData = new FormData();
         formData.set('private_key', privateKey);
         return this.httpClient.post<DiaBackendWallet>(
-          `${BASE_URL}/api/v2/wallets/asset-wallet/`,
+          `${BASE_URL}/api/v3/wallets/asset-wallet/`,
           formData,
           { headers }
         );
@@ -55,7 +55,7 @@ export class DiaBackendWalletService {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         return this.httpClient.get<DiaBackendWallet>(
-          `${BASE_URL}/api/v2/wallets/managed-wallet/`,
+          `${BASE_URL}/api/v3/wallets/managed-wallet/`,
           { headers }
         );
       })
