@@ -93,6 +93,7 @@
   "send": "發送",
   "resend": "重新發送",
   "resendIn": "重新發送 {{ secondsRemained }}秒",
+  "balance": "餘額",
   "verification": {
     "verification": "驗證",
     "clickToVerify": "點擊驗證",

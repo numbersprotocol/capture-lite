@@ -5,11 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### 0.38.1 - 2021-09-03
+## 0.39.1 - 2021-09-07
+
+### Fixed
+
+- Phone verification code form duplicate paste issue. #839
+- Homepage side menu display issue.
+
+## 0.39.0 - 2021-09-03
+
+### Added
+
+- Add syncing mechanism with backend asset wallet to use consistent signing keys even if App is uninstalled and resinstalled.
 
 ### Changed
 
-- Update iOS permission usage description
+- Upgrade to Angular 12 and Webpack 5.
+- Share CAI-injected photo so that photos can speak for themselves.
+  - Shared photo can be parsed by [media-reader](https://authmedia.net/media-reader) only when sharing them as "files". (e.g. sharing with gmail/gdrive, etc)
+    - iOS: Share as "saving to files" instead of "saving to photos".
+    - APPs like instagram, facebook will compress the photo and the photo can not be parsed with our [media-reader](https://authmedia.net/media-reader).
+
+### Fixed
+
+- Show capture images/videos in their original aspect instead of fixed 1:1 ratio, which will usually crop them.
+
+## 0.38.1 - 2021-09-03
+
+### Changed
+
+- Update iOS permission usage description.
 
 ## 0.38.0 - 2021-08-24
 
