@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { ActionSheetController } from '@ionic/angular';
@@ -40,7 +41,7 @@ import {
 
 SwiperCore.use([Virtual]);
 
-const { Browser } = Plugins;
+const { Browser, Clipboard } = Plugins;
 
 @UntilDestroy()
 @Component({
@@ -185,7 +186,8 @@ export class DetailsPage {
     private readonly shareService: ShareService,
     private readonly confirmAlert: ConfirmAlert,
     private readonly blockingActionService: BlockingActionService,
-    private readonly informationSessionService: InformationSessionService
+    private readonly informationSessionService: InformationSessionService,
+    private readonly snackBar: MatSnackBar
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -233,12 +235,64 @@ export class DetailsPage {
       );
   }
 
+  async copyToClipboard(value: string) {
+    await Clipboard.write({ string: value });
+    this.snackBar.open(
+      this.translocoService.translate('message.copiedToClipboard')
+    );
+  }
+
+  openShareMenu() {
+    combineLatest([
+      this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
+      this.translocoService.selectTranslateObject({
+        'message.copyIpfsAddress': null,
+        'message.shareC2paPhoto': null,
+      }),
+    ])
+      .pipe(
+        first(),
+        concatMap(
+          ([
+            diaBackendAsset,
+            [messageCopyIpfsAddress, messageShareC2paPhoto],
+          ]) =>
+            new Promise<void>(resolve => {
+              const buttons: ActionSheetButton[] = [];
+              if (diaBackendAsset?.cid) {
+                buttons.push({
+                  text: messageCopyIpfsAddress,
+                  handler: () => {
+                    const ipfsAddress = `https://ipfs.io/ipfs/${diaBackendAsset.cid}`;
+                    this.copyToClipboard(ipfsAddress);
+                    resolve();
+                  },
+                });
+              }
+              if (diaBackendAsset?.cai_file) {
+                buttons.push({
+                  text: messageShareC2paPhoto,
+                  handler: () => {
+                    this.share();
+                    resolve();
+                  },
+                });
+              }
+              this.actionSheetController
+                .create({ buttons })
+                .then(sheet => sheet.present());
+            })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
   openOptionsMenu() {
     combineLatest([
       this.activeDetailedCapture$,
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
       this.translocoService.selectTranslateObject({
-        'message.shareCapture': null,
         'message.transferCapture': null,
         'message.viewOnCaptureClub': null,
         'message.deleteCapture': null,
@@ -253,7 +307,6 @@ export class DetailsPage {
             detailedCapture,
             diaBackendAsset,
             [
-              messageShareCapture,
               messageTransferCapture,
               messageViewOnCaptureClub,
               messageDeleteCapture,
@@ -268,15 +321,6 @@ export class DetailsPage {
                   text: messageViewSupportingVideoOnIpfs,
                   handler: () => {
                     this.openIpfsSupportingVideo();
-                  },
-                });
-              }
-              if (detailedCapture.id && diaBackendAsset?.sharable_copy) {
-                buttons.push({
-                  text: messageShareCapture,
-                  handler: () => {
-                    this.share();
-                    resolve();
                   },
                 });
               }

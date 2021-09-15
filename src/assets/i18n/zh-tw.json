@@ -161,7 +161,9 @@
     "viewSupportingVideoOnIpfs": "於 IPFS 檢視附件影片",
     "videoLimitation": "錄製的影片長度需小於 10 秒鐘。",
     "yesIUnderstand": "我了解",
-    "verificationSuccess": "驗證成功"
+    "verificationSuccess": "驗證成功",
+    "copyIpfsAddress": "複製 IPFS 位址",
+    "shareC2paPhoto": "分享 C2PA 照片"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",

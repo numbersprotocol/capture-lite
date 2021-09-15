@@ -161,7 +161,9 @@
     "viewSupportingVideoOnIpfs": "View supporting video on IPFS",
     "videoLimitation": "Capture App DOES NOT support video recording longer than 10 secs. Recording longer than 10 secs will not be saved.",
     "yesIUnderstand": "Yes, I understand",
-    "verificationSuccess": "Success"
+    "verificationSuccess": "Success",
+    "copyIpfsAddress": "Copy IPFS address",
+    "shareC2paPhoto": "Share C2PA photo"
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",

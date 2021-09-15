@@ -286,6 +286,7 @@ export interface DiaBackendAssetParsedMeta extends Tuple {
 
 export interface DiaBackendAsset extends Tuple {
   readonly id: string;
+  readonly cid: string;
   readonly proof_hash: string;
   readonly is_original_owner: boolean;
   readonly owner: string;
