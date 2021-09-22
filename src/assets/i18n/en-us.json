@@ -152,8 +152,8 @@
     "doNotTurnOffApp": "Please keep the screen on and DO NOT leave the app.",
     "upgrading": "Upgrading...",
     "shareCapture": "Share Capture",
-    "transferCapture": "Transfer Capture",
-    "deleteCapture": "Delete Capture",
+    "transferOwnership": "Transfer ownership",
+    "deregisterFromNetwork": "Deregister from network",
     "viewOnCaptureClub": "View on CaptureClub",
     "viewBlockchainCertificate": "View blockchain certificate",
     "confirmLogout": "Your local data will be wipe out after logout. You can restore your Captures after login again.",
@@ -162,7 +162,11 @@
     "viewSupportingVideoOnIpfs": "View supporting video on IPFS",
     "videoLimitation": "Capture App DOES NOT support video recording longer than 10 secs. Recording longer than 10 secs will not be saved.",
     "yesIUnderstand": "Yes, I understand",
-    "verificationSuccess": "Success"
+    "verificationSuccess": "Success",
+    "copyIpfsAddress": "Copy IPFS address",
+    "shareC2paPhoto": "Share C2PA photo",
+    "mintNftToken": "Mint NFT token",
+    "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?"
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",
@@ -189,7 +193,8 @@
       "phone_verification_code_expired": "The verification code has been expired",
       "throttled": "Too frequent request",
       "user_is_email_verified": "The email address has beed verified",
-      "user_not_found": "There is no account registered with the email address"
+      "user_not_found": "There is no account registered with the email address",
+      "asset_is_being_minted": "Asset is being minted"
     }
   },
   "transactionState": {

@@ -265,6 +265,21 @@ export class DiaBackendAssetRepository {
   refreshPostCaptures(options?: { reason?: string }) {
     this.postCapturesUpdated$.next({ reason: options?.reason });
   }
+
+  mintNft$(id: string) {
+    const formData = new FormData();
+    formData.append('no_blocking', 'true');
+    formData.append('nft_blockchain_name', 'thundercore');
+    return defer(() => this.authService.getAuthHeadersWithApiKey()).pipe(
+      concatMap(headers => {
+        return this.httpClient.post(
+          `${BASE_URL}/api/v2/assets/${id}/mint/`,
+          formData,
+          { headers }
+        );
+      })
+    );
+  }
 }
 
 export interface DiaBackendAssetTransaction extends Tuple {
@@ -286,6 +301,7 @@ export interface DiaBackendAssetParsedMeta extends Tuple {
 
 export interface DiaBackendAsset extends Tuple {
   readonly id: string;
+  readonly cid: string;
   readonly proof_hash: string;
   readonly is_original_owner: boolean;
   readonly owner: string;
@@ -303,6 +319,10 @@ export interface DiaBackendAsset extends Tuple {
   readonly supporting_file: string | null;
   readonly source_type: 'original' | 'post_capture' | 'store';
   readonly cai_file: string;
+  readonly nft_token_id: string | null;
+  readonly nft_token_uri: string;
+  readonly nft_blockchain_name: string;
+  readonly nft_contract_address: string;
 }
 
 export type AssetDownloadField =
