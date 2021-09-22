@@ -221,7 +221,7 @@ export class DiaBackendAssetRepository {
     ]).pipe(
       concatMap(([headers, formData]) =>
         this.httpClient.post<CreateAssetResponse>(
-          `${BASE_URL}/api/v2/assets/`,
+          `${BASE_URL}/api/v3/assets/`,
           formData,
           { headers }
         )
@@ -301,6 +301,7 @@ export interface DiaBackendAssetParsedMeta extends Tuple {
 
 export interface DiaBackendAsset extends Tuple {
   readonly id: string;
+  readonly uuid: string;
   readonly cid: string;
   readonly proof_hash: string;
   readonly is_original_owner: boolean;
