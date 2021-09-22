@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -293,9 +294,10 @@ export class DetailsPage {
       this.activeDetailedCapture$,
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
       this.translocoService.selectTranslateObject({
-        'message.transferCapture': null,
+        'message.transferOwnership': null,
         'message.viewOnCaptureClub': null,
-        'message.deleteCapture': null,
+        'message.deregisterFromNetwork': null,
+        'message.mintNftToken': null,
         'message.viewBlockchainCertificate': null,
         'message.viewSupportingVideoOnIpfs': null,
       }),
@@ -307,9 +309,10 @@ export class DetailsPage {
             detailedCapture,
             diaBackendAsset,
             [
-              messageTransferCapture,
+              messageTransferOwnership,
               messageViewOnCaptureClub,
-              messageDeleteCapture,
+              messageDeregisterFromNetwork,
+              messageMintNftToken,
               messageViewBlockchainCertificate,
               messageViewSupportingVideoOnIpfs,
             ],
@@ -326,7 +329,7 @@ export class DetailsPage {
               }
               if (!detailedCapture.isFromStore && detailedCapture.id) {
                 buttons.push({
-                  text: messageTransferCapture,
+                  text: messageTransferOwnership,
                   handler: () => {
                     this.openContactSelectionDialog();
                     resolve();
@@ -342,11 +345,20 @@ export class DetailsPage {
                 });
               }
               buttons.push({
-                text: messageDeleteCapture,
+                text: messageDeregisterFromNetwork,
                 handler: () => {
                   this.remove().then(() => resolve());
                 },
               });
+              if (diaBackendAsset?.nft_token_id === null) {
+                buttons.push({
+                  text: messageMintNftToken,
+                  handler: () => {
+                    this.mintNft().then(() => resolve());
+                  },
+                  role: 'destructive',
+                });
+              }
               if (detailedCapture.id) {
                 buttons.push({
                   text: messageViewBlockchainCertificate,
@@ -495,5 +507,40 @@ export class DetailsPage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  private async mintNft() {
+    const result = await this.confirmAlert.present({
+      message: this.translocoService.translate('message.mintNftAlert'),
+    });
+    if (result) {
+      const action$ = this.activeDetailedCapture$.pipe(
+        first(),
+        switchTap(activeDetailedCapture =>
+          defer(() => {
+            if (activeDetailedCapture.id) {
+              return this.diaBackendAssetRepository.mintNft$(
+                activeDetailedCapture.id
+              );
+            }
+            return VOID$;
+          })
+        ),
+        catchError((err: unknown) => {
+          if (err instanceof HttpErrorResponse) {
+            const errorType = err.error.error?.type;
+            if (errorType === 'asset_is_being_minted')
+              return this.errorService.toastError$(
+                this.translocoService.translate(`error.diaBackend.${errorType}`)
+              );
+          }
+          return this.errorService.toastError$(err);
+        })
+      );
+      this.blockingActionService
+        .run$(action$)
+        .pipe(untilDestroyed(this))
+        .subscribe();
+    }
   }
 }

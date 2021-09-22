@@ -299,6 +299,13 @@ export class DiaBackendAuthService {
     return { authorization: `token ${await this.getToken()}` };
   }
 
+  async getAuthHeadersWithApiKey() {
+    return {
+      authorization: `token ${await this.getToken()}`,
+      'x-api-key': TRUSTED_CLIENT_KEY,
+    };
+  }
+
   private async getToken() {
     return new Promise<string>(resolve => {
       this.preferences.getString(PrefKeys.TOKEN).then(token => {
