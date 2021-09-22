@@ -130,7 +130,8 @@ export class DiaBackendAssetUploadingService {
         return throwError(err);
       }),
       map(diaBackendAsset => {
-        proof.diaBackendAssetId = diaBackendAsset.id;
+        // NOTE: need to change to diaBackendAsset.id when migrate to v3
+        proof.diaBackendAssetId = diaBackendAsset.uuid;
         return proof;
       }),
       retryWhen(err$ =>

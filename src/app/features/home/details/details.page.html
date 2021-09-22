@@ -5,10 +5,8 @@
   <div class="toolbar-spacer"></div>
   <ng-container *ngrxLet="activeDetailedCapture$ as activeDetailedCapture">
     <button
-      *ngIf="
-        (isFromSeriesPage$ | ngrxPush) === false && activeDetailedCapture.id
-      "
-      (click)="openContactSelectionDialog()"
+      *ngIf="activeDetailedCapture.id"
+      (click)="openShareMenu()"
       mat-icon-button
     >
       <mat-icon>send</mat-icon>
