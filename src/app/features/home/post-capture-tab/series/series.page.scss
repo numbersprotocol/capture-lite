@@ -10,16 +10,6 @@ ion-card {
   }
 }
 
-.page-content {
-  @media (prefers-color-scheme: light) {
-    background-color: var(--ion-color-primary-contrast);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    background-color: var(--capture-color-dark-background);
-  }
-}
-
 mat-grid-list {
   margin: 8px;
 

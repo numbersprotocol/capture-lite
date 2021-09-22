@@ -19,6 +19,7 @@ ion-content {
         color: white;
         font-size: 20px;
         padding-bottom: calc(5vh + env(safe-area-inset-bottom));
+        border: none;
       }
     }
   }
