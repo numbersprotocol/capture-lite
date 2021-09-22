@@ -93,6 +93,7 @@
   "send": "發送",
   "resend": "重新發送",
   "resendIn": "重新發送 {{ secondsRemained }}秒",
+  "balance": "餘額",
   "verification": {
     "verification": "驗證",
     "clickToVerify": "點擊驗證",
@@ -151,8 +152,8 @@
     "doNotTurnOffApp": "載入中，期間請勿關閉螢幕與離開 APP。",
     "upgrading": "升級中...",
     "shareCapture": "分享瞬時影像",
-    "transferCapture": "轉移瞬時影像",
-    "deleteCapture": "刪除瞬時影像",
+    "transferOwnership": "轉移影像所有權",
+    "deregisterFromNetwork": "刪除並從影像網絡註銷",
     "viewOnCaptureClub": "在 CaptureClub 檢視",
     "viewBlockchainCertificate": "檢視區塊鏈證書",
     "confirmLogout": "所有您的本地資料將會在登出後清除。再次登入後可以復原您的拍攝。",
@@ -161,7 +162,11 @@
     "viewSupportingVideoOnIpfs": "於 IPFS 檢視附件影片",
     "videoLimitation": "錄製的影片長度需小於 10 秒鐘。",
     "yesIUnderstand": "我了解",
-    "verificationSuccess": "驗證成功"
+    "verificationSuccess": "驗證成功",
+    "copyIpfsAddress": "複製 IPFS 位址",
+    "shareC2paPhoto": "分享 C2PA 照片",
+    "mintNftToken": "鑄造 NFT 代幣",
+    "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",
@@ -188,7 +193,8 @@
       "phone_verification_code_expired": "驗證碼已過期",
       "throttled": "短時間內傳送過多請求",
       "user_is_email_verified": "此電子郵件已驗證",
-      "user_not_found": "此電子郵件尚未註冊 Capture 帳號"
+      "user_not_found": "此電子郵件尚未註冊 Capture 帳號",
+      "asset_is_being_minted": "NFT 代幣鑄造中"
     }
   },
   "transactionState": {

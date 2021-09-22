@@ -2,32 +2,4 @@ div[mat-dialog-content] {
   mat-spinner {
     margin: auto;
   }
-
-  @media (prefers-color-scheme: dark) {
-    mat-icon {
-      color: white;
-    }
-
-    div[mat-subheader] {
-      color: white;
-    }
-
-    div[mat-line] {
-      color: white;
-    }
-  }
-
-  @media (prefers-color-scheme: light) {
-    mat-icon {
-      color: black;
-    }
-
-    div[mat-subheader] {
-      color: black;
-    }
-
-    div[mat-line] {
-      color: black;
-    }
-  }
 }
