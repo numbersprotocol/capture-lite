@@ -73,6 +73,7 @@ jobs:
       - name: Build Ionic
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
+          NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
         run: npm run build
 
       - name: Build Android
@@ -103,6 +104,7 @@ jobs:
       - name: Build Ionic
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
+          NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
         run: npm run build
 
       - name: Import the Code-Signing PKCS12 Certificate
