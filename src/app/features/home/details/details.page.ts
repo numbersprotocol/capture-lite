@@ -327,7 +327,7 @@ export class DetailsPage {
                   },
                 });
               }
-              if (!detailedCapture.isFromStore && detailedCapture.id) {
+              if (detailedCapture.id) {
                 buttons.push({
                   text: messageTransferOwnership,
                   handler: () => {
