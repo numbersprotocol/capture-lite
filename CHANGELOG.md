@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.40.2 - 2021-09-24
+
+### Fixed
+
+- Missing trusted client key variable settings in GitHub workflow template.
+- Remove the ownership transfer restriction for not-from-store Captures.
+
 ## 0.40.1 - 2021-09-24
 
 ### Fixed
