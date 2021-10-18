@@ -6,6 +6,8 @@ import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
 
 import com.equimaps.capacitorblobwriter.BlobWriter;
+import com.capacitorjs.community.plugins.bluetoothle.BluetoothLe;
+import com.digaus.capacitor.wifi.Wifi;
 
 import java.util.ArrayList;
 import android.content.res.Configuration;
@@ -47,6 +49,8 @@ public class MainActivity extends BridgeActivity {
     this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
       // Additional plugins you've installed go here
       add(BlobWriter.class);
+      add(BluetoothLe.class);
+      add(Wifi.class);
     }});
   }
 }

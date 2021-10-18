@@ -28,6 +28,8 @@
     "@angular/platform-browser": "^12.2.4",
     "@angular/platform-browser-dynamic": "^12.2.4",
     "@angular/router": "^12.2.4",
+    "@capacitor-community/bluetooth-le": "^0.6.1",
+    "@capacitor-community/wifi": "git+https://github.com/digaus/community-capacitor-wifi.git",
     "@capacitor/android": "https://gitpkg.now.sh/numbersprotocol/capacitor/android?release-2.4.7-range-request-fix",
     "@capacitor/core": "~2.4.7",
     "@capacitor/ios": "~2.4.7",
