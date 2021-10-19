@@ -1,7 +1,5 @@
 <div *transloco="let t" class="page-content">
-  <div class="logo">
-    <img decoding="async" loading="lazy" src="/assets/images/capture.svg" />
-  </div>
+  <div class="logo"></div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
