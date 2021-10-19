@@ -20,7 +20,7 @@ mat-toolbar {
   }
 
   button.received {
-    color: var(--ion-background-color);
+    color: var(--ion-color-dark-contrast);
     border-color: var(--noir-simple);
     background-color: var(--noir-simple);
   }
@@ -36,13 +36,13 @@ mat-toolbar {
   }
 
   button.waitingToBeAccepted {
-    color: var(--ion-background-color);
+    color: var(--ion-color-dark-contrast);
     border-color: var(--noir-secondary-dark);
     background-color: var(--noir-secondary-dark);
   }
 
   button.returned {
-    color: var(--ion-background-color);
+    color: var(--ion-color-dark-contrast);
     border-color: var(--noir-warn);
     background-color: var(--noir-warn);
   }
