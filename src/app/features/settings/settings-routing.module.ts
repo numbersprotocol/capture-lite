@@ -7,6 +7,11 @@ const routes: Routes = [
     path: '',
     component: SettingsPage,
   },
+  {
+    path: 'go-pro',
+    loadChildren: () =>
+      import('./go-pro/go-pro.module').then(m => m.GoProPageModule),
+  },
 ];
 
 @NgModule({

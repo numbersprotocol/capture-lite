@@ -1,0 +1,30 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button (click)="goBack()" routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <!-- <span>{{ t('goProMediaDetailOnCamera') }}</span> -->
+  <span>Detail On Camera</span>
+</mat-toolbar>
+
+<ion-content>
+  <ion-img
+    *ngIf="mediaType == 'image'"
+    [src]="mediaFile!.url"
+    decoding="async"
+    loading="lazy"
+  ></ion-img>
+
+  <video *ngIf="mediaType == 'video'" controls playsinline preload="metadata">
+    <source src="{{ mediaFile!.url }}#t=0.1" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div style="height: 24px"></div>
+  <ion-button (click)="downloadFileFromGoProCamera()" expand="block">
+    Download File To Device
+  </ion-button>
+
+  <ion-button (click)="uploadToCapture()" expand="block">
+    Upload to capture directly from camera
+  </ion-button>
+</ion-content>

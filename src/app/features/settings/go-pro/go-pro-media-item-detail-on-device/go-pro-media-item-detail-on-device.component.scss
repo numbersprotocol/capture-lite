@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  object-fit: contain;
+  animation: loading 2.5s ease-in-out alternate infinite;
+}
+
+img,
+video {
+  display: block;
+  width: 100%;
+  height: 50%;
+  background-color: black;
+  // object-fit: inherit;
+  // object-position: inherit;
+}

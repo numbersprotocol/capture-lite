@@ -5,6 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
 import { ReactiveComponentModule } from '@ngrx/component';
+import { GoProBluetoothService } from '../features/settings/go-pro/services/go-pro-bluetooth.service';
+import { GoProMediaService } from '../features/settings/go-pro/services/go-pro-media.service';
+import { GoProWifiService } from '../features/settings/go-pro/services/go-pro-wifi.service';
 import { AvatarComponent } from './avatar/avatar.component';
 import { CapacitorPluginsModule } from './capacitor-plugins/capacitor-plugins.module';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
@@ -35,9 +38,12 @@ const imports = [
   ReactiveComponentModule,
 ];
 
+const providers = [GoProBluetoothService, GoProWifiService, GoProMediaService];
+
 @NgModule({
   declarations,
   imports,
+  providers,
   exports: [...declarations, ...imports],
 })
 export class SharedModule {}

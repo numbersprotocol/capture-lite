@@ -1,0 +1,129 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>GoPro Setup</span>
+</mat-toolbar>
+
+<ion-content>
+  <ion-list>
+    <ion-button
+      expand="block"
+      [disabled]="bluetoothIsScanning"
+      (click)="scanForBluetoothDevices()"
+    >
+      {{ bluetoothIsScanning ? 'Scaning' : 'Scan for bluetooth devices' }}
+    </ion-button>
+
+    <ng-container *ngIf="bluetoothScanResults.length > 0">
+      <ion-item *ngFor="let scanResult of bluetoothScanResults">
+        <ion-label>
+          <h2>{{ scanResult.device.name }}</h2>
+          <p style="font-size: 8px">{{ scanResult.device.deviceId }}</p>
+        </ion-label>
+
+        <ion-button
+          *ngIf="
+            scanResult.device.deviceId ==
+            bluetoothConnectedDevice?.device?.deviceId
+          "
+          (click)="disconnectFromBluetoothDevice(scanResult)"
+          color="danger"
+          slot="end"
+        >
+          Disconnect
+        </ion-button>
+
+        <ion-button
+          *ngIf="
+            scanResult.device.deviceId !=
+            bluetoothConnectedDevice?.device?.deviceId
+          "
+          (click)="connectToBluetoothDevice(scanResult)"
+          slot="end"
+        >
+          Connect
+        </ion-button>
+      </ion-item>
+    </ng-container>
+
+    <div style="height: 24px"></div>
+
+    <ion-list-header *ngIf="!bluetoothConnectedDevice">
+      <h4>NOT CONNECTED TO ANY GO PRO CAMERA ⚠️</h4>
+    </ion-list-header>
+
+    <ng-container *ngIf="bluetoothConnectedDevice" style="margin-top: 40px">
+      <ion-list-header>
+        <h4>
+          CONNECTED TO:
+          {{ bluetoothConnectedDevice.device.name }}
+          ✅
+        </h4>
+      </ion-list-header>
+
+      <ion-list-header> <h4>Go Pro Bluetooth Commands</h4> </ion-list-header>
+      <ion-item>
+        <ion-label>Take Photo</ion-label>
+        <ion-button
+          slot="end"
+          (click)="sendBluetoothWriteCommand(shutterCommand)"
+        >
+          send
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Shut Down</ion-label>
+        <ion-button
+          slot="end"
+          (click)="sendBluetoothWriteCommand(shutdownCommand)"
+        >
+          send
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Show GoPro Wifi Creds (SSID, PASSWORD)</ion-label>
+        <ion-button slot="end" (click)="getGoProWiFiCreds()"> send </ion-button>
+      </ion-item>
+
+      <ion-list-header><h4>Go Pro WiFi related</h4></ion-list-header>
+      <ion-item>
+        <ion-label>Connect To Go Pro WiFi</ion-label>
+        <ion-button slot="end" (click)="connectToGoProWifi()">
+          send
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Show files on go pro</ion-label>
+        <ion-button slot="end" (click)="showFilesOnGoPro()"> send </ion-button>
+      </ion-item>
+    </ng-container>
+
+    <ion-list-header><h4>Device related</h4></ion-list-header>
+    <ion-item>
+      <ion-label>Show files on device</ion-label>
+      <ion-button slot="end" (click)="showFilesOnDevice()"> send </ion-button>
+    </ion-item>
+
+    <hr />
+    <div style="height: 40px"></div>
+    <ion-list-header><h2>Devlopers only (debug mode)</h2></ion-list-header>
+    <ion-item>
+      <ion-label>Clear files on device (developers only)</ion-label>
+      <ion-button slot="end" color="danger" (click)="clearGoProMediaStorage()">
+        send
+      </ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Print files on device (developers only)</ion-label>
+      <ion-button slot="end" color="danger" (click)="printGoProMediaStorage()">
+        send
+      </ion-button>
+    </ion-item>
+    <div style="height: 300px"></div>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,15 @@
+<ion-icon
+  *ngIf="mediaFile?.type == 'video'"
+  name="videocam"
+  class="is-video"
+></ion-icon>
+<img
+  *ngIf="mediaFile?.thumbnailUrl"
+  [src]="mediaFile!.thumbnailUrl"
+  (click)="showDetails()"
+  loading="lazy"
+  decoding="async"
+/>
+<mat-icon *ngIf="!mediaFile?.thumbnailUrl" class="is-thumbnail-missing">
+  broken_image
+</mat-icon>

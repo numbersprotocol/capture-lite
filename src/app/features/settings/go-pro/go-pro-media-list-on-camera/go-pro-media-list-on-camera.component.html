@@ -1,0 +1,41 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button (click)="goBack()" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>GoPro Media on Camera</span>
+</mat-toolbar>
+
+<ion-content>
+  <h4>Connected WiFi: {{ connectedWifiSSID }}</h4>
+  <ion-button
+    *ngIf="!isConnectedToGoProWifi"
+    expand="block"
+    (click)="connectToGoProWifi()"
+  >
+    Connect to go pro WiFi
+  </ion-button>
+
+  <!-- TODO: att translate text -->
+  <h4 *ngIf="shouldConnectToWiFi" style="padding: 16px">
+    Make sure you connected to GoPro WiFi first
+  </h4>
+
+  <h4 *ngIf="fetchingFilesError">
+    {{ fetchingFilesError }}
+  </h4>
+
+  <h4 *ngIf="fetchingFiles">Fetching files</h4>
+
+  <div class="go-pro-container">
+    <mat-grid-list cols="3" gutterSize="8px">
+      <mat-grid-tile
+        *ngFor="let mediaFile of allMediaFiles"
+        class="go-pro-item"
+      >
+        <app-go-pro-media-list-item-on-camera
+          [mediaFile]="mediaFile"
+        ></app-go-pro-media-list-item-on-camera>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</ion-content>
