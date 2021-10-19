@@ -119,28 +119,74 @@ export class GoProMediaService {
     const fileExtension = this.extractFileExtensionFromGoProUrl(mediaFile.url);
     const fileType = this.detectFileTypeFromUrl(mediaFile.url);
 
-    try {
-      const fileResponse: HttpDownloadFileResult = await Http.downloadFile({
-        url: mediaFile.url!,
-        filePath: fileName,
-        fileDirectory: this.directory,
-        method: 'GET',
-      });
+    let option = 'oldWay';
+    if (option === 'oldWay') {
+      try {
+        console.log(option);
 
-      const readResult = await this.filesystemPlugin.readFile({
-        directory: this.directory,
-        // path: `${this.rootDir}/${goProFileOnDevice.name}`,
-        path: `${fileName}`, //  Because when saving we forget to add rootDir
-      });
+        const fileResponse: HttpDownloadFileResult = await Http.downloadFile({
+          url: mediaFile.url!,
+          filePath: fileName,
+          fileDirectory: this.directory,
+          method: 'GET',
+        });
 
-      const base64 = readResult.data;
+        const readResult = await this.filesystemPlugin.getUri({
+          directory: this.directory,
+          // path: `${this.rootDir}/${goProFileOnDevice.name}`,
+          path: `${fileName}`, //  Because when saving we forget to add rootDir
+        });
 
-      const mimeType = this.urlIsImage(mediaFile.url)
-        ? 'image/jpeg'
-        : 'video/mp4';
+        const url = Capacitor.convertFileSrc(readResult.uri);
 
-      const proof = await this.captureService.capture({ base64, mimeType });
-    } catch (error) {}
+        const blob = await this.httpClient
+          .get(url, { responseType: 'blob' })
+          .toPromise();
+
+        const base64 = await blobToBase64(blob);
+
+        const mimeType = this.urlIsImage(mediaFile.url)
+          ? 'image/jpeg'
+          : 'video/mp4';
+
+        const proof = await this.captureService.capture({ base64, mimeType });
+
+        // delete temp downloaded file
+        await this.filesystemPlugin.deleteFile({
+          directory: this.directory,
+          // path: `${this.rootDir}/${goProFileOnDevice.name}`,
+          path: `${fileName}`, //  Because when saving we forget to add rootDir
+        });
+      } catch (error) {}
+    } else {
+      try {
+        const url = mediaFile.url;
+
+        console.log('getting blob without headers...');
+        const blob = await Http.request({
+          method: 'GET',
+          url: url,
+          headers: { responseType: 'blob' },
+        });
+
+        // const blob = await this.httpClient
+        //   .get(url, { responseType: 'blob' })
+        //   .toPromise();
+
+        console.log('got blob');
+
+        const base64 = await blobToBase64(blob);
+
+        const mimeType = this.urlIsImage(url) ? 'image/jpeg' : 'video/mp4';
+
+        console.log('capture start');
+        const proof = await this.captureService.capture({ base64, mimeType });
+        console.log(JSON.stringify(proof, null, 2));
+        console.log('capture end');
+      } catch (error) {
+        console.log(JSON.stringify(error, null, 2));
+      }
+    }
 
     // // TODO: fix this hack (temporary download file to upload to capture)
     // await this.http.downloadFile(
