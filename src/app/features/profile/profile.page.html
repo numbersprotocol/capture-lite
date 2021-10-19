@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" *transloco="let t">
+<mat-toolbar *transloco="let t">
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -120,7 +120,7 @@
       </button>
     </mat-list-item>
   </mat-list>
-  <button (click)="logout()" class="expand" color="primary" mat-raised-button>
+  <button (click)="logout()" class="expand" color="primary" mat-stroked-button>
     {{ t('logout') }}
   </button>
 </div>
