@@ -151,6 +151,35 @@ export class DetailedCapture {
     )[0];
   });
 
+  readonly caption$ = defer(async () => {
+    if (!(this.proofOrDiaBackendAsset instanceof Proof))
+      return this.proofOrDiaBackendAsset.caption;
+  });
+
+  readonly nftToken$ = defer(() => {
+    if (this.proofOrDiaBackendAsset instanceof Proof)
+      return this.diaBackendAsset$.pipe(
+        map(asset => {
+          const tokenInfo = asset?.nft_token_id
+            ? getTokenInfo(
+                asset.nft_blockchain_name,
+                asset.nft_contract_address,
+                asset.nft_token_id
+              )
+            : null;
+          return tokenInfo;
+        })
+      );
+    const tokenInfo = this.proofOrDiaBackendAsset.nft_token_id
+      ? getTokenInfo(
+          this.proofOrDiaBackendAsset.nft_blockchain_name,
+          this.proofOrDiaBackendAsset.nft_contract_address,
+          this.proofOrDiaBackendAsset.nft_token_id
+        )
+      : null;
+    return of(tokenInfo);
+  });
+
   constructor(
     private readonly proofOrDiaBackendAsset: Proof | DiaBackendAsset,
     private readonly mediaStore: MediaStore,
@@ -190,4 +219,30 @@ export function normalizeGeolocation({
   )
     return { latitude: Number(latitude), longitude: Number(longitude) };
   return undefined;
+}
+
+function getTokenInfo(
+  nftBlockchainName: string,
+  nftContractAddress: string,
+  nftTokenId: string
+) {
+  return {
+    tokenId: nftTokenId,
+    tokenType: nftBlockchainName === 'thundercore' ? 'TT721' : 'ERC721',
+    explorerUrl: getExplorerUrl(
+      nftBlockchainName,
+      nftContractAddress,
+      nftTokenId
+    ),
+  };
+}
+
+function getExplorerUrl(
+  nftBlockchainName: string,
+  nftContractAddress: string,
+  nftTokenId: string
+) {
+  return nftBlockchainName === 'thundercore'
+    ? `https://viewblock.io/thundercore/address/${nftContractAddress}?txsType=nft&specific=${nftTokenId}`
+    : `https://etherscan.io/token/${nftContractAddress}?a=${nftTokenId}`;
 }
