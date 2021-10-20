@@ -27,36 +27,36 @@ mat-toolbar {
     }
 
     button.received {
-      color: white;
-      border-color: #4cd964;
-      background-color: #4cd964;
+      color: var(--ion-color-dark-contrast);
+      border-color: var(--noir-simple);
+      background-color: var(--noir-simple);
     }
 
     button.delivered {
-      color: mediumseagreen;
-      border-color: mediumseagreen;
+      color: var(--noir-simple);
+      border-color: var(--noir-simple);
     }
 
     button.inProgress {
-      color: deepskyblue;
-      border-color: deepskyblue;
+      color: var(--noir-secondary-dark);
+      border-color: var(--noir-secondary-dark);
     }
 
     button.waitingToBeAccepted {
-      color: white;
-      border-color: deepskyblue;
-      background-color: deepskyblue;
+      color: var(--ion-color-dark-contrast);
+      border-color: var(--noir-secondary-dark);
+      background-color: var(--noir-secondary-dark);
     }
 
     button.returned {
-      color: white;
-      border-color: #e31587;
-      background-color: #e31587;
+      color: var(--ion-color-dark-contrast);
+      border-color: var(--noir-warn);
+      background-color: var(--noir-warn);
     }
 
     button.missed {
-      color: #e31587;
-      border-color: #e31587;
+      color: var(--noir-warn);
+      border-color: var(--noir-warn);
     }
   }
 }

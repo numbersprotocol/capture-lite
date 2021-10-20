@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" *transloco="let t">
+<mat-toolbar *transloco="let t">
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -97,7 +97,7 @@
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>lock</mat-icon>
-      <div mat-line>{{ t('publicKey') }}</div>
+      <div mat-line>{{ t('walletAddress') }}</div>
       <div mat-line>{{ publicKey$ | ngrxPush }}</div>
       <button
         *ngIf="publicKey$ | ngrxPush as publicKey"
@@ -120,7 +120,7 @@
       </button>
     </mat-list-item>
   </mat-list>
-  <button (click)="logout()" class="expand" color="primary" mat-raised-button>
+  <button (click)="logout()" class="expand" color="primary" mat-stroked-button>
     {{ t('logout') }}
   </button>
 </div>
