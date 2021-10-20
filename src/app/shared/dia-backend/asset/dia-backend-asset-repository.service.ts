@@ -324,6 +324,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly nft_token_uri: string;
   readonly nft_blockchain_name: string;
   readonly nft_contract_address: string;
+  readonly caption: string;
 }
 
 export type AssetDownloadField =

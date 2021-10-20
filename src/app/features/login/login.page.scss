@@ -8,6 +8,8 @@
     height: 35vh;
     justify-content: center;
     align-items: center;
+    background-color: var(--ion-color-primary);
+    mask: url('/assets/images/capture.svg') no-repeat center;
   }
 
   button {

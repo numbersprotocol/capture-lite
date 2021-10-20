@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" *transloco="let t">
+<mat-toolbar *transloco="let t">
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -72,10 +72,7 @@
             </ion-label>
           </ion-item>
           <ion-item>
-            <ion-icon
-              src="/assets/images/media-id-solid-black.svg"
-              slot="start"
-            ></ion-icon>
+            <ion-icon src="/assets/images/media-id.svg" slot="start"></ion-icon>
             <ion-label
               (click)="openCertificate()"
               *ngIf="detailedCapture.id; else notRegistered"
@@ -86,6 +83,25 @@
               {{ 'notRegistered' | transloco }}
             </ng-template>
           </ion-item>
+          <ng-container *ngrxLet="detailedCapture.nftToken$ as nftToken">
+            <ion-item *ngIf="nftToken">
+              <ion-icon src="/assets/images/nft.svg" slot="start"></ion-icon>
+              <ion-label>
+                {{ nftToken.tokenType }}
+                <a href="{{ nftToken.explorerUrl }}">
+                  {{ nftToken.tokenId }}
+                </a>
+              </ion-label>
+            </ion-item>
+          </ng-container>
+          <ng-container *ngrxLet="detailedCapture.caption$ as caption">
+            <ion-item *ngIf="caption">
+              <ion-icon name="document-text" slot="start"></ion-icon>
+              <ion-label text-wrap>
+                {{ caption }}
+              </ion-label>
+            </ion-item>
+          </ng-container>
         </ion-list>
         <div class="text-center">
           <ion-button routerLink="information">
