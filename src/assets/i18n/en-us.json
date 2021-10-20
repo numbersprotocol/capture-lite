@@ -94,6 +94,7 @@
   "resend": "Re-send",
   "resendIn": "Re-send {{ secondsRemained }}s",
   "balance": "Balance",
+  "walletAddress": "Wallet Address",
   "verification": {
     "verification": "Verification",
     "clickToVerify": "Click me to verify",

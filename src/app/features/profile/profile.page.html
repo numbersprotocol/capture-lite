@@ -97,7 +97,7 @@
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>lock</mat-icon>
-      <div mat-line>{{ t('publicKey') }}</div>
+      <div mat-line>{{ t('walletAddress') }}</div>
       <div mat-line>{{ publicKey$ | ngrxPush }}</div>
       <button
         *ngIf="publicKey$ | ngrxPush as publicKey"
