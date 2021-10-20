@@ -162,9 +162,9 @@ export class DetailedCapture {
         map(asset => {
           const tokenInfo = asset?.nft_token_id
             ? getTokenInfo(
-                asset?.nft_blockchain_name,
-                asset?.nft_contract_address,
-                asset?.nft_token_id
+                asset.nft_blockchain_name,
+                asset.nft_contract_address,
+                asset.nft_token_id
               )
             : null;
           return tokenInfo;

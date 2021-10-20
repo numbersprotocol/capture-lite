@@ -85,7 +85,7 @@
           </ion-item>
           <ng-container *ngrxLet="detailedCapture.nftToken$ as nftToken">
             <ion-item *ngIf="nftToken">
-              <ion-icon name="flash" slot="start"></ion-icon>
+              <ion-icon src="/assets/images/nft.svg" slot="start"></ion-icon>
               <ion-label>
                 {{ nftToken.tokenType }}
                 <a href="{{ nftToken.explorerUrl }}">
