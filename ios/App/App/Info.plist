@@ -78,5 +78,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<!-- Bluetooth Permissions   -->
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Uses Bluetooth to connect and interact with GoPro or any other Bluetooth devices.</string>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>bluetooth-central</string>
+    </array>
 </dict>
 </plist>
