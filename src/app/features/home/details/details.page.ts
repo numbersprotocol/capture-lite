@@ -300,6 +300,7 @@ export class DetailsPage {
         'message.mintNftToken': null,
         'message.viewBlockchainCertificate': null,
         'message.viewSupportingVideoOnIpfs': null,
+        'message.moreActions': null,
       }),
     ])
       .pipe(
@@ -315,6 +316,7 @@ export class DetailsPage {
               messageMintNftToken,
               messageViewBlockchainCertificate,
               messageViewSupportingVideoOnIpfs,
+              messageMoreActions,
             ],
           ]) =>
             new Promise<void>(resolve => {
@@ -368,6 +370,13 @@ export class DetailsPage {
                   },
                 });
               }
+              buttons.push({
+                text: messageMoreActions,
+                handler: () => {
+                  this.router.navigate(['actions'], { relativeTo: this.route });
+                  resolve();
+                },
+              });
               this.actionSheetController
                 .create({ buttons })
                 .then(sheet => sheet.present());

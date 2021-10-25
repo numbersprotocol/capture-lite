@@ -167,7 +167,8 @@
     "copyIpfsAddress": "Copy IPFS address",
     "shareC2paPhoto": "Share C2PA photo",
     "mintNftToken": "Mint NFT token",
-    "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?"
+    "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?",
+    "moreActions": "More Actions"
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",
