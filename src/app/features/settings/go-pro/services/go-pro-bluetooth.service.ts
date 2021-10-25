@@ -129,7 +129,7 @@ export class GoProBluetoothService {
     await Storage.remove({ key: this.GO_PRO_BLUETOOTH_STORAGE_KEY });
   }
 
-  async getCurrentlyConnectedDevice(): Promise<ScanResult | undefined> {
+  async getConnectedDevice(): Promise<ScanResult | undefined> {
     const connectedDevice = await this.getConnectedDeviceFromStorage();
     if (connectedDevice !== undefined) {
       try {

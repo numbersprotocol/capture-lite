@@ -71,7 +71,7 @@ export class GoProPage implements OnInit {
 
   async restoreBluetoothConnection() {
     const currentlyConnectedBluetoothDevice =
-      await this.goProBluetoothService.getCurrentlyConnectedDevice();
+      await this.goProBluetoothService.getConnectedDevice();
     debugger;
     if (currentlyConnectedBluetoothDevice) {
       this.bluetoothScanResults = [currentlyConnectedBluetoothDevice];
