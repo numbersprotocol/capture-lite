@@ -10,6 +10,7 @@ export class GoProWifiService {
   constructor(private goProBluetoothService: GoProBluetoothService) {}
 
   async connectToGoProWiFi(): Promise<string> {
+    await this.goProBluetoothService.enableGoProWifi();
     const creds = await this.goProBluetoothService.getGoProWiFiCreds();
     const result = await Wifi.connect({
       ssid: creds.wifiSSID,

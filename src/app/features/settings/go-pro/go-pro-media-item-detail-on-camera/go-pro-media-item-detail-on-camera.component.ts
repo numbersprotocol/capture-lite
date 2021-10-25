@@ -124,7 +124,7 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
       const alert = await this.alertController.create({
         header: 'Warning!',
         message:
-          'You are using mobile data to upload file!' +
+          'You are using mobile data to upload file! ' +
           '<strong>Do you want to continue?</strong>',
         buttons: [
           {
