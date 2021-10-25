@@ -116,7 +116,7 @@ export class DiaBackendTransactionRepository {
           params = params.set('limit', `${limit}`);
         }
         return this.httpClient.get<PaginatedResponse<DiaBackendTransaction>>(
-          `${BASE_URL}/api/v2/transactions/inbox/`,
+          `${BASE_URL}/api/v3/transactions/inbox/`,
           { headers, params }
         );
       })
@@ -138,7 +138,7 @@ export class DiaBackendTransactionRepository {
         }
 
         return this.httpClient.get<PaginatedResponse<DiaBackendTransaction>>(
-          `${BASE_URL}/api/v2/transactions/`,
+          `${BASE_URL}/api/v3/transactions/`,
           { headers, params }
         );
       }),
@@ -150,7 +150,7 @@ export class DiaBackendTransactionRepository {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.get<DiaBackendTransaction>(
-          `${BASE_URL}/api/v2/transactions/${id}/`,
+          `${BASE_URL}/api/v3/transactions/${id}/`,
           { headers }
         )
       )
@@ -171,7 +171,7 @@ export class DiaBackendTransactionRepository {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post<CreateTransactionResponse>(
-          `${BASE_URL}/api/v2/transactions/`,
+          `${BASE_URL}/api/v3/transactions/`,
           {
             asset_id: assetId,
             email: targetEmail,
@@ -197,7 +197,7 @@ export class DiaBackendTransactionRepository {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post<AcceptTransactionResponse>(
-          `${BASE_URL}/api/v2/transactions/${id}/accept/`,
+          `${BASE_URL}/api/v3/transactions/${id}/accept/`,
           {},
           { headers }
         )
@@ -214,7 +214,7 @@ export class DiaBackendTransactionRepository {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
         this.httpClient.post<AcceptTransactionResponse>(
-          `${BASE_URL}/api/v2/transactions/${id}/ignore/`,
+          `${BASE_URL}/api/v3/transactions/${id}/ignore/`,
           {},
           { headers }
         )
