@@ -373,7 +373,10 @@ export class DetailsPage {
               buttons.push({
                 text: messageMoreActions,
                 handler: () => {
-                  this.router.navigate(['actions'], { relativeTo: this.route });
+                  this.router.navigate(
+                    ['actions', { id: detailedCapture.id }],
+                    { relativeTo: this.route }
+                  );
                   resolve();
                 },
               });

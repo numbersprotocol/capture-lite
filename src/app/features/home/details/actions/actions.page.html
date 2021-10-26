@@ -7,7 +7,7 @@
 
 <div class="page-content">
   <ng-container *ngFor="let action of actions$ | ngrxPush">
-    <ion-card>
+    <ion-card (click)="openAction(action)">
       <ion-card-header>
         <div class="wrapper">
           <div>
