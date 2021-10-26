@@ -167,7 +167,9 @@
     "copyIpfsAddress": "複製 IPFS 位址",
     "shareC2paPhoto": "分享 C2PA 照片",
     "mintNftToken": "鑄造 NFT 代幣",
-    "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？"
+    "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？",
+    "moreActions": "更多動作",
+    "sentSuccessfully": "成功送出"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",

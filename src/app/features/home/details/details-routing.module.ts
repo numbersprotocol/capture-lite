@@ -14,6 +14,11 @@ const routes: Routes = [
         m => m.InformationPageModule
       ),
   },
+  {
+    path: 'actions',
+    loadChildren: () =>
+      import('./actions/actions.module').then(m => m.ActionsPageModule),
+  },
 ];
 
 @NgModule({

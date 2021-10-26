@@ -1,0 +1,20 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+  }
+}
+
+.page-content {
+  .wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  ion-card {
+    margin: 20px 10px;
+  }
+
+  ion-icon.numbers-token {
+    color: var(--ion-color-primary-contrast);
+  }
+}
