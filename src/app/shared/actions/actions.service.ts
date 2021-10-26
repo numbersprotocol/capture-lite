@@ -2,20 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { defer, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { BUBBLE_DB_URL } from '../dia-backend/secret';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ActionsService {
-  private readonly BASE_URL =
-    '***REMOVED***';
-
   constructor(private readonly httpClient: HttpClient) {}
 
   getActions$() {
     return defer(() =>
       this.httpClient
-        .get<GetActionsResponse<Action>>(`${this.BASE_URL}/api/1.1/obj/action`)
+        .get<GetActionsResponse<Action>>(`${BUBBLE_DB_URL}/api/1.1/obj/action`)
         .pipe(map(response => response.response.results))
     );
   }
@@ -25,7 +23,7 @@ export class ActionsService {
       forkJoin(
         ids.map(id =>
           this.httpClient
-            .get<GetParamResponse>(`${this.BASE_URL}/api/1.1/obj/param/${id}`)
+            .get<GetParamResponse>(`${BUBBLE_DB_URL}/api/1.1/obj/param/${id}`)
             .pipe(map(response => response.response))
         )
       )
