@@ -49,6 +49,7 @@ export interface Param {
   readonly name_text: string;
   readonly type_text: string;
   readonly placeholder_text: string;
+  readonly default_value_text: string;
 }
 
 export interface GetActionsResponse<T> {

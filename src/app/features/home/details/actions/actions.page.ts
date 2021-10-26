@@ -60,6 +60,7 @@ export class ActionsPage {
                         label: param.label_text,
                         type: param.type_text,
                         placeholder: param.placeholder_text,
+                        value: param.default_value_text,
                       } as AlertInput)
                   ),
                   buttons: [
