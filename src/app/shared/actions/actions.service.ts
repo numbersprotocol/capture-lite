@@ -50,6 +50,7 @@ export interface Param {
   readonly type_text: string;
   readonly placeholder_text: string;
   readonly default_value_text: string;
+  readonly disabled_boolean: boolean;
 }
 
 export interface GetActionsResponse<T> {

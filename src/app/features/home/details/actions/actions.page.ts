@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AlertInput } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
-import { catchError, concatMap, map } from 'rxjs/operators';
+import { catchError, concatMap, map, tap } from 'rxjs/operators';
 import {
   Action,
   ActionsService,
@@ -36,7 +37,8 @@ export class ActionsPage {
     private readonly translocoService: TranslocoService,
     private readonly blockingActionService: BlockingActionService,
     private readonly route: ActivatedRoute,
-    private readonly authService: DiaBackendAuthService
+    private readonly authService: DiaBackendAuthService,
+    private readonly snackBar: MatSnackBar
   ) {}
 
   openAction(action: Action) {
@@ -61,6 +63,7 @@ export class ActionsPage {
                         type: param.type_text,
                         placeholder: param.placeholder_text,
                         value: param.default_value_text,
+                        disabled: param.disabled_boolean,
                       } as AlertInput)
                   ),
                   buttons: [
@@ -92,7 +95,12 @@ export class ActionsPage {
     const action$ = this.actionsService.send$(action.base_url_text, body).pipe(
       catchError((err: unknown) => {
         return this.errorService.toastError$(err);
-      })
+      }),
+      tap(() =>
+        this.snackBar.open(
+          this.translocoService.translate('message.sentSuccessfully')
+        )
+      )
     );
     this.blockingActionService
       .run$(action$)
