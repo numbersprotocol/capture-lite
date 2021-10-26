@@ -74,6 +74,7 @@ jobs:
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
+          NUMBERS_BUBBLE_DB_URL: ${{ secrets.NUMBERS_BUBBLE_DB_URL }}
         run: npm run build
 
       - name: Build Android
@@ -105,6 +106,7 @@ jobs:
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
+          NUMBERS_BUBBLE_DB_URL: ${{ secrets.NUMBERS_BUBBLE_DB_URL }}
         run: npm run build
 
       - name: Import the Code-Signing PKCS12 Certificate
