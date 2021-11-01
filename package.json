@@ -36,7 +36,7 @@
     "@ionic/pwa-elements": "^3.0.2",
     "@ngneat/transloco": "^2.22.0",
     "@ngneat/until-destroy": "^8.1.0",
-    "@ngrx/component": "^12.4.0",
+    "@ngrx/component": "^12.5.1",
     "@ngrx/store": "^12.4.0",
     "@ngx-formly/core": "^5.10.22",
     "@ngx-formly/material": "^5.10.22",
