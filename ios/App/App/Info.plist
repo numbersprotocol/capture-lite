@@ -45,6 +45,8 @@
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Uses Bluetooth to connect and interact with GoPro or any other Bluetooth devices.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Uses Bluetooth to connect and interact with GoPro Camera</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Grant camera permission to allow the app to take images and videos of the unique moments that you want to keep.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
