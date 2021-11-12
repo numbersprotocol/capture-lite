@@ -23,11 +23,6 @@ export class GoProBluetoothService {
   private readonly GO_PRO_BLUETOOTH_STORAGE_KEY =
     'GO_PRO_BLUETOOTH_STORAGE_KEY';
 
-  private readonly GO_PRO_LAST_CONNECTED_BLUETOOTH_DEVICE =
-    'GO_PRO_LAST_CONNECTED_BLUETOOTH_DEVICE';
-
-  private readonly GO_PRO_CURRENTLY_CONNECTED_BLUETOOTH_DEVICE =
-    'GO_PRO_CURRENTLY_CONNECTED_BLUETOOTH_DEVICE';
   /**
    * @goProControlAndQueryServiceUUID {string} - Should be FEA6.
    * https://gopro.github.io/OpenGoPro/ble#services-and-characteristics

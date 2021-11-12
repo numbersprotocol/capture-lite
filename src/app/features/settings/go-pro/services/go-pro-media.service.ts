@@ -12,8 +12,6 @@ import {
 import { isPlatform } from '@ionic/core';
 import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { CaptureService } from '../../../../shared/capture/capture.service';
-import { DiaBackendAssetRepository } from '../../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
-import { ProofRepository } from '../../../../shared/repositories/proof/proof-repository.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import { GoProFile, GoProFileOnDevice } from '../go-pro-media-file';
 const { Http, Storage } = Plugins;
@@ -37,9 +35,7 @@ export class GoProMediaService {
     private readonly filesystemPlugin: FilesystemPlugin,
     private sanitizer: DomSanitizer,
     private captureService: CaptureService,
-    private readonly httpClient: HttpClient,
-    private readonly diaBackendRepository: DiaBackendAssetRepository,
-    private readonly proofRepository: ProofRepository
+    private readonly httpClient: HttpClient
   ) {}
 
   private async saveFilesToStorage(files: GoProFileOnDevice[]) {
@@ -51,13 +47,6 @@ export class GoProMediaService {
 
   async clearStorage() {
     await this.saveFilesToStorage([]);
-  }
-
-  async printGoProMediaStorage() {
-    const result = await Storage.get({
-      key: this.GO_PRO_FILES_ON_DEVICE_STORAGE_KEY,
-    });
-    const filesOnDevice: GoProFileOnDevice[] = JSON.parse(result.value || '[]');
   }
 
   getThumbnailUrlFrom(url: string): string {
@@ -107,13 +96,11 @@ export class GoProMediaService {
     if (!mediaFile) return;
 
     const fileName = this.extractFileNameFromGoProUrl(mediaFile.url);
-    const fileExtension = this.extractFileExtensionFromGoProUrl(mediaFile.url);
-    const fileType = this.detectFileTypeFromUrl(mediaFile.url);
 
     let option = 'oldWay';
     if (option === 'oldWay') {
       try {
-        const fileResponse: HttpDownloadFileResult = await Http.downloadFile({
+        await Http.downloadFile({
           url: mediaFile.url!,
           filePath: fileName,
           fileDirectory: this.directory,
@@ -138,7 +125,7 @@ export class GoProMediaService {
           ? 'image/jpeg'
           : 'video/mp4';
 
-        const proof = await this.captureService.capture({ base64, mimeType });
+        await this.captureService.capture({ base64, mimeType });
 
         // delete temp downloaded file
         await this.filesystemPlugin.deleteFile({

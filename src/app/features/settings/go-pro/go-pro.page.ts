@@ -25,35 +25,6 @@ export class GoProPage implements OnInit {
 
   bluetoothConnectedDevice?: ScanResult;
 
-  readonly goproBaseUrl = 'http://10.5.5.9:8080';
-
-  /**
-   * @goProControlAndQueryServiceUUID {string} - Should be FEA6.
-   * https://gopro.github.io/OpenGoPro/ble#services-and-characteristics
-   * and 128-bit version will be 0000fea6-0000-1000-8000-00805f9b34fb
-   * passing FEA6 (16-bit version) does not work
-   * you can read more here https://github.com/gopro/OpenGoPro/discussions/41#discussion-3530421
-   */
-  //
-  readonly goProControlAndQueryServiceUUID =
-    '0000fea6-0000-1000-8000-00805f9b34fb'.toUpperCase();
-
-  readonly goProWifiAccessPointServiceUUID =
-    `b5f90001-aa8d-11e3-9046-0002a5d5c51b`.toUpperCase();
-
-  readonly goProCommandReqCharacteristicsUUID =
-    'b5f90072-aa8d-11e3-9046-0002a5d5c51b'.toUpperCase();
-
-  readonly goProWifiSSIDCharacteristicUUID =
-    `b5f90002-aa8d-11e3-9046-0002a5d5c51b`.toUpperCase();
-
-  readonly goProWifiPASSCharacteristicUUID =
-    `b5f90003-aa8d-11e3-9046-0002a5d5c51b`.toUpperCase();
-
-  readonly shutdownCommand = [0x01, 0x05];
-
-  readonly shutterCommand = [0x03, 0x01, 0x01, 0x01];
-
   readonly enableGoProWiFiCommand = [0x03, 0x17, 0x01, 0x01];
 
   constructor(
@@ -187,12 +158,10 @@ export class GoProPage implements OnInit {
           this.presentToast(`Connected to ${JSON.stringify(result.ssid)}`);
         })
         .catch((error: any) => {
-          this.presentToast(`Wifi.connect().catch() ${JSON.stringify(error)}`);
+          this.presentToast(`${JSON.stringify(error)}`);
         });
     } catch (error) {
-      this.presentToast(
-        `await Wifi.connect() catch() ${JSON.stringify(error)}`
-      );
+      this.presentToast(`${JSON.stringify(error)}`);
     }
   }
 
@@ -202,15 +171,6 @@ export class GoProPage implements OnInit {
 
   async showFilesOnDevice() {
     this.router.navigate(['/settings', 'go-pro', 'media-list-on-device']);
-  }
-
-  clearGoProMediaStorage() {
-    this.goProMediaService.clearStorage();
-    // TODO: go through file system and delete actual files too
-  }
-
-  printGoProMediaStorage() {
-    this.goProMediaService.printGoProMediaStorage();
   }
 
   async presentToast(message: string) {
