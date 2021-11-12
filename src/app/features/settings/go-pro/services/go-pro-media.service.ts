@@ -59,18 +59,11 @@ export class GoProMediaService {
     });
     const filesOnDevice: GoProFileOnDevice[] = JSON.parse(result.value || '[]');
     console.log('filesOnDeviceStorage', JSON.stringify(filesOnDevice, null, 2));
-
-    // this.file
-    //   .listDir('', this.rootDir2)
-    //   .then(val => console.log(JSON.stringify(val, null, 2)))
-    //   .catch(error => console.log(JSON.stringify(error, null, 2)));
   }
 
   getThumbnailUrlFrom(url: string): string {
     const fileName = url.split('/').pop();
     const thumbnailUrl = `${this.goproBaseUrl}/gopro/media/thumbnail?path=100GOPRO/${fileName}`;
-    // console.log(`_________url: ${url}`);
-    // console.log(`thumbnailUrl: ${thumbnailUrl}`);
     return thumbnailUrl;
   }
 
@@ -114,7 +107,6 @@ export class GoProMediaService {
   async uploadToCaptureFromGoProCamera(mediaFile: GoProFile | undefined) {
     if (!mediaFile) return;
 
-    // TODO: reimplement with capacitor-community-http plugin
     const fileName = this.extractFileNameFromGoProUrl(mediaFile.url);
     const fileExtension = this.extractFileExtensionFromGoProUrl(mediaFile.url);
     const fileType = this.detectFileTypeFromUrl(mediaFile.url);
@@ -169,12 +161,6 @@ export class GoProMediaService {
           headers: { responseType: 'blob' },
         });
 
-        // const blob = await this.httpClient
-        //   .get(url, { responseType: 'blob' })
-        //   .toPromise();
-
-        console.log('got blob');
-
         const base64 = await blobToBase64(blob);
 
         const mimeType = this.urlIsImage(url) ? 'image/jpeg' : 'video/mp4';
@@ -187,32 +173,6 @@ export class GoProMediaService {
         console.log(JSON.stringify(error, null, 2));
       }
     }
-
-    // // TODO: fix this hack (temporary download file to upload to capture)
-    // await this.http.downloadFile(
-    //   mediaFile.url,
-    //   {},
-    //   {},
-    //   `${this.rootDir2}/${fileName}`
-    // );
-
-    // const readResult = await this.filesystemPlugin.readFile({
-    //   directory: this.directory,
-    //   path: `${this.rootDir}/${fileName}`,
-    // });
-
-    // const base64 = readResult.data;
-
-    // const mimeType = this.urlIsImage(mediaFile.url)
-    //   ? 'image/jpeg'
-    //   : 'video/mp4';
-
-    // await this.filesystemPlugin.deleteFile({
-    //   directory: this.directory,
-    //   path: `${this.rootDir}/${fileName}`,
-    // });
-
-    // this.captureService.capture({ base64, mimeType });
   }
 
   async getFileSrcFromDevice(filePath: string): Promise<SafeUrl> {
@@ -285,14 +245,6 @@ export class GoProMediaService {
       try {
         console.log('getting blob without headers...');
 
-        // const blob = await Http.request({
-        //   method: 'GET',
-        //   url: url,
-        //   headers: { responseType: 'blob' },
-        // });
-
-        // angular http might not work if you try to get from GoPro
-        // but seems working fetching from device
         const blob = await this.httpClient
           .get(url, { responseType: 'blob' })
           .toPromise();
@@ -309,25 +261,6 @@ export class GoProMediaService {
         const proof = await this.captureService.capture({ base64, mimeType });
         console.log(JSON.stringify(proof, null, 2));
         console.log('capture end');
-
-        // console.log('manual capture start');
-        // const proof = (
-        //   await this.captureService.capture({ base64, mimeType })
-        // )[0];
-
-        // // The real upload happens here
-        // const diaBackendAsset = await this.diaBackendRepository
-        //   .addCapture$(proof)
-        //   .toPromise();
-
-        // // After upload, you get an UUID and need to update the UUID to  proof.diaBackendAssetId
-        // proof.diaBackendAssetId = diaBackendAsset.uuid;
-        // // Update the proof repository (locally stored Capture)
-        // await this.proofRepository.update(
-        //   [proof],
-        //   (x, y) => getOldProof(x).hash === getOldProof(y).hash
-        // );
-        // console.log('manual capture end');
       } catch (error) {
         debugger;
         console.log(JSON.stringify(error));

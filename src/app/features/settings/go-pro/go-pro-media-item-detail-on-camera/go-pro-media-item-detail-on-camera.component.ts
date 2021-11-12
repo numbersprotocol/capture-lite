@@ -61,7 +61,6 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
     await loading.present();
 
     try {
-      // TODO: reimplement download with capacitor-community-http plugin
       await this.goProMediaService.downloadFromGoProCamera(this.mediaFile);
       this.presentToast(`${fileName} downloaded ✅`);
     } catch (error) {
@@ -81,24 +80,6 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
       this.startUploadToCapture();
       return;
     }
-
-    // if (newtorkStatus.connectionType == 'wifi') {
-    //   const connectedToGoProWiFi =
-    //     await this.goProWiFiService.isConnectedToGoProWifi();
-
-    //   if (!connectedToGoProWiFi) {
-    //     this.startUploadToCapture();
-    //     return;
-    //   }
-    // }
-
-    // if (newtorkStatus.connectionType == 'cellular') {
-    //   const allowed = await this.allowUploadWithMobileInternet();
-    //   if (allowed) {
-    //     this.startUploadToCapture();
-    //     return;
-    //   }
-    // }
   }
 
   private async startUploadToCapture() {

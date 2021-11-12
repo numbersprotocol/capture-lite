@@ -66,13 +66,12 @@ export class GoProPage implements OnInit {
 
   ngOnInit() {
     this.restoreBluetoothConnection();
-    // this.scanForBluetoothDevices();
   }
 
   async restoreBluetoothConnection() {
     const currentlyConnectedBluetoothDevice =
       await this.goProBluetoothService.getConnectedDevice();
-    debugger;
+
     if (currentlyConnectedBluetoothDevice) {
       this.bluetoothScanResults = [currentlyConnectedBluetoothDevice];
       this.bluetoothConnectedDevice = currentlyConnectedBluetoothDevice;
@@ -176,41 +175,25 @@ export class GoProPage implements OnInit {
   }
 
   async connectToGoProWifi() {
-    // TODO: use goProBluetoothService
-
-    // try {
-    //   await this.goProBluetoothService.connectToGoProWiFi();
-    //   this.presentToast(`Connected to GoPro WiFi`);
-    // } catch (error) {
-    //   console.error(`connectToGoProWifi.error`);
-    //   console.error(error);
-    //   this.presentToast(
-    //     `await Wifi.connect() catch() ${JSON.stringify(error)}`
-    //   );
-    // }
-
     if (!this.bluetoothConnectedDevice) {
       return;
     }
 
     await this.sendBluetoothWriteCommand(this.enableGoProWiFiCommand);
-    // @ts-ignore
-    const { wifiSSID, wifiPASS } = await this.getGoProWiFiCreds();
+
+    const creds = await this.getGoProWiFiCreds();
+    if (!creds) return;
+
+    const { wifiSSID, wifiPASS } = creds;
 
     try {
-      // this.presentToast(`Wifi.connectPrefix`);
-      // console.log(`Connecting to ${wifiSSID} with password ${wifiPASS}`);
-      // await Wifi.connectPrefix({
-      //   ssid: wifiSSID,
-      //   password: wifiPASS,
-      // })
       this.presentToast(`Wifi.connect`);
       console.log(`Connecting to ${wifiSSID} with password ${wifiPASS}`);
       await Wifi.connect({
         ssid: wifiSSID,
         password: wifiPASS,
       })
-        .then(result => {
+        .then((result: any) => {
           console.warn(`connectToGoProWifi.result`, result);
           this.presentToast(`Connected to ${JSON.stringify(result.ssid)}`);
         })
