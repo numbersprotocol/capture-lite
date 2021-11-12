@@ -98,10 +98,6 @@ export class GoProBluetoothService {
 
   onDisconnectedFromBluetoothDevice(scanResult: ScanResult) {
     this.removeConnectedDeviceFromStorage(scanResult);
-    console.warn(
-      '🚀 ~ file: go-pro-bluetooth.service.ts ~ line 108 ~ GoProBluetoothService ~ onDisconnectedFromBluetoothDevice ~ deviceId',
-      scanResult.device.deviceId
-    );
   }
 
   async disconnectFromBluetoothDevice(scanResult: ScanResult) {
@@ -217,10 +213,8 @@ export class GoProBluetoothService {
           password: wifiCreds.wifiPASS,
         });
 
-        console.log(JSON.stringify(result, null, 2));
         resolve(result);
       } catch (error) {
-        console.log(JSON.stringify(error, null, 2));
         reject(error);
       }
     });

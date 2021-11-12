@@ -88,7 +88,6 @@ export class GoProPage implements OnInit {
     } catch (error) {
       this.bluetoothScanResults = [];
       this.bluetoothIsScanning = false;
-      console.error('scanForBluetoothDevices', error);
     }
   }
 
@@ -98,7 +97,6 @@ export class GoProPage implements OnInit {
       this.bluetoothConnectedDevice = scanResult;
       this.presentToast(`🅱 Connected to ${scanResult.device.name}`);
     } catch (error) {
-      console.log(JSON.stringify(error, null, 2));
       this.presentToast(JSON.stringify(error));
     }
   }
@@ -113,7 +111,7 @@ export class GoProPage implements OnInit {
       const device = scanResult.device;
       alert(`disconnected from device ${device.name ?? device.deviceId}`);
     } catch (error) {
-      console.error('disconnectFromDevice', error);
+      this.presentToast(JSON.stringify(error));
     }
   }
 
@@ -122,10 +120,6 @@ export class GoProPage implements OnInit {
       await this.goProBluetoothService.sendBluetoothWriteCommand(command);
       this.presentToast('command sent');
     } catch (error) {
-      console.log(
-        '🚀 ~ file: go-pro.page.ts ~ GoProPage ~ sendBluetoothWriteCommand ~ sendBluetoothWriteCommand',
-        error
-      );
       this.presentToast(JSON.stringify(error));
     }
   }
@@ -135,7 +129,6 @@ export class GoProPage implements OnInit {
       await this.goProBluetoothService.sendBluetoothReadCommand(command);
       this.presentToast('command sent');
     } catch (error) {
-      console.log(`error: ${JSON.stringify(error)}`);
       this.presentToast(JSON.stringify(error));
     }
   }
@@ -164,11 +157,9 @@ export class GoProPage implements OnInit {
         await this.goProBluetoothService.getGoProWiFiCreds();
 
       this.presentToast(`GoPro WiFi SSID: ${wifiSSID} PASS: ${wifiPASS}`);
-      console.log({ wifiSSID, wifiPASS });
 
       return { wifiSSID, wifiPASS };
     } catch (error) {
-      console.error('getGoProWiFiCreds', JSON.stringify(error));
       this.presentToast(`❌ ${JSON.stringify(error)}`);
       return undefined;
     }
@@ -188,23 +179,17 @@ export class GoProPage implements OnInit {
 
     try {
       this.presentToast(`Wifi.connect`);
-      console.log(`Connecting to ${wifiSSID} with password ${wifiPASS}`);
       await Wifi.connect({
         ssid: wifiSSID,
         password: wifiPASS,
       })
         .then((result: any) => {
-          console.warn(`connectToGoProWifi.result`, result);
           this.presentToast(`Connected to ${JSON.stringify(result.ssid)}`);
         })
         .catch((error: any) => {
-          console.error(`connectToGoProWifi.error`);
-          console.error(error);
           this.presentToast(`Wifi.connect().catch() ${JSON.stringify(error)}`);
         });
     } catch (error) {
-      console.error(`connectToGoProWifi.error`);
-      console.error(error);
       this.presentToast(
         `await Wifi.connect() catch() ${JSON.stringify(error)}`
       );

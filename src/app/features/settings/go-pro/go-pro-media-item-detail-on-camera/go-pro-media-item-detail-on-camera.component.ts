@@ -65,7 +65,6 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
       this.presentToast(`${fileName} downloaded ✅`);
     } catch (error) {
       this.presentToast(`Failed to download ${fileName}  ❌`);
-      console.log(JSON.stringify(error, null, 2));
     }
 
     await loading.dismiss();
@@ -73,7 +72,6 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
 
   async uploadToCapture() {
     const newtorkStatus = await this.networkPlugin.getStatus();
-    console.log(JSON.stringify(newtorkStatus, null, 4));
 
     const allowed = await this.allowUploadWithMobileInternet();
     if (allowed) {
@@ -94,7 +92,6 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
       await loading.dismiss();
       await this.presentToast(`✅ Upload added to the queue, see Home Page`);
     } catch (error) {
-      console.log(JSON.stringify(error, null, 4));
       await loading.dismiss();
       await this.presentToast(`❌ Failed to upload`);
     }
@@ -111,15 +108,13 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
           {
             text: 'Cancel',
             role: 'cancel',
-            handler: blah => {
-              console.log('Confirm Cancel');
+            handler: () => {
               resolve(false);
             },
           },
           {
             text: 'Okay',
             handler: () => {
-              console.log('Confirm Okay');
               resolve(true);
             },
           },

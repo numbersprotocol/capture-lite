@@ -58,7 +58,6 @@ export class GoProMediaService {
       key: this.GO_PRO_FILES_ON_DEVICE_STORAGE_KEY,
     });
     const filesOnDevice: GoProFileOnDevice[] = JSON.parse(result.value || '[]');
-    console.log('filesOnDeviceStorage', JSON.stringify(filesOnDevice, null, 2));
   }
 
   getThumbnailUrlFrom(url: string): string {
@@ -114,8 +113,6 @@ export class GoProMediaService {
     let option = 'oldWay';
     if (option === 'oldWay') {
       try {
-        console.log(option);
-
         const fileResponse: HttpDownloadFileResult = await Http.downloadFile({
           url: mediaFile.url!,
           filePath: fileName,
@@ -154,7 +151,6 @@ export class GoProMediaService {
       try {
         const url = mediaFile.url;
 
-        console.log('getting blob without headers...');
         const blob = await Http.request({
           method: 'GET',
           url: url,
@@ -165,13 +161,8 @@ export class GoProMediaService {
 
         const mimeType = this.urlIsImage(url) ? 'image/jpeg' : 'video/mp4';
 
-        console.log('capture start');
         const proof = await this.captureService.capture({ base64, mimeType });
-        console.log(JSON.stringify(proof, null, 2));
-        console.log('capture end');
-      } catch (error) {
-        console.log(JSON.stringify(error, null, 2));
-      }
+      } catch (error) {}
     }
   }
 
@@ -229,8 +220,6 @@ export class GoProMediaService {
         ? 'image/jpeg'
         : 'video/mp4';
 
-      console.log('uploadToCaptureFromDevice finish readFile');
-
       const proof = await this.captureService.capture({ base64, mimeType });
     } else {
       const result = await this.filesystemPlugin.getUri({
@@ -240,16 +229,11 @@ export class GoProMediaService {
       });
 
       const url = Capacitor.convertFileSrc(result.uri);
-      console.log('got url', url);
 
       try {
-        console.log('getting blob without headers...');
-
         const blob = await this.httpClient
           .get(url, { responseType: 'blob' })
           .toPromise();
-
-        console.log('got blob');
 
         const base64 = await blobToBase64(blob);
 
@@ -257,12 +241,8 @@ export class GoProMediaService {
           ? 'image/jpeg'
           : 'video/mp4';
 
-        console.log('capture start');
         const proof = await this.captureService.capture({ base64, mimeType });
-        console.log(JSON.stringify(proof, null, 2));
-        console.log('capture end');
       } catch (error) {
-        debugger;
         console.log(JSON.stringify(error));
       }
     }
@@ -281,12 +261,6 @@ export class GoProMediaService {
         params,
       });
 
-      console.log(
-        '🚀 ~ file: go-pro-media.service.ts ~ line 124 ~ GoProMediaService ~ getFilesFromGoPro ~ response',
-        response,
-        typeof response.data
-      );
-
       const data = response.data;
 
       const files = data.media[0].fs as any[];
@@ -304,8 +278,6 @@ export class GoProMediaService {
   }
 
   private generateGoProFileFromUrl(url: string): GoProFile {
-    console.log(url);
-
     return {
       url,
       storageKey: undefined,
@@ -347,7 +319,6 @@ export class GoProMediaService {
         fileDirectory: this.directory,
         method: 'GET',
       });
-      console.log(`fileRespnse.path: ${fileResponse.path}`);
 
       const thumbResponse: HttpDownloadFileResult = await Http.downloadFile({
         url: mediaFile.thumbnailUrl!,
@@ -355,7 +326,6 @@ export class GoProMediaService {
         fileDirectory: this.directory,
         method: 'GET',
       });
-      console.log(`thumbResponse.path: ${thumbResponse.path}`);
 
       const goProFileOnDevice: GoProFileOnDevice = {
         name: fileName,
@@ -364,10 +334,6 @@ export class GoProMediaService {
         size: 1, // TODO: find out size of file
         type: fileType,
       };
-
-      console.log(
-        `goProFileOnDevice: ${JSON.stringify(goProFileOnDevice, null, 2)}`
-      );
 
       await this.addFileToStorage(goProFileOnDevice);
     } catch (error) {
