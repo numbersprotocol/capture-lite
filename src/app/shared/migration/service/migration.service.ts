@@ -289,7 +289,7 @@ function isEqualOrLowerThanTargetVersion(
   if (!currentVersion) return true;
   const currentVersionArray = currentVersion.split('.');
   const targetVersionArray = targetVersion.split('.');
-  for (let index in currentVersionArray) {
+  for (const index in currentVersionArray) {
     if (currentVersionArray[index] > targetVersionArray[index]) {
       return false;
     } else if (currentVersionArray[index] < targetVersionArray[index]) {
