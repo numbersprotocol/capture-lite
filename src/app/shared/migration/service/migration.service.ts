@@ -17,6 +17,7 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAssetPrefetchingService } from '../../dia-backend/asset/prefetching/dia-backend-asset-prefetching.service';
 import { DiaBackendWalletService } from '../../dia-backend/wallet/dia-backend-wallet.service';
 import { HttpErrorCode } from '../../error/error.service';
 import { NetworkService } from '../../network/network.service';
@@ -39,6 +40,7 @@ export class MigrationService {
     private readonly dialog: MatDialog,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendWalletService: DiaBackendWalletService,
+    private readonly diaBackendAssetPrefetchingService: DiaBackendAssetPrefetchingService,
     private readonly networkService: NetworkService,
     private readonly proofRepository: ProofRepository,
     private readonly preferenceManager: PreferenceManager,
@@ -59,6 +61,7 @@ export class MigrationService {
         hasMigratedTo0_15_0 ? VOID$ : runMigrateTo0_15_0$
       ),
       concatMap(() => this.runMigrateFrom0_38_1$()),
+      concatMap(() => this.runMigrateFrom0_40_2$()),
       concatMap(() => this.updatePreviousVersion())
     );
   }
@@ -114,6 +117,35 @@ export class MigrationService {
     return this.createOrImportDiaBackendAssetWallet$().pipe(
       concatMap(() => this.generateAndUpdateSignatureForUnversionedProofs$())
     );
+  }
+
+  runMigrateFrom0_40_2$() {
+    const targetVersion = '0.42.0';
+    return this.preferences.getString$(PrefKeys.PREVIOUS_VERSION).pipe(
+      first(),
+      concatMap(previousVersion =>
+        iif(
+          () => isEqualOrLowerThanTargetVersion(previousVersion, targetVersion),
+          this.migrationActions0_40_2$(),
+          VOID$
+        )
+      )
+    );
+  }
+
+  migrationActions0_40_2$() {
+    return defer(async () => {
+      const dialogRef = this.dialog.open(MigratingDialogComponent, {
+        disableClose: true,
+        data: { progress: 0 },
+      });
+
+      try {
+        await this.diaBackendAssetPrefetchingService.prefetch();
+      } finally {
+        dialogRef.close();
+      }
+    });
   }
 
   createOrImportDiaBackendAssetWallet$() {
@@ -257,12 +289,12 @@ function isEqualOrLowerThanTargetVersion(
   if (!currentVersion) return true;
   const currentVersionArray = currentVersion.split('.');
   const targetVersionArray = targetVersion.split('.');
-  currentVersionArray.forEach((versionNumber, index) => {
-    if (versionNumber > targetVersionArray[index]) {
+  for (const index in currentVersionArray) {
+    if (currentVersionArray[index] > targetVersionArray[index]) {
       return false;
-    } else if (versionNumber < targetVersionArray[index]) {
+    } else if (currentVersionArray[index] < targetVersionArray[index]) {
       return true;
     }
-  });
+  }
   return true;
 }
