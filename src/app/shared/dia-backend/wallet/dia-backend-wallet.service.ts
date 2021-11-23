@@ -100,7 +100,6 @@ export interface DiaBackendWallet {
 }
 
 const enum PrefKeys {
-  CAPT_BALANCE = 'CAPT_BALANCE',
   ETH_NUM_BALANCE = 'ETH_NUM_BALANCE',
   BSC_NUM_BALANCE = 'BSC_NUM_BALANCE',
 }
