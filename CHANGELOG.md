@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.43.0 - 2021-11-23
+
+### Changed
+
+- Show ERC20 and BEP20 NUM tokens in profile page.
+- Add migration for APPs upgrading from versions before 0.42.0.
+- Change network application fields to meet the new Bubble database schema.
+- Update Android target version to Android 11 (API level 30).
+
+### Fixed
+
+- Fix Capture icon display issue in signup page.
+
 ## 0.42.0 - 2021-10-26
 
 ### Added
