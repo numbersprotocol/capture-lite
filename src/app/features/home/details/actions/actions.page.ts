@@ -43,7 +43,7 @@ export class ActionsPage {
 
   openAction(action: Action) {
     return combineLatest([
-      this.actionsService.getParams$(action.params_list_custom_param),
+      this.actionsService.getParams$(action.params_list_custom_param1),
       this.authService.token$,
       this.id$,
     ])
@@ -59,11 +59,11 @@ export class ActionsPage {
                     param =>
                       ({
                         name: param.name_text,
-                        label: param.label_text,
+                        label: param.display_text_text,
                         type: param.type_text,
                         placeholder: param.placeholder_text,
-                        value: param.default_value_text,
-                        disabled: param.disabled_boolean,
+                        value: param.default_values_list_text[0],
+                        disabled: !param.user_input_boolean,
                       } as AlertInput)
                   ),
                   buttons: [
