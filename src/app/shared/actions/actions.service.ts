@@ -36,21 +36,22 @@ export class ActionsService {
 }
 
 export interface Action {
-  readonly base_url_text: string;
+  readonly action_cost_number: number;
   readonly banner_image_url_text: string;
+  readonly base_url_text: string;
   readonly description_text: string;
-  readonly price_number: number;
+  readonly params_list_custom_param1: string[];
   readonly title_text: string;
-  readonly params_list_custom_param: string[];
 }
 
 export interface Param {
-  readonly label_text: string;
+  readonly default_values_list_text: string[];
+  readonly description_text: string;
+  readonly display_text_text: string;
   readonly name_text: string;
-  readonly type_text: string;
   readonly placeholder_text: string;
-  readonly default_value_text: string;
-  readonly disabled_boolean: boolean;
+  readonly type_text: string;
+  readonly user_input_boolean: boolean;
 }
 
 export interface GetActionsResponse<T> {
