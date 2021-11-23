@@ -11,11 +11,22 @@
   <mat-list>
     <mat-list-item>
       <ion-icon mat-list-icon src="/assets/images/numbers_token.svg"></ion-icon>
-      <div mat-line>{{ t('balance') }}</div>
+      <div mat-line>ETH {{ t('balance') }}</div>
       <div mat-line>NUM</div>
-      <div class="capt-balance">
+      <div class="num-balance">
         <ng-container *ngIf="networkConnected$ | ngrxPush; else offline">
-          $ {{ captBalance$ | ngrxPush | number: '1.2-2' }}
+          $ {{ ethNumBalance$ | ngrxPush | number: '1.2-2' }}
+        </ng-container>
+        <ng-template #offline> --offline-- </ng-template>
+      </div>
+    </mat-list-item>
+    <mat-list-item>
+      <ion-icon mat-list-icon src="/assets/images/numbers_token.svg"></ion-icon>
+      <div mat-line>BSC {{ t('balance') }}</div>
+      <div mat-line>NUM</div>
+      <div class="num-balance">
+        <ng-container *ngIf="networkConnected$ | ngrxPush; else offline">
+          $ {{ bscNumBalance$ | ngrxPush | number: '1.2-2' }}
         </ng-container>
         <ng-template #offline> --offline-- </ng-template>
       </div>

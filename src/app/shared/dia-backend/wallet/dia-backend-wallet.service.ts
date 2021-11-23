@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer } from 'rxjs';
+import { defer, forkJoin } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { NetworkService } from '../../network/network.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
@@ -15,7 +15,12 @@ export class DiaBackendWalletService {
 
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
-  readonly captBalance$ = this.preferences.getNumber$(PrefKeys.CAPT_BALANCE);
+  readonly ethNumBalance$ = this.preferences.getNumber$(
+    PrefKeys.ETH_NUM_BALANCE
+  );
+  readonly bscNumBalance$ = this.preferences.getNumber$(
+    PrefKeys.BSC_NUM_BALANCE
+  );
 
   readonly networkConnected$ = this.networkService.connected$;
 
@@ -63,12 +68,18 @@ export class DiaBackendWalletService {
   }
 
   syncCaptBalance$() {
-    return this.getManagedWallet$().pipe(
+    return this.getAssetWallet$().pipe(
       concatMap(diaBackendWallet =>
-        this.preferences.setNumber(
-          PrefKeys.CAPT_BALANCE,
-          diaBackendWallet.capt_balance
-        )
+        forkJoin([
+          this.preferences.setNumber(
+            PrefKeys.ETH_NUM_BALANCE,
+            diaBackendWallet.num_balance.eth_num
+          ),
+          this.preferences.setNumber(
+            PrefKeys.BSC_NUM_BALANCE,
+            diaBackendWallet.num_balance.bsc_num
+          ),
+        ])
       )
     );
   }
@@ -78,6 +89,10 @@ export interface DiaBackendWallet {
   id: string;
   type: string;
   capt_balance: number;
+  num_balance: {
+    bsc_num: number;
+    eth_num: number;
+  };
   address: string;
   private_key: string;
   created_at: string;
@@ -86,4 +101,6 @@ export interface DiaBackendWallet {
 
 const enum PrefKeys {
   CAPT_BALANCE = 'CAPT_BALANCE',
+  ETH_NUM_BALANCE = 'ETH_NUM_BALANCE',
+  BSC_NUM_BALANCE = 'BSC_NUM_BALANCE',
 }

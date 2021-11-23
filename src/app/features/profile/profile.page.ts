@@ -32,7 +32,8 @@ export class ProfilePage {
   readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
   readonly phoneVerified$ = this.diaBackendAuthService.phoneVerified$;
   readonly emailVerified$ = this.diaBackendAuthService.emailVerified$;
-  readonly captBalance$ = this.diaBackendWalletService.captBalance$;
+  readonly ethNumBalance$ = this.diaBackendWalletService.ethNumBalance$;
+  readonly bscNumBalance$ = this.diaBackendWalletService.bscNumBalance$;
   readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
 
   constructor(
