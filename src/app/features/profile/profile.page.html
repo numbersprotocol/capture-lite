@@ -10,12 +10,23 @@
 <div *transloco="let t" class="page-content">
   <mat-list>
     <mat-list-item>
-      <ion-icon mat-list-icon src="/assets/images/numbers_token.svg"></ion-icon>
-      <div mat-line>{{ t('balance') }}</div>
-      <div mat-line>NUM</div>
-      <div class="capt-balance">
+      <ion-icon mat-list-icon src="/assets/images/num-icon.svg"></ion-icon>
+      <div mat-line>NUM {{ t('balance') }}</div>
+      <div mat-line>ERC20</div>
+      <div class="num-balance">
         <ng-container *ngIf="networkConnected$ | ngrxPush; else offline">
-          $ {{ captBalance$ | ngrxPush | number: '1.2-2' }}
+          $ {{ ethNumBalance$ | ngrxPush | number: '1.2-2' }}
+        </ng-container>
+        <ng-template #offline> --offline-- </ng-template>
+      </div>
+    </mat-list-item>
+    <mat-list-item>
+      <ion-icon mat-list-icon src="/assets/images/num-icon.svg"></ion-icon>
+      <div mat-line>NUM {{ t('balance') }}</div>
+      <div mat-line>BEP20</div>
+      <div class="num-balance">
+        <ng-container *ngIf="networkConnected$ | ngrxPush; else offline">
+          $ {{ bscNumBalance$ | ngrxPush | number: '1.2-2' }}
         </ng-container>
         <ng-template #offline> --offline-- </ng-template>
       </div>
