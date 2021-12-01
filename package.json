@@ -69,7 +69,7 @@
     "@angular/compiler-cli": "^12.2.4",
     "@angular/language-service": "^12.2.4",
     "@capacitor/cli": "~2.4.7",
-    "@ionic/angular-toolkit": "^4.0.0",
+    "@ionic/angular-toolkit": "^5.0.3",
     "@types/jasmine": "^3.8.2",
     "@types/jasminewd2": "^2.0.10",
     "@types/lodash-es": "^4.17.4",
