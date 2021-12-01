@@ -39,7 +39,7 @@
     "@ngrx/component": "^12.4.0",
     "@ngrx/store": "^12.4.0",
     "@ngx-formly/core": "^5.10.22",
-    "@ngx-formly/material": "^5.10.22",
+    "@ngx-formly/material": "^5.10.24",
     "@ngx-formly/schematics": "^5.10.22",
     "async-mutex": "^0.3.2",
     "buffer": "^5.7.1",
