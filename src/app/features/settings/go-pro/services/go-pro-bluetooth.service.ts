@@ -73,7 +73,7 @@ export class GoProBluetoothService {
           foundDevice => bluetoothScanResults.push(foundDevice)
         );
 
-        const stopScanAfterMilliSeconds = 1500;
+        const stopScanAfterMilliSeconds = 2000;
         setTimeout(async () => {
           await BleClient.stopLEScan();
           resolve(bluetoothScanResults);

@@ -22,6 +22,9 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
 
   mediaType: 'unknown' | 'image' | 'video' = 'unknown';
 
+  showTutorialForMobileDataOnlyApps = false;
+  dontShowAgainTutorialForMobileDataOnlyApps = false;
+
   constructor(
     private location: Location,
     private route: ActivatedRoute,
@@ -75,8 +78,25 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
 
     const allowed = await this.allowUploadWithMobileInternet();
     if (allowed) {
-      this.startUploadToCapture();
-      return;
+      await this.startUploadToCapture();
+
+      if (
+        (await this.goProWiFiService.showTutorialForMobileDataOnlyApps()) ===
+        false
+      ) {
+        this.showTutorialForMobileDataOnlyApps = true;
+      }
+    }
+  }
+
+  hideTutorialForMobileDataOnlyApps() {
+    this.showTutorialForMobileDataOnlyApps = false;
+    console.log(
+      `hideTutorialForMobileDataOnlyApps.dontShowAgainTutorialForMobileDataOnlyApps ${this.dontShowAgainTutorialForMobileDataOnlyApps}`
+    );
+
+    if (this.dontShowAgainTutorialForMobileDataOnlyApps == true) {
+      this.goProWiFiService.dontShowAgainTutorialForMobileDataOnlyApps();
     }
   }
 

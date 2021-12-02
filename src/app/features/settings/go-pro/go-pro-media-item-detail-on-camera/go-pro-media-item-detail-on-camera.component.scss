@@ -7,3 +7,47 @@ video {
   width: 100%;
   height: 350px;
 }
+
+ion-content {
+  ion-slides {
+    --bullet-background-active: white;
+
+    ion-slide {
+      flex-direction: column;
+      background-color: #36393f;
+      height: 93vh;
+
+      svg {
+        padding-top: 8vh;
+        padding-bottom: calc(12vh + env(safe-area-inset-bottom));
+      }
+
+      button {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+        color: white;
+        font-size: 20px;
+        padding-bottom: calc(5vh + env(safe-area-inset-bottom));
+        border: none;
+      }
+    }
+  }
+}
+
+.pagination-bullets {
+  bottom: 16px;
+}
+
+.ios text {
+  font-family: Helvetica, Arial, Verdana, Tahoma, sans-serif;
+}
+
+@media (min-height: 750px) {
+  .ios div {
+    position: relative;
+    width: 100%;
+    padding: 30px;
+    height: 90%;
+  }
+}
