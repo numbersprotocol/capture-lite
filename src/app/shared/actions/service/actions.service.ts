@@ -52,6 +52,8 @@ export interface Param {
   readonly placeholder_text: string;
   readonly type_text: 'number' | 'text' | 'dropdown';
   readonly user_input_boolean: boolean;
+  readonly max_number: number;
+  readonly min_number: number;
 }
 
 export interface GetActionsResponse<T> {

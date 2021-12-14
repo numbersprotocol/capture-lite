@@ -52,12 +52,26 @@ export class ActionsDialogComponent {
             required: true,
           },
         });
+      else if (param.type_text === 'number')
+        this.fields.push({
+          key: param.name_text,
+          type: 'input',
+          templateOptions: {
+            type: 'number',
+            label: param.display_text_text,
+            placeholder: param.placeholder_text,
+            disabled: !param.user_input_boolean,
+            max: param.max_number,
+            min: param.min_number,
+            required: true,
+          },
+        });
       else
         this.fields.push({
           key: param.name_text,
           type: 'input',
           templateOptions: {
-            type: param.type_text,
+            type: 'text',
             label: param.display_text_text,
             placeholder: param.placeholder_text,
             disabled: !param.user_input_boolean,
