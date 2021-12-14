@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
-import { AlertInput } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { catchError, concatMap, map, tap } from 'rxjs/operators';
+import { ActionsDialogComponent } from '../../../../shared/actions/actions-dialog/actions-dialog.component';
 import {
   Action,
   ActionsService,
-} from '../../../../shared/actions/actions.service';
+} from '../../../../shared/actions/service/actions.service';
 import { BlockingActionService } from '../../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../../shared/error/error.service';
@@ -33,12 +33,12 @@ export class ActionsPage {
   constructor(
     private readonly actionsService: ActionsService,
     private readonly errorService: ErrorService,
-    private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService,
     private readonly blockingActionService: BlockingActionService,
     private readonly route: ActivatedRoute,
     private readonly authService: DiaBackendAuthService,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
+    private readonly dialog: MatDialog
   ) {}
 
   openAction(action: Action) {
@@ -51,39 +51,20 @@ export class ActionsPage {
         concatMap(
           ([params, token, id]) =>
             new Promise<void>(resolve => {
-              this.alertController
-                .create({
-                  header: action.title_text,
-                  message: action.description_text,
-                  inputs: params.map(
-                    param =>
-                      ({
-                        name: param.name_text,
-                        label: param.display_text_text,
-                        type: param.type_text,
-                        placeholder: param.placeholder_text,
-                        value: param.default_values_list_text[0],
-                        disabled: !param.user_input_boolean,
-                      } as AlertInput)
-                  ),
-                  buttons: [
-                    {
-                      text: this.translocoService.translate('cancel'),
-                      role: 'cancel',
-                    },
-                    {
-                      text: this.translocoService.translate('ok'),
-                      handler: value => {
-                        const body = { ...value, token: token, cid: id };
-                        return this.sendAction(action, body);
-                      },
-                    },
-                  ],
-                })
-                .then(alert => {
-                  alert.present();
-                  resolve();
-                });
+              const dialogRef = this.dialog.open(ActionsDialogComponent, {
+                disableClose: true,
+                data: {
+                  action: action,
+                  params: params,
+                },
+              });
+              dialogRef.afterClosed().subscribe(data => {
+                if (data !== undefined) {
+                  const body = { ...data, token: token, cid: id };
+                  return this.sendAction(action, body);
+                }
+              });
+              resolve();
             })
         ),
         untilDestroyed(this)

@@ -1,0 +1,20 @@
+<div *transloco="let t">
+  <h2 mat-dialog-title>{{ title }}</h2>
+  <p>{{ description }}</p>
+
+  <form [formGroup]="form" (ngSubmit)="send()">
+    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="cancel()">{{ t('cancel') }}</button>
+      <button
+        mat-button
+        type="submit"
+        [disabled]="!form.valid"
+        color="primary"
+        cdkFocusInitial
+      >
+        {{ t('ok') }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>
