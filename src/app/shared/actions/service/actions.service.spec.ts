@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { SharedTestingModule } from '../shared-testing.module';
+import { SharedTestingModule } from '../../shared-testing.module';
 import { ActionsService } from './actions.service';
 
 describe('ActionsService', () => {

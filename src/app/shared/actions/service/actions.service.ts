@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { defer, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BUBBLE_DB_URL } from '../dia-backend/secret';
+import { BUBBLE_DB_URL } from '../../dia-backend/secret';
 
 @Injectable({
   providedIn: 'root',
@@ -50,8 +50,10 @@ export interface Param {
   readonly display_text_text: string;
   readonly name_text: string;
   readonly placeholder_text: string;
-  readonly type_text: string;
+  readonly type_text: 'number' | 'text' | 'dropdown';
   readonly user_input_boolean: boolean;
+  readonly max_number: number;
+  readonly min_number: number;
 }
 
 export interface GetActionsResponse<T> {

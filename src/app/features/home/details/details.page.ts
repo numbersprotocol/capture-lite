@@ -26,6 +26,7 @@ import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.servic
 import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendWorkflowService } from '../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { MediaStore } from '../../../shared/media/media-store/media-store.service';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
@@ -85,7 +86,8 @@ export class DetailsPage {
               this.diaBackendAssetRepository,
               this.errorService,
               this.diaBackendAuthService,
-              this.translocoService
+              this.translocoService,
+              this.diaBackendWorkflowService
             )
         )
     )
@@ -103,7 +105,8 @@ export class DetailsPage {
               this.diaBackendAssetRepository,
               this.errorService,
               this.diaBackendAuthService,
-              this.translocoService
+              this.translocoService,
+              this.diaBackendWorkflowService
             )
         )
       )
@@ -119,7 +122,8 @@ export class DetailsPage {
         this.diaBackendAssetRepository,
         this.errorService,
         this.diaBackendAuthService,
-        this.translocoService
+        this.translocoService,
+        this.diaBackendWorkflowService
       ),
     ])
   );
@@ -173,6 +177,17 @@ export class DetailsPage {
 
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
+  readonly postCreationWorkflowCompleted$ = combineLatest([
+    this.initialSlideIndex$,
+    this.detailedCaptures$,
+  ]).pipe(
+    map(
+      ([initialSlideIndex, detailedCaptures]) =>
+        detailedCaptures[initialSlideIndex]
+    ),
+    concatMap(detailedCapture => detailedCapture.postCreationWorkflowCompleted$)
+  );
+
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly mediaStore: MediaStore,
@@ -188,7 +203,8 @@ export class DetailsPage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly blockingActionService: BlockingActionService,
     private readonly informationSessionService: InformationSessionService,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
+    private readonly diaBackendWorkflowService: DiaBackendWorkflowService
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))

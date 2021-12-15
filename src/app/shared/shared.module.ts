@@ -2,9 +2,13 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
 import { ReactiveComponentModule } from '@ngrx/component';
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/material';
+import { ActionsDialogComponent } from './actions/actions-dialog/actions-dialog.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { CapacitorPluginsModule } from './capacitor-plugins/capacitor-plugins.module';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
@@ -16,6 +20,7 @@ import { StartsWithPipe } from './pipes/starts-with/starts-with.pipe';
 
 const declarations = [
   MigratingDialogComponent,
+  ActionsDialogComponent,
   AvatarComponent,
   MediaComponent,
   StartsWithPipe,
@@ -33,6 +38,9 @@ const imports = [
   MaterialModule,
   CapacitorPluginsModule,
   ReactiveComponentModule,
+  MatDialogModule,
+  FormlyModule,
+  FormlyMaterialModule,
 ];
 
 @NgModule({
