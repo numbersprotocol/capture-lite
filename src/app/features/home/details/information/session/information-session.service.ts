@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { defer, of } from 'rxjs';
-import { catchError, first, map, shareReplay, switchMap } from 'rxjs/operators';
+import {
+  catchError,
+  concatMap,
+  first,
+  map,
+  shareReplay,
+  switchMap,
+} from 'rxjs/operators';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendWorkflowService } from '../../../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../../../shared/error/error.service';
 import { MediaStore } from '../../../../../shared/media/media-store/media-store.service';
 import {
@@ -180,13 +188,33 @@ export class DetailedCapture {
     return of(tokenInfo);
   });
 
+  readonly postCreationWorkflowCompleted$ = defer(() => {
+    if (this.proofOrDiaBackendAsset instanceof Proof) {
+      return this.diaBackendAsset$.pipe(
+        isNonNullable(),
+        concatMap(asset =>
+          this.diaBackendWorkflowService.getWorkflowById$(
+            asset.post_creation_workflow_id
+          )
+        ),
+        map(diaBackendWorkflow => diaBackendWorkflow.completed_at !== null)
+      );
+    }
+    return this.diaBackendWorkflowService
+      .getWorkflowById$(this.proofOrDiaBackendAsset.post_creation_workflow_id)
+      .pipe(
+        map(diaBackendWorkflow => diaBackendWorkflow.completed_at !== null)
+      );
+  });
+
   constructor(
     private readonly proofOrDiaBackendAsset: Proof | DiaBackendAsset,
     private readonly mediaStore: MediaStore,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly errorService: ErrorService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly diaBackendWorkflowService: DiaBackendWorkflowService
   ) {}
 }
 
