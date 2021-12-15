@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
-import { catchError, concatMap, map, tap } from 'rxjs/operators';
+import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
 import { ActionsDialogComponent } from '../../../../shared/actions/actions-dialog/actions-dialog.component';
 import {
   Action,
@@ -14,6 +14,7 @@ import {
 import { BlockingActionService } from '../../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../../shared/error/error.service';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy()
 @Component({
@@ -48,25 +49,25 @@ export class ActionsPage {
       this.id$,
     ])
       .pipe(
-        concatMap(
-          ([params, token, id]) =>
-            new Promise<void>(resolve => {
-              const dialogRef = this.dialog.open(ActionsDialogComponent, {
-                disableClose: true,
-                data: {
-                  action: action,
-                  params: params,
-                },
-              });
-              dialogRef.afterClosed().subscribe(data => {
-                if (data !== undefined) {
-                  const body = { ...data, token: token, cid: id };
-                  return this.sendAction(action, body);
-                }
-              });
-              resolve();
-            })
-        ),
+        first(),
+        concatMap(([params, token, id]) => {
+          const dialogRef = this.dialog.open<ActionsDialogComponent>(
+            ActionsDialogComponent,
+            {
+              disableClose: true,
+              data: {
+                action: action,
+                params: params,
+              },
+            }
+          );
+          return dialogRef.afterClosed().pipe(
+            isNonNullable(),
+            tap(data =>
+              this.sendAction(action, { ...data, token: token, cid: id })
+            )
+          );
+        }),
         untilDestroyed(this)
       )
       .subscribe();
