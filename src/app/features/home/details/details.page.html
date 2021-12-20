@@ -13,10 +13,7 @@
     </button>
   </ng-container>
   <button
-    *ngIf="
-      (isFromSeriesPage$ | ngrxPush) === false &&
-      (postCreationWorkflowCompleted$ | ngrxPush) === true
-    "
+    *ngIf="(isFromSeriesPage$ | ngrxPush) === false"
     (click)="openOptionsMenu()"
     mat-icon-button
   >
