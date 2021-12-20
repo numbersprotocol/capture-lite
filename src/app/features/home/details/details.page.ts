@@ -177,17 +177,6 @@ export class DetailsPage {
 
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
-  readonly postCreationWorkflowCompleted$ = combineLatest([
-    this.initialSlideIndex$,
-    this.detailedCaptures$,
-  ]).pipe(
-    map(
-      ([initialSlideIndex, detailedCaptures]) =>
-        detailedCaptures[initialSlideIndex]
-    ),
-    concatMap(detailedCapture => detailedCapture.postCreationWorkflowCompleted$)
-  );
-
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly mediaStore: MediaStore,
@@ -309,6 +298,9 @@ export class DetailsPage {
     combineLatest([
       this.activeDetailedCapture$,
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
+      this.activeDetailedCapture$.pipe(
+        switchMap(c => c.postCreationWorkflowCompleted$)
+      ),
       this.translocoService.selectTranslateObject({
         'message.transferOwnership': null,
         'message.viewOnCaptureClub': null,
@@ -325,6 +317,7 @@ export class DetailsPage {
           ([
             detailedCapture,
             diaBackendAsset,
+            postCreationWorkflowCompleted,
             [
               messageTransferOwnership,
               messageViewOnCaptureClub,
@@ -337,7 +330,10 @@ export class DetailsPage {
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
-              if (diaBackendAsset?.supporting_file) {
+              if (
+                postCreationWorkflowCompleted &&
+                diaBackendAsset?.supporting_file
+              ) {
                 buttons.push({
                   text: messageViewSupportingVideoOnIpfs,
                   handler: () => {
@@ -345,7 +341,7 @@ export class DetailsPage {
                   },
                 });
               }
-              if (detailedCapture.id) {
+              if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
                   text: messageTransferOwnership,
                   handler: () => {
@@ -368,7 +364,10 @@ export class DetailsPage {
                   this.remove().then(() => resolve());
                 },
               });
-              if (diaBackendAsset?.nft_token_id === null) {
+              if (
+                postCreationWorkflowCompleted &&
+                diaBackendAsset?.nft_token_id === null
+              ) {
                 buttons.push({
                   text: messageMintNftToken,
                   handler: () => {
@@ -377,7 +376,7 @@ export class DetailsPage {
                   role: 'destructive',
                 });
               }
-              if (detailedCapture.id) {
+              if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
                   text: messageViewBlockchainCertificate,
                   handler: () => {
@@ -386,16 +385,18 @@ export class DetailsPage {
                   },
                 });
               }
-              buttons.push({
-                text: messageMoreActions,
-                handler: () => {
-                  this.router.navigate(
-                    ['actions', { id: detailedCapture.id }],
-                    { relativeTo: this.route }
-                  );
-                  resolve();
-                },
-              });
+              if (postCreationWorkflowCompleted) {
+                buttons.push({
+                  text: messageMoreActions,
+                  handler: () => {
+                    this.router.navigate(
+                      ['actions', { id: detailedCapture.id }],
+                      { relativeTo: this.route }
+                    );
+                    resolve();
+                  },
+                });
+              }
               this.actionSheetController
                 .create({ buttons })
                 .then(sheet => sheet.present());
