@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { defer, of } from 'rxjs';
+import { defer, iif, of } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -191,19 +191,30 @@ export class DetailedCapture {
   readonly postCreationWorkflowCompleted$ = defer(() => {
     if (this.proofOrDiaBackendAsset instanceof Proof) {
       return this.diaBackendAsset$.pipe(
-        isNonNullable(),
         concatMap(asset =>
-          this.diaBackendWorkflowService.getWorkflowById$(
-            asset.post_creation_workflow_id
+          iif(
+            () => asset !== undefined,
+            of(asset).pipe(
+              isNonNullable(),
+              concatMap(asset =>
+                this.diaBackendWorkflowService.getWorkflowById$(
+                  asset.post_creation_workflow_id
+                )
+              ),
+              map(
+                diaBackendWorkflow => diaBackendWorkflow.completed_at !== null
+              )
+            ),
+            of(false)
           )
-        ),
-        map(diaBackendWorkflow => diaBackendWorkflow.completed_at !== null)
+        )
       );
     }
     return this.diaBackendWorkflowService
       .getWorkflowById$(this.proofOrDiaBackendAsset.post_creation_workflow_id)
       .pipe(
-        map(diaBackendWorkflow => diaBackendWorkflow.completed_at !== null)
+        map(diaBackendWorkflow => diaBackendWorkflow.completed_at !== null),
+        catchError(() => of(false))
       );
   });
 
