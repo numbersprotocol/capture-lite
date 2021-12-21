@@ -33,7 +33,8 @@ export class ActionsDialogComponent {
 
   private createFormModel() {
     for (const param of this.params)
-      this.model[param.name_text] = param.default_values_list_text[0] || '';
+      this.model[param.name_text] =
+        param?.default_values_list_text?.at(0) || '';
   }
 
   private createFormFields() {
