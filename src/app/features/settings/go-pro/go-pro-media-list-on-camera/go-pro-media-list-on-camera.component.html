@@ -3,6 +3,10 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span>GoPro Media on Camera</span>
+
+  <button (click)="fetchFilesFromGoProWiFi()" mat-icon-button>
+    <mat-icon>refresh</mat-icon>
+  </button>
 </mat-toolbar>
 
 <ion-content>
@@ -24,7 +28,7 @@
     {{ fetchingFilesError }}
   </h4>
 
-  <h4 *ngIf="fetchingFiles">Fetching files</h4>
+  <h4 *ngIf="fetchingFiles">Fetching files...</h4>
 
   <div class="go-pro-container">
     <mat-grid-list cols="3" gutterSize="8px">

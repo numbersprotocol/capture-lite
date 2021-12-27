@@ -29,9 +29,10 @@ export class GoProMediaListOnCameraComponent implements OnInit {
     public toastController: ToastController
   ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
     this.checkWiFiConnection();
   }
+
   async checkWiFiConnection() {
     this.connectedWifiSSID = await this.goProWifiService.getConnectedWifiSSID();
     this.isConnectedToGoProWifi =
@@ -41,9 +42,18 @@ export class GoProMediaListOnCameraComponent implements OnInit {
       this.fetchFilesFromGoProWiFi();
     }
   }
+
   async fetchFilesFromGoProWiFi() {
-    const result = await this.goProMediaService.getFilesFromGoPro();
-    this.allMediaFiles = result;
+    try {
+      this.fetchingFilesError = undefined;
+      this.fetchingFiles = true;
+      this.allMediaFiles = await this.goProMediaService.getFilesFromGoPro();
+      this.fetchingFiles = false;
+    } catch (error: any) {
+      this.fetchingFilesError = error.toString();
+      this.allMediaFiles = [];
+      this.fetchingFiles = false;
+    }
   }
 
   async connectToGoProWifi() {

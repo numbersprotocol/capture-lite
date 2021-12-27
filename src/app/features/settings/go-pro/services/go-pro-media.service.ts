@@ -250,7 +250,7 @@ export class GoProMediaService {
 
       const data = response.data;
 
-      const files = data.media[0].fs as any[];
+      const files = (data.media[0].fs as any[]).reverse();
 
       const fileNames: string[] = files.map(e => e.n);
 
