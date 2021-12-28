@@ -124,7 +124,7 @@
       <div mat-line>{{ privateKey$ | ngrxPush }}</div>
       <button
         *ngIf="privateKey$ | ngrxPush as privateKey"
-        (click)="copyToClipboard(privateKey)"
+        (click)="copyPrivateKey(privateKey)"
         mat-icon-button
       >
         <mat-icon>content_copy</mat-icon>
