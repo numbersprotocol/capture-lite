@@ -94,16 +94,18 @@
               </ion-label>
             </ion-item>
           </ng-container>
-          <ng-container *ngrxLet="detailedCapture.caption$ as caption">
-            <ion-item (click)="editCaption()">
-              <ion-icon name="document-text" slot="start"></ion-icon>
-              <ion-label text-wrap *ngIf="caption; else emptyCaption">
-                {{ caption }}
-              </ion-label>
-              <ng-template #emptyCaption>
-                <ion-label> No Caption </ion-label>
-              </ng-template>
-            </ion-item>
+          <ng-container *ngIf="captionOn">
+            <ng-container *ngrxLet="detailedCapture.caption$ as caption">
+              <ion-item (click)="editCaption()">
+                <ion-icon name="document-text" slot="start"></ion-icon>
+                <ion-label text-wrap *ngIf="caption; else emptyCaption">
+                  {{ caption }}
+                </ion-label>
+                <ng-template #emptyCaption>
+                  <ion-label> No Caption </ion-label>
+                </ng-template>
+              </ion-item>
+            </ng-container>
           </ng-container>
         </ion-list>
         <div class="text-center">

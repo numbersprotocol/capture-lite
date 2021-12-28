@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -52,6 +52,7 @@ const { Browser, Clipboard } = Plugins;
   styleUrls: ['./details.page.scss'],
 })
 export class DetailsPage {
+  captionOn = true;
   private readonly type$ = this.route.paramMap.pipe(
     map(params => params.get('type')),
     isNonNullable()
@@ -194,7 +195,8 @@ export class DetailsPage {
     private readonly informationSessionService: InformationSessionService,
     private readonly snackBar: MatSnackBar,
     private readonly diaBackendWorkflowService: DiaBackendWorkflowService,
-    private readonly alertController: AlertController
+    private readonly alertController: AlertController,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -626,7 +628,13 @@ export class DetailsPage {
             );
           }
           return VOID$;
-        })
+        }).pipe(
+          tap(() => {
+            this.captionOn = false;
+            this.changeDetectorRef.detectChanges();
+            this.captionOn = true;
+          })
+        )
       ),
       catchError((err: unknown) => {
         return this.errorService.toastError$(err);
