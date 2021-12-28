@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>549594343019-49t7tqres080fn4et4hgorchj90hnmm8.apps.googleusercontent.com</string>
+	<string>412240334546-pg4d0qdlf551c8kv0og9p0pc3h5l4d49.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.549594343019-49t7tqres080fn4et4hgorchj90hnmm8</string>
+	<string>com.googleusercontent.apps.412240334546-pg4d0qdlf551c8kv0og9p0pc3h5l4d49</string>
 	<key>API_KEY</key>
-	<string>AIzaSyApjeSlDKJhguBKz9YQ_gDTV_4cupHhWNQ</string>
+	<string>AIzaSyAzEMCCqSoruxRNY2athk0bP9KAUZqGSZs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>549594343019</string>
+	<string>412240334546</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>io.numbersprotocol.capturelite</string>
+	<string>io.numbersprotocol.capturelite.experiments.gopro</string>
 	<key>PROJECT_ID</key>
-	<string>capture-push-notification-dev</string>
+	<string>capture-lite-gopro-experiment</string>
 	<key>STORAGE_BUCKET</key>
-	<string>capture-push-notification-dev.appspot.com</string>
+	<string>capture-lite-gopro-experiment.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:549594343019:ios:62dea8803dea04784b332e</string>
-	<key>DATABASE_URL</key>
-	<string>https://capture-push-notification-dev.firebaseio.com</string>
+	<string>1:412240334546:ios:2fa137d3a17a73ce5ea70b</string>
 </dict>
 </plist>
