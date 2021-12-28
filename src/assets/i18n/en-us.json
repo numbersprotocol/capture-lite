@@ -169,7 +169,8 @@
     "mintNftToken": "Mint NFT token",
     "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?",
     "moreActions": "More Actions",
-    "sentSuccessfully": "Sent Successfully"
+    "sentSuccessfully": "Sent Successfully",
+    "confirmCopyPrivateKey": "Warning: Please do not expose your private key to anyone. Lost of private key may cause your account to be lost permanently."
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",

@@ -115,6 +115,13 @@ export class ProfilePage {
     );
   }
 
+  async copyPrivateKey(privateKey: string) {
+    const result = await this.confirmAlert.present({
+      message: this.translocoService.translate('message.confirmCopyPrivateKey'),
+    });
+    if (result) await this.copyToClipboard(privateKey);
+  }
+
   logout() {
     const action$ = defer(() => this.mediaStore.clear()).pipe(
       concatMapTo(defer(() => this.database.clear())),
