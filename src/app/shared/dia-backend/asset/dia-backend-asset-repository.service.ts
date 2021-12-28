@@ -247,6 +247,18 @@ export class DiaBackendAssetRepository {
     );
   }
 
+  updateCapture$(id: string, formData: any) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.patch<UpdateAssetResponse>(
+          `${BASE_URL}/api/v3/assets/${id}/`,
+          formData,
+          { headers }
+        )
+      )
+    );
+  }
+
   removeCaptureById$(id: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>

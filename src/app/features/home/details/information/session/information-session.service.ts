@@ -159,9 +159,14 @@ export class DetailedCapture {
     )[0];
   });
 
-  readonly caption$ = defer(async () => {
-    if (!(this.proofOrDiaBackendAsset instanceof Proof))
-      return this.proofOrDiaBackendAsset.caption;
+  readonly caption$ = defer(() => {
+    if (this.proofOrDiaBackendAsset instanceof Proof) {
+      return this.diaBackendAsset$.pipe(
+        isNonNullable(),
+        map(asset => asset.caption)
+      );
+    }
+    return of(this.proofOrDiaBackendAsset.caption);
   });
 
   readonly nftToken$ = defer(() => {

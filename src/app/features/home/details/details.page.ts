@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -193,7 +193,8 @@ export class DetailsPage {
     private readonly blockingActionService: BlockingActionService,
     private readonly informationSessionService: InformationSessionService,
     private readonly snackBar: MatSnackBar,
-    private readonly diaBackendWorkflowService: DiaBackendWorkflowService
+    private readonly diaBackendWorkflowService: DiaBackendWorkflowService,
+    private readonly alertController: AlertController
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -571,5 +572,69 @@ export class DetailsPage {
         .pipe(untilDestroyed(this))
         .subscribe();
     }
+  }
+
+  async editCaption() {
+    return this.activeDetailedCapture$
+      .pipe(
+        first(),
+        concatMap(activeDetailedCapture => activeDetailedCapture.caption$),
+        concatMap(caption =>
+          this.alertController.create({
+            header: this.translocoService.translate('editCaption'),
+            inputs: [
+              {
+                name: 'caption',
+                type: 'text',
+                value: caption,
+              },
+            ],
+            buttons: [
+              {
+                text: this.translocoService.translate('cancel'),
+                role: 'cancel',
+              },
+              {
+                text: this.translocoService.translate('ok'),
+                handler: value => this.updateCaption(value.caption),
+              },
+            ],
+          })
+        ),
+        concatMap(
+          alert =>
+            new Promise<void>(resolve => {
+              alert.present().then(() => resolve());
+            })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private updateCaption(caption: string) {
+    const action$ = this.activeDetailedCapture$.pipe(
+      first(),
+      switchTap(activeDetailedCapture =>
+        defer(() => {
+          if (activeDetailedCapture.id) {
+            const formData = new FormData();
+            formData.append('caption', caption);
+            return this.diaBackendAssetRepository.updateCapture$(
+              activeDetailedCapture.id,
+              formData
+            );
+          }
+          return VOID$;
+        })
+      ),
+      catchError((err: unknown) => {
+        return this.errorService.toastError$(err);
+      })
+    );
+    this.blockingActionService
+      .run$(action$)
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 }
