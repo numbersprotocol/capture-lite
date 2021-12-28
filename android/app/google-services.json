@@ -1,35 +1,41 @@
 {
   "project_info": {
-    "project_number": "549594343019",
-    "firebase_url": "https://capture-push-notification-dev.firebaseio.com",
-    "project_id": "capture-push-notification-dev",
-    "storage_bucket": "capture-push-notification-dev.appspot.com"
+    "project_number": "412240334546",
+    "project_id": "capture-lite-gopro-experiment",
+    "storage_bucket": "capture-lite-gopro-experiment.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:549594343019:android:696255faaa8829154b332e",
+        "mobilesdk_app_id": "1:412240334546:android:3e158d80b3c6f6e35ea70b",
         "android_client_info": {
-          "package_name": "io.numbersprotocol.capturelite"
+          "package_name": "io.numbersprotocol.capturelite.experiments.gopro"
         }
       },
       "oauth_client": [
         {
-          "client_id": "549594343019-2nnhn1apr7n1ie8l2tbbuhpelp5mul9v.apps.googleusercontent.com",
+          "client_id": "412240334546-anqclvnnaao5rk9orjmgob12o5hiaa70.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDIQANqkPRKssGr4AShQEQAV68cad1pUro"
+          "current_key": "AIzaSyBiHrcnSuZ1gyyjODOwy5vM_143Z3PAi5I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "549594343019-2nnhn1apr7n1ie8l2tbbuhpelp5mul9v.apps.googleusercontent.com",
+              "client_id": "412240334546-anqclvnnaao5rk9orjmgob12o5hiaa70.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "412240334546-pg4d0qdlf551c8kv0og9p0pc3h5l4d49.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.numbersprotocol.capturelite.experiments.gopro"
+              }
             }
           ]
         }
