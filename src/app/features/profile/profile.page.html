@@ -118,19 +118,15 @@
         <mat-icon>content_copy</mat-icon>
       </button>
     </mat-list-item>
-    <mat-list-item>
-      <mat-icon mat-list-icon>vpn_key</mat-icon>
-      <div mat-line>{{ t('privateKey') }}</div>
-      <div mat-line>{{ privateKey$ | ngrxPush }}</div>
-      <button
-        *ngIf="privateKey$ | ngrxPush as privateKey"
-        (click)="copyPrivateKey(privateKey)"
-        mat-icon-button
-      >
-        <mat-icon>content_copy</mat-icon>
-      </button>
-    </mat-list-item>
   </mat-list>
+  <button
+    (click)="exportPrivateKey()"
+    class="expand"
+    color="primary"
+    mat-stroked-button
+  >
+    {{ t('exportPrivateKey') }}
+  </button>
   <button (click)="logout()" class="expand" color="primary" mat-stroked-button>
     {{ t('logout') }}
   </button>

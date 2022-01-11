@@ -95,6 +95,9 @@
   "resendIn": "Re-send {{ secondsRemained }}s",
   "balance": "Balance",
   "walletAddress": "Wallet Address",
+  "exportPrivateKey": "Export Private Key",
+  "yourPrivateKey": "Your Private Key",
+  "copyToClipboard": "Copy To Clipboard",
   "verification": {
     "verification": "Verification",
     "clickToVerify": "Click me to verify",
