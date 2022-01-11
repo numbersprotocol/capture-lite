@@ -95,6 +95,9 @@
   "resendIn": "重新發送 {{ secondsRemained }}秒",
   "balance": "餘額",
   "walletAddress": "錢包地址",
+  "exportPrivateKey": "匯出私鑰",
+  "yourPrivateKey": "您的私鑰",
+  "copyToClipboard": "複製到剪貼簿",
   "verification": {
     "verification": "驗證",
     "clickToVerify": "點擊驗證",

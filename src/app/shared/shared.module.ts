@@ -13,6 +13,7 @@ import { AvatarComponent } from './avatar/avatar.component';
 import { CapacitorPluginsModule } from './capacitor-plugins/capacitor-plugins.module';
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import { FriendInvitationDialogComponent } from './contact-selection-dialog/friend-invitation-dialog/friend-invitation-dialog.component';
+import { ExportPrivateKeyModalComponent } from './export-private-key-modal/export-private-key-modal.component';
 import { MaterialModule } from './material/material.module';
 import { MediaComponent } from './media/component/media.component';
 import { MigratingDialogComponent } from './migration/migrating-dialog/migrating-dialog.component';
@@ -26,6 +27,7 @@ const declarations = [
   StartsWithPipe,
   ContactSelectionDialogComponent,
   FriendInvitationDialogComponent,
+  ExportPrivateKeyModalComponent,
 ];
 
 const imports = [
