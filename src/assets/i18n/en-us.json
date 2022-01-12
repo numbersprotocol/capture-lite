@@ -95,6 +95,9 @@
   "resendIn": "Re-send {{ secondsRemained }}s",
   "balance": "Balance",
   "walletAddress": "Wallet Address",
+  "exportPrivateKey": "Export Private Key",
+  "yourPrivateKey": "Your Private Key",
+  "copyToClipboard": "Copy To Clipboard",
   "verification": {
     "verification": "Verification",
     "clickToVerify": "Click me to verify",
@@ -198,7 +201,8 @@
       "throttled": "Too frequent request",
       "user_is_email_verified": "The email address has beed verified",
       "user_not_found": "There is no account registered with the email address",
-      "asset_is_being_minted": "Asset is being minted"
+      "asset_is_being_minted": "Asset is being minted",
+      "insufficient_fund": "Insufficient NUM token"
     }
   },
   "transactionState": {
@@ -208,5 +212,11 @@
     "missed": "Returned",
     "inProgress": "In Progress",
     "waitingToBeAccepted": "In Progress"
+  },
+  "payment": {
+    "confirmPayment": "Confirm Payment",
+    "price": "Price",
+    "fee": "Fee",
+    "totalCost": "Total Cost"
   }
 }

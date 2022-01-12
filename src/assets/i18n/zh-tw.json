@@ -95,6 +95,9 @@
   "resendIn": "重新發送 {{ secondsRemained }}秒",
   "balance": "餘額",
   "walletAddress": "錢包地址",
+  "exportPrivateKey": "匯出私鑰",
+  "yourPrivateKey": "您的私鑰",
+  "copyToClipboard": "複製到剪貼簿",
   "verification": {
     "verification": "驗證",
     "clickToVerify": "點擊驗證",
@@ -198,7 +201,8 @@
       "throttled": "短時間內傳送過多請求",
       "user_is_email_verified": "此電子郵件已驗證",
       "user_not_found": "此電子郵件尚未註冊 Capture 帳號",
-      "asset_is_being_minted": "NFT 代幣鑄造中"
+      "asset_is_being_minted": "NFT 代幣鑄造中",
+      "insufficient_fund": "NUM 餘額不足"
     }
   },
   "transactionState": {
@@ -208,5 +212,11 @@
     "missed": "已退回",
     "inProgress": "等待中",
     "waitingToBeAccepted": "等待中"
+  },
+  "payment": {
+    "confirmPayment": "確認付款",
+    "price": "價格",
+    "fee": "手續費",
+    "totalCost": "總額"
   }
 }
