@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.46.0
+
+### Added
+
+- Support NUM payment for network applications.
+
+### Changed
+
+- Do not show the private key directly. Users need to agree with the warnings to see and copy their private key.
+
 ## 0.45.1 - 2022-01-05
 
 ### Fixed
