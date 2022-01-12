@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.45.1 - 2022-01-05
+
+### Fixed
+
+- Make the default language of Camera UI to be `en` instead of `zh-TW`.
+
+## 0.45.0 - 2021-12-28
+
+### Added
+
+- Can edit caption of Captures.
+- Show warnings when users try to copy private key.
+
+## 0.44.1 - 2021-12-20
+
+### Fixed
+
+- Show "Deregister from network" option when uploading is not completed.
+
+## 0.44.0 - 2021-12-15
+
+### Changed
+
+- Change network application dialog to support selection input and input validation.
+
+### Fixed
+
+- Do not show Capture options menu when post-creation workflow has not been completed yet
+
+## 0.43.1 - 2021-12-08
+
+### Fixed
+
+- Fix camera activity issue on Android 11 (API level 30).
+
+## 0.43.0 - 2021-11-23
+
+### Changed
+
+- Show ERC20 and BEP20 NUM tokens in profile page.
+- Add migration for APPs upgrading from versions before 0.42.0.
+- Change network application fields to meet the new Bubble database schema.
+- Update Android target version to Android 11 (API level 30).
+
+### Fixed
+
+- Fix Capture icon display issue in signup page.
+
 ## 0.42.0 - 2021-10-26
 
 ### Added
