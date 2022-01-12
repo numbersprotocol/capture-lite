@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
 import { ActionsDialogComponent } from '../../../../shared/actions/actions-dialog/actions-dialog.component';
 import {
@@ -13,7 +13,12 @@ import {
 } from '../../../../shared/actions/service/actions.service';
 import { BlockingActionService } from '../../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
+import {
+  DiaBackendStoreService,
+  NetworkAppOrderStatus,
+} from '../../../../shared/dia-backend/store/dia-backend-store.service';
 import { ErrorService } from '../../../../shared/error/error.service';
+import { OrderDetailDialogComponent } from '../../../../shared/order-detail-dialog/order-detail-dialog.component';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy()
@@ -39,54 +44,101 @@ export class ActionsPage {
     private readonly route: ActivatedRoute,
     private readonly authService: DiaBackendAuthService,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly storeService: DiaBackendStoreService
   ) {}
 
-  openAction(action: Action) {
+  openActionDialog$(action: Action) {
     return combineLatest([
       this.actionsService.getParams$(action.params_list_custom_param1),
       this.authService.token$,
       this.id$,
-    ])
+    ]).pipe(
+      first(),
+      concatMap(([params, token, id]) => {
+        const dialogRef = this.dialog.open<ActionsDialogComponent>(
+          ActionsDialogComponent,
+          {
+            disableClose: true,
+            data: {
+              action: action,
+              params: params,
+            },
+          }
+        );
+        return dialogRef.afterClosed().pipe(
+          isNonNullable(),
+          concatMap(data =>
+            of({
+              networkApp: action.network_app_id_text,
+              actionArgs: { ...data, token: token, cid: id },
+            } as CreateOrderInput)
+          )
+        );
+      })
+    );
+  }
+
+  openOrderDialog$(orderStatus: NetworkAppOrderStatus) {
+    const dialogRef = this.dialog.open<OrderDetailDialogComponent>(
+      OrderDetailDialogComponent,
+      {
+        disableClose: true,
+        data: orderStatus,
+        width: '80%',
+      }
+    );
+    return dialogRef.afterClosed().pipe(
+      isNonNullable(),
+      concatMap((orderId: string) => of(orderId))
+    );
+  }
+
+  createOrder$(appName: string, actionArgs: any) {
+    return this.storeService.createNetworkAppOrder(appName, actionArgs).pipe(
+      catchError((err: unknown) => {
+        return this.errorService.toastError$(err);
+      }),
+      isNonNullable()
+    );
+  }
+
+  confirmOrder$(id: string) {
+    return this.storeService.confirmNetworkAppOrder(id).pipe(
+      catchError((err: unknown) => {
+        return this.errorService.toastError$(err);
+      }),
+      isNonNullable()
+    );
+  }
+
+  doAction(action: Action) {
+    this.openActionDialog$(action)
       .pipe(
-        first(),
-        concatMap(([params, token, id]) => {
-          const dialogRef = this.dialog.open<ActionsDialogComponent>(
-            ActionsDialogComponent,
-            {
-              disableClose: true,
-              data: {
-                action: action,
-                params: params,
-              },
-            }
-          );
-          return dialogRef.afterClosed().pipe(
-            isNonNullable(),
-            tap(data =>
-              this.sendAction(action, { ...data, token: token, cid: id })
+        concatMap(createOrderInput =>
+          this.blockingActionService.run$(
+            this.createOrder$(
+              createOrderInput.networkApp,
+              createOrderInput.actionArgs
             )
+          )
+        ),
+        concatMap(orderStatus => this.openOrderDialog$(orderStatus)),
+        concatMap(orderId =>
+          this.blockingActionService.run$(this.confirmOrder$(orderId))
+        ),
+        tap(() => {
+          this.snackBar.open(
+            this.translocoService.translate('message.sentSuccessfully')
           );
         }),
         untilDestroyed(this)
       )
       .subscribe();
   }
+}
 
-  sendAction(action: Action, body: any) {
-    const action$ = this.actionsService.send$(action.base_url_text, body).pipe(
-      catchError((err: unknown) => {
-        return this.errorService.toastError$(err);
-      }),
-      tap(() =>
-        this.snackBar.open(
-          this.translocoService.translate('message.sentSuccessfully')
-        )
-      )
-    );
-    this.blockingActionService
-      .run$(action$)
-      .pipe(untilDestroyed(this))
-      .subscribe();
-  }
+interface CreateOrderInput {
+  networkApp: string;
+  actionArgs: any;
 }

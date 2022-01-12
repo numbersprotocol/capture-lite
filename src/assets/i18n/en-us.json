@@ -211,5 +211,11 @@
     "missed": "Returned",
     "inProgress": "In Progress",
     "waitingToBeAccepted": "In Progress"
+  },
+  "payment": {
+    "confirmPayment": "Confirm Payment",
+    "price": "Price",
+    "fee": "Fee",
+    "totalCost": "Total Cost"
   }
 }

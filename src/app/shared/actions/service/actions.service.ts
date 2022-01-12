@@ -42,6 +42,7 @@ export interface Action {
   readonly description_text: string;
   readonly params_list_custom_param1: string[];
   readonly title_text: string;
+  readonly network_app_id_text: string;
 }
 
 export interface Param {
