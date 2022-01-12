@@ -1,0 +1,33 @@
+<div *transloco="let t">
+  <h2 mat-dialog-title>{{ t('payment.confirmPayment') }}</h2>
+  <ion-row style="border-bottom: groove">
+    <ion-col>
+      <ion-label>{{ t('payment.price') }}</ion-label>
+    </ion-col>
+    <ion-col align="end">
+      <ion-label>{{ orderStatus.price | number: '1.2-2' }} NUM</ion-label>
+    </ion-col>
+  </ion-row>
+  <ion-row style="border-bottom: groove">
+    <ion-col>
+      <ion-label>{{ t('payment.fee') }}</ion-label>
+    </ion-col>
+    <ion-col align="end">
+      <ion-label>{{ orderStatus.fee | number: '1.2-2' }} NUM</ion-label>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-label>{{ t('payment.totalCost') }}</ion-label>
+    </ion-col>
+    <ion-col align="end">
+      <ion-label>{{ orderStatus.total_cost | number: '1.2-2' }} NUM</ion-label>
+    </ion-col>
+  </ion-row>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">{{ t('cancel') }}</button>
+    <button mat-button color="primary" (click)="ok()">
+      {{ t('ok') }}
+    </button>
+  </mat-dialog-actions>
+</div>
