@@ -202,7 +202,7 @@
       "user_is_email_verified": "The email address has beed verified",
       "user_not_found": "There is no account registered with the email address",
       "asset_is_being_minted": "Asset is being minted",
-      "insufficient_fund": "Insufficient Fund"
+      "insufficient_fund": "Insufficient NUM token"
     }
   },
   "transactionState": {

@@ -202,7 +202,7 @@
       "user_is_email_verified": "此電子郵件已驗證",
       "user_not_found": "此電子郵件尚未註冊 Capture 帳號",
       "asset_is_being_minted": "NFT 代幣鑄造中",
-      "insufficient_fund": "餘額不足"
+      "insufficient_fund": "NUM 餘額不足"
     }
   },
   "transactionState": {
