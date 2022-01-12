@@ -17,6 +17,7 @@ import { ExportPrivateKeyModalComponent } from './export-private-key-modal/expor
 import { MaterialModule } from './material/material.module';
 import { MediaComponent } from './media/component/media.component';
 import { MigratingDialogComponent } from './migration/migrating-dialog/migrating-dialog.component';
+import { OrderDetailDialogComponent } from './order-detail-dialog/order-detail-dialog.component';
 import { StartsWithPipe } from './pipes/starts-with/starts-with.pipe';
 
 const declarations = [
@@ -28,6 +29,7 @@ const declarations = [
   ContactSelectionDialogComponent,
   FriendInvitationDialogComponent,
   ExportPrivateKeyModalComponent,
+  OrderDetailDialogComponent,
 ];
 
 const imports = [
