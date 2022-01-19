@@ -1,12 +1,12 @@
 name: Dev-test
 
-on: 
+on:
   push:
     branches:
-    - 'develop'
+      - 'develop'
   pull_request:
     branches:
-    - 'develop'
+      - 'develop'
 
 jobs:
   lint:
