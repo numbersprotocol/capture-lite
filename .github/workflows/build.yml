@@ -51,6 +51,13 @@ jobs:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: ./coverage/cobertura-coverage.xml
 
+      - name: Slack Notification
+        if: github.ref == 'refs/heads/maste' &&  (success() || failure())
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: ${{ job.status }}
+
   android:
     runs-on: ubuntu-latest
     timeout-minutes: 60
