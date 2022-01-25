@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-
+import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { GoProMediaListItemOnCameraComponent } from './go-pro-media-list-item-on-camera.component';
 
 describe('GoProMediaListItemOnCameraComponent', () => {
@@ -11,7 +10,7 @@ describe('GoProMediaListItemOnCameraComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [GoProMediaListItemOnCameraComponent],
-        imports: [IonicModule.forRoot()],
+        imports: [SharedTestingModule],
       }).compileComponents();
 
       fixture = TestBed.createComponent(GoProMediaListItemOnCameraComponent);

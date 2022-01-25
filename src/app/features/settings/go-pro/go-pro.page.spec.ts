@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { GoProPage } from './go-pro.page';
 
 describe('GoProPage', () => {
@@ -11,7 +10,7 @@ describe('GoProPage', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [GoProPage],
-        imports: [IonicModule.forRoot()],
+        imports: [SharedTestingModule],
       }).compileComponents();
 
       fixture = TestBed.createComponent(GoProPage);

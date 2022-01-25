@@ -19,9 +19,11 @@ export class GoProMediaListItemOnDeviceComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.thumbnailSrc = await this.goProMediaService.getFileSrcFromDevice(
-      this.goProFileOnDevice.thumbnailUrl
-    );
+    if (this.goProFileOnDevice !== undefined) {
+      this.thumbnailSrc = await this.goProMediaService.getFileSrcFromDevice(
+        this.goProFileOnDevice.thumbnailUrl
+      );
+    }
   }
 
   showDetails() {
