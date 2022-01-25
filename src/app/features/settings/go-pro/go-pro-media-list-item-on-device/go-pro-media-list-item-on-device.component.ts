@@ -11,7 +11,7 @@ import { GoProMediaService } from '../services/go-pro-media.service';
 })
 export class GoProMediaListItemOnDeviceComponent implements OnInit {
   thumbnailSrc?: string | SafeUrl;
-  @Input() goProFileOnDevice!: GoProFileOnDevice;
+  @Input() goProFileOnDevice!: GoProFileOnDevice | undefined;
 
   constructor(
     private readonly router: Router,
