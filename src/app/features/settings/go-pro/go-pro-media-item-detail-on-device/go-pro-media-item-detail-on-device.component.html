@@ -8,14 +8,14 @@
 
 <ion-content>
   <img
-    *ngIf="goProFileOnDevice?.type == 'image' && url"
+    *ngIf="goProFileOnDevice?.type === 'image' && url"
     decoding="async"
     loading="lazy"
     [src]="url"
   />
 
   <video
-    *ngIf="goProFileOnDevice?.type == 'video' && url"
+    *ngIf="goProFileOnDevice?.type === 'video' && url"
     autoplay
     playsinline
     preload="metadata"

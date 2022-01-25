@@ -10,13 +10,12 @@ import { GoProMediaService } from '../services/go-pro-media.service';
   styleUrls: ['./go-pro-media-list-item-on-device.component.scss'],
 })
 export class GoProMediaListItemOnDeviceComponent implements OnInit {
+  thumbnailSrc?: string | SafeUrl;
   @Input() goProFileOnDevice!: GoProFileOnDevice;
 
-  thumbnailSrc?: string | SafeUrl;
-
   constructor(
-    private router: Router,
-    private goProMediaService: GoProMediaService
+    private readonly router: Router,
+    private readonly goProMediaService: GoProMediaService
   ) {}
 
   async ngOnInit() {

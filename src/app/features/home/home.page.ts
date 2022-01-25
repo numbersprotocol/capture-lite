@@ -161,32 +161,32 @@ export class HomePage {
       })
       .pipe(
         first(),
-        concatMap(
-          ([takePicture, recordVideo]) =>
-            new Promise<Media>(async resolve => {
-              const buttons = [
-                {
-                  text: takePicture,
-                  handler: () => resolve(this.cameraService.takePhoto()),
-                },
-                {
-                  text: recordVideo,
-                  handler: () => resolve(this.recordVideo()),
-                },
-              ];
+        concatMap(async ([takePicture, recordVideo]) => {
+          // eslint-disable-next-line no-async-promise-executor
+          return new Promise<Media>(async resolve => {
+            const buttons = [
+              {
+                text: takePicture,
+                handler: () => resolve(this.cameraService.takePhoto()),
+              },
+              {
+                text: recordVideo,
+                handler: () => resolve(this.recordVideo()),
+              },
+            ];
 
-              if (await this.goProBluetoothService.getConnectedDevice()) {
-                buttons.push({
-                  text: 'Capture from GoPro',
-                  handler: () => resolve(this.caputureFromGoPro()),
-                });
-              }
+            if (await this.goProBluetoothService.getConnectedDevice()) {
+              buttons.push({
+                text: 'Capture from GoPro',
+                handler: () => resolve(this.caputureFromGoPro()),
+              });
+            }
 
-              return this.actionSheetController
-                .create({ buttons })
-                .then(sheet => sheet.present());
-            })
-        )
+            return this.actionSheetController
+              .create({ buttons })
+              .then(sheet => sheet.present());
+          });
+        })
       );
   }
 
@@ -209,7 +209,7 @@ export class HomePage {
   }
 
   private async caputureFromGoPro() {
-    return new Promise<Media>(resolve => {
+    return new Promise<Media>(() => {
       this.router.navigate(['/settings', 'go-pro', 'media-list-on-camera']);
     });
   }

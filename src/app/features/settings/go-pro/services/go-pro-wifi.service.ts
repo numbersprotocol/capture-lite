@@ -15,9 +15,19 @@ export class GoProWifiService {
     'GO_PRO_TUTORIAL_MOBILE_DATA_ONLY_APPS_STORAGE_KEY';
 
   constructor(
-    private goProBluetoothService: GoProBluetoothService,
+    private readonly goProBluetoothService: GoProBluetoothService,
     public platform: Platform
   ) {}
+
+  static async isConnectedToGoProWifi() {
+    const result = await Wifi.getSSID();
+    return result.ssid?.startsWith('GP') ?? false;
+  }
+
+  static async getConnectedWifiSSID() {
+    const result = await Wifi.getSSID();
+    return result.ssid;
+  }
 
   async connectToGoProWiFi(): Promise<string> {
     await this.goProBluetoothService.enableGoProWifi();
@@ -30,16 +40,6 @@ export class GoProWifiService {
     return result.ssid!;
   }
 
-  async isConnectedToGoProWifi() {
-    const result = await Wifi.getSSID();
-    return result.ssid?.startsWith('GP') || false;
-  }
-
-  async getConnectedWifiSSID() {
-    const result = await Wifi.getSSID();
-    return result.ssid;
-  }
-
   async showTutorialForMobileDataOnlyApps() {
     if (this.platform.is('android') === false) return false;
 
@@ -48,8 +48,6 @@ export class GoProWifiService {
     });
 
     if (result.value) {
-      console.log(`dont show again ${JSON.parse(result.value) as boolean}`);
-
       return JSON.parse(result.value) as boolean;
     }
 

@@ -25,15 +25,15 @@ export class GoProPage implements OnInit {
 
   bluetoothConnectedDevice?: ScanResult;
 
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   readonly enableGoProWiFiCommand = [0x03, 0x17, 0x01, 0x01];
 
   constructor(
     public toastController: ToastController,
-    private goProMediaService: GoProMediaService,
-    private router: Router,
-    private goProBluetoothService: GoProBluetoothService
+    private readonly goProMediaService: GoProMediaService,
+    private readonly router: Router,
+    private readonly goProBluetoothService: GoProBluetoothService
   ) {}
-  ngOnDestroy(): void {}
 
   ngOnInit() {
     this.restoreBluetoothConnection();
@@ -137,9 +137,6 @@ export class GoProPage implements OnInit {
   }
 
   async getGoProWiFiCreds(): Promise<GoProWiFiCreds | undefined> {
-    // @ts-ignore
-    const device = this.bluetoothConnectedDevice.device;
-
     try {
       const { wifiSSID, wifiPASS } =
         await this.goProBluetoothService.getGoProWiFiCreds();

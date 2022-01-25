@@ -20,9 +20,9 @@ export class GoProMediaItemDetailOnDeviceComponent implements OnInit {
   url?: string | SafeUrl;
 
   constructor(
-    private router: Router,
-    private location: Location,
-    private route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly location: Location,
+    private readonly route: ActivatedRoute,
     public goProMediaService: GoProMediaService,
     public goProWiFiService: GoProWifiService,
     @Inject(NETOWRK_PLUGIN)
@@ -30,7 +30,7 @@ export class GoProMediaItemDetailOnDeviceComponent implements OnInit {
     public alertController: AlertController,
     public toastController: ToastController
   ) {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(() => {
       const state = this.router.getCurrentNavigation()?.extras.state;
       if (state) {
         this.goProFileOnDevice = state.goProFileOnDevice;
@@ -52,11 +52,10 @@ export class GoProMediaItemDetailOnDeviceComponent implements OnInit {
 
   async uploadToCapture() {
     const newtorkStatus = await this.networkPlugin.getStatus();
-    console.log(JSON.stringify(newtorkStatus, null, 4));
 
     if (newtorkStatus.connectionType == 'wifi') {
       const connectedToGoProWiFi =
-        await this.goProWiFiService.isConnectedToGoProWifi();
+        await GoProWifiService.isConnectedToGoProWifi();
 
       if (!connectedToGoProWiFi) {
         this.startUploadToCapture();
@@ -79,7 +78,6 @@ export class GoProMediaItemDetailOnDeviceComponent implements OnInit {
         this.goProFileOnDevice
       );
     } catch (error) {
-      console.log(JSON.stringify(error, null, 4));
       await this.presentToast(`❌ Failed to upload`);
     }
   }
@@ -93,7 +91,8 @@ export class GoProMediaItemDetailOnDeviceComponent implements OnInit {
   }
 
   async allowUploadWithMobileInternet() {
-    return new Promise<boolean>(async (resolve, reject) => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise<boolean>(async resolve => {
       const alert = await this.alertController.create({
         header: 'Warning!',
         message:
@@ -103,15 +102,13 @@ export class GoProMediaItemDetailOnDeviceComponent implements OnInit {
           {
             text: 'Cancel',
             role: 'cancel',
-            handler: blah => {
-              console.log('Confirm Cancel');
+            handler: () => {
               resolve(false);
             },
           },
           {
             text: 'Okay',
             handler: () => {
-              console.log('Confirm Okay');
               resolve(true);
             },
           },

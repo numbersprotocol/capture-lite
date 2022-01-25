@@ -13,19 +13,19 @@ import { GoProWifiService } from '../services/go-pro-wifi.service';
 })
 export class GoProMediaListOnCameraComponent implements OnInit {
   allMediaFiles: GoProFile[] = [];
-  shouldConnectToWiFi: boolean = false;
+  shouldConnectToWiFi = false;
 
-  fetchingFiles: boolean = false;
+  fetchingFiles = false;
   fetchingFilesError: string | undefined;
 
   connectedWifiSSID: string | null = null;
   isConnectedToGoProWifi: boolean | undefined;
 
   constructor(
-    private location: Location,
-    private goProMediaService: GoProMediaService,
-    private goProBluetoothService: GoProBluetoothService,
-    private goProWifiService: GoProWifiService,
+    private readonly location: Location,
+    private readonly goProMediaService: GoProMediaService,
+    private readonly goProBluetoothService: GoProBluetoothService,
+    private readonly goProWifiService: GoProWifiService,
     public toastController: ToastController
   ) {}
 
@@ -34,9 +34,9 @@ export class GoProMediaListOnCameraComponent implements OnInit {
   }
 
   async checkWiFiConnection() {
-    this.connectedWifiSSID = await this.goProWifiService.getConnectedWifiSSID();
+    this.connectedWifiSSID = await GoProWifiService.getConnectedWifiSSID();
     this.isConnectedToGoProWifi =
-      await this.goProWifiService.isConnectedToGoProWifi();
+      await GoProWifiService.isConnectedToGoProWifi();
 
     if (this.isConnectedToGoProWifi) {
       this.fetchFilesFromGoProWiFi();

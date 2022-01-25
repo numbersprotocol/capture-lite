@@ -26,9 +26,9 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   dontShowAgainTutorialForMobileDataOnlyApps = false;
 
   constructor(
-    private location: Location,
-    private route: ActivatedRoute,
-    private router: Router,
+    private readonly location: Location,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
     public toastController: ToastController,
     public alertController: AlertController,
     public loadingController: LoadingController,
@@ -37,7 +37,7 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
     @Inject(NETOWRK_PLUGIN)
     private readonly networkPlugin: NetworkPlugin
   ) {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(() => {
       const state = this.router.getCurrentNavigation()?.extras.state;
       if (state) {
         this.mediaFile = state.goProMediaFile;
@@ -46,7 +46,7 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.mediaType = this.goProMediaService.getFileType(this.mediaFile?.url);
+    this.mediaType = GoProMediaService.getFileType(this.mediaFile?.url);
   }
 
   async downloadFileFromGoProCamera() {
@@ -54,7 +54,7 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
       return;
     }
 
-    const fileName = this.goProMediaService.extractFileNameFromUrl(
+    const fileName = GoProMediaService.extractFileNameFromUrl(
       this.mediaFile.url
     );
 
@@ -74,8 +74,6 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   }
 
   async uploadToCapture() {
-    const newtorkStatus = await this.networkPlugin.getStatus();
-
     const allowed = await this.allowUploadWithMobileInternet();
     if (allowed) {
       await this.startUploadToCapture();
@@ -91,9 +89,6 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
 
   hideTutorialForMobileDataOnlyApps() {
     this.showTutorialForMobileDataOnlyApps = false;
-    console.log(
-      `hideTutorialForMobileDataOnlyApps.dontShowAgainTutorialForMobileDataOnlyApps ${this.dontShowAgainTutorialForMobileDataOnlyApps}`
-    );
 
     if (this.dontShowAgainTutorialForMobileDataOnlyApps == true) {
       this.goProWiFiService.dontShowAgainTutorialForMobileDataOnlyApps();
@@ -118,7 +113,8 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   }
 
   async allowUploadWithMobileInternet() {
-    return new Promise<boolean>(async (resolve, reject) => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise<boolean>(async resolve => {
       const alert = await this.alertController.create({
         header: 'Warning!',
         message:

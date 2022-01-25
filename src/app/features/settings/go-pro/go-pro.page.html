@@ -24,7 +24,7 @@
 
         <ion-button
           *ngIf="
-            scanResult.device.deviceId ==
+            scanResult.device.deviceId ===
             bluetoothConnectedDevice?.device?.deviceId
           "
           (click)="disconnectFromBluetoothDevice(scanResult)"
@@ -36,7 +36,7 @@
 
         <ion-button
           *ngIf="
-            scanResult.device.deviceId !=
+            scanResult.device.deviceId !==
             bluetoothConnectedDevice?.device?.deviceId
           "
           (click)="connectToBluetoothDevice(scanResult)"

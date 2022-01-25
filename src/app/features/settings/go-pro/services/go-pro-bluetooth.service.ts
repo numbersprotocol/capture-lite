@@ -46,10 +46,13 @@ export class GoProBluetoothService {
   private readonly goProWifiPASSCharacteristicUUID =
     `b5f90003-aa8d-11e3-9046-0002a5d5c51b`.toUpperCase();
 
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private readonly shutdownCommand = [0x01, 0x05];
 
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private readonly shutterCommand = [0x03, 0x01, 0x01, 0x01];
 
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private readonly enableGoProWiFiCommand = [0x03, 0x17, 0x01, 0x01];
 
   constructor() {
@@ -62,8 +65,9 @@ export class GoProBluetoothService {
       return [];
     }
 
-    let bluetoothScanResults: ScanResult[] = [];
+    const bluetoothScanResults: ScanResult[] = [];
 
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise<ScanResult[]>(async (resolve, reject) => {
       try {
         await BleClient.initialize();
@@ -85,7 +89,7 @@ export class GoProBluetoothService {
   }
 
   async connectToBluetoothDevice(scanResult: ScanResult) {
-    await BleClient.connect(scanResult.device.deviceId, deviceId => {
+    await BleClient.connect(scanResult.device.deviceId, () => {
       this.onDisconnectedFromBluetoothDevice(scanResult);
     });
     this.saveConnectedDeviceToStorage(scanResult);
@@ -116,7 +120,7 @@ export class GoProBluetoothService {
     });
   }
 
-  async removeConnectedDeviceFromStorage(scanResult: ScanResult) {
+  async removeConnectedDeviceFromStorage(_: ScanResult) {
     await Storage.remove({ key: this.GO_PRO_BLUETOOTH_STORAGE_KEY });
   }
 
@@ -127,11 +131,9 @@ export class GoProBluetoothService {
         const creds = await this.getGoProWiFiCreds();
         if (creds.wifiSSID && creds.wifiPASS) {
           return connectedDevice;
-        } else {
-          await this.removeConnectedDeviceFromStorage(connectedDevice);
         }
+        await this.removeConnectedDeviceFromStorage(connectedDevice);
       } catch (error) {
-        debugger;
         await this.removeConnectedDeviceFromStorage(connectedDevice);
       }
     }
@@ -197,6 +199,7 @@ export class GoProBluetoothService {
   }
 
   async connectToGoProWiFi() {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       await this.sendBluetoothWriteCommand(this.enableGoProWiFiCommand);
 
