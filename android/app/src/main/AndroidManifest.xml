@@ -46,6 +46,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
 
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"

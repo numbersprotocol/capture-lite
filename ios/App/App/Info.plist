@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>zh_TW</string>
+	<string>en_US</string>
 	<key>CFBundleDisplayName</key>
 	<string>Capture</string>
 	<key>CFBundleExecutable</key>
@@ -14,8 +14,8 @@
 	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
 	<array>
-		<string>zh_TW</string>
 		<string>en</string>
+		<string>zh_TW</string>
 	</array>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>

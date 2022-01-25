@@ -1,0 +1,33 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('message.moreActions') }}</span>
+</mat-toolbar>
+
+<div class="page-content">
+  <ng-container *ngFor="let action of actions$ | ngrxPush">
+    <ion-card (click)="doAction(action)">
+      <ion-card-header>
+        <div class="wrapper">
+          <div>
+            <ion-card-subtitle>{{ action.title_text }}</ion-card-subtitle>
+          </div>
+          <div>
+            <ion-icon
+              src="/assets/images/numbers_token.svg"
+              class="numbers-token"
+            ></ion-icon>
+            x
+            {{ action.action_cost_number }}
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        {{ action.description_text }}
+      </ion-card-content>
+      <ion-img [src]="action.banner_image_url_text"></ion-img>
+    </ion-card>
+  </ng-container>
+</div>

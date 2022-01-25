@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -26,6 +26,7 @@ import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.servic
 import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendWorkflowService } from '../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { MediaStore } from '../../../shared/media/media-store/media-store.service';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
@@ -51,6 +52,7 @@ const { Browser, Clipboard } = Plugins;
   styleUrls: ['./details.page.scss'],
 })
 export class DetailsPage {
+  captionOn = true;
   private readonly type$ = this.route.paramMap.pipe(
     map(params => params.get('type')),
     isNonNullable()
@@ -85,7 +87,8 @@ export class DetailsPage {
               this.diaBackendAssetRepository,
               this.errorService,
               this.diaBackendAuthService,
-              this.translocoService
+              this.translocoService,
+              this.diaBackendWorkflowService
             )
         )
     )
@@ -103,7 +106,8 @@ export class DetailsPage {
               this.diaBackendAssetRepository,
               this.errorService,
               this.diaBackendAuthService,
-              this.translocoService
+              this.translocoService,
+              this.diaBackendWorkflowService
             )
         )
       )
@@ -119,7 +123,8 @@ export class DetailsPage {
         this.diaBackendAssetRepository,
         this.errorService,
         this.diaBackendAuthService,
-        this.translocoService
+        this.translocoService,
+        this.diaBackendWorkflowService
       ),
     ])
   );
@@ -188,7 +193,10 @@ export class DetailsPage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly blockingActionService: BlockingActionService,
     private readonly informationSessionService: InformationSessionService,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
+    private readonly diaBackendWorkflowService: DiaBackendWorkflowService,
+    private readonly alertController: AlertController,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -293,6 +301,9 @@ export class DetailsPage {
     combineLatest([
       this.activeDetailedCapture$,
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
+      this.activeDetailedCapture$.pipe(
+        switchMap(c => c.postCreationWorkflowCompleted$)
+      ),
       this.translocoService.selectTranslateObject({
         'message.transferOwnership': null,
         'message.viewOnCaptureClub': null,
@@ -300,6 +311,7 @@ export class DetailsPage {
         'message.mintNftToken': null,
         'message.viewBlockchainCertificate': null,
         'message.viewSupportingVideoOnIpfs': null,
+        'message.moreActions': null,
       }),
     ])
       .pipe(
@@ -308,6 +320,7 @@ export class DetailsPage {
           ([
             detailedCapture,
             diaBackendAsset,
+            postCreationWorkflowCompleted,
             [
               messageTransferOwnership,
               messageViewOnCaptureClub,
@@ -315,11 +328,15 @@ export class DetailsPage {
               messageMintNftToken,
               messageViewBlockchainCertificate,
               messageViewSupportingVideoOnIpfs,
+              messageMoreActions,
             ],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
-              if (diaBackendAsset?.supporting_file) {
+              if (
+                postCreationWorkflowCompleted &&
+                diaBackendAsset?.supporting_file
+              ) {
                 buttons.push({
                   text: messageViewSupportingVideoOnIpfs,
                   handler: () => {
@@ -327,7 +344,7 @@ export class DetailsPage {
                   },
                 });
               }
-              if (detailedCapture.id) {
+              if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
                   text: messageTransferOwnership,
                   handler: () => {
@@ -350,7 +367,10 @@ export class DetailsPage {
                   this.remove().then(() => resolve());
                 },
               });
-              if (diaBackendAsset?.nft_token_id === null) {
+              if (
+                postCreationWorkflowCompleted &&
+                diaBackendAsset?.nft_token_id === null
+              ) {
                 buttons.push({
                   text: messageMintNftToken,
                   handler: () => {
@@ -359,11 +379,23 @@ export class DetailsPage {
                   role: 'destructive',
                 });
               }
-              if (detailedCapture.id) {
+              if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
                   text: messageViewBlockchainCertificate,
                   handler: () => {
                     this.openCertificate();
+                    resolve();
+                  },
+                });
+              }
+              if (postCreationWorkflowCompleted) {
+                buttons.push({
+                  text: messageMoreActions,
+                  handler: () => {
+                    this.router.navigate(
+                      ['actions', { id: detailedCapture.id }],
+                      { relativeTo: this.route }
+                    );
                     resolve();
                   },
                 });
@@ -542,5 +574,75 @@ export class DetailsPage {
         .pipe(untilDestroyed(this))
         .subscribe();
     }
+  }
+
+  async editCaption() {
+    return this.activeDetailedCapture$
+      .pipe(
+        first(),
+        concatMap(activeDetailedCapture => activeDetailedCapture.caption$),
+        concatMap(caption =>
+          this.alertController.create({
+            header: this.translocoService.translate('editCaption'),
+            inputs: [
+              {
+                name: 'caption',
+                type: 'text',
+                value: caption,
+              },
+            ],
+            buttons: [
+              {
+                text: this.translocoService.translate('cancel'),
+                role: 'cancel',
+              },
+              {
+                text: this.translocoService.translate('ok'),
+                handler: value => this.updateCaption(value.caption),
+              },
+            ],
+          })
+        ),
+        concatMap(
+          alert =>
+            new Promise<void>(resolve => {
+              alert.present().then(() => resolve());
+            })
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private updateCaption(caption: string) {
+    const action$ = this.activeDetailedCapture$.pipe(
+      first(),
+      switchTap(activeDetailedCapture =>
+        defer(() => {
+          if (activeDetailedCapture.id) {
+            const formData = new FormData();
+            formData.append('caption', caption);
+            return this.diaBackendAssetRepository.updateCapture$(
+              activeDetailedCapture.id,
+              formData
+            );
+          }
+          return VOID$;
+        }).pipe(
+          tap(() => {
+            this.captionOn = false;
+            this.changeDetectorRef.detectChanges();
+            this.captionOn = true;
+          })
+        )
+      ),
+      catchError((err: unknown) => {
+        return this.errorService.toastError$(err);
+      })
+    );
+    this.blockingActionService
+      .run$(action$)
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 }

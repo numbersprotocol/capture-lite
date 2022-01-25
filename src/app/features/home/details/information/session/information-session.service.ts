@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { defer, of } from 'rxjs';
-import { catchError, first, map, shareReplay, switchMap } from 'rxjs/operators';
+import { defer, iif, of } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  first,
+  map,
+  shareReplay,
+  switchMap,
+} from 'rxjs/operators';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../../../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendWorkflowService } from '../../../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../../../shared/error/error.service';
 import { MediaStore } from '../../../../../shared/media/media-store/media-store.service';
 import {
@@ -151,13 +159,78 @@ export class DetailedCapture {
     )[0];
   });
 
+  readonly caption$ = defer(() => {
+    if (this.proofOrDiaBackendAsset instanceof Proof) {
+      return this.diaBackendAsset$.pipe(
+        isNonNullable(),
+        map(asset => asset.caption)
+      );
+    }
+    return of(this.proofOrDiaBackendAsset.caption);
+  });
+
+  readonly nftToken$ = defer(() => {
+    if (this.proofOrDiaBackendAsset instanceof Proof)
+      return this.diaBackendAsset$.pipe(
+        map(asset => {
+          const tokenInfo = asset?.nft_token_id
+            ? getTokenInfo(
+                asset.nft_blockchain_name,
+                asset.nft_contract_address,
+                asset.nft_token_id
+              )
+            : null;
+          return tokenInfo;
+        })
+      );
+    const tokenInfo = this.proofOrDiaBackendAsset.nft_token_id
+      ? getTokenInfo(
+          this.proofOrDiaBackendAsset.nft_blockchain_name,
+          this.proofOrDiaBackendAsset.nft_contract_address,
+          this.proofOrDiaBackendAsset.nft_token_id
+        )
+      : null;
+    return of(tokenInfo);
+  });
+
+  readonly postCreationWorkflowCompleted$ = defer(() => {
+    if (this.proofOrDiaBackendAsset instanceof Proof) {
+      return this.diaBackendAsset$.pipe(
+        concatMap(asset =>
+          iif(
+            () => asset !== undefined,
+            of(asset).pipe(
+              isNonNullable(),
+              concatMap(asset =>
+                this.diaBackendWorkflowService.getWorkflowById$(
+                  asset.post_creation_workflow_id
+                )
+              ),
+              map(
+                diaBackendWorkflow => diaBackendWorkflow.completed_at !== null
+              )
+            ),
+            of(false)
+          )
+        )
+      );
+    }
+    return this.diaBackendWorkflowService
+      .getWorkflowById$(this.proofOrDiaBackendAsset.post_creation_workflow_id)
+      .pipe(
+        map(diaBackendWorkflow => diaBackendWorkflow.completed_at !== null),
+        catchError(() => of(false))
+      );
+  });
+
   constructor(
     private readonly proofOrDiaBackendAsset: Proof | DiaBackendAsset,
     private readonly mediaStore: MediaStore,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly errorService: ErrorService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly diaBackendWorkflowService: DiaBackendWorkflowService
   ) {}
 }
 
@@ -190,4 +263,30 @@ export function normalizeGeolocation({
   )
     return { latitude: Number(latitude), longitude: Number(longitude) };
   return undefined;
+}
+
+function getTokenInfo(
+  nftBlockchainName: string,
+  nftContractAddress: string,
+  nftTokenId: string
+) {
+  return {
+    tokenId: nftTokenId,
+    tokenType: nftBlockchainName === 'thundercore' ? 'TT721' : 'ERC721',
+    explorerUrl: getExplorerUrl(
+      nftBlockchainName,
+      nftContractAddress,
+      nftTokenId
+    ),
+  };
+}
+
+function getExplorerUrl(
+  nftBlockchainName: string,
+  nftContractAddress: string,
+  nftTokenId: string
+) {
+  return nftBlockchainName === 'thundercore'
+    ? `https://viewblock.io/thundercore/address/${nftContractAddress}?txsType=nft&specific=${nftTokenId}`
+    : `https://etherscan.io/token/${nftContractAddress}?a=${nftTokenId}`;
 }

@@ -68,8 +68,8 @@ export class AppComponent {
 
   async initializeApp() {
     await this.platform.ready();
-    await SplashScreen.hide();
     AppComponent.setDarkMode();
+    await SplashScreen.hide();
   }
 
   private restoreAppState() {

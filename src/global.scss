@@ -65,7 +65,14 @@ ion-app {
   overflow: auto;
 }
 
-mat-toolbar {
+body.dark .mat-toolbar {
+  background-color: var(--ion-background-color);
+  color: var(--ion-color-primary);
+}
+
+mat-toolbar.mat-toolbar {
+  background-color: var(--ion-background-color);
+  color: var(--ion-color-primary);
   min-height: 56px;
 
   span {
@@ -103,4 +110,20 @@ ion-button {
   100% {
     background-color: var(--loading-background-end);
   }
+}
+
+body.dark .mat-sidenav {
+  background-color: var(--noir-primary);
+}
+
+body.dark .mat-dialog-container {
+  background-color: var(--noir-primary);
+}
+
+body.dark .mat-card {
+  background-color: var(--ion-color-light-shade);
+}
+
+body.dark .mat-tab-group {
+  background-color: var(--ion-background-color);
 }

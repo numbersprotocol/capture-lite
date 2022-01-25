@@ -1,0 +1,13 @@
+<div *transloco="let t">
+  <h2 mat-dialog-title>
+    {{ t('yourPrivateKey') }}
+  </h2>
+  <p>{{ privateKey }}</p>
+  <button
+    (click)="copyToClipboard(privateKey)"
+    color="primary"
+    mat-stroked-button
+  >
+    <mat-icon>content_copy</mat-icon> {{ t('copyToClipboard') }}
+  </button>
+</div>

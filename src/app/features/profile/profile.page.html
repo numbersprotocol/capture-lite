@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" *transloco="let t">
+<mat-toolbar *transloco="let t">
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -10,12 +10,23 @@
 <div *transloco="let t" class="page-content">
   <mat-list>
     <mat-list-item>
-      <ion-icon mat-list-icon src="/assets/images/numbers_token.svg"></ion-icon>
-      <div mat-line>{{ t('balance') }}</div>
-      <div mat-line>NUM</div>
-      <div class="capt-balance">
+      <ion-icon mat-list-icon src="/assets/images/num-icon.svg"></ion-icon>
+      <div mat-line>NUM {{ t('balance') }}</div>
+      <div mat-line>ERC20</div>
+      <div class="num-balance">
         <ng-container *ngIf="networkConnected$ | ngrxPush; else offline">
-          $ {{ captBalance$ | ngrxPush | number: '1.2-2' }}
+          $ {{ ethNumBalance$ | ngrxPush | number: '1.2-2' }}
+        </ng-container>
+        <ng-template #offline> --offline-- </ng-template>
+      </div>
+    </mat-list-item>
+    <mat-list-item>
+      <ion-icon mat-list-icon src="/assets/images/num-icon.svg"></ion-icon>
+      <div mat-line>NUM {{ t('balance') }}</div>
+      <div mat-line>BEP20</div>
+      <div class="num-balance">
+        <ng-container *ngIf="networkConnected$ | ngrxPush; else offline">
+          $ {{ bscNumBalance$ | ngrxPush | number: '1.2-2' }}
         </ng-container>
         <ng-template #offline> --offline-- </ng-template>
       </div>
@@ -97,7 +108,7 @@
     </mat-list-item>
     <mat-list-item>
       <mat-icon mat-list-icon>lock</mat-icon>
-      <div mat-line>{{ t('publicKey') }}</div>
+      <div mat-line>{{ t('walletAddress') }}</div>
       <div mat-line>{{ publicKey$ | ngrxPush }}</div>
       <button
         *ngIf="publicKey$ | ngrxPush as publicKey"
@@ -107,20 +118,16 @@
         <mat-icon>content_copy</mat-icon>
       </button>
     </mat-list-item>
-    <mat-list-item>
-      <mat-icon mat-list-icon>vpn_key</mat-icon>
-      <div mat-line>{{ t('privateKey') }}</div>
-      <div mat-line>{{ privateKey$ | ngrxPush }}</div>
-      <button
-        *ngIf="privateKey$ | ngrxPush as privateKey"
-        (click)="copyToClipboard(privateKey)"
-        mat-icon-button
-      >
-        <mat-icon>content_copy</mat-icon>
-      </button>
-    </mat-list-item>
   </mat-list>
-  <button (click)="logout()" class="expand" color="primary" mat-raised-button>
+  <button
+    (click)="exportPrivateKey()"
+    class="expand"
+    color="primary"
+    mat-stroked-button
+  >
+    {{ t('exportPrivateKey') }}
+  </button>
+  <button (click)="logout()" class="expand" color="primary" mat-stroked-button>
     {{ t('logout') }}
   </button>
 </div>

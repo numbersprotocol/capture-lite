@@ -4,7 +4,7 @@ ion-content {
 
     ion-slide {
       flex-direction: column;
-      background-color: #36393f;
+      background-color: var(--noir-primary);
       height: 100vh;
 
       svg {

@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.42.0 - 2021-10-26
+
+### Added
+
+- Add "More Actions" in the Capture options menu, which will open a page of network applications.
+- Support posting Capture in CaptureClub.
+
+### Changed
+
+- Upgrade all dia-backend API to v3.
+- Change the "send" icon to "share" icon in Capture Details page.
+
+## 0.41.0 - 2021-10-20
+
+### Added
+
+- Can see caption of every Capture
+- Can see NFT address and token ID of every Capture
+
+### Changed
+
+- Update "Public Key" text to "Wallet Address" in Profile page
+- Update colors, icon, and splash screen to the new brand theme
+
 ## 0.40.3 - 2021-09-27
 
 ### Fixed

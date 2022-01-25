@@ -8,76 +8,77 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
-$capture-primary: (
-  50: #ece6fe,
-  100: #ccc1fc,
-  200: #a898fb,
-  300: #7e6dfc,
-  400: #564dfc,
-  500: #002cfa,
-  600: #0029f4,
-  700: #0022ec,
-  800: #001ee7,
-  900: #0014d8,
-  A100: white,
-  A200: white,
-  A400: #cfceff,
-  A700: #b6b4ff,
+$capture-primary-light: (
+  50: #e0e0fa,
+  100: #b3b3f3,
+  200: #8080ec,
+  300: #4d4de4,
+  400: #2626de,
+  500: #0000d8,
+  600: #0000d4,
+  700: #0000ce,
+  800: #0000c8,
+  900: #0000bf,
+  A100: #e7e7ff,
+  A200: #b4b4ff,
+  A400: #8181ff,
+  A700: #6868ff,
   contrast: (
-    50: rgb(0 0 0 / 0.87),
-    100: rgb(0 0 0 / 0.87),
-    200: rgb(0 0 0 / 0.87),
-    300: rgb(0 0 0 / 0.87),
-    400: white,
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-    A100: rgb(0 0 0 / 0.87),
-    A200: rgb(0 0 0 / 0.87),
-    A400: rgb(0 0 0 / 0.87),
-    A700: rgb(0 0 0 / 0.87),
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #000,
+    A200: #000,
+    A400: #000,
+    A700: #fff,
   ),
 );
 
-$capture-accent: (
-  50: #def8f5,
-  100: #aceee4,
-  200: #6ee4d2,
-  300: #14d7bf,
-  400: #00caaf,
-  500: #00bd9f,
-  600: #00af91,
-  700: #009d7f,
-  800: #008c70,
-  900: #006e52,
-  A100: #97ffec,
-  A200: #64ffe3,
-  A400: #31ffda,
-  A700: #18ffd5,
+$capture-primary-dark: (
+  50: #e0f9ff,
+  100: #b3efff,
+  200: #80e4ff,
+  300: #4dd9ff,
+  400: #26d1ff,
+  500: #00c9ff,
+  600: #00c3ff,
+  700: #00bcff,
+  800: #00b5ff,
+  900: #00a9ff,
+  A100: #fff,
+  A200: #f2faff,
+  A400: #bfe7ff,
+  A700: #a6ddff,
   contrast: (
-    50: rgb(0 0 0 / 0.87),
-    100: rgb(0 0 0 / 0.87),
-    200: rgb(0 0 0 / 0.87),
-    300: rgb(0 0 0 / 0.87),
-    400: white,
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-    A100: rgb(0 0 0 / 0.87),
-    A200: rgb(0 0 0 / 0.87),
-    A400: rgb(0 0 0 / 0.87),
-    A700: rgb(0 0 0 / 0.87),
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #000,
+    400: #000,
+    500: #000,
+    600: #000,
+    700: #000,
+    800: #000,
+    900: #000,
+    A100: #000,
+    A200: #000,
+    A400: #000,
+    A700: #000,
   ),
 );
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$app-primary: mat.define-palette($capture-primary, 400);
+$app-primary-light: mat.define-palette($capture-primary-light, 400);
+$app-primary-dark: mat.define-palette(mat.$light-blue-palette, 200);
 $app-accent: mat.define-palette(mat.$teal-palette, 200);
 
 // The warn palette is optional (defaults to red).
@@ -88,7 +89,7 @@ $app-warn: mat.define-palette(mat.$red-palette);
 $app-theme: mat.define-light-theme(
   (
     color: (
-      primary: $app-primary,
+      primary: $app-primary-light,
       accent: $app-accent,
       warn: $app-warn,
     ),
@@ -98,7 +99,7 @@ $app-theme: mat.define-light-theme(
 $dark-theme: mat.define-dark-theme(
   (
     color: (
-      primary: $app-primary,
+      primary: $app-primary-dark,
       accent: $app-accent,
       warn: $app-warn,
     ),
@@ -116,12 +117,12 @@ $dark-theme: mat.define-dark-theme(
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #564dfc;
-  --ion-color-primary-rgb: 86, 77, 252;
-  --ion-color-primary-contrast: white;
+  --ion-color-primary: #0000d8;
+  --ion-color-primary-rgb: 0, 0, 216;
+  --ion-color-primary-contrast: black;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #4c44de;
-  --ion-color-primary-tint: #675ffc;
+  --ion-color-primary-shade: #0000d8;
+  --ion-color-primary-tint: #0000d8;
 
   /** secondary **/
   --ion-color-secondary: #6ee4d2;
@@ -190,61 +191,90 @@ $dark-theme: mat.define-dark-theme(
   // loading animation
   --loading-background-start: var(--ion-color-light-shade);
   --loading-background-end: var(--ion-color-light);
+
+  // noir colors
+  --noir-primary: black;
+  --noir-secondary-dark: #00c9ff;
+  --noir-secondary-light: #0000d8;
+  --noir-warn: #f64662;
+  --noir-success: #66c109;
+  --noir-simple: #597393;
+  --noir-numbers-light: #f2f2f2;
+  --noir-numbers-mid: grey;
+  --noir-numbers-dark: #4d4d4d;
 }
 
 body.dark {
   @include mat.all-component-colors($dark-theme);
 
-  --capture-color-dark-background: #36393f;
+  --capture-color-dark-background: black;
   --capture-color-dark-contrast: #444;
-  --ion-color-primary: #564dfc;
-  --ion-color-primary-rgb: 86, 77, 252;
+
+  /** primary **/
+  --ion-color-primary: #00c9ff;
+  --ion-color-primary-rgb: 0, 201, 255;
   --ion-color-primary-contrast: white;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #4c44de;
-  --ion-color-primary-tint: #675ffc;
+  --ion-color-primary-shade: #00c9ff;
+  --ion-color-primary-tint: #00c9ff;
+
+  /** secondary **/
   --ion-color-secondary: #50c8ff;
   --ion-color-secondary-rgb: 80, 200, 255;
   --ion-color-secondary-contrast: white;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
   --ion-color-secondary-shade: #46b0e0;
   --ion-color-secondary-tint: #62ceff;
+
+  /** tertiary **/
   --ion-color-tertiary: #6a64ff;
   --ion-color-tertiary-rgb: 106, 100, 255;
   --ion-color-tertiary-contrast: white;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
   --ion-color-tertiary-shade: #5d58e0;
   --ion-color-tertiary-tint: #7974ff;
+
+  /** success **/
   --ion-color-success: #2fdf75;
   --ion-color-success-rgb: 47, 223, 117;
   --ion-color-success-contrast: black;
   --ion-color-success-contrast-rgb: 0, 0, 0;
   --ion-color-success-shade: #29c467;
   --ion-color-success-tint: #44e283;
+
+  /** warning **/
   --ion-color-warning: #ffd534;
   --ion-color-warning-rgb: 255, 213, 52;
   --ion-color-warning-contrast: black;
   --ion-color-warning-contrast-rgb: 0, 0, 0;
   --ion-color-warning-shade: #e0bb2e;
   --ion-color-warning-tint: #ffd948;
+
+  /** danger **/
   --ion-color-danger: #ff4961;
   --ion-color-danger-rgb: 255, 73, 97;
   --ion-color-danger-contrast: white;
   --ion-color-danger-contrast-rgb: 255, 255, 255;
   --ion-color-danger-shade: #e04055;
   --ion-color-danger-tint: #ff5b71;
+
+  /** dark **/
   --ion-color-dark: #f4f5f8;
   --ion-color-dark-rgb: 244, 245, 248;
   --ion-color-dark-contrast: black;
   --ion-color-dark-contrast-rgb: 0, 0, 0;
   --ion-color-dark-shade: #d7d8da;
   --ion-color-dark-tint: #f5f6f9;
+
+  /** medium **/
   --ion-color-medium: #989aa2;
   --ion-color-medium-rgb: 152, 154, 162;
   --ion-color-medium-contrast: black;
   --ion-color-medium-contrast-rgb: 0, 0, 0;
   --ion-color-medium-shade: #86888f;
   --ion-color-medium-tint: #a2a4ab;
+
+  /** light **/
   --ion-color-light: #222428;
   --ion-color-light-rgb: 34, 36, 40;
   --ion-color-light-contrast: white;
@@ -258,7 +288,7 @@ body.dark {
 }
 
 .ios body.dark {
-  --ion-background-color: #36393f;
+  --ion-background-color: black;
   --ion-background-color-rgb: 0, 0, 0;
   --ion-text-color: white;
   --ion-text-color-rgb: 255, 255, 255;
@@ -287,7 +317,7 @@ body.dark {
 }
 
 .md body.dark {
-  --ion-background-color: #36393f;
+  --ion-background-color: black;
   --ion-background-color-rgb: 18, 18, 18;
   --ion-text-color: white;
   --ion-text-color-rgb: 255, 255, 255;
@@ -311,8 +341,8 @@ body.dark {
   --ion-color-step-850: #dbdbdb;
   --ion-color-step-900: #e7e7e7;
   --ion-color-step-950: #f3f3f3;
-  --ion-item-background: #36393f;
   --ion-toolbar-background: #1f1f1f;
   --ion-tab-bar-background: #1f1f1f;
+  --ion-item-background: black;
   --ion-card-background: #1e1e1e;
 }
