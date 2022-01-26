@@ -56,7 +56,15 @@ export class GoProBluetoothService {
   private readonly enableGoProWiFiCommand = [0x03, 0x17, 0x01, 0x01];
 
   constructor() {
-    BleClient.initialize();
+    try {
+      BleClient.initialize();
+    } catch (err) {
+      if (
+        err instanceof Error &&
+        err.message === 'Web Bluetooth API not available in this browser.'
+      )
+        return;
+    }
   }
 
   async scanForBluetoothDevices(): Promise<ScanResult[]> {
