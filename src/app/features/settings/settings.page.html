@@ -2,7 +2,7 @@
   <button routerLink=".." routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <span>{{ t('settings') }}</span>
+  <span (click)="onSettingsToolbarClicked()">{{ t('settings') }}</span>
 </mat-toolbar>
 
 <ion-content *transloco="let t">
@@ -24,7 +24,10 @@
       </ion-select>
     </ion-item>
 
-    <ion-item [routerLink]="['/', 'settings', 'go-pro']">
+    <ion-item
+      *ngIf="showHiddenOption"
+      [routerLink]="['/', 'settings', 'go-pro']"
+    >
       <ion-icon name="camera" slot="start"></ion-icon>
       <ion-label>GoPro</ion-label>
     </ion-item>
