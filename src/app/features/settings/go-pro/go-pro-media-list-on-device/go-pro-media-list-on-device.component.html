@@ -1,0 +1,18 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <!-- <span>{{ t('mediaListOnDevice') }}</span> -->
+  <span>Media List On Device</span>
+</mat-toolbar>
+
+<ion-content>
+  <div class="grid-container">
+    <mat-grid-list cols="3" gutterSize="8px">
+      <mat-grid-tile *ngFor="let item of goProFilesOnDevice">
+        <app-go-pro-media-list-item-on-device [goProFileOnDevice]="item">
+        </app-go-pro-media-list-item-on-device>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</ion-content>

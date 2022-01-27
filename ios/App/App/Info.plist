@@ -43,6 +43,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Uses Bluetooth to connect and interact with GoPro or any other Bluetooth devices.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Uses Bluetooth to connect and interact with GoPro Camera</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Grant camera permission to allow the app to take images and videos of the unique moments that you want to keep.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -55,6 +59,10 @@
 	<string>Grant permission to allow this app to save the photos and videos you take to the local storage.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Grant permission to allow the app to read the photos and videos you take by this app.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

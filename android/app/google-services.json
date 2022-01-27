@@ -30,6 +30,13 @@
             {
               "client_id": "549594343019-2nnhn1apr7n1ie8l2tbbuhpelp5mul9v.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "549594343019-2nnhn1apr7n1ie8l2tbbuhpelp5mul9v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.numbersprotocol.capturelite"
+              }
             }
           ]
         }

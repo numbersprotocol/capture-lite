@@ -25,6 +25,7 @@ import { ErrorService } from '../../shared/error/error.service';
 import { MigrationService } from '../../shared/migration/service/migration.service';
 import { OnboardingService } from '../../shared/onboarding/onboarding.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
+import { GoProBluetoothService } from '../settings/go-pro/services/go-pro-bluetooth.service';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 
 const { Browser } = Plugins;
@@ -67,7 +68,8 @@ export class HomePage {
     private readonly errorService: ErrorService,
     private readonly cameraService: CameraService,
     private readonly actionSheetController: ActionSheetController,
-    private readonly alertController: AlertController
+    private readonly alertController: AlertController,
+    private readonly goProBluetoothService: GoProBluetoothService
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -159,25 +161,32 @@ export class HomePage {
       })
       .pipe(
         first(),
-        concatMap(
-          ([takePicture, recordVideo]) =>
-            new Promise<Media>(resolve =>
-              this.actionSheetController
-                .create({
-                  buttons: [
-                    {
-                      text: takePicture,
-                      handler: () => resolve(this.cameraService.takePhoto()),
-                    },
-                    {
-                      text: recordVideo,
-                      handler: () => resolve(this.recordVideo()),
-                    },
-                  ],
-                })
-                .then(sheet => sheet.present())
-            )
-        )
+        concatMap(async ([takePicture, recordVideo]) => {
+          // eslint-disable-next-line no-async-promise-executor
+          return new Promise<Media>(async resolve => {
+            const buttons = [
+              {
+                text: takePicture,
+                handler: () => resolve(this.cameraService.takePhoto()),
+              },
+              {
+                text: recordVideo,
+                handler: () => resolve(this.recordVideo()),
+              },
+            ];
+
+            if (await this.goProBluetoothService.getConnectedDevice()) {
+              buttons.push({
+                text: 'Capture from GoPro',
+                handler: () => resolve(this.caputureFromGoPro()),
+              });
+            }
+
+            return this.actionSheetController
+              .create({ buttons })
+              .then(sheet => sheet.present());
+          });
+        })
       );
   }
 
@@ -196,6 +205,12 @@ export class HomePage {
           ],
         })
         .then(alert => alert.present());
+    });
+  }
+
+  private async caputureFromGoPro() {
+    return new Promise<Media>(() => {
+      this.router.navigate(['/settings', 'go-pro', 'media-list-on-camera']);
     });
   }
 

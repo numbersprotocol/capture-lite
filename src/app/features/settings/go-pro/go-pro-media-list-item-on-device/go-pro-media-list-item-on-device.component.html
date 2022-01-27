@@ -1,0 +1,15 @@
+<ion-icon
+  *ngIf="goProFileOnDevice?.type === 'video'"
+  name="videocam"
+  class="is-video"
+></ion-icon>
+<img
+  *ngIf="thumbnailSrc"
+  [src]="thumbnailSrc"
+  (click)="showDetails()"
+  loading="lazy"
+  decoding="async"
+/>
+<mat-icon *ngIf="!goProFileOnDevice?.thumbnailUrl" class="is-thumbnail-missing">
+  broken_image
+</mat-icon>

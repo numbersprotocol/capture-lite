@@ -1,0 +1,200 @@
+<mat-toolbar color="primary" *transloco="let t">
+  <button (click)="goBack()" routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <!-- <span>{{ t('goProMediaDetailOnCamera') }}</span> -->
+  <span>Detail On Camera</span>
+</mat-toolbar>
+
+<ion-content *transloco="let t">
+  <div *ngIf="showTutorialForMobileDataOnlyApps === false">
+    <ion-img
+      *ngIf="mediaType === 'image'"
+      [src]="mediaFile!.url"
+      decoding="async"
+      loading="lazy"
+    ></ion-img>
+
+    <video
+      *ngIf="mediaType === 'video'"
+      controls
+      playsinline
+      preload="metadata"
+    >
+      <source src="{{ mediaFile!.url }}#t=0.1" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <div style="height: 24px"></div>
+    <ion-button (click)="uploadToCapture()" expand="block">
+      Upload to capture directly from camera
+    </ion-button>
+  </div>
+
+  <ion-slides #slides pager *ngIf="showTutorialForMobileDataOnlyApps">
+    <ion-slide>
+      <ng-container>
+        <svg
+          version="1.1"
+          id="圖層_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 360 639"
+          enable-background="new 0 0 360 639"
+          xml:space="preserve"
+        >
+          <image
+            overflow="visible"
+            width="360"
+            height="639"
+            xlink:href="/assets/images/go-pro/enable-mobile-only-apps-tutorial-for-android/1.png"
+          ></image>
+        </svg>
+      </ng-container>
+      <button (click)="slides.slideNext()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
+    </ion-slide>
+    <ion-slide>
+      <ng-container>
+        <svg
+          version="1.1"
+          id="圖層_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 360 639"
+          enable-background="new 0 0 360 639"
+          xml:space="preserve"
+        >
+          <image
+            overflow="visible"
+            width="359"
+            height="639"
+            xlink:href="/assets/images/go-pro/enable-mobile-only-apps-tutorial-for-android/2.png"
+          ></image>
+        </svg>
+      </ng-container>
+      <button (click)="slides.slideNext()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
+    </ion-slide>
+    <ion-slide>
+      <ng-container>
+        <svg
+          version="1.1"
+          id="圖層_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 360 639"
+          enable-background="new 0 0 360 639"
+          xml:space="preserve"
+        >
+          <image
+            overflow="visible"
+            width="360"
+            height="639"
+            xlink:href="/assets/images/go-pro/enable-mobile-only-apps-tutorial-for-android/3.png"
+          ></image>
+        </svg>
+      </ng-container>
+      <button (click)="slides.slideNext()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
+    </ion-slide>
+    <ion-slide>
+      <ng-container>
+        <svg
+          version="1.1"
+          id="圖層_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 360 639"
+          enable-background="new 0 0 360 639"
+          xml:space="preserve"
+        >
+          <image
+            overflow="visible"
+            width="360"
+            height="639"
+            xlink:href="/assets/images/go-pro/enable-mobile-only-apps-tutorial-for-android/4.png"
+          ></image>
+        </svg>
+      </ng-container>
+      <button (click)="slides.slideNext()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
+    </ion-slide>
+    <ion-slide>
+      <ng-container>
+        <svg
+          version="1.1"
+          id="圖層_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 360 639"
+          enable-background="new 0 0 360 639"
+          xml:space="preserve"
+        >
+          <image
+            overflow="visible"
+            width="360"
+            height="639"
+            xlink:href="/assets/images/go-pro/enable-mobile-only-apps-tutorial-for-android/5.png"
+          ></image>
+        </svg>
+      </ng-container>
+      <button (click)="slides.slideNext()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
+    </ion-slide>
+    <ion-slide>
+      <ng-container>
+        <svg
+          version="1.1"
+          id="圖層_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 360 639"
+          enable-background="new 0 0 360 639"
+          xml:space="preserve"
+        >
+          <image
+            overflow="visible"
+            width="360"
+            height="639"
+            xlink:href="/assets/images/go-pro/enable-mobile-only-apps-tutorial-for-android/6.png"
+          ></image>
+        </svg>
+      </ng-container>
+      <button (click)="slides.slideNext()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-item style="--background: #36393f" lines="none">
+        <ion-checkbox
+          [checked]="dontShowAgainTutorialForMobileDataOnlyApps"
+          [(ngModel)]="dontShowAgainTutorialForMobileDataOnlyApps"
+          slot="start"
+        ></ion-checkbox>
+        <ion-label color="light">Don't show again</ion-label>
+      </ion-item>
+      <button (click)="hideTutorialForMobileDataOnlyApps()" mat-stroked-button>
+        {{ t('next') }}
+      </button>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

@@ -8,6 +8,9 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { ReactiveComponentModule } from '@ngrx/component';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
+import { GoProBluetoothService } from '../features/settings/go-pro/services/go-pro-bluetooth.service';
+import { GoProMediaService } from '../features/settings/go-pro/services/go-pro-media.service';
+import { GoProWifiService } from '../features/settings/go-pro/services/go-pro-wifi.service';
 import { ActionsDialogComponent } from './actions/actions-dialog/actions-dialog.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { CapacitorPluginsModule } from './capacitor-plugins/capacitor-plugins.module';
@@ -47,9 +50,12 @@ const imports = [
   FormlyMaterialModule,
 ];
 
+const providers = [GoProBluetoothService, GoProWifiService, GoProMediaService];
+
 @NgModule({
   declarations,
   imports,
+  providers,
   exports: [...declarations, ...imports],
 })
 export class SharedModule {}
