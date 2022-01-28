@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import '@capacitor-community/http';
-import { HttpDownloadFileResult } from '@capacitor-community/http';
 import {
   Capacitor,
   FilesystemDirectory,
@@ -13,8 +12,8 @@ import { isPlatform } from '@ionic/core';
 import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { CaptureService } from '../../../../shared/capture/capture.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
-import { GoProFile, GoProFileOnDevice } from '../go-pro-media-file';
-const { Http, Storage } = Plugins;
+import { GoProFile } from '../go-pro-media-file';
+const { Http } = Plugins;
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +37,8 @@ export class GoProMediaService {
     private readonly httpClient: HttpClient
   ) {}
 
-  static getFileType(url?: string): 'unknown' | 'video' | 'image' {
+  // eslint-disable-next-line class-methods-use-this
+  getFileType(url?: string): 'unknown' | 'video' | 'image' {
     if (url === undefined) {
       return 'unknown';
     }
@@ -54,185 +54,121 @@ export class GoProMediaService {
     return 'unknown';
   }
 
-  static extractFileNameFromUrl(url: string): string {
+  // eslint-disable-next-line class-methods-use-this
+  extractFileNameFromUrl(url: string): string {
     // return extract filename with extension from url
     // example 001.jpg, 002.mp4
-    return url.split('?')[0].split('/').pop()!;
+    return url.split('?')[0].split('/').pop() ?? '';
   }
 
-  static extractFileExtensionFormUrl(filaName: string): string {
-    return filaName.split('?')[0].split('.').pop()!;
+  // eslint-disable-next-line class-methods-use-this
+  extractFileExtensionFormUrl(filaName: string): string {
+    return filaName.split('?')[0].split('.').pop() ?? '';
   }
 
-  static extractFileNameFromGoProUrl(url: string): string {
+  // eslint-disable-next-line class-methods-use-this
+  extractFileNameFromGoProUrl(url: string): string {
     // example of GoPro urls
     // _________url: http://10.5.5.9:8080/videos/DCIM/100GOPRO/GH010168.MP4
     // thumbnailUrl: http://10.5.5.9:8080/gopro/media/thumbnail?path=100GOPRO/GH010168.MP4
-    return url.split('/').pop()!;
+    return url.split('/').pop() ?? '';
   }
 
-  static extractFileExtensionFromGoProUrl(url: string): string {
-    return url.split('.').pop()!;
+  // eslint-disable-next-line class-methods-use-this
+  extractFileExtensionFromGoProUrl(url: string): string {
+    return url.split('.').pop() ?? '';
   }
 
-  static urlIsImage(url: string): boolean {
-    const url_lowercase = url.toLocaleLowerCase();
-    return url_lowercase.includes('.jpeg') || url_lowercase.includes('.jpg');
-  }
-
-  static urlIsVideo(url: string): boolean {
-    const url_lowercase = url.toLowerCase();
-    return url_lowercase.includes('.mp4');
-  }
-
-  static detectFileTypeFromUrl(url: string): 'image' | 'video' | 'unknown' {
-    if (GoProMediaService.urlIsImage(url)) {
-      return 'image';
-    }
-    if (GoProMediaService.urlIsVideo(url)) {
-      return 'video';
-    }
-    return 'unknown';
-  }
-
-  private async saveFilesToStorage(files: GoProFileOnDevice[]) {
-    await Storage.set({
-      key: this.GO_PRO_FILES_ON_DEVICE_STORAGE_KEY,
-      value: JSON.stringify(files),
-    });
-  }
-
-  async clearStorage() {
-    await this.saveFilesToStorage([]);
-  }
-
+  // eslint-disable-next-line class-methods-use-this
   getThumbnailUrlFrom(url: string): string {
     const fileName = url.split('/').pop();
     const thumbnailUrl = `${this.goproBaseUrl}/gopro/media/thumbnail?path=100GOPRO/${fileName}`;
     return thumbnailUrl;
   }
 
-  async uploadToCaptureFromGoProCamera(mediaFile: GoProFile | undefined) {
-    if (!mediaFile) return;
+  async uploadToCaptureFromGoProCamera(
+    mediaFile: GoProFile | undefined
+  ): Promise<{
+    isDownloaded: boolean;
+    isCaptured: boolean;
+  }> {
+    if (!mediaFile) return { isDownloaded: false, isCaptured: false };
 
-    const fileName = GoProMediaService.extractFileNameFromGoProUrl(
-      mediaFile.url
+    const fileName = this.extractFileNameFromGoProUrl(mediaFile.url);
+
+    let isDownloaded = false;
+    let isCaptured = false;
+
+    try {
+      await Http.downloadFile({
+        url: mediaFile.url,
+        filePath: fileName,
+        fileDirectory: this.directory,
+        method: 'GET',
+      });
+
+      const readResult = await this.filesystemPlugin.getUri({
+        directory: this.directory,
+        path: fileName,
+      });
+
+      const url = Capacitor.convertFileSrc(readResult.uri);
+
+      const blob = await this.httpClient
+        .get(url, { responseType: 'blob' })
+        .toPromise();
+
+      const base64 = await blobToBase64(blob);
+
+      const mimeType = this.urlIsImage(mediaFile.url)
+        ? 'image/jpeg'
+        : 'video/mp4';
+      isDownloaded = true;
+
+      await this.captureService.capture({ base64, mimeType });
+      isCaptured = true;
+
+      // delete temp downloaded file
+      await this.filesystemPlugin.deleteFile({
+        directory: this.directory,
+        path: fileName,
+      });
+    } catch (error: any) {
+      const printIndentation = 2;
+      // eslint-disable-next-line no-console
+      console.warn(`'😭 ${JSON.stringify(error, null, printIndentation)}`);
+    }
+
+    return { isDownloaded, isCaptured };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  urlIsImage(url: string): boolean {
+    return (
+      url.toLocaleLowerCase().includes('.jpeg') ||
+      url.toLocaleLowerCase().includes('.jpg')
     );
-
-    // const option = 'oldWay';
-    // if (option === 'oldWay') {
-    await Http.downloadFile({
-      url: mediaFile.url!,
-      filePath: fileName,
-      fileDirectory: this.directory,
-      method: 'GET',
-    });
-
-    const readResult = await this.filesystemPlugin.getUri({
-      directory: this.directory,
-      // path: `${this.rootDir}/${goProFileOnDevice.name}`,
-      path: `${fileName}`, //  Because when saving we forget to add rootDir
-    });
-
-    const url = Capacitor.convertFileSrc(readResult.uri);
-
-    const blob = await this.httpClient
-      .get(url, { responseType: 'blob' })
-      .toPromise();
-
-    const base64 = await blobToBase64(blob);
-
-    const mimeType = GoProMediaService.urlIsImage(mediaFile.url)
-      ? 'image/jpeg'
-      : 'video/mp4';
-
-    await this.captureService.capture({ base64, mimeType });
-
-    // delete temp downloaded file
-    await this.filesystemPlugin.deleteFile({
-      directory: this.directory,
-      // path: `${this.rootDir}/${goProFileOnDevice.name}`,
-      path: `${fileName}`, //  Because when saving we forget to add rootDir
-    });
-    // } else {
-    //   const url = mediaFile.url;
-
-    //   const blob = await Http.request({
-    //     method: 'GET',
-    //     url: url,
-    //     headers: { responseType: 'blob' },
-    //   });
-
-    //   const base64 = await blobToBase64(blob);
-
-    //   const mimeType = this.urlIsImage(url) ? 'image/jpeg' : 'video/mp4';
-
-    //   await this.captureService.capture({ base64, mimeType });
-    // }
   }
 
-  async getFileSrcFromDevice(filePath: string): Promise<SafeUrl> {
-    const fileName = filePath.split('/').pop();
-
-    const result = await this.filesystemPlugin.getUri({
-      directory: this.directory,
-      // path: `${this.rootDir}/${fileName}`,
-      path: `${fileName}`, // Because when saving we forget to add rootDir
-    });
-
-    const uri = result.uri;
-
-    const url = Capacitor.convertFileSrc(uri);
-
-    return this.sanitizer.bypassSecurityTrustUrl(url);
+  // eslint-disable-next-line class-methods-use-this
+  urlIsVideo(url: string): boolean {
+    return url.toLowerCase().includes('.mp4');
   }
 
-  async uploadToCaptureFromDevice(goProFileOnDevice?: GoProFileOnDevice) {
-    if (!goProFileOnDevice) return;
-
-    // const option = 'oldWay';
-    // if (option !== 'oldWay') {
-    //   const readResult = await this.filesystemPlugin.readFile({
-    //     directory: this.directory,
-    //     // path: `${this.rootDir}/${goProFileOnDevice.name}`,
-    //     path: `${goProFileOnDevice.name}`, //  Because when saving we forget to add rootDir
-    //   });
-
-    //   const base64 = readResult.data;
-
-    //   const mimeType = this.urlIsImage(goProFileOnDevice.url)
-    //     ? 'image/jpeg'
-    //     : 'video/mp4';
-
-    //   await this.captureService.capture({ base64, mimeType });
-    // } else {
-    const result = await this.filesystemPlugin.getUri({
-      directory: this.directory,
-      // path: `${this.rootDir}/${goProFileOnDevice.name}`,
-      path: `${goProFileOnDevice.name}`, //  Because when saving we forget to add rootDir
-    });
-
-    const url = Capacitor.convertFileSrc(result.uri);
-
-    const blob = await this.httpClient
-      .get(url, { responseType: 'blob' })
-      .toPromise();
-
-    const base64 = await blobToBase64(blob);
-
-    const mimeType = GoProMediaService.urlIsImage(goProFileOnDevice.url)
-      ? 'image/jpeg'
-      : 'video/mp4';
-
-    await this.captureService.capture({ base64, mimeType });
-    // }
+  detectFileTypeFromUrl(url: string): 'image' | 'video' | 'unknown' {
+    if (this.urlIsImage(url)) {
+      return 'image';
+    }
+    if (this.urlIsVideo(url)) {
+      return 'video';
+    }
+    return 'unknown';
   }
 
   async getFilesFromGoPro(): Promise<GoProFile[]> {
     const url = this.goproBaseUrl + '/gopro/media/list';
     const params = {};
     const headers = {};
-
     const response = await Http.request({
       method: 'GET',
       url,
@@ -241,9 +177,7 @@ export class GoProMediaService {
     });
 
     const data = response.data;
-
     const files = (data.media[0].fs as any[]).reverse();
-
     const fileNames: string[] = files.map(e => e.n);
 
     return fileNames
@@ -256,64 +190,8 @@ export class GoProMediaService {
       url,
       storageKey: undefined,
       thumbnailUrl: this.getThumbnailUrlFrom(url),
-      name: GoProMediaService.extractFileNameFromGoProUrl(url),
-      type: GoProMediaService.detectFileTypeFromUrl(url),
+      name: this.extractFileNameFromGoProUrl(url),
+      type: this.detectFileTypeFromUrl(url),
     };
-  }
-
-  async loadFilesFromStorage() {
-    const result = await Storage.get({
-      key: this.GO_PRO_FILES_ON_DEVICE_STORAGE_KEY,
-    });
-    const filesOnDevice: GoProFileOnDevice[] = JSON.parse(result.value ?? '[]');
-    return filesOnDevice;
-  }
-
-  async addFileToStorage(fileToAdd: GoProFileOnDevice) {
-    const filesOnDevice = await this.loadFilesFromStorage();
-    filesOnDevice.unshift(fileToAdd);
-    await this.saveFilesToStorage(filesOnDevice);
-  }
-
-  async downloadFromGoProCamera(mediaFile?: GoProFile) {
-    if (!mediaFile) {
-      return;
-    }
-    const fileName = GoProMediaService.extractFileNameFromGoProUrl(
-      mediaFile.url
-    );
-    // const fileExtension = GoProMediaService.extractFileExtensionFromGoProUrl(
-    //   mediaFile.url
-    // );
-    const fileType = GoProMediaService.detectFileTypeFromUrl(mediaFile.url);
-
-    const thumbName = GoProMediaService.extractFileNameFromGoProUrl(
-      mediaFile.thumbnailUrl!
-    );
-    const thumbNameFull = 'thumbnail_' + thumbName + '.jpeg';
-
-    const fileResponse: HttpDownloadFileResult = await Http.downloadFile({
-      url: mediaFile.url!,
-      filePath: fileName,
-      fileDirectory: this.directory,
-      method: 'GET',
-    });
-
-    const thumbResponse: HttpDownloadFileResult = await Http.downloadFile({
-      url: mediaFile.thumbnailUrl!,
-      filePath: thumbNameFull,
-      fileDirectory: this.directory,
-      method: 'GET',
-    });
-
-    const goProFileOnDevice: GoProFileOnDevice = {
-      name: fileName,
-      url: fileResponse.path!,
-      thumbnailUrl: thumbResponse.path!,
-      size: 1, // TODO: find out size of file
-      type: fileType,
-    };
-
-    await this.addFileToStorage(goProFileOnDevice);
   }
 }
