@@ -214,9 +214,9 @@
     "waitingToBeAccepted": "等待中"
   },
   "payment": {
-    "confirmPayment": "確認付款",
-    "price": "價格",
-    "fee": "手續費",
+    "confirmPayment": "你的訂單",
+    "price": "費用",
+    "fee": "油費",
     "totalCost": "總額"
   }
 }
