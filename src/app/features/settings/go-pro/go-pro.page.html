@@ -51,10 +51,6 @@
 
     <div style="height: 24px"></div>
 
-    <ion-list-header *ngIf="!bluetoothConnectedDevice">
-      <h4>NOT CONNECTED TO ANY GO PRO CAMERA ⚠️</h4>
-    </ion-list-header>
-
     <ng-container *ngIf="bluetoothConnectedDevice" style="margin-top: 40px">
       <ion-list-header>
         <h4>

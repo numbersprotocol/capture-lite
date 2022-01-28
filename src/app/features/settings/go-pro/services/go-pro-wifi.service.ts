@@ -19,12 +19,14 @@ export class GoProWifiService {
     public platform: Platform
   ) {}
 
-  static async isConnectedToGoProWifi() {
+  // eslint-disable-next-line class-methods-use-this
+  async isConnectedToGoProWifi(): Promise<boolean> {
     const result = await Wifi.getSSID();
     return result.ssid?.startsWith('GP') ?? false;
   }
 
-  static async getConnectedWifiSSID() {
+  // eslint-disable-next-line class-methods-use-this
+  async getConnectedWifiSSID() {
     const result = await Wifi.getSSID();
     return result.ssid;
   }
@@ -37,7 +39,7 @@ export class GoProWifiService {
       password: creds.wifiPASS,
     });
 
-    return result.ssid!;
+    return result.ssid ?? '';
   }
 
   async showTutorialForMobileDataOnlyApps() {

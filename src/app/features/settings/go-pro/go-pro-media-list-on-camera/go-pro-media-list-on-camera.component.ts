@@ -1,6 +1,11 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import {
+  AlertController,
+  NavController,
+  ToastController,
+} from '@ionic/angular';
 import { GoProFile } from '../go-pro-media-file';
 import { GoProBluetoothService } from '../services/go-pro-bluetooth.service';
 import { GoProMediaService } from '../services/go-pro-media.service';
@@ -21,9 +26,20 @@ export class GoProMediaListOnCameraComponent implements OnInit {
   connectedWifiSSID: string | null = null;
   isConnectedToGoProWifi: boolean | undefined;
 
+  isScrollingContent = false;
+
+  multiSelectMode = false;
+  selectedGoProFiles: GoProFile[] = [];
+
+  filesToUpload: GoProFile[] = [];
+  uploadInProgress = false;
+
   constructor(
     private readonly location: Location,
     private readonly goProMediaService: GoProMediaService,
+    private readonly router: Router,
+    private readonly navCtrl: NavController,
+    private readonly alertCtrl: AlertController,
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly goProWifiService: GoProWifiService,
     public toastController: ToastController
@@ -34,9 +50,9 @@ export class GoProMediaListOnCameraComponent implements OnInit {
   }
 
   async checkWiFiConnection() {
-    this.connectedWifiSSID = await GoProWifiService.getConnectedWifiSSID();
+    this.connectedWifiSSID = await this.goProWifiService.getConnectedWifiSSID();
     this.isConnectedToGoProWifi =
-      await GoProWifiService.isConnectedToGoProWifi();
+      await this.goProWifiService.isConnectedToGoProWifi();
 
     if (this.isConnectedToGoProWifi) {
       this.fetchFilesFromGoProWiFi();
@@ -75,5 +91,118 @@ export class GoProMediaListOnCameraComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+  onItemClick(item: GoProFile) {
+    if (!this.multiSelectMode) {
+      this.router.navigate(
+        ['/settings', 'go-pro', 'media-item-detail-on-camera'],
+        { state: { goProMediaFile: item } }
+      );
+    } else if (!this.isItemInSelectedList(item)) {
+      this.selectedGoProFiles.push(item);
+    } else {
+      this.selectedGoProFiles = this.selectedGoProFiles.filter(
+        i => i.url !== item.url
+      );
+    }
+  }
+
+  async uploadSelectedFiles() {
+    for (const selectedFile of this.selectedGoProFiles) {
+      if (this.isItemInUploadList(selectedFile) === false) {
+        this.filesToUpload.push(selectedFile);
+      }
+    }
+
+    this.exitMultiSelectMode();
+
+    if (!this.uploadInProgress) {
+      this.uploadInProgress = true;
+
+      while (this.filesToUpload.length > 0) {
+        const fileToUpload = this.filesToUpload.shift();
+
+        // // eslint-disable-next-line no-console
+        // console.log(fileToUpload);
+
+        // await new Promise(resolve => {
+        //   setTimeout(() => {
+        //     resolve(fileToUpload);
+        //     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+        //   }, 4000);
+        // });
+
+        const uploadResult =
+          await this.goProMediaService.uploadToCaptureFromGoProCamera(
+            fileToUpload
+          );
+
+        if (uploadResult.isDownloaded && uploadResult.isCaptured === false) {
+          this.fileWasUploadedBefore(fileToUpload);
+        }
+      }
+
+      this.uploadInProgress = false;
+      this.navigateToHomeScreen();
+    }
+  }
+
+  async fileWasUploadedBefore(fileToUpload: GoProFile | undefined) {
+    if (!fileToUpload) return;
+
+    const alert = await this.alertCtrl.create({
+      cssClass: 'go-pro-alert-message-with',
+      header: 'File Upload Error!',
+      subHeader: 'File Previously Uploaded.',
+      message: `<img src="${fileToUpload.thumbnailUrl}"  loading="lazy" decoding="async">`,
+      buttons: ['OK'],
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    // eslint-disable-next-line no-console
+    console.log('onDidDismiss resolved with role', role);
+  }
+
+  private async navigateToHomeScreen() {
+    // this.navCtrl.navigateRoot('/');
+    await this.navCtrl.pop();
+    await this.navCtrl.pop();
+    await this.navCtrl.pop();
+  }
+
+  ionScrollStart() {
+    this.isScrollingContent = true;
+  }
+
+  ionScrollEnd() {
+    this.isScrollingContent = false;
+  }
+
+  enterMultiSelectMode(firstSelectedItem?: GoProFile) {
+    if (this.multiSelectMode) return;
+    if (this.isScrollingContent) return;
+    if (firstSelectedItem) this.selectedGoProFiles.push(firstSelectedItem);
+    this.multiSelectMode = true;
+  }
+
+  exitMultiSelectMode() {
+    this.multiSelectMode = false;
+    this.selectedGoProFiles = [];
+  }
+
+  isItemInSelectedList(item: GoProFile) {
+    return this.selectedGoProFiles.find(i => i.url === item.url) !== undefined;
+  }
+
+  isItemInUploadList(item: GoProFile) {
+    return this.filesToUpload.find(i => i.url === item.url) !== undefined;
+  }
+
+  onUploadCancel() {
+    this.uploadInProgress = false;
+    this.filesToUpload = [];
   }
 }
