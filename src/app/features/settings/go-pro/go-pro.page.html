@@ -11,6 +11,7 @@
       expand="block"
       [disabled]="bluetoothIsScanning"
       (click)="scanForBluetoothDevices()"
+      style="color: white; --box-shadow: 0; margin: 0 16px 0 16px"
     >
       {{ bluetoothIsScanning ? 'Scaning' : 'Scan for bluetooth devices' }}
     </ion-button>
@@ -41,6 +42,7 @@
           "
           (click)="connectToBluetoothDevice(scanResult)"
           slot="end"
+          style="color: white; --box-shadow: 0"
         >
           Connect
         </ion-button>
@@ -62,9 +64,8 @@
         </h4>
       </ion-list-header>
 
-      <ion-item>
+      <ion-item detail="true" (click)="showFilesOnGoPro()">
         <ion-label>Show files on go pro</ion-label>
-        <ion-button slot="end" (click)="showFilesOnGoPro()"> send </ion-button>
       </ion-item>
     </ng-container>
 
