@@ -214,9 +214,9 @@
     "waitingToBeAccepted": "In Progress"
   },
   "payment": {
-    "confirmPayment": "Confirm Payment",
-    "price": "Price",
-    "fee": "Fee",
+    "confirmPayment": "Your Order",
+    "price": "Fee",
+    "fee": "Gas",
     "totalCost": "Total Cost"
   }
 }
