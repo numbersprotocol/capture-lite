@@ -207,4 +207,14 @@ export class GoProBluetoothService {
       password: wifiCreds.wifiPASS,
     });
   }
+
+  /** Trigger pairing between device and GoPro.
+   *
+   * Because '@capacitor-community/bluetooth-le' have no such command pair device. However we can
+   * send any bluetooth read command to trigger pairing if connected for the first time.
+   * For example: it can be get wifi credentials command
+   */
+  async pairDevice(): Promise<void> {
+    await this.getGoProWiFiCreds();
+  }
 }
