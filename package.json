@@ -29,7 +29,7 @@
     "@angular/platform-browser-dynamic": "^12.2.4",
     "@angular/router": "^12.2.4",
     "@capacitor-community/bluetooth-le": "github:numbersprotocol/bluetooth-le#fix-complilation-error-on-ios-15",
-    "@capacitor-community/http": "^0.3.2",
+    "@capacitor-community/http": "^1.4.1",
     "@capacitor-community/wifi": "git+https://github.com/digaus/community-capacitor-wifi.git",
     "@capacitor/android": "https://gitpkg.now.sh/numbersprotocol/capacitor/android?release-2.4.7-range-request-fix",
     "@capacitor/core": "~2.4.7",
