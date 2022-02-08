@@ -26,7 +26,7 @@
   <ion-button
     *ngIf="!isConnectedToGoProWifi"
     (click)="connectToGoProWifi()"
-    style="color: white; --box-shadow: 0"
+    class="connect-to-go-pro-wifi-btn"
   >
     Connect to go pro WiFi (enable first)
   </ion-button>
@@ -35,13 +35,13 @@
     *ngIf="multiSelectMode"
     [disabled]="selectedGoProFiles.length === 0"
     (click)="uploadSelectedFiles()"
-    style="align-self: flex-end; color: white; --box-shadow: 0"
+    class="multi-select-mode-btn"
   >
     Upload to capture
   </ion-button>
 
   <!-- TODO: att translate text -->
-  <h4 *ngIf="shouldConnectToWiFi" style="padding: 16px">
+  <h4 *ngIf="shouldConnectToWiFi" class="should-connect-to-wifi-text">
     Make sure you connected to GoPro WiFi first
   </h4>
 
@@ -53,7 +53,7 @@
 
   <h4 *ngIf="fetchingFiles">Fetching files...</h4>
 
-  <span *ngIf="uploadInProgress" style="padding-top: 8px">
+  <span *ngIf="uploadInProgress" class="upload-in-progress-info">
     <ion-icon name="information-circle-outline"></ion-icon>
     Stay on this screen with the app open to ensure your downloads complete!
   </span>

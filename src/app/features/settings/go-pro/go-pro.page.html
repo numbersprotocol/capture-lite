@@ -11,7 +11,7 @@
       expand="block"
       [disabled]="bluetoothIsScanning"
       (click)="scanForBluetoothDevices()"
-      style="color: white; --box-shadow: 0; margin: 0 16px 0 16px"
+      class="scan-for-bluetooth-devices-btn"
     >
       {{ bluetoothIsScanning ? 'Scaning' : 'Scan for bluetooth devices' }}
     </ion-button>
@@ -20,7 +20,7 @@
       <ion-item *ngFor="let scanResult of bluetoothScanResults">
         <ion-label>
           <h2>{{ scanResult.device.name }}</h2>
-          <p style="font-size: 8px">{{ scanResult.device.deviceId }}</p>
+          <p class="device-id-text">{{ scanResult.device.deviceId }}</p>
         </ion-label>
 
         <ion-button
@@ -42,16 +42,19 @@
           "
           (click)="connectToBluetoothDevice(scanResult)"
           slot="end"
-          style="color: white; --box-shadow: 0"
+          class="connect-to-bluetooth-device-btn"
         >
           Connect
         </ion-button>
       </ion-item>
     </ng-container>
 
-    <div style="height: 24px"></div>
+    <div class="spacer"></div>
 
-    <ng-container *ngIf="bluetoothConnectedDevice" style="margin-top: 40px">
+    <ng-container
+      *ngIf="bluetoothConnectedDevice"
+      class="connected-bluetooth-device-container"
+    >
       <ion-list-header>
         <h4>
           CONNECTED TO:
@@ -65,6 +68,6 @@
       </ion-item>
     </ng-container>
 
-    <div style="height: 300px"></div>
+    <div class="spacer-bottom"></div>
   </ion-list>
 </ion-content>
