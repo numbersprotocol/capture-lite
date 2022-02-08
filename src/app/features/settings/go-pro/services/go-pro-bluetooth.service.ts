@@ -8,6 +8,7 @@ import {
 import { Wifi } from '@capacitor-community/wifi';
 import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/core';
+import { isEqual } from 'lodash-es';
 
 const { Storage } = Plugins;
 
@@ -163,8 +164,7 @@ export class GoProBluetoothService {
   async sendBluetoothReadCommand(command: number[]) {
     await this.checkBluetoothDeviceConnection();
 
-    // TODO: find better solution for comparing 2 arrays with numbers
-    if (JSON.stringify(command) === JSON.stringify(this.shutdownCommand)) {
+    if (isEqual(command, this.shutdownCommand)) {
       this.getGoProWiFiCreds();
     }
 
