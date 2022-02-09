@@ -47,6 +47,7 @@ jobs:
 
       - name: Upload coverage reports
         uses: codacy/codacy-coverage-reporter-action@master
+        if: github.actor != 'dependabot[bot]'
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: ./coverage/cobertura-coverage.xml
