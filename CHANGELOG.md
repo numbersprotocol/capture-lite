@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix [拍攝 capture 後未上傳完成 , 使用 "重整功能" 圖會直接被刪除](https://github.com/numbersprotocol/capture-lite/issues/918)
+- Unuploaded Captures disappear after user pulls to refresh. #918
 
 ## 0.47.0
 
