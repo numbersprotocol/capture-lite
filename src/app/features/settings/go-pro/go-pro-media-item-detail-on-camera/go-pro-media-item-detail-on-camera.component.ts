@@ -6,6 +6,7 @@ import {
   LoadingController,
   ToastController,
 } from '@ionic/angular';
+import { getFileType } from '../../../../../utils/url';
 import { GoProFile } from '../go-pro-media-file';
 import { GoProMediaService } from '../services/go-pro-media.service';
 import { GoProWifiService } from '../services/go-pro-wifi.service';
@@ -42,7 +43,7 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.mediaType = this.goProMediaService.getFileType(this.mediaFile?.url);
+    this.mediaType = getFileType(this.mediaFile?.url);
   }
 
   async uploadToCapture() {

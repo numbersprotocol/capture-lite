@@ -9,6 +9,11 @@ import {
   Plugins,
 } from '@capacitor/core';
 import { isPlatform } from '@ionic/core';
+import {
+  detectFileTypeFromUrl,
+  extractFileNameFromGoProUrl,
+  urlIsImage,
+} from '../../../../../utils/url';
 import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { CaptureService } from '../../../../shared/capture/capture.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
@@ -37,32 +42,6 @@ export class GoProMediaService {
     private readonly httpClient: HttpClient
   ) {}
 
-  // eslint-disable-next-line class-methods-use-this
-  getFileType(url?: string): 'unknown' | 'video' | 'image' {
-    if (url === undefined) {
-      return 'unknown';
-    }
-    if (url.toLowerCase().includes('.mp4')) {
-      return 'video';
-    }
-    if (
-      url.toLowerCase().includes('.jpg') ||
-      url.toLowerCase().includes('.jpeg')
-    ) {
-      return 'image';
-    }
-    return 'unknown';
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  extractFileNameFromGoProUrl(url: string): string {
-    // example of GoPro urls
-    // _________url: http://10.5.5.9:8080/videos/DCIM/100GOPRO/GH010168.MP4
-    // thumbnailUrl: http://10.5.5.9:8080/gopro/media/thumbnail?path=100GOPRO/GH010168.MP4
-    return url.split('/').pop() ?? '';
-  }
-
-  // eslint-disable-next-line class-methods-use-this
   getThumbnailUrlFrom(url: string): string {
     const fileName = url.split('/').pop();
     const thumbnailUrl = `${this.goproBaseUrl}/gopro/media/thumbnail?path=100GOPRO/${fileName}`;
@@ -77,7 +56,7 @@ export class GoProMediaService {
   }> {
     if (!mediaFile) return { isDownloaded: false, isCaptured: false };
 
-    const fileName = this.extractFileNameFromGoProUrl(mediaFile.url);
+    const fileName = extractFileNameFromGoProUrl(mediaFile.url);
 
     let isDownloaded = false;
     let isCaptured = false;
@@ -103,9 +82,7 @@ export class GoProMediaService {
 
       const base64 = await blobToBase64(blob);
 
-      const mimeType = this.urlIsImage(mediaFile.url)
-        ? 'image/jpeg'
-        : 'video/mp4';
+      const mimeType = urlIsImage(mediaFile.url) ? 'image/jpeg' : 'video/mp4';
       isDownloaded = true;
 
       await this.captureService.capture({ base64, mimeType });
@@ -123,29 +100,6 @@ export class GoProMediaService {
     }
 
     return { isDownloaded, isCaptured };
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  urlIsImage(url: string): boolean {
-    return (
-      url.toLocaleLowerCase().includes('.jpeg') ||
-      url.toLocaleLowerCase().includes('.jpg')
-    );
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  urlIsVideo(url: string): boolean {
-    return url.toLowerCase().includes('.mp4');
-  }
-
-  detectFileTypeFromUrl(url: string): 'image' | 'video' | 'unknown' {
-    if (this.urlIsImage(url)) {
-      return 'image';
-    }
-    if (this.urlIsVideo(url)) {
-      return 'video';
-    }
-    return 'unknown';
   }
 
   async getFilesFromGoPro(): Promise<GoProFile[]> {
@@ -173,8 +127,8 @@ export class GoProMediaService {
       url,
       storageKey: undefined,
       thumbnailUrl: this.getThumbnailUrlFrom(url),
-      name: this.extractFileNameFromGoProUrl(url),
-      type: this.detectFileTypeFromUrl(url),
+      name: extractFileNameFromGoProUrl(url),
+      type: detectFileTypeFromUrl(url),
     };
   }
 }
