@@ -36,23 +36,6 @@ export class GoProPage implements OnInit {
 
   ngOnInit() {
     this.restoreBluetoothConnection();
-
-    // this.router.navigate(
-    //   ['/settings', 'go-pro', 'media-item-detail-on-camera'],
-    //   {
-    //     state: {
-    //       goProMediaFile: {
-    //         name: 'string;',
-    //         url: 'https://images.pexels.com/photos/9683060/pexels-photo-9683060.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    //         thumbnailUrl:
-    //           'https://images.pexels.com/photos/9683060/pexels-photo-9683060.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    //         type: 'image',
-    //         size: 1024,
-    //         storageKey: 'string; // TODO: remove this field',
-    //       },
-    //     },
-    //   }
-    // );
   }
 
   async restoreBluetoothConnection() {
