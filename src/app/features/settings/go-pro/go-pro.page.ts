@@ -74,6 +74,7 @@ export class GoProPage implements OnInit {
       this.bluetoothIsScanning = false;
     } catch (error) {
       this.bluetoothScanResults = [];
+    } finally {
       this.bluetoothIsScanning = false;
     }
   }
