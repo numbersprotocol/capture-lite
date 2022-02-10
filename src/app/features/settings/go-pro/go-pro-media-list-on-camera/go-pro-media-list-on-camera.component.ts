@@ -123,16 +123,6 @@ export class GoProMediaListOnCameraComponent implements OnInit {
       while (this.filesToUpload.length > 0) {
         const fileToUpload = this.filesToUpload.shift();
 
-        // // eslint-disable-next-line no-console
-        // console.log(fileToUpload);
-
-        // await new Promise(resolve => {
-        //   setTimeout(() => {
-        //     resolve(fileToUpload);
-        //     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        //   }, 4000);
-        // });
-
         const uploadResult =
           await this.goProMediaService.uploadToCaptureFromGoProCamera(
             fileToUpload
