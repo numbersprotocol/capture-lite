@@ -151,9 +151,7 @@ export class GoProMediaListOnCameraComponent implements OnInit {
 
     await alert.present();
 
-    const { role } = await alert.onDidDismiss();
-    // eslint-disable-next-line no-console
-    console.log('onDidDismiss resolved with role', role);
+    await alert.onDidDismiss();
   }
 
   private async navigateToHomeScreen() {
