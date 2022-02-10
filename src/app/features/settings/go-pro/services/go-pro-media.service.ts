@@ -55,28 +55,11 @@ export class GoProMediaService {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  extractFileNameFromUrl(url: string): string {
-    // return extract filename with extension from url
-    // example 001.jpg, 002.mp4
-    return url.split('?')[0].split('/').pop() ?? '';
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  extractFileExtensionFormUrl(filaName: string): string {
-    return filaName.split('?')[0].split('.').pop() ?? '';
-  }
-
-  // eslint-disable-next-line class-methods-use-this
   extractFileNameFromGoProUrl(url: string): string {
     // example of GoPro urls
     // _________url: http://10.5.5.9:8080/videos/DCIM/100GOPRO/GH010168.MP4
     // thumbnailUrl: http://10.5.5.9:8080/gopro/media/thumbnail?path=100GOPRO/GH010168.MP4
     return url.split('/').pop() ?? '';
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  extractFileExtensionFromGoProUrl(url: string): string {
-    return url.split('.').pop() ?? '';
   }
 
   // eslint-disable-next-line class-methods-use-this
