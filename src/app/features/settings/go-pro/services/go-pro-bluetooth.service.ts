@@ -56,8 +56,25 @@ export class GoProBluetoothService {
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private readonly enableGoProWiFiCommand = [0x03, 0x17, 0x01, 0x01];
 
-  constructor() {
-    BleClient.initialize();
+  private hasInitialized = false;
+
+  private async initialize() {
+    if (this.hasInitialized) {
+      return;
+    }
+
+    try {
+      await BleClient.initialize();
+      this.hasInitialized = true;
+    } catch (err: any) {
+      if (
+        err instanceof Error &&
+        err.message === 'Web Bluetooth API not available in this browser.'
+      ) {
+        return;
+      }
+      throw new Error(err.message);
+    }
   }
 
   async scanForBluetoothDevices(): Promise<ScanResult[]> {
@@ -68,7 +85,7 @@ export class GoProBluetoothService {
 
     const bluetoothScanResults: ScanResult[] = [];
 
-    await BleClient.initialize();
+    await this.initialize();
 
     BleClient.requestLEScan(
       { services: [this.goProControlAndQueryServiceUUID] },
@@ -86,6 +103,7 @@ export class GoProBluetoothService {
   }
 
   async connectToBluetoothDevice(scanResult: ScanResult) {
+    await this.initialize();
     await BleClient.connect(scanResult.device.deviceId, _ => {
       this.onDisconnectedFromBluetoothDevice(scanResult);
     });
@@ -101,7 +119,9 @@ export class GoProBluetoothService {
     this.removeConnectedDeviceFromStorage(scanResult);
   }
 
-  async getConnectedDeviceFromStorage(): Promise<ScanResult | undefined> {
+  private async getConnectedDeviceFromStorage(): Promise<
+    ScanResult | undefined
+  > {
     const result = await Storage.get({
       key: this.GO_PRO_BLUETOOTH_STORAGE_KEY,
     });
@@ -148,6 +168,7 @@ export class GoProBluetoothService {
   }
 
   async sendBluetoothWriteCommand(command: number[]) {
+    await this.initialize();
     await this.checkBluetoothDeviceConnection();
     const connectedDevice = await this.getConnectedDeviceFromStorage();
 
@@ -162,6 +183,7 @@ export class GoProBluetoothService {
   }
 
   async sendBluetoothReadCommand(command: number[]) {
+    await this.initialize();
     await this.checkBluetoothDeviceConnection();
 
     if (isEqual(command, this.shutdownCommand)) {
@@ -215,6 +237,7 @@ export class GoProBluetoothService {
    * For example: it can be get wifi credentials command
    */
   async pairDevice(): Promise<void> {
+    await this.initialize();
     await this.getGoProWiFiCreds();
   }
 }
