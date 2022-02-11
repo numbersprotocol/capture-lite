@@ -87,6 +87,7 @@ jobs:
   ios:
     runs-on: macos-latest
     timeout-minutes: 60
+    if: github.actor != 'dependabot[bot]'
     needs: [lint, test]
 
     steps:
