@@ -87,6 +87,7 @@ jobs:
   ios:
     runs-on: macos-latest
     timeout-minutes: 60
+    if: github.actor != 'dependabot[bot]'
     needs: [lint, test]
 
     steps:
@@ -132,6 +133,7 @@ jobs:
 
   notification-success:
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     needs: test
 
     steps:
@@ -147,7 +149,7 @@ jobs:
   notification-failure:
     runs-on: ubuntu-latest
     needs: test
-    if: ${{ failure() }}
+    if: ${{ failure() }} && github.actor != 'dependabot[bot]'
 
     steps:
       - uses: actions/checkout@v2

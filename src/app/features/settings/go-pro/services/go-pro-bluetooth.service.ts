@@ -55,15 +55,22 @@ export class GoProBluetoothService {
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private readonly enableGoProWiFiCommand = [0x03, 0x17, 0x01, 0x01];
 
-  constructor() {
-    BleClient.initialize().catch(err => {
-      if (
-        err instanceof Error &&
-        err.message === 'Web Bluetooth API not available in this browser.'
-      )
+  private hasInitialized = false;
+
+  private async initialize() {
+    if (this.hasInitialized) {
+      return;
+    }
+
+    try {
+      await BleClient.initialize();
+      this.hasInitialized = true;
+    } catch (err: any) {
+      if (err instanceof Error && err.message === '') {
         return;
+      }
       throw new Error(err.message);
-    });
+    }
   }
 
   async scanForBluetoothDevices(): Promise<ScanResult[]> {
@@ -74,29 +81,26 @@ export class GoProBluetoothService {
 
     const bluetoothScanResults: ScanResult[] = [];
 
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise<ScanResult[]>(async (resolve, reject) => {
-      try {
-        await BleClient.initialize();
+    await this.initialize();
 
-        await BleClient.requestLEScan(
-          { services: [this.goProControlAndQueryServiceUUID] },
-          foundDevice => bluetoothScanResults.push(foundDevice)
-        );
+    BleClient.requestLEScan(
+      { services: [this.goProControlAndQueryServiceUUID] },
+      (foundDevice: any) => bluetoothScanResults.push(foundDevice)
+    );
 
-        const stopScanAfterMilliSeconds = 2000;
-        setTimeout(async () => {
-          await BleClient.stopLEScan();
-          resolve(bluetoothScanResults);
-        }, stopScanAfterMilliSeconds);
-      } catch (error) {
-        reject(error);
-      }
+    await new Promise(resolve => {
+      const stopScanAfterMilliSeconds = 2000;
+      setTimeout(resolve, stopScanAfterMilliSeconds);
     });
+
+    await BleClient.stopLEScan();
+
+    return bluetoothScanResults;
   }
 
   async connectToBluetoothDevice(scanResult: ScanResult) {
-    await BleClient.connect(scanResult.device.deviceId, () => {
+    await this.initialize();
+    await BleClient.connect(scanResult.device.deviceId, _ => {
       this.onDisconnectedFromBluetoothDevice(scanResult);
     });
     this.saveConnectedDeviceToStorage(scanResult);
@@ -111,7 +115,9 @@ export class GoProBluetoothService {
     this.removeConnectedDeviceFromStorage(scanResult);
   }
 
-  async getConnectedDeviceFromStorage(): Promise<ScanResult | undefined> {
+  private async getConnectedDeviceFromStorage(): Promise<
+    ScanResult | undefined
+  > {
     const result = await Storage.get({
       key: this.GO_PRO_BLUETOOTH_STORAGE_KEY,
     });
@@ -157,6 +163,7 @@ export class GoProBluetoothService {
   }
 
   async sendBluetoothWriteCommand(command: number[]) {
+    await this.initialize();
     await this.checkBluetoothDeviceConnection();
     const connectedDevice = await this.getConnectedDeviceFromStorage();
     await BleClient.write(
@@ -168,6 +175,7 @@ export class GoProBluetoothService {
   }
 
   async sendBluetoothReadCommand(command: number[]) {
+    await this.initialize();
     await this.checkBluetoothDeviceConnection();
 
     // TODO: find better solution for comparing 2 arrays with numbers
