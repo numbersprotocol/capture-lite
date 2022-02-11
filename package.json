@@ -19,10 +19,10 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^12.2.4",
+    "@angular/animations": "^13.2.2",
     "@angular/cdk": "^12.2.4",
     "@angular/common": "^12.2.4",
-    "@angular/core": "^12.2.4",
+    "@angular/core": "^13.2.2",
     "@angular/forms": "^12.2.4",
     "@angular/material": "^12.2.4",
     "@angular/platform-browser": "^12.2.4",
