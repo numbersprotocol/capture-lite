@@ -8,6 +8,7 @@ import {
 import { Wifi } from '@capacitor-community/wifi';
 import { isPlatform } from '@ionic/core';
 import { isEqual } from 'lodash-es';
+import { BehaviorSubject } from 'rxjs';
 import { PreferenceManager } from '../../../../shared/preference-manager/preference-manager.service';
 
 interface GoProWiFiCreds {
@@ -59,6 +60,10 @@ export class GoProBluetoothService {
   readonly id = 'GoProBluetoothService';
 
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
+
+  readonly connectedDevice$ = new BehaviorSubject<ScanResult | undefined>(
+    undefined
+  );
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
 
@@ -139,6 +144,7 @@ export class GoProBluetoothService {
       PrefKeys.LAST_CONNECTED_BLUETOOTH_DEVICE,
       JSON.stringify(scanResult)
     );
+    this.connectedDevice$.next(scanResult);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -147,6 +153,7 @@ export class GoProBluetoothService {
       PrefKeys.LAST_CONNECTED_BLUETOOTH_DEVICE,
       ''
     );
+    this.connectedDevice$.next(undefined);
   }
 
   async getConnectedDevice(): Promise<ScanResult | undefined> {

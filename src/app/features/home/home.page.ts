@@ -5,7 +5,7 @@ import { Plugins } from '@capacitor/core';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, EMPTY, iif, of } from 'rxjs';
+import { combineLatest, defer, EMPTY, iif, of } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -154,40 +154,42 @@ export class HomePage {
   }
 
   private presentCaptureActions$() {
-    return this.translocoService
-      .selectTranslateObject({
+    return combineLatest([
+      this.translocoService.selectTranslateObject({
         takePicture: null,
         recordVideo: null,
+      }),
+      this.goProBluetoothService.connectedDevice$,
+    ]).pipe(
+      first(),
+      concatMap(([translations, connectedDevice]) => {
+        const [takePicture, recordVideo] = translations;
+
+        return new Promise<Media>(resolve => {
+          const buttons = [
+            {
+              text: takePicture,
+              handler: () => resolve(this.cameraService.takePhoto()),
+            },
+            {
+              text: recordVideo,
+              handler: () => resolve(this.recordVideo()),
+            },
+          ];
+
+          if (connectedDevice) {
+            buttons.push({
+              text: 'Capture from GoPro',
+              handler: () => resolve(this.caputureFromGoPro()),
+            });
+          }
+
+          return this.actionSheetController
+            .create({ buttons })
+            .then(sheet => sheet.present());
+        });
       })
-      .pipe(
-        first(),
-        concatMap(async ([takePicture, recordVideo]) => {
-          // eslint-disable-next-line no-async-promise-executor
-          return new Promise<Media>(async resolve => {
-            const buttons = [
-              {
-                text: takePicture,
-                handler: () => resolve(this.cameraService.takePhoto()),
-              },
-              {
-                text: recordVideo,
-                handler: () => resolve(this.recordVideo()),
-              },
-            ];
-
-            if (await this.goProBluetoothService.getConnectedDevice()) {
-              buttons.push({
-                text: 'Capture from GoPro',
-                handler: () => resolve(this.caputureFromGoPro()),
-              });
-            }
-
-            return this.actionSheetController
-              .create({ buttons })
-              .then(sheet => sheet.present());
-          });
-        })
-      );
+    );
   }
 
   private async recordVideo() {
