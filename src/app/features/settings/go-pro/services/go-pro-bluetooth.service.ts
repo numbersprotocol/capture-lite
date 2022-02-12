@@ -6,11 +6,9 @@ import {
   ScanResult,
 } from '@capacitor-community/bluetooth-le';
 import { Wifi } from '@capacitor-community/wifi';
-import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/core';
 import { isEqual } from 'lodash-es';
-
-const { Storage } = Plugins;
+import { PreferenceManager } from '../../../../shared/preference-manager/preference-manager.service';
 
 interface GoProWiFiCreds {
   wifiPASS: string;
@@ -57,6 +55,12 @@ export class GoProBluetoothService {
   private readonly enableGoProWiFiCommand = [0x03, 0x17, 0x01, 0x01];
 
   private hasInitialized = false;
+
+  readonly id = 'GoProBluetoothService';
+
+  private readonly preferences = this.preferenceManager.getPreferences(this.id);
+
+  constructor(private readonly preferenceManager: PreferenceManager) {}
 
   private async initialize() {
     if (this.hasInitialized) {
@@ -122,24 +126,27 @@ export class GoProBluetoothService {
   private async getConnectedDeviceFromStorage(): Promise<
     ScanResult | undefined
   > {
-    const result = await Storage.get({
-      key: this.GO_PRO_BLUETOOTH_STORAGE_KEY,
-    });
-    if (result.value) {
-      return JSON.parse(result.value) as ScanResult;
+    const res = await this.preferences.getString(
+      PrefKeys.LAST_CONNECTED_BLUETOOTH_DEVICE
+    );
+    if (res !== '') {
+      return JSON.parse(res) as ScanResult;
     }
   }
 
   async saveConnectedDeviceToStorage(scanResult: ScanResult) {
-    await Storage.set({
-      key: this.GO_PRO_BLUETOOTH_STORAGE_KEY,
-      value: JSON.stringify(scanResult),
-    });
+    await this.preferences.setString(
+      PrefKeys.LAST_CONNECTED_BLUETOOTH_DEVICE,
+      JSON.stringify(scanResult)
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async removeConnectedDeviceFromStorage(scanResult: ScanResult) {
-    await Storage.remove({ key: this.GO_PRO_BLUETOOTH_STORAGE_KEY });
+    await this.preferences.setString(
+      PrefKeys.LAST_CONNECTED_BLUETOOTH_DEVICE,
+      ''
+    );
   }
 
   async getConnectedDevice(): Promise<ScanResult | undefined> {
@@ -240,4 +247,8 @@ export class GoProBluetoothService {
     await this.initialize();
     await this.getGoProWiFiCreds();
   }
+}
+
+const enum PrefKeys {
+  LAST_CONNECTED_BLUETOOTH_DEVICE = 'GO_PRO_LAST_CONNECTED_BLUETOOTH_DEVICE',
 }
