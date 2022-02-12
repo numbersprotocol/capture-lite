@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import { defer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import packageInfo from '../../../../package.json';
-
-const { Device } = Plugins;
 
 @Injectable({
   providedIn: 'root',
 })
 export class VersionService {
-  readonly version$ = defer(() => Device.getInfo()).pipe(
+  readonly version$ = defer(() => App.getInfo()).pipe(
     map(info => {
-      if (info.appVersion === '') return packageInfo.version;
-      return info.appVersion;
+      if (info.version === '') return packageInfo.version;
+      return info.version;
     })
   );
 }
