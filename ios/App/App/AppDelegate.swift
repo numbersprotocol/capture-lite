@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     guard let touchPoint = event?.allTouches?.first?.location(in: self.window) else { return }
 
     if statusBarRect.contains(touchPoint) {
-      NotificationCenter.default.post(CAPBridge.statusBarTappedNotification)
+      NotificationCenter.default.post(name: .capacitorStatusBarTapped, object: nil)
     }
   }
 
@@ -66,15 +66,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     Messaging.messaging().apnsToken = deviceToken
     Messaging.messaging().token { (token, error) in
         if let error = error {
-            NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidFailToRegisterForRemoteNotificationsWithError.name()), object: error)
+            NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
         } else if let token = token {
-            NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: token)
+            NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: token)
         }
     }
   }
 
   func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidFailToRegisterForRemoteNotificationsWithError.name()), object: error)
+      NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
   }
 
 
