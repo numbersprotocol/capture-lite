@@ -21,6 +21,9 @@ export class DiaBackendWalletService {
   readonly bscNumBalance$ = this.preferences.getNumber$(
     PrefKeys.BSC_NUM_BALANCE
   );
+  readonly numWalletAddr$ = this.preferences.getString$(
+    PrefKeys.NUM_WALLET_ADDR
+  );
 
   readonly networkConnected$ = this.networkService.connected$;
 
@@ -82,6 +85,10 @@ export class DiaBackendWalletService {
             PrefKeys.BSC_NUM_BALANCE,
             diaBackendWallet.num_balance.bsc_num
           ),
+          this.preferences.setString(
+            PrefKeys.NUM_WALLET_ADDR,
+            diaBackendWallet.address
+          ),
         ])
       ),
       tap(() => {
@@ -108,4 +115,5 @@ export interface DiaBackendWallet {
 const enum PrefKeys {
   ETH_NUM_BALANCE = 'ETH_NUM_BALANCE',
   BSC_NUM_BALANCE = 'BSC_NUM_BALANCE',
+  NUM_WALLET_ADDR = 'NUM_WALLET_ADDR',
 }
