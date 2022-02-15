@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer, forkJoin } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { BehaviorSubject, defer, forkJoin } from 'rxjs';
+import { concatMap, tap } from 'rxjs/operators';
 import { NetworkService } from '../../network/network.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
@@ -23,6 +23,8 @@ export class DiaBackendWalletService {
   );
 
   readonly networkConnected$ = this.networkService.connected$;
+
+  readonly isLoadingBalance$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -68,6 +70,7 @@ export class DiaBackendWalletService {
   }
 
   syncCaptBalance$() {
+    this.isLoadingBalance$.next(true);
     return this.getNumWallet$().pipe(
       concatMap(diaBackendWallet =>
         forkJoin([
@@ -80,7 +83,10 @@ export class DiaBackendWalletService {
             diaBackendWallet.num_balance.bsc_num
           ),
         ])
-      )
+      ),
+      tap(() => {
+        this.isLoadingBalance$.next(false);
+      })
     );
   }
 }

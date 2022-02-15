@@ -37,6 +37,7 @@ export class ProfilePage {
   readonly ethNumBalance$ = this.diaBackendWalletService.ethNumBalance$;
   readonly bscNumBalance$ = this.diaBackendWalletService.bscNumBalance$;
   readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
+  readonly isLoadingBalance$ = this.diaBackendWalletService.isLoadingBalance$;
 
   constructor(
     private readonly database: Database,
