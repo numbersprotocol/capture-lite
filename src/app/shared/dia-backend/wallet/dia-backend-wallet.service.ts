@@ -56,7 +56,7 @@ export class DiaBackendWalletService {
     );
   }
 
-  getManagedWallet$() {
+  getNumWallet$() {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         return this.httpClient.get<DiaBackendWallet>(
@@ -68,7 +68,7 @@ export class DiaBackendWalletService {
   }
 
   syncCaptBalance$() {
-    return this.getManagedWallet$().pipe(
+    return this.getNumWallet$().pipe(
       concatMap(diaBackendWallet =>
         forkJoin([
           this.preferences.setNumber(
