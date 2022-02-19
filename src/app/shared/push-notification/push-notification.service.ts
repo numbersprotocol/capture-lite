@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { Capacitor, PushNotificationsPlugin } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
+import { PushNotificationsPlugin } from '@capacitor/push-notifications';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { isNonNullable } from '../../utils/rx-operators/rx-operators';
 import { PUSH_NOTIFICATIONS_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
@@ -43,11 +44,10 @@ export class PushNotificationService {
     if (!Capacitor.isPluginAvailable('PushNotifications')) {
       return;
     }
-    await this.pushNotificationsPlugin.requestPermission();
-    const result = await this.pushNotificationsPlugin.requestPermission();
+    const result = await this.pushNotificationsPlugin.requestPermissions();
 
     return new Promise<string>((resolve, reject) => {
-      if (!result.granted) {
+      if (result.receive !== 'granted') {
         reject(new Error('Push notification permission denied.'));
       }
       this.pushNotificationsPlugin.addListener('registration', token => {

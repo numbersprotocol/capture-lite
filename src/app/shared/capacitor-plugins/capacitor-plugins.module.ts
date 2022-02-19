@@ -1,7 +1,6 @@
 import { InjectionToken, NgModule } from '@angular/core';
 import { App, AppPlugin } from '@capacitor/app';
 import { Camera, CameraPlugin } from '@capacitor/camera';
-import { Plugins, PushNotificationsPlugin } from '@capacitor/core';
 import { Filesystem, FilesystemPlugin } from '@capacitor/filesystem';
 import { Geolocation, GeolocationPlugin } from '@capacitor/geolocation';
 import {
@@ -9,6 +8,10 @@ import {
   LocalNotificationsPlugin,
 } from '@capacitor/local-notifications';
 import { Network, NetworkPlugin } from '@capacitor/network';
+import {
+  PushNotifications,
+  PushNotificationsPlugin,
+} from '@capacitor/push-notifications';
 import { Storage, StoragePlugin } from '@capacitor/storage';
 
 export const APP_PLUGIN = new InjectionToken<AppPlugin>('APP_PLUGIN');
@@ -62,7 +65,7 @@ export const PUSH_NOTIFICATIONS_PLUGIN =
     },
     {
       provide: PUSH_NOTIFICATIONS_PLUGIN,
-      useValue: Plugins.PushNotifications,
+      useValue: PushNotifications,
     },
   ],
 })
