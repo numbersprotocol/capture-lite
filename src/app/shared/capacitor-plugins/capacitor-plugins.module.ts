@@ -8,8 +8,8 @@ import {
   NetworkPlugin,
   Plugins,
   PushNotificationsPlugin,
-  StoragePlugin,
 } from '@capacitor/core';
+import { Storage, StoragePlugin } from '@capacitor/storage';
 
 export const APP_PLUGIN = new InjectionToken<AppPlugin>('APP_PLUGIN');
 export const CAMERA_PLUGIN = new InjectionToken<CameraPlugin>('CAMERA_PLUGIN');
@@ -58,7 +58,7 @@ export const PUSH_NOTIFICATIONS_PLUGIN =
     },
     {
       provide: STORAGE_PLUGIN,
-      useValue: Plugins.Storage,
+      useValue: Storage,
     },
     {
       provide: PUSH_NOTIFICATIONS_PLUGIN,

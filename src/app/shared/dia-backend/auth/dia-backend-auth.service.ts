@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
 import { isEqual, reject } from 'lodash-es';
 import { combineLatest, defer, forkJoin, Observable, Subject } from 'rxjs';
 import {
@@ -18,8 +19,7 @@ import { LanguageService } from '../../language/service/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
 import { BASE_URL, TRUSTED_CLIENT_KEY } from '../secret';
-
-const { Device, Storage } = Plugins;
+const { Device } = Plugins;
 
 @Injectable({
   providedIn: 'root',

@@ -1,4 +1,4 @@
-import { StoragePlugin } from '@capacitor/core';
+import { StoragePlugin } from '@capacitor/storage';
 import { Mutex } from 'async-mutex';
 import { isEqual } from 'lodash-es';
 import { BehaviorSubject, defer, Observable } from 'rxjs';
