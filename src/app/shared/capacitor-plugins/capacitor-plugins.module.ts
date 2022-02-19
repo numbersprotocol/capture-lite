@@ -2,12 +2,12 @@ import { InjectionToken, NgModule } from '@angular/core';
 import { App, AppPlugin } from '@capacitor/app';
 import { Camera, CameraPlugin } from '@capacitor/camera';
 import {
-  GeolocationPlugin,
   LocalNotificationsPlugin,
   Plugins,
   PushNotificationsPlugin,
 } from '@capacitor/core';
 import { Filesystem, FilesystemPlugin } from '@capacitor/filesystem';
+import { Geolocation, GeolocationPlugin } from '@capacitor/geolocation';
 import { Network, NetworkPlugin } from '@capacitor/network';
 import { Storage, StoragePlugin } from '@capacitor/storage';
 
@@ -42,7 +42,7 @@ export const PUSH_NOTIFICATIONS_PLUGIN =
     },
     {
       provide: GEOLOCATION_PLUGIN,
-      useValue: Plugins.Geolocation,
+      useValue: Geolocation,
     },
     {
       provide: FILESYSTEM_PLUGIN,
