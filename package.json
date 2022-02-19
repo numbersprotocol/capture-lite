@@ -44,6 +44,7 @@
     "@capacitor/local-notifications": "^1.1.0",
     "@capacitor/network": "^1.0.7",
     "@capacitor/push-notifications": "^1.0.9",
+    "@capacitor/share": "^1.1.1",
     "@capacitor/splash-screen": "^1.2.2",
     "@capacitor/storage": "^1.2.4",
     "@ionic/angular": "^5.6.11",

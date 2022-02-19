@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { Share } from '@capacitor/share';
 import { concatMap, first, map } from 'rxjs/operators';
 import { blobToBase64 } from '../../utils/encoding/encoding';
 import {
@@ -8,7 +8,6 @@ import {
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
 import { MediaStore } from '../media/media-store/media-store.service';
-const { Share } = Plugins;
 
 @Injectable({
   providedIn: 'root',
