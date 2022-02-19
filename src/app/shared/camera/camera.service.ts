@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
+import { AppPlugin } from '@capacitor/app';
 import {
-  AppPlugin,
   CameraPhoto,
   CameraPlugin,
   CameraResultType,
