@@ -6,7 +6,7 @@ import {
   FilesystemPlugin,
 } from '@capacitor/filesystem';
 import { Mutex } from 'async-mutex';
-import { writeFile } from 'capacitor-blob-writer';
+import write_blob from 'capacitor-blob-writer';
 import Compressor from 'compressorjs';
 import { defer, merge } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
@@ -104,10 +104,10 @@ export class MediaStore {
       const mediaExtension = await this.setMediaExtension(index, mimeType);
       if (Capacitor.isNative) {
         const blob = await base64ToBlob(base64, mimeType);
-        await writeFile({
+        await write_blob({
           directory: this.directory,
           path: `${this.rootDir}/${index}.${mediaExtension.extension}`,
-          data: blob,
+          blob: blob,
           recursive: true,
         });
       } else {
