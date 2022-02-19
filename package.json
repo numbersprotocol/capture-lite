@@ -28,7 +28,7 @@
     "@angular/platform-browser": "^12.2.4",
     "@angular/platform-browser-dynamic": "^12.2.4",
     "@angular/router": "^12.2.4",
-    "@capacitor-community/bluetooth-le": "github:numbersprotocol/bluetooth-le#fix-complilation-error-on-ios-15",
+    "@capacitor-community/bluetooth-le": "^1.7.0",
     "@capacitor-community/http": "^1.4.1",
     "@capacitor-community/wifi": "github:sultanmyrza/community-capacitor-wifi#capacitor3",
     "@capacitor/android": "^3.4.1",
