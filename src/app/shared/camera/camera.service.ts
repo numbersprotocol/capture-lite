@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
 import { AppPlugin } from '@capacitor/app';
 import {
-  CameraPhoto,
   CameraPlugin,
   CameraResultType,
   CameraSource,
-} from '@capacitor/core';
+  Photo as CameraPhoto,
+} from '@capacitor/camera';
 import { Subject } from 'rxjs';
 import { blobToBase64 } from '../../utils/encoding/encoding';
 import { fromExtension, MimeType } from '../../utils/mime-type';

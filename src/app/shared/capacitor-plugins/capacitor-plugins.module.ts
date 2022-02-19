@@ -1,7 +1,7 @@
 import { InjectionToken, NgModule } from '@angular/core';
 import { App, AppPlugin } from '@capacitor/app';
+import { Camera, CameraPlugin } from '@capacitor/camera';
 import {
-  CameraPlugin,
   FilesystemPlugin,
   GeolocationPlugin,
   LocalNotificationsPlugin,
@@ -38,7 +38,7 @@ export const PUSH_NOTIFICATIONS_PLUGIN =
     },
     {
       provide: CAMERA_PLUGIN,
-      useValue: Plugins.Camera,
+      useValue: Camera,
     },
     {
       provide: GEOLOCATION_PLUGIN,
