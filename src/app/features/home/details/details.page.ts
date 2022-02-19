@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Browser } from '@capacitor/browser';
 import { Plugins } from '@capacitor/core';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
@@ -43,7 +44,7 @@ import {
 
 SwiperCore.use([Virtual]);
 
-const { Browser, Clipboard } = Plugins;
+const { Clipboard } = Plugins;
 
 @UntilDestroy()
 @Component({
