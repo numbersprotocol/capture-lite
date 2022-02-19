@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { App } from '@capacitor/app';
+import { Device } from '@capacitor/device';
 import { TranslocoService } from '@ngneat/transloco';
 import { ErrorService } from '../../../error/error.service';
 import { BaseError } from '../../../error/errors';
@@ -16,8 +17,6 @@ import {
   Facts,
 } from '../../../repositories/proof/proof';
 import { FactsProvider } from '../facts-provider';
-
-const { Device } = Plugins;
 
 @Injectable({
   providedIn: 'root',
@@ -79,7 +78,16 @@ export class CapacitorFactsProvider implements FactsProvider {
     if (!isDeviceInfoCollectionEnabled) {
       return;
     }
-    return { ...(await Device.getInfo()), ...(await Device.getBatteryInfo()) };
+    const appInfo = await App.getInfo();
+    return {
+      appVersion: appInfo.version,
+      appBuild: appInfo.build,
+      appId: appInfo.id,
+      appName: appInfo.name,
+      uuid: (await Device.getId()).uuid,
+      ...(await Device.getInfo()),
+      ...(await Device.getBatteryInfo()),
+    };
   }
 
   private async collectLocationInfo(capturedTimestamp: number) {

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { Device } from '@capacitor/device';
 import { Storage } from '@capacitor/storage';
 import { isEqual, reject } from 'lodash-es';
 import { combineLatest, defer, forkJoin, Observable, Subject } from 'rxjs';
@@ -19,7 +19,6 @@ import { LanguageService } from '../../language/service/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
 import { BASE_URL, TRUSTED_CLIENT_KEY } from '../secret';
-const { Device } = Plugins;
 
 @Injectable({
   providedIn: 'root',
@@ -182,14 +181,15 @@ export class DiaBackendAuthService {
     return combineLatest([
       this.pushNotificationService.getToken$(),
       defer(() => Device.getInfo()),
+      defer(() => Device.getId()),
     ]).pipe(
-      concatMap(([fcmToken, deviceInfo]) =>
+      concatMap(([fcmToken, deviceInfo, deviceId]) =>
         this.httpClient.post(
           `${BASE_URL}/auth/devices/`,
           {
             fcm_token: fcmToken,
             platform: deviceInfo.platform,
-            device_identifier: deviceInfo.uuid,
+            device_identifier: deviceId,
           },
           { headers }
         )
