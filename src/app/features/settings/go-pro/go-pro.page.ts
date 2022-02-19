@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ScanResult } from '@capacitor-community/bluetooth-le';
-import { WifiPlugin } from '@capacitor-community/wifi';
-import { Plugins } from '@capacitor/core';
+import { Wifi } from '@capacitor-community/wifi';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { GoProBluetoothService } from './services/go-pro-bluetooth.service';
-
-const Wifi: WifiPlugin = Plugins.Wifi as WifiPlugin;
 
 interface GoProWiFiCreds {
   wifiPASS: string;

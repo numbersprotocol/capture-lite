@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { WifiPlugin } from '@capacitor-community/wifi';
-import { Plugins } from '@capacitor/core';
+import { Wifi } from '@capacitor-community/wifi';
 import { Platform } from '@ionic/angular';
 import { PreferenceManager } from '../../../../shared/preference-manager/preference-manager.service';
 import { GoProBluetoothService } from './go-pro-bluetooth.service';
-const Wifi: WifiPlugin = Plugins.Wifi as WifiPlugin;
 
 @Injectable({
   providedIn: 'root',
