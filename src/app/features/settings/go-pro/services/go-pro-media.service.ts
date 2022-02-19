@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import '@capacitor-community/http';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Http } from '@capacitor-community/http';
+import { Capacitor } from '@capacitor/core';
 import {
   Directory as FilesystemDirectory,
   FilesystemPlugin,
@@ -17,7 +18,6 @@ import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacito
 import { CaptureService } from '../../../../shared/capture/capture.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import { GoProFile } from '../go-pro-media-file';
-const { Http } = Plugins;
 
 @Injectable({
   providedIn: 'root',
