@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Plugins } from '@capacitor/core';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, concatMap } from 'rxjs/operators';
@@ -17,8 +17,6 @@ import { ErrorService } from './shared/error/error.service';
 import { LanguageService } from './shared/language/service/language.service';
 import { NotificationService } from './shared/notification/notification.service';
 import { PushNotificationService } from './shared/push-notification/push-notification.service';
-
-const { SplashScreen } = Plugins;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
