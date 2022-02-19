@@ -1,10 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Plugins } from '@capacitor/core';
+import { Clipboard } from '@capacitor/clipboard';
 import { TranslocoService } from '@ngneat/transloco';
-
-const { Clipboard } = Plugins;
 
 @Component({
   selector: 'app-export-private-key-modal',

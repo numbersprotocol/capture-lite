@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
-import { Plugins } from '@capacitor/core';
+import { Clipboard } from '@capacitor/clipboard';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
@@ -43,8 +43,6 @@ import {
 } from './information/session/information-session.service';
 
 SwiperCore.use([Virtual]);
-
-const { Clipboard } = Plugins;
 
 @UntilDestroy()
 @Component({
