@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import {
-  Capacitor,
-  FilesystemDirectory,
+  Directory as FilesystemDirectory,
   FilesystemPlugin,
-} from '@capacitor/core';
+} from '@capacitor/filesystem';
 import { Mutex } from 'async-mutex';
 import { writeFile } from 'capacitor-blob-writer';
 import Compressor from 'compressorjs';

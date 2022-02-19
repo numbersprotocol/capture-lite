@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { FilesystemPlugin } from '@capacitor/core';
+import { FilesystemPlugin } from '@capacitor/filesystem';
 import { FILESYSTEM_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
 import { CapacitorFilesystemTable } from './table/capacitor-filesystem-table/capacitor-filesystem-table';
 import { Table, Tuple } from './table/table';

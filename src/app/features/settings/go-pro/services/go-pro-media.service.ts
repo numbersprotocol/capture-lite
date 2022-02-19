@@ -2,12 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import '@capacitor-community/http';
+import { Capacitor, Plugins } from '@capacitor/core';
 import {
-  Capacitor,
-  FilesystemDirectory,
+  Directory as FilesystemDirectory,
   FilesystemPlugin,
-  Plugins,
-} from '@capacitor/core';
+} from '@capacitor/filesystem';
 import { isPlatform } from '@ionic/core';
 import {
   detectFileTypeFromUrl,

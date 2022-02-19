@@ -2,12 +2,12 @@ import { InjectionToken, NgModule } from '@angular/core';
 import { App, AppPlugin } from '@capacitor/app';
 import { Camera, CameraPlugin } from '@capacitor/camera';
 import {
-  FilesystemPlugin,
   GeolocationPlugin,
   LocalNotificationsPlugin,
   Plugins,
   PushNotificationsPlugin,
 } from '@capacitor/core';
+import { Filesystem, FilesystemPlugin } from '@capacitor/filesystem';
 import { Network, NetworkPlugin } from '@capacitor/network';
 import { Storage, StoragePlugin } from '@capacitor/storage';
 
@@ -46,7 +46,7 @@ export const PUSH_NOTIFICATIONS_PLUGIN =
     },
     {
       provide: FILESYSTEM_PLUGIN,
-      useValue: Plugins.Filesystem,
+      useValue: Filesystem,
     },
     {
       provide: LOCAL_NOTIFICATIONS_PLUGIN,

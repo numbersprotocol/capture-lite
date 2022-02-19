@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Plugins } from '@capacitor/core';
+import { Filesystem } from '@capacitor/filesystem';
 import { defer } from 'rxjs';
 import { concatMapTo } from 'rxjs/operators';
 import { OnConflictStrategy, Table, Tuple } from '../table';
 import { CapacitorFilesystemTable } from './capacitor-filesystem-table';
-
-const { Filesystem } = Plugins;
 
 describe('CapacitorFilesystemTable', () => {
   let table: Table<TestTuple>;
