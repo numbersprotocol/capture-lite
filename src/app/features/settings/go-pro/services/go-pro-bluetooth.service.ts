@@ -113,10 +113,11 @@ export class GoProBluetoothService {
 
   async connectToBluetoothDevice(scanResult: ScanResult) {
     await this.initialize();
+    await BleClient.disconnect(scanResult.device.deviceId);
     await BleClient.connect(scanResult.device.deviceId, _ => {
       this.onDisconnectedFromBluetoothDevice(scanResult);
     });
-    this.saveConnectedDeviceToStorage(scanResult);
+    await this.saveConnectedDeviceToStorage(scanResult);
   }
 
   onDisconnectedFromBluetoothDevice(scanResult: ScanResult) {
