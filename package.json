@@ -35,6 +35,7 @@
     "@capacitor/app": "^1.1.0",
     "@capacitor/core": "^3.4.1",
     "@capacitor/ios": "^3.4.1",
+    "@capacitor/network": "^1.0.7",
     "@capacitor/storage": "^1.2.4",
     "@ionic/angular": "^5.6.11",
     "@ionic/core": "^5.6.11",

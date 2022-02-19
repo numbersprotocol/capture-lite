@@ -1,9 +1,10 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
+import { PluginListenerHandle } from '@capacitor/core';
 import {
+  ConnectionStatus as NetworkStatus,
+  ConnectionStatusChangeListener,
   NetworkPlugin,
-  NetworkStatus,
-  PluginListenerHandle,
-} from '@capacitor/core';
+} from '@capacitor/network';
 
 export class MockNetworkPlugin implements NetworkPlugin {
   async getStatus(): Promise<NetworkStatus> {
@@ -11,14 +12,13 @@ export class MockNetworkPlugin implements NetworkPlugin {
   }
 
   addListener(
-    _eventName: string,
-    _listenerFunc: (status: NetworkStatus) => any
-  ): PluginListenerHandle {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return { remove: () => {} };
+    _eventName: 'networkStatusChange',
+    _listenerFunc: ConnectionStatusChangeListener
+  ): Promise<PluginListenerHandle> & PluginListenerHandle {
+    throw new Error('Method not implemented.');
   }
 
-  removeAllListeners() {
+  async removeAllListeners(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

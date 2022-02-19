@@ -5,10 +5,10 @@ import {
   FilesystemPlugin,
   GeolocationPlugin,
   LocalNotificationsPlugin,
-  NetworkPlugin,
   Plugins,
   PushNotificationsPlugin,
 } from '@capacitor/core';
+import { Network, NetworkPlugin } from '@capacitor/network';
 import { Storage, StoragePlugin } from '@capacitor/storage';
 
 export const APP_PLUGIN = new InjectionToken<AppPlugin>('APP_PLUGIN');
@@ -54,7 +54,7 @@ export const PUSH_NOTIFICATIONS_PLUGIN =
     },
     {
       provide: NETOWRK_PLUGIN,
-      useValue: Plugins.Network,
+      useValue: Network,
     },
     {
       provide: STORAGE_PLUGIN,

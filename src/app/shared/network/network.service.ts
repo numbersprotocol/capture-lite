@@ -1,5 +1,5 @@
 import { Inject, Injectable, NgZone } from '@angular/core';
-import { NetworkPlugin, NetworkStatus } from '@capacitor/core';
+import { ConnectionStatus, NetworkPlugin } from '@capacitor/network';
 import { defer, merge, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, pluck } from 'rxjs/operators';
 import { NETOWRK_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
@@ -8,7 +8,7 @@ import { NETOWRK_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
   providedIn: 'root',
 })
 export class NetworkService {
-  private readonly status$ = new ReplaySubject<NetworkStatus>(1);
+  private readonly status$ = new ReplaySubject<ConnectionStatus>(1);
 
   readonly connected$ = merge(
     defer(() => this.networkPlugin.getStatus()),
