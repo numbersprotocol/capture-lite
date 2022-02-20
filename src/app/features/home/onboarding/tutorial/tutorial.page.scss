@@ -39,7 +39,7 @@ ion-content {
 }
 
 .onboarding-text {
-  flex: 1; // 高度自動伸展至所有剩餘的空間
+  flex: 1; // Fill remaining space of the flex-direction (column)
 }
 
 .pagination-bullets {
