@@ -101,7 +101,7 @@ export class SendingPostCapturePage {
         asset_file: assetFileUrl,
         asset_file_thumbnail: assetFileUrl,
         sharable_copy: assetFileUrl,
-        caption: this.previewCaption,
+        caption: this.message !== '' ? this.message : asset.caption,
         source_transaction: {
           id: '',
           sender: asset.owner_name,
@@ -119,7 +119,7 @@ export class SendingPostCapturePage {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  previewCaption = '';
+  message = '';
 
   isPreview = false;
 
@@ -152,14 +152,14 @@ export class SendingPostCapturePage {
     }
   }
 
-  async send(captionText: string) {
+  async send() {
     const action$ = combineLatest([this.asset$, this.receiverEmail$]).pipe(
       first(),
       switchTap(([asset, contact]) =>
         this.diaBackendTransactionRepository.add$({
           assetId: asset.id,
           targetEmail: contact,
-          caption: captionText,
+          caption: this.message !== '' ? this.message : asset.caption,
           createContact: this.shouldCreateContact,
         })
       ),

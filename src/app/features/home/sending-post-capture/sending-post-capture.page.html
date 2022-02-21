@@ -19,7 +19,7 @@
           <mat-form-field appearance="outline">
             <mat-label>{{ t('.message') }}</mat-label>
             <textarea
-              [(ngModel)]="previewCaption"
+              [(ngModel)]="message"
               name="caption"
               ngModel
               matInput
@@ -75,7 +75,7 @@
     </mat-card>
 
     <button
-      (click)="send(previewCaption)"
+      (click)="send()"
       class="send-button"
       mat-raised-button
       color="primary"
