@@ -12,7 +12,12 @@
     <mat-list-item>
       <ion-icon mat-list-icon src="/assets/images/num-icon.svg"></ion-icon>
       <div mat-line>NUM {{ t('balance') }}</div>
-      <div mat-line>ERC20</div>
+      <div mat-line>
+        ERC20
+        <a (click)="openNUMTransactionHistory('erc20')">{{
+          t('numTransactionHistory')
+        }}</a>
+      </div>
       <div class="num-balance">
         <ng-container *ngIf="networkConnected$ | ngrxPush; else balanceOffline">
           <ng-container
@@ -30,7 +35,12 @@
     <mat-list-item>
       <ion-icon mat-list-icon src="/assets/images/num-icon.svg"></ion-icon>
       <div mat-line>NUM {{ t('balance') }}</div>
-      <div mat-line>BEP20</div>
+      <div mat-line>
+        BEP20
+        <a (click)="openNUMTransactionHistory('bep20')">{{
+          t('numTransactionHistory')
+        }}</a>
+      </div>
       <div class="num-balance">
         <ng-container *ngIf="networkConnected$ | ngrxPush; else balanceOffline">
           <ng-container
