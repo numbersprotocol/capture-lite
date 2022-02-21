@@ -66,6 +66,7 @@
   "ignore": "忽略",
   "accept": "接收",
   "transaction": "活動紀錄",
+  "numTransactionHistory": "查詢交易紀錄",
   "transactionDetails": "活動資訊",
   "sentFrom": "發送自",
   "receiver": "收件人",

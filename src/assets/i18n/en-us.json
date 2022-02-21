@@ -66,6 +66,7 @@
   "ignore": "Ignore",
   "accept": "Accept",
   "transaction": "Activity",
+  "numTransactionHistory": "View transaction history",
   "transactionDetails": "Activity Details",
   "sentFrom": "Sent from",
   "receiver": "Receiver",

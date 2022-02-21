@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.49.0 - 2022-02-21
+
+### Added
+
+- Add NUM balance loading indicator
+- Add hyperlink for users to view NUM wallet transaction history on EtherScan/BscScan
+- New introductory UI/UX for new users
+
+### Fixed
+
+- Show custody wallet balance instead of Capture wallet balance
+- Fix null message overwriting asset caption when send. #1166
+
 ## 0.48.1 - 2022-02-11
 
 ### Fixed

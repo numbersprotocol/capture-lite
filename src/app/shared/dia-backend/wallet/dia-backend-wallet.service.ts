@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer, forkJoin } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { BehaviorSubject, defer, forkJoin } from 'rxjs';
+import { concatMap, tap } from 'rxjs/operators';
 import { NetworkService } from '../../network/network.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
@@ -21,8 +21,13 @@ export class DiaBackendWalletService {
   readonly bscNumBalance$ = this.preferences.getNumber$(
     PrefKeys.BSC_NUM_BALANCE
   );
+  readonly numWalletAddr$ = this.preferences.getString$(
+    PrefKeys.NUM_WALLET_ADDR
+  );
 
   readonly networkConnected$ = this.networkService.connected$;
+
+  readonly isLoadingBalance$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -56,11 +61,11 @@ export class DiaBackendWalletService {
     );
   }
 
-  getManagedWallet$() {
+  getNumWallet$() {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         return this.httpClient.get<DiaBackendWallet>(
-          `${BASE_URL}/api/v3/wallets/managed-wallet/`,
+          `${BASE_URL}/api/v3/wallets/num-wallet/`,
           { headers }
         );
       })
@@ -68,7 +73,8 @@ export class DiaBackendWalletService {
   }
 
   syncCaptBalance$() {
-    return this.getAssetWallet$().pipe(
+    this.isLoadingBalance$.next(true);
+    return this.getNumWallet$().pipe(
       concatMap(diaBackendWallet =>
         forkJoin([
           this.preferences.setNumber(
@@ -79,8 +85,15 @@ export class DiaBackendWalletService {
             PrefKeys.BSC_NUM_BALANCE,
             diaBackendWallet.num_balance.bsc_num
           ),
+          this.preferences.setString(
+            PrefKeys.NUM_WALLET_ADDR,
+            diaBackendWallet.address
+          ),
         ])
-      )
+      ),
+      tap(() => {
+        this.isLoadingBalance$.next(false);
+      })
     );
   }
 }
@@ -102,4 +115,5 @@ export interface DiaBackendWallet {
 const enum PrefKeys {
   ETH_NUM_BALANCE = 'ETH_NUM_BALANCE',
   BSC_NUM_BALANCE = 'BSC_NUM_BALANCE',
+  NUM_WALLET_ADDR = 'NUM_WALLET_ADDR',
 }
