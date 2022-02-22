@@ -140,6 +140,12 @@ export class SendingPostCapturePage {
     private readonly navController: NavController
   ) {}
 
+  ionViewWillEnter() {
+    this.asset$.pipe(untilDestroyed(this)).subscribe(asset => {
+      this.message = asset.caption;
+    });
+  }
+
   preview() {
     this.isPreview = true;
   }
