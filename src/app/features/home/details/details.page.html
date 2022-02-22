@@ -102,7 +102,13 @@
                   {{ caption }}
                 </ion-label>
                 <ng-template #emptyCaption>
-                  <ion-label> No Caption </ion-label>
+                  <ion-label>
+                    No Caption
+                    <ion-icon
+                      name="pencil-outline"
+                      id="caption-edit-icon"
+                    ></ion-icon>
+                  </ion-label>
                 </ng-template>
               </ion-item>
             </ng-container>
