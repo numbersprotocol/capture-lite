@@ -1,0 +1,42 @@
+mat-list-item {
+  height: initial;
+  padding-top: 16px;
+  padding-bottom: 16px;
+
+  img[matListAvatar] {
+    border-radius: 4px;
+    width: calc(100vw / 5);
+    height: calc(100vw / 8);
+    max-width: 150px;
+    max-height: 80px;
+  }
+
+  button {
+    flex-shrink: 0;
+    min-width: 25%;
+  }
+
+  button.completed {
+    color: var(--ion-color-dark-contrast);
+    border-color: var(--noir-simple);
+    background-color: var(--noir-simple);
+  }
+
+  button.paid {
+    color: var(--noir-secondary-dark);
+    border-color: var(--noir-secondary-dark);
+  }
+
+  button.submitted {
+    color: var(--ion-color-dark-contrast);
+    border-color: var(--noir-secondary-dark);
+    background-color: var(--noir-secondary-dark);
+  }
+
+  button.failed,
+  button.payment_failed {
+    color: var(--ion-color-dark-contrast);
+    border-color: var(--noir-warn);
+    background-color: var(--noir-warn);
+  }
+}

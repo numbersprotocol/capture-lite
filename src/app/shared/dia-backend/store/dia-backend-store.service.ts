@@ -17,7 +17,7 @@ export class DiaBackendStoreService {
   createNetworkAppOrder(networkApp: string, actionArgs: any) {
     return defer(() => this.authService.getAuthHeadersWithApiKey()).pipe(
       concatMap(headers => {
-        return this.httpClient.post<NetworkAppOrderStatus>(
+        return this.httpClient.post<NetworkAppOrder>(
           `${BASE_URL}/api/v3/store/network-app-orders/`,
           {
             network_app: networkApp,
@@ -32,7 +32,7 @@ export class DiaBackendStoreService {
   confirmNetworkAppOrder(id: string) {
     return defer(() => this.authService.getAuthHeadersWithApiKey()).pipe(
       concatMap(headers => {
-        return this.httpClient.post<NetworkAppOrderStatus>(
+        return this.httpClient.post<NetworkAppOrder>(
           `${BASE_URL}/api/v3/store/network-app-orders/${id}/confirm/`,
           {},
           { headers }
@@ -42,10 +42,11 @@ export class DiaBackendStoreService {
   }
 }
 
-export interface NetworkAppOrderStatus {
+export interface NetworkAppOrder {
   id: string;
   status: 'completed' | 'canceled' | 'pending';
-  network_app: string;
+  network_app_id: string;
+  network_app_name: string;
   action: string;
   action_args: Record<string, unknown>;
   price: string;

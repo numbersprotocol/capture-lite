@@ -16,7 +16,7 @@ import { BlockingActionService } from '../../../../shared/blocking-action/blocki
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import {
   DiaBackendStoreService,
-  NetworkAppOrderStatus,
+  NetworkAppOrder,
 } from '../../../../shared/dia-backend/store/dia-backend-store.service';
 import { ErrorService } from '../../../../shared/error/error.service';
 import { OrderDetailDialogComponent } from '../../../../shared/order-detail-dialog/order-detail-dialog.component';
@@ -80,7 +80,7 @@ export class ActionsPage {
     );
   }
 
-  openOrderDialog$(orderStatus: NetworkAppOrderStatus) {
+  openOrderDialog$(orderStatus: NetworkAppOrder) {
     const dialogRef = this.dialog.open<OrderDetailDialogComponent>(
       OrderDetailDialogComponent,
       {
@@ -120,7 +120,25 @@ export class ActionsPage {
     );
   }
 
+  createOrderHistory$(networkAppOrder: NetworkAppOrder) {
+    return combineLatest([this.id$]).pipe(
+      first(),
+      concatMap(([cid]) =>
+        this.actionsService.createOrderHistory$(
+          networkAppOrder,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          cid!
+        )
+      ),
+      catchError((err: unknown) => {
+        return this.errorService.toastError$(err);
+      }),
+      isNonNullable()
+    );
+  }
+
   doAction(action: Action) {
+    let networkAppOrder: NetworkAppOrder;
     this.openActionDialog$(action)
       .pipe(
         concatMap(createOrderInput =>
@@ -131,7 +149,11 @@ export class ActionsPage {
             )
           )
         ),
-        concatMap(orderStatus => this.openOrderDialog$(orderStatus)),
+        concatMap(orderStatus => {
+          networkAppOrder = orderStatus;
+          return this.openOrderDialog$(orderStatus);
+        }),
+        tap(() => this.createOrderHistory$(networkAppOrder).subscribe()),
         concatMap(orderId =>
           this.blockingActionService.run$(this.confirmOrder$(orderId))
         ),

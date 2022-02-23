@@ -1,0 +1,26 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('activity') }}</span>
+</mat-toolbar>
+
+<ion-content *transloco="let t">
+  <ion-segment #segment value="networkActionOrders">
+    <ion-segment-button value="transactions">
+      <ion-label>{{ t('captureTransactions') }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="networkActionOrders">
+      <ion-label>{{ t('message.moreActions') }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div class="page-content">
+    <div *ngIf="segment.value === 'transactions'">
+      <app-capture-transactions></app-capture-transactions>
+    </div>
+    <div *ngIf="segment.value === 'networkActionOrders'">
+      <app-network-action-orders></app-network-action-orders>
+    </div>
+  </div>
+</ion-content>
