@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { App } from '@capacitor/app';
+import { App, AppInfo } from '@capacitor/app';
 import { Device } from '@capacitor/device';
+import { isPlatform } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { ErrorService } from '../../../error/error.service';
 import { BaseError } from '../../../error/errors';
@@ -78,7 +79,9 @@ export class CapacitorFactsProvider implements FactsProvider {
     if (!isDeviceInfoCollectionEnabled) {
       return;
     }
-    const appInfo = await App.getInfo();
+    let appInfo: AppInfo = { version: '', build: '', id: '', name: '' };
+    if (isPlatform('hybrid')) appInfo = await App.getInfo();
+
     return {
       appVersion: appInfo.version,
       appBuild: appInfo.build,
