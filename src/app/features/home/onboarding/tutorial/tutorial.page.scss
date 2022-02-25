@@ -25,24 +25,6 @@ ion-content {
   }
 }
 
-.onboarding-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
-  background-color: #0000d8;
-}
-
-.onboarding-logo {
-  width: 95%;
-  margin: auto 20;
-  margin-bottom: 20px;
-}
-
-.onboarding-text {
-  flex: 1; // Fill remaining space of the flex-direction (column)
-}
-
 .pagination-bullets {
   bottom: 16px;
 }
