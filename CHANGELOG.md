@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.49.1 - 2022-02-25
+
+### Added
+
+- Have message default to asset caption when send
+- Update edit asset caption help text
+- Display edit icon when no caption
+
+### Fixed
+
+- Removed the new introductory UI/UX for new users
+
 ## 0.49.0 - 2022-02-21
 
 ### Added
