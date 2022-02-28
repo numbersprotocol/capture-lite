@@ -29,7 +29,7 @@
     "@angular/platform-browser-dynamic": "^12.2.4",
     "@angular/router": "^12.2.4",
     "@capacitor-community/bluetooth-le": "^1.7.0",
-    "@capacitor-community/http": "^1.4.1",
+    "@capacitor-community/http": "github:sultanmyrza/http#fix-catch-disabled-Local-Network-case-on-iOS",
     "@capacitor-community/wifi": "github:sultanmyrza/community-capacitor-wifi#capacitor3",
     "@capacitor/android": "https://gitpkg.now.sh/sultanmyrza/capacitor/android?release-3.4.1-range-request-fix",
     "@capacitor/app": "^1.1.0",
