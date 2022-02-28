@@ -26,9 +26,14 @@
   <ion-button
     *ngIf="!isConnectedToGoProWifi"
     (click)="connectToGoProWifi()"
+    [disabled]="isConnectingToGoProWifi"
     class="connect-to-go-pro-wifi-btn"
   >
-    Connect to go pro WiFi (enable first)
+    {{
+      isConnectingToGoProWifi
+        ? 'Connecting to GoPro Wifi...'
+        : 'Connect to go pro WiFi (enable first)'
+    }}
   </ion-button>
 
   <ion-button
@@ -45,11 +50,8 @@
     Make sure you connected to GoPro WiFi first
   </h4>
 
-  <h4 *ngIf="fetchingFilesError">
-    {{ fetchingFilesError }}
-    <br />
-    Hint: click refresh button at top right.
-  </h4>
+  <h4 *ngIf="fetchingFilesError">{{ fetchingFilesError }}</h4>
+  <h4 *ngIf="fetchingFilesError">Hint: click refresh button at top right.</h4>
 
   <h4 *ngIf="fetchingFiles">Fetching files...</h4>
 
