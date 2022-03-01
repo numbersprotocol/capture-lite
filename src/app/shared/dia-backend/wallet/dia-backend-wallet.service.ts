@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, defer, forkJoin } from 'rxjs';
-import { concatMap, tap } from 'rxjs/operators';
+import { combineLatest, defer, forkJoin } from 'rxjs';
+import { concatMap, first } from 'rxjs/operators';
 import { NetworkService } from '../../network/network.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
@@ -15,19 +15,27 @@ export class DiaBackendWalletService {
 
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
-  readonly ethNumBalance$ = this.preferences.getNumber$(
-    PrefKeys.ETH_NUM_BALANCE
+  readonly assetWalletEthNumBalance$ = this.preferences.getNumber$(
+    PrefKeys.ASSET_WALLET_ETH_NUM_BALANCE
   );
-  readonly bscNumBalance$ = this.preferences.getNumber$(
-    PrefKeys.BSC_NUM_BALANCE
+  readonly assetWalletBscNumBalance$ = this.preferences.getNumber$(
+    PrefKeys.ASSET_WALLET_BSC_NUM_BALANCE
   );
-  readonly numWalletAddr$ = this.preferences.getString$(
-    PrefKeys.NUM_WALLET_ADDR
+  readonly assetWalletAddr$ = this.preferences.getString$(
+    PrefKeys.ASSET_WALLET_ADDR
   );
+
+  readonly integrityWalletEthNumBalance$ = this.preferences.getNumber$(
+    PrefKeys.INTEGRITY_WALLET_ETH_NUM_BALANCE
+  );
+
+  readonly integrityWalletBscNumBalance$ = this.preferences.getNumber$(
+    PrefKeys.INTEGRITY_WALLET_BSC_NUM_BALANCE
+  );
+
+  // For integrity wallet addr, use WebCryptoApiSignatureProvider.publicKey$
 
   readonly networkConnected$ = this.networkService.connected$;
-
-  readonly isLoadingBalance$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -36,7 +44,7 @@ export class DiaBackendWalletService {
     private readonly preferenceManager: PreferenceManager
   ) {}
 
-  getAssetWallet$() {
+  getIntegrityWallet$() {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         return this.httpClient.get<DiaBackendWallet>(
@@ -47,7 +55,7 @@ export class DiaBackendWalletService {
     );
   }
 
-  setAssetWallet$(privateKey: string) {
+  setIntegrityWallet$(privateKey: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         const formData = new FormData();
@@ -61,7 +69,7 @@ export class DiaBackendWalletService {
     );
   }
 
-  getNumWallet$() {
+  getAssetWallet$() {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         return this.httpClient.get<DiaBackendWallet>(
@@ -72,28 +80,53 @@ export class DiaBackendWalletService {
     );
   }
 
-  syncCaptBalance$() {
-    this.isLoadingBalance$.next(true);
-    return this.getNumWallet$().pipe(
+  syncAssetWalletBalance$() {
+    return this.getAssetWallet$().pipe(
       concatMap(diaBackendWallet =>
         forkJoin([
           this.preferences.setNumber(
-            PrefKeys.ETH_NUM_BALANCE,
+            PrefKeys.ASSET_WALLET_ETH_NUM_BALANCE,
             diaBackendWallet.num_balance.eth_num
           ),
           this.preferences.setNumber(
-            PrefKeys.BSC_NUM_BALANCE,
+            PrefKeys.ASSET_WALLET_BSC_NUM_BALANCE,
             diaBackendWallet.num_balance.bsc_num
           ),
           this.preferences.setString(
-            PrefKeys.NUM_WALLET_ADDR,
+            PrefKeys.ASSET_WALLET_ADDR,
             diaBackendWallet.address
           ),
         ])
-      ),
-      tap(() => {
-        this.isLoadingBalance$.next(false);
-      })
+      )
+    );
+  }
+
+  syncIntegrityAndAssetWalletBalance$() {
+    return combineLatest([
+      this.getIntegrityWallet$(),
+      this.getAssetWallet$(),
+    ]).pipe(
+      first(),
+      concatMap(([integrityWallet, assetWallet]) =>
+        forkJoin([
+          this.preferences.setNumber(
+            PrefKeys.INTEGRITY_WALLET_ETH_NUM_BALANCE,
+            integrityWallet.num_balance.eth_num
+          ),
+          this.preferences.setNumber(
+            PrefKeys.INTEGRITY_WALLET_BSC_NUM_BALANCE,
+            integrityWallet.num_balance.bsc_num
+          ),
+          this.preferences.setNumber(
+            PrefKeys.ASSET_WALLET_ETH_NUM_BALANCE,
+            assetWallet.num_balance.eth_num
+          ),
+          this.preferences.setNumber(
+            PrefKeys.ASSET_WALLET_BSC_NUM_BALANCE,
+            assetWallet.num_balance.bsc_num
+          ),
+        ])
+      )
     );
   }
 }
@@ -113,7 +146,9 @@ export interface DiaBackendWallet {
 }
 
 const enum PrefKeys {
-  ETH_NUM_BALANCE = 'ETH_NUM_BALANCE',
-  BSC_NUM_BALANCE = 'BSC_NUM_BALANCE',
-  NUM_WALLET_ADDR = 'NUM_WALLET_ADDR',
+  ASSET_WALLET_ETH_NUM_BALANCE = 'ASSET_WALLET_ETH_NUM_BALANCE',
+  ASSET_WALLET_BSC_NUM_BALANCE = 'ASSET_WALLET_BSC_NUM_BALANCE',
+  ASSET_WALLET_ADDR = 'ASSET_WALLET_ADDR',
+  INTEGRITY_WALLET_ETH_NUM_BALANCE = 'INTEGRITY_WALLET_ETH_NUM_BALANCE',
+  INTEGRITY_WALLET_BSC_NUM_BALANCE = 'INTEGRITY_WALLET_BSC_NUM_BALANCE',
 }

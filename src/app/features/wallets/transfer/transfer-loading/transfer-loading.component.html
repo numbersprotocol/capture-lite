@@ -1,0 +1,35 @@
+<div *transloco="let t">
+  <ion-row>
+    <ion-col *ngIf="mode === 'withdraw'" size="3">
+      <ion-icon id="wallet-icon" name="wallet"></ion-icon>
+    </ion-col>
+    <ion-col *ngIf="mode === 'deposit'" id="num-icon-col" size="3">
+      <ion-img src="../../../assets/images/num-icon.svg"></ion-img>
+    </ion-col>
+    <ion-col>
+      <ion-row id="forward-icons-row">
+        <ion-img
+          class="arrow-img"
+          src="../../../assets/images/transfer_arrow.svg"
+        ></ion-img>
+        <ion-img
+          class="arrow-img"
+          src="../../../assets/images/transfer_arrow.svg"
+        ></ion-img>
+        <ion-img
+          class="arrow-img"
+          src="../../../assets/images/transfer_arrow.svg"
+        ></ion-img>
+      </ion-row>
+      <h4>
+        {{ t('wallets.' + mode) }}
+      </h4>
+    </ion-col>
+    <ion-col *ngIf="mode === 'deposit'" size="3">
+      <ion-icon id="wallet-icon" name="wallet"></ion-icon>
+    </ion-col>
+    <ion-col *ngIf="mode === 'withdraw'" id="num-icon-col" size="3">
+      <ion-img src="../../../assets/images/num-icon.svg"></ion-img>
+    </ion-col>
+  </ion-row>
+</div>

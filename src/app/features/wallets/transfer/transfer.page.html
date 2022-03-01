@@ -1,0 +1,124 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink="/wallets" routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('wallets.transfer') }}</span>
+</mat-toolbar>
+
+<ion-content *transloco="let t">
+  <ion-card id="main-card">
+    <ion-grid>
+      <ion-row id="in-app-transfer-row">
+        <ion-col size="2">
+          <ion-icon id="in-app-transfer-wallet-icon" name="wallet"></ion-icon>
+        </ion-col>
+        <ion-col size="8">
+          <h6>{{ t('wallets.inAppTransfer') }}</h6>
+          <p>{{ t('wallets.moveNumBetweenAssetWallet') }}</p>
+          <p>{{ t('wallets.andIntegrityWallet') }}</p>
+        </ion-col>
+        <ion-col>
+          <ion-img
+            id="num-icon-svg"
+            src="../../../assets/images/num-icon.svg"
+          ></ion-img>
+        </ion-col>
+      </ion-row>
+      <ion-row class="wallet-info-row">
+        <ion-col size="7">
+          <h1>
+            {{
+              mode === 'withdraw'
+                ? t('wallets.assetWallet')
+                : t('wallets.integrityWallet')
+            }}
+          </h1>
+        </ion-col>
+        <ion-col offset="0.5">
+          <h6>BEP20</h6>
+          <h5>
+            {{
+              (mode === 'withdraw'
+                ? assetWalletBscNumBalance$
+                : integrityWalletBscNumBalance$
+              )
+                | ngrxPush
+                | currency
+            }}
+          </h5>
+        </ion-col>
+      </ion-row>
+      <ion-row id="divider-row">
+        <ion-icon id="direction-icon" name="arrow-down-circle"></ion-icon>
+        <div id="horizontal-divider"></div>
+      </ion-row>
+      <ion-row class="wallet-info-row">
+        <ion-col size="7">
+          <h1>
+            {{
+              mode === 'withdraw'
+                ? t('wallets.integrityWallet')
+                : t('wallets.assetWallet')
+            }}
+          </h1>
+        </ion-col>
+        <ion-col offset="0.5">
+          <h6>BEP20</h6>
+          <h5>
+            {{
+              (mode === 'withdraw'
+                ? integrityWalletBscNumBalance$
+                : assetWalletBscNumBalance$
+              )
+                | ngrxPush
+                | currency
+            }}
+          </h5>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-input
+          id="transfer-amount-input"
+          [placeholder]="t('wallets.enterAmount')"
+          [(ngModel)]="transferAmount"
+          type="number"
+          (input)="onInputTransferAmount()"
+        ></ion-input>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <ion-card id="bottom-card" *ngIf="!this.keyboardIsShown">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2">
+          <ion-icon name="wallet"></ion-icon>
+        </ion-col>
+        <ion-col size="5" *ngrxLet="gasFee$ as gasFee">
+          <h6>
+            {{ t('wallets.gasFee') }}:
+            {{ gasFee > 0 ? (gasFee | number: '1.2-2') : t('wallets.pending') }}
+          </h6>
+          <h4>
+            {{ t('wallets.total') }} {{ totalCost$ | ngrxPush | currency }}
+          </h4>
+        </ion-col>
+        <ion-col id="deposit-withdraw-btn-col">
+          <ion-button
+            *ngIf="!readyToSend"
+            fill="outline"
+            expand="block"
+            (click)="quoteGasFee()"
+            >{{ t('wallets.quoteGasFee') }}</ion-button
+          >
+          <ion-button
+            *ngIf="readyToSend"
+            fill="outline"
+            expand="block"
+            (click)="transfer()"
+            >{{ t('wallets.' + mode) }}</ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ion-content>

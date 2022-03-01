@@ -67,7 +67,6 @@
   "ignore": "Ignore",
   "accept": "Accept",
   "transaction": "Activity",
-  "numTransactionHistory": "View transaction history",
   "transactionDetails": "Activity Details",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
@@ -93,11 +92,12 @@
   "addTheReceiverToContacts": "Add the Receiver to Contacts",
   ".message": "Message",
   "send": "Send",
+  "buy": "Buy",
   "resend": "Re-send",
   "resendIn": "Re-send {{ secondsRemained }}s",
   "balance": "Balance",
   "walletAddress": "Wallet Address",
-  "exportPrivateKey": "Export Private Key",
+
   "yourPrivateKey": "Your Private Key",
   "copyToClipboard": "Copy To Clipboard",
   "verification": {
@@ -204,7 +204,12 @@
       "user_is_email_verified": "The email address has beed verified",
       "user_not_found": "There is no account registered with the email address",
       "asset_is_being_minted": "Asset is being minted",
-      "insufficient_fund": "Insufficient NUM token"
+      "insufficient_fund": "Insufficient NUM token",
+      "order_expired": "Order expired. Please create a new order and confirm it within 5 minutes."
+    },
+    "wallets": {
+      "emptyTransferAmount": "Please enter a valid transfer amount.",
+      "insufficientFund": "Insufficient NUM token."
     }
   },
   "transactionState": {
@@ -220,5 +225,30 @@
     "price": "Fee",
     "fee": "Gas",
     "totalCost": "Total Cost"
+  },
+  "wallets": {
+    "wallets": "Wallets",
+    "pullToRefreshBalance": "Pull to refresh balance",
+    "assetWallet": "Asset Wallet",
+    "myAssetWallet": "My Asset Wallet",
+    "myAssetWalletTooltip": "Main asset vault for Capture NFT and NUM",
+    "integrityKey": "Integrity Key",
+    "integrityWallet": "Integrity Wallet",
+    "integrityWalletTooltip": "Wallet used for creating Signatures",
+    "numTransactionHistory": "Transaction History",
+    "viewOnBscScan": "View on BscScan",
+    "exportIntegrityKey": "Export Integrity Key",
+    "transfer": "Transfer",
+    "withdraw": "Withdraw",
+    "deposit": "Deposit",
+    "inAppTransfer": "In App Transfer",
+    "enterAmount": "Enter Amount",
+    "moveNumBetweenAssetWallet": "Move NUM between asset wallet",
+    "andIntegrityWallet": "and integrity wallet",
+    "requestSent": "request sent",
+    "gasFee": "Gas Fee",
+    "pending": "Pending",
+    "total": "Total",
+    "quoteGasFee": "Quote Gas Fee"
   }
 }

@@ -1,0 +1,107 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+  }
+}
+
+.text-black {
+  color: black;
+}
+
+#pull-to-refresh-help-text {
+  margin: 0;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 10px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #9c9c9c;
+}
+
+ion-card {
+  background: white;
+  border-radius: 15px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin-top: 5px;
+  margin-left: 8px;
+  margin-right: 8px;
+
+  ion-grid {
+    margin-left: 12px;
+    margin-right: 8px;
+
+    #num-icon-row {
+      ion-img {
+        margin-top: 10px;
+        width: 29px;
+      }
+
+      h3 {
+        flex: none;
+        order: 1;
+        flex-grow: 0;
+        margin-top: 21px;
+        margin-left: 7px;
+      }
+    }
+
+    #bep20-points-row {
+      margin-top: 5%;
+
+      .bep20-points {
+        letter-spacing: 0.05em;
+        font-weight: bold;
+      }
+
+      #bep20 {
+        margin-left: 2%;
+      }
+
+      #points {
+        margin-left: 5%;
+      }
+    }
+
+    #buy-deposit-withdraw-row {
+      margin-top: 10px;
+    }
+  }
+}
+
+ion-button {
+  --box-shadow: 0;
+}
+
+.num-operation-btn {
+  --border-radius: 10.4988px;
+
+  margin-bottom: 16px;
+  padding-right: 10px;
+  min-width: 90px;
+}
+
+mat-list {
+  padding-top: 0;
+  margin: 0 8px;
+}
+
+#buy-num-btn {
+  color: white;
+}
+
+.deposit-withdraw-num-btn {
+  color: #626262;
+}
+
+#export-integrity-wallet-btn {
+  margin: 8px 16px;
+}
+
+.info-icon {
+  transform: translateY(3px);
+  margin-left: 3px;
+  font-size: 1.1em;
+}
