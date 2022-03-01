@@ -97,10 +97,10 @@
     </button>
 
     <div class="checkbox" *ngIf="!contactAlreadyExists">
-      <ion-checkbox
-        slot="start"
+      <mat-checkbox
+        color="primary"
         [(ngModel)]="shouldCreateContact"
-      ></ion-checkbox>
+      ></mat-checkbox>
       <ion-label>{{ t('addTheReceiverToContacts') }}</ion-label>
     </div>
   </ng-container>
