@@ -2,6 +2,28 @@ ion-img {
   height: 350px;
 }
 
+.video-placeholder {
+  height: 350px;
+  position: relative;
+}
+
+.play-icon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 175px; // half of video-placeholder height
+  transform: translateY(-36px); // half of play-icon height
+  margin: 0 auto;
+  font-size: 72px;
+  height: 72px;
+  width: 72px;
+}
+
+.thumbnail-blurred {
+  -webkit-filter: blur(0.5rem); /* Safari 6.0 - 9.0 */
+  filter: blur(0.5rem);
+}
+
 video {
   background-color: black;
   width: 100%;
