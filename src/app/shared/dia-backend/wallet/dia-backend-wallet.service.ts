@@ -47,11 +47,12 @@ export class DiaBackendWalletService {
     );
   }
 
-  setAssetWallet$(privateKey: string) {
+  setAssetWallet$(privateKey: string, forceReplace = false) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
         const formData = new FormData();
         formData.set('private_key', privateKey);
+        formData.set('force_replace', forceReplace.toString());
         return this.httpClient.post<DiaBackendWallet>(
           `${BASE_URL}/api/v3/wallets/asset-wallet/`,
           formData,

@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { defer, forkJoin, iif } from 'rxjs';
@@ -24,6 +24,7 @@ import { ErrorService } from '../../shared/error/error.service';
 import { ExportPrivateKeyModalComponent } from '../../shared/export-private-key-modal/export-private-key-modal.component';
 import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
+import { isValidETHAddress } from '../../utils/crypto/crypto';
 
 const { Browser, Clipboard } = Plugins;
 
@@ -68,7 +69,8 @@ export class ProfilePage {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly diaBackendWalletService: DiaBackendWalletService,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly loadingController: LoadingController
   ) {}
 
   ionViewWillEnter() {
@@ -152,6 +154,92 @@ export class ProfilePage {
     this.snackBar.open(
       this.translocoService.translate('message.copiedToClipboard')
     );
+  }
+
+  async onImportIntegrityWallet() {
+    const proceed = await this.confirmAlert.present({
+      message: this.translocoService.translate(
+        'message.confirmImportIntegrityWallet'
+      ),
+    });
+    if (!proceed) {
+      return;
+    }
+
+    const loading = await this.loadingController.create({
+      message: 'Updating your integrity wallet...', // use translocoService
+    });
+
+    const alert = await this.alertController.create({
+      header: this.translocoService.translate('importIntegrityWallet'),
+      message: 'Please enter the public and private keys:', // use translocoService
+      inputs: [
+        {
+          name: 'publicKey',
+          type: 'textarea',
+          placeholder: 'Public key', // use translocoService
+        },
+        {
+          name: 'privateKey',
+          type: 'textarea',
+          placeholder: 'Private key', // use translocoService
+        },
+      ],
+      buttons: [
+        {
+          text: this.translocoService.translate('cancel'),
+          role: 'cancel',
+        },
+        {
+          text: this.translocoService.translate('confirm'),
+          handler: value => {
+            loading.present();
+            this.updateIntegrityWallet(value.publicKey, value.privateKey)
+              .then(async () => {
+                const successAlert = await this.alertController.create({
+                  header: 'Success',
+                  message: 'Your integrity wallet has been updated!',
+                  buttons: [
+                    {
+                      text: this.translocoService.translate('ok'),
+                    },
+                  ],
+                });
+                loading.dismiss();
+                alert.dismiss();
+                successAlert.present();
+              })
+              .catch(async (err: Error) => {
+                const failAlert = await this.alertController.create({
+                  header: 'Fail',
+                  message: 'Some error message',
+                  buttons: [
+                    {
+                      text: this.translocoService.translate('ok'),
+                    },
+                  ],
+                });
+                loading.dismiss();
+                alert.dismiss();
+                failAlert.present();
+              });
+            return false;
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  async updateIntegrityWallet(publicKey: string, privateKey: string) {
+    if (!isValidETHAddress(publicKey)) {
+      throw new Error('Invalid address');
+    }
+    await this.webCryptoApiSignatureProvider.importKeys(publicKey, privateKey);
+    await this.diaBackendWalletService
+      .setAssetWallet$(privateKey, true)
+      .toPromise();
   }
 
   exportPrivateKey() {

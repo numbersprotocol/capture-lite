@@ -40,6 +40,7 @@
   "email": "Email",
   "phone": "Phone",
   "password": "Password",
+  "confirm": "Confirm",
   "confirmPassword": "Confirm Password",
   "bringTrustIntoData": "Bring Trust Into Data",
   "login": "Login",
@@ -96,8 +97,9 @@
   "resend": "Re-send",
   "resendIn": "Re-send {{ secondsRemained }}s",
   "balance": "Balance",
-  "walletAddress": "Wallet Address",
-  "exportPrivateKey": "Export Private Key",
+  "walletAddress": "Integrity Wallet Address",
+  "importIntegrityWallet": "Import Integrity Wallet",
+  "exportPrivateKey": "Export Integrity Wallet Private Key",
   "yourPrivateKey": "Your Private Key",
   "copyToClipboard": "Copy To Clipboard",
   "verification": {
@@ -175,7 +177,8 @@
     "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?",
     "moreActions": "More Actions",
     "sentSuccessfully": "Sent Successfully",
-    "confirmCopyPrivateKey": "Warning: Please do not expose your private key to anyone. Lost of private key may cause your account to be lost permanently."
+    "confirmCopyPrivateKey": "Warning: Please do not expose your private key to anyone. Lost of private key may cause your account to be lost permanently.",
+    "confirmImportIntegrityWallet": "Warning: We do not keep a copy of your current integrity wallet private key. If you decide to import your own wallet, consider keeping a copy of the current integrity wallet private key first. Lost of private key may cause a wallet to be lost permanently."
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",

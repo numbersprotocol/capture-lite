@@ -35,3 +35,14 @@ export function verifyWithEthSignature(
     return false;
   }
 }
+
+const addressRegex = new RegExp('^0x[0-9a-f]{40}$');
+
+export function isValidETHAddress(address: string): boolean {
+  const addressLowerCase = address.toLowerCase();
+  return (
+    addressRegex.exec(addressLowerCase) != null &&
+    web3.utils.toChecksumAddress(addressLowerCase).toLowerCase() ==
+      addressLowerCase
+  );
+}

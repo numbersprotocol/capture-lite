@@ -40,6 +40,7 @@
   "email": "電子郵件",
   "phone": "手機",
   "password": "密碼",
+  "confirm": "確認",
   "confirmPassword": "再次輸入密碼",
   "bringTrustIntoData": "Bring Trust Into Data",
   "login": "登入",
@@ -96,8 +97,9 @@
   "resend": "重新發送",
   "resendIn": "重新發送 {{ secondsRemained }}秒",
   "balance": "餘額",
-  "walletAddress": "錢包地址",
-  "exportPrivateKey": "匯出私鑰",
+  "walletAddress": "完整性錢包地址",
+  "importIntegrityWallet": "匯入完整性錢包",
+  "exportPrivateKey": "匯出完整性私鑰",
   "yourPrivateKey": "您的私鑰",
   "copyToClipboard": "複製到剪貼簿",
   "verification": {
@@ -175,7 +177,8 @@
     "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？",
     "moreActions": "更多動作",
     "sentSuccessfully": "成功送出",
-    "confirmCopyPrivateKey": "警告：請不要向任何人揭露您的金鑰，未保管好金鑰可能導致您永遠失去您的帳號。"
+    "confirmCopyPrivateKey": "警告：請不要向任何人揭露您的金鑰，未保管好金鑰可能導致您永遠失去您的帳號。",
+    "confirmImportIntegrityWallet": "警告：我們不會保留您當前錢包私鑰的副本。如果您決定導入自己的錢包，請考慮首先記下當前錢包私鑰的副本。丟失私鑰可能會導致錢包永久丟失。"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",
