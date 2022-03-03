@@ -10,15 +10,10 @@
   </h4>
   <mat-card class="transaction-card">
     <mat-card-content class="row">
-      <mat-label> {{ (transaction$ | ngrxPush)?.asset?.id }}</mat-label>
-      <button
-        *ngrxLet="status$ as status"
-        [class]="status"
-        mat-stroked-button
-        disableRipple
-      >
-        {{ t('transactionState.' + status) }}
-      </button>
+      <mat-label>
+        {{ t('digitalAsset') }} ID:
+        {{ (transaction$ | ngrxPush)?.asset?.id }}
+      </mat-label>
     </mat-card-content>
     <img
       decoding="async"
@@ -32,6 +27,16 @@
       <mat-label>
         {{ t('receiver') }}: {{ (transaction$ | ngrxPush)?.receiver_email }}
       </mat-label>
+    </mat-card-content>
+    <mat-card-content class="column">
+      <button
+        *ngrxLet="status$ as status"
+        [class]="status"
+        mat-stroked-button
+        disableRipple
+      >
+        {{ t('transactionState.' + status) }}
+      </button>
     </mat-card-content>
   </mat-card>
 </div>
