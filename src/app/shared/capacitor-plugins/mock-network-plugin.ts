@@ -15,7 +15,11 @@ export class MockNetworkPlugin implements NetworkPlugin {
     _eventName: 'networkStatusChange',
     _listenerFunc: ConnectionStatusChangeListener
   ): Promise<PluginListenerHandle> & PluginListenerHandle {
-    throw new Error('Method not implemented.');
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const remove = () => {};
+    // @ts-expect-error don't know how to mock function that expects
+    // Promise<PluginListenerHandle> & PluginListenerHandle at the same
+    return { remove };
   }
 
   async removeAllListeners(): Promise<void> {
