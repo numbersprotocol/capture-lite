@@ -41,10 +41,12 @@ export class MockAppPlugin implements AppPlugin {
     _listenerFunc: any
   ): Promise<PluginListenerHandle> & PluginListenerHandle {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const remove = () => {};
-    // @ts-expect-error don't know how to mock function that expects
-    // Promise<PluginListenerHandle> & PluginListenerHandle at the same
-    return { remove };
+    const remove = async () => {};
+    const listenerHandler: any = Promise.resolve({ remove });
+    Object.defineProperty(listenerHandler, 'remove', {
+      value: async () => Promise.resolve({ remove }),
+    });
+    return listenerHandler;
   }
 
   async removeAllListeners(): Promise<void> {
