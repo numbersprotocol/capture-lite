@@ -339,6 +339,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly caption: string;
   readonly post_creation_workflow_id: string;
   readonly mint_workflow_id: string;
+  readonly public_access: boolean;
 }
 
 export type AssetDownloadField =

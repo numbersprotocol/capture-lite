@@ -308,7 +308,8 @@ export class DetailsPage {
         'message.transferOwnership': null,
         'message.viewOnCaptureClub': null,
         'message.deregisterFromNetwork': null,
-        'message.mintNftToken': null,
+        'message.setAssetToPublic': null,
+        'message.setAssetToPrivate': null,
         'message.viewBlockchainCertificate': null,
         'message.viewSupportingVideoOnIpfs': null,
         'message.moreActions': null,
@@ -325,7 +326,8 @@ export class DetailsPage {
               messageTransferOwnership,
               messageViewOnCaptureClub,
               messageDeregisterFromNetwork,
-              messageMintNftToken,
+              messageSetAssetToPublic,
+              messageSetAssetToPrivate,
               messageViewBlockchainCertificate,
               messageViewSupportingVideoOnIpfs,
               messageMoreActions,
@@ -367,14 +369,17 @@ export class DetailsPage {
                   this.remove().then(() => resolve());
                 },
               });
-              if (
-                postCreationWorkflowCompleted &&
-                diaBackendAsset?.nft_token_id === null
-              ) {
+              if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
-                  text: messageMintNftToken,
+                  text: diaBackendAsset?.public_access
+                    ? messageSetAssetToPrivate
+                    : messageSetAssetToPublic,
                   handler: () => {
-                    this.mintNft().then(() => resolve());
+                    this.setAssetPublicity(
+                      !diaBackendAsset?.public_access,
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      detailedCapture.id!
+                    );
                   },
                   role: 'destructive',
                 });
@@ -451,17 +456,20 @@ export class DetailsPage {
   openCertificate() {
     combineLatest([
       this.activeDetailedCapture$,
+      this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
       this.diaBackendAuthService.token$,
     ])
       .pipe(
         first(),
-        concatMap(([detailedCapture, token]) =>
-          defer(() =>
+        concatMap(([detailedCapture, diaBackendAsset, token]) =>
+          defer(() => {
             Browser.open({
-              url: `https://authmedia.net/dia-certificate?mid=${detailedCapture.id}&token=${token}`,
+              url: `https://authmedia.net/dia-certificate?mid=${
+                detailedCapture.id
+              }${diaBackendAsset?.public_access ? '' : '&token=' + token}`,
               toolbarColor: '#564dfc',
-            })
-          )
+            });
+          })
         ),
         untilDestroyed(this)
       )
@@ -640,6 +648,31 @@ export class DetailsPage {
         return this.errorService.toastError$(err);
       })
     );
+    this.blockingActionService
+      .run$(action$)
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
+
+  private setAssetPublicity(setToPublic: boolean, detailedCaptureId: string) {
+    const formData = new FormData();
+    formData.append('public_access', setToPublic.toString());
+    const action$ = this.diaBackendAssetRepository
+      .updateCapture$(detailedCaptureId, formData)
+      .pipe(
+        tap(() => {
+          this.snackBar.open(
+            this.translocoService.translate(
+              setToPublic
+                ? 'message.successfullySetAssetToPublic'
+                : 'message.successfullySetAssetToPrivate'
+            )
+          );
+        }),
+        catchError((err: unknown) => {
+          return this.errorService.toastError$(err);
+        })
+      );
     this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))
