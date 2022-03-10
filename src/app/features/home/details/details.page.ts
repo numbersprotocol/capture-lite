@@ -308,7 +308,7 @@ export class DetailsPage {
         'message.transferOwnership': null,
         'message.viewOnCaptureClub': null,
         'message.deregisterFromNetwork': null,
-        'message.mintNftToken': null,
+        'message.setAssetToPublic': null,
         'message.viewBlockchainCertificate': null,
         'message.viewSupportingVideoOnIpfs': null,
         'message.moreActions': null,
@@ -325,7 +325,7 @@ export class DetailsPage {
               messageTransferOwnership,
               messageViewOnCaptureClub,
               messageDeregisterFromNetwork,
-              messageMintNftToken,
+              messagesetAssetToPublic,
               messageViewBlockchainCertificate,
               messageViewSupportingVideoOnIpfs,
               messageMoreActions,
@@ -372,9 +372,9 @@ export class DetailsPage {
                 diaBackendAsset?.nft_token_id === null
               ) {
                 buttons.push({
-                  text: messageMintNftToken,
+                  text: messagesetAssetToPublic,
                   handler: () => {
-                    this.mintNft().then(() => resolve());
+                    this.setAssetToPublic().then(() => resolve());
                   },
                   role: 'destructive',
                 });
@@ -541,7 +541,7 @@ export class DetailsPage {
       .subscribe();
   }
 
-  private async mintNft() {
+  private async setAssetToPublic() {
     const result = await this.confirmAlert.present({
       message: this.translocoService.translate('message.mintNftAlert'),
     });
