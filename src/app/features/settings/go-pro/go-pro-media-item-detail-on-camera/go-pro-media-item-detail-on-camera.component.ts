@@ -1,13 +1,12 @@
 import { Location } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NetworkPlugin } from '@capacitor/core';
 import {
   AlertController,
   LoadingController,
   ToastController,
 } from '@ionic/angular';
-import { NETOWRK_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
+import { getFileType } from '../../../../../utils/url';
 import { GoProFile } from '../go-pro-media-file';
 import { GoProMediaService } from '../services/go-pro-media.service';
 import { GoProWifiService } from '../services/go-pro-wifi.service';
@@ -33,11 +32,9 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
     public alertController: AlertController,
     public loadingController: LoadingController,
     public goProMediaService: GoProMediaService,
-    public goProWiFiService: GoProWifiService,
-    @Inject(NETOWRK_PLUGIN)
-    private readonly networkPlugin: NetworkPlugin
+    public goProWiFiService: GoProWifiService
   ) {
-    this.route.queryParams.subscribe(() => {
+    this.route.queryParams.subscribe(_ => {
       const state = this.router.getCurrentNavigation()?.extras.state;
       if (state) {
         this.mediaFile = state.goProMediaFile;
@@ -46,31 +43,7 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.mediaType = GoProMediaService.getFileType(this.mediaFile?.url);
-  }
-
-  async downloadFileFromGoProCamera() {
-    if (!this.mediaFile) {
-      return;
-    }
-
-    const fileName = GoProMediaService.extractFileNameFromUrl(
-      this.mediaFile.url
-    );
-
-    const loading = await this.loadingController.create({
-      message: 'Please wait... Download in progress',
-    });
-    await loading.present();
-
-    try {
-      await this.goProMediaService.downloadFromGoProCamera(this.mediaFile);
-      this.presentToast(`${fileName} downloaded ✅`);
-    } catch (error) {
-      this.presentToast(`Failed to download ${fileName}  ❌`);
-    }
-
-    await loading.dismiss();
+    this.mediaType = getFileType(this.mediaFile?.url);
   }
 
   async uploadToCapture() {

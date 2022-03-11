@@ -1,35 +1,77 @@
 <mat-toolbar color="primary" *transloco="let t">
-  <button (click)="goBack()" mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <span>GoPro Media on Camera</span>
+  <ng-template [ngIf]="!multiSelectMode" [ngIfElse]="multiSelectBlock">
+    <button (click)="goBack()" mat-icon-button>
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span> GoPro Media on Camera </span>
+  </ng-template>
+
+  <ng-template #multiSelectBlock>
+    <button (click)="exitMultiSelectMode()" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+    <span *ngIf="multiSelectMode">
+      {{ selectedGoProFiles.length }} file(s) selected
+    </span>
+  </ng-template>
 
   <button (click)="fetchFilesFromGoProWiFi()" mat-icon-button>
     <mat-icon>refresh</mat-icon>
   </button>
 </mat-toolbar>
 
-<ion-content>
+<div class="wifi-state-container">
   <h4>Connected WiFi: {{ connectedWifiSSID }}</h4>
+
   <ion-button
     *ngIf="!isConnectedToGoProWifi"
-    expand="block"
     (click)="connectToGoProWifi()"
+    class="connect-to-go-pro-wifi-btn"
   >
     Connect to go pro WiFi (enable first)
   </ion-button>
 
+  <ion-button
+    *ngIf="multiSelectMode"
+    [disabled]="selectedGoProFiles.length === 0"
+    (click)="uploadSelectedFiles()"
+    class="multi-select-mode-btn"
+  >
+    Upload to capture
+  </ion-button>
+
   <!-- TODO: att translate text -->
-  <h4 *ngIf="shouldConnectToWiFi" style="padding: 16px">
+  <h4 *ngIf="shouldConnectToWiFi" class="should-connect-to-wifi-text">
     Make sure you connected to GoPro WiFi first
   </h4>
 
   <h4 *ngIf="fetchingFilesError">
     {{ fetchingFilesError }}
+    <br />
+    Hint: click refresh button at top right.
   </h4>
 
   <h4 *ngIf="fetchingFiles">Fetching files...</h4>
 
+  <span *ngIf="uploadInProgress" class="upload-in-progress-info">
+    <ion-icon name="information-circle-outline"></ion-icon>
+    Stay on this screen with the app open to ensure your downloads complete!
+  </span>
+</div>
+
+<app-go-pro-media-loading-bar
+  *ngIf="uploadInProgress"
+  loadingText="Loading {{
+    filesToUpload.length + 1
+  }} file(s) for upload to capture."
+  (uploadCancel)="onUploadCancel()"
+></app-go-pro-media-loading-bar>
+
+<ion-content
+  [scrollEvents]="true"
+  (ionScrollStart)="ionScrollStart()"
+  (ionScrollEnd)="ionScrollEnd()"
+>
   <div class="go-pro-container">
     <mat-grid-list cols="3" gutterSize="8px">
       <mat-grid-tile
@@ -37,8 +79,13 @@
         class="go-pro-item"
       >
         <app-go-pro-media-list-item-on-camera
+          ngxLongPress2
+          (onLongPress)="enterMultiSelectMode(mediaFile)"
+          (click)="onItemClick(mediaFile)"
           [mediaFile]="mediaFile"
-        ></app-go-pro-media-list-item-on-camera>
+          [selected]="isItemInSelectedList(mediaFile)"
+        >
+        </app-go-pro-media-list-item-on-camera>
       </mat-grid-tile>
     </mat-grid-list>
   </div>

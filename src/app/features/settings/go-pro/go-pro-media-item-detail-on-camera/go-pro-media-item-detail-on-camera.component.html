@@ -25,8 +25,12 @@
       Your browser does not support the video tag.
     </video>
 
-    <div style="height: 24px"></div>
-    <ion-button (click)="uploadToCapture()" expand="block">
+    <div class="spacer"></div>
+    <ion-button
+      (click)="uploadToCapture()"
+      expand="block"
+      class="upload-to-capture-btn"
+    >
       Upload to capture directly from camera
     </ion-button>
   </div>
@@ -184,7 +188,7 @@
     </ion-slide>
 
     <ion-slide>
-      <ion-item style="--background: #36393f" lines="none">
+      <ion-item lines="none">
         <ion-checkbox
           [checked]="dontShowAgainTutorialForMobileDataOnlyApps"
           [(ngModel)]="dontShowAgainTutorialForMobileDataOnlyApps"
