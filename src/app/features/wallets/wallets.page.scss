@@ -50,18 +50,18 @@ ion-card {
 
     #bep20-points-row {
       margin-top: 5%;
+      padding-left: 2%;
 
       .bep20-points {
         letter-spacing: 0.05em;
         font-weight: bold;
+        margin-left: 1%;
+        margin-right: 5%;
       }
 
-      #bep20 {
-        margin-left: 2%;
-      }
-
-      #points {
+      mat-spinner {
         margin-left: 5%;
+        margin-right: 5%;
       }
     }
 

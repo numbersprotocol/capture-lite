@@ -5,8 +5,21 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import { catchError, concatMap, first, tap } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  combineLatest,
+  merge,
+  ObservableInput,
+  of,
+} from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  first,
+  mapTo,
+  startWith,
+  tap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendStoreService } from '../../../shared/dia-backend/store/dia-backend-store.service';
 import { DiaBackendWalletService } from '../../../shared/dia-backend/wallet/dia-backend-wallet.service';
@@ -39,6 +52,11 @@ export class TransferPage {
 
   private orderId = '';
 
+  readonly keyboardIsHidden$ = merge(
+    <ObservableInput<boolean>>this.platform.keyboardDidHide.pipe(mapTo(true)),
+    <ObservableInput<boolean>>this.platform.keyboardDidShow.pipe(mapTo(false))
+  ).pipe(startWith(true));
+
   constructor(
     private readonly activeRoute: ActivatedRoute,
     private readonly diaBackendWalletService: DiaBackendWalletService,
@@ -57,14 +75,6 @@ export class TransferPage {
       }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.mode = paramMap.get('mode')!;
-    });
-
-    this.platform.keyboardDidShow.pipe(untilDestroyed(this)).subscribe(() => {
-      this.keyboardIsShown = true;
-    });
-
-    this.platform.keyboardDidHide.pipe(untilDestroyed(this)).subscribe(() => {
-      this.keyboardIsShown = false;
     });
   }
 
@@ -103,7 +113,7 @@ export class TransferPage {
     );
   }
 
-  quoteGasFee() {
+  calculateGasFee() {
     if (!this.transferAmount) {
       this.errorService
         .toastError$(

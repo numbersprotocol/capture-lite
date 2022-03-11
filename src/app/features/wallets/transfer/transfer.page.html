@@ -87,7 +87,7 @@
       </ion-row>
     </ion-grid>
   </ion-card>
-  <ion-card id="bottom-card" *ngIf="!this.keyboardIsShown">
+  <ion-card id="bottom-card" *ngIf="keyboardIsHidden$ | ngrxPush">
     <ion-grid>
       <ion-row>
         <ion-col size="2">
@@ -107,8 +107,8 @@
             *ngIf="!readyToSend"
             fill="outline"
             expand="block"
-            (click)="quoteGasFee()"
-            >{{ t('wallets.quoteGasFee') }}</ion-button
+            (click)="calculateGasFee()"
+            >{{ t('wallets.calculateGasFee') }}</ion-button
           >
           <ion-button
             *ngIf="readyToSend"

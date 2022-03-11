@@ -248,8 +248,8 @@
     "viewOnBscScan": "在 BscScan 上查看",
     "exportIntegrityKey": "匯出完整性金鑰",
     "gasFee": "油費",
-    "pending": "待估計",
+    "pending": "待計算",
     "total": "總額",
-    "quoteGasFee": "報價油費"
+    "calculateGasFee": "計算油費"
   }
 }

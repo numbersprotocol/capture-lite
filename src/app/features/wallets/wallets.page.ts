@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { BehaviorSubject } from 'rxjs';
 import { concatMap, first, map, switchMap } from 'rxjs/operators';
 import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
@@ -35,6 +36,8 @@ export class WalletsPage {
   readonly publicKey$ = this.webCryptoApiSignatureProvider.publicKey$;
   readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
   readonly assetWalletAddr$ = this.diaBackendWalletService.assetWalletAddr$;
+
+  readonly isLoadingBalance$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly diaBackendWalletService: DiaBackendWalletService,
@@ -70,8 +73,10 @@ export class WalletsPage {
   }
 
   async refreshBalance(event: Event) {
-    await this.diaBackendWalletService.syncAssetWalletBalance$().toPromise();
     (<CustomEvent>event).detail.complete();
+    this.isLoadingBalance$.next(true);
+    await this.diaBackendWalletService.syncAssetWalletBalance$().toPromise();
+    this.isLoadingBalance$.next(false);
   }
 
   async copyToClipboard(value: string) {

@@ -8,12 +8,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class TransferLoadingComponent {
   mode: 'deposit' | 'withdraw';
-  dark = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: 'deposit' | 'withdraw') {
     this.mode = data;
-    this.dark =
-      window.navigator.userAgent.includes('AndroidDarkMode') ||
-      window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 }

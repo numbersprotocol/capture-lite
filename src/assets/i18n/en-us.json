@@ -249,6 +249,6 @@
     "gasFee": "Gas Fee",
     "pending": "Pending",
     "total": "Total",
-    "quoteGasFee": "Quote Gas Fee"
+    "calculateGasFee": "Calculate Gas"
   }
 }
