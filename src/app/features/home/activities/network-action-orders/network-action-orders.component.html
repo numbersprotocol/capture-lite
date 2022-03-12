@@ -1,13 +1,20 @@
 <mat-list *transloco="let t">
   <ng-container
-    *ngFor="let order of networkActionOrders$ | ngrxPush; last as isLast"
+    *ngFor="
+      let order of networkActionOrders$ | ngrxPush;
+      last as isLast;
+      trackBy: trackNetworkActionOrderHistoryRecords
+    "
   >
     <mat-list-item>
       <img
         decoding="async"
         loading="lazy"
         matListAvatar
-        [src]="order.assetThumbnailUrl$ | ngrxPush"
+        [src]="
+          (order.assetThumbnailUrl$ | ngrxPush) ||
+          '/assets/images/image-placeholder.png'
+        "
       />
       <div mat-line>{{ order.network_app_name_text }}</div>
       <div mat-line>{{ order.asset_id_text }}</div>

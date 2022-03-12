@@ -66,4 +66,12 @@ export class NetworkActionOrdersComponent {
           .fetchById$(order.asset_id_text)
           .pipe(pluck('asset_file_thumbnail'));
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  trackNetworkActionOrderHistoryRecords(
+    _: number,
+    item: BubbleOrderHistoryRecord
+  ) {
+    return item._id;
+  }
 }

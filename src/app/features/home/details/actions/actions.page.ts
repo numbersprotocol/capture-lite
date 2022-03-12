@@ -121,19 +121,15 @@ export class ActionsPage {
   }
 
   createOrderHistory$(networkAppOrder: NetworkAppOrder) {
-    return combineLatest([this.id$]).pipe(
+    return this.id$.pipe(
       first(),
-      concatMap(([cid]) =>
-        this.actionsService.createOrderHistory$(
-          networkAppOrder,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          cid!
-        )
+      isNonNullable(),
+      concatMap(cid =>
+        this.actionsService.createOrderHistory$(networkAppOrder, cid)
       ),
       catchError((err: unknown) => {
         return this.errorService.toastError$(err);
-      }),
-      isNonNullable()
+      })
     );
   }
 
