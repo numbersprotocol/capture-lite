@@ -1,0 +1,28 @@
+<mat-list *transloco="let t">
+  <ng-container
+    *ngFor="
+      let order of networkActionOrders$ | ngrxPush;
+      last as isLast;
+      trackBy: trackNetworkActionOrderHistoryRecords
+    "
+  >
+    <mat-list-item>
+      <img
+        decoding="async"
+        loading="lazy"
+        matListAvatar
+        [src]="
+          (order.assetThumbnailUrl$ | ngrxPush) ||
+          '/assets/images/image-placeholder.png'
+        "
+      />
+      <div mat-line>{{ order.network_app_name_text }}</div>
+      <div mat-line>{{ order.asset_id_text }}</div>
+      <div mat-line>{{ order['Created Date'] | date: 'short' }}</div>
+      <button [class]="order.status_text" mat-stroked-button disableRipple>
+        {{ t('networkActionOrderState.' + order.status_text) }}
+      </button>
+    </mat-list-item>
+    <mat-divider *ngIf="!isLast"></mat-divider>
+  </ng-container>
+</mat-list>

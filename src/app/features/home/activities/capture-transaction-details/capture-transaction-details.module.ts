@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../../../shared/shared.module';
-import { TransactionDetailsPageRoutingModule } from './transaction-details-routing.module';
-import { TransactionDetailsPage } from './transaction-details.page';
+import { TransactionDetailsPageRoutingModule } from './capture-transaction-details-routing.module';
+import { TransactionDetailsPage } from './capture-transaction-details.page';
 
 @NgModule({
   imports: [SharedModule, TransactionDetailsPageRoutingModule],

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
-import { TransactionPage } from './transaction.page';
+import { TransactionPage } from './activities.page';
 
 describe('TransactionPage', () => {
   let component: TransactionPage;
