@@ -69,10 +69,6 @@ export class TransferPage {
     private readonly platform: Platform
   ) {
     this.activeRoute.paramMap.subscribe(paramMap => {
-      if (!paramMap.has('mode')) {
-        this.navCtrl.navigateBack('/wallets');
-        return;
-      }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.mode = paramMap.get('mode')!;
     });
