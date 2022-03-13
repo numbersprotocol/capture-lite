@@ -66,7 +66,9 @@
   "inbox": "Inbox",
   "ignore": "Ignore",
   "accept": "Accept",
-  "transaction": "Activity",
+  "activity": "Activity",
+  "captureTransactions": "Capture Transactions",
+  "numTransactionHistory": "View transaction history",
   "transactionDetails": "Activity Details",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
@@ -219,6 +221,13 @@
     "missed": "Returned",
     "inProgress": "In Progress",
     "waitingToBeAccepted": "In Progress"
+  },
+  "networkActionOrderState": {
+    "submitted": "Submitted",
+    "paid": "Paid",
+    "payment_failed": "Payment Failed",
+    "completed": "Completed",
+    "failed": "Failed"
   },
   "payment": {
     "confirmPayment": "Your Order",
