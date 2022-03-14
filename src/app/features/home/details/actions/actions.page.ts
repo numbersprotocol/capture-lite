@@ -109,7 +109,10 @@ export class ActionsPage {
       catchError((err: unknown) => {
         if (err instanceof HttpErrorResponse) {
           const errorType = err.error.error?.type;
-          if (errorType === 'insufficient_fund')
+          if (
+            errorType === 'insufficient_fund' ||
+            errorType === 'order_expired'
+          )
             return this.errorService.toastError$(
               this.translocoService.translate(`error.diaBackend.${errorType}`)
             );

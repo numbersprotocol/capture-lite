@@ -114,7 +114,7 @@ export class MigrationService {
   }
 
   migrationActions0_38_1$() {
-    return this.createOrImportDiaBackendAssetWallet$().pipe(
+    return this.createOrImportDiaBackendIntegrityWallet$().pipe(
       concatMap(() => this.generateAndUpdateSignatureForUnversionedProofs$())
     );
   }
@@ -148,13 +148,13 @@ export class MigrationService {
     });
   }
 
-  createOrImportDiaBackendAssetWallet$() {
+  createOrImportDiaBackendIntegrityWallet$() {
     /**
      * Deal with backend's asset wallet with the following logic:
      * 1. If backend asset wallet already exists, replace App's keys with asset wallet's keys.
      * 2. If not, upload App's keys to create an asset wallet.
      */
-    return this.diaBackendWalletService.getAssetWallet$().pipe(
+    return this.diaBackendWalletService.getIntegrityWallet$().pipe(
       catchError((err: unknown) => {
         if (
           err instanceof HttpErrorResponse &&
@@ -164,7 +164,7 @@ export class MigrationService {
             this.webCryptoApiSignatureProvider.getPrivateKey()
           ).pipe(
             concatMap(privateKey =>
-              this.diaBackendWalletService.setAssetWallet$(privateKey)
+              this.diaBackendWalletService.setIntegrityWallet$(privateKey)
             )
           );
         }
