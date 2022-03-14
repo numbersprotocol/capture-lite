@@ -11,9 +11,9 @@ import { ErrorService } from '../../../../shared/error/error.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'app-transaction-details',
-  templateUrl: './transaction-details.page.html',
-  styleUrls: ['./transaction-details.page.scss'],
+  selector: 'app-capture-transaction-details',
+  templateUrl: './capture-transaction-details.page.html',
+  styleUrls: ['./capture-transaction-details.page.scss'],
 })
 export class TransactionDetailsPage {
   readonly transaction$ = this.route.paramMap.pipe(

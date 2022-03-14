@@ -21,6 +21,7 @@ import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../shared/error/error.service';
 import { MigrationService } from '../../shared/migration/service/migration.service';
 import { OnboardingService } from '../../shared/onboarding/onboarding.service';
@@ -69,7 +70,8 @@ export class HomePage {
     private readonly cameraService: CameraService,
     private readonly actionSheetController: ActionSheetController,
     private readonly alertController: AlertController,
-    private readonly goProBluetoothService: GoProBluetoothService
+    private readonly goProBluetoothService: GoProBluetoothService,
+    private readonly diaBackendWalletService: DiaBackendWalletService
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -78,9 +80,6 @@ export class HomePage {
     of(this.onboardingService.isNewLogin)
       .pipe(
         concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
-        concatMap(() =>
-          this.migrationService.createOrImportDiaBackendAssetWallet$()
-        ),
         catchError(() => VOID$),
         switchTapTo(defer(() => this.onboardingRedirect())),
         catchError((err: unknown) => this.errorService.toastError$(err)),
@@ -96,6 +95,22 @@ export class HomePage {
       });
     }
     this.onboardingService.isNewLogin = false;
+
+    if (!(await this.onboardingService.hasCreatedOrImportedIntegrityWallet())) {
+      this.migrationService
+        .createOrImportDiaBackendIntegrityWallet$()
+        .toPromise()
+        .then(() =>
+          this.onboardingService.setHasCreatedOrImportedIntegrityWallet(true)
+        );
+    }
+    if (!(await this.onboardingService.hasSyncAssetWalletBalance())) {
+      this.diaBackendWalletService
+        .syncAssetWalletBalance$()
+        .toPromise()
+        .then(() => this.onboardingService.setHasSyncAssetWalletBalance(true));
+    }
+
     if (
       !(await this.onboardingService.hasPrefetchedDiaBackendAssets()) &&
       (await this.diaBackendAssetRepository.fetchOriginallyOwnedCount$

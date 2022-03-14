@@ -11,6 +11,7 @@ import {
   concatMapTo,
   first,
   map,
+  pluck,
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
@@ -90,12 +91,19 @@ export class SendingPostCapturePage {
     map(contact => contact.substring(0, contact.lastIndexOf('@')))
   );
 
+  readonly contacts$ = this.diaBackendContactRepository.all$.pipe(
+    pluck('results'),
+    catchError((err: unknown) => this.errorService.toastError$(err)),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
   readonly previewAsset$ = combineLatest([
     this.asset$,
     this.receiverEmail$,
     this.assetFileUrl$,
+    this.contacts$,
   ]).pipe(
-    switchMap(async ([asset, contact, assetFileUrl]) => {
+    switchMap(async ([asset, receiverEmail, assetFileUrl, contacts]) => {
       const previewAsset: DiaBackendAsset = {
         ...asset,
         asset_file: assetFileUrl,
@@ -105,12 +113,16 @@ export class SendingPostCapturePage {
         source_transaction: {
           id: '',
           sender: asset.owner_name,
-          receiver_email: contact,
+          receiver_email: receiverEmail,
           created_at: '',
           fulfilled_at: formatDate(Date.now(), 'short', 'en-US'),
           expired: false,
         },
       };
+      if (contacts.find(cont => cont.contact_email == receiverEmail) != null) {
+        this.contactAlreadyExists = true;
+        this.shouldCreateContact = false;
+      }
       return previewAsset;
     })
   );
@@ -122,6 +134,8 @@ export class SendingPostCapturePage {
   message = '';
 
   isPreview = false;
+
+  contactAlreadyExists = false;
 
   shouldCreateContact = true;
 

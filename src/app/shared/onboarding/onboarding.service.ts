@@ -91,6 +91,34 @@ export class OnboardingService {
   async hasShownTutorialVersion() {
     return this.preferences.getString(PrefKeys.HAS_SHOWN_TUTORIAL_VERSION, '');
   }
+
+  async hasCreatedOrImportedIntegrityWallet() {
+    return this.preferences.getBoolean(
+      PrefKeys.HAS_CREATED_OR_IMPORTED_INTEGRITY_WALLET,
+      false
+    );
+  }
+
+  async setHasCreatedOrImportedIntegrityWallet(value: boolean) {
+    return this.preferences.setBoolean(
+      PrefKeys.HAS_CREATED_OR_IMPORTED_INTEGRITY_WALLET,
+      value
+    );
+  }
+
+  async hasSyncAssetWalletBalance() {
+    return this.preferences.getBoolean(
+      PrefKeys.HAS_SYNC_ASSET_WALLET_BALANCE,
+      false
+    );
+  }
+
+  async setHasSyncAssetWalletBalance(value: boolean) {
+    return this.preferences.setBoolean(
+      PrefKeys.HAS_SYNC_ASSET_WALLET_BALANCE,
+      value
+    );
+  }
 }
 
 const enum PrefKeys {
@@ -102,4 +130,6 @@ const enum PrefKeys {
   HAS_PREFETCHED_DIA_BACKEND_ASSETS = 'HAS_PREFETCHED_DIA_BACKEND_ASSETS',
   HAS_MIGRATED = 'HAS_MIGRATED',
   HAS_SHOWN_TUTORIAL_VERSION = 'HAS_SHOWN_TUTORIAL_VERSION',
+  HAS_CREATED_OR_IMPORTED_INTEGRITY_WALLET = 'HAS_CREATED_OR_IMPORTED_INTEGRITY_WALLET',
+  HAS_SYNC_ASSET_WALLET_BALANCE = 'HAS_SYNC_ASSET_WALLET_BALANCE',
 }
