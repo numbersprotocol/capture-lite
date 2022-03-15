@@ -55,7 +55,7 @@
           color="#7E7E7E"
           fill="outline"
           size="small"
-          [routerLink]="['transfer', 'deposit']"
+          (click)="onDepositWithdrawBtnClick('deposit')"
           >{{ t('wallets.deposit') }}</ion-button
         >
         <ion-button
@@ -63,7 +63,7 @@
           color="#7E7E7E"
           fill="outline"
           size="small"
-          [routerLink]="['transfer', 'withdraw']"
+          (click)="onDepositWithdrawBtnClick('withdraw')"
           >{{ t('wallets.withdraw') }}</ion-button
         >
       </ion-row>

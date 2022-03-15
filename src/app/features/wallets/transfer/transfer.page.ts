@@ -5,21 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import {
-  BehaviorSubject,
-  combineLatest,
-  merge,
-  ObservableInput,
-  of,
-} from 'rxjs';
-import {
-  catchError,
-  concatMap,
-  first,
-  mapTo,
-  startWith,
-  tap,
-} from 'rxjs/operators';
+import { BehaviorSubject, merge, ObservableInput } from 'rxjs';
+import { catchError, finalize, mapTo, startWith, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendStoreService } from '../../../shared/dia-backend/store/dia-backend-store.service';
 import { DiaBackendWalletService } from '../../../shared/dia-backend/wallet/dia-backend-wallet.service';
@@ -77,36 +64,21 @@ export class TransferPage {
   ionViewWillEnter() {
     this.blockingActionService
       .run$(this.diaBackendWalletService.syncIntegrityAndAssetWalletBalance$())
-      .pipe(untilDestroyed(this))
+      .pipe(
+        catchError(() =>
+          this.errorService.toastError$(
+            this.translocoService.translate(
+              `error.wallets.cannotRefreshBalance`
+            )
+          )
+        ),
+        untilDestroyed(this)
+      )
       .subscribe();
   }
 
   onInputTransferAmount() {
     this.readyToSend = false;
-  }
-
-  hasSufficientBalance$() {
-    return combineLatest([
-      this.assetWalletBscNumBalance$,
-      this.integrityWalletBscNumBalance$,
-      this.totalCost$,
-    ]).pipe(
-      first(),
-      concatMap(
-        ([assetWalletBscNumBalance, integrityWalletBscNum, totalCost]) => {
-          if (
-            (this.mode === 'withdraw' &&
-              totalCost > assetWalletBscNumBalance) ||
-            (this.mode === 'deposit' && totalCost > integrityWalletBscNum)
-          ) {
-            throw new Error(
-              this.translocoService.translate('error.wallets.insufficientFund')
-            );
-          }
-          return of(true);
-        }
-      )
-    );
   }
 
   calculateGasFee() {
@@ -142,6 +114,36 @@ export class TransferPage {
           );
           this.readyToSend = true;
         }),
+        catchError((err: unknown) => {
+          if (err instanceof HttpErrorResponse) {
+            const errorType = err.error.error?.type;
+            // Handle `insufficient_fund` as a special case here to extract how much
+            // NUM is needed and display that to the user.
+            if (errorType === 'insufficient_fund') {
+              const errorDetails = err.error.error?.details;
+              const decimalPlaces = 2;
+              try {
+                return this.errorService.toastError$(
+                  this.translocoService.translate(
+                    `error.wallets.insufficientFundWithRequiredBalance`,
+                    {
+                      requiredBalance: Number(
+                        errorDetails.split(':')[1].trim()
+                      ).toFixed(decimalPlaces),
+                    }
+                  )
+                );
+              } catch (_) {
+                return this.errorService.toastError$(
+                  this.translocoService.translate(
+                    `error.diaBackend.${errorType}`
+                  )
+                );
+              }
+            }
+          }
+          return this.errorService.toastDIABackendError$(err);
+        }),
         untilDestroyed(this)
       )
       .subscribe();
@@ -158,25 +160,14 @@ export class TransferPage {
       }
     );
 
-    this.hasSufficientBalance$()
+    this.storeService
+      .confirmNetworkAppOrder(this.orderId)
       .pipe(
-        concatMap(() => this.storeService.confirmNetworkAppOrder(this.orderId)),
-        tap(() => dialogRef.close()),
         tap(() => this.openTransferRequestSentDialog()),
-        catchError((err: unknown) => {
-          dialogRef.close();
-          if (err instanceof HttpErrorResponse) {
-            const errorType = err.error.error?.type;
-            if (
-              errorType === 'insufficient_fund' ||
-              errorType === 'order_expired'
-            )
-              return this.errorService.toastError$(
-                this.translocoService.translate(`error.diaBackend.${errorType}`)
-              );
-          }
-          return this.errorService.toastError$(err);
-        }),
+        catchError((err: unknown) =>
+          this.errorService.toastDIABackendError$(err)
+        ),
+        finalize(() => dialogRef.close()),
         untilDestroyed(this)
       )
       .subscribe();

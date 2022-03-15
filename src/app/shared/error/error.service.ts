@@ -62,6 +62,23 @@ export class ErrorService {
         concatMapTo(EMPTY)
       );
   }
+
+  toastDIABackendError$(err: unknown) {
+    if (err instanceof HttpErrorResponse) {
+      const errorType = err.error.error?.type;
+      if (
+        errorType === 'invalid_network_app_name' ||
+        errorType === 'insufficient_fund' ||
+        errorType === 'order_expired' ||
+        errorType === 'unable_to_confirm_order' ||
+        errorType === 'unpaid_num_exceed_threshold'
+      )
+        return this.toastError$(
+          this.translocoService.translate(`error.diaBackend.${errorType}`)
+        );
+    }
+    return this.toastError$(err);
+  }
 }
 
 export enum HttpErrorCode {
