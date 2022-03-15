@@ -20,6 +20,7 @@
   "cancel": "取消",
   "ok": "確認",
   "emptyInbox": "空收件匣",
+  "clickToEditCaption": "點擊以編輯標題",
   "editCaption": "編輯標題",
   "selectAPublisher": "選擇發佈者",
   "about": "關於",
@@ -66,6 +67,7 @@
   "ignore": "忽略",
   "accept": "接收",
   "transaction": "活動紀錄",
+  "numTransactionHistory": "查詢交易紀錄",
   "transactionDetails": "活動資訊",
   "sentFrom": "發送自",
   "receiver": "收件人",
@@ -214,9 +216,9 @@
     "waitingToBeAccepted": "等待中"
   },
   "payment": {
-    "confirmPayment": "確認付款",
-    "price": "價格",
-    "fee": "手續費",
+    "confirmPayment": "你的訂單",
+    "price": "費用",
+    "fee": "油費",
     "totalCost": "總額"
   }
 }

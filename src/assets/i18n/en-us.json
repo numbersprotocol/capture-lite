@@ -20,6 +20,7 @@
   "cancel": "Cancel",
   "ok": "Ok",
   "emptyInbox": "Empty Inbox",
+  "clickToEditCaption": "Click to Edit Caption",
   "editCaption": "Edit Caption",
   "selectAPublisher": "Select a Publisher",
   "about": "About",
@@ -66,6 +67,7 @@
   "ignore": "Ignore",
   "accept": "Accept",
   "transaction": "Activity",
+  "numTransactionHistory": "View transaction history",
   "transactionDetails": "Activity Details",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
@@ -214,9 +216,9 @@
     "waitingToBeAccepted": "In Progress"
   },
   "payment": {
-    "confirmPayment": "Confirm Payment",
-    "price": "Price",
-    "fee": "Fee",
+    "confirmPayment": "Your Order",
+    "price": "Fee",
+    "fee": "Gas",
     "totalCost": "Total Cost"
   }
 }
