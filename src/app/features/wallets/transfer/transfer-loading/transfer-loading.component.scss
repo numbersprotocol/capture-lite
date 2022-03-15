@@ -1,0 +1,67 @@
+#wallet-icon {
+  color: black;
+  font-size: 48px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+#forward-icons-row {
+  position: relative;
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20%;
+  display: flex;
+  justify-content: center;
+
+  .arrow-img {
+    width: 25px;
+  }
+}
+
+h4 {
+  color: black;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+#num-icon-col {
+  position: relative;
+
+  ion-img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 45px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  #wallet-icon {
+    font-size: 36px;
+  }
+
+  #forward-icons-row {
+    .arrow-img {
+      width: 20px;
+    }
+  }
+
+  h4 {
+    font-size: 16px;
+  }
+
+  #num-icon-col {
+    ion-img {
+      width: 30px;
+    }
+  }
+}

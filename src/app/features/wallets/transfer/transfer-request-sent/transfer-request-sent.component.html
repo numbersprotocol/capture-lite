@@ -1,0 +1,24 @@
+<div *transloco="let t">
+  <ion-row id="wallet-icon-row">
+    <ion-icon id="wallet-icon" name="wallet"></ion-icon>
+  </ion-row>
+  <ion-row>
+    <h4>
+      {{
+        t('wallets.' + mode) +
+          (translocoService.getActiveLang() === 'zh-tw' ? '' : ' ') +
+          t('wallets.requestSent') +
+          '!'
+      }}
+    </h4>
+  </ion-row>
+  <ion-row>
+    <ion-button
+      [color]="dark ? 'light' : 'dark'"
+      expand="block"
+      (click)="onDone()"
+    >
+      {{ t('dismiss') }}
+    </ion-button>
+  </ion-row>
+</div>

@@ -10,48 +10,6 @@
 <div *transloco="let t" class="page-content">
   <mat-list>
     <mat-list-item>
-      <ion-icon mat-list-icon src="/assets/images/num-icon.svg"></ion-icon>
-      <div mat-line>NUM {{ t('balance') }}</div>
-      <div mat-line>
-        ERC20
-        <a (click)="openNUMTransactionHistory('erc20')">{{
-          t('numTransactionHistory')
-        }}</a>
-      </div>
-      <div class="num-balance">
-        <ng-container *ngIf="networkConnected$ | ngrxPush; else balanceOffline">
-          <ng-container
-            *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
-          >
-            $ {{ ethNumBalance$ | ngrxPush | number: '1.2-2' }}
-          </ng-container>
-        </ng-container>
-        <ng-template #balanceOffline> --offline-- </ng-template>
-        <ng-template #balanceLoading>
-          <mat-spinner diameter="30"></mat-spinner>
-        </ng-template>
-      </div>
-    </mat-list-item>
-    <mat-list-item>
-      <ion-icon mat-list-icon src="/assets/images/num-icon.svg"></ion-icon>
-      <div mat-line>NUM {{ t('balance') }}</div>
-      <div mat-line>
-        BEP20
-        <a (click)="openNUMTransactionHistory('bep20')">{{
-          t('numTransactionHistory')
-        }}</a>
-      </div>
-      <div class="num-balance">
-        <ng-container *ngIf="networkConnected$ | ngrxPush; else balanceOffline">
-          <ng-container
-            *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
-          >
-            $ {{ bscNumBalance$ | ngrxPush | number: '1.2-2' }}
-          </ng-container>
-        </ng-container>
-      </div>
-    </mat-list-item>
-    <mat-list-item>
       <mat-icon mat-list-icon>account_circle</mat-icon>
       <div mat-line>{{ t('username') }}</div>
       <div mat-line>{{ username$ | ngrxPush }}</div>
@@ -126,27 +84,7 @@
       <div mat-line>{{ t('email') }}</div>
       <div mat-line>{{ email$ | ngrxPush }}</div>
     </mat-list-item>
-    <mat-list-item>
-      <mat-icon mat-list-icon>lock</mat-icon>
-      <div mat-line>{{ t('walletAddress') }}</div>
-      <div mat-line>{{ publicKey$ | ngrxPush }}</div>
-      <button
-        *ngIf="publicKey$ | ngrxPush as publicKey"
-        (click)="copyToClipboard(publicKey)"
-        mat-icon-button
-      >
-        <mat-icon>content_copy</mat-icon>
-      </button>
-    </mat-list-item>
   </mat-list>
-  <button
-    (click)="exportPrivateKey()"
-    class="expand"
-    color="primary"
-    mat-stroked-button
-  >
-    {{ t('exportPrivateKey') }}
-  </button>
   <button (click)="logout()" class="expand" color="primary" mat-stroked-button>
     {{ t('logout') }}
   </button>

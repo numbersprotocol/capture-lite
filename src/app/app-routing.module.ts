@@ -68,6 +68,13 @@ const routes: Routes = [
         m => m.ContactsPageModule
       ),
   },
+  {
+    path: 'wallets',
+    loadChildren: () =>
+      import('./features/wallets/wallets.module').then(
+        m => m.WalletsPageModule
+      ),
+  },
 ];
 @NgModule({
   imports: [

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TransactionPage } from './transaction.page';
+import { TransactionPage } from './activities.page';
 
 const routes: Routes = [
   {
@@ -8,11 +8,11 @@ const routes: Routes = [
     component: TransactionPage,
   },
   {
-    path: 'transaction-details',
+    path: 'capture-transaction-details',
     loadChildren: () =>
-      import('./transaction-details/transaction-details.module').then(
-        m => m.TransactionDetailsPageModule
-      ),
+      import(
+        './capture-transaction-details/capture-transaction-details.module'
+      ).then(m => m.TransactionDetailsPageModule),
   },
 ];
 
