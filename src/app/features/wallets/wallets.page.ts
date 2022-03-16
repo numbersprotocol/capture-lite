@@ -3,14 +3,23 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject } from 'rxjs';
-import { concatMap, first, map, switchMap } from 'rxjs/operators';
+import {
+  catchError,
+  concatMap,
+  finalize,
+  first,
+  map,
+  switchMap,
+} from 'rxjs/operators';
 import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
+import { ErrorService } from '../../shared/error/error.service';
 import { ExportPrivateKeyModalComponent } from '../../shared/export-private-key-modal/export-private-key-modal.component';
 
 const { Browser, Clipboard } = Plugins;
@@ -38,6 +47,7 @@ export class WalletsPage {
   readonly assetWalletAddr$ = this.diaBackendWalletService.assetWalletAddr$;
 
   readonly isLoadingBalance$ = new BehaviorSubject<boolean>(false);
+  readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
 
   constructor(
     private readonly diaBackendWalletService: DiaBackendWalletService,
@@ -47,7 +57,9 @@ export class WalletsPage {
     private readonly translocoService: TranslocoService,
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     private readonly confirmAlert: ConfirmAlert,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly errorService: ErrorService,
+    private readonly router: Router
   ) {
     this.matIconRegistry.addSvgIcon(
       'wallet',
@@ -72,11 +84,51 @@ export class WalletsPage {
       .subscribe();
   }
 
-  async refreshBalance(event: Event) {
+  refreshBalance(event: Event) {
     (<CustomEvent>event).detail.complete();
-    this.isLoadingBalance$.next(true);
-    await this.diaBackendWalletService.syncAssetWalletBalance$().toPromise();
-    this.isLoadingBalance$.next(false);
+    this.networkConnected$
+      .pipe(
+        first(),
+        concatMap(networkConnected => {
+          if (!networkConnected) {
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                `error.wallets.noNetworkConnectionCannotRefreshBalance`
+              )
+            );
+          }
+          this.isLoadingBalance$.next(true);
+          return this.diaBackendWalletService.syncAssetWalletBalance$().pipe(
+            catchError(() =>
+              this.errorService.toastError$(
+                this.translocoService.translate(
+                  `error.wallets.cannotRefreshBalance`
+                )
+              )
+            ),
+            finalize(() => this.isLoadingBalance$.next(false))
+          );
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  async onDepositWithdrawBtnClick(mode: 'deposit' | 'withdraw') {
+    this.networkConnected$
+      .pipe(
+        first(),
+        concatMap(networkConnected => {
+          if (!networkConnected) {
+            return this.errorService.toastError$(
+              this.translocoService.translate(`error.internetError`)
+            );
+          }
+          return this.router.navigate(['wallets', 'transfer', mode]);
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   async copyToClipboard(value: string) {
