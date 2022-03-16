@@ -43,7 +43,7 @@
         <span
           class="bep20-points"
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
-          >{{ points | number: '1.2-2' }}</span
+          >{{ points$ | ngrxPush | number: '1.2-2' }}</span
         >
       </ion-row>
       <ion-row id="buy-deposit-withdraw-row">
