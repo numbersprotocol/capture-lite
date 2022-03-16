@@ -1,0 +1,90 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+  }
+}
+
+ion-content {
+  .datetime {
+    width: 90vw;
+    margin-top: 16px;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    text-align: center;
+  }
+
+  ion-card {
+    width: 90vw;
+    margin-top: 16px;
+    margin-left: 5vw;
+    margin-right: 5vw;
+
+    img {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 3%;
+      width: 50%;
+    }
+
+    #network-action-name {
+      color: var(--ion-color-primary-contrast);
+      text-align: center;
+    }
+
+    #order-id-row {
+      ion-col {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+
+    .detail-info-rows {
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+
+    ion-label {
+      color: var(--ion-color-primary-contrast);
+    }
+
+    .wrap-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #status-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    button {
+      margin-top: 3%;
+      flex-shrink: 0;
+    }
+
+    button.completed {
+      color: var(--ion-color-dark-contrast);
+      border-color: var(--noir-simple);
+      background-color: var(--noir-simple);
+    }
+
+    button.paid {
+      color: var(--noir-secondary-dark);
+      border-color: var(--noir-secondary-dark);
+    }
+
+    button.submitted {
+      color: var(--ion-color-dark-contrast);
+      border-color: var(--noir-secondary-dark);
+      background-color: var(--noir-secondary-dark);
+    }
+
+    button.failed,
+    button.payment_failed {
+      color: var(--ion-color-dark-contrast);
+      border-color: var(--noir-warn);
+      background-color: var(--noir-warn);
+    }
+  }
+}

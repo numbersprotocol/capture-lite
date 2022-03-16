@@ -11,6 +11,7 @@ import {
   Action,
   ActionsService,
 } from '../../../../shared/actions/service/actions.service';
+import { OrderHistoryService } from '../../../../shared/actions/service/order-history.service';
 import { BlockingActionService } from '../../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import {
@@ -45,7 +46,8 @@ export class ActionsPage {
     private readonly authService: DiaBackendAuthService,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
-    private readonly storeService: DiaBackendStoreService
+    private readonly storeService: DiaBackendStoreService,
+    private readonly orderHistoryService: OrderHistoryService
   ) {}
 
   openActionDialog$(action: Action) {
@@ -117,7 +119,7 @@ export class ActionsPage {
       first(),
       isNonNullable(),
       concatMap(cid =>
-        this.actionsService.createOrderHistory$(networkAppOrder, cid)
+        this.orderHistoryService.createOrderHistory$(networkAppOrder, cid)
       ),
       catchError((err: unknown) => {
         return this.errorService.toastError$(err);

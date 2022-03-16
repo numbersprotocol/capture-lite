@@ -69,7 +69,8 @@
   "activity": "Activity",
   "captureTransactions": "Capture Transactions",
   "numTransactionHistory": "View transaction history",
-  "transactionDetails": "Activity Details",
+  "transactionDetails": "Transaction Details",
+  "networkActionOrderDetails": "Order Details",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
   "location": "Location",
@@ -102,6 +103,9 @@
 
   "yourPrivateKey": "Your Private Key",
   "copyToClipboard": "Copy To Clipboard",
+  "order": "Order",
+  "resultUrl": "Result URL",
+  "noResultUrlAvailable": "No Result URL available",
   "verification": {
     "verification": "Verification",
     "clickToVerify": "Click me to verify",
@@ -143,7 +147,7 @@
     "forbiddenAllNumeric": "Cannot contain only numbers.",
     "isNotEmail": "Does not follow email format.",
     "pleaseWait": "Please wait...",
-    "copiedToClipboard": "Has copied to clipboard.",
+    "copiedToClipboard": "Copied to clipboard.",
     "invitationEmail": "Enter friend's email to send the invitation.",
     "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://ipfs.io/ipfs/QmR2AB2qc1fbsTtf77WXmQn3fyNZskLUt1EG4Qoxxnt6Up\" target=\"_blank\">Privacy Policy</a>.",
     "sendPostCaptureAlert": "After this Capture is sent, the ownership will be transferred to the selected friend. Are you sure?",
