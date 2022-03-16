@@ -142,7 +142,7 @@ export class TransferPage {
               }
             }
           }
-          return this.errorService.toastDIABackendError$(err);
+          return this.errorService.toastDiaBackendError$(err);
         }),
         untilDestroyed(this)
       )
@@ -165,7 +165,7 @@ export class TransferPage {
       .pipe(
         tap(() => this.openTransferRequestSentDialog()),
         catchError((err: unknown) =>
-          this.errorService.toastDIABackendError$(err)
+          this.errorService.toastDiaBackendError$(err)
         ),
         finalize(() => dialogRef.close()),
         untilDestroyed(this)

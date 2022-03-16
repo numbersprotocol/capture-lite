@@ -97,7 +97,7 @@ export class ActionsPage {
   createOrder$(appName: string, actionArgs: any) {
     return this.storeService.createNetworkAppOrder(appName, actionArgs).pipe(
       catchError((err: unknown) =>
-        this.errorService.toastDIABackendError$(err)
+        this.errorService.toastDiaBackendError$(err)
       ),
       isNonNullable()
     );
@@ -106,7 +106,7 @@ export class ActionsPage {
   confirmOrder$(id: string) {
     return this.storeService.confirmNetworkAppOrder(id).pipe(
       catchError((err: unknown) =>
-        this.errorService.toastDIABackendError$(err)
+        this.errorService.toastDiaBackendError$(err)
       ),
       isNonNullable()
     );

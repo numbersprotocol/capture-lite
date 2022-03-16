@@ -215,7 +215,7 @@
     "wallets": {
       "emptyTransferAmount": "請輸入有效轉帳金額。",
       "cannotRefreshBalance": "刷新餘額時發生錯誤。",
-      "noNetworkConnectionCannotRefreshBalance": "沒有網絡連接，無法刷新餘額。",
+      "noNetworkConnectionCannotRefreshBalance": "沒有網路連接，無法刷新餘額。",
       "insufficientFundWithRequiredBalance": "NUM 餘額不足。需要至少 {{requiredBalance}} NUM"
     }
   },

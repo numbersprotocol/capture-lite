@@ -63,7 +63,7 @@ export class ErrorService {
       );
   }
 
-  toastDIABackendError$(err: unknown) {
+  toastDiaBackendError$(err: unknown) {
     if (err instanceof HttpErrorResponse) {
       const errorType = err.error.error?.type;
       if (
