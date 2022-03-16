@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest, forkJoin } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -15,9 +15,11 @@ import {
   first,
   map,
   switchMap,
+  tap,
 } from 'rxjs/operators';
 import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
+import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../shared/error/error.service';
 import { ExportPrivateKeyModalComponent } from '../../shared/export-private-key-modal/export-private-key-modal.component';
@@ -36,11 +38,9 @@ export class WalletsPage {
 
   readonly bscNumBalance$ =
     this.diaBackendWalletService.assetWalletBscNumBalance$;
-  readonly points = 0;
+  readonly points$ = this.diaBackendAuthService.points$;
 
-  readonly totalBalance$ = this.bscNumBalance$.pipe(
-    map(num => num + this.points)
-  );
+  readonly totalBalance$ = new BehaviorSubject<number>(0);
 
   readonly publicKey$ = this.webCryptoApiSignatureProvider.publicKey$;
   readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
@@ -51,6 +51,7 @@ export class WalletsPage {
 
   constructor(
     private readonly diaBackendWalletService: DiaBackendWalletService,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly matIconRegistry: MatIconRegistry,
     private readonly domSanitizer: DomSanitizer,
     private readonly snackBar: MatSnackBar,
@@ -67,6 +68,16 @@ export class WalletsPage {
         '../../../assets/images/wallet.svg'
       )
     );
+
+    combineLatest([this.bscNumBalance$, this.points$])
+      .pipe(
+        first(),
+        map(
+          ([bscNumBalance, points]) => Number(bscNumBalance) + Number(points)
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe(totalBalance => this.totalBalance$.next(totalBalance));
   }
 
   openNUMTransactionHistory() {
@@ -98,7 +109,16 @@ export class WalletsPage {
             );
           }
           this.isLoadingBalance$.next(true);
-          return this.diaBackendWalletService.syncAssetWalletBalance$().pipe(
+          return forkJoin([
+            this.diaBackendWalletService.syncAssetWalletBalance$(),
+            this.diaBackendAuthService.syncProfile$(),
+          ]).pipe(
+            tap(async ([assetWallet, _]) => {
+              this.totalBalance$.next(
+                Number(assetWallet[1]) +
+                  (await this.diaBackendAuthService.getPoints())
+              );
+            }),
             catchError(() =>
               this.errorService.toastError$(
                 this.translocoService.translate(
