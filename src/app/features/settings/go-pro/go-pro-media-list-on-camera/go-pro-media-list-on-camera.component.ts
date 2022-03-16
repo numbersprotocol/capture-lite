@@ -75,6 +75,7 @@ export class GoProMediaListOnCameraComponent implements OnInit {
   async connectToGoProWifi() {
     try {
       this.connectedWifiSSID = await this.goProWifiService.connectToGoProWiFi();
+      this.isConnectedToGoProWifi = true;
       await this.fetchFilesFromGoProWiFi();
     } catch (error) {
       this.presentToast(JSON.stringify(error));
