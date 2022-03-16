@@ -126,7 +126,6 @@ export class ActionsPage {
   }
 
   doAction(action: Action) {
-    let networkAppOrder: NetworkAppOrder;
     this.openActionDialog$(action)
       .pipe(
         concatMap(createOrderInput =>
@@ -137,13 +136,12 @@ export class ActionsPage {
             )
           )
         ),
-        concatMap(orderStatus => {
-          networkAppOrder = orderStatus;
-          return this.openOrderDialog$(orderStatus);
-        }),
-        tap(() => this.createOrderHistory$(networkAppOrder).subscribe()),
+        concatMap(orderStatus => this.openOrderDialog$(orderStatus)),
         concatMap(orderId =>
           this.blockingActionService.run$(this.confirmOrder$(orderId))
+        ),
+        tap(networkAppOrder =>
+          this.createOrderHistory$(networkAppOrder).subscribe()
         ),
         tap(() => {
           this.snackBar.open(
