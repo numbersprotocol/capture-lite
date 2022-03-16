@@ -3,14 +3,25 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject } from 'rxjs';
-import { concatMap, first, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, forkJoin } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  finalize,
+  first,
+  map,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
+import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
+import { ErrorService } from '../../shared/error/error.service';
 import { ExportPrivateKeyModalComponent } from '../../shared/export-private-key-modal/export-private-key-modal.component';
 
 const { Browser, Clipboard } = Plugins;
@@ -27,27 +38,29 @@ export class WalletsPage {
 
   readonly bscNumBalance$ =
     this.diaBackendWalletService.assetWalletBscNumBalance$;
-  readonly points = 0;
+  readonly points$ = this.diaBackendAuthService.points$;
 
-  readonly totalBalance$ = this.bscNumBalance$.pipe(
-    map(num => num + this.points)
-  );
+  readonly totalBalance$ = new BehaviorSubject<number>(0);
 
   readonly publicKey$ = this.webCryptoApiSignatureProvider.publicKey$;
   readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
   readonly assetWalletAddr$ = this.diaBackendWalletService.assetWalletAddr$;
 
   readonly isLoadingBalance$ = new BehaviorSubject<boolean>(false);
+  readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
 
   constructor(
     private readonly diaBackendWalletService: DiaBackendWalletService,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly matIconRegistry: MatIconRegistry,
     private readonly domSanitizer: DomSanitizer,
     private readonly snackBar: MatSnackBar,
     private readonly translocoService: TranslocoService,
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     private readonly confirmAlert: ConfirmAlert,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly errorService: ErrorService,
+    private readonly router: Router
   ) {
     this.matIconRegistry.addSvgIcon(
       'wallet',
@@ -55,6 +68,16 @@ export class WalletsPage {
         '../../../assets/images/wallet.svg'
       )
     );
+
+    combineLatest([this.bscNumBalance$, this.points$])
+      .pipe(
+        first(),
+        map(
+          ([bscNumBalance, points]) => Number(bscNumBalance) + Number(points)
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe(totalBalance => this.totalBalance$.next(totalBalance));
   }
 
   openNUMTransactionHistory() {
@@ -72,11 +95,60 @@ export class WalletsPage {
       .subscribe();
   }
 
-  async refreshBalance(event: Event) {
+  refreshBalance(event: Event) {
     (<CustomEvent>event).detail.complete();
-    this.isLoadingBalance$.next(true);
-    await this.diaBackendWalletService.syncAssetWalletBalance$().toPromise();
-    this.isLoadingBalance$.next(false);
+    this.networkConnected$
+      .pipe(
+        first(),
+        concatMap(networkConnected => {
+          if (!networkConnected) {
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                `error.wallets.noNetworkConnectionCannotRefreshBalance`
+              )
+            );
+          }
+          this.isLoadingBalance$.next(true);
+          return forkJoin([
+            this.diaBackendWalletService.syncAssetWalletBalance$(),
+            this.diaBackendAuthService.syncProfile$(),
+          ]).pipe(
+            tap(async ([assetWallet, _]) => {
+              this.totalBalance$.next(
+                Number(assetWallet[1]) +
+                  (await this.diaBackendAuthService.getPoints())
+              );
+            }),
+            catchError(() =>
+              this.errorService.toastError$(
+                this.translocoService.translate(
+                  `error.wallets.cannotRefreshBalance`
+                )
+              )
+            ),
+            finalize(() => this.isLoadingBalance$.next(false))
+          );
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  async onDepositWithdrawBtnClick(mode: 'deposit' | 'withdraw') {
+    this.networkConnected$
+      .pipe(
+        first(),
+        concatMap(networkConnected => {
+          if (!networkConnected) {
+            return this.errorService.toastError$(
+              this.translocoService.translate(`error.internetError`)
+            );
+          }
+          return this.router.navigate(['wallets', 'transfer', mode]);
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   async copyToClipboard(value: string) {
