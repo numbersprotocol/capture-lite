@@ -271,7 +271,7 @@
     "goProMediaOnCamera": "相機上的 GoPro 媒體",
     "filesSelected": "已選擇 {{count}} 個檔案",
     "connectedWiFi": "連接到 WiFi",
-    "connectToGoProWiFiEnableFirst": "連接到 GoPro WiFi (先啟用)",
+    "connectToGoProWiFi": "連接到 GoPro WiFi",
     "uploadToCapture": "上傳至 Capture",
     "makeSureYouAreConnectedToGoProWiFiFirst": "請確保您已經連接到 GoPro WiFi",
     "hintClickTheRefreshButtonAtTheTopRight": "提示：點擊右上角的刷新按鈕",

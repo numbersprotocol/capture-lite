@@ -271,7 +271,7 @@
     "goProMediaOnCamera": "GoPro Media On Camera",
     "filesSelected": "{{count}} File(s) Selected",
     "connectedWiFi": "Connected WiFi",
-    "connectToGoProWiFiEnableFirst": "Connect To GoPro WiFi (Enable First)",
+    "connectToGoProWiFi": "Connect To GoPro WiFi",
     "uploadToCapture": "Upload To Capture",
     "makeSureYouAreConnectedToGoProWiFiFirst": "Make Sure You Are Connected To GoPro WiFi First",
     "hintClickTheRefreshButtonAtTheTopRight": "Hint: Click The Refresh Button At The Top Right",
