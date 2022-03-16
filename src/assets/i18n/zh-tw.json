@@ -206,12 +206,17 @@
       "user_is_email_verified": "此電子郵件已驗證",
       "user_not_found": "此電子郵件尚未註冊 Capture 帳號",
       "asset_is_being_minted": "NFT 代幣鑄造中",
-      "insufficient_fund": "NUM 餘額不足",
-      "order_expired": "訂單已過期。請創建新訂單並在 5 分鐘內確認。"
+      "insufficient_fund": "NUM 餘額不足。",
+      "order_expired": "訂單已過期。請創建新訂單並在 5 分鐘內確認。",
+      "unable_to_confirm_order": "無法確認訂單。請再試一次。",
+      "unpaid_num_exceed_threshold": "太多未付的 NUM。請通過電子郵件與我們聯繫以恢復帳戶功能。",
+      "invalid_network_app_name": "無效的網絡動作。"
     },
     "wallets": {
       "emptyTransferAmount": "請輸入有效轉帳金額。",
-      "insufficientFund": "NUM 餘額不足。"
+      "cannotRefreshBalance": "刷新餘額時發生錯誤。",
+      "noNetworkConnectionCannotRefreshBalance": "沒有網路連接，無法刷新餘額。",
+      "insufficientFundWithRequiredBalance": "NUM 餘額不足。需要至少 {{requiredBalance}} NUM"
     }
   },
   "transactionState": {

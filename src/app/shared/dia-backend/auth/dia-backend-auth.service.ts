@@ -66,6 +66,8 @@ export class DiaBackendAuthService {
     PrefKeys.EMAIL_VERIFIED
   );
 
+  readonly points$ = this.preferences.getNumber$(PrefKeys.POINTS);
+
   constructor(
     private readonly httpClient: HttpClient,
     private readonly languageService: LanguageService,
@@ -268,6 +270,7 @@ export class DiaBackendAuthService {
           this.setEmail(response.email),
           this.setPhoneVerfied(response.phone_verified),
           this.setEmailVerfied(response.email_verified),
+          this.setPoints(Number(response.user_wallet.points)),
         ]);
       })
     );
@@ -337,6 +340,14 @@ export class DiaBackendAuthService {
   async getEmailVerified() {
     return this.preferences.getBoolean(PrefKeys.EMAIL_VERIFIED);
   }
+
+  private async setPoints(value: number) {
+    return this.preferences.setNumber(PrefKeys.POINTS, value);
+  }
+
+  async getPoints() {
+    return this.preferences.getNumber(PrefKeys.POINTS);
+  }
 }
 
 const enum PrefKeys {
@@ -345,6 +356,7 @@ const enum PrefKeys {
   EMAIL = 'EMAIL',
   EMAIL_VERIFIED = 'EMAIL_VERIFIED',
   PHONE_VERIFIED = 'PHONE_VERIFIED',
+  POINTS = 'POINTS',
 }
 
 interface LoginResult {
@@ -361,6 +373,15 @@ export interface ReadUserResponse {
   readonly email: string;
   readonly phone_verified: boolean;
   readonly email_verified: boolean;
+  readonly user_wallet: {
+    asset_wallet: string;
+    asset_wallet_num: string | null;
+    integrity_wallet: string;
+    integrity_wallet_num: string | null;
+    points: string;
+    num_wallet_name: string;
+    billed_num: string;
+  };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

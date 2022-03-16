@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.50.1 - 2022-03-16
+
+### Added
+
+- Connect points displayed on the wallets page to real backend.
+- Have Capture blockchain certificate links to the new authmedia asset profile page.
+
+### Fixed
+
+- Better error display on wallets and transfer page.
+- Check internet connection and prevent users from visiting transfer page if no internet connection.
+- Hide buy NUM button.
+- Fix network action order history getting generated even when confirm order failed.
+
 ## 0.50.0 - 2022-03-14
 
 ### Added
