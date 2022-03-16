@@ -95,7 +95,7 @@ export class WalletsPage {
       .subscribe();
   }
 
-  async refreshBalance(event: Event) {
+  refreshBalance(event: Event) {
     (<CustomEvent>event).detail.complete();
     this.networkConnected$
       .pipe(
