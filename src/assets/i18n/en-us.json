@@ -70,6 +70,8 @@
   "captureTransactions": "Capture Transactions",
   "numTransactionHistory": "View transaction history",
   "transactionDetails": "Activity Details",
+  "noTransactionsFound": "No transactions found",
+  "noNetworkActionOrdersFound": "No network action orders found",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
   "location": "Location",
@@ -99,7 +101,6 @@
   "resendIn": "Re-send {{ secondsRemained }}s",
   "balance": "Balance",
   "walletAddress": "Wallet Address",
-
   "yourPrivateKey": "Your Private Key",
   "copyToClipboard": "Copy To Clipboard",
   "verification": {

@@ -70,6 +70,8 @@
   "captureTransactions": "Capture 交易",
   "numTransactionHistory": "查詢交易紀錄",
   "transactionDetails": "活動資訊",
+  "noTransactionsFound": "找不到任何 Capture 交易",
+  "noNetworkActionOrdersFound": "找不到任何網絡動作訂單",
   "sentFrom": "發送自",
   "receiver": "收件人",
   "location": "位置",
