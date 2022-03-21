@@ -43,11 +43,15 @@
         <span
           class="bep20-points"
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
-          >{{ points | number: '1.2-2' }}</span
+          >{{ points$ | ngrxPush | number: '1.2-2' }}</span
         >
       </ion-row>
       <ion-row id="buy-deposit-withdraw-row">
-        <ion-button id="buy-num-btn" size="small" class="num-operation-btn"
+        <ion-button
+          hidden
+          id="buy-num-btn"
+          size="small"
+          class="num-operation-btn"
           >{{ t('buy') }} NUM</ion-button
         >
         <ion-button
@@ -55,7 +59,7 @@
           color="#7E7E7E"
           fill="outline"
           size="small"
-          [routerLink]="['transfer', 'deposit']"
+          (click)="onDepositWithdrawBtnClick('deposit')"
           >{{ t('wallets.deposit') }}</ion-button
         >
         <ion-button
@@ -63,7 +67,7 @@
           color="#7E7E7E"
           fill="outline"
           size="small"
-          [routerLink]="['transfer', 'withdraw']"
+          (click)="onDepositWithdrawBtnClick('withdraw')"
           >{{ t('wallets.withdraw') }}</ion-button
         >
       </ion-row>

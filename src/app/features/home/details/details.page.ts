@@ -457,7 +457,7 @@ export class DetailsPage {
         concatMap(([detailedCapture, token]) =>
           defer(() =>
             Browser.open({
-              url: `https://authmedia.net/dia-certificate?mid=${detailedCapture.id}&token=${token}`,
+              url: `https://authmedia.net/asset-profile?cid=${detailedCapture.id}&token=${token}`,
               toolbarColor: '#564dfc',
             })
           )
