@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, EMPTY } from 'rxjs';
-import { first, map, pluck } from 'rxjs/operators';
+import { catchError, first, map, pluck } from 'rxjs/operators';
 import {
   ActionsService,
   BubbleOrderHistoryRecord,
 } from '../../../../shared/actions/service/actions.service';
 import { DiaBackendAssetRepository } from '../../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendTransactionRepository } from '../../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
+import { ErrorService } from '../../../../shared/error/error.service';
 import { Proof } from '../../../../shared/repositories/proof/proof';
 import { ProofRepository } from '../../../../shared/repositories/proof/proof-repository.service';
 @UntilDestroy({ checkProperties: true })
@@ -29,6 +30,7 @@ export class NetworkActionOrdersComponent {
       });
       return orders;
     }),
+    catchError((err: unknown) => this.errorService.toastError$(err)),
     untilDestroyed(this)
   );
 
@@ -37,7 +39,8 @@ export class NetworkActionOrdersComponent {
     private readonly actionsService: ActionsService,
     private readonly sanitizer: DomSanitizer,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
-    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly errorService: ErrorService
   ) {}
 
   fetchThumbnailUrl$(proofs: Proof[], order: BubbleOrderHistoryRecord) {
