@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -97,28 +96,18 @@ export class ActionsPage {
 
   createOrder$(appName: string, actionArgs: any) {
     return this.storeService.createNetworkAppOrder(appName, actionArgs).pipe(
-      catchError((err: unknown) => {
-        return this.errorService.toastError$(err);
-      }),
+      catchError((err: unknown) =>
+        this.errorService.toastDiaBackendError$(err)
+      ),
       isNonNullable()
     );
   }
 
   confirmOrder$(id: string) {
     return this.storeService.confirmNetworkAppOrder(id).pipe(
-      catchError((err: unknown) => {
-        if (err instanceof HttpErrorResponse) {
-          const errorType = err.error.error?.type;
-          if (
-            errorType === 'insufficient_fund' ||
-            errorType === 'order_expired'
-          )
-            return this.errorService.toastError$(
-              this.translocoService.translate(`error.diaBackend.${errorType}`)
-            );
-        }
-        return this.errorService.toastError$(err);
-      }),
+      catchError((err: unknown) =>
+        this.errorService.toastDiaBackendError$(err)
+      ),
       isNonNullable()
     );
   }
@@ -137,7 +126,6 @@ export class ActionsPage {
   }
 
   doAction(action: Action) {
-    let networkAppOrder: NetworkAppOrder;
     this.openActionDialog$(action)
       .pipe(
         concatMap(createOrderInput =>
@@ -148,13 +136,12 @@ export class ActionsPage {
             )
           )
         ),
-        concatMap(orderStatus => {
-          networkAppOrder = orderStatus;
-          return this.openOrderDialog$(orderStatus);
-        }),
-        tap(() => this.createOrderHistory$(networkAppOrder).subscribe()),
+        concatMap(orderStatus => this.openOrderDialog$(orderStatus)),
         concatMap(orderId =>
           this.blockingActionService.run$(this.confirmOrder$(orderId))
+        ),
+        tap(networkAppOrder =>
+          this.createOrderHistory$(networkAppOrder).subscribe()
         ),
         tap(() => {
           this.snackBar.open(
