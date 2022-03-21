@@ -1,0 +1,151 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+  }
+}
+
+ion-content > * {
+  color: initial;
+}
+
+ion-card {
+  background: white;
+  border-radius: 15px;
+}
+
+#bottom-card {
+  position: absolute;
+  bottom: 2%;
+  width: 95%;
+
+  ion-icon {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    font-size: 36px;
+  }
+
+  h6 {
+    margin-bottom: 0;
+  }
+
+  h4 {
+    margin-top: 2%;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+  }
+
+  #deposit-withdraw-btn-col {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  ion-button {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 5%;
+    width: 80%;
+
+    --border-radius: 10px;
+  }
+}
+
+#main-card {
+  margin-top: 10%;
+
+  .wallet-info-row {
+    margin-top: 2%;
+    margin-bottom: 3%;
+    margin-left: 4%;
+
+    h6 {
+      font-size: 1.1em;
+      margin-bottom: 2px;
+    }
+
+    h5 {
+      margin-top: 0;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+  }
+
+  #in-app-transfer-row {
+    position: relative;
+    margin-top: 4%;
+    margin-left: 4%;
+
+    ion-icon {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      font-size: 36px;
+    }
+
+    h6 {
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+
+    ion-img {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      margin: auto 5% auto 2%;
+      width: 30px;
+    }
+  }
+
+  #divider-row {
+    position: relative;
+    align-items: center;
+
+    ion-icon {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 40px;
+      background-color: white;
+      border-style: solid;
+      border-width: 3px;
+      border-color: white;
+      border-radius: 15px;
+    }
+
+    div {
+      height: 5px;
+      width: 90%;
+      margin: auto;
+      background-color: black;
+      border-style: solid;
+      border-width: 1px;
+    }
+  }
+
+  ion-input {
+    height: 30px;
+    text-align: center;
+    margin: 2% 2% 3%;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.2em;
+    border: 2px solid black;
+    border-radius: 5px;
+  }
+}

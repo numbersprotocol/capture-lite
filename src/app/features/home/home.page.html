@@ -19,6 +19,11 @@
           </a>
         </mat-list-item>
         <mat-list-item>
+          <a routerLink="/wallets" (click)="sidenav.close()" mat-list-item>
+            {{ t('wallets.wallets') }}
+          </a>
+        </mat-list-item>
+        <mat-list-item>
           <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>
             {{ t('settings') }}
           </a>
@@ -46,7 +51,7 @@
           <mat-icon>menu</mat-icon>
         </button>
         <span class="toolbar-spacer"></span>
-        <button routerLink="transaction" mat-icon-button>
+        <button routerLink="activities" mat-icon-button>
           <mat-icon>history</mat-icon>
         </button>
         <button routerLink="inbox" mat-icon-button>

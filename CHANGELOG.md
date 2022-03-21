@@ -5,6 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.50.0 - 2022-03-14
+
+### Added
+
+- A whole new wallets page
+- A new tab in activities page to display network action order history
+
+### Fixed
+
+- Change num token icon from the black one to the blue one
+- Fix activity details cid text overflow. #1167
+- Remove add to contacts checkbox when the receiver already exists in contacts
+
+## 0.49.1 - 2022-02-25
+
+### Added
+
+- Have message default to asset caption when send
+- Update edit asset caption help text
+- Display edit icon when no caption
+
+### Fixed
+
+- Removed the new introductory UI/UX for new users
+
+## 0.49.0 - 2022-02-21
+
+### Added
+
+- Add NUM balance loading indicator
+- Add hyperlink for users to view NUM wallet transaction history on EtherScan/BscScan
+- New introductory UI/UX for new users
+
+### Fixed
+
+- Show custody wallet balance instead of Capture wallet balance
+- Fix null message overwriting asset caption when send. #1166
+
+## 0.48.1 - 2022-02-11
+
+### Fixed
+
+- Avoid bluetooth initialization at App startup.
+
+## 0.48.0 - 2022-02-10
+
+### Fixed
+
+- Unuploaded Captures disappear after user pulls to refresh. #918
+
 ## 0.47.0
 
 ### Added
