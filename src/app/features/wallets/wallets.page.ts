@@ -3,7 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Plugins } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
+import { Clipboard } from '@capacitor/clipboard';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject } from 'rxjs';
@@ -12,8 +13,6 @@ import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ExportPrivateKeyModalComponent } from '../../shared/export-private-key-modal/export-private-key-modal.component';
-
-const { Browser, Clipboard } = Plugins;
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-wallets',

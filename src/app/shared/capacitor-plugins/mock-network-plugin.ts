@@ -15,7 +15,14 @@ export class MockNetworkPlugin implements NetworkPlugin {
     _eventName: 'networkStatusChange',
     _listenerFunc: ConnectionStatusChangeListener
   ): Promise<PluginListenerHandle> & PluginListenerHandle {
-    throw new Error('Method not implemented.');
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const remove = async () => {};
+    const listenerHandler: any = Promise.resolve({ remove });
+    Object.defineProperty(listenerHandler, 'remove', {
+      value: async () => Promise.resolve({ remove }),
+    });
+    return listenerHandler;
   }
 
   async removeAllListeners(): Promise<void> {
