@@ -9,7 +9,6 @@ import { BlockingActionService } from '../../shared/blocking-action/blocking-act
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { Database } from '../../shared/database/database.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
-import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../shared/error/error.service';
 import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
@@ -25,7 +24,6 @@ export class ProfilePage {
   readonly email$ = this.diaBackendAuthService.email$;
   readonly phoneVerified$ = this.diaBackendAuthService.phoneVerified$;
   readonly emailVerified$ = this.diaBackendAuthService.emailVerified$;
-  readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
 
   constructor(
     private readonly database: Database,
@@ -38,8 +36,7 @@ export class ProfilePage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly alertController: AlertController,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly diaBackendWalletService: DiaBackendWalletService
+    private readonly route: ActivatedRoute
   ) {}
 
   ionViewWillEnter() {
