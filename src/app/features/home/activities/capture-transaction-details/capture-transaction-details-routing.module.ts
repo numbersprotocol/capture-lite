@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TransactionDetailsPage } from './transaction-details.page';
+import { TransactionDetailsPage } from './capture-transaction-details.page';
 
 const routes: Routes = [
   {

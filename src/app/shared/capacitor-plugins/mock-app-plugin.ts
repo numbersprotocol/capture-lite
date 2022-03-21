@@ -40,7 +40,13 @@ export class MockAppPlugin implements AppPlugin {
     _eventName: any,
     _listenerFunc: any
   ): Promise<PluginListenerHandle> & PluginListenerHandle {
-    throw new Error('Method not implemented.');
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const remove = async () => {};
+    const listenerHandler: any = Promise.resolve({ remove });
+    Object.defineProperty(listenerHandler, 'remove', {
+      value: async () => Promise.resolve({ remove }),
+    });
+    return listenerHandler;
   }
 
   async removeAllListeners(): Promise<void> {
