@@ -76,19 +76,10 @@ mat-card img {
   margin: 10% 25%;
 }
 
-form mat-form-field {
-  width: 100%;
-  height: 100%;
-
-  textarea {
-    overflow: hidden;
-  }
-}
-
-.spacer {
-  flex: 1 1 auto;
+.wrap-text {
+  overflow-wrap: anywhere;
 }
 
 mat-label {
-  overflow-wrap: anywhere;
+  max-width: 90%;
 }

@@ -71,6 +71,8 @@
   "numTransactionHistory": "View transaction history",
   "transactionDetails": "Transaction Details",
   "networkActionOrderDetails": "Order Details",
+  "noTransactionsFound": "No transactions found",
+  "noNetworkActionOrdersFound": "No network action orders found",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
   "location": "Location",
@@ -100,7 +102,7 @@
   "resendIn": "Re-send {{ secondsRemained }}s",
   "balance": "Balance",
   "walletAddress": "Wallet Address",
-
+  "networkActions": "Network Actions",
   "yourPrivateKey": "Your Private Key",
   "copyToClipboard": "Copy To Clipboard",
   "order": "Order",
@@ -179,7 +181,6 @@
     "shareC2paPhoto": "Share C2PA photo",
     "mintNftToken": "Mint NFT token",
     "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?",
-    "moreActions": "More Actions",
     "sentSuccessfully": "Sent Successfully",
     "confirmCopyPrivateKey": "Warning: Please do not expose your private key to anyone. Lost of private key may cause your account to be lost permanently."
   },
