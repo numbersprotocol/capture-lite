@@ -70,6 +70,8 @@
   "captureTransactions": "Capture Transactions",
   "numTransactionHistory": "View transaction history",
   "transactionDetails": "Activity Details",
+  "noTransactionsFound": "No transactions found",
+  "noNetworkActionOrdersFound": "No network action orders found",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
   "location": "Location",
