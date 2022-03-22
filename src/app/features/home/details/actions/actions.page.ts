@@ -4,8 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, of } from 'rxjs';
-import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
+import { combineLatest, forkJoin, of } from 'rxjs';
+import { catchError, concatMap, first, map, take, tap } from 'rxjs/operators';
 import { ActionsDialogComponent } from '../../../../shared/actions/actions-dialog/actions-dialog.component';
 import {
   Action,
@@ -14,13 +14,17 @@ import {
 import { OrderHistoryService } from '../../../../shared/actions/service/order-history.service';
 import { BlockingActionService } from '../../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendSeriesRepository } from '../../../../shared/dia-backend/series/dia-backend-series-repository.service';
 import {
   DiaBackendStoreService,
   NetworkAppOrder,
 } from '../../../../shared/dia-backend/store/dia-backend-store.service';
 import { ErrorService } from '../../../../shared/error/error.service';
 import { OrderDetailDialogComponent } from '../../../../shared/order-detail-dialog/order-detail-dialog.component';
-import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import {
+  isNonNullable,
+  VOID$,
+} from '../../../../utils/rx-operators/rx-operators';
 
 @UntilDestroy()
 @Component({
@@ -34,7 +38,8 @@ export class ActionsPage {
     .pipe(catchError((err: unknown) => this.errorService.toastError$(err)));
 
   private readonly id$ = this.route.paramMap.pipe(
-    map(params => params.get('id'))
+    map(params => params.get('id')),
+    isNonNullable()
   );
 
   constructor(
@@ -47,8 +52,70 @@ export class ActionsPage {
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
     private readonly storeService: DiaBackendStoreService,
-    private readonly orderHistoryService: OrderHistoryService
+    private readonly orderHistoryService: OrderHistoryService,
+    private readonly diaBackendStoreService: DiaBackendStoreService,
+    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository
   ) {}
+
+  canPerformAction$(action: Action) {
+    if (action.title_text === 'List in CaptureClub') {
+      /* 
+        Workaround:
+        Currently there isn't a simple way to check whether an asset is listed in
+        CaptureClub or not. So I first query List all Products API with 
+        associated_id parameter set to the assets cid. And then use list series 
+        API and check through all nested collections. See discussion here 
+        https://app.asana.com/0/0/1201558520076805/1201995911008176/f
+      */
+      return this.id$.pipe(
+        concatMap(cid =>
+          forkJoin([
+            this.diaBackendStoreService.listAllProducts$({
+              associated_id: cid,
+              service_name: 'CaptureClub',
+            }),
+            of(cid),
+          ])
+        ),
+        concatMap(([response, cid]) => {
+          if (response.count > 0) {
+            throw new Error(
+              this.translocoService.translate('message.hasListedInCaptureClub')
+            );
+          }
+          return of(cid);
+        }),
+        concatMap(async cid => {
+          let currentOffset = 0;
+          const limit = 100;
+          while (true) {
+            const response = await this.diaBackendSeriesRepository
+              .fetchAll$({ offset: currentOffset, limit })
+              .toPromise();
+            const listedAsSeries = response.results.some(serie =>
+              serie.collections.some(collection =>
+                collection.assets.some(asset => asset.cid === cid)
+              )
+            );
+            if (listedAsSeries) {
+              throw new Error(
+                this.translocoService.translate(
+                  'message.hasListedInCaptureClub'
+                )
+              );
+            }
+            if (response.next == null) {
+              break;
+            }
+            currentOffset += response.results.length;
+          }
+          return VOID$;
+        }),
+        take(1)
+      );
+    }
+    return VOID$;
+  }
 
   openActionDialog$(action: Action) {
     return combineLatest([
@@ -128,8 +195,13 @@ export class ActionsPage {
   }
 
   doAction(action: Action) {
-    this.openActionDialog$(action)
+    this.blockingActionService
+      .run$(this.canPerformAction$(action))
       .pipe(
+        catchError((err: unknown) => {
+          return this.errorService.toastError$(err);
+        }),
+        concatMap(() => this.openActionDialog$(action)),
         concatMap(createOrderInput =>
           this.blockingActionService.run$(
             this.createOrder$(
