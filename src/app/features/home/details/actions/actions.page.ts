@@ -142,9 +142,11 @@ export class ActionsPage {
         concatMap(orderId =>
           this.blockingActionService.run$(this.confirmOrder$(orderId))
         ),
-        tap(networkAppOrder =>
-          this.createOrderHistory$(networkAppOrder).subscribe()
-        ),
+        tap(networkAppOrder => {
+          if (Number(networkAppOrder.total_cost) !== 0) {
+            this.createOrderHistory$(networkAppOrder).subscribe();
+          }
+        }),
         tap(() => {
           this.snackBar.open(
             this.translocoService.translate('message.sentSuccessfully')
