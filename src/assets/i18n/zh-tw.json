@@ -69,7 +69,10 @@
   "activity": "活動紀錄",
   "captureTransactions": "Capture 交易",
   "numTransactionHistory": "查詢交易紀錄",
-  "transactionDetails": "活動資訊",
+  "transactionDetails": "交易資訊",
+  "networkActionOrderDetails": "訂單資訊",
+  "noTransactionsFound": "找不到任何 Capture 交易",
+  "noNetworkActionOrdersFound": "找不到任何網絡動作訂單",
   "sentFrom": "發送自",
   "receiver": "收件人",
   "location": "位置",
@@ -99,9 +102,12 @@
   "resendIn": "重新發送 {{ secondsRemained }}秒",
   "balance": "餘額",
   "walletAddress": "錢包地址",
-
+  "networkActions": "網絡動作",
   "yourPrivateKey": "您的私鑰",
   "copyToClipboard": "複製到剪貼簿",
+  "order": "訂單",
+  "resultUrl": "結果連結",
+  "noResultUrlAvailable": "沒有可以顯示的結果連結",
   "verification": {
     "verification": "驗證",
     "clickToVerify": "點擊驗證",
@@ -175,7 +181,6 @@
     "shareC2paPhoto": "分享 C2PA 照片",
     "mintNftToken": "鑄造 NFT 代幣",
     "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？",
-    "moreActions": "更多動作",
     "sentSuccessfully": "成功送出",
     "confirmCopyPrivateKey": "警告：請不要向任何人揭露您的金鑰，未保管好金鑰可能導致您永遠失去您的帳號。"
   },
@@ -228,11 +233,11 @@
     "waitingToBeAccepted": "等待中"
   },
   "networkActionOrderState": {
-    "submitted": "送出",
+    "submitted": "已送出",
     "paid": "繳費成功",
     "payment_failed": "繳費失敗",
-    "completed": "完成",
-    "failed": "失敗"
+    "completed": "已完成",
+    "failed": "已失敗"
   },
   "payment": {
     "confirmPayment": "你的訂單",

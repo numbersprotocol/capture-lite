@@ -311,7 +311,7 @@ export class DetailsPage {
         'message.mintNftToken': null,
         'message.viewBlockchainCertificate': null,
         'message.viewSupportingVideoOnIpfs': null,
-        'message.moreActions': null,
+        networkActions: null,
       }),
     ])
       .pipe(
@@ -328,7 +328,7 @@ export class DetailsPage {
               messageMintNftToken,
               messageViewBlockchainCertificate,
               messageViewSupportingVideoOnIpfs,
-              messageMoreActions,
+              messageNetworkActions,
             ],
           ]) =>
             new Promise<void>(resolve => {
@@ -390,7 +390,7 @@ export class DetailsPage {
               }
               if (postCreationWorkflowCompleted) {
                 buttons.push({
-                  text: messageMoreActions,
+                  text: messageNetworkActions,
                   handler: () => {
                     this.router.navigate(
                       ['actions', { id: detailedCapture.id }],

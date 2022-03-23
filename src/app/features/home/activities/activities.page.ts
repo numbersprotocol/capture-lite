@@ -7,4 +7,4 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   templateUrl: './activities.page.html',
   styleUrls: ['./activities.page.scss'],
 })
-export class TransactionPage {}
+export class ActivitiesPage {}
