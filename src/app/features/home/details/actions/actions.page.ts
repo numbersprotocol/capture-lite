@@ -142,9 +142,19 @@ export class ActionsPage {
         concatMap(orderId =>
           this.blockingActionService.run$(this.confirmOrder$(orderId))
         ),
-        tap(networkAppOrder =>
-          this.createOrderHistory$(networkAppOrder).subscribe()
-        ),
+        tap(networkAppOrder => {
+          /*
+            Workaround:
+            Create a order history record only if the total cost is > 0 to prevent race condition 
+            between app creating the order history record v.s. bubble workflow checking whether a 
+            record already exists and if not create a new one, especially for network actions that 
+            don't require any cost (and hence backend calls the webhook immediately). See 
+            https://dt42-numbers.slack.com/archives/C0323488MEJ/p1648006014291339
+          */
+          if (Number(networkAppOrder.total_cost) !== 0) {
+            this.createOrderHistory$(networkAppOrder).subscribe();
+          }
+        }),
         tap(() => {
           this.snackBar.open(
             this.translocoService.translate('message.sentSuccessfully')
