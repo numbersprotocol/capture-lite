@@ -36,6 +36,7 @@ import {
   switchTap,
   VOID$,
 } from '../../../utils/rx-operators/rx-operators';
+import { getAssetProfileUrl } from '../../../utils/url';
 import {
   DetailedCapture,
   InformationSessionService,
@@ -458,7 +459,8 @@ export class DetailsPage {
         concatMap(([detailedCapture, token]) =>
           defer(() =>
             Browser.open({
-              url: `https://authmedia.net/asset-profile?cid=${detailedCapture.id}&token=${token}`,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              url: getAssetProfileUrl(detailedCapture.id!, token),
               toolbarColor: '#564dfc',
             })
           )
