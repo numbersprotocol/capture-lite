@@ -257,7 +257,7 @@ export class DetailsPage {
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
       this.translocoService.selectTranslateObject({
         'message.copyIpfsAddress': null,
-        'message.shareC2paPhoto': null,
+        'message.shareAssetProfile': null,
       }),
     ])
       .pipe(
