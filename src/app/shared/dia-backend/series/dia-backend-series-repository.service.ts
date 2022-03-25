@@ -10,13 +10,13 @@ import { BASE_URL } from '../secret';
   providedIn: 'root',
 })
 export class DiaBackendSeriesRepository {
-  private readonly fetchCollectedSeriesCount$ = this.fetch$({
+  private readonly fetchCollectedSeriesCount$ = this.fetchAll$({
     limit: 1,
     collected: true,
   }).pipe(pluck('count'));
 
   readonly fetchCollectedSeriesList$ = this.fetchCollectedSeriesCount$.pipe(
-    switchMap(count => this.fetch$({ limit: count, collected: true }))
+    switchMap(count => this.fetchAll$({ limit: count, collected: true }))
   );
 
   constructor(
@@ -28,23 +28,16 @@ export class DiaBackendSeriesRepository {
     return this.read$(id);
   }
 
-  private fetch$({
-    limit,
-    collected,
-  }: {
-    limit?: number;
-    collected?: boolean;
-  }) {
+  fetchAll$(
+    queryParams: {
+      limit?: number;
+      collected?: boolean;
+      offset?: number;
+    } = {}
+  ) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers => {
-        let params = new HttpParams();
-
-        if (limit !== undefined) {
-          params = params.set('limit', `${limit}`);
-        }
-        if (collected !== undefined) {
-          params = params.set('collected', `${collected}`);
-        }
+        const params = new HttpParams({ fromObject: queryParams });
         return this.httpClient.get<PaginatedResponse<DiaBackendSeries>>(
           `${BASE_URL}/api/v3/series/`,
           { headers, params }
@@ -70,6 +63,7 @@ export interface DiaBackendSeries {
   readonly collections: {
     readonly assets: {
       readonly id: string;
+      readonly cid: string;
       readonly asset_file_thumbnail: string;
       readonly collected: boolean;
     }[];
