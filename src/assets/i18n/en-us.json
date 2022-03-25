@@ -182,7 +182,8 @@
     "mintNftToken": "Mint NFT token",
     "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?",
     "sentSuccessfully": "Sent Successfully",
-    "confirmCopyPrivateKey": "Warning: Please do not expose your private key to anyone. Lost of private key may cause your account to be lost permanently."
+    "confirmCopyPrivateKey": "Warning: Please do not expose your private key to anyone. Lost of private key may cause your account to be lost permanently.",
+    "hasListedInCaptureClub": "This asset has already been listed in CaptureClub."
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",
