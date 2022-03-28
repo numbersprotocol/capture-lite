@@ -9,7 +9,7 @@
     {{ (transaction$ | ngrxPush)?.created_at | date: 'short' }}
   </h4>
   <mat-card class="transaction-card">
-    <mat-card-content class="row">
+    <mat-card-content class="row wrap-text">
       <mat-label>
         {{ t('digitalAsset') }} ID:
         {{ (transaction$ | ngrxPush)?.asset?.id }}
@@ -20,7 +20,7 @@
       loading="lazy"
       [src]="(transaction$ | ngrxPush)?.asset?.asset_file_thumbnail"
     />
-    <mat-card-content class="column">
+    <mat-card-content class="column wrap-text">
       <mat-label>
         {{ t('sentFrom') }}: {{ (transaction$ | ngrxPush)?.sender_name }}
       </mat-label>

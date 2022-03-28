@@ -1,0 +1,115 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('networkActionOrderDetails') }}</span>
+</mat-toolbar>
+
+<ion-content *ngrxLet="order$ as order">
+  <div *transloco="let t">
+    <h4 class="datetime">
+      {{ order['Created Date'] | date: 'short' }}
+    </h4>
+    <ion-card>
+      <ion-grid>
+        <ion-row>
+          <img
+            decoding="async"
+            loading="lazy"
+            [src]="
+              (order.assetThumbnailUrl$ | ngrxPush) ||
+              '/assets/images/image-placeholder.png'
+            "
+          />
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <h4 id="network-action-name">{{ order.network_app_name_text }}</h4>
+          </ion-col>
+        </ion-row>
+        <ion-row id="order-id-row" class="detail-info-rows">
+          <ion-col size="3.5">
+            <ion-label>{{ t('order') + ' ID' }}:</ion-label>
+          </ion-col>
+          <ion-col class="wrap-text" align="end">
+            <ion-label>{{ order.order_id_text }} </ion-label>
+          </ion-col>
+          <ion-col size="1" align="end">
+            <ion-icon
+              size="small"
+              name="copy-outline"
+              (click)="copyToClipboard(order.order_id_text)"
+            ></ion-icon>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="detail-info-rows">
+          <ion-col size="3.5">
+            <ion-label>{{ t('resultUrl') }}:</ion-label>
+          </ion-col>
+          <ion-col class="wrap-text" align="end">
+            <ion-label (click)="openResultUrl(order.result_url_text)">
+              <a *ngIf="order.result_url_text !== undefined">
+                {{ order.result_url_text }}
+              </a>
+              <ion-text *ngIf="order.result_url_text === undefined">{{
+                t('noResultUrlAvailable')
+              }}</ion-text>
+            </ion-label>
+          </ion-col>
+          <ion-col size="1"> </ion-col>
+        </ion-row>
+
+        <ion-row class="detail-info-rows">
+          <ion-col size="3.5">
+            <ion-label>{{ t('payment.price') }}:</ion-label>
+          </ion-col>
+          <ion-col align="end">
+            <ion-label
+              >{{ order.price_number | number: '1.2-2' }}
+              {{ order.cost_token_ticker_text || 'NUM' }}</ion-label
+            >
+          </ion-col>
+          <ion-col size="1"></ion-col>
+        </ion-row>
+        <ion-row class="detail-info-rows">
+          <ion-col size="3.5">
+            <ion-label>{{ t('payment.fee') }}:</ion-label>
+          </ion-col>
+          <ion-col align="end">
+            <ion-label
+              >{{ order.gas_fee_number | number: '1.2-2' }}
+              {{ order.cost_token_ticker_text || 'NUM' }}</ion-label
+            >
+          </ion-col>
+          <ion-col size="1"></ion-col>
+        </ion-row>
+        <ion-row class="detail-info-rows">
+          <ion-col size="3.5">
+            <ion-label>{{ t('payment.totalCost') }}:</ion-label>
+          </ion-col>
+          <ion-col align="end">
+            <ion-label
+              >{{ order.total_cost_number | number: '1.2-2' }}
+              {{ order.cost_token_ticker_text || 'NUM' }}</ion-label
+            >
+          </ion-col>
+          <ion-col size="1"></ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col id="status-col">
+            <button
+              [class]="order.status_text"
+              mat-stroked-button
+              disableRipple
+            >
+              {{ t('networkActionOrderState.' + order.status_text) }}
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </div>
+</ion-content>

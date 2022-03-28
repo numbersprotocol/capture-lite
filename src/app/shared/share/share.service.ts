@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Plugins } from '@capacitor/core';
+import { catchError } from 'rxjs/operators';
+import { getAssetProfileUrl } from '../../utils/url';
 import { Share } from '@capacitor/share';
 import { concatMap, first, map } from 'rxjs/operators';
 import { blobToBase64 } from '../../utils/encoding/encoding';
@@ -7,48 +10,33 @@ import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
-import { MediaStore } from '../media/media-store/media-store.service';
+import { ErrorService } from '../error/error.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShareService {
-  private readonly defaultMimetype = 'image/jpeg';
   private readonly defaultShareText = '#CaptureApp #OnlyTruePhotos';
 
   constructor(
-    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
-    private readonly mediaStore: MediaStore,
-    private readonly httpClient: HttpClient
+    private readonly errorService: ErrorService,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
   ) {}
 
   async share(asset: DiaBackendAsset) {
-    const dataUri = await this.getCaiFile(asset);
-    const fileUrl = await this.createFileUrl(dataUri);
     return Share.share({
       text: this.defaultShareText,
-      url: fileUrl,
+      url: await this.setPublicAndGetLink(asset),
     });
   }
 
-  private async createFileUrl(dataUri: string) {
-    const base64 = dataUri.split(',')[1];
-    const index = await this.mediaStore.write(base64, this.defaultMimetype);
-    return this.mediaStore.getUri(index);
-  }
-
-  private async getCaiFile(asset: DiaBackendAsset) {
-    return this.diaBackendAssetRepository
-      .fetchById$(asset.id)
-      .pipe(
-        first(),
-        map(diaBackendAsset => diaBackendAsset.cai_file),
-        concatMap(cai_file =>
-          this.httpClient.get(cai_file, { responseType: 'blob' })
-        ),
-        concatMap(blobToBase64),
-        map(imageBase64 => `data:image/jpeg;base64,${imageBase64}`)
-      )
+  private async setPublicAndGetLink(asset: DiaBackendAsset) {
+    const formData = new FormData();
+    formData.append('public_access', 'true');
+    await this.diaBackendAssetRepository
+      .updateCapture$(asset.id, formData)
+      .pipe(catchError((err: unknown) => this.errorService.toastError$(err)))
       .toPromise();
+    return getAssetProfileUrl(asset.id);
   }
 }

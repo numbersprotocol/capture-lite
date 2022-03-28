@@ -38,6 +38,8 @@ export class ActionsDialogComponent {
 
   private createFormFields() {
     for (const param of this.params) {
+      const isOptional = param.optional_boolean ?? false;
+
       if (param.type_text === 'dropdown')
         this.fields.push({
           key: param.name_text,
@@ -49,7 +51,7 @@ export class ActionsDialogComponent {
             })),
             placeholder: param.placeholder_text,
             disabled: !param.user_input_boolean,
-            required: true,
+            required: !isOptional,
           },
         });
       else if (param.type_text === 'number')
@@ -63,7 +65,7 @@ export class ActionsDialogComponent {
             disabled: !param.user_input_boolean,
             max: param.max_number,
             min: param.min_number,
-            required: true,
+            required: !isOptional,
           },
         });
       else
@@ -75,7 +77,7 @@ export class ActionsDialogComponent {
             label: param.display_text_text,
             placeholder: param.placeholder_text,
             disabled: !param.user_input_boolean,
-            required: true,
+            required: !isOptional,
           },
         });
     }

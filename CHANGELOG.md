@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.52.1 - 2022-03-25
+
+### Fixed
+
+- Fix incorrect zh-tw translation for "Share Asset Profile"
+
+## 0.52.0 - 2022-03-25
+
+### Changed
+
+- Replace share option "Share C2PA Photo" with "Share Asset Profile"
+
+### Fixed
+
+- Prevent user from performing List in CaptureClub with the same asset twice.
+
+## 0.51.1 - 2022-03-23
+
+### Fixed
+
+- Prevent race condition when creating network action history record.
+
+## 0.51.0 - 2022-03-22
+
+### Added
+
+- Network action order detail page.
+- Display a message on activities page if no transactions or network action orders found.
+
+### Fixed
+
+- Have activities display default to Capture transactions.
+- Error message should be displayed at network action orders page. Like when no internet connection.
+- Fix ios activity details page cid overflow. #1383
+- Rename "More actions" to "Network actions."
+
 ## 0.50.1 - 2022-03-16
 
 ### Added
