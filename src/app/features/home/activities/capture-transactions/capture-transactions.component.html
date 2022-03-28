@@ -1,3 +1,5 @@
+<mat-spinner diameter="30" *ngIf="isFetching$ | ngrxPush"></mat-spinner>
+
 <div *transloco="let t">
   <mat-list *ngrxLet="transactionsWithStatus$ as transactions">
     <h5 id="empty-transaction-msg" *ngIf="transactions.length === 0">
