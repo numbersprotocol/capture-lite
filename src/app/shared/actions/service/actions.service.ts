@@ -55,6 +55,7 @@ export interface Param {
   readonly user_input_boolean: boolean;
   readonly max_number: number;
   readonly min_number: number;
+  readonly optional_boolean?: boolean;
 }
 
 export interface GetActionsResponse<T> {
