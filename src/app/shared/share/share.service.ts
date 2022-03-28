@@ -1,11 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { Share } from '@capacitor/share';
 import { catchError } from 'rxjs/operators';
 import { getAssetProfileUrl } from '../../utils/url';
-import { Share } from '@capacitor/share';
-import { concatMap, first, map } from 'rxjs/operators';
-import { blobToBase64 } from '../../utils/encoding/encoding';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
