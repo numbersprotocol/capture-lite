@@ -265,7 +265,7 @@ export class DetailsPage {
         concatMap(
           ([
             diaBackendAsset,
-            [messageCopyIpfsAddress, messageShareC2paPhoto],
+            [messageCopyIpfsAddress, messageShareAssetProfile],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
@@ -281,9 +281,17 @@ export class DetailsPage {
               }
               if (diaBackendAsset?.cai_file) {
                 buttons.push({
-                  text: messageShareC2paPhoto,
-                  handler: () => {
-                    this.share();
+                  text: messageShareAssetProfile,
+                  handler: async () => {
+                    const result = await this.confirmAlert.present({
+                      message:
+                        this.translocoService.translate(
+                          'message.assetBecomePublicAfterSharing'
+                        ) + '!',
+                    });
+                    if (result) {
+                      this.share();
+                    }
                     resolve();
                   },
                 });

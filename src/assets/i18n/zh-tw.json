@@ -179,6 +179,7 @@
     "verificationSuccess": "驗證成功",
     "copyIpfsAddress": "複製 IPFS 位址",
     "shareAssetProfile": "分享資產檔案",
+    "assetBecomePublicAfterSharing": "該資產將在分享後公開",
     "mintNftToken": "鑄造 NFT 代幣",
     "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？",
     "sentSuccessfully": "成功送出",
