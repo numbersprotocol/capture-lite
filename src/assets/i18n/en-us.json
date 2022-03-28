@@ -179,6 +179,7 @@
     "verificationSuccess": "Success",
     "copyIpfsAddress": "Copy IPFS address",
     "shareAssetProfile": "Share Asset Profile",
+    "assetBecomePublicAfterSharing": "This asset will become public after sharing",
     "mintNftToken": "Mint NFT token",
     "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?",
     "sentSuccessfully": "Sent Successfully",
