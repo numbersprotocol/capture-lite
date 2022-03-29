@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { catchError, map, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject, of } from 'rxjs';
+import { catchError, finalize, map, shareReplay, take } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { ErrorService } from '../../../../shared/error/error.service';
@@ -13,17 +14,22 @@ import { getStatus } from '../capture-transaction-details/capture-transaction-de
 export class CaptureTransactionsComponent {
   readonly transactionsWithStatus$ =
     this.diaBackendTransactionRepository.all$.pipe(
-      catchError((err: unknown) => this.errorService.toastError$(err)),
+      take(1),
       map(transactions =>
         transactions.results.map(transaction => ({
           ...transaction,
           status: getStatus(transaction, this.diaBackendAuthService.getEmail()),
         }))
       ),
+      catchError((err: unknown) => {
+        this.errorService.toastError$(err).subscribe();
+        return of([]);
+      }),
+      finalize(() => this.isFetching$.next(false)),
       shareReplay({ bufferSize: 1, refCount: true })
     );
 
-  readonly isFetching$ = this.diaBackendTransactionRepository.isFetching$;
+  readonly isFetching$ = new BehaviorSubject<boolean>(true);
 
   constructor(
     private readonly diaBackendAuthService: DiaBackendAuthService,
