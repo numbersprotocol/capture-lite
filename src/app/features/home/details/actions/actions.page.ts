@@ -119,7 +119,7 @@ export class ActionsPage {
 
   openActionDialog$(action: Action) {
     return combineLatest([
-      this.actionsService.getParams$(action.params_list_custom_param1),
+      this.actionsService.getParams$(action.params_list_custom_param1 ?? []),
       this.authService.token$,
       this.id$,
     ]).pipe(
