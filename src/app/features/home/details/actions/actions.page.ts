@@ -19,6 +19,7 @@ import {
   DiaBackendStoreService,
   NetworkAppOrder,
 } from '../../../../shared/dia-backend/store/dia-backend-store.service';
+import { DiaBackendWalletService } from '../../../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../../../shared/error/error.service';
 import { OrderDetailDialogComponent } from '../../../../shared/order-detail-dialog/order-detail-dialog.component';
 import {
@@ -54,7 +55,8 @@ export class ActionsPage {
     private readonly storeService: DiaBackendStoreService,
     private readonly orderHistoryService: OrderHistoryService,
     private readonly diaBackendStoreService: DiaBackendStoreService,
-    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository
+    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository,
+    private readonly diaBackendWalletService: DiaBackendWalletService
   ) {}
 
   canPerformAction$(action: Action) {
@@ -204,13 +206,16 @@ export class ActionsPage {
         concatMap(() => this.openActionDialog$(action)),
         concatMap(createOrderInput =>
           this.blockingActionService.run$(
-            this.createOrder$(
-              createOrderInput.networkApp,
-              createOrderInput.actionArgs
-            )
+            forkJoin([
+              this.createOrder$(
+                createOrderInput.networkApp,
+                createOrderInput.actionArgs
+              ),
+              this.diaBackendWalletService.syncAssetWalletBalance$(),
+            ])
           )
         ),
-        concatMap(orderStatus => this.openOrderDialog$(orderStatus)),
+        concatMap(([orderStatus, _]) => this.openOrderDialog$(orderStatus)),
         concatMap(orderId =>
           this.blockingActionService.run$(this.confirmOrder$(orderId))
         ),
