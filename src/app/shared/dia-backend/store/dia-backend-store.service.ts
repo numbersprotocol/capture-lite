@@ -67,6 +67,10 @@ export interface NetworkAppOrder {
   action_args: Record<string, unknown>;
   price: string;
   fee: string | null;
+  num_charged: string;
+  num_paid: string;
+  points_charged: string;
+  points_paid: string;
   total_cost: string;
   quantity: number;
   fund_crypto_transaction_id: string;

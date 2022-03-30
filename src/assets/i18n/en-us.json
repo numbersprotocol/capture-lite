@@ -108,6 +108,7 @@
   "order": "Order",
   "resultUrl": "Result URL",
   "noResultUrlAvailable": "No Result URL available",
+  "insufficientNum": "Insufficient NUM",
   "verification": {
     "verification": "Verification",
     "clickToVerify": "Click me to verify",
