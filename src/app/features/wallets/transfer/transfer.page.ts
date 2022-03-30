@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, merge, ObservableInput } from 'rxjs';
+import { merge, ObservableInput } from 'rxjs';
 import { catchError, finalize, mapTo, startWith, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendStoreService } from '../../../shared/dia-backend/store/dia-backend-store.service';
@@ -30,8 +30,9 @@ export class TransferPage {
 
   transferAmount: number | null = null;
 
-  readonly gasFee$ = new BehaviorSubject<number>(0);
-  readonly totalCost$ = new BehaviorSubject<number>(0);
+  gasFeeNumCharged = 0;
+  gasFeePointsCharged = 0;
+  totalCost = 0;
 
   readyToSend = false;
 
@@ -108,10 +109,11 @@ export class TransferPage {
       .pipe(
         tap(networkAppOrder => {
           this.orderId = networkAppOrder.id;
-          this.gasFee$.next(Number(networkAppOrder.fee));
-          this.totalCost$.next(
-            Number(networkAppOrder.fee) + Number(this.transferAmount)
-          );
+          this.gasFeePointsCharged = Number(networkAppOrder.points_charged);
+          this.gasFeeNumCharged =
+            Number(networkAppOrder.fee) -
+            Number(networkAppOrder.points_charged);
+          this.totalCost = Number(networkAppOrder.total_cost);
           this.readyToSend = true;
         }),
         catchError((err: unknown) => {

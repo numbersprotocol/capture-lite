@@ -93,13 +93,26 @@
         <ion-col size="2">
           <ion-icon name="wallet"></ion-icon>
         </ion-col>
-        <ion-col size="5" *ngrxLet="gasFee$ as gasFee">
+        <ion-col size="5">
           <h6>
             {{ t('wallets.gasFee') }}:
-            {{ gasFee > 0 ? (gasFee | number: '1.2-2') : t('wallets.pending') }}
+            {{
+              readyToSend
+                ? (gasFeeNumCharged > 0
+                    ? (gasFeeNumCharged | number: '1.2-2') + ' NUM'
+                    : '') +
+                  (gasFeeNumCharged > 0 && gasFeePointsCharged > 0
+                    ? ' + '
+                    : '') +
+                  (gasFeePointsCharged > 0
+                    ? (gasFeePointsCharged | number: '1.2-2') + ' Points'
+                    : '')
+                : t('wallets.pending')
+            }}
           </h6>
           <h4>
-            {{ t('wallets.total') }} {{ totalCost$ | ngrxPush | currency }}
+            {{ t('wallets.total') }}:
+            {{ readyToSend ? (totalCost | currency) : t('wallets.pending') }}
           </h4>
         </ion-col>
         <ion-col id="deposit-withdraw-btn-col">
