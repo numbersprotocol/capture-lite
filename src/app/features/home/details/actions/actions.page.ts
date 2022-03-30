@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, forkJoin, of } from 'rxjs';
+import { combineLatest, forkJoin, iif, of } from 'rxjs';
 import { catchError, concatMap, first, map, take, tap } from 'rxjs/operators';
 import { ActionsDialogComponent } from '../../../../shared/actions/actions-dialog/actions-dialog.component';
 import {
@@ -19,6 +19,7 @@ import {
   DiaBackendStoreService,
   NetworkAppOrder,
 } from '../../../../shared/dia-backend/store/dia-backend-store.service';
+import { DiaBackendWalletService } from '../../../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../../../shared/error/error.service';
 import { OrderDetailDialogComponent } from '../../../../shared/order-detail-dialog/order-detail-dialog.component';
 import {
@@ -54,7 +55,8 @@ export class ActionsPage {
     private readonly storeService: DiaBackendStoreService,
     private readonly orderHistoryService: OrderHistoryService,
     private readonly diaBackendStoreService: DiaBackendStoreService,
-    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository
+    private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository,
+    private readonly diaBackendWalletService: DiaBackendWalletService
   ) {}
 
   canPerformAction$(action: Action) {
@@ -201,16 +203,27 @@ export class ActionsPage {
         catchError((err: unknown) => {
           return this.errorService.toastError$(err);
         }),
-        concatMap(() => this.openActionDialog$(action)),
-        concatMap(createOrderInput =>
+        concatMap(() =>
+          combineLatest([this.openActionDialog$(action), of(action)])
+        ),
+        concatMap(([createOrderInput, action]) =>
           this.blockingActionService.run$(
-            this.createOrder$(
-              createOrderInput.networkApp,
-              createOrderInput.actionArgs
-            )
+            forkJoin([
+              this.createOrder$(
+                createOrderInput.networkApp,
+                createOrderInput.actionArgs
+              ),
+              // To display "Insufficient NUM" in order confirmation dialog,
+              // we need to sync asset wallet balance if the action cost NUM.
+              iif(
+                () => action.action_cost_number > 0,
+                this.diaBackendWalletService.syncAssetWalletBalance$(),
+                VOID$
+              ),
+            ])
           )
         ),
-        concatMap(orderStatus => this.openOrderDialog$(orderStatus)),
+        concatMap(([orderStatus, _]) => this.openOrderDialog$(orderStatus)),
         concatMap(orderId =>
           this.blockingActionService.run$(this.confirmOrder$(orderId))
         ),
