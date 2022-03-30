@@ -8,6 +8,7 @@ const envConfigFile = `
 export const BASE_URL = '${process.env.NUMBERS_STORAGE_BASE_URL}';
 export const TRUSTED_CLIENT_KEY = '${process.env.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY}';
 export const BUBBLE_DB_URL = '${process.env.NUMBERS_BUBBLE_DB_URL}';
+export const BUBBLE_DB_API_TOKEN = '${process.env.NUMBERS_BUBBLE_DB_API_TOKEN}';
 `;
 fs.writeFile(targetPath, envConfigFile, err => {
   if (err) {
