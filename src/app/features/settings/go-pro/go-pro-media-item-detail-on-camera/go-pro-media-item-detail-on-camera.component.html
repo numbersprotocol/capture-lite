@@ -25,9 +25,13 @@
       Your browser does not support the video tag.
     </video>
 
-    <div style="height: 24px"></div>
-    <ion-button (click)="uploadToCapture()" expand="block">
-      Upload to capture directly from camera
+    <div class="spacer"></div>
+    <ion-button
+      (click)="uploadToCapture()"
+      expand="block"
+      class="upload-to-capture-btn"
+    >
+      {{ t('gopro.uploadToCapture') }}
     </ion-button>
   </div>
 
@@ -184,7 +188,7 @@
     </ion-slide>
 
     <ion-slide>
-      <ion-item style="--background: #36393f" lines="none">
+      <ion-item lines="none">
         <ion-checkbox
           [checked]="dontShowAgainTutorialForMobileDataOnlyApps"
           [(ngModel)]="dontShowAgainTutorialForMobileDataOnlyApps"

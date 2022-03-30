@@ -1,13 +1,28 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 import {
-  CameraOptions,
-  CameraPhoto,
   CameraPlugin,
-  PluginListenerHandle,
-} from '@capacitor/core';
+  CameraPluginPermissions,
+  GalleryImageOptions,
+  GalleryPhotos,
+  ImageOptions,
+  PermissionStatus,
+  Photo as CameraPhoto,
+} from '@capacitor/camera';
+import { PluginListenerHandle } from '@capacitor/core';
 
 export class MockCameraPlugin implements CameraPlugin {
-  async getPhoto(_options: CameraOptions): Promise<CameraPhoto> {
+  async pickImages(_: GalleryImageOptions): Promise<GalleryPhotos> {
+    throw new Error('Method not implemented.');
+  }
+  async checkPermissions(): Promise<PermissionStatus> {
+    throw new Error('Method not implemented.');
+  }
+  async requestPermissions(
+    _?: CameraPluginPermissions
+  ): Promise<PermissionStatus> {
+    throw new Error('Method not implemented.');
+  }
+  async getPhoto(_options: ImageOptions): Promise<CameraPhoto> {
     throw new Error('Method not implemented.');
   }
 

@@ -1,18 +1,18 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 
+import { PluginListenerHandle } from '@capacitor/core';
 import {
-  LocalNotification,
-  LocalNotificationActionPerformed,
-  LocalNotificationActionType,
-  LocalNotificationEnabledResult,
-  LocalNotificationPendingList,
-  LocalNotificationScheduleResult,
+  ActionPerformed as LocalNotificationActionPerformed,
+  ActionType as LocalNotificationActionType,
+  Channel as NotificationChannel,
+  EnabledResult as LocalNotificationEnabledResult,
+  ListChannelsResult as NotificationChannelList,
+  LocalNotificationSchema as LocalNotification,
   LocalNotificationsPlugin,
-  NotificationChannel,
-  NotificationChannelList,
-  NotificationPermissionResponse,
-  PluginListenerHandle,
-} from '@capacitor/core';
+  PendingResult as LocalNotificationPendingList,
+  PermissionStatus,
+  ScheduleResult as LocalNotificationScheduleResult,
+} from '@capacitor/local-notifications';
 
 export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
   async schedule(options: {
@@ -20,7 +20,7 @@ export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
   }): Promise<LocalNotificationScheduleResult> {
     return {
       notifications: options.notifications.map(notification => ({
-        id: `${notification.id}`,
+        id: notification.id,
       })),
     };
   }
@@ -55,30 +55,30 @@ export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
     throw new Error('Method not implemented.');
   }
 
-  async requestPermission(): Promise<NotificationPermissionResponse> {
-    return { granted: true };
+  async checkPermissions(): Promise<PermissionStatus> {
+    throw new Error('Method not implemented.');
+  }
+
+  async requestPermissions(): Promise<PermissionStatus> {
+    return { display: 'granted' };
   }
 
   addListener(
     eventName: 'localNotificationReceived',
     listenerFunc: (notification: LocalNotification) => void
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
   addListener(
     eventName: 'localNotificationActionPerformed',
     listenerFunc: (notificationAction: LocalNotificationActionPerformed) => void
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
   addListener(
-    _eventName:
-      | 'localNotificationReceived'
-      | 'localNotificationActionPerformed',
-    _listenerFunc:
-      | ((notification: LocalNotification) => void)
-      | ((notificationAction: LocalNotificationActionPerformed) => void)
-  ): PluginListenerHandle {
+    _eventName: any,
+    _listenerFunc: any
+  ): Promise<PluginListenerHandle> & PluginListenerHandle {
     throw new Error('Method not implemented.');
   }
 
-  removeAllListeners(): void {
+  async removeAllListeners(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

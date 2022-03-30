@@ -1,36 +1,39 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
+import { PluginListenerHandle } from '@capacitor/core';
 import {
+  AppendFileOptions as FileAppendOptions,
   CopyOptions,
-  CopyResult,
-  FileAppendOptions,
-  FileAppendResult,
-  FileDeleteOptions,
-  FileDeleteResult,
-  FileReadOptions,
-  FileReadResult,
+  DeleteFileOptions as FileDeleteOptions,
   FilesystemPlugin,
-  FileWriteOptions,
-  FileWriteResult,
   GetUriOptions,
   GetUriResult,
   MkdirOptions,
-  MkdirResult,
-  PluginListenerHandle,
+  PermissionStatus,
   ReaddirOptions,
   ReaddirResult,
+  ReadFileOptions as FileReadOptions,
+  ReadFileResult as FileReadResult,
   RenameOptions,
-  RenameResult,
   RmdirOptions,
-  RmdirResult,
   StatOptions,
   StatResult,
-} from '@capacitor/core';
+  WriteFileOptions as FileWriteOptions,
+  WriteFileResult as FileWriteResult,
+} from '@capacitor/filesystem';
 import { groupBy } from 'lodash-es';
 import { base64ToString, stringToBase64 } from '../../utils/encoding/encoding';
 
 export class MockFilesystemPlugin implements FilesystemPlugin {
   private readonly files = new Map<string, string>();
+
+  async checkPermissions(): Promise<PermissionStatus> {
+    throw new Error('Method not implemented.');
+  }
+
+  async requestPermissions(): Promise<PermissionStatus> {
+    throw new Error('Method not implemented.');
+  }
 
   async readFile(options: FileReadOptions): Promise<FileReadResult> {
     const path = `${options.directory ?? ''}/${options.path}`;
@@ -55,24 +58,22 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
     return { uri: path };
   }
 
-  async appendFile(options: FileAppendOptions): Promise<FileAppendResult> {
+  async appendFile(options: FileAppendOptions): Promise<void> {
     const result = await this.readFile(options);
     const newData = `${result.data}${options.data}`;
     await this.writeFile({ ...options, data: newData });
-    return {};
   }
 
-  async deleteFile(options: FileDeleteOptions): Promise<FileDeleteResult> {
+  async deleteFile(options: FileDeleteOptions): Promise<void> {
     const path = `${options.directory ?? ''}/${options.path}`;
     this.files.delete(path);
-    return {};
   }
 
-  async mkdir(_: MkdirOptions): Promise<MkdirResult> {
-    return {};
+  async mkdir(_: MkdirOptions): Promise<void> {
+    return;
   }
 
-  async rmdir(_: RmdirOptions): Promise<RmdirResult> {
+  async rmdir(_: RmdirOptions): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -101,11 +102,11 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
     throw new Error('Method not implemented.');
   }
 
-  async rename(_: RenameOptions): Promise<RenameResult> {
+  async rename(_: RenameOptions): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  async copy(_: CopyOptions): Promise<CopyResult> {
+  async copy(_: CopyOptions): Promise<void> {
     throw new Error('Method not implemented.');
   }
 

@@ -1,22 +1,26 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
+import { PluginListenerHandle } from '@capacitor/core';
 import {
-  NotificationChannel,
-  NotificationChannelList,
-  NotificationPermissionResponse,
-  PluginListenerHandle,
-  PushNotification,
-  PushNotificationActionPerformed,
-  PushNotificationDeliveredList,
+  ActionPerformed as PushNotificationActionPerformed,
+  Channel as NotificationChannel,
+  DeliveredNotifications as PushNotificationDeliveredList,
+  ListChannelsResult as NotificationChannelList,
+  PermissionStatus,
+  PushNotificationSchema as PushNotification,
   PushNotificationsPlugin,
-  PushNotificationToken,
-} from '@capacitor/core';
+  Token as PushNotificationToken,
+} from '@capacitor/push-notifications';
 
 export class MockPushNotificationsPlugin implements PushNotificationsPlugin {
+  async checkPermissions(): Promise<PermissionStatus> {
+    throw new Error('Method not implemented.');
+  }
+
   async register(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  async requestPermission(): Promise<NotificationPermissionResponse> {
+  async requestPermissions(): Promise<PermissionStatus> {
     throw new Error('Method not implemented.');
   }
 
@@ -49,36 +53,29 @@ export class MockPushNotificationsPlugin implements PushNotificationsPlugin {
   addListener(
     eventName: 'registration',
     listenerFunc: (token: PushNotificationToken) => void
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
   addListener(
     eventName: 'registrationError',
     listenerFunc: (error: any) => void
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
   addListener(
     eventName: 'pushNotificationReceived',
     listenerFunc: (notification: PushNotification) => void
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
   addListener(
     eventName: 'pushNotificationActionPerformed',
     listenerFunc: (notification: PushNotificationActionPerformed) => void
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
   addListener(
-    _eventName:
-      | 'registration'
-      | 'registrationError'
-      | 'pushNotificationReceived'
-      | 'pushNotificationActionPerformed',
-    _listenerFunc:
-      | ((token: PushNotificationToken) => void)
-      | ((error: any) => void)
-      | ((notification: PushNotification) => void)
-      | ((notification: PushNotificationActionPerformed) => void)
-  ): PluginListenerHandle {
+    _eventName: any,
+    _listenerFunc: any
+  ): Promise<PluginListenerHandle> & PluginListenerHandle {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return { remove: () => {} };
+    // return { remove: () => {} };
+    throw new Error('Method not implemented.');
   }
 
-  removeAllListeners(): void {
+  async removeAllListeners(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

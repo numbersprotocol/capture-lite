@@ -1,0 +1,9 @@
+<mat-toolbar color="background" class="thin-upload-bar" id="thin-upload-bar">
+  <span class="text spacer-text"> {{ loadingText }} </span>
+
+  <span class="spacer">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </span>
+
+  <mat-icon (click)="cancel()">cancel</mat-icon>
+</mat-toolbar>

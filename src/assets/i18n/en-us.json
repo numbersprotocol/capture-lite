@@ -271,5 +271,24 @@
     "pending": "Pending",
     "total": "Total",
     "calculateGasFee": "Calculate Gas"
+  },
+  "gopro": {
+    "setup": "GoPro Setup",
+    "scanning": "Scanning",
+    "scanForBluetoothDevices": "Scan For Bluetooth Devices",
+    "disconnect": "Disconnect",
+    "connect": "Connect",
+    "connectedTo": "Connected To",
+    "showFilesOnGoPro": "Show Files On GoPro",
+    "goProMediaOnCamera": "GoPro Media On Camera",
+    "filesSelected": "{{count}} File(s) Selected",
+    "connectedWiFi": "Connected WiFi",
+    "connectToGoProWiFi": "Connect To GoPro WiFi",
+    "uploadToCapture": "Upload To Capture",
+    "makeSureYouAreConnectedToGoProWiFiFirst": "Make Sure You Are Connected To GoPro WiFi First",
+    "hintClickTheRefreshButtonAtTheTopRight": "Hint: Click The Refresh Button At The Top Right",
+    "fetchingFiles": "Fetching Files",
+    "stayOnThisScreenWithTheAppOpenToEnsureYourDownloadsAreComplete": "Stay On This Screen With The App Open To Ensure Your Downloads Are Complete",
+    "loadingFilesForUploadToCapture": "Loading {{count}} File(s) For Upload To Capture"
   }
 }

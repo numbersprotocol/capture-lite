@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Plugins } from '@capacitor/core';
+import { Filesystem } from '@capacitor/filesystem';
 import { defer } from 'rxjs';
 import { concatMap, first } from 'rxjs/operators';
 import { stringToBase64 } from '../../../utils/encoding/encoding';
@@ -7,8 +7,6 @@ import { MimeType } from '../../../utils/mime-type';
 import { FILESYSTEM_PLUGIN } from '../../capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../../shared-testing.module';
 import { MediaStore } from './media-store.service';
-
-const { Filesystem } = Plugins;
 
 describe('MediaStore', () => {
   let store: MediaStore;

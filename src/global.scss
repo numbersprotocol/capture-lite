@@ -131,3 +131,12 @@ body.dark .mat-card {
 body.dark .mat-tab-group {
   background-color: var(--ion-background-color);
 }
+
+.go-pro-alert-message-with img {
+  width: 100%;
+  height: 150px;
+  border-radius: 4px;
+  overflow: hidden;
+  object-fit: cover;
+  align-self: center;
+}

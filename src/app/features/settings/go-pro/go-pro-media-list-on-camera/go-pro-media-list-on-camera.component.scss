@@ -11,3 +11,30 @@ app-go-pro-media-list-item-on-camera {
   overflow: hidden;
   border-radius: 4px;
 }
+
+.wifi-state-container {
+  padding: 0 16px 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.connect-to-go-pro-wifi-btn {
+  color: white;
+
+  --box-shadow: 0;
+}
+
+.multi-select-mode-btn {
+  color: white;
+  align-self: flex-end;
+
+  --box-shadow: 0;
+}
+
+.upload-in-progress-info {
+  padding-top: 8px;
+}
+
+.should-connect-to-wifi-text {
+  padding: 16px;
+}

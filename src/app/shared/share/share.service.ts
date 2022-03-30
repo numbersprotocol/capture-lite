@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { Share } from '@capacitor/share';
 import { catchError } from 'rxjs/operators';
 import { getAssetProfileUrl } from '../../utils/url';
 import {
@@ -7,7 +7,6 @@ import {
   DiaBackendAssetRepository,
 } from '../dia-backend/asset/dia-backend-asset-repository.service';
 import { ErrorService } from '../error/error.service';
-const { Share } = Plugins;
 
 @Injectable({
   providedIn: 'root',

@@ -11,6 +11,7 @@ import { GoProMediaService } from '../services/go-pro-media.service';
 export class GoProMediaListItemOnCameraComponent {
   mediaType: 'unknown' | 'video' | 'image' = 'unknown';
   @Input() mediaFile: GoProFile | undefined;
+  @Input() selected = false;
 
   constructor(
     private readonly router: Router,

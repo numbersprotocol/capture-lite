@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ScanResult } from '@capacitor-community/bluetooth-le';
-import { WifiPlugin } from '@capacitor-community/wifi';
-import { Plugins } from '@capacitor/core';
-import { ToastController } from '@ionic/angular';
+import { Wifi } from '@capacitor-community/wifi';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { GoProBluetoothService } from './services/go-pro-bluetooth.service';
-import { GoProMediaService } from './services/go-pro-media.service';
-
-const Wifi: WifiPlugin = Plugins.Wifi as WifiPlugin;
 
 interface GoProWiFiCreds {
   wifiPASS: string;
@@ -30,30 +26,13 @@ export class GoProPage implements OnInit {
 
   constructor(
     public toastController: ToastController,
-    private readonly goProMediaService: GoProMediaService,
+    private readonly loadingController: LoadingController,
     private readonly router: Router,
     private readonly goProBluetoothService: GoProBluetoothService
   ) {}
 
   ngOnInit() {
     this.restoreBluetoothConnection();
-
-    // this.router.navigate(
-    //   ['/settings', 'go-pro', 'media-item-detail-on-camera'],
-    //   {
-    //     state: {
-    //       goProMediaFile: {
-    //         name: 'string;',
-    //         url: 'https://images.pexels.com/photos/9683060/pexels-photo-9683060.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    //         thumbnailUrl:
-    //           'https://images.pexels.com/photos/9683060/pexels-photo-9683060.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    //         type: 'image',
-    //         size: 1024,
-    //         storageKey: 'string; // TODO: remove this field',
-    //       },
-    //     },
-    //   }
-    // );
   }
 
   async restoreBluetoothConnection() {
@@ -75,16 +54,26 @@ export class GoProPage implements OnInit {
       this.bluetoothIsScanning = false;
     } catch (error) {
       this.bluetoothScanResults = [];
+    } finally {
       this.bluetoothIsScanning = false;
     }
   }
 
   async connectToBluetoothDevice(scanResult: ScanResult) {
+    const loading = await this.loadingController.create({
+      message: `Connecting to ${scanResult.device.name}`,
+    });
+
     try {
+      await loading.present();
       await this.goProBluetoothService.connectToBluetoothDevice(scanResult);
+      await this.goProBluetoothService.pairDevice();
+
       this.bluetoothConnectedDevice = scanResult;
+      await loading.dismiss();
       this.presentToast(`🅱 Connected to ${scanResult.device.name}`);
     } catch (error) {
+      await loading.dismiss();
       this.presentToast(JSON.stringify(error));
     }
   }

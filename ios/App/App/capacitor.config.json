@@ -1,21 +1,25 @@
 {
-  "appId": "io.numbersprotocol.capturelite",
-  "appName": "Capture",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www",
-  "plugins": {
-    "SplashScreen": {
-      "androidScaleType": "CENTER_CROP",
-      "launchAutoHide": false
-    },
-    "PushNotifications": {
-      "presentationOptions": ["badge", "sound", "alert"]
-    },
-    "LocalNotifications": {
-      "smallIcon": "ic_capture_lite",
-      "iconColor": "#564dfc"
-    }
-  },
-  "cordova": {}
+	"appId": "io.numbersprotocol.capturelite",
+	"appName": "Capture",
+	"bundledWebRuntime": false,
+	"npmClient": "npm",
+	"webDir": "www",
+	"plugins": {
+		"SplashScreen": {
+			"androidScaleType": "CENTER_CROP",
+			"launchAutoHide": false
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		},
+		"LocalNotifications": {
+			"smallIcon": "ic_capture_lite",
+			"iconColor": "#564dfc"
+		}
+	},
+	"cordova": {}
 }

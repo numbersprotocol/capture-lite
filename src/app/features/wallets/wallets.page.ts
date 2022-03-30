@@ -3,8 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Browser } from '@capacitor/browser';
+import { Clipboard } from '@capacitor/clipboard';
 import { Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, combineLatest, forkJoin } from 'rxjs';
@@ -23,8 +24,6 @@ import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../shared/error/error.service';
 import { ExportPrivateKeyModalComponent } from '../../shared/export-private-key-modal/export-private-key-modal.component';
-
-const { Browser, Clipboard } = Plugins;
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-wallets',

@@ -1,9 +1,9 @@
 /* eslint-disable rxjs/no-subject-value */
 import {
-  FilesystemDirectory,
-  FilesystemEncoding,
+  Directory as FilesystemDirectory,
+  Encoding as FilesystemEncoding,
   FilesystemPlugin,
-} from '@capacitor/core';
+} from '@capacitor/filesystem';
 import { Mutex } from 'async-mutex';
 import { differenceWith, intersectionWith, isEqual, uniqWith } from 'lodash-es';
 import { BehaviorSubject, defer } from 'rxjs';
