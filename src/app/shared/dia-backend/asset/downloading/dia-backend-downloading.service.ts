@@ -1,6 +1,5 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { first } from 'rxjs/operators';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import { OnConflictStrategy } from '../../../database/table/table';
 import { HttpErrorCode } from '../../../error/error.service';
@@ -23,7 +22,8 @@ export class DiaBackendAssetDownloadingService {
   constructor(
     private readonly assetRepository: DiaBackendAssetRepository,
     private readonly mediaStore: MediaStore,
-    private readonly proofRepository: ProofRepository
+    private readonly proofRepository: ProofRepository,
+    private readonly httpClient: HttpClient
   ) {}
 
   async storeRemoteCapture(diaBackendAsset: DiaBackendAsset) {
@@ -43,9 +43,11 @@ export class DiaBackendAssetDownloadingService {
     if (!diaBackendAsset.information.proof) {
       return;
     }
-    const thumbnailBlob = await this.assetRepository
-      .downloadFile$({ id: diaBackendAsset.id, field: 'asset_file_thumbnail' })
-      .pipe(first())
+    // This function is only called by storeRemoteCapture, which should always
+    // get diaBackendAsset from backend. That should mean we're always using
+    // up-to-date asset_file_thumbnail cdn link.
+    const thumbnailBlob = await this.httpClient
+      .get(diaBackendAsset.asset_file_thumbnail, { responseType: 'blob' })
       .toPromise();
     return this.mediaStore.storeThumbnail(
       diaBackendAsset.proof_hash,
