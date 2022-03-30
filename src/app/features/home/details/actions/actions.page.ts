@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,6 +14,7 @@ import {
 } from '../../../../shared/actions/service/actions.service';
 import { OrderHistoryService } from '../../../../shared/actions/service/order-history.service';
 import { BlockingActionService } from '../../../../shared/blocking-action/blocking-action.service';
+import { ConfirmAlert } from '../../../../shared/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendSeriesRepository } from '../../../../shared/dia-backend/series/dia-backend-series-repository.service';
 import {
@@ -20,7 +22,10 @@ import {
   NetworkAppOrder,
 } from '../../../../shared/dia-backend/store/dia-backend-store.service';
 import { DiaBackendWalletService } from '../../../../shared/dia-backend/wallet/dia-backend-wallet.service';
-import { ErrorService } from '../../../../shared/error/error.service';
+import {
+  ErrorService,
+  HttpErrorCode,
+} from '../../../../shared/error/error.service';
 import { OrderDetailDialogComponent } from '../../../../shared/order-detail-dialog/order-detail-dialog.component';
 import {
   isNonNullable,
@@ -56,7 +61,8 @@ export class ActionsPage {
     private readonly orderHistoryService: OrderHistoryService,
     private readonly diaBackendStoreService: DiaBackendStoreService,
     private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository,
-    private readonly diaBackendWalletService: DiaBackendWalletService
+    private readonly diaBackendWalletService: DiaBackendWalletService,
+    private readonly confirmAlert: ConfirmAlert
   ) {}
 
   canPerformAction$(action: Action) {
@@ -191,6 +197,22 @@ export class ActionsPage {
         this.orderHistoryService.createOrderHistory$(networkAppOrder, cid)
       ),
       catchError((err: unknown) => {
+        if (err instanceof HttpErrorResponse) {
+          // After adding bubble order db api token protection in 0.53.0,
+          // old Capture App users are not able to create order history
+          // record from Capture App. Remind user to update their app should
+          // they receive auth error from bubble when creating order history record.
+          // See https://github.com/numbersprotocol/capture-lite/pull/1453
+          if (err.status === HttpErrorCode.AUTHENTICATION) {
+            this.confirmAlert.present({
+              header: this.translocoService.translate('updateCaptureApp'),
+              message: this.translocoService.translate(
+                'message.pleaseUpdateCaptureAppBubbleDBAuth'
+              ),
+              showCancelButton: false,
+            });
+          }
+        }
         return this.errorService.toastError$(err);
       })
     );
