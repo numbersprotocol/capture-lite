@@ -1,9 +1,10 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
+import { PluginListenerHandle } from '@capacitor/core';
 import {
+  ConnectionStatus as NetworkStatus,
+  ConnectionStatusChangeListener,
   NetworkPlugin,
-  NetworkStatus,
-  PluginListenerHandle,
-} from '@capacitor/core';
+} from '@capacitor/network';
 
 export class MockNetworkPlugin implements NetworkPlugin {
   async getStatus(): Promise<NetworkStatus> {
@@ -11,14 +12,20 @@ export class MockNetworkPlugin implements NetworkPlugin {
   }
 
   addListener(
-    _eventName: string,
-    _listenerFunc: (status: NetworkStatus) => any
-  ): PluginListenerHandle {
+    _eventName: 'networkStatusChange',
+    _listenerFunc: ConnectionStatusChangeListener
+  ): Promise<PluginListenerHandle> & PluginListenerHandle {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return { remove: () => {} };
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const remove = async () => {};
+    const listenerHandler: any = Promise.resolve({ remove });
+    Object.defineProperty(listenerHandler, 'remove', {
+      value: async () => Promise.resolve({ remove }),
+    });
+    return listenerHandler;
   }
 
-  removeAllListeners() {
+  async removeAllListeners(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { GeolocationPlugin } from '@capacitor/core';
+import { GeolocationPlugin } from '@capacitor/geolocation';
 import { GEOLOCATION_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
 import { BaseError } from '../error/errors';
 

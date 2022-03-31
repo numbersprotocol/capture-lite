@@ -6,10 +6,12 @@
 <img
   *ngIf="mediaFile?.thumbnailUrl"
   [src]="mediaFile!.thumbnailUrl"
-  (click)="showDetails()"
   loading="lazy"
   decoding="async"
+  [ngStyle]="{ border: selected ? '2px solid black' : '' }"
 />
 <mat-icon *ngIf="!mediaFile?.thumbnailUrl" class="is-thumbnail-missing">
   broken_image
 </mat-icon>
+
+<div [class.selected]="selected"></div>

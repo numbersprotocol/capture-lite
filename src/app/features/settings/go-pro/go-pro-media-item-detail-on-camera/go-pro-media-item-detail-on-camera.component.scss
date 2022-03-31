@@ -31,6 +31,10 @@ ion-content {
         padding-bottom: calc(5vh + env(safe-area-inset-bottom));
         border: none;
       }
+
+      ion-item {
+        --background: #36393f;
+      }
     }
   }
 }
@@ -50,4 +54,15 @@ ion-content {
     padding: 30px;
     height: 90%;
   }
+}
+
+.upload-to-capture-btn {
+  color: white;
+  margin: 0 16px;
+
+  --box-shadow: 0;
+}
+
+.spacer {
+  height: 24px;
 }

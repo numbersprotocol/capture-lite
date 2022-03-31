@@ -3,7 +3,8 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
+import { Clipboard } from '@capacitor/clipboard';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
@@ -43,8 +44,6 @@ import {
 } from './information/session/information-session.service';
 
 SwiperCore.use([Virtual]);
-
-const { Browser, Clipboard } = Plugins;
 
 @UntilDestroy()
 @Component({
@@ -265,7 +264,7 @@ export class DetailsPage {
         concatMap(
           ([
             diaBackendAsset,
-            [messageCopyIpfsAddress, messageShareC2paPhoto],
+            [messageCopyIpfsAddress, messageShareAssetProfile],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
@@ -281,9 +280,17 @@ export class DetailsPage {
               }
               if (diaBackendAsset?.cai_file) {
                 buttons.push({
-                  text: messageShareC2paPhoto,
-                  handler: () => {
-                    this.share();
+                  text: messageShareAssetProfile,
+                  handler: async () => {
+                    const result = await this.confirmAlert.present({
+                      message:
+                        this.translocoService.translate(
+                          'message.assetBecomePublicAfterSharing'
+                        ) + '!',
+                    });
+                    if (result) {
+                      this.share();
+                    }
                     resolve();
                   },
                 });

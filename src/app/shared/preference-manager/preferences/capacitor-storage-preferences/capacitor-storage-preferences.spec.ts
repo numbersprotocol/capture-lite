@@ -1,13 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
 import { defer, zip } from 'rxjs';
 import { concatMapTo, first } from 'rxjs/operators';
 import { STORAGE_PLUGIN } from '../../../capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../../../shared-testing.module';
 import { Preferences } from '../preferences';
 import { CapacitorStoragePreferences } from './capacitor-storage-preferences';
-
-const { Storage } = Plugins;
 
 describe('CapacitorStoragePreferences', () => {
   let preferences: Preferences;

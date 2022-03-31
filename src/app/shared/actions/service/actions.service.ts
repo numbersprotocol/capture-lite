@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer, forkJoin } from 'rxjs';
+import { defer, forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BUBBLE_DB_URL } from '../../dia-backend/secret';
 
@@ -19,6 +19,7 @@ export class ActionsService {
   }
 
   getParams$(ids: string[]) {
+    if (ids.length === 0) return of([]);
     return defer(() =>
       forkJoin(
         ids.map(id =>
@@ -40,7 +41,7 @@ export interface Action {
   readonly banner_image_url_text: string;
   readonly base_url_text: string;
   readonly description_text: string;
-  readonly params_list_custom_param1: string[];
+  readonly params_list_custom_param1?: string[];
   readonly title_text: string;
   readonly network_app_id_text: string;
 }
@@ -55,6 +56,7 @@ export interface Param {
   readonly user_input_boolean: boolean;
   readonly max_number: number;
   readonly min_number: number;
+  readonly optional_boolean?: boolean;
 }
 
 export interface GetActionsResponse<T> {

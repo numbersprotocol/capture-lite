@@ -6,10 +6,10 @@ import {
   ScanResult,
 } from '@capacitor-community/bluetooth-le';
 import { Wifi } from '@capacitor-community/wifi';
-import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/core';
-
-const { Storage } = Plugins;
+import { isEqual } from 'lodash-es';
+import { BehaviorSubject } from 'rxjs';
+import { PreferenceManager } from '../../../../shared/preference-manager/preference-manager.service';
 
 interface GoProWiFiCreds {
   wifiPASS: string;
@@ -57,6 +57,16 @@ export class GoProBluetoothService {
 
   private hasInitialized = false;
 
+  readonly id = 'GoProBluetoothService';
+
+  private readonly preferences = this.preferenceManager.getPreferences(this.id);
+
+  readonly connectedDevice$ = new BehaviorSubject<ScanResult | undefined>(
+    undefined
+  );
+
+  constructor(private readonly preferenceManager: PreferenceManager) {}
+
   private async initialize() {
     if (this.hasInitialized) {
       return;
@@ -66,7 +76,10 @@ export class GoProBluetoothService {
       await BleClient.initialize();
       this.hasInitialized = true;
     } catch (err: any) {
-      if (err instanceof Error && err.message === '') {
+      if (
+        err instanceof Error &&
+        err.message === 'Web Bluetooth API not available in this browser.'
+      ) {
         return;
       }
       throw new Error(err.message);
@@ -100,10 +113,11 @@ export class GoProBluetoothService {
 
   async connectToBluetoothDevice(scanResult: ScanResult) {
     await this.initialize();
+    await BleClient.disconnect(scanResult.device.deviceId);
     await BleClient.connect(scanResult.device.deviceId, _ => {
       this.onDisconnectedFromBluetoothDevice(scanResult);
     });
-    this.saveConnectedDeviceToStorage(scanResult);
+    await this.saveConnectedDeviceToStorage(scanResult);
   }
 
   onDisconnectedFromBluetoothDevice(scanResult: ScanResult) {
@@ -118,23 +132,29 @@ export class GoProBluetoothService {
   private async getConnectedDeviceFromStorage(): Promise<
     ScanResult | undefined
   > {
-    const result = await Storage.get({
-      key: this.GO_PRO_BLUETOOTH_STORAGE_KEY,
-    });
-    if (result.value) {
-      return JSON.parse(result.value) as ScanResult;
+    const res = await this.preferences.getString(
+      PrefKeys.LAST_CONNECTED_BLUETOOTH_DEVICE
+    );
+    if (res !== '') {
+      return JSON.parse(res) as ScanResult;
     }
   }
 
   async saveConnectedDeviceToStorage(scanResult: ScanResult) {
-    await Storage.set({
-      key: this.GO_PRO_BLUETOOTH_STORAGE_KEY,
-      value: JSON.stringify(scanResult),
-    });
+    await this.preferences.setString(
+      PrefKeys.LAST_CONNECTED_BLUETOOTH_DEVICE,
+      JSON.stringify(scanResult)
+    );
+    this.connectedDevice$.next(scanResult);
   }
 
-  async removeConnectedDeviceFromStorage(_: ScanResult) {
-    await Storage.remove({ key: this.GO_PRO_BLUETOOTH_STORAGE_KEY });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async removeConnectedDeviceFromStorage(scanResult: ScanResult) {
+    await this.preferences.setString(
+      PrefKeys.LAST_CONNECTED_BLUETOOTH_DEVICE,
+      ''
+    );
+    this.connectedDevice$.next(undefined);
   }
 
   async getConnectedDevice(): Promise<ScanResult | undefined> {
@@ -166,8 +186,11 @@ export class GoProBluetoothService {
     await this.initialize();
     await this.checkBluetoothDeviceConnection();
     const connectedDevice = await this.getConnectedDeviceFromStorage();
+
+    if (!connectedDevice) return;
+
     await BleClient.write(
-      connectedDevice!.device.deviceId,
+      connectedDevice.device.deviceId,
       this.goProControlAndQueryServiceUUID,
       this.goProCommandReqCharacteristicsUUID,
       numbersToDataView(command)
@@ -178,8 +201,7 @@ export class GoProBluetoothService {
     await this.initialize();
     await this.checkBluetoothDeviceConnection();
 
-    // TODO: find better solution for comparing 2 arrays with numbers
-    if (JSON.stringify(command) === JSON.stringify(this.shutdownCommand)) {
+    if (isEqual(command, this.shutdownCommand)) {
       this.getGoProWiFiCreds();
     }
 
@@ -214,22 +236,27 @@ export class GoProBluetoothService {
   }
 
   async connectToGoProWiFi() {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve, reject) => {
-      await this.sendBluetoothWriteCommand(this.enableGoProWiFiCommand);
+    await this.sendBluetoothWriteCommand(this.enableGoProWiFiCommand);
 
-      const wifiCreds = await this.getGoProWiFiCreds();
-
-      try {
-        const result = await Wifi.connect({
-          ssid: wifiCreds.wifiSSID,
-          password: wifiCreds.wifiPASS,
-        });
-
-        resolve(result);
-      } catch (error) {
-        reject(error);
-      }
+    const wifiCreds = await this.getGoProWiFiCreds();
+    await Wifi.connect({
+      ssid: wifiCreds.wifiSSID,
+      password: wifiCreds.wifiPASS,
     });
   }
+
+  /** Trigger pairing between device and GoPro.
+   *
+   * Because '@capacitor-community/bluetooth-le' have no such command pair device. However we can
+   * send any bluetooth read command to trigger pairing if connected for the first time.
+   * For example: it can be get wifi credentials command
+   */
+  async pairDevice(): Promise<void> {
+    await this.initialize();
+    await this.getGoProWiFiCreds();
+  }
+}
+
+const enum PrefKeys {
+  LAST_CONNECTED_BLUETOOTH_DEVICE = 'GO_PRO_LAST_CONNECTED_BLUETOOTH_DEVICE',
 }

@@ -1,30 +1,31 @@
 import { Injectable } from '@angular/core';
-import { WifiPlugin } from '@capacitor-community/wifi';
-import { Plugins } from '@capacitor/core';
+import { Wifi } from '@capacitor-community/wifi';
 import { Platform } from '@ionic/angular';
+import { PreferenceManager } from '../../../../shared/preference-manager/preference-manager.service';
 import { GoProBluetoothService } from './go-pro-bluetooth.service';
-const Wifi: WifiPlugin = Plugins.Wifi as WifiPlugin;
-
-const { Storage } = Plugins;
 
 @Injectable({
   providedIn: 'root',
 })
 export class GoProWifiService {
-  private readonly GO_PRO_TUTORIAL_MOBILE_DATA_ONLY_APPS_STORAGE_KEY =
-    'GO_PRO_TUTORIAL_MOBILE_DATA_ONLY_APPS_STORAGE_KEY';
+  readonly id = 'GoProWifiService';
+
+  private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
   constructor(
+    private readonly preferenceManager: PreferenceManager,
     private readonly goProBluetoothService: GoProBluetoothService,
     public platform: Platform
   ) {}
 
-  static async isConnectedToGoProWifi() {
+  // eslint-disable-next-line class-methods-use-this
+  async isConnectedToGoProWifi(): Promise<boolean> {
     const result = await Wifi.getSSID();
     return result.ssid?.startsWith('GP') ?? false;
   }
 
-  static async getConnectedWifiSSID() {
+  // eslint-disable-next-line class-methods-use-this
+  async getConnectedWifiSSID() {
     const result = await Wifi.getSSID();
     return result.ssid;
   }
@@ -37,27 +38,28 @@ export class GoProWifiService {
       password: creds.wifiPASS,
     });
 
-    return result.ssid!;
+    return result.ssid ?? '';
   }
 
   async showTutorialForMobileDataOnlyApps() {
-    if (this.platform.is('android') === false) return false;
+    if (this.platform.is('ios')) return false;
 
-    const result = await Storage.get({
-      key: this.GO_PRO_TUTORIAL_MOBILE_DATA_ONLY_APPS_STORAGE_KEY,
-    });
+    const result = await this.preferences.getBoolean(
+      PrefKeys.SHOW_MOBILE_DATA_TUTORIAL,
+      true
+    );
 
-    if (result.value) {
-      return JSON.parse(result.value) as boolean;
-    }
-
-    return false;
+    return result;
   }
 
   async dontShowAgainTutorialForMobileDataOnlyApps() {
-    await Storage.set({
-      key: this.GO_PRO_TUTORIAL_MOBILE_DATA_ONLY_APPS_STORAGE_KEY,
-      value: JSON.stringify(true),
-    });
+    await this.preferences.setBoolean(
+      PrefKeys.SHOW_MOBILE_DATA_TUTORIAL,
+      false
+    );
   }
+}
+
+const enum PrefKeys {
+  SHOW_MOBILE_DATA_TUTORIAL = 'GO_PRO_SHOW_MOBILE_DATA_TUTORIAL',
 }

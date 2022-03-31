@@ -1,18 +1,57 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await  */
 import {
+  AppInfo,
   AppLaunchUrl,
   AppPlugin,
   AppState,
-  PluginListenerHandle,
-} from '@capacitor/core';
+  BackButtonListener,
+  RestoredListener,
+  StateChangeListener,
+  URLOpenListener,
+} from '@capacitor/app';
+import { PluginListenerHandle } from '@capacitor/core';
 
 export class MockAppPlugin implements AppPlugin {
-  addListener(): PluginListenerHandle {
-    return { remove: () => undefined };
+  async getInfo(): Promise<AppInfo> {
+    throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  removeAllListeners(): void {}
+  async minimizeApp(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  addListener(
+    eventName: 'appStateChange',
+    listenerFunc: StateChangeListener
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  addListener(
+    eventName: 'appUrlOpen',
+    listenerFunc: URLOpenListener
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  addListener(
+    eventName: 'appRestoredResult',
+    listenerFunc: RestoredListener
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  addListener(
+    eventName: 'backButton',
+    listenerFunc: BackButtonListener
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  addListener(
+    _eventName: any,
+    _listenerFunc: any
+  ): Promise<PluginListenerHandle> & PluginListenerHandle {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const remove = async () => {};
+    const listenerHandler: any = Promise.resolve({ remove });
+    Object.defineProperty(listenerHandler, 'remove', {
+      value: async () => Promise.resolve({ remove }),
+    });
+    return listenerHandler;
+  }
+
+  async removeAllListeners(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 
   exitApp(): never {
     throw new Error('exited');

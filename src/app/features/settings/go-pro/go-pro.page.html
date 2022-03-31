@@ -11,15 +11,16 @@
       expand="block"
       [disabled]="bluetoothIsScanning"
       (click)="scanForBluetoothDevices()"
+      class="scan-for-bluetooth-devices-btn"
     >
-      {{ bluetoothIsScanning ? 'Scaning' : 'Scan for bluetooth devices' }}
+      {{ bluetoothIsScanning ? 'Scanning' : 'Scan for bluetooth devices' }}
     </ion-button>
 
     <ng-container *ngIf="bluetoothScanResults.length > 0">
       <ion-item *ngFor="let scanResult of bluetoothScanResults">
         <ion-label>
           <h2>{{ scanResult.device.name }}</h2>
-          <p style="font-size: 8px">{{ scanResult.device.deviceId }}</p>
+          <p class="device-id-text">{{ scanResult.device.deviceId }}</p>
         </ion-label>
 
         <ion-button
@@ -41,19 +42,19 @@
           "
           (click)="connectToBluetoothDevice(scanResult)"
           slot="end"
+          class="connect-to-bluetooth-device-btn"
         >
           Connect
         </ion-button>
       </ion-item>
     </ng-container>
 
-    <div style="height: 24px"></div>
+    <div class="spacer"></div>
 
-    <ion-list-header *ngIf="!bluetoothConnectedDevice">
-      <h4>NOT CONNECTED TO ANY GO PRO CAMERA ⚠️</h4>
-    </ion-list-header>
-
-    <ng-container *ngIf="bluetoothConnectedDevice" style="margin-top: 40px">
+    <ng-container
+      *ngIf="bluetoothConnectedDevice"
+      class="connected-bluetooth-device-container"
+    >
       <ion-list-header>
         <h4>
           CONNECTED TO:
@@ -62,12 +63,11 @@
         </h4>
       </ion-list-header>
 
-      <ion-item>
+      <ion-item detail="true" (click)="showFilesOnGoPro()">
         <ion-label>Show files on go pro</ion-label>
-        <ion-button slot="end" (click)="showFilesOnGoPro()"> send </ion-button>
       </ion-item>
     </ng-container>
 
-    <div style="height: 300px"></div>
+    <div class="spacer-bottom"></div>
   </ion-list>
 </ion-content>

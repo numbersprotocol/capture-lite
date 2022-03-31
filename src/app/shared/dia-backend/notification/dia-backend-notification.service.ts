@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { AppPlugin, Capacitor } from '@capacitor/core';
+import { AppPlugin } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { combineLatest, defer, EMPTY, Observable } from 'rxjs';
 import { concatMap, filter, tap } from 'rxjs/operators';

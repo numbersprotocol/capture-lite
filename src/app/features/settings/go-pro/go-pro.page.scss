@@ -1,0 +1,28 @@
+.connected-bluetooth-device-container {
+  margin-top: 40px;
+}
+
+.scan-for-bluetooth-devices-btn {
+  color: white;
+  margin: 0 16px;
+
+  --box-shadow: 0;
+}
+
+.connect-to-bluetooth-device-btn {
+  color: white;
+
+  --box-shadow: 0;
+}
+
+.device-id-text {
+  font-size: 8px;
+}
+
+.spacer {
+  height: 24px;
+}
+
+.spacer-bottom {
+  height: 300px;
+}

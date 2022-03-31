@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import {
-  Capacitor,
-  FilesystemDirectory,
+  Directory as FilesystemDirectory,
   FilesystemPlugin,
-} from '@capacitor/core';
+} from '@capacitor/filesystem';
 import { Mutex } from 'async-mutex';
-import { writeFile } from 'capacitor-blob-writer';
+import write_blob from 'capacitor-blob-writer';
 import Compressor from 'compressorjs';
 import { defer, merge } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
@@ -104,10 +104,10 @@ export class MediaStore {
       const mediaExtension = await this.setMediaExtension(index, mimeType);
       if (Capacitor.isNative) {
         const blob = await base64ToBlob(base64, mimeType);
-        await writeFile({
+        await write_blob({
           directory: this.directory,
           path: `${this.rootDir}/${index}.${mediaExtension.extension}`,
-          data: blob,
+          blob: blob,
           recursive: true,
         });
       } else {
@@ -367,33 +367,34 @@ async function makeVideoThumbnail({
 }) {
   return new Promise<Blob>((resolve, reject) => {
     const videoElement = document.createElement('video');
-    const canvas = document.createElement('canvas');
-    videoElement.addEventListener('error', reject);
-    canvas.addEventListener('error', reject);
-    videoElement.addEventListener('canplay', () => {
-      canvas.width = videoElement.videoWidth;
-      canvas.height = videoElement.videoHeight;
+    videoElement.addEventListener('canplay', onCanPlay);
+    function onCanPlay() {
+      videoElement.removeEventListener('canplay', onCanPlay);
+      videoElement.addEventListener('seeked', onSeeked);
+      const oneSecond = 1;
+      videoElement.currentTime = Math.min(videoElement.duration || oneSecond);
+    }
+    function onSeeked() {
+      videoElement.removeEventListener('seeked', onSeeked);
+      const canvas = document.createElement('canvas');
+      const { videoWidth, videoHeight } = videoElement;
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
       const context = canvas.getContext('2d');
       if (!context) reject(TypeError('2d context is undefined.'));
       else {
-        context.drawImage(
-          videoElement,
-          0,
-          0,
-          videoElement.videoWidth,
-          videoElement.videoHeight
-        );
+        context.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
         canvas.toBlob(
-          blob => {
-            if (blob)
-              resolve(makeImageThumbnail({ image: blob, width, quality }));
+          image => {
+            if (image) resolve(makeImageThumbnail({ image, width, quality }));
             else reject(TypeError('canvas.toBlob is null.'));
           },
           'image/jpeg',
           quality
         );
       }
-    });
+    }
+    videoElement.addEventListener('error', reject);
     videoElement.preload = 'auto';
     videoElement.src = videoUrl;
     videoElement.load();
