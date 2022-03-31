@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.53.0 - 2022-03-31
+
+### Added
+
+- Display insufficient NUM in order confirm dialog if applicable.
+- Add loading indicator at Capture transactions history page.
+- Warn user that the asset will become public when sharing asset profile.
+- Support network action that doesn't take in any parameter.
+- Support optional network action parameters.
+
 ## 0.52.1 - 2022-03-25
 
 ### Fixed
