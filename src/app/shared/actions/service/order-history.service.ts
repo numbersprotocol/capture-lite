@@ -5,7 +5,7 @@ import { BehaviorSubject, combineLatest, defer, EMPTY, Observable } from 'rxjs';
 import { concatMap, first, map, pluck, tap } from 'rxjs/operators';
 import { WebCryptoApiSignatureProvider } from '../../collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { DiaBackendAssetRepository } from '../../dia-backend/asset/dia-backend-asset-repository.service';
-import { BUBBLE_DB_API_TOKEN, BUBBLE_DB_URL } from '../../dia-backend/secret';
+import { BUBBLE_DB_URL } from '../../dia-backend/secret';
 import { NetworkAppOrder } from '../../dia-backend/store/dia-backend-store.service';
 import { DiaBackendTransactionRepository } from '../../dia-backend/transaction/dia-backend-transaction-repository.service';
 import { Proof } from '../../repositories/proof/proof';
@@ -64,9 +64,6 @@ export class OrderHistoryService {
               status_text: OrderStatus.Submitted,
               total_cost_number: Number(networkAppOrder.total_cost),
               uid_text: publicKey,
-            },
-            {
-              headers: { authorization: `Bearer ${BUBBLE_DB_API_TOKEN}` },
             }
           )
         )

@@ -20,7 +20,6 @@ jobs:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets.NUMBERS_BUBBLE_DB_URL }}
-          NUMBERS_BUBBLE_DB_API_TOKEN: ${{ secrets.NUMBERS_BUBBLE_DB_API_TOKEN }}
         run: |
           npm install -g @ionic/cli
           npm install

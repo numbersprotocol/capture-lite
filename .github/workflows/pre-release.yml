@@ -30,7 +30,6 @@ jobs:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets.NUMBERS_BUBBLE_DB_URL }}
-          NUMBERS_BUBBLE_DB_API_TOKEN: ${{ secrets.NUMBERS_BUBBLE_DB_API_TOKEN }}
         run: |
           npm install -g @ionic/cli
           npm install
@@ -91,7 +90,6 @@ jobs:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets.NUMBERS_BUBBLE_DB_URL }}
-          NUMBERS_BUBBLE_DB_API_TOKEN: ${{ secrets.NUMBERS_BUBBLE_DB_API_TOKEN }}
         run: |
           npm install -g @ionic/cli
           npm install
@@ -162,32 +160,26 @@ jobs:
             storage_base_url: NUMBERS_STORAGE_DEV_BASE_URL
             storage_trusted_client_key: NUMBERS_STORAGE_DEV_TRUSTED_CLIENT_KEY
             bubble_db_url: NUMBERS_BUBBLE_DB_QA_URL
-            bubble_db_api_token: NUMBERS_BUBBLE_DB_API_TOKEN
           - folder_name: storage-qa-bubble-qa
             storage_base_url: NUMBERS_STORAGE_QA_BASE_URL
             storage_trusted_client_key: NUMBERS_STORAGE_QA_TRUSTED_CLIENT_KEY
             bubble_db_url: NUMBERS_BUBBLE_DB_QA_URL
-            bubble_db_api_token: NUMBERS_BUBBLE_DB_API_TOKEN
           - folder_name: storage-prod-bubble-qa
             storage_base_url: NUMBERS_STORAGE_BASE_URL
             storage_trusted_client_key: NUMBERS_STORAGE_TRUSTED_CLIENT_KEY
             bubble_db_url: NUMBERS_BUBBLE_DB_QA_URL
-            bubble_db_api_token: NUMBERS_BUBBLE_DB_API_TOKEN
           - folder_name: storage-dev-bubble-prod
             storage_base_url: NUMBERS_STORAGE_DEV_BASE_URL
             storage_trusted_client_key: NUMBERS_STORAGE_DEV_TRUSTED_CLIENT_KEY
             bubble_db_url: NUMBERS_BUBBLE_DB_URL
-            bubble_db_api_token: NUMBERS_BUBBLE_DB_API_TOKEN
           - folder_name: storage-qa-bubble-prod
             storage_base_url: NUMBERS_STORAGE_QA_BASE_URL
             storage_trusted_client_key: NUMBERS_STORAGE_QA_TRUSTED_CLIENT_KEY
             bubble_db_url: NUMBERS_BUBBLE_DB_URL
-            bubble_db_api_token: NUMBERS_BUBBLE_DB_API_TOKEN
           - folder_name: storage-prod-bubble-prod
             storage_base_url: NUMBERS_STORAGE_BASE_URL
             storage_trusted_client_key: NUMBERS_STORAGE_TRUSTED_CLIENT_KEY
             bubble_db_url: NUMBERS_BUBBLE_DB_URL
-            bubble_db_api_token: NUMBERS_BUBBLE_DB_API_TOKEN
     steps:
       - uses: actions/checkout@v2
 
@@ -207,7 +199,6 @@ jobs:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets[matrix.storage_base_url] }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets[matrix.storage_trusted_client_key] }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets[matrix.bubble_db_url] }}
-          NUMBERS_BUBBLE_DB_API_TOKEN: ${{ secrets[matrix.bubble_db_api_token] }}
         run: |
           npm install -g @ionic/cli
           npm install
@@ -251,7 +242,6 @@ jobs:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets.NUMBERS_BUBBLE_DB_URL }}
-          NUMBERS_BUBBLE_DB_API_TOKEN: ${{ secrets.NUMBERS_BUBBLE_DB_API_TOKEN }}
         run: |
           npm install -g @ionic/cli
           npm install
