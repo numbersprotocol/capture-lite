@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, forkJoin, iif, of } from 'rxjs';
@@ -22,10 +22,12 @@ import {
 import { DiaBackendWalletService } from '../../../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../../../shared/error/error.service';
 import { OrderDetailDialogComponent } from '../../../../shared/order-detail-dialog/order-detail-dialog.component';
+import { ProofRepository } from '../../../../shared/repositories/proof/proof-repository.service';
 import {
   isNonNullable,
   VOID$,
 } from '../../../../utils/rx-operators/rx-operators';
+import { InformationSessionService } from '../information/session/information-session.service';
 
 @UntilDestroy()
 @Component({
@@ -44,6 +46,7 @@ export class ActionsPage {
   );
 
   constructor(
+    private readonly router: Router,
     private readonly actionsService: ActionsService,
     private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
@@ -56,7 +59,9 @@ export class ActionsPage {
     private readonly orderHistoryService: OrderHistoryService,
     private readonly diaBackendStoreService: DiaBackendStoreService,
     private readonly diaBackendSeriesRepository: DiaBackendSeriesRepository,
-    private readonly diaBackendWalletService: DiaBackendWalletService
+    private readonly diaBackendWalletService: DiaBackendWalletService,
+    private readonly informationSessionService: InformationSessionService,
+    private readonly proofRepository: ProofRepository
   ) {}
 
   canPerformAction$(action: Action) {
@@ -196,6 +201,26 @@ export class ActionsPage {
     );
   }
 
+  postActionProcedure(networkAppOrder: NetworkAppOrder) {
+    // Since "Gift a Capture" and "Web 3.0 Archive" are essentially Capture
+    // transaction, we want to have the Capture removed after order is submitted.
+    if (
+      networkAppOrder.network_app_name === 'Gift a Capture' ||
+      networkAppOrder.network_app_name === 'Web 3.0 Archive'
+    ) {
+      if (this.informationSessionService.activatedDetailedCapture) {
+        this.informationSessionService.activatedDetailedCapture.proof$.subscribe(
+          proof => {
+            if (proof) {
+              this.proofRepository.remove(proof);
+              this.router.navigate(['/home']);
+            }
+          }
+        );
+      }
+    }
+  }
+
   doAction(action: Action) {
     this.blockingActionService
       .run$(this.canPerformAction$(action))
@@ -245,6 +270,7 @@ export class ActionsPage {
             this.translocoService.translate('message.sentSuccessfully')
           );
         }),
+        tap(networkAppOrder => this.postActionProcedure(networkAppOrder)),
         untilDestroyed(this)
       )
       .subscribe();
