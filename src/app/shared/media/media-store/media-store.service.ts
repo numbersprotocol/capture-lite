@@ -222,7 +222,7 @@ export class MediaStore {
     return index;
   }
 
-  private async getThumbnail(index: string) {
+  async getThumbnail(index: string) {
     const thumbnails = await this.thumbnailTable.queryAll();
     return thumbnails.find(thumb => thumb.imageIndex === index);
   }
