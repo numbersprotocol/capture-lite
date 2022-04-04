@@ -94,11 +94,11 @@
           <ion-icon name="wallet"></ion-icon>
         </ion-col>
         <ion-col size="5" *ngrxLet="gasFee$ as gasFee">
-          <h6>
+          <h6 class="gas-fee-text">
             {{ t('wallets.gasFee') }}:
             {{ gasFee > 0 ? (gasFee | number: '1.2-2') : t('wallets.pending') }}
           </h6>
-          <h4>
+          <h4 class="wallet-total-text">
             {{ t('wallets.total') }} {{ totalCost$ | ngrxPush | currency }}
           </h4>
         </ion-col>
