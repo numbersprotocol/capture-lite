@@ -152,7 +152,7 @@
     "pleaseWait": "請稍候...",
     "copiedToClipboard": "已複製至剪貼簿。",
     "invitationEmail": "輸入好友電子信箱發送邀請。",
-    "clickingSignupToAgreePolicy": "點擊「註冊」即表示你同意我們的《<a href=\"https://ipfs.io/ipfs/QmR2AB2qc1fbsTtf77WXmQn3fyNZskLUt1EG4Qoxxnt6Up\" target=\"_blank\">服務條款</a>》和《<a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">資料政策</a>》。",
+    "clickingSignupToAgreePolicy": "點擊「註冊」即表示你同意我們的《<a href=\"http://ipfs-pin.numbersprotocol.io/ipfs/QmR2AB2qc1fbsTtf77WXmQn3fyNZskLUt1EG4Qoxxnt6Up\" target=\"_blank\">服務條款</a>》和《<a href=\"https://docs.google.com/document/d/1m-LiyZ9ZDs4y9F_IKvY4ProLOYuEA_vIe_GfCSPNhwQ/edit?usp=sharing\" target=\"_blank\">資料政策</a>》。",
     "sendPostCaptureAlert": "瞬時影像送出後，它的所有權將轉移至選定的朋友。您確定嗎？",
     "transactionReceived": "收到了新的瞬時影像。",
     "transactionExpired": "您寄出的瞬時影像已被退回。",
