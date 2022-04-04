@@ -34,16 +34,30 @@ ion-icon.collecting {
   font-size: 24px;
 }
 
-ion-icon.uploaded {
+.bottom-left-icons {
   bottom: 9px;
   left: 5px;
-  font-size: 13px;
-}
+  position: absolute;
+  display: flex;
 
-ion-icon.located {
-  bottom: 8px;
-  left: 23px;
-  font-size: 16px;
+  ion-icon.uploaded {
+    position: relative;
+    font-size: 13px;
+  }
+
+  ion-icon.located {
+    left: 4px;
+    bottom: 2px;
+    position: relative;
+    font-size: 16px;
+  }
+
+  ion-icon.with-caption {
+    left: 6px;
+    bottom: 1px;
+    position: relative;
+    font-size: 14px;
+  }
 }
 
 ion-icon.is-video {
