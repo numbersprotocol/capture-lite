@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
 import { Clipboard } from '@capacitor/clipboard';
-import { Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, combineLatest, forkJoin } from 'rxjs';
@@ -77,6 +77,14 @@ export class WalletsPage {
         untilDestroyed(this)
       )
       .subscribe(totalBalance => this.totalBalance$.next(totalBalance));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  onBuyNumBtnClicked() {
+    Browser.open({
+      url: `https://link.numbersprotocol.io/buy-num`,
+      toolbarColor: '#564dfc',
+    });
   }
 
   openNUMTransactionHistory() {

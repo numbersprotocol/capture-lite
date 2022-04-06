@@ -45,6 +45,7 @@ export interface Action {
   readonly title_text: string;
   readonly network_app_id_text: string;
   readonly ext_action_destination_text?: string;
+  readonly hide_capture_after_execution_boolean?: boolean;
 }
 
 export interface Param {
