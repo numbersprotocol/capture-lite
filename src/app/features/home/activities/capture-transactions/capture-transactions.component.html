@@ -1,11 +1,11 @@
-<div *transloco="let t" class="page-content">
-  <mat-list>
-    <ng-container
-      *ngFor="
-        let transaction of transactionsWithStatus$ | ngrxPush;
-        last as isLast
-      "
-    >
+<mat-spinner diameter="30" *ngIf="isFetching$ | ngrxPush"></mat-spinner>
+
+<div *transloco="let t">
+  <mat-list *ngrxLet="transactionsWithStatus$ as transactions">
+    <h5 id="empty-transaction-msg" *ngIf="transactions.length === 0">
+      {{ t('noTransactionsFound') }}
+    </h5>
+    <ng-container *ngFor="let transaction of transactions; last as isLast">
       <mat-list-item
         [routerLink]="['capture-transaction-details', { id: transaction.id }]"
       >

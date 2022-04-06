@@ -16,7 +16,7 @@ const routes: Routes = [
     path: 'activities',
     loadChildren: () =>
       import('./activities/activities.module').then(
-        m => m.TransactionPageModule
+        m => m.ActivitiesPageModule
       ),
   },
   {

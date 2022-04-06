@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { Device } from '@capacitor/device';
+import { Storage } from '@capacitor/storage';
 import { isEqual, reject } from 'lodash-es';
 import { combineLatest, defer, forkJoin, Observable, Subject } from 'rxjs';
 import {
@@ -18,8 +19,6 @@ import { LanguageService } from '../../language/service/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
 import { BASE_URL, TRUSTED_CLIENT_KEY } from '../secret';
-
-const { Device, Storage } = Plugins;
 
 @Injectable({
   providedIn: 'root',
@@ -66,6 +65,8 @@ export class DiaBackendAuthService {
   readonly emailVerified$ = this.preferences.getBoolean$(
     PrefKeys.EMAIL_VERIFIED
   );
+
+  readonly points$ = this.preferences.getNumber$(PrefKeys.POINTS);
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -182,14 +183,15 @@ export class DiaBackendAuthService {
     return combineLatest([
       this.pushNotificationService.getToken$(),
       defer(() => Device.getInfo()),
+      defer(() => Device.getId()),
     ]).pipe(
-      concatMap(([fcmToken, deviceInfo]) =>
+      concatMap(([fcmToken, deviceInfo, deviceId]) =>
         this.httpClient.post(
           `${BASE_URL}/auth/devices/`,
           {
             fcm_token: fcmToken,
             platform: deviceInfo.platform,
-            device_identifier: deviceInfo.uuid,
+            device_identifier: deviceId.uuid,
           },
           { headers }
         )
@@ -268,6 +270,7 @@ export class DiaBackendAuthService {
           this.setEmail(response.email),
           this.setPhoneVerfied(response.phone_verified),
           this.setEmailVerfied(response.email_verified),
+          this.setPoints(Number(response.user_wallet.points)),
         ]);
       })
     );
@@ -337,6 +340,14 @@ export class DiaBackendAuthService {
   async getEmailVerified() {
     return this.preferences.getBoolean(PrefKeys.EMAIL_VERIFIED);
   }
+
+  private async setPoints(value: number) {
+    return this.preferences.setNumber(PrefKeys.POINTS, value);
+  }
+
+  async getPoints() {
+    return this.preferences.getNumber(PrefKeys.POINTS);
+  }
 }
 
 const enum PrefKeys {
@@ -345,6 +356,7 @@ const enum PrefKeys {
   EMAIL = 'EMAIL',
   EMAIL_VERIFIED = 'EMAIL_VERIFIED',
   PHONE_VERIFIED = 'PHONE_VERIFIED',
+  POINTS = 'POINTS',
 }
 
 interface LoginResult {
@@ -361,6 +373,15 @@ export interface ReadUserResponse {
   readonly email: string;
   readonly phone_verified: boolean;
   readonly email_verified: boolean;
+  readonly user_wallet: {
+    asset_wallet: string;
+    asset_wallet_num: string | null;
+    integrity_wallet: string;
+    integrity_wallet_num: string | null;
+    points: string;
+    num_wallet_name: string;
+    billed_num: string;
+  };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

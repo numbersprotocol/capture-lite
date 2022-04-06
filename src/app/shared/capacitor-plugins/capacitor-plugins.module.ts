@@ -1,15 +1,18 @@
 import { InjectionToken, NgModule } from '@angular/core';
+import { App, AppPlugin } from '@capacitor/app';
+import { Camera, CameraPlugin } from '@capacitor/camera';
+import { Filesystem, FilesystemPlugin } from '@capacitor/filesystem';
+import { Geolocation, GeolocationPlugin } from '@capacitor/geolocation';
 import {
-  AppPlugin,
-  CameraPlugin,
-  FilesystemPlugin,
-  GeolocationPlugin,
+  LocalNotifications,
   LocalNotificationsPlugin,
-  NetworkPlugin,
-  Plugins,
+} from '@capacitor/local-notifications';
+import { Network, NetworkPlugin } from '@capacitor/network';
+import {
+  PushNotifications,
   PushNotificationsPlugin,
-  StoragePlugin,
-} from '@capacitor/core';
+} from '@capacitor/push-notifications';
+import { Storage, StoragePlugin } from '@capacitor/storage';
 
 export const APP_PLUGIN = new InjectionToken<AppPlugin>('APP_PLUGIN');
 export const CAMERA_PLUGIN = new InjectionToken<CameraPlugin>('CAMERA_PLUGIN');
@@ -34,35 +37,35 @@ export const PUSH_NOTIFICATIONS_PLUGIN =
   providers: [
     {
       provide: APP_PLUGIN,
-      useValue: Plugins.App,
+      useValue: App,
     },
     {
       provide: CAMERA_PLUGIN,
-      useValue: Plugins.Camera,
+      useValue: Camera,
     },
     {
       provide: GEOLOCATION_PLUGIN,
-      useValue: Plugins.Geolocation,
+      useValue: Geolocation,
     },
     {
       provide: FILESYSTEM_PLUGIN,
-      useValue: Plugins.Filesystem,
+      useValue: Filesystem,
     },
     {
       provide: LOCAL_NOTIFICATIONS_PLUGIN,
-      useValue: Plugins.LocalNotifications,
+      useValue: LocalNotifications,
     },
     {
       provide: NETOWRK_PLUGIN,
-      useValue: Plugins.Network,
+      useValue: Network,
     },
     {
       provide: STORAGE_PLUGIN,
-      useValue: Plugins.Storage,
+      useValue: Storage,
     },
     {
       provide: PUSH_NOTIFICATIONS_PLUGIN,
-      useValue: Plugins.PushNotifications,
+      useValue: PushNotifications,
     },
   ],
 })

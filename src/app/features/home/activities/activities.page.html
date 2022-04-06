@@ -6,12 +6,12 @@
 </mat-toolbar>
 
 <ion-content *transloco="let t">
-  <ion-segment #segment value="networkActionOrders">
+  <ion-segment #segment value="transactions">
     <ion-segment-button value="transactions">
       <ion-label>{{ t('captureTransactions') }}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="networkActionOrders">
-      <ion-label>{{ t('message.moreActions') }}</ion-label>
+      <ion-label>{{ t('networkActions') }}</ion-label>
     </ion-segment-button>
   </ion-segment>
 

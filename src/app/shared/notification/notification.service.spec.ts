@@ -1,11 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { Plugins } from '@capacitor/core';
+import { LocalNotifications } from '@capacitor/local-notifications';
 import { LOCAL_NOTIFICATIONS_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../shared-testing.module';
 import { NotificationItem } from './notification-item';
 import { NotificationService } from './notification.service';
-
-const { LocalNotifications } = Plugins;
 
 describe('NotificationService', () => {
   let service: NotificationService;

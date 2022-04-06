@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { StoragePlugin } from '@capacitor/core';
+import { StoragePlugin } from '@capacitor/storage';
 import { STORAGE_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
 import { CapacitorStoragePreferences } from './preferences/capacitor-storage-preferences/capacitor-storage-preferences';
 import { Preferences } from './preferences/preferences';

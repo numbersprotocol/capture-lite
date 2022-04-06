@@ -69,7 +69,10 @@
   "activity": "Activity",
   "captureTransactions": "Capture Transactions",
   "numTransactionHistory": "View transaction history",
-  "transactionDetails": "Activity Details",
+  "transactionDetails": "Transaction Details",
+  "networkActionOrderDetails": "Order Details",
+  "noTransactionsFound": "No transactions found",
+  "noNetworkActionOrdersFound": "No network action orders found",
   "sentFrom": "Sent from",
   "receiver": "Receiver",
   "location": "Location",
@@ -99,9 +102,13 @@
   "resendIn": "Re-send {{ secondsRemained }}s",
   "balance": "Balance",
   "walletAddress": "Wallet Address",
-
+  "networkActions": "Network Actions",
   "yourPrivateKey": "Your Private Key",
   "copyToClipboard": "Copy To Clipboard",
+  "order": "Order",
+  "resultUrl": "Result URL",
+  "noResultUrlAvailable": "No Result URL available",
+  "insufficientNum": "Insufficient NUM",
   "verification": {
     "verification": "Verification",
     "clickToVerify": "Click me to verify",
@@ -143,7 +150,7 @@
     "forbiddenAllNumeric": "Cannot contain only numbers.",
     "isNotEmail": "Does not follow email format.",
     "pleaseWait": "Please wait...",
-    "copiedToClipboard": "Has copied to clipboard.",
+    "copiedToClipboard": "Copied to clipboard.",
     "invitationEmail": "Enter friend's email to send the invitation.",
     "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://ipfs.io/ipfs/QmR2AB2qc1fbsTtf77WXmQn3fyNZskLUt1EG4Qoxxnt6Up\" target=\"_blank\">Privacy Policy</a>.",
     "sendPostCaptureAlert": "After this Capture is sent, the ownership will be transferred to the selected friend. Are you sure?",
@@ -172,12 +179,13 @@
     "yesIUnderstand": "Yes, I understand",
     "verificationSuccess": "Success",
     "copyIpfsAddress": "Copy IPFS address",
-    "shareC2paPhoto": "Share C2PA photo",
+    "shareAssetProfile": "Share Asset Profile",
+    "assetBecomePublicAfterSharing": "This asset will become public after sharing",
     "mintNftToken": "Mint NFT token",
     "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?",
-    "moreActions": "More Actions",
     "sentSuccessfully": "Sent Successfully",
-    "confirmCopyPrivateKey": "Warning: Please do not expose your private key to anyone. Lost of private key may cause your account to be lost permanently."
+    "confirmCopyPrivateKey": "Warning: Please do not expose your private key to anyone. Lost of private key may cause your account to be lost permanently.",
+    "hasListedInCaptureClub": "This asset has already been listed in CaptureClub."
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",
@@ -206,12 +214,17 @@
       "user_is_email_verified": "The email address has beed verified",
       "user_not_found": "There is no account registered with the email address",
       "asset_is_being_minted": "Asset is being minted",
-      "insufficient_fund": "Insufficient NUM token",
-      "order_expired": "Order expired. Please create a new order and confirm it within 5 minutes."
+      "insufficient_fund": "Insufficient NUM token.",
+      "order_expired": "Order expired. Please create a new order and confirm it within 5 minutes.",
+      "unable_to_confirm_order": "Unable to confirm order. Please try again.",
+      "unpaid_num_exceed_threshold": "Too much unpaid NUM. Please contact us with email to restore account functionality.",
+      "invalid_network_app_name": "Invalid network app."
     },
     "wallets": {
       "emptyTransferAmount": "Please enter a valid transfer amount.",
-      "insufficientFund": "Insufficient NUM token."
+      "cannotRefreshBalance": "Error refreshing balance.",
+      "noNetworkConnectionCannotRefreshBalance": "No internet connection. Cannot refresh balance.",
+      "insufficientFundWithRequiredBalance": "Insufficient NUM token. Need at least {{requiredBalance}} NUM."
     }
   },
   "transactionState": {
@@ -259,5 +272,24 @@
     "pending": "Pending",
     "total": "Total",
     "calculateGasFee": "Calculate Gas"
+  },
+  "gopro": {
+    "setup": "GoPro Setup",
+    "scanning": "Scanning",
+    "scanForBluetoothDevices": "Scan For Bluetooth Devices",
+    "disconnect": "Disconnect",
+    "connect": "Connect",
+    "connectedTo": "Connected To",
+    "showFilesOnGoPro": "Show Files On GoPro",
+    "goProMediaOnCamera": "GoPro Media On Camera",
+    "filesSelected": "{{count}} File(s) Selected",
+    "connectedWiFi": "Connected WiFi",
+    "connectToGoProWiFi": "Connect To GoPro WiFi",
+    "uploadToCapture": "Upload To Capture",
+    "makeSureYouAreConnectedToGoProWiFiFirst": "Make Sure You Are Connected To GoPro WiFi First",
+    "hintClickTheRefreshButtonAtTheTopRight": "Hint: Click The Refresh Button At The Top Right",
+    "fetchingFiles": "Fetching Files",
+    "stayOnThisScreenWithTheAppOpenToEnsureYourDownloadsAreComplete": "Stay On This Screen With The App Open To Ensure Your Downloads Are Complete",
+    "loadingFilesForUploadToCapture": "Loading {{count}} File(s) For Upload To Capture"
   }
 }

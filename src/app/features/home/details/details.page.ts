@@ -3,7 +3,8 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
+import { Clipboard } from '@capacitor/clipboard';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
@@ -36,14 +37,13 @@ import {
   switchTap,
   VOID$,
 } from '../../../utils/rx-operators/rx-operators';
+import { getAssetProfileUrl } from '../../../utils/url';
 import {
   DetailedCapture,
   InformationSessionService,
 } from './information/session/information-session.service';
 
 SwiperCore.use([Virtual]);
-
-const { Browser, Clipboard } = Plugins;
 
 @UntilDestroy()
 @Component({
@@ -256,7 +256,7 @@ export class DetailsPage {
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
       this.translocoService.selectTranslateObject({
         'message.copyIpfsAddress': null,
-        'message.shareC2paPhoto': null,
+        'message.shareAssetProfile': null,
       }),
     ])
       .pipe(
@@ -264,7 +264,7 @@ export class DetailsPage {
         concatMap(
           ([
             diaBackendAsset,
-            [messageCopyIpfsAddress, messageShareC2paPhoto],
+            [messageCopyIpfsAddress, messageShareAssetProfile],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
@@ -280,9 +280,17 @@ export class DetailsPage {
               }
               if (diaBackendAsset?.cai_file) {
                 buttons.push({
-                  text: messageShareC2paPhoto,
-                  handler: () => {
-                    this.share();
+                  text: messageShareAssetProfile,
+                  handler: async () => {
+                    const result = await this.confirmAlert.present({
+                      message:
+                        this.translocoService.translate(
+                          'message.assetBecomePublicAfterSharing'
+                        ) + '!',
+                    });
+                    if (result) {
+                      this.share();
+                    }
                     resolve();
                   },
                 });
@@ -311,7 +319,7 @@ export class DetailsPage {
         'message.mintNftToken': null,
         'message.viewBlockchainCertificate': null,
         'message.viewSupportingVideoOnIpfs': null,
-        'message.moreActions': null,
+        networkActions: null,
       }),
     ])
       .pipe(
@@ -328,7 +336,7 @@ export class DetailsPage {
               messageMintNftToken,
               messageViewBlockchainCertificate,
               messageViewSupportingVideoOnIpfs,
-              messageMoreActions,
+              messageNetworkActions,
             ],
           ]) =>
             new Promise<void>(resolve => {
@@ -390,7 +398,7 @@ export class DetailsPage {
               }
               if (postCreationWorkflowCompleted) {
                 buttons.push({
-                  text: messageMoreActions,
+                  text: messageNetworkActions,
                   handler: () => {
                     this.router.navigate(
                       ['actions', { id: detailedCapture.id }],
@@ -458,7 +466,8 @@ export class DetailsPage {
         concatMap(([detailedCapture, token]) =>
           defer(() =>
             Browser.open({
-              url: `https://authmedia.net/dia-certificate?mid=${detailedCapture.id}&token=${token}`,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              url: getAssetProfileUrl(detailedCapture.id!, token),
               toolbarColor: '#564dfc',
             })
           )

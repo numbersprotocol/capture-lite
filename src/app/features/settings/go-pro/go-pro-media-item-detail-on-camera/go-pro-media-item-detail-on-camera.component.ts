@@ -51,10 +51,7 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
     if (allowed) {
       await this.startUploadToCapture();
 
-      if (
-        (await this.goProWiFiService.showTutorialForMobileDataOnlyApps()) ===
-        false
-      ) {
+      if (await this.goProWiFiService.showTutorialForMobileDataOnlyApps()) {
         this.showTutorialForMobileDataOnlyApps = true;
       }
     }

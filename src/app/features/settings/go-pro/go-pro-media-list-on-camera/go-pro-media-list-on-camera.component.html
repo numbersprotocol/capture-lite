@@ -3,7 +3,7 @@
     <button (click)="goBack()" mat-icon-button>
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <span> GoPro Media on Camera </span>
+    <span>{{ t('gopro.goProMediaOnCamera') }}</span>
   </ng-template>
 
   <ng-template #multiSelectBlock>
@@ -11,7 +11,7 @@
       <mat-icon>close</mat-icon>
     </button>
     <span *ngIf="multiSelectMode">
-      {{ selectedGoProFiles.length }} file(s) selected
+      {{ t('gopro.filesSelected', { count: selectedGoProFiles.length }) }}
     </span>
   </ng-template>
 
@@ -20,15 +20,15 @@
   </button>
 </mat-toolbar>
 
-<div class="wifi-state-container">
-  <h4>Connected WiFi: {{ connectedWifiSSID }}</h4>
+<div class="wifi-state-container" *transloco="let t">
+  <h4>{{ t('gopro.connectedWiFi') }}: {{ connectedWifiSSID }}</h4>
 
   <ion-button
     *ngIf="!isConnectedToGoProWifi"
     (click)="connectToGoProWifi()"
     class="connect-to-go-pro-wifi-btn"
   >
-    Connect to go pro WiFi (enable first)
+    {{ t('gopro.connectToGoProWiFi') }}
   </ion-button>
 
   <ion-button
@@ -37,35 +37,41 @@
     (click)="uploadSelectedFiles()"
     class="multi-select-mode-btn"
   >
-    Upload to capture
+    {{ t('gopro.uploadToCapture') }}
   </ion-button>
 
   <!-- TODO: att translate text -->
   <h4 *ngIf="shouldConnectToWiFi" class="should-connect-to-wifi-text">
-    Make sure you connected to GoPro WiFi first
+    {{ t('gopro.makeSureYouAreConnectedToGoProWiFiFirst') }}
   </h4>
 
   <h4 *ngIf="fetchingFilesError">
     {{ fetchingFilesError }}
     <br />
-    Hint: click refresh button at top right.
+    {{ t('gopro.hintClickTheRefreshButtonAtTheTopRight') }}
   </h4>
 
-  <h4 *ngIf="fetchingFiles">Fetching files...</h4>
+  <h4 *ngIf="fetchingFiles">{{ t('gopro.fetchingFiles') }}...</h4>
 
   <span *ngIf="uploadInProgress" class="upload-in-progress-info">
     <ion-icon name="information-circle-outline"></ion-icon>
-    Stay on this screen with the app open to ensure your downloads complete!
+    {{
+      t('gopro.stayOnThisScreenWithTheAppOpenToEnsureYourDownloadsAreComplete')
+    }}
   </span>
 </div>
 
-<app-go-pro-media-loading-bar
-  *ngIf="uploadInProgress"
-  loadingText="Loading {{
-    filesToUpload.length + 1
-  }} file(s) for upload to capture."
-  (uploadCancel)="onUploadCancel()"
-></app-go-pro-media-loading-bar>
+<ng-template *transloco="let t">
+  <app-go-pro-media-loading-bar
+    *ngIf="uploadInProgress"
+    [loadingText]="
+      t('gopro.loadingFilesForUploadToCapture', {
+        count: filesToUpload.length + 1
+      })
+    "
+    (uploadCancel)="onUploadCancel()"
+  ></app-go-pro-media-loading-bar>
+</ng-template>
 
 <ion-content
   [scrollEvents]="true"

@@ -69,7 +69,10 @@
   "activity": "活動紀錄",
   "captureTransactions": "Capture 交易",
   "numTransactionHistory": "查詢交易紀錄",
-  "transactionDetails": "活動資訊",
+  "transactionDetails": "交易資訊",
+  "networkActionOrderDetails": "訂單資訊",
+  "noTransactionsFound": "找不到任何 Capture 交易",
+  "noNetworkActionOrdersFound": "找不到任何網絡動作訂單",
   "sentFrom": "發送自",
   "receiver": "收件人",
   "location": "位置",
@@ -99,9 +102,13 @@
   "resendIn": "重新發送 {{ secondsRemained }}秒",
   "balance": "餘額",
   "walletAddress": "錢包地址",
-
+  "networkActions": "網絡動作",
   "yourPrivateKey": "您的私鑰",
   "copyToClipboard": "複製到剪貼簿",
+  "order": "訂單",
+  "resultUrl": "結果連結",
+  "insufficientNum": "NUM 餘額不足",
+  "noResultUrlAvailable": "沒有可以顯示的結果連結",
   "verification": {
     "verification": "驗證",
     "clickToVerify": "點擊驗證",
@@ -172,12 +179,13 @@
     "yesIUnderstand": "我了解",
     "verificationSuccess": "驗證成功",
     "copyIpfsAddress": "複製 IPFS 位址",
-    "shareC2paPhoto": "分享 C2PA 照片",
+    "shareAssetProfile": "分享資產檔案",
+    "assetBecomePublicAfterSharing": "該資產將在分享後公開",
     "mintNftToken": "鑄造 NFT 代幣",
     "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？",
-    "moreActions": "更多動作",
     "sentSuccessfully": "成功送出",
-    "confirmCopyPrivateKey": "警告：請不要向任何人揭露您的金鑰，未保管好金鑰可能導致您永遠失去您的帳號。"
+    "confirmCopyPrivateKey": "警告：請不要向任何人揭露您的金鑰，未保管好金鑰可能導致您永遠失去您的帳號。",
+    "hasListedInCaptureClub": "該資產已在 CaptureClub 上架。"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",
@@ -206,12 +214,17 @@
       "user_is_email_verified": "此電子郵件已驗證",
       "user_not_found": "此電子郵件尚未註冊 Capture 帳號",
       "asset_is_being_minted": "NFT 代幣鑄造中",
-      "insufficient_fund": "NUM 餘額不足",
-      "order_expired": "訂單已過期。請創建新訂單並在 5 分鐘內確認。"
+      "insufficient_fund": "NUM 餘額不足。",
+      "order_expired": "訂單已過期。請創建新訂單並在 5 分鐘內確認。",
+      "unable_to_confirm_order": "無法確認訂單。請再試一次。",
+      "unpaid_num_exceed_threshold": "太多未付的 NUM。請通過電子郵件與我們聯繫以恢復帳戶功能。",
+      "invalid_network_app_name": "無效的網絡動作。"
     },
     "wallets": {
       "emptyTransferAmount": "請輸入有效轉帳金額。",
-      "insufficientFund": "NUM 餘額不足。"
+      "cannotRefreshBalance": "刷新餘額時發生錯誤。",
+      "noNetworkConnectionCannotRefreshBalance": "沒有網路連接，無法刷新餘額。",
+      "insufficientFundWithRequiredBalance": "NUM 餘額不足。需要至少 {{requiredBalance}} NUM"
     }
   },
   "transactionState": {
@@ -223,11 +236,11 @@
     "waitingToBeAccepted": "等待中"
   },
   "networkActionOrderState": {
-    "submitted": "送出",
+    "submitted": "已送出",
     "paid": "繳費成功",
     "payment_failed": "繳費失敗",
-    "completed": "完成",
-    "failed": "失敗"
+    "completed": "已完成",
+    "failed": "已失敗"
   },
   "payment": {
     "confirmPayment": "你的訂單",
@@ -259,5 +272,24 @@
     "pending": "待計算",
     "total": "總額",
     "calculateGasFee": "計算油費"
+  },
+  "gopro": {
+    "setup": "GoPro 設置",
+    "scanning": "掃描",
+    "scanForBluetoothDevices": "掃描藍牙設備",
+    "disconnect": "斷開連接",
+    "connect": "連接",
+    "connectedTo": "連接到",
+    "showFilesOnGoPro": "在 GoPro 上顯示檔案",
+    "goProMediaOnCamera": "相機上的 GoPro 媒體",
+    "filesSelected": "已選擇 {{count}} 個檔案",
+    "connectedWiFi": "連接到 WiFi",
+    "connectToGoProWiFi": "連接到 GoPro WiFi",
+    "uploadToCapture": "上傳至 Capture",
+    "makeSureYouAreConnectedToGoProWiFiFirst": "請確保您已經連接到 GoPro WiFi",
+    "hintClickTheRefreshButtonAtTheTopRight": "提示：點擊右上角的刷新按鈕",
+    "fetchingFiles": "獲取檔案",
+    "stayOnThisScreenWithTheAppOpenToEnsureYourDownloadsAreComplete": "請勿關閉此畫面以確保您的下載完成",
+    "loadingFilesForUploadToCapture": "加載 {{count}} 個檔案以供上傳至 Capture"
   }
 }

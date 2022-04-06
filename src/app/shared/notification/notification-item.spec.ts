@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { LocalNotificationsPlugin, Plugins } from '@capacitor/core';
+import {
+  LocalNotifications,
+  LocalNotificationsPlugin,
+} from '@capacitor/local-notifications';
 import { TranslocoService } from '@ngneat/transloco';
 import { LOCAL_NOTIFICATIONS_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
 import { SharedTestingModule } from '../shared-testing.module';
 import { NotificationItem } from './notification-item';
-
-const { LocalNotifications } = Plugins;
 
 describe('NotificationItem', () => {
   let item: NotificationItem;

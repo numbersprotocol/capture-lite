@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -28,8 +28,6 @@ import { OnboardingService } from '../../shared/onboarding/onboarding.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { GoProBluetoothService } from '../settings/go-pro/services/go-pro-bluetooth.service';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
-
-const { Browser } = Plugins;
 
 @UntilDestroy()
 @Component({

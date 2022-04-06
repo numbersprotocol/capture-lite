@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TransactionPage } from './activities.page';
+import { ActivitiesPage } from './activities.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: TransactionPage,
+    component: ActivitiesPage,
   },
   {
     path: 'capture-transaction-details',
@@ -14,10 +14,17 @@ const routes: Routes = [
         './capture-transaction-details/capture-transaction-details.module'
       ).then(m => m.TransactionDetailsPageModule),
   },
+  {
+    path: 'network-action-order-details',
+    loadChildren: () =>
+      import(
+        './network-action-order-details/network-action-order-details.module'
+      ).then(m => m.NetworkActionOrderDetailsPageModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TransactionPageRoutingModule {}
+export class ActivitiesPageRoutingModule {}

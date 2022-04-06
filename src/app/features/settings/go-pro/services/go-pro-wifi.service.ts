@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { WifiPlugin } from '@capacitor-community/wifi';
-import { Plugins } from '@capacitor/core';
+import { Wifi } from '@capacitor-community/wifi';
 import { Platform } from '@ionic/angular';
 import { PreferenceManager } from '../../../../shared/preference-manager/preference-manager.service';
 import { GoProBluetoothService } from './go-pro-bluetooth.service';
-const Wifi: WifiPlugin = Plugins.Wifi as WifiPlugin;
 
 @Injectable({
   providedIn: 'root',
@@ -44,10 +42,10 @@ export class GoProWifiService {
   }
 
   async showTutorialForMobileDataOnlyApps() {
-    if (this.platform.is('android') === false) return false;
+    if (this.platform.is('ios')) return false;
 
     const result = await this.preferences.getBoolean(
-      PrefKeys.SHOW_MOBILE_DATA_TUTORIAL_ON_IOS,
+      PrefKeys.SHOW_MOBILE_DATA_TUTORIAL,
       true
     );
 
@@ -56,12 +54,12 @@ export class GoProWifiService {
 
   async dontShowAgainTutorialForMobileDataOnlyApps() {
     await this.preferences.setBoolean(
-      PrefKeys.SHOW_MOBILE_DATA_TUTORIAL_ON_IOS,
+      PrefKeys.SHOW_MOBILE_DATA_TUTORIAL,
       false
     );
   }
 }
 
 const enum PrefKeys {
-  SHOW_MOBILE_DATA_TUTORIAL_ON_IOS = 'GO_PRO_SHOW_MOBILE_DATA_TUTORIAL_ON_IOS',
+  SHOW_MOBILE_DATA_TUTORIAL = 'GO_PRO_SHOW_MOBILE_DATA_TUTORIAL',
 }

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { combineLatest, defer, forkJoin } from 'rxjs';
-import { concatMap, first } from 'rxjs/operators';
+import { catchError, concatMap, first } from 'rxjs/operators';
+import { ErrorService } from '../../error/error.service';
 import { NetworkService } from '../../network/network.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
@@ -41,7 +42,8 @@ export class DiaBackendWalletService {
     private readonly httpClient: HttpClient,
     private readonly authService: DiaBackendAuthService,
     private readonly networkService: NetworkService,
-    private readonly preferenceManager: PreferenceManager
+    private readonly preferenceManager: PreferenceManager,
+    private readonly errorService: ErrorService
   ) {}
 
   getIntegrityWallet$() {
@@ -97,7 +99,8 @@ export class DiaBackendWalletService {
             diaBackendWallet.address
           ),
         ])
-      )
+      ),
+      catchError((err: unknown) => this.errorService.toastDiaBackendError$(err))
     );
   }
 
