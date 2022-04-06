@@ -26,15 +26,20 @@ export class DiaBackendAssetDownloadingService {
     private readonly httpClient: HttpClient
   ) {}
 
-  async storeRemoteCapture(diaBackendAsset: DiaBackendAsset) {
-    try {
-      await this.storeAssetThumbnail(diaBackendAsset);
-    } catch (e: unknown) {
-      if (
-        !(e instanceof HttpErrorResponse) ||
-        !(e.status === HttpErrorCode.NOT_FOUND)
-      )
-        throw e;
+  async storeRemoteCapture(
+    diaBackendAsset: DiaBackendAsset,
+    storeAssetThumbnail = true
+  ) {
+    if (storeAssetThumbnail) {
+      try {
+        await this.storeAssetThumbnail(diaBackendAsset);
+      } catch (e: unknown) {
+        if (
+          !(e instanceof HttpErrorResponse) ||
+          !(e.status === HttpErrorCode.NOT_FOUND)
+        )
+          throw e;
+      }
     }
     return this.storeIndexedProof(diaBackendAsset);
   }
