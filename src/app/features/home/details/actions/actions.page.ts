@@ -221,10 +221,8 @@ export class ActionsPage {
         catchError((err: unknown) => {
           return this.errorService.toastError$(err);
         }),
-        concatMap(() =>
-          combineLatest([this.openActionDialog$(action), of(action)])
-        ),
-        concatMap(([createOrderInput, action]) =>
+        concatMap(() => this.openActionDialog$(action)),
+        concatMap(createOrderInput =>
           this.blockingActionService.run$(
             forkJoin([
               this.createOrder$(
