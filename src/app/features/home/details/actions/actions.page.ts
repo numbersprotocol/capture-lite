@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Browser } from '@capacitor/browser';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, forkJoin, iif, of } from 'rxjs';
@@ -201,6 +202,25 @@ export class ActionsPage {
     );
   }
 
+  redirectToExternalUrl(url: string, orderId: string) {
+    this.id$
+      .pipe(
+        first(),
+        isNonNullable(),
+        tap(cid =>
+          Browser.open({
+            url: `${url}?cid=${cid}&order_id=${orderId}`,
+            toolbarColor: '#564dfc',
+          })
+        ),
+        catchError((err: unknown) => {
+          return this.errorService.toastError$(err);
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
   removeCapture() {
     if (this.informationSessionService.activatedDetailedCapture) {
       this.informationSessionService.activatedDetailedCapture.proof$.subscribe(
@@ -260,6 +280,14 @@ export class ActionsPage {
           this.snackBar.open(
             this.translocoService.translate('message.sentSuccessfully')
           );
+        }),
+        tap(networkAppOrder => {
+          if (action.ext_action_destination_text) {
+            this.redirectToExternalUrl(
+              action.ext_action_destination_text,
+              networkAppOrder.id
+            );
+          }
         }),
         tap(() => {
           if (action.hide_capture_after_execution_boolean ?? false)
