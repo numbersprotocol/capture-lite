@@ -82,7 +82,7 @@ export class WalletsPage {
   // eslint-disable-next-line class-methods-use-this
   onBuyNumBtnClicked() {
     Browser.open({
-      url: `https://buy.num.indacoin.io/`,
+      url: `https://link.numbersprotocol.io/buy-num`,
       toolbarColor: '#564dfc',
     });
   }
