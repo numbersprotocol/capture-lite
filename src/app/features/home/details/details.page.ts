@@ -272,7 +272,7 @@ export class DetailsPage {
                 buttons.push({
                   text: messageCopyIpfsAddress,
                   handler: () => {
-                    const ipfsAddress = `http://ipfs-pin.numbersprotocol.io/ipfs/${diaBackendAsset.cid}`;
+                    const ipfsAddress = `https://ipfs-pin.numbersprotocol.io/ipfs/${diaBackendAsset.cid}`;
                     this.copyToClipboard(ipfsAddress);
                     resolve();
                   },
@@ -431,7 +431,7 @@ export class DetailsPage {
           return Browser.open({
             url: diaBackendAsset.supporting_file.replace(
               'ipfs://',
-              'http://ipfs-pin.numbersprotocol.io/ipfs/'
+              'https://ipfs-pin.numbersprotocol.io/ipfs/'
             ),
             toolbarColor: '#564dfc',
           });
