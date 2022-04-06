@@ -99,7 +99,7 @@ export class CaptureTabComponent {
 
   refreshCaptures(event: Event) {
     this.diaBackendAssetRefreshingService
-      .refresh()
+      .refresh$()
       .pipe(finalize(() => (<CustomEvent>event).detail.complete()))
       .subscribe();
   }
