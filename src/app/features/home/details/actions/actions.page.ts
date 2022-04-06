@@ -201,23 +201,16 @@ export class ActionsPage {
     );
   }
 
-  postActionProcedure(networkAppOrder: NetworkAppOrder) {
-    // Since "Gift a Capture" and "Web 3.0 Archive" are essentially Capture
-    // transaction, we want to have the Capture removed after order is submitted.
-    if (
-      networkAppOrder.network_app_name === 'Gift a Capture' ||
-      networkAppOrder.network_app_name === 'Web 3.0 Archive'
-    ) {
-      if (this.informationSessionService.activatedDetailedCapture) {
-        this.informationSessionService.activatedDetailedCapture.proof$.subscribe(
-          proof => {
-            if (proof) {
-              this.proofRepository.remove(proof);
-              this.router.navigate(['/home']);
-            }
+  removeCapture() {
+    if (this.informationSessionService.activatedDetailedCapture) {
+      this.informationSessionService.activatedDetailedCapture.proof$.subscribe(
+        proof => {
+          if (proof) {
+            this.proofRepository.remove(proof);
+            this.router.navigate(['/home']);
           }
-        );
-      }
+        }
+      );
     }
   }
 
@@ -270,7 +263,10 @@ export class ActionsPage {
             this.translocoService.translate('message.sentSuccessfully')
           );
         }),
-        tap(networkAppOrder => this.postActionProcedure(networkAppOrder)),
+        tap(() => {
+          if (action.hide_capture_after_execution_boolean ?? false)
+            this.removeCapture();
+        }),
         untilDestroyed(this)
       )
       .subscribe();
