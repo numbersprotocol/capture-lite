@@ -52,7 +52,7 @@ export class DetailedCapture {
         const [index, meta] = Object.entries(proof.indexedAssets)[0];
         if (!(await this.mediaStore.exists(index)) && proof.diaBackendAssetId) {
           const mediaBlob = await this.diaBackendAssetRepository
-            .downloadAssetFileFromCDN$(proof.diaBackendAssetId)
+            .downloadFile$({ id: proof.diaBackendAssetId, field: 'asset_file' })
             .pipe(
               first(),
               catchError((err: unknown) => this.errorService.toastError$(err))
@@ -63,6 +63,7 @@ export class DetailedCapture {
         return proof.getFirstAssetUrl();
       });
     }
+
     return this.diaBackendAsset$.pipe(
       isNonNullable(),
       switchMap(asset =>
