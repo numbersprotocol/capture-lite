@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove the Capture after Gift a Capture or Web 3 archive network action #1129
 - Fix wallets and NUM transfer page UI for screen width < 360px
+- Fix refresh not working when there's no Capture
 
 ## 0.53.0 - 2022-03-31
 
