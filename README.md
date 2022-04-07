@@ -140,3 +140,11 @@ When push to the `master` branch with new version in the `package.json` file, Gi
 1. Publish the app to Play Console on alpha track.
 1. Upload debug apk to Google Drive.
 1. Send notification to the private `reminder-releases` slack channel.
+
+If error occur in `deploy-app-store` GitHub Action, most likely it's due to some weird error with GitHub MacOS runner or iOS server. Re-run the failed job should fix that. However, you might run into
+
+```
+Error: Validation Failed: {"resource":"Release","code":"already_exists","field":"tag_name"}
+```
+
+In this case, you could delete the releae tag by doing `git push --delete origin tagname`. E.g. `git push --delete origin 0.53.0`.

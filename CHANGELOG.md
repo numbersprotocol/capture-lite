@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.54.0 - 2022-04-07
+
+### Added
+
+- Add buy NUM button at wallets page
+- Support redirecting to external website after successfully submitting a network action order
+- Skip storing asset thumbnail for cached assets
+- Download asset using CDN instead of [DIA backend `/download/` endpoint](https://dia-backend.numbersprotocol.io/api/v3/redoc/#operation/assets_download) #1362
+
+### Fixed
+
+- Remove the Capture after Gift a Capture or Web 3 archive network action #1129
+- Fix wallets and NUM transfer page UI for screen width < 360px
+
 ## 0.53.0 - 2022-03-31
 
 ### Added
