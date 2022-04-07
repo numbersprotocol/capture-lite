@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { EMPTY, forkJoin } from 'rxjs';
+import { EMPTY, forkJoin, of } from 'rxjs';
 import { catchError, concatMap, first } from 'rxjs/operators';
 import { HttpErrorCode } from '../../../error/error.service';
 import { ProofRepository } from '../../../repositories/proof/proof-repository.service';
@@ -34,8 +34,9 @@ export class DiaBackendAsseRefreshingService {
     }
     return this.proofRepository.all$.pipe(
       first(),
-      concatMap(proofs =>
-        forkJoin(
+      concatMap(proofs => {
+        if (proofs.length === 0) return of([]);
+        return forkJoin(
           proofs.map(proof =>
             this.assetRepository.fetchByProof$(proof).pipe(
               catchError((err: unknown) => {
@@ -49,8 +50,8 @@ export class DiaBackendAsseRefreshingService {
               })
             )
           )
-        )
-      ),
+        );
+      }),
       concatMap(() => this.diaBackendAssetPrefetchingService.prefetch())
     );
   }
