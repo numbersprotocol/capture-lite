@@ -134,7 +134,7 @@ export class DiaBackendAssetRepository {
         iif(
           () => !!image,
           of(image).pipe(isNonNullable()),
-          this.downloadAssetFileFromCDN$(postCapture.id).pipe(
+          this.downloadFile$({ id: postCapture.id, field: 'asset_file' }).pipe(
             first(),
             tap(blob => {
               // eslint-disable-next-line rxjs/no-subject-value
@@ -200,18 +200,16 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  downloadAssetFileFromCDN$(cid: string) {
+  downloadFile$({ id, field }: { id: string; field: AssetDownloadField }) {
+    const formData = new FormData();
+    formData.append('field', field);
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
-        this.httpClient.get<DiaBackendAsset>(
-          `${BASE_URL}/api/v3/assets/${cid}`,
-          { headers }
+        this.httpClient.post(
+          `${BASE_URL}/api/v3/assets/${id}/download/`,
+          formData,
+          { headers, responseType: 'blob' }
         )
-      ),
-      concatMap(diaBackendAsset =>
-        this.httpClient.get(`${diaBackendAsset.asset_file}`, {
-          responseType: 'blob',
-        })
       )
     );
   }
