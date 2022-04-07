@@ -27,15 +27,13 @@ export class DiaBackendAsseRefreshingService {
       .subscribe(value => (this.pendingUploadTasks = value));
   }
 
-  refresh$() {
+  refresh() {
     // Don't refresh if there are still captures being uploaded.
     if (this.pendingUploadTasks > 0) {
       return EMPTY;
     }
-
     return this.proofRepository.all$.pipe(
       first(),
-      // Remove deleted Captures or Captures that no longer belong to the user.
       concatMap(proofs => {
         if (proofs.length === 0) return of([]);
         return forkJoin(
@@ -54,11 +52,7 @@ export class DiaBackendAsseRefreshingService {
           )
         );
       }),
-      concatMap(async () => {
-        // TO DO: pass in diaBackendAssets and skip those when prefetching.
-        await this.diaBackendAssetPrefetchingService.prefetch();
-        return EMPTY;
-      })
+      concatMap(() => this.diaBackendAssetPrefetchingService.prefetch())
     );
   }
 }
