@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Warn user that the asset will become public when sharing asset profile.
 - Support network action that doesn't take in any parameter.
 - Support optional network action parameters.
+- Go pro/multi select file upload.
 
 ## 0.52.1 - 2022-03-25
 
