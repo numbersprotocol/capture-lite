@@ -26,6 +26,7 @@
   <ion-button
     *ngIf="!isConnectedToGoProWifi"
     (click)="connectToGoProWifi()"
+    [disabled]="isConnectingToGoProWifi"
     class="connect-to-go-pro-wifi-btn"
   >
     {{ t('gopro.connectToGoProWiFi') }}
