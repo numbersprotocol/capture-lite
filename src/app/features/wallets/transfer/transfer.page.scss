@@ -32,10 +32,22 @@ ion-card {
     margin-bottom: 0;
   }
 
+  h6.gas-fee-text {
+    @media (max-width: 360px) {
+      font-size: 14px;
+    }
+  }
+
   h4 {
     margin-top: 2%;
     font-weight: bold;
     letter-spacing: 0.02em;
+  }
+
+  h4.wallet-total-text {
+    @media (max-width: 360px) {
+      font-size: 14px;
+    }
   }
 
   #deposit-withdraw-btn-col {
@@ -53,6 +65,10 @@ ion-card {
     width: 80%;
 
     --border-radius: 10px;
+
+    @media (max-width: 360px) {
+      font-size: 12px;
+    }
   }
 }
 
@@ -73,6 +89,16 @@ ion-card {
       margin-top: 0;
       font-weight: bold;
       letter-spacing: 0.02em;
+
+      @media (max-width: 360px) {
+        font-size: 16px;
+      }
+    }
+
+    h1 {
+      @media (max-width: 360px) {
+        font-size: 20px;
+      }
     }
   }
 

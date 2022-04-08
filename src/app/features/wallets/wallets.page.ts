@@ -79,6 +79,14 @@ export class WalletsPage {
       .subscribe(totalBalance => this.totalBalance$.next(totalBalance));
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  onBuyNumBtnClicked() {
+    Browser.open({
+      url: `https://link.numbersprotocol.io/buy-num`,
+      toolbarColor: '#564dfc',
+    });
+  }
+
   openAssetWalletHistory() {
     this.diaBackendWalletService.assetWalletAddr$
       .pipe(

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MediaStore } from '../../../media/media-store/media-store.service';
 import { DiaBackendAssetRepository } from '../dia-backend-asset-repository.service';
 import { DiaBackendAssetDownloadingService } from '../downloading/dia-backend-downloading.service';
 
@@ -8,7 +9,8 @@ import { DiaBackendAssetDownloadingService } from '../downloading/dia-backend-do
 export class DiaBackendAssetPrefetchingService {
   constructor(
     private readonly assetRepository: DiaBackendAssetRepository,
-    private readonly downloadingService: DiaBackendAssetDownloadingService
+    private readonly downloadingService: DiaBackendAssetDownloadingService,
+    private readonly mediaStore: MediaStore
   ) {}
 
   async prefetch(
@@ -29,7 +31,12 @@ export class DiaBackendAssetPrefetchingService {
       await Promise.all(
         diaBackendAssets.map(async diaBackendAsset => {
           if (diaBackendAsset.source_transaction === null)
-            await this.downloadingService.storeRemoteCapture(diaBackendAsset);
+            await this.downloadingService.storeRemoteCapture(
+              diaBackendAsset,
+              (await this.mediaStore.getThumbnail(
+                diaBackendAsset.proof_hash
+              )) === undefined
+            );
           currentCount += 1;
           onStored(currentCount, totalCount);
         })
