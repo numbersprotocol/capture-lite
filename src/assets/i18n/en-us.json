@@ -152,7 +152,7 @@
     "pleaseWait": "Please wait...",
     "copiedToClipboard": "Copied to clipboard.",
     "invitationEmail": "Enter friend's email to send the invitation.",
-    "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://ipfs.io/ipfs/QmR2AB2qc1fbsTtf77WXmQn3fyNZskLUt1EG4Qoxxnt6Up\" target=\"_blank\">Privacy Policy</a>.",
+    "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://ipfs-pin.numbersprotocol.io/ipfs/QmR2AB2qc1fbsTtf77WXmQn3fyNZskLUt1EG4Qoxxnt6Up\" target=\"_blank\">Privacy Policy</a>.",
     "sendPostCaptureAlert": "After this Capture is sent, the ownership will be transferred to the selected friend. Are you sure?",
     "transactionReceived": "A new Capture received.",
     "transactionExpired": "A Capture you sent is returned.",
