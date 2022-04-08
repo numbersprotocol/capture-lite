@@ -65,6 +65,10 @@ export class GoProBluetoothService {
     undefined
   );
 
+  readonly lastConnectedDevice$ = this.preferences.getString$(
+    PrefKeys.LAST_CONNECTED_BLUETOOTH_DEVICE
+  );
+
   constructor(private readonly preferenceManager: PreferenceManager) {}
 
   private async initialize() {
