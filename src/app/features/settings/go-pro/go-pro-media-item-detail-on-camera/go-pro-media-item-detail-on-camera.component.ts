@@ -24,6 +24,9 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   showTutorialForMobileDataOnlyApps = false;
   dontShowAgainTutorialForMobileDataOnlyApps = false;
 
+  // TODO: keep until Q&A decides if they need blurred thumbnail or not
+  thumbnailBlurred = true;
+
   constructor(
     private readonly location: Location,
     private readonly route: ActivatedRoute,
@@ -43,7 +46,25 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   }
 
   ngOnInit() {
+    // TODO: git reset this function
+    // const goProMediaFile: GoProFile = {
+    //   url: 'http://192.168.0.11:3000/thumbnail.mp4',
+    //   name: 'thumbnail',
+    //   size: 0,
+    //   storageKey: '',
+    //   thumbnailUrl: 'http://192.168.0.11:3000/thumbnail.jpeg',
+    // };
+    // this.mediaFile = goProMediaFile;
+    // this.mediaType = getFileType(this.mediaFile.url);
+
     this.mediaType = getFileType(this.mediaFile?.url);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  playVideoFullScreen() {
+    this.router.navigate(['/settings', 'go-pro', 'media-item-viewer'], {
+      state: { goProMediaFile: this.mediaFile },
+    });
   }
 
   async uploadToCapture() {

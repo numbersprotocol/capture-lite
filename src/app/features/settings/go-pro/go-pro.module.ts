@@ -5,6 +5,7 @@ import { GoProMediaItemDetailOnCameraComponent } from './go-pro-media-item-detai
 import { GoProMediaListItemOnCameraComponent } from './go-pro-media-list-item-on-camera/go-pro-media-list-item-on-camera.component';
 import { GoProMediaListOnCameraComponent } from './go-pro-media-list-on-camera/go-pro-media-list-on-camera.component';
 import { GoProMediaLoadingBarComponent } from './go-pro-media-loading-bar/go-pro-media-loading-bar.component';
+import { GoProMediaViewerWithNativePlayerComponent } from './go-pro-media-viewer-with-native-player/go-pro-media-viewer-with-native-player.component';
 import { GoProPageRoutingModule } from './go-pro-routing.module';
 import { GoProPage } from './go-pro.page';
 
@@ -16,6 +17,7 @@ import { GoProPage } from './go-pro.page';
     GoProMediaListItemOnCameraComponent,
     GoProMediaItemDetailOnCameraComponent,
     GoProMediaLoadingBarComponent,
+    GoProMediaViewerWithNativePlayerComponent,
   ],
 })
 export class GoProPageModule {}
