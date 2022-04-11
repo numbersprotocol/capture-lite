@@ -43,17 +43,6 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   }
 
   ngOnInit() {
-    // TODO: git reset this function
-    // const goProMediaFile: GoProFile = {
-    //   url: 'http://192.168.0.11:3000/thumbnail.mp4',
-    //   name: 'thumbnail',
-    //   size: 0,
-    //   storageKey: '',
-    //   thumbnailUrl: 'http://192.168.0.11:3000/thumbnail.jpeg',
-    // };
-    // this.mediaFile = goProMediaFile;
-    // this.mediaType = getFileType(this.mediaFile.url);
-
     this.mediaType = getFileType(this.mediaFile?.url);
   }
 
