@@ -7,6 +7,7 @@ import {
   Platform,
   ToastController,
 } from '@ionic/angular';
+import { ErrorService } from '../../../../shared/error/error.service';
 import { GoProFile } from '../go-pro-media-file';
 import { GoProBluetoothService } from '../services/go-pro-bluetooth.service';
 import { GoProMediaService } from '../services/go-pro-media.service';
@@ -45,6 +46,7 @@ export class GoProMediaListOnCameraComponent implements OnInit {
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly goProWifiService: GoProWifiService,
     private readonly platform: Platform,
+    private readonly errorService: ErrorService,
     public toastController: ToastController
   ) {}
 
@@ -84,7 +86,7 @@ export class GoProMediaListOnCameraComponent implements OnInit {
       this.isConnectingToGoProWifi = true;
 
       if (!(await this.goProBluetoothService.getConnectedDevice())) {
-        alert('Connect to GoPro via bluetooth first');
+        this.errorService.toastError$('Connect to GoPro via bluetooth first');
         // I need to show alert because when catching error below for some reason it's empty
         throw new Error('Connect to GoPro via bluetooth first');
       }
