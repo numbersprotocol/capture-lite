@@ -64,6 +64,10 @@
 		"classpath": "com.capacitorjs.plugins.storage.StoragePlugin"
 	},
 	{
+		"pkg": "@numbersprotocol/preview-video",
+		"classpath": "io.numbersprotocol.capturelite.plugins.previewvideo.PreviewVideoPlugin"
+	},
+	{
 		"pkg": "capacitor-blob-writer",
 		"classpath": "com.equimaps.capacitorblobwriter.BlobWriter"
 	}

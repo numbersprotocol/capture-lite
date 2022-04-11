@@ -57,6 +57,7 @@
     "@ngx-formly/core": "^5.10.22",
     "@ngx-formly/material": "^5.10.22",
     "@ngx-formly/schematics": "^5.10.22",
+    "@numbersprotocol/preview-video": "github:numbersprotocol/preview-video",
     "async-mutex": "^0.3.2",
     "buffer": "^5.7.1",
     "capacitor-blob-writer": "^1.0.4",
