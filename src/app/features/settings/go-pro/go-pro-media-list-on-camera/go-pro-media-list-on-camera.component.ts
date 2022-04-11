@@ -86,7 +86,9 @@ export class GoProMediaListOnCameraComponent implements OnInit {
       this.isConnectingToGoProWifi = true;
 
       if (!(await this.goProBluetoothService.getConnectedDevice())) {
-        this.errorService.toastError$('Connect to GoPro via bluetooth first');
+        await this.errorService
+          .toastError$('Connect to GoPro via bluetooth first')
+          .toPromise();
         // I need to show alert because when catching error below for some reason it's empty
         throw new Error('Connect to GoPro via bluetooth first');
       }
