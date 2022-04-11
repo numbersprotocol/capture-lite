@@ -24,9 +24,6 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
   showTutorialForMobileDataOnlyApps = false;
   dontShowAgainTutorialForMobileDataOnlyApps = false;
 
-  // TODO: keep until Q&A decides if they need blurred thumbnail or not
-  thumbnailBlurred = true;
-
   constructor(
     private readonly location: Location,
     private readonly route: ActivatedRoute,

@@ -18,7 +18,6 @@
     <div class="video-placeholder" (click)="playVideoFullScreen()">
       <div class="play-icon"></div>
       <ion-img
-        [ngClass]="{ 'thumbnail-blurred': thumbnailBlurred }"
         *ngIf="mediaType === 'video'"
         [src]="mediaFile!.thumbnailUrl"
         decoding="async"
@@ -26,15 +25,6 @@
       ></ion-img>
       <mat-icon class="play-icon">play_circle_outline</mat-icon>
     </div>
-
-    <!-- TODO: keep until Q&A decides if they need blurred thumbnail or not -->
-    <ion-item>
-      <ion-checkbox slot="start" [(ngModel)]="thumbnailBlurred"></ion-checkbox>
-      <ion-label>
-        <h2>Blur image (remove after Q&A)</h2>
-        <p>GoPro thumbnails come in low quality.</p>
-      </ion-label>
-    </ion-item>
 
     <div class="spacer"></div>
     <ion-button
