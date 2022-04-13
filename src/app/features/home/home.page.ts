@@ -166,6 +166,12 @@ export class HomePage {
       .subscribe();
   }
 
+  captureWithCustomCamera() {
+    const captureIndex = 0;
+    this.selectedTabIndex = captureIndex;
+    this.router.navigate(['home', 'custom-camera']);
+  }
+
   private presentCaptureActions$() {
     return combineLatest([
       this.translocoService.selectTranslateObject({
