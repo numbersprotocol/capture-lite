@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { NgCircleProgressModule } from 'ng-circle-progress';
+import { NgxLongPress2Module } from 'ngx-long-press2';
 import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { CustomCameraPage } from './custom-camera.page';
 
@@ -10,7 +12,11 @@ describe('CustomCameraPage', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [CustomCameraPage],
-        imports: [SharedTestingModule],
+        imports: [
+          SharedTestingModule,
+          NgxLongPress2Module,
+          NgCircleProgressModule.forRoot({}),
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(CustomCameraPage);
