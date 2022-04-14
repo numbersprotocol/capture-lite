@@ -1,9 +1,9 @@
 :host {
-  background-color: transparent !important;
+  background-color: transparent;
 }
 
 ion-content {
-  --background: transparent !important;
+  --background: transparent;
 }
 
 mat-icon {
@@ -17,8 +17,6 @@ mat-icon.close-camera-button {
   position: absolute;
   top: 16px;
   right: 16px;
-  // border-radius: 50%;
-  // box-shadow: 0 0 8px rgb(100, 100, 100);
 }
 
 mat-icon.temporarily-hidden {
@@ -30,8 +28,6 @@ mat-icon.temporarily-hidden {
   position: absolute;
   top: 16px;
   left: 16px;
-  // border-radius: 24px;
-  // box-shadow: 0 0 2px rgb(100, 100, 100);
   color: var(--ion-color-primary);
   display: flex;
   align-items: center;
