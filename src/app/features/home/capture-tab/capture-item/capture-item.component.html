@@ -6,17 +6,26 @@
   name="hourglass-outline"
   class="collecting"
 ></ion-icon>
-<ion-icon
-  *ngIf="hasUploaded$ | ngrxPush"
-  src="/assets/images/media-id.svg"
-  class="uploaded"
->
-</ion-icon>
-<ion-icon
-  *ngIf="hasGeolocation$ | ngrxPush"
-  src="/assets/images/location.svg"
-  class="located"
-></ion-icon>
+
+<div class="bottom-left-icons">
+  <ion-icon
+    *ngIf="hasUploaded$ | ngrxPush"
+    src="/assets/images/media-id.svg"
+    class="uploaded"
+  >
+  </ion-icon>
+  <ion-icon
+    *ngIf="hasGeolocation$ | ngrxPush"
+    src="/assets/images/location.svg"
+    class="located"
+  ></ion-icon>
+  <ion-icon
+    *ngIf="hasCaption$ | ngrxPush"
+    name="document-text-outline"
+    class="with-caption"
+  ></ion-icon>
+</div>
+
 <ion-icon
   *ngIf="isVideo$ | ngrxPush"
   name="videocam"
