@@ -87,7 +87,7 @@ export class WalletsPage {
     });
   }
 
-  openNUMTransactionHistory() {
+  openAssetWalletHistory() {
     this.diaBackendWalletService.assetWalletAddr$
       .pipe(
         first(),

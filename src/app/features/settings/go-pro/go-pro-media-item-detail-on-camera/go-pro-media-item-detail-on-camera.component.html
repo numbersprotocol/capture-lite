@@ -15,15 +15,16 @@
       loading="lazy"
     ></ion-img>
 
-    <video
-      *ngIf="mediaType === 'video'"
-      controls
-      playsinline
-      preload="metadata"
-    >
-      <source src="{{ mediaFile!.url }}#t=0.1" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
+    <div class="video-placeholder" (click)="playVideoFullScreen()">
+      <div class="play-icon"></div>
+      <ion-img
+        *ngIf="mediaType === 'video'"
+        [src]="mediaFile!.thumbnailUrl"
+        decoding="async"
+        loading="lazy"
+      ></ion-img>
+      <mat-icon class="play-icon">play_circle_outline</mat-icon>
+    </div>
 
     <div class="spacer"></div>
     <ion-button

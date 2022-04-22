@@ -46,6 +46,13 @@ export class GoProMediaItemDetailOnCameraComponent implements OnInit {
     this.mediaType = getFileType(this.mediaFile?.url);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  playVideoFullScreen() {
+    this.router.navigate(['/settings', 'go-pro', 'media-item-viewer'], {
+      state: { goProMediaFile: this.mediaFile },
+    });
+  }
+
   async uploadToCapture() {
     const allowed = await this.allowUploadWithMobileInternet();
     if (allowed) {

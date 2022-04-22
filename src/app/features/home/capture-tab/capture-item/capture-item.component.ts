@@ -13,6 +13,7 @@ import {
   switchMap,
 } from 'rxjs/operators';
 import { CaptureService } from '../../../../shared/capture/capture.service';
+import { DiaBackendAssetRepository } from '../../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { getOldProof } from '../../../../shared/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../../shared/repositories/proof/proof';
 import { normalizeGeolocation } from '../../details/information/session/information-session.service';
@@ -70,6 +71,11 @@ export class CaptureItemComponent {
     )
   );
 
+  readonly hasCaption$ = this.proof$.pipe(
+    switchMap(proof => this.diaBackendAssetRepository.fetchByProof$(proof)),
+    map(asset => asset.caption !== '')
+  );
+
   readonly isVideo$ = this.proof$.pipe(
     concatMap(proof => proof.getFirstAssetMeta()),
     map(meta => meta.mimeType.startsWith('video'))
@@ -81,7 +87,8 @@ export class CaptureItemComponent {
     private readonly captureService: CaptureService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly sanitizer: DomSanitizer
+    private readonly sanitizer: DomSanitizer,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
   ) {}
 
   @HostListener('click')

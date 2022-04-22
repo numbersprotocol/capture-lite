@@ -50,5 +50,8 @@ project(':capacitor-splash-screen').projectDir = new File('../node_modules/@capa
 include ':capacitor-storage'
 project(':capacitor-storage').projectDir = new File('../node_modules/@capacitor/storage/android')
 
+include ':numbersprotocol-preview-video'
+project(':numbersprotocol-preview-video').projectDir = new File('../node_modules/@numbersprotocol/preview-video/android')
+
 include ':capacitor-blob-writer'
 project(':capacitor-blob-writer').projectDir = new File('../node_modules/capacitor-blob-writer/android')

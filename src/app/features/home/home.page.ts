@@ -172,7 +172,7 @@ export class HomePage {
         takePicture: null,
         recordVideo: null,
       }),
-      this.goProBluetoothService.connectedDevice$,
+      this.goProBluetoothService.lastConnectedDevice$,
     ]).pipe(
       first(),
       concatMap(([translations, connectedDevice]) => {

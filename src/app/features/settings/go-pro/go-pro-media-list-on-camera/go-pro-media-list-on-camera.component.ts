@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import {
   AlertController,
   NavController,
+  Platform,
   ToastController,
 } from '@ionic/angular';
+import { ErrorService } from '../../../../shared/error/error.service';
 import { GoProFile } from '../go-pro-media-file';
 import { GoProBluetoothService } from '../services/go-pro-bluetooth.service';
 import { GoProMediaService } from '../services/go-pro-media.service';
@@ -25,6 +27,7 @@ export class GoProMediaListOnCameraComponent implements OnInit {
 
   connectedWifiSSID: string | null = null;
   isConnectedToGoProWifi: boolean | undefined;
+  isConnectingToGoProWifi: boolean | undefined;
 
   isScrollingContent = false;
 
@@ -42,6 +45,8 @@ export class GoProMediaListOnCameraComponent implements OnInit {
     private readonly alertCtrl: AlertController,
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly goProWifiService: GoProWifiService,
+    private readonly platform: Platform,
+    private readonly errorService: ErrorService,
     public toastController: ToastController
   ) {}
 
@@ -64,21 +69,36 @@ export class GoProMediaListOnCameraComponent implements OnInit {
       this.fetchingFilesError = undefined;
       this.fetchingFiles = true;
       this.allMediaFiles = await this.goProMediaService.getFilesFromGoPro();
-      this.fetchingFiles = false;
     } catch (error: any) {
-      this.fetchingFilesError = error.toString();
+      this.fetchingFilesError = 'Failed to fetch media from GoPro';
+      if (this.platform.is('ios')) {
+        this.fetchingFilesError =
+          'Please check iOS Settings > Capture > Local Network, make sure the permission of Local Network is allowed Capture app.';
+      }
       this.allMediaFiles = [];
+    } finally {
       this.fetchingFiles = false;
     }
   }
 
   async connectToGoProWifi() {
     try {
+      this.isConnectingToGoProWifi = true;
+
+      if (!(await this.goProBluetoothService.getConnectedDevice())) {
+        await this.errorService
+          .toastError$('Connect to GoPro via bluetooth first')
+          .toPromise();
+        // I need to show alert because when catching error below for some reason it's empty
+        throw new Error('Connect to GoPro via bluetooth first');
+      }
       this.connectedWifiSSID = await this.goProWifiService.connectToGoProWiFi();
       this.isConnectedToGoProWifi = true;
       await this.fetchFilesFromGoProWiFi();
     } catch (error) {
       this.presentToast(JSON.stringify(error));
+    } finally {
+      this.isConnectingToGoProWifi = false;
     }
   }
 

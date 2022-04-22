@@ -1,6 +1,6 @@
 {
   "name": "capture-lite",
-  "version": "0.54.1",
+  "version": "0.54.2",
   "author": "numbersprotocol",
   "homepage": "https://numbersprotocol.io/",
   "scripts": {
@@ -29,7 +29,7 @@
     "@angular/platform-browser-dynamic": "^12.2.4",
     "@angular/router": "^12.2.4",
     "@capacitor-community/bluetooth-le": "^1.7.0",
-    "@capacitor-community/http": "^1.4.1",
+    "@capacitor-community/http": "github:numbersprotocol/http#fix-catch-disabled-Local-Network-case-on-iOS",
     "@capacitor-community/wifi": "github:numbersprotocol/community-capacitor-wifi#capacitor3",
     "@capacitor/android": "https://gitpkg.now.sh/numbersprotocol/capacitor/android?release-3.4.1-range-request-fix",
     "@capacitor/app": "^1.1.0",
@@ -57,6 +57,7 @@
     "@ngx-formly/core": "^5.10.22",
     "@ngx-formly/material": "^5.10.22",
     "@ngx-formly/schematics": "^5.10.22",
+    "@numbersprotocol/preview-video": "github:numbersprotocol/preview-video",
     "async-mutex": "^0.3.2",
     "buffer": "^5.7.1",
     "capacitor-blob-writer": "^1.0.4",

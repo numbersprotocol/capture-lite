@@ -26,6 +26,7 @@
   <ion-button
     *ngIf="!isConnectedToGoProWifi"
     (click)="connectToGoProWifi()"
+    [disabled]="isConnectingToGoProWifi"
     class="connect-to-go-pro-wifi-btn"
   >
     {{ t('gopro.connectToGoProWiFi') }}
@@ -40,7 +41,6 @@
     {{ t('gopro.uploadToCapture') }}
   </ion-button>
 
-  <!-- TODO: att translate text -->
   <h4 *ngIf="shouldConnectToWiFi" class="should-connect-to-wifi-text">
     {{ t('gopro.makeSureYouAreConnectedToGoProWiFiFirst') }}
   </h4>
