@@ -64,10 +64,6 @@
 		"classpath": "com.capacitorjs.plugins.storage.StoragePlugin"
 	},
 	{
-		"pkg": "@numbersprotocol/preview-camera",
-		"classpath": "io.numbersprotocol.capturelite.plugins.previewcamera.PreviewCameraPlugin"
-	},
-	{
 		"pkg": "@numbersprotocol/preview-video",
 		"classpath": "io.numbersprotocol.capturelite.plugins.previewvideo.PreviewVideoPlugin"
 	},

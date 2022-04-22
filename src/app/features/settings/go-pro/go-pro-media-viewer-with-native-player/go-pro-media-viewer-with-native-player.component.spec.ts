@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { SharedTestingModule } from '../../../../shared/shared-testing.module';
+import { IonicModule } from '@ionic/angular';
+
 import { GoProMediaViewerWithNativePlayerComponent } from './go-pro-media-viewer-with-native-player.component';
 
 describe('GoProMediaViewerWithNativePlayerComponent', () => {
@@ -10,7 +11,7 @@ describe('GoProMediaViewerWithNativePlayerComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [GoProMediaViewerWithNativePlayerComponent],
-        imports: [SharedTestingModule],
+        imports: [IonicModule.forRoot()],
       }).compileComponents();
 
       fixture = TestBed.createComponent(
