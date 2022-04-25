@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { PreviewVideo } from '@numbersprotocol/preview-video';
 import { GoProFile } from '../go-pro-media-file';
 
@@ -19,7 +19,8 @@ export class GoProMediaViewerWithNativePlayerComponent
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly navController: NavController
+    private readonly navController: NavController,
+    private readonly platform: Platform
   ) {
     this.route.queryParams.subscribe(_ => {
       const state = this.router.getCurrentNavigation()?.extras.state;
@@ -31,22 +32,26 @@ export class GoProMediaViewerWithNativePlayerComponent
 
   ngOnInit(): void {
     if (!this.mediaFile?.url) return;
-    PreviewVideo.playFullScreenFromRemote({ url: this.mediaFile.url });
-    PreviewVideo.addListener('iosPlayerDismissed', (_info: any) => {
-      // eslint-disable-next-line no-console
-      console.log('ITS WORKING');
-      this.navController.back();
-    });
+    if (this.platform.is('hybrid')) {
+      PreviewVideo.playFullScreenFromRemote({ url: this.mediaFile.url });
+      this.onIOSPlayerDismissedListener = PreviewVideo.addListener(
+        'iosPlayerDismissed',
+        (_info: any) => this.navController.back()
+      );
+    }
   }
 
   ngOnDestroy(): void {
-    PreviewVideo.stopFullScreen();
-    // TODO: check if .remove() really get called
-    this.onIOSPlayerDismissedListener?.remove();
+    if (this.platform.is('hybrid')) {
+      PreviewVideo.stopFullScreen();
+      this.onIOSPlayerDismissedListener?.remove();
+    }
   }
 
   dismiss() {
-    PreviewVideo.stopFullScreen();
+    if (this.platform.is('hybrid')) {
+      PreviewVideo.stopFullScreen();
+    }
     this.navController.back();
   }
 }
