@@ -45,6 +45,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./details/details.module').then(m => m.DetailsPageModule),
   },
+  {
+    path: 'custom-camera',
+    loadChildren: () =>
+      import('./custom-camera/custom-camera.module').then(
+        m => m.CustomCameraPageModule
+      ),
+  },
 ];
 
 @NgModule({

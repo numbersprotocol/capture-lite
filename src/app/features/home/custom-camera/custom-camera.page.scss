@@ -1,0 +1,55 @@
+:host {
+  background-color: transparent;
+}
+
+ion-content {
+  --background: transparent;
+}
+
+mat-icon {
+  color: #f2f2f2;
+  font-size: 36px;
+  height: 36px;
+  width: 36px;
+}
+
+mat-icon.close-camera-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+mat-icon.temporarily-hidden {
+  visibility: hidden;
+}
+
+// mat-icon
+.select-from-go-pro-camera-button {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  color: var(--ion-color-primary);
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  font-size: 22px;
+
+  mat-icon {
+    margin-left: 4px;
+    font-size: 24px;
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.camera-buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16px 8px;
+}
