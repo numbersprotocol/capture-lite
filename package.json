@@ -113,7 +113,7 @@
     "karma-jasmine-html-reporter": "^1.6.0",
     "lint-staged": "^11.1.2",
     "os-browserify": "^0.3.0",
-    "prettier": "^2.3.2",
+    "prettier": "^2.6.2",
     "protractor": "~7.0.0",
     "stream-http": "^3.2.0",
     "stylelint": "^13.13.1",
