@@ -273,6 +273,9 @@
     "total": "總額",
     "calculateGasFee": "計算油費"
   },
+  "invitation": {
+    "invitation": "邀請"
+  },
   "gopro": {
     "setup": "GoPro 設置",
     "scanning": "掃描",

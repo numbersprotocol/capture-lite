@@ -273,6 +273,9 @@
     "total": "Total",
     "calculateGasFee": "Calculate Gas"
   },
+  "invitation": {
+    "invitation": "Invitation"
+  },
   "gopro": {
     "setup": "GoPro Setup",
     "scanning": "Scanning",
