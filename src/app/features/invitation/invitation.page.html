@@ -1,7 +1,75 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>invitation</ion-title>
-  </ion-toolbar>
-</ion-header>
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('invitation.invitation') }}</span>
+</mat-toolbar>
 
-<ion-content> </ion-content>
+<ion-content *transloco="let t">
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col sizeMd="6" offsetMd="3" sizeXs="10" offsetXs="1">
+          <div class="title">Share invitation code</div>
+          <div class="subtitle">Share to get rewarded</div>
+
+          <div class="social-icons-container">
+            <ion-avatar>
+              <img src="/assets/images/share-icons/share-fb.png" />
+            </ion-avatar>
+            <ion-avatar>
+              <img src="/assets/images/share-icons/share-line.png" />
+            </ion-avatar>
+            <ion-avatar>
+              <img src="/assets/images/share-icons/share-email.jpg" />
+            </ion-avatar>
+            <div class="share-more">更多</div>
+          </div>
+
+          <div class="title">XS6EGH</div>
+
+          <div class="spacer-12"></div>
+
+          <ion-button routerLink="information" expand="block">
+            Share
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <div class="spacer-24"></div>
+
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col sizeMd="6" offsetMd="3" sizeXs="10" offsetXs="1">
+          <div class="title">Enter invitation code</div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col
+          class="centered"
+          sizeMd="6"
+          offsetMd="3"
+          sizeXs="10"
+          offsetXs="1"
+        >
+          <mat-form-field>
+            <input name="invitationCode" matInput required size="24" />
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col sizeMd="6" offsetMd="3" sizeXs="10" offsetXs="1">
+          <ion-button routerLink="information" expand="block">
+            Get Rewards
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <div class="spacer-24"></div>
+</ion-content>

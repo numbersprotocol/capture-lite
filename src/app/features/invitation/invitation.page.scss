@@ -1,0 +1,86 @@
+ion-card {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: white;
+  border-radius: 15px;
+}
+
+.title {
+  text-align: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  color: #000000;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #000000;
+}
+
+.social-icons-container {
+  display: flex;
+  justify-content: center;
+  margin: 24px 8px 32px 8px;
+}
+
+ion-avatar {
+  width: 42px;
+  height: 42px;
+  margin: 0 6px;
+}
+
+.share-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  width: 42px;
+  background-color: #fcecd4;
+  border-radius: 50%;
+  margin: 0 6px;
+}
+
+ion-button {
+  --border-radius: 15px;
+  --color: #ffffff;
+  --background: #00c9ff;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+ion-col.centered {
+  display: flex;
+  justify-content: center;
+}
+
+mat-form-field {
+  max-width: 240px;
+  font-size: 24px;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: #00c9ff !important;
+}
+
+::ng-deep.mat-form-field-underline {
+  /*change color of underline*/
+  background-color: #00c9ff !important;
+}
+
+::ng-deep.mat-form-field-ripple {
+  /*change color of underline when focused*/
+  background-color: #00c9ff !important;
+}
+
+.spacer-12 {
+  height: 12px;
+}
+
+.spacer-24 {
+  height: 24px;
+}
