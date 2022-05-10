@@ -6,37 +6,39 @@
 </mat-toolbar>
 
 <ion-content *transloco="let t">
-  <ion-card>
-    <ion-grid>
-      <ion-row>
-        <ion-col sizeMd="6" offsetMd="3" sizeXs="10" offsetXs="1">
-          <div class="title">Share invitation code</div>
-          <div class="subtitle">Share to get rewarded</div>
+  <ng-container *ngIf="referralCode$ | ngrxPush as referralCode">
+    <ion-card>
+      <ion-grid>
+        <ion-row>
+          <ion-col sizeMd="6" offsetMd="3" sizeXs="10" offsetXs="1">
+            <div class="title">Share invitation code</div>
+            <div class="subtitle">Share to get rewarded</div>
 
-          <div class="social-icons-container">
-            <ion-avatar>
-              <img src="/assets/images/share-icons/share-fb.png" />
-            </ion-avatar>
-            <ion-avatar>
-              <img src="/assets/images/share-icons/share-line.png" />
-            </ion-avatar>
-            <ion-avatar>
-              <img src="/assets/images/share-icons/share-email.jpg" />
-            </ion-avatar>
-            <div class="share-more">更多</div>
-          </div>
+            <div class="social-icons-container">
+              <ion-avatar>
+                <img src="/assets/images/share-icons/share-fb.png" />
+              </ion-avatar>
+              <ion-avatar>
+                <img src="/assets/images/share-icons/share-line.png" />
+              </ion-avatar>
+              <ion-avatar>
+                <img src="/assets/images/share-icons/share-email.jpg" />
+              </ion-avatar>
+              <div class="share-more">更多</div>
+            </div>
 
-          <div class="title">{{ referralCode$ | ngrxPush }}</div>
+            <div class="title">{{ referralCode }}</div>
 
-          <div class="spacer-12"></div>
+            <div class="spacer-12"></div>
 
-          <ion-button (click)="shareReferralCode()" expand="block">
-            Share
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card>
+            <ion-button (click)="shareReferralCode()" expand="block">
+              Share
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ng-container>
 
   <div class="spacer-24"></div>
 
