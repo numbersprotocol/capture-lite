@@ -138,14 +138,23 @@ export class DiaBackendAuthService {
     );
   }
 
-  createUser$(username: string, email: string, password: string) {
+  createUser$(
+    username: string,
+    email: string,
+    password: string,
+    referralCodeOptional: string
+  ) {
+    const requestBody: any = {
+      username,
+      email,
+      password,
+      referral_code: referralCodeOptional,
+    };
+    if (referralCodeOptional === '') delete requestBody.referral_code;
+
     return this.httpClient.post<CreateUserResponse>(
       `${BASE_URL}/auth/users/`,
-      {
-        username,
-        email,
-        password,
-      },
+      requestBody,
       { headers: { 'x-api-key': TRUSTED_CLIENT_KEY } }
     );
   }
@@ -357,7 +366,7 @@ export class DiaBackendAuthService {
     return this.preferences.setString(PrefKeys.REFERRAL_CODE, value);
   }
 
-  private async getReferralCode(value: string) {
+  private async getReferralCode() {
     return this.preferences.getString(PrefKeys.REFERRAL_CODE);
   }
 }

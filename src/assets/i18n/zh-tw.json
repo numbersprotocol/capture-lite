@@ -41,6 +41,7 @@
   "phone": "手機",
   "password": "密碼",
   "confirmPassword": "再次輸入密碼",
+  "referralCodeOptional": "推薦代碼（可選）",
   "bringTrustIntoData": "Bring Trust Into Data",
   "login": "登入",
   "createAnAccount": "建立帳號",
@@ -144,6 +145,7 @@
     "pleaseEnterValidEmail": "請輸入有效的電子郵件地址。",
     "passwordMustBeBetween": "密碼長度必須介於 {{ min }} 至 {{ max }} 個字元之間。",
     "passwordNotMatching": "密碼不符。",
+    "invalidReferralCode": "無效的推薦代碼",
     "accountNotActivated": "此帳戶尚未啟用。",
     "ifYouNotReceiveEmail": "如果您在10分鐘內仍未收到驗證電子郵件，請單擊下面的按鈕重新發送驗證電子郵件。",
     "tooManyRetries": "您輸入無效的電子郵件或密碼的次數過多。請稍後再試。",
@@ -218,7 +220,8 @@
       "order_expired": "訂單已過期。請創建新訂單並在 5 分鐘內確認。",
       "unable_to_confirm_order": "無法確認訂單。請再試一次。",
       "unpaid_num_exceed_threshold": "太多未付的 NUM。請通過電子郵件與我們聯繫以恢復帳戶功能。",
-      "invalid_network_app_name": "無效的網絡動作。"
+      "invalid_network_app_name": "無效的網絡動作。",
+      "invalid_referral_code": "無效的推薦代碼"
     },
     "wallets": {
       "emptyTransferAmount": "請輸入有效轉帳金額。",
