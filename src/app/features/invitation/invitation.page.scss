@@ -53,31 +53,6 @@ ion-button {
   font-size: 18px;
 }
 
-ion-col.centered {
-  display: flex;
-  justify-content: center;
-}
-
-mat-form-field {
-  max-width: 240px;
-  font-size: 24px;
-}
-
-::ng-deep .mat-focused .mat-form-field-label {
-  /* change color of label */
-  color: #00c9ff;
-}
-
-::ng-deep.mat-form-field-underline {
-  /* change color of underline */
-  background-color: #00c9ff;
-}
-
-::ng-deep.mat-form-field-ripple {
-  /* change color of underline when focused */
-  background-color: #00c9ff;
-}
-
 .spacer-12 {
   height: 12px;
 }
