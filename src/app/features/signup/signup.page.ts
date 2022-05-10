@@ -181,6 +181,10 @@ export class SignupPage {
               required: false,
               hideRequiredMarker: true,
             },
+            expressionProperties: {
+              'model.referralCodeOptional': 'model.referralCodeOptional',
+            },
+            parsers: [(value: any) => value?.toUpperCase()],
           },
         ],
       },
