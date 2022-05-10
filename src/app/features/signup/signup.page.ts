@@ -26,6 +26,7 @@ export class SignupPage {
     username: '',
     password: '',
     confirmPassword: '',
+    referralCodeOptional: '',
   };
 
   fields: FormlyFieldConfig[] = [];
@@ -42,6 +43,7 @@ export class SignupPage {
       this.translocoService.selectTranslate('username'),
       this.translocoService.selectTranslate('password'),
       this.translocoService.selectTranslate('confirmPassword'),
+      this.translocoService.selectTranslate('referralCodeOptional'),
     ])
       .pipe(
         tap(
@@ -50,12 +52,14 @@ export class SignupPage {
             usernameTranlation,
             passwordTranslation,
             confirmPasswordTranslation,
+            referralCodeOptionalTranslation,
           ]) =>
             this.createFormFields(
               emailTranslation,
               usernameTranlation,
               passwordTranslation,
-              confirmPasswordTranslation
+              confirmPasswordTranslation,
+              referralCodeOptionalTranslation
             )
         ),
         untilDestroyed(this)
@@ -67,7 +71,8 @@ export class SignupPage {
     emailTranslation: string,
     usernameTranlation: string,
     passwordTranslation: string,
-    confirmPasswordTranslation: string
+    confirmPasswordTranslation: string,
+    referralCodeOptionalTranslation: string
   ) {
     this.fields = [
       {
@@ -86,6 +91,21 @@ export class SignupPage {
               'message.passwordNotMatching'
             ),
             errorPath: 'confirmPassword',
+          },
+          referralCodeValidator: {
+            expression: (control: FormGroup) => {
+              const alphanumeric = /^[A-Z0-9]{6}$/g;
+              const { referralCodeOptional } = control.value;
+
+              if (referralCodeOptional?.length === 0) return true;
+              if (referralCodeOptional?.match(alphanumeric)) return true;
+
+              return false;
+            },
+            message: this.translocoService.translate(
+              'message.invalidReferralCode'
+            ),
+            errorPath: 'referralCodeOptional',
           },
         },
         fieldGroup: [
@@ -152,6 +172,20 @@ export class SignupPage {
               hideRequiredMarker: true,
             },
           },
+          {
+            key: 'referralCodeOptional',
+            type: 'input',
+            templateOptions: {
+              type: 'text',
+              placeholder: referralCodeOptionalTranslation,
+              required: false,
+              hideRequiredMarker: true,
+            },
+            expressionProperties: {
+              'model.referralCodeOptional': 'model.referralCodeOptional',
+            },
+            parsers: [(value: any) => value?.toUpperCase()],
+          },
         ],
       },
     ];
@@ -159,7 +193,12 @@ export class SignupPage {
 
   onSubmit() {
     const action$ = this.diaBackendAuthService
-      .createUser$(this.model.username, this.model.email, this.model.password)
+      .createUser$(
+        this.model.username,
+        this.model.email,
+        this.model.password,
+        this.model.referralCodeOptional
+      )
       .pipe(
         first(),
         concatMapTo(
@@ -174,6 +213,14 @@ export class SignupPage {
           )
         ),
         catchError((err: unknown) => {
+          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+          if (err instanceof HttpErrorResponse && err.status === 400) {
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'error.diaBackend.invalid_referral_code'
+              )
+            );
+          }
           // eslint-disable-next-line @typescript-eslint/no-magic-numbers
           if (err instanceof HttpErrorResponse && err.status === 401)
             return this.errorService.toastError$(
@@ -197,4 +244,5 @@ interface SignupFormModel {
   username: string;
   password: string;
   confirmPassword: string;
+  referralCodeOptional: string;
 }

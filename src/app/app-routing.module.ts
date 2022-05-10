@@ -75,6 +75,13 @@ const routes: Routes = [
         m => m.WalletsPageModule
       ),
   },
+  {
+    path: 'invitation',
+    loadChildren: () =>
+      import('./features/invitation/invitation.module').then(
+        m => m.InvitationPageModule
+      ),
+  },
 ];
 @NgModule({
   imports: [

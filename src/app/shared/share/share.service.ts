@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Share } from '@capacitor/share';
+import { TranslocoService } from '@ngneat/transloco';
 import { catchError } from 'rxjs/operators';
 import { getAssetProfileUrl } from '../../utils/url';
 import {
@@ -16,7 +17,8 @@ export class ShareService {
 
   constructor(
     private readonly errorService: ErrorService,
-    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly translocoService: TranslocoService
   ) {}
 
   async share(asset: DiaBackendAsset) {
@@ -34,5 +36,16 @@ export class ShareService {
       .pipe(catchError((err: unknown) => this.errorService.toastError$(err)))
       .toPromise();
     return getAssetProfileUrl(asset.id);
+  }
+
+  async shareReferralCode(referralCode: string) {
+    const text = this.translocoService.translate(
+      'invitation.myReferralCodeAtCaptureAppIs',
+      { referralCode: referralCode }
+    );
+    return Share.share({
+      text: text,
+      url: 'https://www.numbersprotocol.io/#products',
+    });
   }
 }

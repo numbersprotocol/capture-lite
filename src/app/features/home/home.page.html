@@ -34,6 +34,11 @@
           </a>
         </mat-list-item>
         <mat-list-item>
+          <a routerLink="/invitation" (click)="sidenav.close()" mat-list-item>
+            {{ t('invitation.invitation') }}
+          </a>
+        </mat-list-item>
+        <mat-list-item>
           <a routerLink="/privacy" (click)="sidenav.close()" mat-list-item>
             {{ t('privacy') }}
           </a>
