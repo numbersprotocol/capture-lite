@@ -279,7 +279,8 @@
   "invitation": {
     "invitation": "Invitation",
     "shareInvitationCode": "Share invitation code",
-    "shareToGetRewarded": "Share to get rewarded"
+    "shareToGetRewarded": "Share to get rewarded",
+    "myReferralCodeAtCaptureAppIs": "My referral code at Capture App is {{referralCode}}"
   },
   "gopro": {
     "setup": "GoPro Setup",
