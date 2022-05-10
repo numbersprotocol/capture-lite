@@ -277,7 +277,9 @@
     "calculateGasFee": "計算油費"
   },
   "invitation": {
-    "invitation": "邀請"
+    "invitation": "邀請",
+    "shareInvitationCode": "分享邀請碼",
+    "shareToGetRewarded": "分享以獲得獎勵"
   },
   "gopro": {
     "setup": "GoPro 設置",

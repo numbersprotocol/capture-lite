@@ -277,7 +277,9 @@
     "calculateGasFee": "Calculate Gas"
   },
   "invitation": {
-    "invitation": "Invitation"
+    "invitation": "Invitation",
+    "shareInvitationCode": "Share invitation code",
+    "shareToGetRewarded": "Share to get rewarded"
   },
   "gopro": {
     "setup": "GoPro Setup",

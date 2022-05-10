@@ -11,8 +11,8 @@
       <ion-grid>
         <ion-row>
           <ion-col sizeMd="6" offsetMd="3" sizeXs="10" offsetXs="1">
-            <div class="title">Share invitation code</div>
-            <div class="subtitle">Share to get rewarded</div>
+            <div class="title">{{ t('invitation.shareInvitationCode') }}</div>
+            <div class="subtitle">{{ t('invitation.shareToGetRewarded') }}</div>
 
             <div class="social-icons-container">
               <ion-avatar>
@@ -32,7 +32,7 @@
             <div class="spacer-12"></div>
 
             <ion-button (click)="shareReferralCode()" expand="block">
-              Share
+              {{ t('share') }}
             </ion-button>
           </ion-col>
         </ion-row>
