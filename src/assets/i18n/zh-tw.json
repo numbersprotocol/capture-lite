@@ -41,7 +41,7 @@
   "phone": "手機",
   "password": "密碼",
   "confirmPassword": "再次輸入密碼",
-  "referralCodeOptional": "推薦代碼（可選）",
+  "referralCodeOptional": "推薦代碼（非必填）",
   "bringTrustIntoData": "Bring Trust Into Data",
   "login": "登入",
   "createAnAccount": "建立帳號",
