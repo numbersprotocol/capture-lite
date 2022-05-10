@@ -20,29 +20,6 @@ ion-card {
   color: black;
 }
 
-.social-icons-container {
-  display: flex;
-  justify-content: center;
-  margin: 24px 8px 32px;
-}
-
-ion-avatar {
-  width: 42px;
-  height: 42px;
-  margin: 0 6px;
-}
-
-.share-more {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 42px;
-  width: 42px;
-  background-color: #fcecd4;
-  border-radius: 50%;
-  margin: 0 6px;
-}
-
 ion-button {
   --border-radius: 15px;
   --color: white;
