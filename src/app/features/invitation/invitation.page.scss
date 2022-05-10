@@ -10,20 +10,20 @@ ion-card {
   font-style: normal;
   font-weight: 500;
   font-size: 24px;
-  color: #000000;
+  color: black;
 }
 
 .subtitle {
   text-align: center;
   font-size: 14px;
   margin-bottom: 12px;
-  color: #000000;
+  color: black;
 }
 
 .social-icons-container {
   display: flex;
   justify-content: center;
-  margin: 24px 8px 32px 8px;
+  margin: 24px 8px 32px;
 }
 
 ion-avatar {
@@ -45,8 +45,9 @@ ion-avatar {
 
 ion-button {
   --border-radius: 15px;
-  --color: #ffffff;
+  --color: white;
   --background: #00c9ff;
+
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -63,18 +64,18 @@ mat-form-field {
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
-  /*change color of label*/
-  color: #00c9ff !important;
+  /* change color of label */
+  color: #00c9ff;
 }
 
 ::ng-deep.mat-form-field-underline {
-  /*change color of underline*/
-  background-color: #00c9ff !important;
+  /* change color of underline */
+  background-color: #00c9ff;
 }
 
 ::ng-deep.mat-form-field-ripple {
-  /*change color of underline when focused*/
-  background-color: #00c9ff !important;
+  /* change color of underline when focused */
+  background-color: #00c9ff;
 }
 
 .spacer-12 {
