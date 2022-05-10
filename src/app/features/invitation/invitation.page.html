@@ -30,7 +30,7 @@
 
           <div class="spacer-12"></div>
 
-          <ion-button routerLink="information" expand="block">
+          <ion-button (click)="shareReferralCode()" expand="block">
             Share
           </ion-button>
         </ion-col>
@@ -40,7 +40,8 @@
 
   <div class="spacer-24"></div>
 
-  <ion-card>
+  <!-- NOTE: we might need this in the future -->
+  <!-- <ion-card>
     <ion-grid>
       <ion-row>
         <ion-col sizeMd="6" offsetMd="3" sizeXs="10" offsetXs="1">
@@ -71,5 +72,5 @@
     </ion-grid>
   </ion-card>
 
-  <div class="spacer-24"></div>
+  <div class="spacer-24"></div> -->
 </ion-content>

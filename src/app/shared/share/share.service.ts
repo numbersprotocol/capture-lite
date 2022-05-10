@@ -35,4 +35,13 @@ export class ShareService {
       .toPromise();
     return getAssetProfileUrl(asset.id);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  async shareReferralCode(referralCode: string) {
+    // TODO: use official (en, zh) text provided by @Tammy
+    return Share.share({
+      text: `My referral code at Capture App ${referralCode}`,
+      url: 'https://www.numbersprotocol.io/#products',
+    });
+  }
 }

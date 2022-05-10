@@ -366,7 +366,7 @@ export class DiaBackendAuthService {
     return this.preferences.setString(PrefKeys.REFERRAL_CODE, value);
   }
 
-  private async getReferralCode() {
+  async getReferralCode() {
     return this.preferences.getString(PrefKeys.REFERRAL_CODE);
   }
 }
