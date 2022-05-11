@@ -41,6 +41,7 @@
   "phone": "Phone",
   "password": "Password",
   "confirmPassword": "Confirm Password",
+  "referralCodeOptional": "Referral Code (Optional)",
   "bringTrustIntoData": "Bring Trust Into Data",
   "login": "Login",
   "createAnAccount": "Create an Account",
@@ -144,6 +145,7 @@
     "pleaseEnterValidEmail": "Please enter a valid email address.",
     "passwordMustBeBetween": "Password must be between {{ min }} to {{ max }} characters.",
     "passwordNotMatching": "Password not matching.",
+    "invalidReferralCode": "Invalid referral code",
     "accountNotActivated": "This account has not been activated yet.",
     "ifYouNotReceiveEmail": "If you haven't received the verification email in 10 minutes, you can click the button below to resend the verification email.",
     "tooManyRetries": "You have entered the invalid email or password too many times. Please try again later.",
@@ -218,7 +220,8 @@
       "order_expired": "Order expired. Please create a new order and confirm it within 5 minutes.",
       "unable_to_confirm_order": "Unable to confirm order. Please try again.",
       "unpaid_num_exceed_threshold": "Too much unpaid NUM. Please contact us with email to restore account functionality.",
-      "invalid_network_app_name": "Invalid network app."
+      "invalid_network_app_name": "Invalid network app.",
+      "invalid_referral_code": "Invalide referral code"
     },
     "wallets": {
       "emptyTransferAmount": "Please enter a valid transfer amount.",
@@ -272,6 +275,12 @@
     "pending": "Pending",
     "total": "Total",
     "calculateGasFee": "Calculate Gas"
+  },
+  "invitation": {
+    "invitation": "Invitation",
+    "shareInvitationCode": "Share invitation code",
+    "shareToGetRewarded": "Share to get rewarded",
+    "myReferralCodeAtCaptureAppIs": "My referral code at Capture App is {{referralCode}}"
   },
   "gopro": {
     "setup": "GoPro Setup",

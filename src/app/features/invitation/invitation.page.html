@@ -1,0 +1,31 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('invitation.invitation') }}</span>
+</mat-toolbar>
+
+<ion-content *transloco="let t">
+  <ng-container *ngIf="referralCode$ | ngrxPush as referralCode">
+    <ion-card>
+      <ion-grid>
+        <ion-row>
+          <ion-col sizeMd="6" offsetMd="3" sizeXs="10" offsetXs="1">
+            <div class="title">{{ t('invitation.shareInvitationCode') }}</div>
+            <div class="subtitle">{{ t('invitation.shareToGetRewarded') }}</div>
+
+            <div class="title">{{ referralCode }}</div>
+
+            <div class="spacer-12"></div>
+
+            <ion-button (click)="shareReferralCode()" expand="block">
+              {{ t('share') }}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ng-container>
+
+  <div class="spacer-24"></div>
+</ion-content>

@@ -68,6 +68,8 @@ export class DiaBackendAuthService {
 
   readonly points$ = this.preferences.getNumber$(PrefKeys.POINTS);
 
+  readonly referralCode$ = this.preferences.getString$(PrefKeys.REFERRAL_CODE);
+
   constructor(
     private readonly httpClient: HttpClient,
     private readonly languageService: LanguageService,
@@ -136,14 +138,23 @@ export class DiaBackendAuthService {
     );
   }
 
-  createUser$(username: string, email: string, password: string) {
+  createUser$(
+    username: string,
+    email: string,
+    password: string,
+    referralCodeOptional: string
+  ) {
+    const requestBody: any = {
+      username,
+      email,
+      password,
+      referral_code: referralCodeOptional,
+    };
+    if (referralCodeOptional === '') delete requestBody.referral_code;
+
     return this.httpClient.post<CreateUserResponse>(
       `${BASE_URL}/auth/users/`,
-      {
-        username,
-        email,
-        password,
-      },
+      requestBody,
       { headers: { 'x-api-key': TRUSTED_CLIENT_KEY } }
     );
   }
@@ -213,6 +224,7 @@ export class DiaBackendAuthService {
         forkJoin([
           this.setUsername(response.username),
           this.setEmail(response.email),
+          this.setRerferralCode(response.referral_code),
         ])
       )
     );
@@ -271,6 +283,7 @@ export class DiaBackendAuthService {
           this.setPhoneVerfied(response.phone_verified),
           this.setEmailVerfied(response.email_verified),
           this.setPoints(Number(response.user_wallet.points)),
+          this.setRerferralCode(response.referral_code),
         ]);
       })
     );
@@ -348,6 +361,14 @@ export class DiaBackendAuthService {
   async getPoints() {
     return this.preferences.getNumber(PrefKeys.POINTS);
   }
+
+  private async setRerferralCode(value: string) {
+    return this.preferences.setString(PrefKeys.REFERRAL_CODE, value);
+  }
+
+  async getReferralCode() {
+    return this.preferences.getString(PrefKeys.REFERRAL_CODE);
+  }
 }
 
 const enum PrefKeys {
@@ -357,6 +378,7 @@ const enum PrefKeys {
   EMAIL_VERIFIED = 'EMAIL_VERIFIED',
   PHONE_VERIFIED = 'PHONE_VERIFIED',
   POINTS = 'POINTS',
+  REFERRAL_CODE = 'REFERRAL_CODE',
 }
 
 interface LoginResult {
@@ -382,6 +404,7 @@ export interface ReadUserResponse {
     num_wallet_name: string;
     billed_num: string;
   };
+  readonly referral_code: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
