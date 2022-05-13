@@ -43,9 +43,7 @@ export class ShareService {
       'invitation.myReferralCodeAtCaptureAppIs',
       { referralCode: referralCode }
     );
-    return Share.share({
-      text: text,
-      url: 'https://www.numbersprotocol.io/#products',
-    });
+    const urlToDownloadApp = 'https://www.numbersprotocol.io/#products';
+    return Share.share({ text: text + '\n' + urlToDownloadApp });
   }
 }
