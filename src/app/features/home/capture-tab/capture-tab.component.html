@@ -14,18 +14,28 @@
   </mat-card-header>
 </mat-card>
 <app-uploading-bar></app-uploading-bar>
-<div class="capture-container">
+<div class="capture-container" *transloco="let t">
   <ng-container
     *ngFor="
       let group of capturesByDate$ | ngrxPush | keyvalue: keyDescendingOrder;
+      first as isFirstGroup;
       trackBy: trackCaptureGroupByDate
     "
   >
     <div class="mat-title">{{ group.key | date: 'longDate' }}</div>
     <mat-grid-list cols="3" gutterSize="8px">
       <mat-grid-tile
-        *ngFor="let proof of group.value; trackBy: trackCaptureItem"
+        *ngFor="
+          let proof of group.value;
+          first as isFirstProof;
+          trackBy: trackCaptureItem
+        "
         class="capture-item"
+        [joyrideStep]="
+          isFirstGroup && isFirstProof ? 'highlightFirstCapture' : 'notFirst'
+        "
+        [title]="t('userGuide.capturedItem')"
+        [text]="t('userGuide.openToSeeDetailsAndActionItems')"
       >
         <app-capture-item [proof]="proof"></app-capture-item>
       </mat-grid-tile>
