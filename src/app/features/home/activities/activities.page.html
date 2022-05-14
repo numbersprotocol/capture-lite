@@ -7,11 +7,25 @@
 
 <ion-content *transloco="let t">
   <ion-segment #segment value="transactions">
-    <ion-segment-button value="transactions">
-      <ion-label>{{ t('captureTransactions') }}</ion-label>
+    <ion-segment-button
+      value="transactions"
+      joyrideStep="highlightCaptureTransactionsTab"
+      [title]="t('userGuide.activityPage')"
+      [text]="t('userGuide.viewYourCaptureTransactionsHistory')"
+    >
+      <ion-label>
+        {{ t('captureTransactions') }}
+      </ion-label>
     </ion-segment-button>
-    <ion-segment-button value="networkActionOrders">
-      <ion-label>{{ t('networkActions') }}</ion-label>
+    <ion-segment-button
+      value="networkActionOrders"
+      joyrideStep="highlightNetworkActionsTab"
+      [title]="t('userGuide.activityPage')"
+      [text]="t('userGuide.viewNetworkActionsHistoryHere')"
+    >
+      <ion-label>
+        {{ t('networkActions') }}
+      </ion-label>
     </ion-segment-button>
   </ion-segment>
 
