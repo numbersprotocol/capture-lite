@@ -6,6 +6,7 @@ import { PluginListenerHandle } from '@capacitor/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CaptureResult, PreviewCamera } from '@numbersprotocol/preview-camera';
 import { ErrorService } from '../../../shared/error/error.service';
+import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import { GoProBluetoothService } from '../../settings/go-pro/services/go-pro-bluetooth.service';
 import {
   CustomCameraMediaItem,
@@ -40,10 +41,11 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly customCameraService: CustomCameraService,
     private readonly goProBluetoothService: GoProBluetoothService,
-    private readonly errorService: ErrorService
+    private readonly errorService: ErrorService,
+    private readonly userGuideService: UserGuideService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.debugOnlyPreventContextMenuFromLongPressContextMenu();
 
     PreviewCamera.addListener(
@@ -57,6 +59,11 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     ).then((listener: any) => (this.captureVideoFinishedListener = listener));
 
     this.startPreviewCamera();
+  }
+
+  async ionViewDidEnter() {
+    await this.userGuideService.showUserGuidesOnCustomCameraPage();
+    await this.userGuideService.setHasOpenedCustomCameraPage(true);
   }
 
   ngOnDestroy(): void {
@@ -96,10 +103,12 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   onPress() {
+    this.userGuideService.setHasCapturedPhotoWithCustomCamera(true);
     this.customCameraService.takePhoto();
   }
 
   onLongPress() {
+    this.userGuideService.setHasCapturedVideoWithCustomCamera(true);
     this.customCameraService.startRecord();
   }
 
