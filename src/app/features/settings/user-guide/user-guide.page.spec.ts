@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-
+import { JoyrideModule } from 'ngx-joyride';
+import { SharedTestingModule } from '../../../shared/shared-testing.module';
 import { UserGuidePage } from './user-guide.page';
 
 describe('UserGuidePage', () => {
@@ -11,7 +11,7 @@ describe('UserGuidePage', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [UserGuidePage],
-        imports: [IonicModule.forRoot()],
+        imports: [SharedTestingModule, JoyrideModule.forChild()],
       }).compileComponents();
 
       fixture = TestBed.createComponent(UserGuidePage);
