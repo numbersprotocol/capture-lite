@@ -149,19 +149,19 @@ body.dark .mat-tab-group {
 }
 
 .joyride-button {
-  background-color: #0000d8 !important;
+  background-color: #0000d8 !important; /* stylelint-disable-line declaration-no-important */
   border-radius: 15px;
 }
 
 .joyride-step__header {
-  padding: 0 8px 8px !important;
+  padding: 0 8px 8px !important; /* stylelint-disable-line declaration-no-important */
 }
 
 .joyride-step__title {
-  color: #0000d8 !important;
+  color: #0000d8 !important; /* stylelint-disable-line declaration-no-important */
 }
 
 .joyride-step__body {
-  padding: 0 8px 10px !important;
+  padding: 0 8px 10px !important; /* stylelint-disable-line declaration-no-important */
 }
 // styling for ngx-joyride END
