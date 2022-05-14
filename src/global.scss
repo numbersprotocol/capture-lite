@@ -141,3 +141,27 @@ body.dark .mat-tab-group {
 .custom-camera-transparent-background {
   background-color: transparent;
 }
+
+// styling for ngx-joyride START
+.joyride-step__container {
+  border-radius: 15px;
+  max-height: 150px;
+}
+
+.joyride-button {
+  background-color: #0000d8 !important;
+  border-radius: 15px;
+}
+
+.joyride-step__header {
+  padding: 0 8px 8px !important;
+}
+
+.joyride-step__title {
+  color: #0000d8 !important;
+}
+
+.joyride-step__body {
+  padding: 0 8px 10px !important;
+}
+// styling for ngx-joyride END
