@@ -6,6 +6,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
+import { JoyrideModule } from 'ngx-joyride';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TranslocoRootModule } from './shared/language/transloco/transloco-root.module';
@@ -23,6 +24,7 @@ import { SharedModule } from './shared/shared.module';
     TranslocoRootModule,
     FormlyModule.forRoot({ extras: { lazyRender: true } }),
     FormlyMaterialModule,
+    JoyrideModule.forRoot(),
   ],
   providers: [
     {
