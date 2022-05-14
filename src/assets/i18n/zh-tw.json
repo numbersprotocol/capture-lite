@@ -300,5 +300,31 @@
     "fetchingFiles": "獲取檔案",
     "stayOnThisScreenWithTheAppOpenToEnsureYourDownloadsAreComplete": "請勿關閉此畫面以確保您的下載完成",
     "loadingFilesForUploadToCapture": "加載 {{count}} 個檔案以供上傳至 Capture"
+  },
+  "userGuide": {
+    "capture": "Capture",
+    "createCapturesByTakingPhotosOrRecordingVideos": "通過拍照或錄製視頻創建捕獲",
+    "cameraUsageGuide": "相機使用指南",
+    "tapToTakeAPhotoAndLongPressToRecordVideo": "點擊拍照，長按錄製視頻",
+    "flipTheCameraToSwitchBetweenFrontAndBackCameras": "翻轉攝像頭以在前後攝像頭之間切換",
+    "afterTakingPhotosOrRecordingVideosYouCanCloseTheCameraHere": "拍照或錄製視頻後，請在此處關閉相機",
+    "capturedItem": "捕獲的物品",
+    "openToSeeDetailsAndActionItems": "打開以查看詳細信息和操作項",
+    "optionsMenu": "選項菜單",
+    "clickTheOptionsMenuAndPossibleNetworkActionsForGivenMedia": "單擊給定媒體的選項菜單和可能的網絡操作",
+    "activities": "活动",
+    "viewTheHistoryOfYourCaptureTransactionsAndNetworkActions": "查看捕獲交易和網絡操作的歷史記錄",
+    "activityPage": "活动页面",
+    "viewYourCaptureTransactionsHistory": "查看您的捕获交易历史",
+    "viewNetworkActionsHistoryHere": "在此處查看網絡操作歷史記錄",
+    "inboxTab": "收件箱標籤",
+    "viewYourCollectionsOfCapturedAndCollectedItems": "查看您捕獲和收集的項目的集合",
+    "gallery": "畫廊",
+    "browseYourImages": "瀏覽您的圖像",
+    "collections": "收藏品",
+    "browseYourCollections": "瀏覽您的收藏",
+    "previous": "以前的",
+    "next": "下一個",
+    "okIGotIt": "好，我知道了"
   }
 }
