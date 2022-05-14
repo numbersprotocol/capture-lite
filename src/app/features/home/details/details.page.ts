@@ -32,6 +32,7 @@ import { ErrorService } from '../../../shared/error/error.service';
 import { MediaStore } from '../../../shared/media/media-store/media-store.service';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import { ShareService } from '../../../shared/share/share.service';
+import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import {
   isNonNullable,
   switchTap,
@@ -196,11 +197,17 @@ export class DetailsPage {
     private readonly snackBar: MatSnackBar,
     private readonly diaBackendWorkflowService: DiaBackendWorkflowService,
     private readonly alertController: AlertController,
-    private readonly changeDetectorRef: ChangeDetectorRef
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly userGuideService: UserGuideService
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
       .subscribe();
+  }
+
+  async ionViewDidEnter() {
+    await this.userGuideService.showUserGuidesOnDetailsPage();
+    await this.userGuideService.setHasOpenedDetailsPage(true);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -306,6 +313,7 @@ export class DetailsPage {
   }
 
   openOptionsMenu() {
+    this.userGuideService.setHasClickedDetailsPageOptionsMenu(true);
     combineLatest([
       this.activeDetailedCapture$,
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
