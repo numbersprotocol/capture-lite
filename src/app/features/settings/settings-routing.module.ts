@@ -12,6 +12,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./go-pro/go-pro.module').then(m => m.GoProPageModule),
   },
+  {
+    path: 'user-guide',
+    loadChildren: () =>
+      import('./user-guide/user-guide.module').then(m => m.UserGuidePageModule),
+  },
 ];
 
 @NgModule({

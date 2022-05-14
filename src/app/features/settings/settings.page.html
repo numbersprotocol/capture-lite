@@ -31,5 +31,13 @@
       <ion-icon name="camera" slot="start"></ion-icon>
       <ion-label>GoPro</ion-label>
     </ion-item>
+
+    <ion-item
+      *ngIf="showHiddenOption"
+      [routerLink]="['/', 'settings', 'user-guide']"
+    >
+      <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+      <ion-label>User Guide Preferences</ion-label>
+    </ion-item>
   </ion-list>
 </ion-content>
