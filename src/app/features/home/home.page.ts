@@ -82,20 +82,16 @@ export class HomePage {
         concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
         catchError(() => VOID$),
         switchTapTo(defer(() => this.onboardingRedirect())),
+        switchTapTo(
+          defer(() => this.userGuideService.showUserGuidesOnHomePage())
+        ),
         catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
       .subscribe();
-
-    this.userGuideService.showUserGuidesOnHomePage();
   }
 
   private async onboardingRedirect() {
-    if ((await this.onboardingService.hasShownTutorialVersion()) === '') {
-      return this.router.navigate(['tutorial'], {
-        relativeTo: this.route,
-      });
-    }
     this.onboardingService.isNewLogin = false;
 
     if (!(await this.onboardingService.hasCreatedOrImportedIntegrityWallet())) {
