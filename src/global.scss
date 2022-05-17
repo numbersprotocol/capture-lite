@@ -145,12 +145,16 @@ body.dark .mat-tab-group {
 // styling for ngx-joyride START
 .joyride-step__container {
   border-radius: 15px;
-  max-height: 150px;
+  max-height: 200px;
 }
 
 .joyride-button {
   background-color: #0000d8 !important; /* stylelint-disable-line declaration-no-important */
   border-radius: 15px;
+}
+
+.joyride-step__close {
+  display: none;
 }
 
 .joyride-step__header {
