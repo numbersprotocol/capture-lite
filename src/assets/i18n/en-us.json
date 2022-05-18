@@ -300,5 +300,32 @@
     "fetchingFiles": "Fetching Files",
     "stayOnThisScreenWithTheAppOpenToEnsureYourDownloadsAreComplete": "Stay On This Screen With The App Open To Ensure Your Downloads Are Complete",
     "loadingFilesForUploadToCapture": "Loading {{count}} File(s) For Upload To Capture"
+  },
+  "userGuide": {
+    "capture": "Capture",
+    "createCapturesByTakingPhotosOrRecordingVideos": "Create Captures by taking photos or recording videos",
+    "cameraUsageGuide": "Camera Usage Guide",
+    "tapToTakeAPhotoAndLongPressToRecordVideo": "Tap to take a photo, and long press to record video",
+    "flipTheCameraToSwitchBetweenFrontAndBackCameras": "Flip the camera to switch between front and back cameras",
+    "afterTakingPhotosOrRecordingVideosCloseAndGoBackHome": "After taking photos or recording videos, close and go back Home",
+    "capturedItem": "Captured Item",
+    "openToSeeDetailsAndMoreActionItems": "Open to see details and more action items",
+    "optionsMenu": "Options Menu",
+    "clickTheOptionsMenuToUseNetworkActions": "Click the options menu to use Network Actions",
+    "activities": "Activities",
+    "viewTheHistoryOfYourCaptureAndNetworkActionTransactions": "View the history of your Capture and Network Action transactions",
+    "activityPage": "Activity Page",
+    "viewYourCaptureTransactions": "View your Capture transactions",
+    "activityPage2": "Activity Page",
+    "viewNetworkActionsHistory": "View Network Actions history",
+    "inboxTab": "Inbox",
+    "visitInboxForPurchasedItemsAndGiftsReceived": "Visit Inbox for purchased items and gifts received",
+    "galleryView": "Gallery View",
+    "browseInGalleryView": "Browse in Gallery view",
+    "collectionView": "Collection View",
+    "browseInCollectionView": "Browse in Collection view",
+    "previous": "Prev",
+    "next": "Next",
+    "okIGotIt": "Ok, I got it"
   }
 }

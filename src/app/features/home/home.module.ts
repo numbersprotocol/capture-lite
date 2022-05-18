@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { JoyrideModule } from 'ngx-joyride';
 import { SharedModule } from '../../shared/shared.module';
 import { CaptureItemComponent } from './capture-tab/capture-item/capture-item.component';
 import { CaptureTabComponent } from './capture-tab/capture-tab.component';
@@ -17,6 +18,6 @@ import { PostCaptureTabComponent } from './post-capture-tab/post-capture-tab.com
     UploadingBarComponent,
     CaptureItemComponent,
   ],
-  imports: [SharedModule, HomePageRoutingModule],
+  imports: [SharedModule, HomePageRoutingModule, JoyrideModule.forChild()],
 })
 export class HomePageModule {}

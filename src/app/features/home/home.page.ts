@@ -25,6 +25,7 @@ import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-bac
 import { ErrorService } from '../../shared/error/error.service';
 import { MigrationService } from '../../shared/migration/service/migration.service';
 import { OnboardingService } from '../../shared/onboarding/onboarding.service';
+import { UserGuideService } from '../../shared/user-guide/user-guide.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { GoProBluetoothService } from '../settings/go-pro/services/go-pro-bluetooth.service';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
@@ -69,7 +70,8 @@ export class HomePage {
     private readonly actionSheetController: ActionSheetController,
     private readonly alertController: AlertController,
     private readonly goProBluetoothService: GoProBluetoothService,
-    private readonly diaBackendWalletService: DiaBackendWalletService
+    private readonly diaBackendWalletService: DiaBackendWalletService,
+    private readonly userGuideService: UserGuideService
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -80,6 +82,9 @@ export class HomePage {
         concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
         catchError(() => VOID$),
         switchTapTo(defer(() => this.onboardingRedirect())),
+        switchTapTo(
+          defer(() => this.userGuideService.showUserGuidesOnHomePage())
+        ),
         catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )
@@ -87,11 +92,6 @@ export class HomePage {
   }
 
   private async onboardingRedirect() {
-    if ((await this.onboardingService.hasShownTutorialVersion()) === '') {
-      return this.router.navigate(['tutorial'], {
-        relativeTo: this.route,
-      });
-    }
     this.onboardingService.isNewLogin = false;
 
     if (!(await this.onboardingService.hasCreatedOrImportedIntegrityWallet())) {
@@ -249,5 +249,10 @@ export class HomePage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  async navigateToInboxTab() {
+    await this.userGuideService.showUserGuidesOnInboxTab();
+    await this.userGuideService.setHasOpenedInboxTab(true);
   }
 }

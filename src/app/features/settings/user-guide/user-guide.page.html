@@ -1,0 +1,68 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink=".." routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>User guide Preferences</span>
+</mat-toolbar>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label text-wrap>Has Opened Camera Page</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasOpenedCustomCameraPage$ | ngrxPush"
+        (ionChange)="setHasOpenedCustomCameraPage($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label text-wrap>Has Captured Photo With Custom Camera</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasCapturedPhotoWithCustomCamera$ | ngrxPush"
+        (ionChange)="setHasCapturedPhotoWithCustomCamera($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label text-wrap>Has Captured Video With Custom Camera</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasCapturedVideoWithCustomCamera$ | ngrxPush"
+        (ionChange)="setHasCapturedVideoWithCustomCamera($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label text-wrap>Has Opened Details Page</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasOpenedDetailsPage$ | ngrxPush"
+        (ionChange)="setHasOpenedDetailsPage($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label text-wrap>Has Clicked Details Page Options Menu</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasClickedDetailsPageOptionsMenu$ | ngrxPush"
+        (ionChange)="setHasClickedDetailsPageOptionsMenu($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label text-wrap>Has Opened Activities Page</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasOpenedActivitiesPage$ | ngrxPush"
+        (ionChange)="setHasOpenedActivitiesPage($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label text-wrap>Has Opened Inbox Tab</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasOpenedInboxTab$ | ngrxPush"
+        (ionChange)="setHasOpenedInboxTab($event)"
+      ></ion-checkbox>
+    </ion-item>
+  </ion-list>
+  <ion-button (click)="resetAll()" expand="block">Reset All</ion-button>
+</ion-content>

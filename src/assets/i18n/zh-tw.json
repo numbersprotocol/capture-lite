@@ -300,5 +300,32 @@
     "fetchingFiles": "獲取檔案",
     "stayOnThisScreenWithTheAppOpenToEnsureYourDownloadsAreComplete": "請勿關閉此畫面以確保您的下載完成",
     "loadingFilesForUploadToCapture": "加載 {{count}} 個檔案以供上傳至 Capture"
+  },
+  "userGuide": {
+    "capture": "瞬時影像",
+    "createCapturesByTakingPhotosOrRecordingVideos": "透過拍照或錄製影片建立瞬時影像",
+    "cameraUsageGuide": "相機使用指南",
+    "tapToTakeAPhotoAndLongPressToRecordVideo": "輕點拍照，長按錄製影片",
+    "flipTheCameraToSwitchBetweenFrontAndBackCameras": "切換前後鏡頭",
+    "afterTakingPhotosOrRecordingVideosCloseAndGoBackHome": "結束拍攝後，請點選此處關閉相機",
+    "capturedItem": "已建立的瞬時影像",
+    "openToSeeDetailsAndMoreActionItems": "打開查看詳細資訊和操作項目",
+    "optionsMenu": "操作項目選單",
+    "clickTheOptionsMenuToUseNetworkActions": "點擊選單，瀏覽可操作的去中心化影像網絡應用項目",
+    "activities": "活動紀錄",
+    "viewTheHistoryOfYourCaptureAndNetworkActionTransactions": "查看瞬時影像所有權與網絡應用紀錄",
+    "activityPage": "瞬時影像轉移紀錄",
+    "viewYourCaptureTransactions": "查看瞬時影像的所有權轉移紀錄",
+    "activityPage2": "去中心化影像網絡應用交易紀錄",
+    "viewNetworkActionsHistory": "在此處查看去中心化影像網絡應用的交易紀錄",
+    "inboxTab": "瞬時影像收藏匣",
+    "visitInboxForPurchasedItemsAndGiftsReceived": "查詢收到的瞬時影像禮物與購買的瞬時影像 NFT",
+    "galleryView": "藝廊模式",
+    "browseInGalleryView": "以藝廊模式瀏覽全部的收藏品",
+    "collectionView": "系列模式",
+    "browseInCollectionView": "瀏覽以系列發行的收藏品",
+    "previous": "上一步",
+    "next": "下一步",
+    "okIGotIt": "好，我知道了"
   }
 }

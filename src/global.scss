@@ -141,3 +141,31 @@ body.dark .mat-tab-group {
 .custom-camera-transparent-background {
   background-color: transparent;
 }
+
+// styling for ngx-joyride START
+.joyride-step__container {
+  border-radius: 15px;
+  max-height: 200px;
+}
+
+.joyride-button {
+  background-color: #0000d8 !important; /* stylelint-disable-line declaration-no-important */
+  border-radius: 15px;
+}
+
+.joyride-step__close {
+  display: none;
+}
+
+.joyride-step__header {
+  padding: 0 8px 8px !important; /* stylelint-disable-line declaration-no-important */
+}
+
+.joyride-step__title {
+  color: #0000d8 !important; /* stylelint-disable-line declaration-no-important */
+}
+
+.joyride-step__body {
+  padding: 0 8px 10px !important; /* stylelint-disable-line declaration-no-important */
+}
+// styling for ngx-joyride END

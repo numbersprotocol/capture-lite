@@ -22,6 +22,7 @@ import { MediaComponent } from './media/component/media.component';
 import { MigratingDialogComponent } from './migration/migrating-dialog/migrating-dialog.component';
 import { OrderDetailDialogComponent } from './order-detail-dialog/order-detail-dialog.component';
 import { StartsWithPipe } from './pipes/starts-with/starts-with.pipe';
+import { UserGuideService } from './user-guide/user-guide.service';
 
 const declarations = [
   MigratingDialogComponent,
@@ -50,7 +51,12 @@ const imports = [
   FormlyMaterialModule,
 ];
 
-const providers = [GoProBluetoothService, GoProWifiService, GoProMediaService];
+const providers = [
+  GoProBluetoothService,
+  GoProWifiService,
+  GoProMediaService,
+  UserGuideService,
+];
 
 @NgModule({
   declarations,

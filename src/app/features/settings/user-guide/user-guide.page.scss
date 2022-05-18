@@ -1,0 +1,18 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+  }
+}
+
+ion-button {
+  --box-shadow: 0;
+
+  margin-bottom: 16px;
+  color: white;
+}
+
+ion-checkbox {
+  --border-radius: 50%;
+  --checkmark-color: white;
+  --size: 24px;
+}

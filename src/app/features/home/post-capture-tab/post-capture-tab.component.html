@@ -1,9 +1,20 @@
-<div class="segments" [ngSwitch]="categories">
+<div class="segments" [ngSwitch]="categories" *transloco="let t">
   <ion-segment mode="ios" [(ngModel)]="categories">
-    <ion-segment-button value="photo" checked>
+    <ion-segment-button
+      value="photo"
+      checked
+      joyrideStep="highlightImageView"
+      [title]="t('userGuide.galleryView')"
+      [text]="t('userGuide.browseInGalleryView')"
+    >
       <ion-icon src="/assets/images/apps.svg" class="segment"></ion-icon>
     </ion-segment-button>
-    <ion-segment-button value="series">
+    <ion-segment-button
+      value="series"
+      joyrideStep="highlightCollectionView"
+      [title]="t('userGuide.collectionView')"
+      [text]="t('userGuide.browseInCollectionView')"
+    >
       <ion-icon src="/assets/images/series.svg" class="segment"></ion-icon>
     </ion-segment-button>
   </ion-segment>

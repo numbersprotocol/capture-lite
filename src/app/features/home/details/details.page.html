@@ -16,6 +16,9 @@
     *ngIf="(isFromSeriesPage$ | ngrxPush) === false"
     (click)="openOptionsMenu()"
     mat-icon-button
+    joyrideStep="highlightDetailsPageOptionsMenu"
+    [title]="t('userGuide.optionsMenu')"
+    [text]="t('userGuide.clickTheOptionsMenuToUseNetworkActions')"
   >
     <mat-icon>more_vert</mat-icon>
   </button>

@@ -1,6 +1,6 @@
 {
   "name": "capture-lite",
-  "version": "0.56.3",
+  "version": "0.57.0",
   "author": "numbersprotocol",
   "homepage": "https://numbersprotocol.io/",
   "scripts": {
@@ -67,6 +67,7 @@
     "lodash-es": "^4.17.21",
     "material-design-icons-iconfont": "^6.1.0",
     "ng-circle-progress": "^1.6.0",
+    "ngx-joyride": "^2.5.0",
     "ngx-long-press2": "^2.0.0",
     "ngx-pinch-zoom": "^2.6.0",
     "process": "^0.11.10",
