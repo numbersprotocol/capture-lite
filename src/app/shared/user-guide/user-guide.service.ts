@@ -35,20 +35,15 @@ export class UserGuideService {
   async showUserGuidesOnHomePage() {
     if (this.platform.is('ios')) return;
 
-    if (
-      (await this.hasOpenedCustomCameraPage()) === false ||
-      (await this.hasCapturePhotoOrVideoWithCustomCamera()) === false
-    ) {
+    if ((await this.hasHighlightedCameraTab()) === false) {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
         steps: ['highlightCaptureButton'],
         showCounter: this.showCounter,
         customTexts: this.customTexts,
       });
-    } else if (
-      (await this.hasOpenedDetailsPage()) === false &&
-      (await this.hasCapturePhotoOrVideoWithCustomCamera()) === true
-    ) {
+      this.setHasHighlightedCameraTab(true);
+    } else if ((await this.hasOpenedDetailsPage()) === false) {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
         steps: ['highlightFirstCapture'],
@@ -57,7 +52,7 @@ export class UserGuideService {
       });
     } else if (
       (await this.hasClickedDetailsPageOptionsMenu()) === true &&
-      (await this.hasOpenedActivitiesPage()) === false
+      (await this.hasHighligtedActivityButton()) === false
     ) {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
@@ -65,9 +60,10 @@ export class UserGuideService {
         showCounter: this.showCounter,
         customTexts: this.customTexts,
       });
+      this.setHasHighligtedActivityButton(true);
     } else if (
-      (await this.hasClickedDetailsPageOptionsMenu()) === true &&
-      (await this.hasOpenedInboxTab()) === false
+      (await this.hasOpenedActivitiesPage()) === true &&
+      (await this.hasHightlightedInboxTab()) === false
     ) {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
@@ -75,6 +71,7 @@ export class UserGuideService {
         showCounter: this.showCounter,
         customTexts: this.customTexts,
       });
+      this.setHasHightlightedInboxTab(true);
     }
   }
 
@@ -92,13 +89,6 @@ export class UserGuideService {
         ],
         customTexts: this.customTexts,
       });
-    } else if (!(await this.hasCapturePhotoOrVideoWithCustomCamera())) {
-      await this.delayBeforeStartTour();
-      this.joyrideService.startTour({
-        steps: ['highlightCustomCameraCaptureButton'],
-        showCounter: this.showCounter,
-        customTexts: this.customTexts,
-      });
     }
   }
 
@@ -109,7 +99,6 @@ export class UserGuideService {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
         customTexts: this.customTexts,
-
         steps: [
           'highlightCaptureTransactionsTab',
           'highlightNetworkActionsTab',
@@ -125,7 +114,6 @@ export class UserGuideService {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
         customTexts: this.customTexts,
-
         steps: ['highlightDetailsPageOptionsMenu'],
         showCounter: this.showCounter,
       });
@@ -139,10 +127,30 @@ export class UserGuideService {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
         customTexts: this.customTexts,
-
         steps: ['highlightImageView', 'highlightCollectionView'],
       });
     }
+  }
+
+  hasHighlightedCameraTab$() {
+    return this.preferences.getBoolean$(
+      PrefKeys.HAS_HIGHLIGHTED_CAMERA_TAB,
+      false
+    );
+  }
+
+  async hasHighlightedCameraTab() {
+    return this.preferences.getBoolean(
+      PrefKeys.HAS_HIGHLIGHTED_CAMERA_TAB,
+      false
+    );
+  }
+
+  async setHasHighlightedCameraTab(value: boolean) {
+    return this.preferences.setBoolean(
+      PrefKeys.HAS_HIGHLIGHTED_CAMERA_TAB,
+      value
+    );
   }
 
   hasOpenedCustomCameraPage$() {
@@ -256,6 +264,27 @@ export class UserGuideService {
       value
     );
   }
+
+  hasHighligtedActivityButton$() {
+    return this.preferences.getBoolean$(
+      PrefKeys.HAS_HIGHLIGHTED_ACTIVITY_BUTTON,
+      false
+    );
+  }
+
+  async hasHighligtedActivityButton() {
+    return this.preferences.getBoolean(
+      PrefKeys.HAS_HIGHLIGHTED_ACTIVITY_BUTTON,
+      false
+    );
+  }
+  async setHasHighligtedActivityButton(value: boolean) {
+    return this.preferences.setBoolean(
+      PrefKeys.HAS_HIGHLIGHTED_ACTIVITY_BUTTON,
+      value
+    );
+  }
+
   hasOpenedActivitiesPage$() {
     return this.preferences.getBoolean$(
       PrefKeys.HAS_OPENED_ACTIVITIES_PAGE,
@@ -272,6 +301,27 @@ export class UserGuideService {
   async setHasOpenedActivitiesPage(value: boolean) {
     return this.preferences.setBoolean(
       PrefKeys.HAS_OPENED_ACTIVITIES_PAGE,
+      value
+    );
+  }
+
+  hasHightlightedInboxTab$() {
+    return this.preferences.getBoolean$(
+      PrefKeys.HAS_HIGHLIGHTED_INBOX_TAB,
+      false
+    );
+  }
+
+  async hasHightlightedInboxTab() {
+    return await this.preferences.getBoolean(
+      PrefKeys.HAS_HIGHLIGHTED_INBOX_TAB,
+      false
+    );
+  }
+
+  async setHasHightlightedInboxTab(value: boolean) {
+    return this.preferences.setBoolean(
+      PrefKeys.HAS_HIGHLIGHTED_INBOX_TAB,
       value
     );
   }
@@ -309,11 +359,14 @@ export interface UserGuide {
 }
 
 const enum PrefKeys {
+  HAS_HIGHLIGHTED_CAMERA_TAB = 'HAS_HIGHLIGHTED_CAMERA_TAB',
   HAS_OPENED_CUSTOM_CAMERA_PAGE = 'HAS_OPENED_CUSTOM_CAMERA_PAGE',
   HAS_CAPTURED_PHOTO_WITH_CUSTOM_CAMERA = 'HAS_CAPTURED_PHOTO_WITH_CUSTOM_CAMERA',
   HAS_CAPTURED_VIDEO_WITH_CUSTOM_CAMERA = 'HAS_CAPTURED_VIDEO_WITH_CUSTOM_CAMERA',
   HAS_OPENED_DETAILS_PAGE = 'HAS_OPENED_DETAILS_PAGE',
   HAS_CLICKED_DETAILS_PAGE_OPTIONS_MENU = 'HAS_CLICKED_DETAILS_PAGE_OPTIONS_MENU',
   HAS_OPENED_ACTIVITIES_PAGE = 'HAS_OPENED_ACTIVITIES_PAGE',
+  HAS_HIGHLIGHTED_ACTIVITY_BUTTON = 'HAS_HIGHLIGHTED_ACTIVITY_BUTTON',
+  HAS_HIGHLIGHTED_INBOX_TAB = 'HAS_HIGHLIGHTED_INBOX_TAB',
   HAS_OPENED_INBOX_TAB = 'HAS_OPENED_INBOX_TAB',
 }
