@@ -38,7 +38,7 @@ import {
   switchTap,
   VOID$,
 } from '../../../utils/rx-operators/rx-operators';
-import { getAssetProfileUrl } from '../../../utils/url';
+import { getAssetProfileUrlWithTmpToken } from '../../../utils/url';
 import {
   DetailedCapture,
   InformationSessionService,
@@ -177,6 +177,15 @@ export class DetailsPage {
     )
   );
 
+  readonly activeDetailedCaptureTmpShareToken$ =
+    this._activeDetailedCapture$.pipe(
+      distinctUntilChanged(),
+      concatMap(({ id }) => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return this.diaBackendAssetRepository.createTemporaryShareToken$(id!);
+      })
+    );
+
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
   constructor(
@@ -208,6 +217,7 @@ export class DetailsPage {
   async ionViewDidEnter() {
     await this.userGuideService.showUserGuidesOnDetailsPage();
     await this.userGuideService.setHasOpenedDetailsPage(true);
+    await this.userGuideService.setHasClickedDetailsPageOptionsMenu(true);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -467,15 +477,18 @@ export class DetailsPage {
   openCertificate() {
     combineLatest([
       this.activeDetailedCapture$,
-      this.diaBackendAuthService.token$,
+      this.activeDetailedCaptureTmpShareToken$,
     ])
       .pipe(
         first(),
-        concatMap(([detailedCapture, token]) =>
+        concatMap(([detailedCapture, tmpShareToken]) =>
           defer(() =>
             Browser.open({
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              url: getAssetProfileUrl(detailedCapture.id!, token),
+              url: getAssetProfileUrlWithTmpToken(
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                detailedCapture.id!,
+                tmpShareToken
+              ),
               toolbarColor: '#564dfc',
             })
           )

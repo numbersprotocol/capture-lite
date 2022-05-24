@@ -7,6 +7,9 @@ import { UserGuideService } from '../../../shared/user-guide/user-guide.service'
   styleUrls: ['./user-guide.page.scss'],
 })
 export class UserGuidePage {
+  readonly hasHighlightedCameraTab$ =
+    this.userGuideService.hasHighlightedCameraTab$();
+
   readonly hasOpenedCustomCameraPage$ =
     this.userGuideService.hasOpenedCustomCameraPage$();
 
@@ -22,12 +25,22 @@ export class UserGuidePage {
   readonly hasClickedDetailsPageOptionsMenu$ =
     this.userGuideService.hasClickedDetailsPageOptionsMenu$();
 
+  readonly hasHighligtedActivityButton$ =
+    this.userGuideService.hasHighligtedActivityButton$();
+
   readonly hasOpenedActivitiesPage$ =
     this.userGuideService.hasOpenedActivitiesPage$();
+
+  readonly hasHightlightedInboxTab$ =
+    this.userGuideService.hasHightlightedInboxTab$();
 
   readonly hasOpenedInboxTab$ = this.userGuideService.hasOpenedInboxTab$();
 
   constructor(private readonly userGuideService: UserGuideService) {}
+
+  setHasHighlightedCameraTab(event: any) {
+    this.userGuideService.setHasHighlightedCameraTab(event.detail.checked);
+  }
 
   setHasOpenedCustomCameraPage(event: any) {
     this.userGuideService.setHasOpenedCustomCameraPage(event.detail.checked);
@@ -55,8 +68,16 @@ export class UserGuidePage {
     );
   }
 
+  setHasHighligtedActivityButton(event: any) {
+    this.userGuideService.setHasHighligtedActivityButton(event.detail.checked);
+  }
+
   setHasOpenedActivitiesPage(event: any) {
     this.userGuideService.setHasOpenedActivitiesPage(event.detail.checked);
+  }
+
+  setHasHightlightedInboxTab(event: any) {
+    this.userGuideService.setHasHightlightedInboxTab(event.detail.checked);
   }
 
   setHasOpenedInboxTab(event: any) {
@@ -64,13 +85,16 @@ export class UserGuidePage {
   }
 
   resetAll() {
+    this.userGuideService.setHasHighlightedCameraTab(false);
     this.userGuideService.setHasOpenedCustomCameraPage(false);
     this.userGuideService.setHasOpenedCustomCameraPage(false);
     this.userGuideService.setHasCapturedPhotoWithCustomCamera(false);
     this.userGuideService.setHasCapturedVideoWithCustomCamera(false);
     this.userGuideService.setHasOpenedDetailsPage(false);
     this.userGuideService.setHasClickedDetailsPageOptionsMenu(false);
+    this.userGuideService.setHasHighligtedActivityButton(false);
     this.userGuideService.setHasOpenedActivitiesPage(false);
+    this.userGuideService.setHasHightlightedInboxTab(false);
     this.userGuideService.setHasOpenedInboxTab(false);
   }
 }
