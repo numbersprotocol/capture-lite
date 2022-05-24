@@ -2,7 +2,11 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
-import { ActionSheetController, AlertController } from '@ionic/angular';
+import {
+  ActionSheetController,
+  AlertController,
+  Platform,
+} from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, defer, EMPTY, iif, of } from 'rxjs';
@@ -71,7 +75,8 @@ export class HomePage {
     private readonly alertController: AlertController,
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly diaBackendWalletService: DiaBackendWalletService,
-    private readonly userGuideService: UserGuideService
+    private readonly userGuideService: UserGuideService,
+    private readonly platform: Platform
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -92,6 +97,15 @@ export class HomePage {
   }
 
   private async onboardingRedirect() {
+    if (
+      this.platform.is('ios') &&
+      (await this.onboardingService.hasShownTutorialVersion()) === ''
+    ) {
+      return this.router.navigate(['tutorial'], {
+        relativeTo: this.route,
+      });
+    }
+
     this.onboardingService.isNewLogin = false;
 
     if (!(await this.onboardingService.hasCreatedOrImportedIntegrityWallet())) {

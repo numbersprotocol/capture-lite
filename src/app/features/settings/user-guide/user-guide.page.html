@@ -8,6 +8,14 @@
 <ion-content>
   <ion-list>
     <ion-item>
+      <ion-label text-wrap>Has Highlighted Camera Tab</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasHighlightedCameraTab$ | ngrxPush"
+        (ionChange)="setHasHighlightedCameraTab($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
       <ion-label text-wrap>Has Opened Camera Page</ion-label>
       <ion-checkbox
         slot="end"
@@ -48,11 +56,27 @@
       ></ion-checkbox>
     </ion-item>
     <ion-item>
+      <ion-label text-wrap>Has Highligted Activity Button</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasHighligtedActivityButton$ | ngrxPush"
+        (ionChange)="setHasHighligtedActivityButton($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
       <ion-label text-wrap>Has Opened Activities Page</ion-label>
       <ion-checkbox
         slot="end"
         [checked]="hasOpenedActivitiesPage$ | ngrxPush"
         (ionChange)="setHasOpenedActivitiesPage($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label text-wrap>Has Hightlighted Inbox Tab</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasHightlightedInboxTab$ | ngrxPush"
+        (ionChange)="setHasHightlightedInboxTab($event)"
       ></ion-checkbox>
     </ion-item>
     <ion-item>

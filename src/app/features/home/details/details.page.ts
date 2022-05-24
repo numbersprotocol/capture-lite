@@ -217,6 +217,7 @@ export class DetailsPage {
   async ionViewDidEnter() {
     await this.userGuideService.showUserGuidesOnDetailsPage();
     await this.userGuideService.setHasOpenedDetailsPage(true);
+    await this.userGuideService.setHasClickedDetailsPageOptionsMenu(true);
   }
 
   // eslint-disable-next-line class-methods-use-this
