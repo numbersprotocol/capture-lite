@@ -31,6 +31,8 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnHomePage() {
+    // Temporarely disable in app user guide for HomePage
+    return;
     if (
       (await this.hasOpenedCustomCameraPage()) === false ||
       (await this.hasCapturePhotoOrVideoWithCustomCamera()) === false
@@ -75,6 +77,8 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnCustomCameraPage() {
+    // Temporarely disable in app user guide for CustomCameraPage
+    return;
     if ((await this.hasOpenedCustomCameraPage()) === false) {
       const avarageTimeToGetCameraPermissions = 1400;
       await this.delayBeforeStartTour(avarageTimeToGetCameraPermissions);
@@ -97,6 +101,8 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnActivitiesPage() {
+    // Temporarely disable in app user guide for ActivitiesPage
+    return;
     if ((await this.hasOpenedActivitiesPage()) === false) {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
@@ -111,6 +117,8 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnDetailsPage() {
+    // Temporarely disable in app user guide for DetailsPage
+    return;
     if ((await this.hasClickedDetailsPageOptionsMenu()) === false) {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
@@ -123,6 +131,8 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnInboxTab() {
+    // Temporarely disable in app user guide for InboxTab
+    return;
     if ((await this.hasOpenedInboxTab()) === false) {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
