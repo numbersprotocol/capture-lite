@@ -30,6 +30,7 @@ export class ErrorService {
             timeoutError,
             unknownError,
           }) => {
+            // eslint-disable-next-line no-debugger
             if (typeof error === 'string') return error;
             if (error instanceof HttpErrorResponse) {
               if (error.status === HttpErrorCode.INVALID)
