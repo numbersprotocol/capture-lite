@@ -280,7 +280,7 @@
     "invitation": "邀請",
     "shareInvitationCode": "分享邀請碼",
     "shareToGetRewarded": "分享以獲得獎勵",
-    "myReferralCodeAtCaptureAppIs": "我在 Capture App 的推薦代碼是 {{referralCode}}"
+    "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "透過我的推薦碼 {{referralCode}} 在 Capture App 註冊，一起獲得 NUM Points!"
   },
   "gopro": {
     "setup": "GoPro 設置",
