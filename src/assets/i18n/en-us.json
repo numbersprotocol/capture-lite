@@ -282,7 +282,7 @@
     "invitation": "Invitation",
     "shareInvitationCode": "Share invitation code",
     "shareToGetRewarded": "Share to get rewarded",
-    "myReferralCodeAtCaptureAppIs": "My referral code at Capture App is {{referralCode}}"
+    "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "Use my referral code {{referralCode}} to sign up for Capture App, pass verification and we both get NUM Points reward!"
   },
   "gopro": {
     "setup": "GoPro Setup",
