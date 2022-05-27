@@ -43,13 +43,14 @@ export class UserGuideService {
         customTexts: this.customTexts,
       });
       this.setHasHighlightedCameraTab(true);
-    } else if ((await this.hasOpenedDetailsPage()) === false) {
+    } else if ((await this.hasHighlightedFirstCapture()) === false) {
       await this.delayBeforeStartTour();
       this.joyrideService.startTour({
         steps: ['highlightFirstCapture'],
         showCounter: this.showCounter,
         customTexts: this.customTexts,
       });
+      this.setHasHighlightedFirstCapture(true);
     } else if (
       (await this.hasClickedDetailsPageOptionsMenu()) === true &&
       (await this.hasHighligtedActivityButton()) === false
@@ -223,6 +224,27 @@ export class UserGuideService {
     );
   }
 
+  hasHighlightedFirstCapture$() {
+    return this.preferences.getBoolean$(
+      PrefKeys.HAS_HIGHLIGHTED_FIRST_CAPTURE,
+      false
+    );
+  }
+
+  async hasHighlightedFirstCapture() {
+    return await this.preferences.getBoolean(
+      PrefKeys.HAS_HIGHLIGHTED_FIRST_CAPTURE,
+      false
+    );
+  }
+
+  async setHasHighlightedFirstCapture(value: boolean) {
+    return await this.preferences.setBoolean(
+      PrefKeys.HAS_HIGHLIGHTED_FIRST_CAPTURE,
+      value
+    );
+  }
+
   hasOpenedDetailsPage$() {
     return this.preferences.getBoolean$(
       PrefKeys.HAS_OPENED_DETAILS_PAGE,
@@ -363,6 +385,7 @@ const enum PrefKeys {
   HAS_OPENED_CUSTOM_CAMERA_PAGE = 'HAS_OPENED_CUSTOM_CAMERA_PAGE',
   HAS_CAPTURED_PHOTO_WITH_CUSTOM_CAMERA = 'HAS_CAPTURED_PHOTO_WITH_CUSTOM_CAMERA',
   HAS_CAPTURED_VIDEO_WITH_CUSTOM_CAMERA = 'HAS_CAPTURED_VIDEO_WITH_CUSTOM_CAMERA',
+  HAS_HIGHLIGHTED_FIRST_CAPTURE = 'HAS_HIGHLIGHTED_FIRST_CAPTURE',
   HAS_OPENED_DETAILS_PAGE = 'HAS_OPENED_DETAILS_PAGE',
   HAS_CLICKED_DETAILS_PAGE_OPTIONS_MENU = 'HAS_CLICKED_DETAILS_PAGE_OPTIONS_MENU',
   HAS_OPENED_ACTIVITIES_PAGE = 'HAS_OPENED_ACTIVITIES_PAGE',
