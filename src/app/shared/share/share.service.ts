@@ -43,8 +43,8 @@ export class ShareService {
       'invitation.useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward',
       { referralCode: referralCode }
     );
-    const url = 'https://www.numbersprotocol.io/#products';
 
-    return Share.share({ text: text + '\n\n' + url });
+    const urlToDownloadApp = 'https://www.numbersprotocol.io/#products';
+    return Share.share({ text: text + '\n' + urlToDownloadApp });
   }
 }
