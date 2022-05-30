@@ -40,6 +40,14 @@
       ></ion-checkbox>
     </ion-item>
     <ion-item>
+      <ion-label text-wrap>Has Highlighted First Capture</ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="hasHighlightedFirstCapture$ | ngrxPush"
+        (ionChange)="setHasHighlightedFirstCapture($event)"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
       <ion-label text-wrap>Has Opened Details Page</ion-label>
       <ion-checkbox
         slot="end"

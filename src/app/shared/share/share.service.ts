@@ -40,12 +40,11 @@ export class ShareService {
 
   async shareReferralCode(referralCode: string) {
     const text = this.translocoService.translate(
-      'invitation.myReferralCodeAtCaptureAppIs',
+      'invitation.useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward',
       { referralCode: referralCode }
     );
-    return Share.share({
-      text: text,
-      url: 'https://www.numbersprotocol.io/#products',
-    });
+
+    const urlToDownloadApp = 'https://www.numbersprotocol.io/#products';
+    return Share.share({ text: text + '\n' + urlToDownloadApp });
   }
 }

@@ -221,7 +221,9 @@
       "unable_to_confirm_order": "無法確認訂單。請再試一次。",
       "unpaid_num_exceed_threshold": "太多未付的 NUM。請通過電子郵件與我們聯繫以恢復帳戶功能。",
       "invalid_network_app_name": "無效的網絡動作。",
-      "invalid_referral_code": "無效的推薦代碼"
+      "invalid_referral_code": "無效的推薦代碼",
+      "duplicate_email": "該電子郵件已註冊",
+      "duplicate_username": "用戶名已被其他使用者使用"
     },
     "wallets": {
       "emptyTransferAmount": "請輸入有效轉帳金額。",
@@ -280,7 +282,7 @@
     "invitation": "邀請",
     "shareInvitationCode": "分享邀請碼",
     "shareToGetRewarded": "分享以獲得獎勵",
-    "myReferralCodeAtCaptureAppIs": "我在 Capture App 的推薦代碼是 {{referralCode}}"
+    "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "透過我的推薦碼 {{referralCode}} 在 Capture App 註冊，一起獲得 NUM Points!"
   },
   "gopro": {
     "setup": "GoPro 設置",

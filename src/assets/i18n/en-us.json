@@ -221,7 +221,9 @@
       "unable_to_confirm_order": "Unable to confirm order. Please try again.",
       "unpaid_num_exceed_threshold": "Too much unpaid NUM. Please contact us with email to restore account functionality.",
       "invalid_network_app_name": "Invalid network app.",
-      "invalid_referral_code": "Invalide referral code"
+      "invalid_referral_code": "Invalid referral code",
+      "duplicate_email": "The email has already been registered",
+      "duplicate_username": "User with this username already exists"
     },
     "wallets": {
       "emptyTransferAmount": "Please enter a valid transfer amount.",
@@ -280,7 +282,7 @@
     "invitation": "Invitation",
     "shareInvitationCode": "Share invitation code",
     "shareToGetRewarded": "Share to get rewarded",
-    "myReferralCodeAtCaptureAppIs": "My referral code at Capture App is {{referralCode}}"
+    "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "Use my referral code {{referralCode}} to sign up for Capture App, pass verification and we both get NUM Points reward!"
   },
   "gopro": {
     "setup": "GoPro Setup",

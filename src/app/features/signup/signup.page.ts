@@ -213,8 +213,30 @@ export class SignupPage {
           )
         ),
         catchError((err: unknown) => {
-          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-          if (err instanceof HttpErrorResponse && err.status === 400) {
+          if (
+            err instanceof HttpErrorResponse &&
+            err.error.error?.type === 'duplicate_email'
+          ) {
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'error.diaBackend.duplicate_email'
+              )
+            );
+          }
+          if (
+            err instanceof HttpErrorResponse &&
+            err.error.error?.details?.username?.length > 0
+          ) {
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'error.diaBackend.duplicate_username'
+              )
+            );
+          }
+          if (
+            err instanceof HttpErrorResponse &&
+            err.error.error?.type === 'invalid_referral_code'
+          ) {
             return this.errorService.toastError$(
               this.translocoService.translate(
                 'error.diaBackend.invalid_referral_code'

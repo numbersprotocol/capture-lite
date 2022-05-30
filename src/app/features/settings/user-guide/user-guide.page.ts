@@ -19,6 +19,9 @@ export class UserGuidePage {
   readonly hasCapturedVideoWithCustomCamera$ =
     this.userGuideService.hasCapturedVideoWithCustomCamera$();
 
+  readonly hasHighlightedFirstCapture$ =
+    this.userGuideService.hasHighlightedFirstCapture$();
+
   readonly hasOpenedDetailsPage$ =
     this.userGuideService.hasOpenedDetailsPage$();
 
@@ -58,6 +61,10 @@ export class UserGuidePage {
     );
   }
 
+  setHasHighlightedFirstCapture(event: any) {
+    this.userGuideService.setHasHighlightedFirstCapture(event.detail.checked);
+  }
+
   setHasOpenedDetailsPage(event: any) {
     this.userGuideService.setHasOpenedDetailsPage(event.detail.checked);
   }
@@ -90,6 +97,7 @@ export class UserGuidePage {
     this.userGuideService.setHasOpenedCustomCameraPage(false);
     this.userGuideService.setHasCapturedPhotoWithCustomCamera(false);
     this.userGuideService.setHasCapturedVideoWithCustomCamera(false);
+    this.userGuideService.setHasHighlightedFirstCapture(false);
     this.userGuideService.setHasOpenedDetailsPage(false);
     this.userGuideService.setHasClickedDetailsPageOptionsMenu(false);
     this.userGuideService.setHasHighligtedActivityButton(false);
