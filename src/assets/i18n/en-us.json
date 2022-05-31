@@ -183,6 +183,7 @@
     "copyIpfsAddress": "Copy IPFS address",
     "shareAssetProfile": "Share Asset Profile",
     "assetBecomePublicAfterSharing": "This asset will become public after sharing",
+    "assetBecomePublicFor24Hours": "Anyone with the link will be able to access the asset in the next 24 hours",
     "mintNftToken": "Mint NFT token",
     "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?",
     "sentSuccessfully": "Sent Successfully",

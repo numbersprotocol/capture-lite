@@ -302,7 +302,7 @@ export class DetailsPage {
                     const result = await this.confirmAlert.present({
                       message:
                         this.translocoService.translate(
-                          'message.assetBecomePublicAfterSharing'
+                          'message.assetBecomePublicFor24Hours'
                         ) + '!',
                     });
                     if (result) {
