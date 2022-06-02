@@ -5,9 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.58.1 - 2022-06-02
+
+### Fixed
+
+- Fix build number
+
 ## 0.58.0 - 2022-05-31
 
-## Changed
+### Changed
 
 - Update authmedia link to use one-time token for private assets
 
@@ -18,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix sign up page errors to be more specific
 - Fix user guide for highlighting capture less persistant
 
-## Changed
+### Changed
 
 - Change share referral code text
 
