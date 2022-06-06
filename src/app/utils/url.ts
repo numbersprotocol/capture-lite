@@ -10,10 +10,3 @@ export function getAssetProfileUrl(id: string, token?: string) {
   }
   return `https://authmedia.net/asset-profile?cid=${id}`;
 }
-
-export function getAssetProfileUrlWithTmpToken(id: string, tmpToken?: string) {
-  if (tmpToken) {
-    return `https://authmedia.net/asset-profile?cid=${id}&token=${tmpToken}`;
-  }
-  return `https://authmedia.net/asset-profile?cid=${id}`;
-}
