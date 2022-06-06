@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { Share } from '@capacitor/share';
 import { TranslocoService } from '@ngneat/transloco';
 import { catchError } from 'rxjs/operators';
-import {
-  getAssetProfileUrl,
-  getAssetProfileUrlWithTmpToken,
-} from '../../utils/url';
+import { getAssetProfileUrl } from '../../utils/url';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -25,13 +22,9 @@ export class ShareService {
   ) {}
 
   async share(asset: DiaBackendAsset) {
-    const tmpToken = await this.diaBackendAssetRepository
-      .createTemporaryShareToken$(asset.id)
-      .toPromise();
-
     return Share.share({
       text: this.defaultShareText,
-      url: getAssetProfileUrlWithTmpToken(asset.id, tmpToken),
+      url: await this.setPublicAndGetLink(asset),
     });
   }
 
