@@ -195,10 +195,18 @@ export class HomePage {
 
   private async showAppUpdateAlert() {
     return this.confirmAlert.present({
-      header: 'Importan updates are available',
-      message: 'Please update app for propper functionig',
-      confirmButtonText: 'Udate now',
-      cancelButtonText: 'Remind me tomorrow',
+      header: this.translocoService.translate(
+        'inAppUpdate.importantUpdatesAreAvailable'
+      ),
+      message: this.translocoService.translate(
+        'inAppUpdate.pleaseUpdateTheAppForProperFunctioning'
+      ),
+      confirmButtonText: this.translocoService.translate(
+        'inAppUpdate.updateNow'
+      ),
+      cancelButtonText: this.translocoService.translate(
+        'inAppUpdate.remindMeTomorrow'
+      ),
     });
   }
 
