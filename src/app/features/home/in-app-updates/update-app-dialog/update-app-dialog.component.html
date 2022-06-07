@@ -1,0 +1,16 @@
+<ng-container *transloco="let t">
+  <h1 mat-dialog-title>{{ 'Critical updates are available' }}</h1>
+
+  <div mat-dialog-content>Please update the app for proper functioning</div>
+  <div mat-dialog-actions>
+    <button
+      (click)="redirectToAppUpdatePage()"
+      mat-button
+      mat-flat-button
+      color="warn"
+      cdkFocusInitial
+    >
+      {{ 'Update now' }}
+    </button>
+  </div>
+</ng-container>
