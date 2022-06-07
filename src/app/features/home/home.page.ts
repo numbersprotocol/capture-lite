@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
 import {
   ActionSheetController,
@@ -24,6 +25,7 @@ import { CaptureService, Media } from '../../shared/capture/capture.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { DiaBackendAssetRepository } from '../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
+import { DiaBackendService } from '../../shared/dia-backend/service/dia-backend-service.service';
 import { DiaBackendTransactionRepository } from '../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../shared/error/error.service';
@@ -31,7 +33,9 @@ import { MigrationService } from '../../shared/migration/service/migration.servi
 import { OnboardingService } from '../../shared/onboarding/onboarding.service';
 import { UserGuideService } from '../../shared/user-guide/user-guide.service';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
+import { getAppDownloadLink } from '../../utils/url';
 import { GoProBluetoothService } from '../settings/go-pro/services/go-pro-bluetooth.service';
+import { UpdateAppDialogComponent } from './in-app-updates/update-app-dialog/update-app-dialog.component';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 
 @UntilDestroy()
@@ -61,6 +65,7 @@ export class HomePage {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
+    private readonly diaBackendService: DiaBackendService,
     private readonly onboardingService: OnboardingService,
     private readonly router: Router,
     private readonly captureService: CaptureService,
@@ -86,6 +91,7 @@ export class HomePage {
       .pipe(
         concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
         catchError(() => VOID$),
+        switchTapTo(defer(() => this.promptAppUpdateIfAny())),
         switchTapTo(defer(() => this.onboardingRedirect())),
         switchTapTo(
           defer(() => this.userGuideService.showUserGuidesOnHomePage())
@@ -136,6 +142,64 @@ export class HomePage {
       }
     }
     await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+  }
+
+  private async promptAppUpdateIfAny() {
+    // Not applicable to Web App
+    if (!this.platform.is('hybrid')) return;
+
+    const backendAppInfo = await this.diaBackendService.appInfo$().toPromise();
+    const appInfo = await App.getInfo();
+
+    const current = appInfo.version;
+    const latest = backendAppInfo.latest_app_version;
+
+    if (this.isEqualOrGreaterThanLatestVersion(current, latest)) return;
+
+    if (backendAppInfo.update_urgency === 'critical') {
+      this.dialog.open(UpdateAppDialogComponent, { disableClose: true });
+    }
+
+    if (
+      backendAppInfo.update_urgency === 'high' &&
+      (await this.diaBackendService.postponedMoreThanOneDayAgo())
+    ) {
+      this.diaBackendService.setAppUpdatePromptTimestamp(Date.now());
+      const confirmAppUpdate = await this.showAppUpdateAlert();
+      if (confirmAppUpdate) await this.redirectToAppUpdatePage();
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  isEqualOrGreaterThanLatestVersion(
+    currentVersion: string,
+    latestVersion: string
+  ) {
+    const currentVersionArray = currentVersion.split('.');
+    const latestVersionArray = latestVersion.split('.');
+
+    for (const index in currentVersionArray) {
+      if (currentVersionArray[index] > latestVersionArray[index]) {
+        return true;
+      } else if (currentVersionArray[index] < latestVersionArray[index]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private async redirectToAppUpdatePage() {
+    const url = getAppDownloadLink(this.platform.is.bind(this));
+    await Browser.open({ url });
+  }
+
+  private async showAppUpdateAlert() {
+    return this.confirmAlert.present({
+      header: 'Importan updates are available',
+      message: 'Please update app for propper functionig',
+      confirmButtonText: 'Udate now',
+      cancelButtonText: 'Remind me tomorrow',
+    });
   }
 
   private async showPrefetchAlert() {
