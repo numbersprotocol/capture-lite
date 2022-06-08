@@ -59,6 +59,7 @@
     "@ngx-formly/schematics": "^5.10.22",
     "@numbersprotocol/preview-camera": "github:numbersprotocol/preview-camera#release-0.0.2-auto-rotate-fix",
     "@numbersprotocol/preview-video": "github:numbersprotocol/preview-video",
+    "appsflyer-capacitor-plugin": "^6.5.2",
     "async-mutex": "^0.3.2",
     "buffer": "^5.7.1",
     "capacitor-blob-writer": "^1.0.4",
