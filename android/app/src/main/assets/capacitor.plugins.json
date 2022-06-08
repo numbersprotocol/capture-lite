@@ -1,5 +1,9 @@
 [
 	{
+		"pkg": "@capacitor-community/advertising-id",
+		"classpath": "com.thomasvidas.advertising.AdvertisingIdPlugin"
+	},
+	{
 		"pkg": "@capacitor-community/bluetooth-le",
 		"classpath": "com.capacitorjs.community.plugins.bluetoothle.BluetoothLe"
 	},
