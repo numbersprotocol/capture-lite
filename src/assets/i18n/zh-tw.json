@@ -211,6 +211,8 @@
       "user_is_not_active": "帳號未啟用。請透過您收到的帳號驗證信啟用帳號。",
       "incorrect_login_credentials": "不正確的電子郵件或密碼。",
       "untrusted_client": "不受信任的客戶端。",
+      "validation_error": "請入有效的電話號碼",
+      "external_api_error": "外部 API 錯誤",
       "phone_verification_failed": "驗證碼錯誤",
       "phone_verification_code_expired": "驗證碼已過期",
       "throttled": "短時間內傳送過多請求",
