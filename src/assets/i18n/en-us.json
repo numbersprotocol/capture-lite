@@ -212,7 +212,7 @@
       "incorrect_login_credentials": "Incorrect email or password.",
       "untrusted_client": "Untrusted client.",
       "validation_error": "Enter a valid phone number",
-      "external_api_error": "External API error",
+      "external_api_error": "An error occurred. Please try again later",
       "phone_verification_failed": "Incorrect verification code",
       "phone_verification_code_expired": "The verification code has been expired",
       "throttled": "Too frequent request",
