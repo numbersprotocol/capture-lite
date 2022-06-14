@@ -9,13 +9,16 @@ import { MaterialTestingModule } from './shared/material/material-testing.module
 
 describe('AppComponent', () => {
   let platformReadySpy: Promise<void>;
+  let platformIsSpy: boolean | undefined;
   let platformSpy: Platform;
 
   beforeEach(
     waitForAsync(() => {
       platformReadySpy = Promise.resolve();
+      platformIsSpy = false;
       platformSpy = jasmine.createSpyObj('Platform', {
         ready: platformReadySpy,
+        is: platformIsSpy,
       });
 
       TestBed.configureTestingModule({

@@ -5,14 +5,14 @@ import { AppFlyerService } from './app-flyer.service';
 
 describe('AppFlyerService', () => {
   let service: AppFlyerService;
-  let platformIs: (platformName: string) => boolean;
+  let platformIs: boolean | undefined;
   let platformReadySpy: Promise<void>;
   let platformSpy: Platform;
 
   beforeEach(
     waitForAsync(async () => {
       platformReadySpy = Promise.resolve();
-      platformIs = _ => false;
+      platformIs = false;
 
       platformSpy = jasmine.createSpyObj('Platform', {
         ready: platformReadySpy,
