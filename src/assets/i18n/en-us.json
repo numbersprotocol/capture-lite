@@ -254,6 +254,17 @@
     "fee": "Gas",
     "totalCost": "Total Cost"
   },
+  "details": {
+    "error": {
+      "transferOwnershipActionIsUnavailable": "Transfer ownership action is unavailable. Please try again later.",
+      "viewOnCaptureClubIsUnavailable": "View on CaptureClub action is unavailable. Please try again later.",
+      "viewSupportingVideoOnIpfsIsUnavailable": "View supporting video on IPFS action is unavailable. Please try again later.",
+      "deregisterFromNetworkIsUnavailable": "Deregister from network action is unavailable. Please try again later.",
+      "mintNftTokenIsUnavailable": "Mint NFT token action is unavailable. Please try again later.",
+      "viewBlockchainCertificateIsUnavailable": "View blockchain certificate action is unavailable. Please try again later.",
+      "networkActionsAreUnavailable": "Network Actions are unavailable. Please try again later."
+    }
+  },
   "wallets": {
     "wallets": "Wallets",
     "pullToRefreshBalance": "Pull to refresh balance",
