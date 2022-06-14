@@ -254,6 +254,17 @@
     "fee": "油費",
     "totalCost": "總額"
   },
+  "details": {
+    "error": {
+      "transferOwnershipActionIsUnavailable": "轉讓所有權操作不可用。 請稍後再試。",
+      "viewOnCaptureClubIsUnavailable": "無法查看 CaptureClub 操作。 請稍後再試。",
+      "viewSupportingVideoOnIpfsIsUnavailable": "查看有關 IPFS 操作的支持視頻不可用。 請稍後再試。",
+      "deregisterFromNetworkIsUnavailable": "從網絡取消註冊操作不可用。 請稍後再試。",
+      "mintNftTokenIsUnavailable": "Mint NFT 令牌操作不可用。 請稍後再試。",
+      "viewBlockchainCertificateIsUnavailable": "查看區塊鏈證書操作不可用。 請稍後再試。",
+      "networkActionsAreUnavailable": "網絡操作不可用。 請稍後再試。"
+    }
+  },
   "wallets": {
     "wallets": "錢包",
     "pullToRefreshBalance": "下拉以刷新餘額",
