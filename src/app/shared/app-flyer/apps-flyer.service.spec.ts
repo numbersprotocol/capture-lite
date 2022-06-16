@@ -1,10 +1,10 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { Platform } from '@ionic/angular';
 import { SharedTestingModule } from '../shared-testing.module';
-import { AppFlyerService } from './app-flyer.service';
+import { AppsFlyerService } from './apps-flyer.service';
 
-describe('AppFlyerService', () => {
-  let service: AppFlyerService;
+describe('AppsFlyerService', () => {
+  let service: AppsFlyerService;
   let platformIs: boolean | undefined;
   let platformReadySpy: Promise<void>;
   let platformSpy: Platform;
@@ -24,7 +24,7 @@ describe('AppFlyerService', () => {
         providers: [{ provide: Platform, useValue: platformSpy }],
       }).compileComponents();
 
-      service = TestBed.inject(AppFlyerService);
+      service = TestBed.inject(AppsFlyerService);
     })
   );
 
