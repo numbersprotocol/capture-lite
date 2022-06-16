@@ -332,5 +332,12 @@
     "previous": "上一步",
     "next": "下一步",
     "okIGotIt": "好，我知道了"
+  },
+  "inAppUpdate": {
+    "criticalUpdatesAreAvailable": "重要更新可用",
+    "importantUpdatesAreAvailable": "重要更新可用",
+    "pleaseUpdateTheAppForProperFunctioning": "請更新應用程序以使其正常運行",
+    "remindMeTomorrow": "明天提醒我",
+    "updateNow": "現在更新"
   }
 }

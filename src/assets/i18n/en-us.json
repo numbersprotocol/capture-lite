@@ -332,5 +332,12 @@
     "previous": "Prev",
     "next": "Next",
     "okIGotIt": "Ok, I got it"
+  },
+  "inAppUpdate": {
+    "criticalUpdatesAreAvailable": "Critical updates are available",
+    "importantUpdatesAreAvailable": "Important updates are available",
+    "pleaseUpdateTheAppForProperFunctioning": "Please update the app for proper functioning",
+    "remindMeTomorrow": "REMIND ME TOMORROW",
+    "updateNow": "UPDATE NOW"
   }
 }

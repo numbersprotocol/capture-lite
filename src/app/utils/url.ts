@@ -10,3 +10,13 @@ export function getAssetProfileUrl(id: string, token?: string) {
   }
   return `https://authmedia.net/asset-profile?cid=${id}`;
 }
+
+export function getAppDownloadLink(isPlatform: (platformName: any) => boolean) {
+  if (isPlatform('ios'))
+    return 'https://apps.apple.com/en/app/capture-app/id1536388009';
+
+  if (isPlatform('android'))
+    return 'https://play.google.com/store/apps/details?id=io.numbersprotocol.capturelite';
+
+  return 'https://www.numbersprotocol.io/#products';
+}
