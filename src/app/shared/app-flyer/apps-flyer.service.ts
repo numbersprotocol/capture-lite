@@ -8,7 +8,7 @@ import { APP_FLYER_DEV_KEY } from '../dia-backend/secret';
 @Injectable({
   providedIn: 'root',
 })
-export class AppFlyerService {
+export class AppsFlyerService {
   private readonly afConfig: AFInit = {
     appID: '1536388009', // AppStore Application ID. For iOS only.
     devKey: APP_FLYER_DEV_KEY,
