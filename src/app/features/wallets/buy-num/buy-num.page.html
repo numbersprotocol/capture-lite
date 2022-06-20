@@ -1,0 +1,49 @@
+<mat-toolbar *transloco="let t">
+  <button routerLink="/wallets" routerDirection="back" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ t('wallets.buyNum.buyNum') }}</span>
+</mat-toolbar>
+
+<ion-content *transloco="let t">
+  <ion-list lines="none">
+    <ion-list-header *ngIf="(totalProducts$ | async) === 0">
+      In App Products are not available yet. Try again later
+    </ion-list-header>
+
+    <ion-card *ngFor="let product of inAppProducts$ | async; let first = first">
+      <ion-item>
+        <ion-label>
+          <div class="in-app-product-description">
+            <div
+              [ngClass]="{ 'title-text': !first, 'title-text-large': first }"
+            >
+              {{ product.inAppProduct.title }}
+
+              <ion-icon
+                class="num-point-info"
+                *ngIf="first"
+                (click)="showNumPointsQuantity(product.numPoints)"
+                name="alert-circle-outline"
+              ></ion-icon>
+            </div>
+            <div class="subtitle-text" *ngIf="!first">
+              {{ product.inAppProduct.price }}
+            </div>
+          </div>
+        </ion-label>
+        <ion-button
+          (click)="purchase(product.inAppProduct)"
+          [disabled]="!product.inAppProduct.canPurchase"
+          fill="outline"
+          color="success"
+        >
+          {{ t('wallets.buyNum.buyPoints', { points: product.numPoints }) }}
+          <ion-spinner
+            *ngIf="product.inAppProduct.state !== 'valid'"
+          ></ion-spinner>
+        </ion-button>
+      </ion-item>
+    </ion-card>
+  </ion-list>
+</ion-content>

@@ -282,7 +282,9 @@
       "buyNum": "購買 NUM",
       "buyPoints": "買{{points}}分",
       "pointsAdded": "加了{{points}}分",
-      "failedToAddPoints": "加分失敗"
+      "failedToAddPoints": "加分失敗",
+      "thisPackageIncludesXNumPoints": "此套餐包括{{points}}個 NUM 分。",
+      "okIGotIt": "好，我知道了"
     }
   },
   "invitation": {

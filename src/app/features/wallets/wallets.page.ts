@@ -87,6 +87,10 @@ export class WalletsPage {
     });
   }
 
+  navigateToBuyNumPage() {
+    this.router.navigate(['wallets', 'buy-num']);
+  }
+
   openAssetWalletHistory() {
     this.diaBackendWalletService.assetWalletAddr$
       .pipe(
