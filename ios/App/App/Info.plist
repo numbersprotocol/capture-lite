@@ -87,6 +87,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>Your data will be used to measure advertising efficiency</string>
+	<string>We collect your data only for counting download numbers and will never share it with any 3rd party</string>
 </dict>
 </plist>
