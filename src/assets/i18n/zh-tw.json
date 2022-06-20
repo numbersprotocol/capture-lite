@@ -256,13 +256,13 @@
   },
   "details": {
     "error": {
-      "transferOwnershipActionIsUnavailable": "轉讓所有權操作不可用。 請稍後再試。",
-      "viewOnCaptureClubIsUnavailable": "無法查看 CaptureClub 操作。 請稍後再試。",
-      "viewSupportingVideoOnIpfsIsUnavailable": "查看有關 IPFS 操作的支持視頻不可用。 請稍後再試。",
-      "deregisterFromNetworkIsUnavailable": "從網絡取消註冊操作不可用。 請稍後再試。",
-      "mintNftTokenIsUnavailable": "Mint NFT 令牌操作不可用。 請稍後再試。",
-      "viewBlockchainCertificateIsUnavailable": "查看區塊鏈證書操作不可用。 請稍後再試。",
-      "networkActionsAreUnavailable": "網絡操作不可用。 請稍後再試。"
+      "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",
+      "viewOnCaptureClubIsUnavailable": "暫時無法在 CaptureClub 觀看，請稍後再試。",
+      "viewSupportingVideoOnIpfsIsUnavailable": "暫時無法觀看 IPFS 影片，請稍後再試。",
+      "deregisterFromNetworkIsUnavailable": "暫時無法註銷網路註冊，請稍後再試。",
+      "mintNftTokenIsUnavailable": "暫時無法鍛造 NFT，請稍後再試。",
+      "viewBlockchainCertificateIsUnavailable": "暫時無法查看區塊鏈證書，請稍後再試。",
+      "networkActionsAreUnavailable": "暫時無法使用 Network Action，請稍後再試。"
     }
   },
   "wallets": {
