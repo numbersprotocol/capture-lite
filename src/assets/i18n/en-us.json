@@ -277,7 +277,13 @@
     "gasFee": "Gas Fee",
     "pending": "Pending",
     "total": "Total",
-    "calculateGasFee": "Calculate Gas"
+    "calculateGasFee": "Calculate Gas",
+    "buyNum": {
+      "buyNum": "Buy NUM",
+      "buyPoints": "Buy {{points}} Points",
+      "pointsAdded": "{{points}} points added",
+      "failedToAddPoints": "Failed to add points"
+    }
   },
   "invitation": {
     "invitation": "Invitation",
@@ -337,5 +343,9 @@
     "pleaseUpdateTheAppForProperFunctioning": "Please update the app for proper functioning",
     "remindMeTomorrow": "REMIND ME TOMORROW",
     "updateNow": "UPDATE NOW"
+  },
+  "inAppPurchase": {
+    "failedToInitInAppStore": "An error occurred during the initialization of the In-App Store. Please check your Internet connection quality.",
+    "inAppPurchaseErrorOcurred": "In-App Purchase error occurred. Please try again later."
   }
 }

@@ -277,7 +277,13 @@
     "gasFee": "油費",
     "pending": "待計算",
     "total": "總額",
-    "calculateGasFee": "計算油費"
+    "calculateGasFee": "計算油費",
+    "buyNum": {
+      "buyNum": "購買 NUM",
+      "buyPoints": "買{{points}}分",
+      "pointsAdded": "加了{{points}}分",
+      "failedToAddPoints": "加分失敗"
+    }
   },
   "invitation": {
     "invitation": "邀請",
@@ -337,5 +343,9 @@
     "pleaseUpdateTheAppForProperFunctioning": "請更新應用程序以使其正常運行",
     "remindMeTomorrow": "明天提醒我",
     "updateNow": "現在更新"
+  },
+  "inAppPurchase": {
+    "failedToInitInAppStore": "In-App Store 初始化期間發生錯誤。 請檢查您的互聯網連接質量。",
+    "inAppPurchaseErrorOcurred": "發生應用內購買錯誤。 請稍後再試。"
   }
 }
