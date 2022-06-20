@@ -2,6 +2,9 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
+include ':capacitor-community-advertising-id'
+project(':capacitor-community-advertising-id').projectDir = new File('../node_modules/@capacitor-community/advertising-id/android')
+
 include ':capacitor-community-bluetooth-le'
 project(':capacitor-community-bluetooth-le').projectDir = new File('../node_modules/@capacitor-community/bluetooth-le/android')
 
@@ -55,6 +58,9 @@ project(':numbersprotocol-preview-camera').projectDir = new File('../node_module
 
 include ':numbersprotocol-preview-video'
 project(':numbersprotocol-preview-video').projectDir = new File('../node_modules/@numbersprotocol/preview-video/android')
+
+include ':appsflyer-capacitor-plugin'
+project(':appsflyer-capacitor-plugin').projectDir = new File('../node_modules/appsflyer-capacitor-plugin/android')
 
 include ':capacitor-blob-writer'
 project(':capacitor-blob-writer').projectDir = new File('../node_modules/capacitor-blob-writer/android')

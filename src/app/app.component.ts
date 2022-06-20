@@ -5,6 +5,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, concatMap } from 'rxjs/operators';
+import { AppsFlyerService } from './shared/app-flyer/apps-flyer.service';
 import { CameraService } from './shared/camera/camera.service';
 import { CaptureService } from './shared/capture/capture.service';
 import { CollectorService } from './shared/collector/collector.service';
@@ -37,6 +38,7 @@ export class AppComponent {
     private readonly cameraService: CameraService,
     private readonly errorService: ErrorService,
     private readonly inAppStoreService: InAppStoreService,
+    appsFlyerService: AppsFlyerService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
@@ -58,6 +60,7 @@ export class AppComponent {
     this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
+    appsFlyerService.initAppsFlyerSDK();
   }
 
   static setDarkMode() {
