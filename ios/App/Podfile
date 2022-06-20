@@ -28,6 +28,7 @@ def capacitor_pods
   pod 'NumbersprotocolPreviewCamera', :path => '../../node_modules/@numbersprotocol/preview-camera'
   pod 'NumbersprotocolPreviewVideo', :path => '../../node_modules/@numbersprotocol/preview-video'
   pod 'CapacitorBlobWriter', :path => '../../node_modules/capacitor-blob-writer'
+  pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
 end
 
 target 'App' do
