@@ -14,6 +14,7 @@ import { DiaBackendAssetUploadingService } from './shared/dia-backend/asset/uplo
 import { DiaBackendAuthService } from './shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendNotificationService } from './shared/dia-backend/notification/dia-backend-notification.service';
 import { ErrorService } from './shared/error/error.service';
+import { InAppStoreService } from './shared/in-app-store/in-app-store.service';
 import { LanguageService } from './shared/language/service/language.service';
 import { NotificationService } from './shared/notification/notification.service';
 import { PushNotificationService } from './shared/push-notification/push-notification.service';
@@ -35,6 +36,7 @@ export class AppComponent {
     private readonly captureService: CaptureService,
     private readonly cameraService: CameraService,
     private readonly errorService: ErrorService,
+    private readonly inAppStoreService: InAppStoreService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
@@ -51,6 +53,7 @@ export class AppComponent {
       .initialize$()
       .pipe(untilDestroyed(this))
       .subscribe();
+    this.inAppStoreService.initialize();
     this.initializeApp();
     this.restoreAppState();
     this.initializeCollector();
