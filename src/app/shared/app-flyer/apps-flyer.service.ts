@@ -3,7 +3,7 @@ import { AdvertisingId } from '@capacitor-community/advertising-id';
 import { Platform } from '@ionic/angular';
 import { AFEvent, AFInit, AppsFlyer } from 'appsflyer-capacitor-plugin';
 import { environment } from '../../../environments/environment';
-import { APP_FLYER_DEV_KEY } from '../dia-backend/secret';
+import { APPS_FLYER_DEV_KEY } from '../dia-backend/secret';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ import { APP_FLYER_DEV_KEY } from '../dia-backend/secret';
 export class AppsFlyerService {
   private readonly afConfig: AFInit = {
     appID: '1536388009', // AppStore Application ID. For iOS only.
-    devKey: APP_FLYER_DEV_KEY,
+    devKey: APPS_FLYER_DEV_KEY,
     isDebug: !environment.production,
     waitForATTUserAuthorization: 10, // for iOS 14 and higher
     minTimeBetweenSessions: 6, // default 5 sec
@@ -25,7 +25,7 @@ export class AppsFlyerService {
 
   constructor(private readonly platform: Platform) {}
 
-  async initAppFlyerSDK() {
+  async initAppsFlyerSDK() {
     if (this.platform.is('ios')) {
       await AdvertisingId.requestTracking();
     }

@@ -57,7 +57,7 @@ export class AppComponent {
     this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
-    appsFlyerService.initAppFlyerSDK();
+    appsFlyerService.initAppsFlyerSDK();
   }
 
   static setDarkMode() {
