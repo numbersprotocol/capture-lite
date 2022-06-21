@@ -1,0 +1,78 @@
+{
+  "identifier" : "509552BA",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "68D9071C",
+      "localizations" : [
+        {
+          "description" : "Bronze Pack (Description)",
+          "displayName" : "Bronze Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "cap_lite_consumable_bronze_pack_099",
+      "referenceName" : "Bronze Pack",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "9A0F041B",
+      "localizations" : [
+        {
+          "description" : "Silver Pack (Description)",
+          "displayName" : "Silver Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "cap_lite_consumable_silver_pack_199",
+      "referenceName" : "Silver Pack",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "D92B12C1",
+      "localizations" : [
+        {
+          "description" : "Gold Pack (Description)",
+          "displayName" : "Gold Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "cap_lite_consumable_gold_pack_299",
+      "referenceName" : "Gold Pack",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "3.99",
+      "familyShareable" : false,
+      "internalID" : "D0441E1B",
+      "localizations" : [
+        {
+          "description" : "Platinum Pack (Description)",
+          "displayName" : "Platinum Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "cap_lite_consumable_platinum_pack_399",
+      "referenceName" : "Platinum Pack",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 1,
+    "minor" : 2
+  }
+}

@@ -1,0 +1,85 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+  }
+}
+
+ion-card {
+  border-radius: 8px;
+}
+
+ion-item {
+  --background: white;
+  --inner-padding-top: 0;
+}
+
+ion-avatar {
+  width: 24px;
+  height: 24px;
+}
+
+.in-app-product-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 42px;
+}
+
+.title-text {
+  font-weight: 700;
+  font-size: 18px;
+  color: black;
+
+  @media (max-width: 360px) {
+    font-size: 16px;
+  }
+}
+
+.title-text-large {
+  font-weight: 700;
+  font-size: 19px;
+  color: black;
+
+  @media (max-width: 360px) {
+    font-size: 18px;
+  }
+}
+
+ion-icon.num-point-info {
+  transform: translate(4px, 4px);
+
+  @media (max-width: 360px) {
+    transform: translateY(4px);
+  }
+}
+
+.subtitle-text {
+  color: black;
+  font-weight: 700;
+  font-size: 18px;
+
+  @media (max-width: 360px) {
+    font-size: 16px;
+  }
+}
+
+ion-button {
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 140px;
+
+  --border-radius: 8px;
+  --color: #00a84d;
+  --border-color: #00a84d;
+}
+
+ion-button[slot='end'] {
+  margin: 0 0 0 4px;
+  padding: 4px;
+}
+
+ion-spinner {
+  margin-left: 4px;
+  width: 12px;
+  height: 12px;
+}

@@ -30,7 +30,7 @@ dependencies {
     implementation project(':numbersprotocol-preview-video')
     implementation project(':appsflyer-capacitor-plugin')
     implementation project(':capacitor-blob-writer')
-
+    implementation "com.android.billingclient:billing:4.0.0"
 }
 
 
