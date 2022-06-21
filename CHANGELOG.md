@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.59.0 - 2222-06-21
+
+### Added
+
+- In App Purchase NUM points
+- In App Upgrade nontification
+- Integration with Apps Flyer SDK
+
+### Fixed
+
+- Fix phone verification error messages on phone submit
+- Show capture options menu regardless of backend response
+
 ## 0.58.2 - 2022-06-07
 
 ### Fixed
