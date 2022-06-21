@@ -40,7 +40,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '16.15.0'
 
       - name: Check if version has been updated
         id: version_check
@@ -54,6 +54,7 @@ jobs:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets[matrix.storage_base_url] }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets[matrix.storage_trusted_client_key] }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets[matrix.bubble_db_url] }}
+          BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
         run: |
           npm install -g @ionic/cli
           npm install

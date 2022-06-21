@@ -12,6 +12,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./transfer/transfer.module').then(m => m.TransferPageModule),
   },
+  {
+    path: 'buy-num',
+    loadChildren: () =>
+      import('./buy-num/buy-num.module').then(m => m.BuyNumPageModule),
+  },
 ];
 
 @NgModule({

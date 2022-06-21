@@ -211,6 +211,8 @@
       "user_is_not_active": "Account is not active. Please activate the account from the activation email you received.",
       "incorrect_login_credentials": "Incorrect email or password.",
       "untrusted_client": "Untrusted client.",
+      "validation_error": "Enter a valid phone number",
+      "external_api_error": "An error occurred. Please try again later",
       "phone_verification_failed": "Incorrect verification code",
       "phone_verification_code_expired": "The verification code has been expired",
       "throttled": "Too frequent request",
@@ -254,6 +256,17 @@
     "fee": "Gas",
     "totalCost": "Total Cost"
   },
+  "details": {
+    "error": {
+      "transferOwnershipActionIsUnavailable": "Transfer ownership action is unavailable. Please try again later.",
+      "viewOnCaptureClubIsUnavailable": "View on CaptureClub action is unavailable. Please try again later.",
+      "viewSupportingVideoOnIpfsIsUnavailable": "View supporting video on IPFS action is unavailable. Please try again later.",
+      "deregisterFromNetworkIsUnavailable": "Deregister from network action is unavailable. Please try again later.",
+      "mintNftTokenIsUnavailable": "Mint NFT token action is unavailable. Please try again later.",
+      "viewBlockchainCertificateIsUnavailable": "View blockchain certificate action is unavailable. Please try again later.",
+      "networkActionsAreUnavailable": "Network Actions are unavailable. Please try again later."
+    }
+  },
   "wallets": {
     "wallets": "Wallets",
     "pullToRefreshBalance": "Pull to refresh balance",
@@ -277,7 +290,16 @@
     "gasFee": "Gas Fee",
     "pending": "Pending",
     "total": "Total",
-    "calculateGasFee": "Calculate Gas"
+    "calculateGasFee": "Calculate Gas",
+    "buyNum": {
+      "buyNum": "Buy NUM Points",
+      "buyPoints": "Buy {{points}} Points",
+      "pointsAdded": "{{points}} NUM points added",
+      "failedToAddPoints": "Failed to add points",
+      "thisPackageIncludesXNumPoints": "This package include {{points}} NUM points.",
+      "okIGotIt": "Ok, I got it",
+      "inAppProductsNotAvailableYetPleaseTryAgainLater": "In App Products are not available yet. Try again later."
+    }
   },
   "invitation": {
     "invitation": "Invitation",
@@ -330,5 +352,16 @@
     "previous": "Prev",
     "next": "Next",
     "okIGotIt": "Ok, I got it"
+  },
+  "inAppUpdate": {
+    "criticalUpdatesAreAvailable": "Critical updates are available",
+    "importantUpdatesAreAvailable": "Important updates are available",
+    "pleaseUpdateTheAppForProperFunctioning": "Please update the app for proper functioning",
+    "remindMeTomorrow": "REMIND ME TOMORROW",
+    "updateNow": "UPDATE NOW"
+  },
+  "inAppPurchase": {
+    "failedToInitInAppStore": "An error occurred during the initialization of the In-App Store. Please check your Internet connection quality.",
+    "inAppPurchaseErrorOcurred": "In-App Purchase error occurred. Please try again later."
   }
 }

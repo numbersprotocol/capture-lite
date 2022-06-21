@@ -6,6 +6,7 @@ import { CaptureTabComponent } from './capture-tab/capture-tab.component';
 import { UploadingBarComponent } from './capture-tab/uploading-bar/uploading-bar.component';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
+import { UpdateAppDialogComponent } from './in-app-updates/update-app-dialog/update-app-dialog.component';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
 import { PostCaptureTabComponent } from './post-capture-tab/post-capture-tab.component';
 
@@ -15,6 +16,7 @@ import { PostCaptureTabComponent } from './post-capture-tab/post-capture-tab.com
     CaptureTabComponent,
     PostCaptureTabComponent,
     PrefetchingDialogComponent,
+    UpdateAppDialogComponent,
     UploadingBarComponent,
     CaptureItemComponent,
   ],

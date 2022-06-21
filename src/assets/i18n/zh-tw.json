@@ -211,6 +211,8 @@
       "user_is_not_active": "帳號未啟用。請透過您收到的帳號驗證信啟用帳號。",
       "incorrect_login_credentials": "不正確的電子郵件或密碼。",
       "untrusted_client": "不受信任的客戶端。",
+      "validation_error": "請入有效的電話號碼",
+      "external_api_error": "發生錯誤，請稍後再試",
       "phone_verification_failed": "驗證碼錯誤",
       "phone_verification_code_expired": "驗證碼已過期",
       "throttled": "短時間內傳送過多請求",
@@ -254,6 +256,17 @@
     "fee": "油費",
     "totalCost": "總額"
   },
+  "details": {
+    "error": {
+      "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",
+      "viewOnCaptureClubIsUnavailable": "暫時無法在 CaptureClub 觀看，請稍後再試。",
+      "viewSupportingVideoOnIpfsIsUnavailable": "暫時無法觀看 IPFS 影片，請稍後再試。",
+      "deregisterFromNetworkIsUnavailable": "暫時無法註銷網路註冊，請稍後再試。",
+      "mintNftTokenIsUnavailable": "暫時無法鍛造 NFT，請稍後再試。",
+      "viewBlockchainCertificateIsUnavailable": "暫時無法查看區塊鏈證書，請稍後再試。",
+      "networkActionsAreUnavailable": "暫時無法使用 Network Action，請稍後再試。"
+    }
+  },
   "wallets": {
     "wallets": "錢包",
     "pullToRefreshBalance": "下拉以刷新餘額",
@@ -277,7 +290,16 @@
     "gasFee": "油費",
     "pending": "待計算",
     "total": "總額",
-    "calculateGasFee": "計算油費"
+    "calculateGasFee": "計算油費",
+    "buyNum": {
+      "buyNum": "購買 NUM 點數",
+      "buyPoints": "購買{{points}}點數",
+      "pointsAdded": "加值 {{points}} NUM 點數",
+      "failedToAddPoints": "加值失敗",
+      "thisPackageIncludesXNumPoints": "此方案包括{{points}}個 NUM 點數",
+      "okIGotIt": "好，我了解",
+      "inAppProductsNotAvailableYetPleaseTryAgainLater": "App 內購買目前無法使用，請稍後再試"
+    }
   },
   "invitation": {
     "invitation": "邀請",
@@ -330,5 +352,16 @@
     "previous": "上一步",
     "next": "下一步",
     "okIGotIt": "好，我知道了"
+  },
+  "inAppUpdate": {
+    "criticalUpdatesAreAvailable": "重要更新可用",
+    "importantUpdatesAreAvailable": "重要更新可用",
+    "pleaseUpdateTheAppForProperFunctioning": "請更新應用程序以使其正常運行",
+    "remindMeTomorrow": "明天提醒我",
+    "updateNow": "現在更新"
+  },
+  "inAppPurchase": {
+    "failedToInitInAppStore": "App 購買功能發生錯誤，請檢查網路連線狀況",
+    "inAppPurchaseErrorOcurred": "發生 App 內購買錯誤，請稍後再試"
   }
 }

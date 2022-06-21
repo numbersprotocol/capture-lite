@@ -1,5 +1,9 @@
 [
 	{
+		"pkg": "@capacitor-community/advertising-id",
+		"classpath": "com.thomasvidas.advertising.AdvertisingIdPlugin"
+	},
+	{
 		"pkg": "@capacitor-community/bluetooth-le",
 		"classpath": "com.capacitorjs.community.plugins.bluetoothle.BluetoothLe"
 	},
@@ -70,6 +74,10 @@
 	{
 		"pkg": "@numbersprotocol/preview-video",
 		"classpath": "io.numbersprotocol.capturelite.plugins.previewvideo.PreviewVideoPlugin"
+	},
+	{
+		"pkg": "appsflyer-capacitor-plugin",
+		"classpath": "capacitor.plugin.appsflyer.sdk.AppsFlyerPlugin"
 	},
 	{
 		"pkg": "capacitor-blob-writer",

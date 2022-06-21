@@ -13,7 +13,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '16.15.0'
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
@@ -34,7 +34,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '16.15.0'
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
@@ -63,7 +63,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '16.15.0'
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
@@ -76,6 +76,7 @@ jobs:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets.NUMBERS_BUBBLE_DB_URL }}
+          BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
         run: npm run build
 
       - name: Build Android
@@ -96,7 +97,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '16.15.0'
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
@@ -109,6 +110,7 @@ jobs:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets.NUMBERS_BUBBLE_DB_URL }}
+          BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
         run: npm run build
 
       - name: Import the Code-Signing PKCS12 Certificate

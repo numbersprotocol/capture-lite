@@ -5,6 +5,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, concatMap } from 'rxjs/operators';
+import { AppsFlyerService } from './shared/app-flyer/apps-flyer.service';
 import { CameraService } from './shared/camera/camera.service';
 import { CaptureService } from './shared/capture/capture.service';
 import { CollectorService } from './shared/collector/collector.service';
@@ -14,6 +15,7 @@ import { DiaBackendAssetUploadingService } from './shared/dia-backend/asset/uplo
 import { DiaBackendAuthService } from './shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendNotificationService } from './shared/dia-backend/notification/dia-backend-notification.service';
 import { ErrorService } from './shared/error/error.service';
+import { InAppStoreService } from './shared/in-app-store/in-app-store.service';
 import { LanguageService } from './shared/language/service/language.service';
 import { NotificationService } from './shared/notification/notification.service';
 import { PushNotificationService } from './shared/push-notification/push-notification.service';
@@ -35,6 +37,8 @@ export class AppComponent {
     private readonly captureService: CaptureService,
     private readonly cameraService: CameraService,
     private readonly errorService: ErrorService,
+    private readonly inAppStoreService: InAppStoreService,
+    appsFlyerService: AppsFlyerService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
@@ -51,10 +55,12 @@ export class AppComponent {
       .initialize$()
       .pipe(untilDestroyed(this))
       .subscribe();
+    this.inAppStoreService.initialize();
     this.initializeApp();
     this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
+    appsFlyerService.initAppsFlyerSDK();
   }
 
   static setDarkMode() {
