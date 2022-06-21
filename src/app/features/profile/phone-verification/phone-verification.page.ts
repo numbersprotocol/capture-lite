@@ -127,7 +127,7 @@ export class PhoneVerificationPage {
     );
     const action$ = this.diaBackendAuthService
       .sendPhoneVerification$(this.phoneNumberModel.phoneNumber)
-      .pipe(catchError((err: unknown) => this.errorService.toastError$(err)));
+      .pipe(catchError((err: unknown) => this.handlePhoneSubmitError$(err)));
     return this.blockingActionService
       .run$(action$, {
         message: this.translocoService.translate('message.pleaseWait'),
@@ -170,6 +170,22 @@ export class PhoneVerificationPage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  private handlePhoneSubmitError$(err: unknown) {
+    if (err instanceof HttpErrorResponse) {
+      const errorType = err.error.error?.type;
+      if (
+        errorType === 'validation_error' ||
+        errorType === 'throttled' ||
+        errorType === 'external_api_error'
+      ) {
+        return this.errorService.toastError$(
+          this.translocoService.translate(`error.diaBackend.${errorType}`)
+        );
+      }
+    }
+    return this.errorService.toastError$(err);
   }
 
   private handleVerificationError$(err: unknown) {
