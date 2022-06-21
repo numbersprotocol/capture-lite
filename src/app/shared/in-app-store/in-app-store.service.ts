@@ -83,17 +83,21 @@ export class InAppStoreService implements OnDestroy {
   }
 
   async refreshNumPointsPricing() {
-    const result = await this.diaBackendNumService
-      .numPointsPriceList$()
-      .toPromise();
-    const priceListFromRestApi = result.response.price_list;
+    try {
+      const result = await this.diaBackendNumService
+        .numPointsPriceList$()
+        .toPromise();
+      const priceListFromRestApi = result.response.price_list;
 
-    const numPointPricesById: NumPointPricesById = {};
-    for (const item of priceListFromRestApi) {
-      numPointPricesById[item.inAppPurchaseId] = item;
+      const numPointPricesById: NumPointPricesById = {};
+      for (const item of priceListFromRestApi) {
+        numPointPricesById[item.inAppPurchaseId] = item;
+      }
+
+      this.numPointPricesById$.next(numPointPricesById);
+    } catch (_) {
+      this.numPointPricesById$.next({});
     }
-
-    this.numPointPricesById$.next(numPointPricesById);
   }
 
   purchase(product: IAPProduct) {

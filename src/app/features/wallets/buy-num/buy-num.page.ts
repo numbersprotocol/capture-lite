@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { IAPProduct } from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
+import { combineLatest } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { InAppStoreService } from '../../../shared/in-app-store/in-app-store.service';
 
@@ -13,11 +14,22 @@ import { InAppStoreService } from '../../../shared/in-app-store/in-app-store.ser
 export class BuyNumPage implements OnInit {
   readonly tmpIcon = '../../../../assets/images/num-icon.svg';
 
-  readonly inAppProducts$ = this.store.inAppProductsWithNumpoints$.pipe(
+  readonly inAppProducts$ = combineLatest([
+    this.store.inAppProductsWithNumpoints$,
+    this.store.numPointPricesById$,
+  ]).pipe(
+    map(([inAppProductsWithNumpoints, numPointPricesById]) => {
+      const totalProducts = inAppProductsWithNumpoints.length;
+      const totalPrices = Object.keys(numPointPricesById).length;
+      if (totalProducts === 0 || totalPrices === 0) {
+        return [];
+      }
+      return inAppProductsWithNumpoints;
+    }),
     tap(_ => this.ref.detectChanges())
   );
 
-  readonly totalProducts$ = this.store.inAppProductsWithNumpoints$.pipe(
+  readonly totalProducts$ = this.inAppProducts$.pipe(
     map(products => products.length),
     tap(_ => this.ref.detectChanges())
   );
