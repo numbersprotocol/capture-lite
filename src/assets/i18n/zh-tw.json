@@ -295,7 +295,8 @@
       "pointsAdded": "加了{{points}}分",
       "failedToAddPoints": "加分失敗",
       "thisPackageIncludesXNumPoints": "此套餐包括{{points}}個 NUM 分。",
-      "okIGotIt": "好，我知道了"
+      "okIGotIt": "好，我知道了",
+      "inAppProductsNotAvailableYetPleaseTryAgainLater": "應用內產品尚不可用。 稍後再試。"
     }
   },
   "invitation": {

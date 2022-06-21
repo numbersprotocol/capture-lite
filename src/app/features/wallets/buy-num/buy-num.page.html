@@ -7,8 +7,8 @@
 
 <ion-content *transloco="let t">
   <ion-list lines="none">
-    <ion-list-header *ngIf="(totalProducts$ | async) === 0">
-      In App Products are not available yet. Try again later
+    <ion-list-header *ngIf="(totalProducts$ | ngrxPush) === 0">
+      {{ t('wallets.buyNum.inAppProductsNotAvailableYetPleaseTryAgainLater') }}
     </ion-list-header>
 
     <ion-card *ngFor="let product of inAppProducts$ | async; let first = first">
@@ -19,7 +19,6 @@
               [ngClass]="{ 'title-text': !first, 'title-text-large': first }"
             >
               {{ product.inAppProduct.title }}
-
               <ion-icon
                 class="num-point-info"
                 *ngIf="first"

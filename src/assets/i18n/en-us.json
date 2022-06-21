@@ -295,7 +295,8 @@
       "pointsAdded": "{{points}} points added",
       "failedToAddPoints": "Failed to add points",
       "thisPackageIncludesXNumPoints": "This package include {{points}} NUM points.",
-      "okIGotIt": "Ok, I got it"
+      "okIGotIt": "Ok, I got it",
+      "inAppProductsNotAvailableYetPleaseTryAgainLater": "In App Products are not available yet. Try again later."
     }
   },
   "invitation": {
