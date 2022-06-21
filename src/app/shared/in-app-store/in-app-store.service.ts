@@ -243,10 +243,10 @@ export class InAppStoreService implements OnDestroy {
 }
 
 export enum CaptureInAppProductIds {
-  BRONZE_PACK = 'cap_lite_consumable_bronze_pack_099',
-  SLIVER_PACK = 'cap_lite_consumable_silver_pack_199',
-  GOLD_PACK = 'cap_lite_consumable_gold_pack_299',
-  PLATINUM_PACK = 'cap_lite_consumable_platinum_pack_399',
+  BRONZE_PACK = 'capture_lite_consumable_bronze_pack_099',
+  SLIVER_PACK = 'capture_lite_consumable_silver_pack_199',
+  GOLD_PACK = 'capture_lite_consumable_gold_pack_299',
+  PLATINUM_PACK = 'capture_lite_consumable_platinum_pack_399',
 }
 
 interface InAppProductsWithNumPoint {
