@@ -290,13 +290,13 @@
     "total": "總額",
     "calculateGasFee": "計算油費",
     "buyNum": {
-      "buyNum": "購買 NUM",
-      "buyPoints": "買{{points}}分",
-      "pointsAdded": "加了{{points}}分",
-      "failedToAddPoints": "加分失敗",
-      "thisPackageIncludesXNumPoints": "此套餐包括{{points}}個 NUM 分。",
-      "okIGotIt": "好，我知道了",
-      "inAppProductsNotAvailableYetPleaseTryAgainLater": "應用內產品尚不可用。 稍後再試。"
+      "buyNum": "購買 NUM 點數",
+      "buyPoints": "購買{{points}}點數",
+      "pointsAdded": "加值 {{points}} NUM 點數",
+      "failedToAddPoints": "加值失敗",
+      "thisPackageIncludesXNumPoints": "此方案包括{{points}}個 NUM 點數",
+      "okIGotIt": "好，我了解",
+      "inAppProductsNotAvailableYetPleaseTryAgainLater": "App 內購買目前無法使用，請稍後再試"
     }
   },
   "invitation": {
@@ -359,7 +359,7 @@
     "updateNow": "現在更新"
   },
   "inAppPurchase": {
-    "failedToInitInAppStore": "In-App Store 初始化期間發生錯誤。 請檢查您的互聯網連接質量。",
-    "inAppPurchaseErrorOcurred": "發生應用內購買錯誤。 請稍後再試。"
+    "failedToInitInAppStore": "App 購買功能發生錯誤，請檢查網路連線狀況",
+    "inAppPurchaseErrorOcurred": "發生 App 內購買錯誤，請稍後再試"
   }
 }

@@ -290,9 +290,9 @@
     "total": "Total",
     "calculateGasFee": "Calculate Gas",
     "buyNum": {
-      "buyNum": "Buy NUM",
+      "buyNum": "Buy NUM Points",
       "buyPoints": "Buy {{points}} Points",
-      "pointsAdded": "{{points}} points added",
+      "pointsAdded": "{{points}} NUM points added",
       "failedToAddPoints": "Failed to add points",
       "thisPackageIncludesXNumPoints": "This package include {{points}} NUM points.",
       "okIGotIt": "Ok, I got it",
