@@ -332,18 +332,12 @@ export class DetailsPage {
       ),
       this.translocoService.selectTranslateObject({
         'message.transferOwnership': null,
-        'details.error.transferOwnershipActionIsUnavailable': null,
         'message.viewOnCaptureClub': null,
-        'details.error.viewOnCaptureClubIsUnavailable': null,
         'message.deregisterFromNetwork': null,
         'message.mintNftToken': null,
-        'details.error.mintNftTokenIsUnavailable': null,
         'message.viewBlockchainCertificate': null,
-        'details.error.viewBlockchainCertificateIsUnavailable': null,
         'message.viewSupportingVideoOnIpfs': null,
-        'details.error.viewSupportingVideoOnIpfsIsUnavailable': null,
         networkActions: null,
-        'details.error.networkActionsAreUnavailable': null,
       }),
     ])
       .pipe(
@@ -355,121 +349,83 @@ export class DetailsPage {
             postCreationWorkflowCompleted,
             [
               messageTransferOwnership,
-              messageTransferOwnershipIsUnavailable,
               messageViewOnCaptureClub,
-              messageviewOnCaptureClubIsUnavailable,
               messageDeregisterFromNetwork,
               messageMintNftToken,
-              messageMintNftTokenIsUnavailable,
               messageViewBlockchainCertificate,
-              messageViewBlockchainCertificateIsUnavailable,
               messageViewSupportingVideoOnIpfs,
-              messageviewSupportingVideoOnIpfsIsUnavailable,
               messageNetworkActions,
-              messageNetworkActionsAreUnavailable,
             ],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
-              buttons.push({
-                text: messageViewSupportingVideoOnIpfs,
-                handler:
-                  postCreationWorkflowCompleted &&
-                  diaBackendAsset?.supporting_file
-                    ? () => {
-                        this.openIpfsSupportingVideo();
-                      }
-                    : () => {
-                        this.errorService
-                          .toastError$(
-                            messageviewSupportingVideoOnIpfsIsUnavailable
-                          )
-                          .toPromise();
-                      },
-              });
-
-              buttons.push({
-                text: messageTransferOwnership,
-                handler:
-                  postCreationWorkflowCompleted && detailedCapture.id
-                    ? () => {
-                        this.openContactSelectionDialog();
-                        resolve();
-                      }
-                    : () => {
-                        this.errorService
-                          .toastError$(messageTransferOwnershipIsUnavailable)
-                          .toPromise();
-                      },
-              });
-
-              buttons.push({
-                text: messageViewOnCaptureClub,
-                handler:
-                  diaBackendAsset?.source_type === 'store'
-                    ? () => {
-                        this.openCaptureClub();
-                      }
-                    : () => {
-                        this.errorService
-                          .toastError$(messageviewOnCaptureClubIsUnavailable)
-                          .toPromise();
-                      },
-              });
+              if (
+                postCreationWorkflowCompleted &&
+                diaBackendAsset?.supporting_file
+              ) {
+                buttons.push({
+                  text: messageViewSupportingVideoOnIpfs,
+                  handler: () => {
+                    this.openIpfsSupportingVideo();
+                  },
+                });
+              }
+              if (postCreationWorkflowCompleted && detailedCapture.id) {
+                buttons.push({
+                  text: messageTransferOwnership,
+                  handler: () => {
+                    this.openContactSelectionDialog();
+                    resolve();
+                  },
+                });
+              }
+              if (diaBackendAsset?.source_type === 'store') {
+                buttons.push({
+                  text: messageViewOnCaptureClub,
+                  handler: () => {
+                    this.openCaptureClub();
+                  },
+                });
+              }
               buttons.push({
                 text: messageDeregisterFromNetwork,
                 handler: () => {
                   this.remove().then(() => resolve());
                 },
               });
-
-              buttons.push({
-                text: messageMintNftToken,
-                handler:
-                  postCreationWorkflowCompleted &&
-                  diaBackendAsset?.nft_token_id === null
-                    ? () => {
-                        this.mintNft().then(() => resolve());
-                      }
-                    : () => {
-                        this.errorService
-                          .toastError$(messageMintNftTokenIsUnavailable)
-                          .toPromise();
-                      },
-                role: 'destructive',
-              });
-              buttons.push({
-                text: messageViewBlockchainCertificate,
-                handler:
-                  postCreationWorkflowCompleted && detailedCapture.id
-                    ? () => {
-                        this.openCertificate();
-                        resolve();
-                      }
-                    : () => {
-                        this.errorService
-                          .toastError$(
-                            messageViewBlockchainCertificateIsUnavailable
-                          )
-                          .toPromise();
-                      },
-              });
-              buttons.push({
-                text: messageNetworkActions,
-                handler: postCreationWorkflowCompleted
-                  ? () => {
-                      this.router.navigate(
-                        ['actions', { id: detailedCapture.id }],
-                        { relativeTo: this.route }
-                      );
-                      resolve();
-                    }
-                  : () => {
-                      this.errorService
-                        .toastError$(messageNetworkActionsAreUnavailable)
-                        .toPromise();
-                    },
-              });
+              if (
+                postCreationWorkflowCompleted &&
+                diaBackendAsset?.nft_token_id === null
+              ) {
+                buttons.push({
+                  text: messageMintNftToken,
+                  handler: () => {
+                    this.mintNft().then(() => resolve());
+                  },
+                  role: 'destructive',
+                });
+              }
+              if (postCreationWorkflowCompleted && detailedCapture.id) {
+                buttons.push({
+                  text: messageViewBlockchainCertificate,
+                  handler: () => {
+                    this.openCertificate();
+                    resolve();
+                  },
+                });
+              }
+              if (postCreationWorkflowCompleted) {
+                buttons.push({
+                  text: messageNetworkActions,
+                  handler: () => {
+                    this.router.navigate(
+                      ['actions', { id: detailedCapture.id }],
+                      { relativeTo: this.route }
+                    );
+                    resolve();
+                  },
+                });
+              }
               this.actionSheetController
                 .create({ buttons })
                 .then(sheet => sheet.present());
