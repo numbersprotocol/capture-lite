@@ -334,14 +334,12 @@ export class DetailsPage {
         'message.transferOwnership': null,
         'details.error.transferOwnershipActionIsUnavailable': null,
         'message.viewOnCaptureClub': null,
-        'details.error.viewOnCaptureClubIsUnavailable': null,
         'message.deregisterFromNetwork': null,
         'message.mintNftToken': null,
         'details.error.mintNftTokenIsUnavailable': null,
         'message.viewBlockchainCertificate': null,
         'details.error.viewBlockchainCertificateIsUnavailable': null,
         'message.viewSupportingVideoOnIpfs': null,
-        'details.error.viewSupportingVideoOnIpfsIsUnavailable': null,
         networkActions: null,
         'details.error.networkActionsAreUnavailable': null,
       }),
@@ -357,37 +355,29 @@ export class DetailsPage {
               messageTransferOwnership,
               messageTransferOwnershipIsUnavailable,
               messageViewOnCaptureClub,
-              messageviewOnCaptureClubIsUnavailable,
               messageDeregisterFromNetwork,
               messageMintNftToken,
               messageMintNftTokenIsUnavailable,
               messageViewBlockchainCertificate,
               messageViewBlockchainCertificateIsUnavailable,
               messageViewSupportingVideoOnIpfs,
-              messageviewSupportingVideoOnIpfsIsUnavailable,
               messageNetworkActions,
               messageNetworkActionsAreUnavailable,
             ],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
-              buttons.push({
-                text: messageViewSupportingVideoOnIpfs,
-                handler:
-                  postCreationWorkflowCompleted &&
-                  diaBackendAsset?.supporting_file
-                    ? () => {
-                        this.openIpfsSupportingVideo();
-                      }
-                    : () => {
-                        this.errorService
-                          .toastError$(
-                            messageviewSupportingVideoOnIpfsIsUnavailable
-                          )
-                          .toPromise();
-                      },
-              });
-
+              if (
+                postCreationWorkflowCompleted &&
+                diaBackendAsset?.supporting_file
+              ) {
+                buttons.push({
+                  text: messageViewSupportingVideoOnIpfs,
+                  handler: () => {
+                    this.openIpfsSupportingVideo();
+                  },
+                });
+              }
               buttons.push({
                 text: messageTransferOwnership,
                 handler:
@@ -402,27 +392,20 @@ export class DetailsPage {
                           .toPromise();
                       },
               });
-
-              buttons.push({
-                text: messageViewOnCaptureClub,
-                handler:
-                  diaBackendAsset?.source_type === 'store'
-                    ? () => {
-                        this.openCaptureClub();
-                      }
-                    : () => {
-                        this.errorService
-                          .toastError$(messageviewOnCaptureClubIsUnavailable)
-                          .toPromise();
-                      },
-              });
+              if (diaBackendAsset?.source_type === 'store') {
+                buttons.push({
+                  text: messageViewOnCaptureClub,
+                  handler: () => {
+                    this.openCaptureClub();
+                  },
+                });
+              }
               buttons.push({
                 text: messageDeregisterFromNetwork,
                 handler: () => {
                   this.remove().then(() => resolve());
                 },
               });
-
               buttons.push({
                 text: messageMintNftToken,
                 handler:
