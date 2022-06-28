@@ -71,7 +71,7 @@ export class InAppStoreService implements OnDestroy {
 
       this.store.refresh();
     } catch (error) {
-      const errorMessage = this.translocoService.getTranslation(
+      const errorMessage = this.translocoService.translate(
         'inAppPurchase.failedToInitInAppStore'
       );
       this.errorService.toastError$(errorMessage).toPromise();
@@ -131,7 +131,7 @@ export class InAppStoreService implements OnDestroy {
         })
       );
     } catch (error) {
-      const errorMessage = this.translocoService.getTranslation(
+      const errorMessage = this.translocoService.translate(
         'wallets.buyNum.failedToAddPoints'
       );
       this.errorService.toastError$(errorMessage).toPromise();
@@ -175,7 +175,7 @@ export class InAppStoreService implements OnDestroy {
   }
 
   private readonly onStoreError = (_: IAPError) => {
-    const errorMessage = this.translocoService.getTranslation(
+    const errorMessage = this.translocoService.translate(
       'inAppPurchase.inAppPurchaseErrorOcurred'
     );
     this.errorService.toastError$(errorMessage).toPromise();
