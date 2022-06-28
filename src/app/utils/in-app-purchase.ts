@@ -2,6 +2,12 @@ import { isDevMode } from '@angular/core';
 import { IAPProduct } from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
 import { CaptureInAppProductIds } from '../shared/in-app-store/in-app-store.service';
 
+export function truncateReceipt(recipt: string) {
+  const preferredMaxLength = 1024;
+  const receiptMaxLength = Math.min(recipt.length, preferredMaxLength);
+  return recipt.substring(0, receiptMaxLength);
+}
+
 /**
  * Usefull to see in app product state changes in console for better debugging.
  * It will pring to console only in dev mode aka isDevMode() === true
