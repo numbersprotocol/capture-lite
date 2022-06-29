@@ -53,3 +53,27 @@ mat-icon.temporarily-hidden {
   bottom: 0;
   padding: 16px 8px;
 }
+
+#camera-flash-placeholder {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100%;
+}
+
+@keyframes flash-camera-keyframes {
+  from {
+    background-color: white;
+  }
+
+  to {
+    background-color: transparent;
+  }
+}
+
+.flash-camera-animation {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: flash-camera-keyframes;
+}

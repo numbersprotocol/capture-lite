@@ -105,6 +105,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   onPress() {
     this.userGuideService.setHasCapturedPhotoWithCustomCamera(true);
     this.customCameraService.takePhoto();
+    this.flashCameraScreen();
   }
 
   onLongPress() {
@@ -123,11 +124,14 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   onReleasePressing() {
-    this.customCameraService.stopRecord();
+    console.log(
+      `onReleasePressing: curRecordTimeInMilliseconds = ${this.curRecordTimeInMilliseconds}`
+    );
 
     if (this.curRecordTimeInMilliseconds > 0) {
       this.curRecordTimeInMilliseconds = 0;
       this.curRecordTimeInPercent = 0;
+      this.customCameraService.stopRecord();
     }
   }
 
@@ -154,16 +158,13 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  private scaleUpGalleryButton() {
-    // TODO: use @ViewChild elementRef
-    const element = document.getElementById('gallery-icon');
-    element?.classList.add('scaled-mat-icon');
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  private scaleDownGalleryButton() {
-    // TODO: use @ViewChild elementRef
-    const element = document.getElementById('gallery-icon');
-    element?.classList.remove('scaled-mat-icon');
+  private flashCameraScreen() {
+    const element = document.getElementById('camera-flash-placeholder');
+    element?.classList.add('flash-camera-animation');
+    setTimeout(
+      () => element?.classList.remove('flash-camera-animation'),
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+      1000
+    );
   }
 }
