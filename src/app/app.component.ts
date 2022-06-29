@@ -60,7 +60,8 @@ export class AppComponent {
     this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
-    appsFlyerService.initAppsFlyerSDK();
+    // Uncomment in next release after fixing Apps Flyer
+    // appsFlyerService.initAppsFlyerSDK();
   }
 
   static setDarkMode() {
