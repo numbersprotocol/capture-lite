@@ -124,10 +124,6 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   onReleasePressing() {
-    console.log(
-      `onReleasePressing: curRecordTimeInMilliseconds = ${this.curRecordTimeInMilliseconds}`
-    );
-
     if (this.curRecordTimeInMilliseconds > 0) {
       this.curRecordTimeInMilliseconds = 0;
       this.curRecordTimeInPercent = 0;
