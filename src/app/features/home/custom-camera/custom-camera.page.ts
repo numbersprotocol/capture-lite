@@ -157,10 +157,10 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   private flashCameraScreen() {
     const element = document.getElementById('camera-flash-placeholder');
     element?.classList.add('flash-camera-animation');
+    const flashCameraTimeout = 1000;
     setTimeout(
       () => element?.classList.remove('flash-camera-animation'),
-      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-      1000
+      flashCameraTimeout
     );
   }
 }
