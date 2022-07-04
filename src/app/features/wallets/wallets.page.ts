@@ -51,7 +51,6 @@ export class WalletsPage {
   readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
 
   elementType = NgxQrcodeElementTypes.URL;
-  value = 'Techiediaries';
 
   constructor(
     private readonly diaBackendWalletService: DiaBackendWalletService,
