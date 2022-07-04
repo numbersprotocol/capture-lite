@@ -275,6 +275,7 @@
     "myAssetWallet": "我的資產錢包",
     "myAssetWalletTooltip": "Capture NFT 和 NUM 的主要資產庫",
     "myAssetWalletQRCode": "我的資產錢包二維碼",
+    "myAssetWalletQRCodeInfo": "請務必使用 BEP20（或 BSC、BNB 鏈）",
     "integrityKey": "完整性金鑰",
     "integrityWallet": "完整性錢包",
     "integrityWalletTooltip": "用於創建簽名的錢包",

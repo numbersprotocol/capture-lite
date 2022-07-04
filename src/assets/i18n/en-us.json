@@ -275,6 +275,7 @@
     "myAssetWallet": "My Asset Wallet",
     "myAssetWalletTooltip": "Main asset vault for Capture NFT and NUM",
     "myAssetWalletQRCode": "My Asset Wallet QR-Code",
+    "myAssetWalletQRCodeInfo": "Please make sure to use BEP20 (or BSC, BNB Chain)",
     "integrityKey": "Integrity Key",
     "integrityWallet": "Integrity Wallet",
     "integrityWalletTooltip": "Wallet used for creating Signatures",
