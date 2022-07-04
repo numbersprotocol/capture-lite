@@ -119,3 +119,16 @@ mat-list {
   margin-left: 3px;
   font-size: 1.1em;
 }
+
+.asset-wallet-qr-code-container {
+  // background-color: green;
+  max-width: 300px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vertical-pacing-12 {
+  height: 12px;
+}
