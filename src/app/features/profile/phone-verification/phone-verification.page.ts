@@ -178,7 +178,8 @@ export class PhoneVerificationPage {
       if (
         errorType === 'validation_error' ||
         errorType === 'throttled' ||
-        errorType === 'external_api_error'
+        errorType === 'external_api_error' ||
+        errorType === 'duplicate_phone_number'
       ) {
         return this.errorService.toastError$(
           this.translocoService.translate(`error.diaBackend.${errorType}`)
