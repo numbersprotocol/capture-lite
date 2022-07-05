@@ -59,8 +59,5 @@ project(':numbersprotocol-preview-camera').projectDir = new File('../node_module
 include ':numbersprotocol-preview-video'
 project(':numbersprotocol-preview-video').projectDir = new File('../node_modules/@numbersprotocol/preview-video/android')
 
-include ':appsflyer-capacitor-plugin'
-project(':appsflyer-capacitor-plugin').projectDir = new File('../node_modules/appsflyer-capacitor-plugin/android')
-
 include ':capacitor-blob-writer'
 project(':capacitor-blob-writer').projectDir = new File('../node_modules/capacitor-blob-writer/android')

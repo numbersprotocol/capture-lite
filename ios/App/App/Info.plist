@@ -86,8 +86,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-<!--  Uncomment in next release after fixing Apps Flyer  -->
-<!--	<key>NSUserTrackingUsageDescription</key>-->
-<!--	<string>We collect your data only for counting download numbers and will never share it with any 3rd party</string>-->
 </dict>
 </plist>
