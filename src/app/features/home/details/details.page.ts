@@ -336,7 +336,6 @@ export class DetailsPage {
         'message.deregisterFromNetwork': null,
         'message.mintNftToken': null,
         'message.viewBlockchainCertificate': null,
-        'message.viewSupportingVideoOnIpfs': null,
         networkActions: null,
       }),
     ])
@@ -353,23 +352,11 @@ export class DetailsPage {
               messageDeregisterFromNetwork,
               messageMintNftToken,
               messageViewBlockchainCertificate,
-              messageViewSupportingVideoOnIpfs,
               messageNetworkActions,
             ],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
-              if (
-                postCreationWorkflowCompleted &&
-                diaBackendAsset?.supporting_file
-              ) {
-                buttons.push({
-                  text: messageViewSupportingVideoOnIpfs,
-                  handler: () => {
-                    this.openIpfsSupportingVideo();
-                  },
-                });
-              }
               if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
                   text: messageTransferOwnership,
