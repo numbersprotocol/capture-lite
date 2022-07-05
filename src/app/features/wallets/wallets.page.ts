@@ -18,7 +18,6 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
-import { AppsFlyerService } from '../../shared/app-flyer/apps-flyer.service';
 import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
@@ -60,8 +59,7 @@ export class WalletsPage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly dialog: MatDialog,
     private readonly errorService: ErrorService,
-    private readonly router: Router,
-    private readonly appsFlyerService: AppsFlyerService
+    private readonly router: Router
   ) {
     this.matIconRegistry.addSvgIcon(
       'wallet',
@@ -79,10 +77,6 @@ export class WalletsPage {
         untilDestroyed(this)
       )
       .subscribe(totalBalance => this.totalBalance$.next(totalBalance));
-  }
-
-  ionViewDidEnter() {
-    this.appsFlyerService.trackUserOpenedWalletsPage();
   }
 
   // eslint-disable-next-line class-methods-use-this
