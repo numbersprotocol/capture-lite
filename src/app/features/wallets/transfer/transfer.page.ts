@@ -1,10 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { Clipboard } from '@capacitor/clipboard';
 import { NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { NgxQrcodeElementTypes } from '@techiediaries/ngx-qrcode';
 import { BehaviorSubject, merge, ObservableInput } from 'rxjs';
 import { catchError, finalize, mapTo, startWith, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
@@ -22,7 +25,9 @@ import { TransferRequestSentComponent } from './transfer-request-sent/transfer-r
 })
 export class TransferPage {
   mode = '';
+  elementType = NgxQrcodeElementTypes.URL;
 
+  readonly assetWalletAddr$ = this.diaBackendWalletService.assetWalletAddr$;
   readonly assetWalletBscNumBalance$ =
     this.diaBackendWalletService.assetWalletBscNumBalance$;
   readonly integrityWalletBscNumBalance$ =
@@ -53,7 +58,8 @@ export class TransferPage {
     private readonly navCtrl: NavController,
     private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly snackBar: MatSnackBar
   ) {
     this.activeRoute.paramMap.subscribe(paramMap => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -187,5 +193,12 @@ export class TransferPage {
       .afterClosed()
       .toPromise()
       .then(() => this.navCtrl.navigateBack('/wallets'));
+  }
+
+  async copyToClipboard(value: string) {
+    await Clipboard.write({ string: value });
+    this.snackBar.open(
+      this.translocoService.translate('message.copiedToClipboard')
+    );
   }
 }
