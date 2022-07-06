@@ -76,22 +76,6 @@
     </ion-grid>
   </ion-card>
 
-  <div class="asset-wallet-qr-code-container">
-    {{ t('wallets.myAssetWalletQRCode') }}
-    <div class="qr-code-info">
-      {{ t('wallets.myAssetWalletQRCodeInfo') }}
-    </div>
-    <div class="vertical-pacing-12"></div>
-    <ngx-qrcode
-      [elementType]="elementType"
-      [value]="assetWalletAddr$ | ngrxPush"
-      cssClass="qr-code"
-      [margin]="0"
-      [width]="150"
-    >
-    </ngx-qrcode>
-  </div>
-
   <mat-list>
     <mat-list-item>
       <mat-icon svgIcon="wallet" mat-list-icon></mat-icon>
