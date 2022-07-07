@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
 import { Clipboard } from '@capacitor/clipboard';
+import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { NgxQrcodeElementTypes } from '@techiediaries/ngx-qrcode';
@@ -50,6 +51,7 @@ export class WalletsPage {
   readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
 
   elementType = NgxQrcodeElementTypes.URL;
+  shouldHideDepositButton = false;
 
   constructor(
     private readonly diaBackendWalletService: DiaBackendWalletService,
@@ -62,7 +64,8 @@ export class WalletsPage {
     private readonly confirmAlert: ConfirmAlert,
     private readonly dialog: MatDialog,
     private readonly errorService: ErrorService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly platform: Platform
   ) {
     this.matIconRegistry.addSvgIcon(
       'wallet',
@@ -80,6 +83,8 @@ export class WalletsPage {
         untilDestroyed(this)
       )
       .subscribe(totalBalance => this.totalBalance$.next(totalBalance));
+
+    this.shouldHideDepositButton = this.platform.is('ios');
   }
 
   // eslint-disable-next-line class-methods-use-this
