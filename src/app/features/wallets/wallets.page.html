@@ -57,6 +57,7 @@
           >{{ t('buy') }} NUM</ion-button
         >
         <ion-button
+          *ngIf="shouldHideDepositButton === false"
           class="deposit-withdraw-num-btn num-operation-btn"
           color="#7E7E7E"
           fill="outline"
