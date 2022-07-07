@@ -6,7 +6,7 @@
 </mat-toolbar>
 
 <ion-content *transloco="let t">
-  <div *ngIf="mode === 'deposit'">
+  <ng-container *ngIf="mode === 'deposit'">
     <div class="vertical-pacing-12"></div>
     <div class="asset-wallet-qr-code-container">
       {{ t('wallets.myAssetWalletQRCode') }}
@@ -47,9 +47,9 @@
         </button>
       </mat-list-item>
     </mat-list>
-  </div>
+  </ng-container>
 
-  <div *ngIf="mode === 'withdraw'">
+  <ng-container *ngIf="mode === 'withdraw'">
     <ion-card id="main-card">
       <ion-grid>
         <ion-row id="in-app-transfer-row">
@@ -167,5 +167,5 @@
         </ion-row>
       </ion-grid>
     </ion-card>
-  </div>
+  </ng-container>
 </ion-content>
