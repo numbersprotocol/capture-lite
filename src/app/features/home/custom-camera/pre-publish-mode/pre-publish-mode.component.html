@@ -1,0 +1,18 @@
+<div class="action-buttons">
+  <button (click)="onDiscard()" class="back-button" mat-mini-fab>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <button
+    (click)="onConfirm()"
+    class="confirm-button"
+    mat-flat-button
+    *transloco="let t"
+  >
+    {{ t('customCamera.confirmCapture') }}
+  </button>
+</div>
+
+<div class="preview" *ngIf="curCaptureFilePath && curCaptureMimeType">
+  <app-media [src]="curCaptureSrc" [mimeType]="curCaptureMimeType"></app-media>
+</div>
