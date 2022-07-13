@@ -9,10 +9,12 @@
     mat-flat-button
     *transloco="let t"
   >
-    {{ t('customCamera.confirmCapture') }}
+    {{ t('customCamera.confirmCapture') | uppercase }}
   </button>
 </div>
 
 <div class="preview" *ngIf="curCaptureFilePath && curCaptureMimeType">
   <app-media [src]="curCaptureSrc" [mimeType]="curCaptureMimeType"></app-media>
 </div>
+
+<div class="footer"></div>
