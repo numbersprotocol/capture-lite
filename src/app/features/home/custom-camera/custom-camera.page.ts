@@ -156,9 +156,9 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.removeCurrentCapture();
   }
 
-  confirmCurrentCapture() {
+  async confirmCurrentCapture() {
     if (this.curCaptureFilePath && this.curCaptureType) {
-      this.customCameraService.uploadToCapture(
+      await this.customCameraService.uploadToCapture(
         this.curCaptureFilePath,
         this.curCaptureType
       );
@@ -179,7 +179,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   private removeCurrentCapture() {
-    // TODO: remove file this.curCaptureFilePath to free space
+    this.customCameraService.removeFile(this.curCaptureFilePath);
     this.curCaptureFilePath = undefined;
     this.curCaptureMimeType = undefined;
     this.curCaptureSrc = undefined;
