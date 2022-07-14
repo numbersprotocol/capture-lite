@@ -22,6 +22,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import SwiperCore, { Swiper, Virtual } from 'swiper/core';
+import { ActionsService } from '../../../shared/actions/service/actions.service';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
@@ -207,7 +208,8 @@ export class DetailsPage {
     private readonly diaBackendWorkflowService: DiaBackendWorkflowService,
     private readonly alertController: AlertController,
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly userGuideService: UserGuideService
+    private readonly userGuideService: UserGuideService,
+    private readonly actionsService: ActionsService
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -467,6 +469,11 @@ export class DetailsPage {
           activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
         ),
         isNonNullable(),
+        tap(diaBackendAsset =>
+          this.actionsService
+            .generateSeoImageAndDescription$(diaBackendAsset)
+            .toPromise()
+        ),
         concatMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
         catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
