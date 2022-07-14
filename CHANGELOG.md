@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix withdraw page the text color
 
+## 0.61.0 - 2022-07-14
+
+### Added
+
+- Show discard/confirm capture before upload
+- Send generate SEO img & description on share asset
+
+### Fixed
+
+- Remove capture after discard/confirm
+
 ## 0.60.1 - 2022-07-06
 
 ### Fixed

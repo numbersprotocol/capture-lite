@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Capacitor } from '@capacitor/core';
+import { FilesystemPlugin } from '@capacitor/filesystem';
 import { TranslocoService } from '@ngneat/transloco';
 import { PreviewCamera } from '@numbersprotocol/preview-camera';
 import { BehaviorSubject } from 'rxjs';
+import { FILESYSTEM_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { CaptureService } from '../../../shared/capture/capture.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
@@ -27,7 +29,9 @@ export class CustomCameraService {
     private readonly httpClient: HttpClient,
     private readonly captureService: CaptureService,
     private readonly errorService: ErrorService,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    @Inject(FILESYSTEM_PLUGIN)
+    private readonly filesystemPlugin: FilesystemPlugin
   ) {}
 
   private mediaItemFromFilePath(
@@ -87,6 +91,11 @@ export class CustomCameraService {
   // eslint-disable-next-line class-methods-use-this
   async stopRecord() {
     return PreviewCamera.stopRecord().catch(() => ({}));
+  }
+
+  async removeFile(filePath: string | undefined) {
+    if (!filePath) return;
+    await this.filesystemPlugin.deleteFile({ path: filePath });
   }
 
   private changeGlobalCSSBackgroundToTransparent() {

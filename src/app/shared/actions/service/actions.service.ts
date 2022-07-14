@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { defer, forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DiaBackendAsset } from '../../dia-backend/asset/dia-backend-asset-repository.service';
 import { BUBBLE_DB_URL } from '../../dia-backend/secret';
 
 @Injectable({
@@ -33,6 +34,16 @@ export class ActionsService {
 
   send$(url: string, body: any) {
     return this.httpClient.post(url, body);
+  }
+
+  generateSeoImageAndDescription$(diaBackendAsset: DiaBackendAsset) {
+    return this.httpClient.post<any>(
+      `https://authmedia.net/api/1.1/obj/nftprofile`,
+      {
+        asset_url: diaBackendAsset.asset_file,
+        Description: diaBackendAsset.cid,
+      }
+    );
   }
 }
 
