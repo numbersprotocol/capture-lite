@@ -166,13 +166,12 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   async confirmCurrentCapture() {
     if (this.curCaptureFilePath && this.curCaptureType) {
-      await this.customCameraService.uploadToCapture(
+      this.customCameraService.uploadToCapture(
         this.curCaptureFilePath,
         this.curCaptureType
       );
-      this.removeCurrentCapture();
+      this.leaveCustomCamera();
     }
-    this.leaveCustomCamera();
   }
 
   async isTorchOn() {
