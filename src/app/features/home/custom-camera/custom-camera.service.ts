@@ -98,6 +98,16 @@ export class CustomCameraService {
     await this.filesystemPlugin.deleteFile({ path: filePath });
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  async isTorchOn() {
+    return await PreviewCamera.isTorchOn();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async enableTorch(enable: boolean) {
+    return await PreviewCamera.enableTorch({ enable });
+  }
+
   private changeGlobalCSSBackgroundToTransparent() {
     document.querySelector('body')?.classList.add(this.globalCSSClass);
     document.querySelector('ion-app')?.classList.add(this.globalCSSClass);
