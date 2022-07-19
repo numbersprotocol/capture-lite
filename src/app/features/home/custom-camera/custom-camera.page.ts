@@ -41,6 +41,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   curCaptureType?: 'image' | 'video' = 'image';
   curCaptureSrc?: string;
 
+  isFlashOn = false;
+
   readonly lastConnectedGoProDevice$ =
     this.goProBluetoothService.lastConnectedDevice$;
 
@@ -67,6 +69,12 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     ).then((listener: any) => (this.captureVideoFinishedListener = listener));
 
     this.startPreviewCamera();
+
+    this.isTorchOn().then(value => {
+      console.log(`isFlashOn: ${value.result}`);
+
+      return (this.isFlashOn = value.result);
+    });
   }
 
   async ionViewDidEnter() {
@@ -158,13 +166,21 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   async confirmCurrentCapture() {
     if (this.curCaptureFilePath && this.curCaptureType) {
-      await this.customCameraService.uploadToCapture(
+      this.customCameraService.uploadToCapture(
         this.curCaptureFilePath,
         this.curCaptureType
       );
-      this.removeCurrentCapture();
+      this.leaveCustomCamera();
     }
-    this.leaveCustomCamera();
+  }
+
+  async isTorchOn() {
+    return this.customCameraService.isTorchOn();
+  }
+
+  async enableTorch() {
+    await this.customCameraService.enableTorch(!this.isFlashOn);
+    this.isFlashOn = (await this.customCameraService.isTorchOn()).result;
   }
 
   async leaveCustomCamera() {

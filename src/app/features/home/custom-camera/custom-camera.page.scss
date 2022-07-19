@@ -13,6 +13,12 @@ mat-icon {
   width: 36px;
 }
 
+mat-icon.flash-camera-button {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+}
+
 mat-icon.close-camera-button {
   position: absolute;
   top: 16px;

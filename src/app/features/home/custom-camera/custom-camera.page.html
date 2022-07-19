@@ -5,6 +5,11 @@
 >
   <ng-container *ngIf="(mode$ | ngrxPush) === 'capture'">
     <div id="camera-flash-placeholder"></div>
+
+    <mat-icon class="flash-camera-button" (click)="enableTorch()">
+      {{ isFlashOn ? 'flash_on' : 'flash_off' }}
+    </mat-icon>
+
     <div
       class="select-from-go-pro-camera-button"
       *ngIf="lastConnectedGoProDevice$ | ngrxPush"
