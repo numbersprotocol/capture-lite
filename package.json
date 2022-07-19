@@ -57,7 +57,7 @@
     "@ngrx/component": "^12.4.0",
     "@ngrx/store": "^12.4.0",
     "@ngx-formly/core": "^5.10.22",
-    "@ngx-formly/material": "^5.10.22",
+    "@ngx-formly/material": "^5.12.6",
     "@ngx-formly/schematics": "^5.10.22",
     "@numbersprotocol/preview-camera": "github:numbersprotocol/preview-camera",
     "@numbersprotocol/preview-video": "github:numbersprotocol/preview-video",
