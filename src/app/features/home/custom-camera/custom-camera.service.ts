@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Capacitor } from '@capacitor/core';
 import { FilesystemPlugin } from '@capacitor/filesystem';
+import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { PreviewCamera } from '@numbersprotocol/preview-camera';
 import { BehaviorSubject } from 'rxjs';
@@ -31,7 +32,8 @@ export class CustomCameraService {
     private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
     @Inject(FILESYSTEM_PLUGIN)
-    private readonly filesystemPlugin: FilesystemPlugin
+    private readonly filesystemPlugin: FilesystemPlugin,
+    private readonly platform: Platform
   ) {}
 
   private mediaItemFromFilePath(
@@ -98,14 +100,21 @@ export class CustomCameraService {
     await this.filesystemPlugin.deleteFile({ path: filePath });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async isTorchOn() {
-    return await PreviewCamera.isTorchOn();
+    if (this.isNativePlatform) {
+      return await PreviewCamera.isTorchOn();
+    }
+    return { result: false };
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async enableTorch(enable: boolean) {
-    return await PreviewCamera.enableTorch({ enable });
+  async enableTorch(enable: boolean): Promise<void> {
+    if (this.isNativePlatform) {
+      return await PreviewCamera.enableTorch({ enable });
+    }
+  }
+
+  private get isNativePlatform() {
+    return this.platform.is('ios') || this.platform.is('android');
   }
 
   private changeGlobalCSSBackgroundToTransparent() {
