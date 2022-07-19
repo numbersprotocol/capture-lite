@@ -20,6 +20,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
+import { AppsFlyerService } from '../../shared/apps-flyer/apps-flyer.service';
 import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
@@ -65,7 +66,8 @@ export class WalletsPage {
     private readonly dialog: MatDialog,
     private readonly errorService: ErrorService,
     private readonly router: Router,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly appsFlyerService: AppsFlyerService
   ) {
     this.matIconRegistry.addSvgIcon(
       'wallet',
@@ -85,6 +87,10 @@ export class WalletsPage {
       .subscribe(totalBalance => this.totalBalance$.next(totalBalance));
 
     this.shouldHideDepositButton = this.platform.is('ios');
+  }
+
+  ionViewDidEnter() {
+    this.appsFlyerService.trackUserOpenedWalletsPage();
   }
 
   // eslint-disable-next-line class-methods-use-this

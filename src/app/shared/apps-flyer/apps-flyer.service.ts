@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AdvertisingId } from '@capacitor-community/advertising-id';
 import { Platform } from '@ionic/angular';
-import { AFInit, AppsFlyer } from 'appsflyer-capacitor-plugin';
+import { AFEvent, AFInit, AppsFlyer } from 'appsflyer-capacitor-plugin';
 import { APPS_FLYER_DEV_KEY } from '../dia-backend/secret';
 
 @Injectable({
@@ -32,6 +32,14 @@ export class AppsFlyerService {
     if (this.platform.is('ios')) {
       await AdvertisingId.requestTracking();
     }
+  }
+
+  async trackUserOpenedWalletsPage() {
+    if (this.isNativePlatform) return;
+
+    const data: AFEvent = { eventName: 'open-wallets-page' };
+
+    return AppsFlyer.logEvent(data).catch(() => ({}));
   }
 
   private get isNativePlatform() {
