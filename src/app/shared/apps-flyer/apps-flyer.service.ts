@@ -25,6 +25,7 @@ export class AppsFlyerService {
   constructor(private readonly platform: Platform) {}
 
   async initAppFlyerSDK() {
+    await this.platform.ready();
     if (this.isNativePlatform) {
       await AppsFlyer.initSDK(this.afConfig);
     }
