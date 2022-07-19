@@ -111,6 +111,7 @@ export class CustomCameraService {
     if (this.isNativePlatform) {
       return await PreviewCamera.enableTorch({ enable });
     }
+    return Promise.resolve();
   }
 
   private get isNativePlatform() {
