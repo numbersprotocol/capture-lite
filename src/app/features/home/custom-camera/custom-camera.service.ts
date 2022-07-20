@@ -115,6 +115,13 @@ export class CustomCameraService {
     return Promise.resolve();
   }
 
+  async isTorchAvailable(): Promise<boolean> {
+    if (this.isNativePlatform) {
+      return (await PreviewCamera.isTorchAvailable()).result;
+    }
+    return false;
+  }
+
   private get isNativePlatform() {
     return this.platform.is('ios') || this.platform.is('android');
   }
