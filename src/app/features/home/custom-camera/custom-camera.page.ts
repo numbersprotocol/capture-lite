@@ -42,6 +42,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   curCaptureSrc?: string;
 
   isFlashOn = false;
+  isFlashAvailable = false;
 
   readonly lastConnectedGoProDevice$ =
     this.goProBluetoothService.lastConnectedDevice$;
@@ -70,11 +71,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
     this.startPreviewCamera();
 
-    this.isTorchOn().then(value => {
-      console.log(`isFlashOn: ${value.result}`);
-
-      return (this.isFlashOn = value.result);
-    });
+    this.syncCameraState();
   }
 
   async ionViewDidEnter() {
@@ -116,8 +113,9 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     }
   }
 
-  startPreviewCamera() {
-    this.customCameraService.startPreviewCamera();
+  async startPreviewCamera() {
+    await this.customCameraService.startPreviewCamera();
+    await this.syncCameraState();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -125,8 +123,14 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.customCameraService.stopPreviewCamera();
   }
 
-  flipCamera() {
-    this.customCameraService.flipCamera();
+  async flipCamera() {
+    await this.customCameraService.flipCamera();
+    await this.syncCameraState();
+  }
+
+  async syncCameraState() {
+    this.isFlashOn = (await this.isTorchOn()).result;
+    this.isFlashAvailable = await this.customCameraService.isTorchAvailable();
   }
 
   onPress() {
