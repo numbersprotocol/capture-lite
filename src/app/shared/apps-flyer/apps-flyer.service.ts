@@ -26,11 +26,12 @@ export class AppsFlyerService {
 
   async initAppFlyerSDK() {
     await this.platform.ready();
-    if (this.isNativePlatform) {
-      await AppsFlyer.initSDK(this.afConfig);
-    }
     if (this.platform.is('ios')) {
       await AdvertisingId.requestTracking();
+    }
+
+    if (this.isNativePlatform) {
+      AppsFlyer.initSDK(this.afConfig);
     }
   }
 
