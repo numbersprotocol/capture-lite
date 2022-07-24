@@ -11,7 +11,7 @@ export class AppsFlyerService {
   private readonly afConfig: AFInit = {
     appID: '1536388009', // AppStore Application ID. For iOS only.
     devKey: APPS_FLYER_DEV_KEY,
-    isDebug: true,
+    isDebug: false,
     waitForATTUserAuthorization: 15, // for iOS 14 and higher
     minTimeBetweenSessions: 6, // default 5 sec
     registerOnDeepLink: true,
