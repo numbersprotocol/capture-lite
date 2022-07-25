@@ -76,6 +76,10 @@
 		"classpath": "io.numbersprotocol.capturelite.plugins.previewvideo.PreviewVideoPlugin"
 	},
 	{
+		"pkg": "appsflyer-capacitor-plugin",
+		"classpath": "capacitor.plugin.appsflyer.sdk.AppsFlyerPlugin"
+	},
+	{
 		"pkg": "capacitor-blob-writer",
 		"classpath": "com.equimaps.capacitorblobwriter.BlobWriter"
 	}
