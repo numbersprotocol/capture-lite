@@ -90,21 +90,21 @@
       >
         <mat-tab>
           <ng-template mat-tab-label>
-            <mat-icon
+            <ion-icon
+              src="/assets/images/icons/search.svg"
               class="tab-action-button-icon"
               joyrideStep="highlightHomeTab"
               title="Home Tab"
               text="View created captures"
-            >
-              apps
-            </mat-icon>
+            ></ion-icon>
           </ng-template>
           <app-post-capture-tab></app-post-capture-tab>
         </mat-tab>
         <mat-tab disabled>
           <ng-template mat-tab-label>
             <button mat-icon-button (click)="captureWithCustomCamera()">
-              <mat-icon
+              <ion-icon
+                src="/assets/images/icons/capture.svg"
                 class="tab-action-button-icon"
                 joyrideStep="highlightCaptureButton"
                 [title]="t('userGuide.capture')"
@@ -113,23 +113,22 @@
                 "
               >
                 camera_alt
-              </mat-icon>
+              </ion-icon>
             </button>
           </ng-template>
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <button mat-icon-button (click)="navigateToInboxTab()">
-              <mat-icon
+              <ion-icon
+                src="/assets/images/icons/profile.svg"
                 class="tab-action-button-icon"
                 joyrideStep="highlightInboxTab"
                 [title]="t('userGuide.inboxTab')"
                 [text]="
                   t('userGuide.visitInboxForPurchasedItemsAndGiftsReceived')
                 "
-              >
-                move_to_inbox
-              </mat-icon>
+              ></ion-icon>
             </button>
           </ng-template>
           <app-capture-tab></app-capture-tab>
