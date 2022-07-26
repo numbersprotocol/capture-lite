@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Share } from '@capacitor/share';
 import { TranslocoService } from '@ngneat/transloco';
 import { catchError } from 'rxjs/operators';
+import { urlToDownloadApp } from '../../utils/constants';
 import { getAssetProfileUrl } from '../../utils/url';
 import {
   DiaBackendAsset,
@@ -44,7 +45,6 @@ export class ShareService {
       { referralCode: referralCode }
     );
 
-    const urlToDownloadApp = 'https://www.numbersprotocol.io/#products';
     return Share.share({ text: text + '\n' + urlToDownloadApp });
   }
 }
