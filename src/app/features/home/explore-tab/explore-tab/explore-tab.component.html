@@ -1,0 +1,10 @@
+<div
+  *ngIf="(networkConnected$ | ngrxPush) === false; else bubbleIframe"
+  class="no-network-text"
+>
+  {{ 'message.networkNotConnected' | transloco }}
+</div>
+
+<ng-template #bubbleIframe>
+  <iframe [src]="bubbleIframeUrl" class="bubble-iframe"></iframe>
+</ng-template>
