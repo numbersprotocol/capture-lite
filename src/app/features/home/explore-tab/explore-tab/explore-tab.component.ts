@@ -11,7 +11,7 @@ import { NetworkService } from '../../../../shared/network/network.service';
 export class ExploreTabComponent {
   // TODO: change url to point to production bubble app
   readonly bubbleIframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-    'https://test-iframe-sample.bubbleapps.io/version-test/'
+    'https://captureappiframe.bubbleapps.io/version-test/'
   );
 
   readonly networkConnected$ = this.networkService.connected$;
