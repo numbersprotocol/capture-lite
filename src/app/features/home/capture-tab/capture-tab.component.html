@@ -4,12 +4,7 @@
 <mat-card *transloco="let t" class="user-card" id="user-card">
   <app-avatar mat-card-avatar></app-avatar>
   <mat-card-header>
-    <mat-card-title>
-      {{ username$ | ngrxPush }}
-      <button mat-button (click)="editUsername()">
-        <mat-icon class="edit-icon">edit</mat-icon>
-      </button>
-    </mat-card-title>
+    <mat-card-title>{{ username$ | ngrxPush }}</mat-card-title>
     <div class="vertical-space-8"></div>
     <mat-card-subtitle>{{ email$ | ngrxPush }} </mat-card-subtitle>
   </mat-card-header>
