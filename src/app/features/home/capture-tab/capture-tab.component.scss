@@ -8,6 +8,22 @@ div.mat-title {
   font-size: medium;
 }
 
+mat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+mat-card-title {
+  text-align: center;
+  margin-top: 32px;
+}
+
+mat-card-subtitle {
+  margin-top: 12px !important; /* stylelint-disable-line declaration-no-important */
+}
+
 .user-card {
   width: 100%;
   padding-left: 16px;
