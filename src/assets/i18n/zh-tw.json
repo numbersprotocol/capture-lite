@@ -257,6 +257,12 @@
     "fee": "油費",
     "totalCost": "總額"
   },
+  "home": {
+    "profileTab": {
+      "captured": "瞬時影像",
+      "collected": "收藏"
+    }
+  },
   "details": {
     "error": {
       "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",

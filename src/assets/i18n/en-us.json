@@ -257,6 +257,12 @@
     "fee": "Gas",
     "totalCost": "Total Cost"
   },
+  "home": {
+    "profileTab": {
+      "captured": "Captured",
+      "collected": "Collected"
+    }
+  },
   "details": {
     "error": {
       "transferOwnershipActionIsUnavailable": "Transfer ownership action is unavailable. Please try again later.",

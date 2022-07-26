@@ -50,6 +50,16 @@ app-avatar {
   height: 64px;
 }
 
+.network-status {
+  margin: 0;
+  padding: 8px;
+  text-align: center;
+  color: darkgray;
+  font-weight: 500;
+  font-size: 0.9em;
+  background-color: var(--ion-color-light);
+}
+
 .capture-container {
   padding-left: 16px;
   padding-right: 16px;
@@ -60,4 +70,38 @@ app-capture-item {
   height: 100%;
   overflow: hidden;
   border-radius: 4px;
+}
+
+.post-captures {
+  overflow: auto;
+  padding: 16px;
+
+  mat-grid-tile {
+    ion-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    ion-icon {
+      color: white;
+      z-index: 10;
+      position: absolute;
+      opacity: 0.3;
+      font-size: 16px;
+    }
+
+    ion-icon.is-video {
+      top: 8px;
+      right: 8px;
+    }
+
+    ion-icon.is-from-store {
+      top: 8px;
+      left: 8px;
+    }
+  }
 }
