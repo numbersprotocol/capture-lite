@@ -45,7 +45,9 @@ import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/pref
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
-  selectedTabIndex = 0;
+  private readonly initialTabIndex = 2;
+  private readonly afterCaptureTabIndex = 2;
+  selectedTabIndex = this.initialTabIndex;
 
   readonly username$ = this.diaBackendAuthService.username$;
 
@@ -236,7 +238,7 @@ export class HomePage {
 
   capture() {
     return defer(() => {
-      const captureIndex = 0;
+      const captureIndex = this.afterCaptureTabIndex;
       this.selectedTabIndex = captureIndex;
       return this.presentCaptureActions$();
     })
@@ -253,9 +255,13 @@ export class HomePage {
   }
 
   captureWithCustomCamera() {
-    const captureIndex = 0;
-    this.selectedTabIndex = captureIndex;
-    this.router.navigate(['home', 'custom-camera']);
+    if (!this.platform.is('android') || !this.platform.is('ios')) {
+      this.capture();
+    } else {
+      const captureIndex = this.afterCaptureTabIndex;
+      this.selectedTabIndex = captureIndex;
+      this.router.navigate(['home', 'custom-camera']);
+    }
   }
 
   private presentCaptureActions$() {
