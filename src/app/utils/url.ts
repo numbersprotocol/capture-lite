@@ -1,3 +1,4 @@
+import { urlToDownloadApp } from './constants';
 import { MimeType } from './mime-type';
 
 export function toDataUrl(base64: string, mimeType: MimeType | string) {
@@ -18,5 +19,5 @@ export function getAppDownloadLink(isPlatform: (platformName: any) => boolean) {
   if (isPlatform('android'))
     return 'https://play.google.com/store/apps/details?id=io.numbersprotocol.capturelite';
 
-  return 'https://www.numbersprotocol.io/#products';
+  return urlToDownloadApp;
 }
