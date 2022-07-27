@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { defer } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
-import { truncateReceipt } from '../../../utils/in-app-purchase';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { BASE_URL, BUBBLE_API_URL } from '../secret';
 
@@ -20,7 +19,7 @@ export class DiaBackendNumService {
       concatMap(headers => {
         const formData = new FormData();
         formData.set('points', pointsToAdd.toString());
-        formData.set('receipt_id', truncateReceipt(receiptId));
+        formData.set('receipt_id', receiptId);
         return this.httpClient.post<DiaBackendNumPointPurchaseResult>(
           `${BASE_URL}/api/v3/num/points/purchase/`,
           formData,
