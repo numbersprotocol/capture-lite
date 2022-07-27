@@ -63,7 +63,11 @@ export class AppComponent {
     this.registerIcon();
   }
 
-  static setDarkMode() {
+  static setDarkMode(forceDarkMode = false) {
+    if (forceDarkMode) {
+      document.body.classList.toggle('dark', true);
+      return;
+    }
     const dark =
       window.navigator.userAgent.includes('AndroidDarkMode') ||
       window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -72,7 +76,7 @@ export class AppComponent {
 
   async initializeApp() {
     await this.platform.ready();
-    AppComponent.setDarkMode();
+    AppComponent.setDarkMode(true);
     await SplashScreen.hide();
   }
 
