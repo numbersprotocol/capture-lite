@@ -77,12 +77,10 @@ cordova-res android --skip-config --copy
 
 #### Android
 
-If your operating system is Linux, set the `linuxAndroidStudioPath` in `capacitor.config.json`. For example,
+If your operating system is Linux, set the environment variable `CAPACITOR_ANDROID_STUDIO_PATH` for your Android Studio. The default value is `/usr/local/android-studio/bin/studio.sh`.
 
-```json
-{
-  "linuxAndroidStudioPath": "/home/username/android-studio/bin/studio.sh"
-}
+```sh
+export CAPACITOR_ANDROID_STUDIO_PATH="/home/username/android-studio/bin/studio.sh"
 ```
 
 Before running the app with Android Studio, build and sync the dependencies and web assets.

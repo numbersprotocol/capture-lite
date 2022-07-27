@@ -59,7 +59,7 @@
     "@ngx-formly/core": "^5.10.22",
     "@ngx-formly/material": "^5.10.22",
     "@ngx-formly/schematics": "^5.10.22",
-    "@numbersprotocol/preview-camera": "github:numbersprotocol/preview-camera#release-0.0.2-auto-rotate-fix",
+    "@numbersprotocol/preview-camera": "github:numbersprotocol/preview-camera",
     "@numbersprotocol/preview-video": "github:numbersprotocol/preview-video",
     "@techiediaries/ngx-qrcode": "^9.1.0",
     "async-mutex": "^0.3.2",

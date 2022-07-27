@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Undo app store, play store receipt truncate
 
+## 0.61.2 - 2022-07-20
+
+### Fixed
+
+- Hide camera flash button for front camera
+- Android flash light on only on capture photo or record video
+
+## 0.61.1 - 2022-07-19
+
+### Added
+
+- Camera flash light
+
+### Fixed
+
+- Capture flow, confirm button work smoothly
+- Use high resolution as default camera settings
+
 ## 0.60.2 - 2022-07-07
 
 ### Changed
@@ -20,6 +38,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix withdraw page the text color
+
+## 0.61.0 - 2022-07-14
+
+### Added
+
+- Show discard/confirm capture before upload
+- Send generate SEO img & description on share asset
+
+### Fixed
+
+- Remove capture after discard/confirm
 
 ## 0.60.1 - 2022-07-06
 
