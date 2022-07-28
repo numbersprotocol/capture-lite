@@ -1,26 +1,36 @@
 <mat-toolbar *transloco="let t">
-  <button routerLink=".." routerDirection="back" mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
+  <button
+    routerLink=".."
+    routerDirection="back"
+    mat-mini-fab
+    class="capture-rebranded-button"
+  >
+    <mat-icon svgIcon="capture-rebrand-arrow-left"></mat-icon>
   </button>
   <div class="toolbar-spacer"></div>
   <ng-container *ngrxLet="activeDetailedCapture$ as activeDetailedCapture">
     <button
       *ngIf="activeDetailedCapture.id"
       (click)="openShareMenu()"
-      mat-icon-button
+      mat-mini-fab
+      class="capture-rebranded-button"
     >
-      <mat-icon>share</mat-icon>
+      <mat-icon svgIcon="capture-rebrand-share"></mat-icon>
     </button>
   </ng-container>
+  <button mat-mini-fab class="capture-rebranded-button">
+    <mat-icon svgIcon="capture-rebrand-support"></mat-icon>
+  </button>
   <button
     *ngIf="(isFromSeriesPage$ | ngrxPush) === false"
     (click)="openOptionsMenu()"
-    mat-icon-button
+    mat-mini-fab
+    class="capture-rebranded-button"
     joyrideStep="highlightDetailsPageOptionsMenu"
     [title]="t('userGuide.optionsMenu')"
     [text]="t('userGuide.clickTheOptionsMenuToUseNetworkActions')"
   >
-    <mat-icon>more_vert</mat-icon>
+    <mat-icon svgIcon="capture-rebrand-more-horiz"></mat-icon>
   </button>
 </mat-toolbar>
 

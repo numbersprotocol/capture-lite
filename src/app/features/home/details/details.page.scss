@@ -1,5 +1,18 @@
+mat-toolbar {
+  padding-top: 18px;
+  margin-bottom: 8px;
+}
+
 .toolbar-spacer {
   flex: 1 1 auto;
+}
+
+.capture-rebranded-button {
+  margin: 0 4px;
+  background: #ffffff40 !important; /* stylelint-disable-line declaration-no-important */
+  color: white !important; /* stylelint-disable-line declaration-no-important */
+  backdrop-filter: blur(4px);
+  box-shadow: none;
 }
 
 .content {
