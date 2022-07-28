@@ -13,13 +13,14 @@
 }
 
 .slide {
+  border-radius: 16px;
+  padding: 16px;
   height: 100%;
   overflow: auto;
 
-  app-media {
-    width: 100%;
-    object-fit: cover;
-    object-position: center;
+  app-media-rebranded {
+    border-radius: 16px;
+    overflow: hidden;
   }
 
   ion-item {

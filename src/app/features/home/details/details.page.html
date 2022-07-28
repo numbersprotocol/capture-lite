@@ -45,7 +45,7 @@
       "
     >
       <div class="slide">
-        <app-media
+        <app-media-rebranded
           [src]="detailedCapture.mediaUrl$ | ngrxPush"
           [mimeType]="detailedCapture.mediaMimeType$ | ngrxPush"
           [routerLink]="[
@@ -53,7 +53,8 @@
             detailedCapture.mediaUrl$ | ngrxPush,
             { mimeType: detailedCapture.mediaMimeType$ | ngrxPush }
           ]"
-        ></app-media>
+        >
+        </app-media-rebranded>
         <ion-list lines="none">
           <ion-item>
             <ion-icon name="person" slot="start"></ion-icon>
