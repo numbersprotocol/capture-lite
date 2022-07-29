@@ -55,6 +55,7 @@ SwiperCore.use([Virtual]);
 })
 export class DetailsPage {
   captionOn = true;
+  expanded = false;
   private readonly type$ = this.route.paramMap.pipe(
     map(params => params.get('type')),
     isNonNullable()
@@ -649,6 +650,18 @@ export class DetailsPage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  togglePanel() {
+    this.expanded = !this.expanded;
+  }
+
+  openPanel() {
+    this.expanded = true;
+  }
+
+  closePanel() {
+    this.expanded = false;
   }
 
   private updateCaption(caption: string) {
