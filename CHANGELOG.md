@@ -5,13 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.60.3 - 2022-07-27
+## [Unreleased]
+
+## [0.60.4] - 2022-07-31
+
+### Added
+
+1. The "Delete Account" button in the Profile page.
+
+## [0.60.3] - 2022-07-27
 
 ### Fixed
 
 - Undo app store, play store receipt truncate
 
-## 0.60.2 - 2022-07-07
+## [0.60.2] - 2022-07-07
 
 ### Changed
 
@@ -1668,3 +1676,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
+
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.60.4...HEAD
+[0.60.4]: https://github.com/numbersprotocol/capture-lite/compare/0.60.3...0.60.4
+[0.60.3]: https://github.com/numbersprotocol/capture-lite/compare/0.60.2...0.60.3
+[0.60.2]: https://github.com/numbersprotocol/capture-lite/releases/tag/0.60.2
