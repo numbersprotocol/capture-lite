@@ -23,6 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Capture flow, confirm button work smoothly
 - Use high resolution as default camera settings
 
+## 0.60.3 - 2022-07-27
+
+### Fixed
+
+- Undo app store, play store receipt truncate
+
 ## 0.60.2 - 2022-07-07
 
 ### Changed
