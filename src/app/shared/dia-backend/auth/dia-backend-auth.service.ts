@@ -230,6 +230,29 @@ export class DiaBackendAuthService {
     );
   }
 
+  deleteUser$(email: string) {
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.post<UpdateUserResponse>(
+          `https://node.numbersprotocol.io/api/1.1/wf/delete_user`,
+          {
+            account: email,
+            token: headers.authorization,
+          },
+          { headers }
+        )
+      ),
+      concatMapTo(this.readUser$()),
+      concatMap(response =>
+        forkJoin([
+          this.setUsername(response.username),
+          this.setEmail(response.email),
+          this.setRerferralCode(response.referral_code),
+        ])
+      )
+    );
+  }
+
   uploadAvatar$({ picture }: { picture: File }) {
     const formData = new FormData();
     formData.append('profile_picture', picture);
