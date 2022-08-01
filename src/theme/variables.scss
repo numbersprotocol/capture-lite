@@ -42,20 +42,20 @@ $capture-primary-light: (
 );
 
 $capture-primary-dark: (
-  50: #e0f9ff,
-  100: #b3efff,
-  200: #80e4ff,
-  300: #4dd9ff,
-  400: #26d1ff,
-  500: #00c9ff,
-  600: #00c3ff,
-  700: #00bcff,
-  800: #00b5ff,
-  900: #00a9ff,
-  A100: #fff,
-  A200: #f2faff,
-  A400: #bfe7ff,
-  A700: #a6ddff,
+  50: #e9edfa,
+  100: #c8d3f4,
+  200: #a4b6ec,
+  300: #7f98e4,
+  400: #6382df,
+  500: #486cd9,
+  600: #4164d5,
+  700: #3859cf,
+  800: #304fca,
+  900: #213dc0,
+  A100: #fafbff,
+  A200: #c7cfff,
+  A400: #94a4ff,
+  A700: #7a8fff,
   contrast: (
     50: #000,
     100: #000,
@@ -78,7 +78,7 @@ $capture-primary-dark: (
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $app-primary-light: mat.define-palette($capture-primary-light, 400);
-$app-primary-dark: mat.define-palette(mat.$light-blue-palette, 200);
+$app-primary-dark: mat.define-palette($capture-primary-dark, 500);
 $app-accent: mat.define-palette(mat.$teal-palette, 200);
 
 // The warn palette is optional (defaults to red).
@@ -194,7 +194,7 @@ $dark-theme: mat.define-dark-theme(
 
   // noir colors
   --noir-primary: black;
-  --noir-secondary-dark: #00c9ff;
+  --noir-secondary-dark: #486cd9;
   --noir-secondary-light: #0000d8;
   --noir-warn: #f64662;
   --noir-success: #66c109;
@@ -211,12 +211,12 @@ body.dark {
   --capture-color-dark-contrast: #444;
 
   /** primary **/
-  --ion-color-primary: #00c9ff;
+  --ion-color-primary: #486cd9;
   --ion-color-primary-rgb: 0, 201, 255;
   --ion-color-primary-contrast: white;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #00c9ff;
-  --ion-color-primary-tint: #00c9ff;
+  --ion-color-primary-shade: #486cd9;
+  --ion-color-primary-tint: #486cd9;
 
   /** secondary **/
   --ion-color-secondary: #50c8ff;
