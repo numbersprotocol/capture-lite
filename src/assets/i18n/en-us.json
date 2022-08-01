@@ -265,6 +265,7 @@
     }
   },
   "details": {
+    "collect": "collect",
     "error": {
       "transferOwnershipActionIsUnavailable": "Transfer ownership action is unavailable. Please try again later.",
       "viewOnCaptureClubIsUnavailable": "View on CaptureClub action is unavailable. Please try again later.",

@@ -265,6 +265,7 @@
     }
   },
   "details": {
+    "collect": "蒐集",
     "error": {
       "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",
       "viewOnCaptureClubIsUnavailable": "暫時無法在 CaptureClub 觀看，請稍後再試。",

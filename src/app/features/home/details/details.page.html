@@ -137,3 +137,17 @@
     </ng-template>
   </swiper>
 </div>
+
+<ion-footer>
+  <div class="custom-footer-content">
+    <div class="price">
+      <!-- TODO: Ask senior devs how price is calculated -->
+      <div class="currency">Price (ETH)</div>
+      <div class="amount">0.725</div>
+    </div>
+
+    <button (click)="mintNft()" mat-flat-button color="primary">
+      {{ 'collect' | uppercase }}
+    </button>
+  </div>
+</ion-footer>

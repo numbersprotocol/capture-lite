@@ -599,7 +599,7 @@ export class DetailsPage {
       .subscribe();
   }
 
-  private async mintNft() {
+  async mintNft() {
     const result = await this.confirmAlert.present({
       message: this.translocoService.translate('message.mintNftAlert'),
     });

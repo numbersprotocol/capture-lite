@@ -131,3 +131,41 @@ mat-panel-title {
     color: white;
   }
 }
+
+.custom-footer-content {
+  padding-top: 16px;
+  padding-bottom: calc(16px + var(--ion-safe-area-bottom));
+  padding-left: 24px;
+  padding-right: 24px;
+  background-color: #111;
+  border-top: 1px solid #212121;
+  display: flex;
+  justify-content: space-between;
+
+  .price {
+    display: flex;
+    flex-direction: column;
+
+    .currency {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      opacity: 0.5;
+      margin-bottom: 8px;
+    }
+
+    .amount {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 80%;
+      color: white;
+    }
+  }
+
+  .mat-primary {
+    background-color: #486cd9;
+    color: white;
+    border-radius: 37px;
+    width: 170px;
+  }
+}
