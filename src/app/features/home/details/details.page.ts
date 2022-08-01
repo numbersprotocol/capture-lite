@@ -345,6 +345,20 @@ export class DetailsPage {
       .subscribe();
   }
 
+  openNetworkActions() {
+    this.activeDetailedCapture$
+      .pipe(
+        first(),
+        tap(detailedCapture => {
+          this.router.navigate(['actions', { id: detailedCapture.id }], {
+            relativeTo: this.route,
+          });
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
   openOptionsMenu() {
     this.userGuideService.setHasClickedDetailsPageOptionsMenu(true);
     combineLatest([
