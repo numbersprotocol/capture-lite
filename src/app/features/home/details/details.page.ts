@@ -273,8 +273,13 @@ export class DetailsPage {
 
   openShareMenu() {
     combineLatest([
+      this.activeDetailedCapture$,
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
+      this.activeDetailedCapture$.pipe(
+        switchMap(c => c.postCreationWorkflowCompleted$)
+      ),
       this.translocoService.selectTranslateObject({
+        'message.viewBlockchainCertificate': null,
         'message.copyIpfsAddress': null,
         'message.shareAssetProfile': null,
       }),
@@ -283,11 +288,26 @@ export class DetailsPage {
         first(),
         concatMap(
           ([
+            detailedCapture,
             diaBackendAsset,
-            [messageCopyIpfsAddress, messageShareAssetProfile],
+            postCreationWorkflowCompleted,
+            [
+              messageViewBlockchainCertificate,
+              messageCopyIpfsAddress,
+              messageShareAssetProfile,
+            ],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
+              if (postCreationWorkflowCompleted && detailedCapture.id) {
+                buttons.push({
+                  text: messageViewBlockchainCertificate,
+                  handler: () => {
+                    this.openCertificate();
+                    resolve();
+                  },
+                });
+              }
               if (diaBackendAsset?.cid) {
                 buttons.push({
                   text: messageCopyIpfsAddress,
