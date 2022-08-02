@@ -3,7 +3,7 @@ name: Build APKs
 on:
   push:
     tags:
-      - '*'
+      - 'android-*'
 
 jobs:
   build-apks-upload-google-drive:
