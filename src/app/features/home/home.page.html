@@ -51,7 +51,7 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-      <mat-toolbar>
+      <mat-toolbar *ngIf="selectedTabIndex === 2">
         <button (click)="sidenav.toggle()" mat-icon-button>
           <mat-icon>menu</mat-icon>
         </button>
@@ -98,7 +98,7 @@
               text="View created captures"
             ></ion-icon>
           </ng-template>
-          <app-post-capture-tab></app-post-capture-tab>
+          <app-explore-tab></app-explore-tab>
         </mat-tab>
         <mat-tab disabled>
           <ng-template mat-tab-label>
