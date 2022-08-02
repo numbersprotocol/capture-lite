@@ -6,6 +6,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { CustomCameraPageRoutingModule } from './custom-camera-routing.module';
 import { CustomCameraPage } from './custom-camera.page';
 import { CustomCameraService } from './custom-camera.service';
+import { PrePublishModeComponent } from './pre-publish-mode/pre-publish-mode.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { CustomCameraService } from './custom-camera.service';
     JoyrideModule.forChild(),
   ],
   providers: [CustomCameraService],
-  declarations: [CustomCameraPage],
+  declarations: [CustomCameraPage, PrePublishModeComponent],
 })
 export class CustomCameraPageModule {}

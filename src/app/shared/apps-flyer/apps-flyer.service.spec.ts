@@ -1,28 +1,31 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { Platform } from '@ionic/angular';
-import { SharedTestingModule } from '../../../shared/shared-testing.module';
-import { CustomCameraService } from './custom-camera.service';
+import { SharedTestingModule } from '../shared-testing.module';
 
-describe('CustomCameraService', () => {
-  let service: CustomCameraService;
+import { AppsFlyerService } from './apps-flyer.service';
+
+describe('AppsFlyerService', () => {
+  let service: AppsFlyerService;
+  let platformIs: (platformName: string) => boolean;
   let platformReadySpy: Promise<void>;
-  let platformIsSpy: boolean | undefined;
   let platformSpy: Platform;
 
   beforeEach(
-    waitForAsync(() => {
+    waitForAsync(async () => {
       platformReadySpy = Promise.resolve();
-      platformIsSpy = false;
+      platformIs = _ => false;
+
       platformSpy = jasmine.createSpyObj('Platform', {
         ready: platformReadySpy,
-        is: platformIsSpy,
+        is: platformIs,
       });
 
-      TestBed.configureTestingModule({
+      await TestBed.configureTestingModule({
         imports: [SharedTestingModule],
         providers: [{ provide: Platform, useValue: platformSpy }],
       }).compileComponents();
-      service = TestBed.inject(CustomCameraService);
+
+      service = TestBed.inject(AppsFlyerService);
     })
   );
 

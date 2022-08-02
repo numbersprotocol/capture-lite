@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Capacitor } from '@capacitor/core';
+import { FilesystemPlugin } from '@capacitor/filesystem';
+import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { PreviewCamera } from '@numbersprotocol/preview-camera';
 import { BehaviorSubject } from 'rxjs';
+import { FILESYSTEM_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { CaptureService } from '../../../shared/capture/capture.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
@@ -27,7 +30,10 @@ export class CustomCameraService {
     private readonly httpClient: HttpClient,
     private readonly captureService: CaptureService,
     private readonly errorService: ErrorService,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    @Inject(FILESYSTEM_PLUGIN)
+    private readonly filesystemPlugin: FilesystemPlugin,
+    private readonly platform: Platform
   ) {}
 
   private mediaItemFromFilePath(
@@ -52,6 +58,7 @@ export class CustomCameraService {
       const base64 = await blobToBase64(itemBlob);
       const mimeType = itemToUpload.mimeType;
       await this.captureService.capture({ base64, mimeType });
+      await this.removeFile(filePath);
     } catch (error) {
       const errMsg = this.translocoService.translate(`error.internetError`);
       await this.errorService.toastError$(errMsg).toPromise();
@@ -87,6 +94,36 @@ export class CustomCameraService {
   // eslint-disable-next-line class-methods-use-this
   async stopRecord() {
     return PreviewCamera.stopRecord().catch(() => ({}));
+  }
+
+  async removeFile(filePath: string | undefined) {
+    if (!filePath) return;
+    await this.filesystemPlugin.deleteFile({ path: filePath });
+  }
+
+  async isTorchOn() {
+    if (this.isNativePlatform) {
+      return await PreviewCamera.isTorchOn();
+    }
+    return { result: false };
+  }
+
+  async enableTorch(enable: boolean): Promise<void> {
+    if (this.isNativePlatform) {
+      return await PreviewCamera.enableTorch({ enable });
+    }
+    return Promise.resolve();
+  }
+
+  async isTorchAvailable(): Promise<boolean> {
+    if (this.isNativePlatform) {
+      return (await PreviewCamera.isTorchAvailable()).result;
+    }
+    return false;
+  }
+
+  private get isNativePlatform() {
+    return this.platform.is('ios') || this.platform.is('android');
   }
 
   private changeGlobalCSSBackgroundToTransparent() {

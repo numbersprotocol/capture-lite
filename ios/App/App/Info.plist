@@ -86,5 +86,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>We collect your data only for counting download numbers and will never share it with any 3rd party</string>
 </dict>
 </plist>

@@ -5,6 +5,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, concatMap } from 'rxjs/operators';
+import { AppsFlyerService } from './shared/apps-flyer/apps-flyer.service';
 import { CameraService } from './shared/camera/camera.service';
 import { CaptureService } from './shared/capture/capture.service';
 import { CollectorService } from './shared/collector/collector.service';
@@ -37,6 +38,7 @@ export class AppComponent {
     private readonly cameraService: CameraService,
     private readonly errorService: ErrorService,
     private readonly inAppStoreService: InAppStoreService,
+    appsFlyerService: AppsFlyerService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
     langaugeService: LanguageService,
@@ -44,6 +46,7 @@ export class AppComponent {
     diaBackendNotificationService: DiaBackendNotificationService,
     uploadService: DiaBackendAssetUploadingService
   ) {
+    appsFlyerService.initAppFlyerSDK();
     notificationService.requestPermission();
     pushNotificationService.register();
     langaugeService.initialize();
@@ -60,7 +63,11 @@ export class AppComponent {
     this.registerIcon();
   }
 
-  static setDarkMode() {
+  static setDarkMode(forceDarkMode = false) {
+    if (forceDarkMode) {
+      document.body.classList.toggle('dark', true);
+      return;
+    }
     const dark =
       window.navigator.userAgent.includes('AndroidDarkMode') ||
       window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -69,7 +76,7 @@ export class AppComponent {
 
   async initializeApp() {
     await this.platform.ready();
-    AppComponent.setDarkMode();
+    AppComponent.setDarkMode(true);
     await SplashScreen.hide();
   }
 

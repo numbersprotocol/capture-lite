@@ -2,9 +2,10 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PluginListenerHandle } from '@capacitor/core';
+import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CaptureResult, PreviewCamera } from '@numbersprotocol/preview-camera';
+import { BehaviorSubject } from 'rxjs';
 import { ErrorService } from '../../../shared/error/error.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import { GoProBluetoothService } from '../../settings/go-pro/services/go-pro-bluetooth.service';
@@ -33,6 +34,16 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   curSessionCaptureMediaItems: CustomCameraMediaItem[] = [];
 
+  mode$ = new BehaviorSubject<'capture' | 'pre-publish'>('capture');
+
+  curCaptureFilePath?: string;
+  curCaptureMimeType?: 'image/jpeg' | 'video/mp4';
+  curCaptureType?: 'image' | 'video' = 'image';
+  curCaptureSrc?: string;
+
+  isFlashOn = false;
+  isFlashAvailable = false;
+
   readonly lastConnectedGoProDevice$ =
     this.goProBluetoothService.lastConnectedDevice$;
 
@@ -59,6 +70,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     ).then((listener: any) => (this.captureVideoFinishedListener = listener));
 
     this.startPreviewCamera();
+
+    this.syncCameraState();
   }
 
   async ionViewDidEnter() {
@@ -85,12 +98,24 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     if (data.errorMessage) {
       await this.errorService.toastError$(data.errorMessage).toPromise();
     } else if (data.filePath) {
-      this.customCameraService.uploadToCapture(data.filePath, type);
+      const filePath = data.filePath;
+
+      let mimeType: 'image/jpeg' | 'video/mp4' = 'image/jpeg';
+      if (type === 'video') mimeType = 'video/mp4';
+
+      this.curCaptureFilePath = filePath;
+      this.curCaptureMimeType = mimeType;
+      this.curCaptureType = type;
+      this.curCaptureSrc = Capacitor.convertFileSrc(filePath);
+      this.mode$.next('pre-publish');
+
+      this.stopPreviewCamera();
     }
   }
 
-  startPreviewCamera() {
-    this.customCameraService.startPreviewCamera();
+  async startPreviewCamera() {
+    await this.customCameraService.startPreviewCamera();
+    await this.syncCameraState();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -98,8 +123,14 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.customCameraService.stopPreviewCamera();
   }
 
-  flipCamera() {
-    this.customCameraService.flipCamera();
+  async flipCamera() {
+    await this.customCameraService.flipCamera();
+    await this.syncCameraState();
+  }
+
+  async syncCameraState() {
+    this.isFlashOn = (await this.isTorchOn()).result;
+    this.isFlashAvailable = await this.customCameraService.isTorchAvailable();
   }
 
   onPress() {
@@ -131,6 +162,31 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     }
   }
 
+  discardCurrentCapture() {
+    this.mode$.next('capture');
+    this.startPreviewCamera();
+    this.removeCurrentCapture();
+  }
+
+  async confirmCurrentCapture() {
+    if (this.curCaptureFilePath && this.curCaptureType) {
+      this.customCameraService.uploadToCapture(
+        this.curCaptureFilePath,
+        this.curCaptureType
+      );
+      this.leaveCustomCamera();
+    }
+  }
+
+  async isTorchOn() {
+    return this.customCameraService.isTorchOn();
+  }
+
+  async enableTorch() {
+    await this.customCameraService.enableTorch(!this.isFlashOn);
+    this.isFlashOn = (await this.customCameraService.isTorchOn()).result;
+  }
+
   async leaveCustomCamera() {
     return this.location.back();
   }
@@ -140,6 +196,13 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.router.navigate(['/settings', 'go-pro', 'media-list-on-camera'], {
       state: { shouldStartPreviewCameraOnLeave: true },
     });
+  }
+
+  private removeCurrentCapture() {
+    this.customCameraService.removeFile(this.curCaptureFilePath);
+    this.curCaptureFilePath = undefined;
+    this.curCaptureMimeType = undefined;
+    this.curCaptureSrc = undefined;
   }
 
   // eslint-disable-next-line class-methods-use-this

@@ -4,11 +4,17 @@ import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash-es';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { iif } from 'rxjs';
+import { catchError, finalize, map, pluck, switchMap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import {
+  DiaBackendAsset,
+  DiaBackendAssetRepository,
+} from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAsseRefreshingService } from '../../../shared/dia-backend/asset/refreshing/dia-backend-asset-refreshing.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../shared/error/error.service';
+import { NetworkService } from '../../../shared/network/network.service';
 import { getOldProof } from '../../../shared/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../shared/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
@@ -20,6 +26,8 @@ import { ProofRepository } from '../../../shared/repositories/proof/proof-reposi
   styleUrls: ['./capture-tab.component.scss'],
 })
 export class CaptureTabComponent {
+  categories: 'captured' | 'collected' = 'captured';
+
   readonly username$ = this.diaBackendAuthService.username$;
 
   readonly email$ = this.diaBackendAuthService.email$;
@@ -35,11 +43,25 @@ export class CaptureTabComponent {
     )
   );
 
+  readonly networkConnected$ = this.networkService.connected$;
+
+  readonly postCaptures$ = this.networkConnected$.pipe(
+    switchMap(isConnected =>
+      iif(
+        () => isConnected,
+        this.diaBackendAssetRepository.postCaptures$.pipe(pluck('results'))
+      )
+    ),
+    catchError((err: unknown) => this.errorService.toastError$(err))
+  );
+
   constructor(
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendAssetRefreshingService: DiaBackendAsseRefreshingService,
     private readonly alertController: AlertController,
+    private readonly networkService: NetworkService,
     private readonly translocoService: TranslocoService,
     private readonly errorService: ErrorService,
     private readonly blockingActionService: BlockingActionService
@@ -95,6 +117,11 @@ export class CaptureTabComponent {
   // eslint-disable-next-line class-methods-use-this
   trackCaptureItem(_: number, item: Proof) {
     return getOldProof(item).hash;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  trackPostCapture(_: number, item: DiaBackendAsset) {
+    return item.id;
   }
 
   refreshCaptures(event: Event) {

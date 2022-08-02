@@ -3,61 +3,83 @@
   [style.--background]="'transparent'"
   *transloco="let t"
 >
-  <div id="camera-flash-placeholder"></div>
-  <div
-    class="select-from-go-pro-camera-button"
-    *ngIf="lastConnectedGoProDevice$ | ngrxPush"
-    (click)="captureFromGoPro()"
-  >
-    GoPro
-    <mat-icon> featured_video </mat-icon>
-  </div>
-
-  <mat-icon
-    class="close-camera-button"
-    (click)="leaveCustomCamera()"
-    joyrideStep="highlightCustomCameraCloseButton"
-    [title]="t('userGuide.cameraUsageGuide')"
-    [text]="t('userGuide.afterTakingPhotosOrRecordingVideosCloseAndGoBackHome')"
-  >
-    close
-  </mat-icon>
-
-  <div class="camera-buttons-container">
-    <mat-icon class="temporarily-hidden" id="gallery-icon">
-      video_collection
-    </mat-icon>
-
-    <circle-progress
-      (click)="onPress()"
-      [maxTime]="maxRecordTimeInMilliseconds"
-      ngxLongPress2
-      (onLongPress)="onLongPress()"
-      (onLongPressing)="onLongPressing($event)"
-      (onReleasePressing)="onReleasePressing()"
-      [percent]="curRecordTimeInPercent"
-      [radius]="38"
-      [outerStrokeWidth]="6"
-      [innerStrokeWidth]="4"
-      [outerStrokeColor]="'#78C000'"
-      [innerStrokeColor]="'#F2F2F2'"
-      [showTitle]="false"
-      [showUnits]="false"
-      [showSubtitle]="false"
-      [animation]="false"
-      [animationDuration]="0"
-      joyrideStep="highlightCustomCameraCaptureButton"
-      [title]="t('userGuide.cameraUsageGuide')"
-      [text]="t('userGuide.tapToTakeAPhotoAndLongPressToRecordVideo')"
-    ></circle-progress>
+  <ng-container *ngIf="(mode$ | ngrxPush) === 'capture'">
+    <div id="camera-flash-placeholder"></div>
 
     <mat-icon
-      (click)="flipCamera()"
-      joyrideStep="highlightCustomCameraFlipButton"
-      [title]="t('userGuide.cameraUsageGuide')"
-      [text]="t('userGuide.flipTheCameraToSwitchBetweenFrontAndBackCameras')"
+      *ngIf="isFlashAvailable"
+      class="flash-camera-button"
+      (click)="enableTorch()"
     >
-      flip_camera_android
+      {{ isFlashOn ? 'flash_on' : 'flash_off' }}
     </mat-icon>
-  </div>
+
+    <div
+      class="select-from-go-pro-camera-button"
+      *ngIf="lastConnectedGoProDevice$ | ngrxPush"
+      (click)="captureFromGoPro()"
+    >
+      GoPro
+      <mat-icon> featured_video </mat-icon>
+    </div>
+
+    <mat-icon
+      class="close-camera-button"
+      (click)="leaveCustomCamera()"
+      joyrideStep="highlightCustomCameraCloseButton"
+      [title]="t('userGuide.cameraUsageGuide')"
+      [text]="
+        t('userGuide.afterTakingPhotosOrRecordingVideosCloseAndGoBackHome')
+      "
+    >
+      close
+    </mat-icon>
+
+    <div class="camera-buttons-container">
+      <mat-icon class="temporarily-hidden" id="gallery-icon">
+        video_collection
+      </mat-icon>
+
+      <circle-progress
+        (click)="onPress()"
+        [maxTime]="maxRecordTimeInMilliseconds"
+        ngxLongPress2
+        (onLongPress)="onLongPress()"
+        (onLongPressing)="onLongPressing($event)"
+        (onReleasePressing)="onReleasePressing()"
+        [percent]="curRecordTimeInPercent"
+        [radius]="38"
+        [outerStrokeWidth]="6"
+        [innerStrokeWidth]="4"
+        [outerStrokeColor]="'#78C000'"
+        [innerStrokeColor]="'#F2F2F2'"
+        [showTitle]="false"
+        [showUnits]="false"
+        [showSubtitle]="false"
+        [animation]="false"
+        [animationDuration]="0"
+        joyrideStep="highlightCustomCameraCaptureButton"
+        [title]="t('userGuide.cameraUsageGuide')"
+        [text]="t('userGuide.tapToTakeAPhotoAndLongPressToRecordVideo')"
+      ></circle-progress>
+
+      <mat-icon
+        (click)="flipCamera()"
+        joyrideStep="highlightCustomCameraFlipButton"
+        [title]="t('userGuide.cameraUsageGuide')"
+        [text]="t('userGuide.flipTheCameraToSwitchBetweenFrontAndBackCameras')"
+      >
+        flip_camera_android
+      </mat-icon>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="(mode$ | ngrxPush) === 'pre-publish'">
+    <app-pre-publish-mode
+      [curCaptureFilePath]="curCaptureFilePath"
+      [curCaptureMimeType]="curCaptureMimeType"
+      [curCaptureSrc]="curCaptureSrc"
+      (confirm)="confirmCurrentCapture()"
+      (discard)="discardCurrentCapture()"
+    ></app-pre-publish-mode>
+  </ng-container>
 </ion-content>

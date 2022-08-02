@@ -28,6 +28,7 @@ def capacitor_pods
   pod 'CapacitorStorage', :path => '../../node_modules/@capacitor/storage'
   pod 'NumbersprotocolPreviewCamera', :path => '../../node_modules/@numbersprotocol/preview-camera'
   pod 'NumbersprotocolPreviewVideo', :path => '../../node_modules/@numbersprotocol/preview-video'
+  pod 'AppsflyerCapacitorPlugin', :path => '../../node_modules/appsflyer-capacitor-plugin'
   pod 'CapacitorBlobWriter', :path => '../../node_modules/capacitor-blob-writer'
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
 end

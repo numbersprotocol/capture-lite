@@ -258,6 +258,12 @@
     "fee": "Gas",
     "totalCost": "Total Cost"
   },
+  "home": {
+    "profileTab": {
+      "captured": "Captured",
+      "collected": "Collected"
+    }
+  },
   "details": {
     "error": {
       "transferOwnershipActionIsUnavailable": "Transfer ownership action is unavailable. Please try again later.",
@@ -268,6 +274,9 @@
       "viewBlockchainCertificateIsUnavailable": "View blockchain certificate action is unavailable. Please try again later.",
       "networkActionsAreUnavailable": "Network Actions are unavailable. Please try again later."
     }
+  },
+  "customCamera": {
+    "confirmCapture": "Confirm"
   },
   "wallets": {
     "wallets": "Wallets",

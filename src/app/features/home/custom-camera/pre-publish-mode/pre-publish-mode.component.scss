@@ -1,0 +1,54 @@
+.action-buttons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: calc(var(--ion-safe-area-top) + 4px) 16px;
+  background-color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  z-index: 100;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: calc(var(--ion-safe-area-bottom) + 4px) 16px;
+  background-color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  z-index: 100;
+  height: 75px;
+}
+
+.back-button {
+  background: #ffffff40 !important; /* stylelint-disable-line declaration-no-important */
+  color: white !important; /* stylelint-disable-line declaration-no-important */
+  backdrop-filter: blur(4px);
+  box-shadow: none;
+}
+
+.confirm-button {
+  background: #486cd9 !important; /* stylelint-disable-line declaration-no-important */
+  color: white !important; /* stylelint-disable-line declaration-no-important */
+  border-radius: 37px;
+  height: 38px;
+}
+
+.preview {
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  app-media {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
