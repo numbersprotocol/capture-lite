@@ -201,6 +201,21 @@ export class DetailsPage {
       })
     );
 
+  readonly iframeUrlWithToken$ = combineLatest([
+    this.activeDetailedCapture$,
+    this.activeDetailedCaptureTmpShareToken$,
+  ]).pipe(
+    distinctUntilChanged(),
+    map(([detailedCapture, tmpToken]) => {
+      const host = 'https://captureappiframe.bubbleapps.io';
+      const path = 'version-test/asset_page';
+      const params = `pid=${detailedCapture.id}&token=${tmpToken}&iframeLoadedFrom=CaptureApp`;
+      // const params = `pid=288036ab-5768-4270-988b-a85d7bd11eb3&iframeLoadedFrom=CaptureApp`;
+      const url = `${host}/${path}?${params}`;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    })
+  );
+
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
   constructor(
