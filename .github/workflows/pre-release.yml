@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '16.15.0'
 
-      - name: Check if version has been updated
+      - name: Get release version
         id: version_check
         uses: EndBug/version-check@v2
         with:
@@ -25,7 +25,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Ionic
-        if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
@@ -37,14 +36,12 @@ jobs:
           npm run build
 
       - name: Build Android release bundle (AAB) for Google Play Console
-        if: steps.version_check.outputs.changed == 'true'
         run: |
           npx cap sync android
           cd android/
           ./gradlew bundleRelease
 
       - name: Sign release AAB
-        if: steps.version_check.outputs.changed == 'true'
         uses: r0adkll/sign-android-release@v1.0.4
         with:
           releaseDirectory: ./android/app/build/outputs/bundle/release
@@ -54,11 +51,9 @@ jobs:
           keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
       - name: Create service_account.json
-        if: steps.version_check.outputs.changed == 'true'
         run: echo '${{ secrets.PLAY_CONSOLE_SERVICE_ACCOUNT_JSON }}' > service_account.json
 
       - name: Deploy to Play Store (closed alpha track)
-        if: steps.version_check.outputs.changed == 'true'
         uses: r0adkll/upload-google-play@v1.0.7
         with:
           serviceAccountJson: service_account.json
@@ -78,7 +73,7 @@ jobs:
         with:
           node-version: '16.15.0'
 
-      - name: Check if version has been updated
+      - name: Get release version
         id: version_check
         uses: EndBug/version-check@v2
         with:
@@ -86,7 +81,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Ionic
-        if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
@@ -98,14 +92,12 @@ jobs:
           npm run build
 
       - name: Import the Code-Signing PKCS12 Certificate
-        if: steps.version_check.outputs.changed == 'true'
         uses: apple-actions/import-codesign-certs@v1
         with:
           p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
           p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
 
       - name: Download provisioning profiles
-        if: steps.version_check.outputs.changed == 'true'
         uses: Apple-Actions/download-provisioning-profiles@v1
         with:
           bundle-id: io.numbersprotocol.capturelite
@@ -115,26 +107,22 @@ jobs:
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
       - name: Get current time
-        if: steps.version_check.outputs.changed == 'true'
         uses: 1466587594/get-current-time@v2
         id: current-time
         with:
           format: YYYYMMDDHHmmss
 
       - name: Build iOS Xcode Archive
-        if: steps.version_check.outputs.changed == 'true'
         run: |
           npx cap sync ios
           xcodebuild archive -workspace ios/App/App.xcworkspace -scheme App -sdk iphoneos  -configuration Release -archivePath build/App.xcarchive -showBuildTimingSummary  MARKETING_VERSION=${{ steps.version_check.outputs.version }}  CURRENT_PROJECT_VERSION=${{ steps.current-time.outputs.formattedTime }}  -allowProvisioningUpdates archive
 
       - name: Export IPA from Xcode Archive
-        if: steps.version_check.outputs.changed == 'true'
         run: |
           xcodebuild -exportArchive -archivePath build/App.xcarchive -exportPath build -exportOptionsPlist ios/App/ExportOptions.plist -allowProvisioningUpdates
 
       - name: Upload IPA to App Store (Testflight)
         uses: Apple-Actions/upload-testflight-build@master
-        if: steps.version_check.outputs.changed == 'true'
         with:
           app-path: build/App.ipa
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
@@ -142,12 +130,10 @@ jobs:
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
       - name: Save iOS build number
-        if: steps.version_check.outputs.changed == 'true'
         run: |
           echo ${{ steps.current-time.outputs.formattedTime }} > build/ios-build-number.txt
 
       - name: Upload iOS build number as artifact
-        if: steps.version_check.outputs.changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: ios-build-number
@@ -189,7 +175,7 @@ jobs:
         with:
           node-version: '16.15.0'
 
-      - name: Check if version has been updated
+      - name: Get release version
         id: version_check
         uses: EndBug/version-check@v2
         with:
@@ -232,7 +218,7 @@ jobs:
         with:
           node-version: '16.15.0'
 
-      - name: Check if version has been updated
+      - name: Get release version
         id: version_check
         uses: EndBug/version-check@v2
         with:
@@ -240,7 +226,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Ionic
-        if: steps.version_check.outputs.changed == 'true'
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets.NUMBERS_STORAGE_BASE_URL }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
@@ -252,7 +237,6 @@ jobs:
           npm run build
 
       - name: Build APKs
-        if: steps.version_check.outputs.changed == 'true'
         run: |
           npx cap sync android
           cd android/
@@ -260,7 +244,6 @@ jobs:
 
       - name: Create GitHub prerelease
         id: create_release
-        if: steps.version_check.outputs.changed == 'true'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -271,7 +254,6 @@ jobs:
           prerelease: true
 
       - name: Upload debug APK to release assets
-        if: steps.version_check.outputs.changed == 'true'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -282,7 +264,6 @@ jobs:
           asset_content_type: application/vnd.android.package-archive
 
       - name: Upload debug metadata.json to release assets
-        if: steps.version_check.outputs.changed == 'true'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -294,18 +275,15 @@ jobs:
 
       - name: Download iOS build number
         uses: actions/download-artifact@v2
-        if: steps.version_check.outputs.changed == 'true'
         with:
           name: ios-build-number
 
       - name: Set iOS build number as Environment Variable
-        if: steps.version_check.outputs.changed == 'true'
         run: |
           IOS_BUILD=`cat ios-build-number.txt`
           echo "ios_build_number=$IOS_BUILD" >> $GITHUB_ENV
 
       - name: Send Slack notification
-        if: steps.version_check.outputs.changed == 'true'
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
