@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
 import { Clipboard } from '@capacitor/clipboard';
@@ -179,6 +180,18 @@ export class DetailsPage {
     )
   );
 
+  readonly iframeUrl$ = this.activeDetailedCapture$.pipe(
+    distinctUntilChanged(),
+    map(detailedCapture => {
+      const host = 'https://captureappiframe.bubbleapps.io';
+      const path = 'version-test/asset_page';
+      const params = `pid=${detailedCapture.id}&iframeLoadedFrom=CaptureApp`;
+      // const params = `pid=288036ab-5768-4270-988b-a85d7bd11eb3&iframeLoadedFrom=CaptureApp`;
+      const url = `${host}/${path}?${params}`;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    })
+  );
+
   readonly activeDetailedCaptureTmpShareToken$ =
     this._activeDetailedCapture$.pipe(
       distinctUntilChanged(),
@@ -191,6 +204,7 @@ export class DetailsPage {
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
   constructor(
+    private readonly sanitizer: DomSanitizer,
     private readonly proofRepository: ProofRepository,
     private readonly mediaStore: MediaStore,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
@@ -215,6 +229,12 @@ export class DetailsPage {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
       .subscribe();
+  }
+
+  iframeUrlFor(detailedCapture: any) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://captureappiframe.bubbleapps.io/version-test/asset_page?pid=${detailedCapture.id}`
+    );
   }
 
   async ionViewDidEnter() {

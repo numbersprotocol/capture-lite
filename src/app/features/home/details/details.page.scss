@@ -26,10 +26,14 @@ mat-toolbar {
 }
 
 .slide {
-  border-radius: 16px;
-  padding: 16px;
   height: 100%;
   overflow: auto;
+
+  iframe {
+    height: 100%;
+    width: 96vw;
+    margin: 0 2vw;
+  }
 
   app-media-rebranded {
     border-radius: 16px;
