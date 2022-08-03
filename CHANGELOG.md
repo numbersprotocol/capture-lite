@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.62.0 - 2022-08-03
+
+### Added
+
+- iFrame to explore tab
+- iFrame to asset details page
+
+### Changed
+
+- Changed details page app bar icons
+- Changed app launch icon to rebranded app icon
+- Changed home page design to match rebranded design
+- Temporarely disable user guide due to UI changes
+
 ## [Unreleased]
 
 ## [0.60.4] - 2022-07-31
