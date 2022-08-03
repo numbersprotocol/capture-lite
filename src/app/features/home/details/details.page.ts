@@ -184,7 +184,7 @@ export class DetailsPage {
     distinctUntilChanged(),
     map(detailedCapture => {
       const host = 'https://captureappiframe.bubbleapps.io';
-      const path = 'version-test/asset_page';
+      const path = 'version-test';
       const params = `pid=${detailedCapture.id}&iframeLoadedFrom=CaptureApp`;
       // const params = `pid=288036ab-5768-4270-988b-a85d7bd11eb3&iframeLoadedFrom=CaptureApp`;
       const url = `${host}/${path}?${params}`;
