@@ -22,6 +22,7 @@ import { MediaRebrandedComponent } from './media/component/media-rebranded.compo
 import { MediaComponent } from './media/component/media.component';
 import { MigratingDialogComponent } from './migration/migrating-dialog/migrating-dialog.component';
 import { OrderDetailDialogComponent } from './order-detail-dialog/order-detail-dialog.component';
+import { SafeResourceUrlPipe } from './pipes/safe-resource-url/safe-resource-url.pipe';
 import { StartsWithPipe } from './pipes/starts-with/starts-with.pipe';
 import { UserGuideService } from './user-guide/user-guide.service';
 
@@ -32,6 +33,7 @@ const declarations = [
   MediaComponent,
   MediaRebrandedComponent,
   StartsWithPipe,
+  SafeResourceUrlPipe,
   ContactSelectionDialogComponent,
   FriendInvitationDialogComponent,
   ExportPrivateKeyModalComponent,
