@@ -19,10 +19,7 @@ jobs:
 
       - name: Get release version
         id: version_check
-        uses: EndBug/version-check@v2
-        with:
-          diff-search: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
 
       - name: Build Ionic
         env:
@@ -75,10 +72,7 @@ jobs:
 
       - name: Get release version
         id: version_check
-        uses: EndBug/version-check@v2
-        with:
-          diff-search: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
 
       - name: Build Ionic
         env:
@@ -177,10 +171,7 @@ jobs:
 
       - name: Get release version
         id: version_check
-        uses: EndBug/version-check@v2
-        with:
-          diff-search: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
 
       - name: Build Ionic
         env:
@@ -220,10 +211,7 @@ jobs:
 
       - name: Get release version
         id: version_check
-        uses: EndBug/version-check@v2
-        with:
-          diff-search: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
 
       - name: Build Ionic
         env:
