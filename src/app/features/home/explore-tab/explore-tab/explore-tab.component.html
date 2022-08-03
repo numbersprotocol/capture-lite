@@ -6,5 +6,8 @@
 </div>
 
 <ng-template #bubbleIframe>
-  <iframe [src]="bubbleIframeUrl$ | ngrxPush" class="bubble-iframe"></iframe>
+  <iframe
+    [src]="bubbleIframeUrl$ | ngrxPush | safeResourceUrl"
+    class="bubble-iframe"
+  ></iframe>
 </ng-template>
