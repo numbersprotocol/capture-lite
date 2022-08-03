@@ -1,64 +1,13 @@
 name: build
 
 on:
-  push:
   pull_request:
-    branches: [master, develop, 'feature-*', 'fix-*', 'hotfix-*', 'release-*']
+    branches: [master, develop]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.15.0'
-
-      - name: Install Ionic CLI
-        run: npm install -g @ionic/cli
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Lint
-        run: npm run lint
-
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.15.0'
-
-      - name: Install Ionic CLI
-        run: npm install -g @ionic/cli
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Test
-        run: npm run test.ci
-
-      - name: Upload coverage reports
-        uses: codacy/codacy-coverage-reporter-action@master
-        if: github.actor != 'dependabot[bot]'
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: ./coverage/cobertura-coverage.xml
-
   android:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    needs: [lint, test]
 
     steps:
       - uses: actions/checkout@v2
@@ -92,7 +41,6 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 60
     if: github.actor != 'dependabot[bot]'
-    needs: [lint, test]
 
     steps:
       - uses: actions/checkout@v2
