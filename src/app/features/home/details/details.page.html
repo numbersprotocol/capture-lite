@@ -1,26 +1,36 @@
 <mat-toolbar *transloco="let t">
-  <button routerLink=".." routerDirection="back" mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
+  <button
+    routerLink=".."
+    routerDirection="back"
+    mat-mini-fab
+    class="capture-rebranded-button"
+  >
+    <mat-icon svgIcon="capture-rebrand-arrow-left"></mat-icon>
   </button>
   <div class="toolbar-spacer"></div>
   <ng-container *ngrxLet="activeDetailedCapture$ as activeDetailedCapture">
     <button
       *ngIf="activeDetailedCapture.id"
       (click)="openShareMenu()"
-      mat-icon-button
+      mat-mini-fab
+      class="capture-rebranded-button"
     >
-      <mat-icon>share</mat-icon>
+      <mat-icon svgIcon="capture-rebrand-share"></mat-icon>
     </button>
   </ng-container>
+  <button mat-mini-fab class="capture-rebranded-button">
+    <mat-icon svgIcon="capture-rebrand-support"></mat-icon>
+  </button>
   <button
     *ngIf="(isFromSeriesPage$ | ngrxPush) === false"
-    (click)="openOptionsMenu()"
-    mat-icon-button
+    (click)="openNetworkActions()"
+    mat-mini-fab
+    class="capture-rebranded-button"
     joyrideStep="highlightDetailsPageOptionsMenu"
     [title]="t('userGuide.optionsMenu')"
     [text]="t('userGuide.clickTheOptionsMenuToUseNetworkActions')"
   >
-    <mat-icon>more_vert</mat-icon>
+    <mat-icon svgIcon="capture-rebrand-more-horiz"></mat-icon>
   </button>
 </mat-toolbar>
 
@@ -45,83 +55,7 @@
       "
     >
       <div class="slide">
-        <app-media
-          [src]="detailedCapture.mediaUrl$ | ngrxPush"
-          [mimeType]="detailedCapture.mediaMimeType$ | ngrxPush"
-          [routerLink]="[
-            '/media-viewer',
-            detailedCapture.mediaUrl$ | ngrxPush,
-            { mimeType: detailedCapture.mediaMimeType$ | ngrxPush }
-          ]"
-        ></app-media>
-        <ion-list lines="none">
-          <ion-item>
-            <ion-icon name="person" slot="start"></ion-icon>
-            <ion-label>{{ detailedCapture.creator$ | ngrxPush }}</ion-label>
-          </ion-item>
-          <ion-item (click)="openMap()">
-            <ion-icon name="location" slot="start"></ion-icon>
-            <ion-label>
-              {{ detailedCapture.locationDisplay$ | ngrxPush }}
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="time" slot="start"></ion-icon>
-            <ion-label>
-              {{
-                (detailedCapture.timestamp$ | ngrxPush | date: 'long') ||
-                  ('notDisclosed' | transloco)
-              }}
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-icon src="/assets/images/media-id.svg" slot="start"></ion-icon>
-            <ion-label
-              (click)="openCertificate()"
-              *ngIf="detailedCapture.id; else notRegistered"
-            >
-              {{ detailedCapture.id }}
-            </ion-label>
-            <ng-template #notRegistered>
-              {{ 'notRegistered' | transloco }}
-            </ng-template>
-          </ion-item>
-          <ng-container *ngrxLet="detailedCapture.nftToken$ as nftToken">
-            <ion-item *ngIf="nftToken">
-              <ion-icon src="/assets/images/nft.svg" slot="start"></ion-icon>
-              <ion-label>
-                {{ nftToken.tokenType }}
-                <a href="{{ nftToken.explorerUrl }}">
-                  {{ nftToken.tokenId }}
-                </a>
-              </ion-label>
-            </ion-item>
-          </ng-container>
-          <ng-container *ngIf="captionOn">
-            <ng-container *ngrxLet="detailedCapture.caption$ as caption">
-              <ion-item (click)="editCaption()">
-                <ion-icon name="document-text" slot="start"></ion-icon>
-                <ion-label text-wrap *ngIf="caption; else emptyCaption">
-                  {{ caption }}
-                </ion-label>
-                <ng-template #emptyCaption>
-                  <ion-label>
-                    {{ 'clickToEditCaption' | transloco }}
-                    <ion-icon
-                      name="pencil-outline"
-                      id="caption-edit-icon"
-                    ></ion-icon>
-                  </ion-label>
-                </ng-template>
-              </ion-item>
-            </ng-container>
-          </ng-container>
-        </ion-list>
-        <div class="text-center">
-          <ion-button routerLink="information">
-            {{ 'moreInformation' | transloco }}
-          </ion-button>
-        </div>
+        <iframe [src]="iframeUrlWithToken$ | ngrxPush"></iframe>
       </div>
     </ng-template>
   </swiper>

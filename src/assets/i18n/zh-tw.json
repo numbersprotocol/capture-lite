@@ -185,6 +185,7 @@
     "shareAssetProfile": "分享資產檔案",
     "assetBecomePublicAfterSharing": "該資產將在分享後公開",
     "assetBecomePublicFor24Hours": "其他用戶在接下來的 24 小時將可透過此連結存取影像",
+    "mintNft": "鑄造 NFT",
     "mintNftToken": "鑄造 NFT 代幣",
     "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？",
     "sentSuccessfully": "成功送出",
@@ -265,6 +266,7 @@
     }
   },
   "details": {
+    "collect": "蒐集",
     "error": {
       "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",
       "viewOnCaptureClubIsUnavailable": "暫時無法在 CaptureClub 觀看，請稍後再試。",

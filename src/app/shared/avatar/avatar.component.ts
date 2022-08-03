@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, ReplaySubject } from 'rxjs';
 import { catchError, concatMap, first, shareReplay, tap } from 'rxjs/operators';
@@ -27,6 +27,9 @@ export class AvatarComponent {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
+  @Input()
+  editable = true;
+
   constructor(
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly networkService: NetworkService,
@@ -34,6 +37,7 @@ export class AvatarComponent {
   ) {}
 
   selectAvatar() {
+    if (!this.editable) return;
     return this.avatarInput$
       .pipe(
         first(),
@@ -44,6 +48,7 @@ export class AvatarComponent {
   }
 
   uploadAvatar(event: Event) {
+    if (!this.editable) return;
     return of((event.target as HTMLInputElement | null)?.files?.item(0))
       .pipe(
         isNonNullable(),

@@ -61,6 +61,7 @@ export class AppComponent {
     this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
+    this.registerCaptureRebrandedIcons();
   }
 
   static setDarkMode(forceDarkMode = false) {
@@ -105,5 +106,21 @@ export class AppComponent {
         '/assets/images/media-id-solid-black.svg'
       )
     );
+  }
+
+  private registerCaptureRebrandedIcons() {
+    const captureRebrandedIconNames = [
+      'capture-rebrand-support',
+      'capture-rebrand-arrow-left',
+      'capture-rebrand-share',
+      'capture-rebrand-more-horiz',
+    ];
+
+    for (const iconName of captureRebrandedIconNames) {
+      const iconPath = this.sanitizer.bypassSecurityTrustResourceUrl(
+        `/assets/images/icons/${iconName}.svg`
+      );
+      this.iconRegistry.addSvgIcon(iconName, iconPath);
+    }
   }
 }

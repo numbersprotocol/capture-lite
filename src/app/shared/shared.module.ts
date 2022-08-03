@@ -18,6 +18,7 @@ import { ContactSelectionDialogComponent } from './contact-selection-dialog/cont
 import { FriendInvitationDialogComponent } from './contact-selection-dialog/friend-invitation-dialog/friend-invitation-dialog.component';
 import { ExportPrivateKeyModalComponent } from './export-private-key-modal/export-private-key-modal.component';
 import { MaterialModule } from './material/material.module';
+import { MediaRebrandedComponent } from './media/component/media-rebranded.component';
 import { MediaComponent } from './media/component/media.component';
 import { MigratingDialogComponent } from './migration/migrating-dialog/migrating-dialog.component';
 import { OrderDetailDialogComponent } from './order-detail-dialog/order-detail-dialog.component';
@@ -29,6 +30,7 @@ const declarations = [
   ActionsDialogComponent,
   AvatarComponent,
   MediaComponent,
+  MediaRebrandedComponent,
   StartsWithPipe,
   ContactSelectionDialogComponent,
   FriendInvitationDialogComponent,

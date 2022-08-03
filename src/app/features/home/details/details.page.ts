@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
 import { Clipboard } from '@capacitor/clipboard';
@@ -55,6 +56,7 @@ SwiperCore.use([Virtual]);
 })
 export class DetailsPage {
   captionOn = true;
+  expanded = false;
   private readonly type$ = this.route.paramMap.pipe(
     map(params => params.get('type')),
     isNonNullable()
@@ -178,6 +180,18 @@ export class DetailsPage {
     )
   );
 
+  readonly iframeUrl$ = this.activeDetailedCapture$.pipe(
+    distinctUntilChanged(),
+    map(detailedCapture => {
+      const host = 'https://captureappiframe.bubbleapps.io';
+      const path = 'version-test';
+      const params = `pid=${detailedCapture.id}&iframeLoadedFrom=CaptureApp`;
+      // const params = `pid=288036ab-5768-4270-988b-a85d7bd11eb3&iframeLoadedFrom=CaptureApp`;
+      const url = `${host}/${path}?${params}`;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    })
+  );
+
   readonly activeDetailedCaptureTmpShareToken$ =
     this._activeDetailedCapture$.pipe(
       distinctUntilChanged(),
@@ -187,9 +201,26 @@ export class DetailsPage {
       })
     );
 
+  userToken: string | undefined;
+
+  readonly iframeUrlWithToken$ = combineLatest([
+    this.activeDetailedCapture$,
+  ]).pipe(
+    distinctUntilChanged(),
+    map(([detailedCapture]) => {
+      const token = this.userToken;
+      const host = 'https://captureappiframe.bubbleapps.io';
+      const path = 'version-test/asset_page';
+      const params = `pid=${detailedCapture.id}&token=${token}&iframeLoadedFrom=CaptureApp`;
+      const url = `${host}/${path}?${params}`;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    })
+  );
+
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
   constructor(
+    private readonly sanitizer: DomSanitizer,
     private readonly proofRepository: ProofRepository,
     private readonly mediaStore: MediaStore,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
@@ -214,6 +245,20 @@ export class DetailsPage {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
       .subscribe();
+
+    this.diaBackendAuthService.token$
+      .pipe(
+        distinctUntilChanged(),
+        map(token => (this.userToken = token)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  iframeUrlFor(detailedCapture: any) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://captureappiframe.bubbleapps.io/version-test/asset_page?pid=${detailedCapture.id}`
+    );
   }
 
   async ionViewDidEnter() {
@@ -272,8 +317,13 @@ export class DetailsPage {
 
   openShareMenu() {
     combineLatest([
+      this.activeDetailedCapture$,
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
+      this.activeDetailedCapture$.pipe(
+        switchMap(c => c.postCreationWorkflowCompleted$)
+      ),
       this.translocoService.selectTranslateObject({
+        'message.viewBlockchainCertificate': null,
         'message.copyIpfsAddress': null,
         'message.shareAssetProfile': null,
       }),
@@ -282,11 +332,26 @@ export class DetailsPage {
         first(),
         concatMap(
           ([
+            detailedCapture,
             diaBackendAsset,
-            [messageCopyIpfsAddress, messageShareAssetProfile],
+            postCreationWorkflowCompleted,
+            [
+              messageViewBlockchainCertificate,
+              messageCopyIpfsAddress,
+              messageShareAssetProfile,
+            ],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
+              if (postCreationWorkflowCompleted && detailedCapture.id) {
+                buttons.push({
+                  text: messageViewBlockchainCertificate,
+                  handler: () => {
+                    this.openCertificate();
+                    resolve();
+                  },
+                });
+              }
               if (diaBackendAsset?.cid) {
                 buttons.push({
                   text: messageCopyIpfsAddress,
@@ -319,6 +384,20 @@ export class DetailsPage {
                 .then(sheet => sheet.present());
             })
         ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  openNetworkActions() {
+    this.activeDetailedCapture$
+      .pipe(
+        first(),
+        tap(detailedCapture => {
+          this.router.navigate(['actions', { id: detailedCapture.id }], {
+            relativeTo: this.route,
+          });
+        }),
         untilDestroyed(this)
       )
       .subscribe();
@@ -578,7 +657,7 @@ export class DetailsPage {
       .subscribe();
   }
 
-  private async mintNft() {
+  async mintNft() {
     const result = await this.confirmAlert.present({
       message: this.translocoService.translate('message.mintNftAlert'),
     });
@@ -649,6 +728,18 @@ export class DetailsPage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  togglePanel() {
+    this.expanded = !this.expanded;
+  }
+
+  openPanel() {
+    this.expanded = true;
+  }
+
+  closePanel() {
+    this.expanded = false;
   }
 
   private updateCaption(caption: string) {
