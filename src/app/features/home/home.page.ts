@@ -51,6 +51,8 @@ export class HomePage {
 
   readonly username$ = this.diaBackendAuthService.username$;
 
+  private readonly userGuideIsTemporarelyDisabled = true;
+
   readonly hasNewInbox$ = this.diaBackendTransactionRepository.inbox$.pipe(
     catchError((err: unknown) => this.errorService.toastError$(err)),
     map(transactions => transactions.count !== 0),
@@ -106,6 +108,8 @@ export class HomePage {
 
   private async onboardingRedirect() {
     if (
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      !this.userGuideIsTemporarelyDisabled &&
       this.platform.is('ios') &&
       (await this.onboardingService.hasShownTutorialVersion()) === ''
     ) {

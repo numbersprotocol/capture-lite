@@ -13,6 +13,8 @@ export class UserGuideService {
 
   private readonly showCounter = false;
 
+  private readonly userGuideIsTemporarelyDisabled = true;
+
   constructor(
     private readonly preferenceManager: PreferenceManager,
     private readonly joyrideService: JoyrideService,
@@ -33,6 +35,9 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnHomePage() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (this.userGuideIsTemporarelyDisabled) return;
+
     if (this.platform.is('ios')) return;
 
     if ((await this.hasHighlightedCameraTab()) === false) {
@@ -77,6 +82,9 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnCustomCameraPage() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (this.userGuideIsTemporarelyDisabled) return;
+
     if (this.platform.is('ios')) return;
 
     if ((await this.hasOpenedCustomCameraPage()) === false) {
@@ -94,6 +102,9 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnActivitiesPage() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (this.userGuideIsTemporarelyDisabled) return;
+
     if (this.platform.is('ios')) return;
 
     if ((await this.hasOpenedActivitiesPage()) === false) {
@@ -109,6 +120,9 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnDetailsPage() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (this.userGuideIsTemporarelyDisabled) return;
+
     if (this.platform.is('ios')) return;
 
     if ((await this.hasClickedDetailsPageOptionsMenu()) === false) {
@@ -122,6 +136,9 @@ export class UserGuideService {
   }
 
   async showUserGuidesOnInboxTab() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (this.userGuideIsTemporarelyDisabled) return;
+
     if (this.platform.is('ios')) return;
 
     if ((await this.hasOpenedInboxTab()) === false) {
