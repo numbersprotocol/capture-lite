@@ -21,6 +21,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.62.0] - 2022-08-02
+
+### Added
+
+1. Update rebrand home page. (#1853, #1856)
+
+### Fixed
+
+1. Update the App download URL to https://link.numbersprotocol.io/CaptureApp.
+
+### Security
+
+1. Update dependency security patches: ejs, eventsource, minimist, plist, url-parse
+
 ## [0.60.4] - 2022-07-31
 
 ### Added
@@ -33,14 +47,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Undo app store, play store receipt truncate
 
-## 0.61.2 - 2022-07-20
+## [0.61.2] - 2022-07-20
 
 ### Fixed
 
 - Hide camera flash button for front camera
 - Android flash light on only on capture photo or record video
 
-## 0.61.1 - 2022-07-19
+## [0.61.1] - 2022-07-19
 
 ### Added
 
@@ -72,7 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove capture after discard/confirm
 
-## 0.60.1 - 2022-07-06
+## [0.60.1] - 2022-07-06
 
 ### Fixed
 
@@ -1720,7 +1734,11 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.60.4...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.62.0...HEAD
+[0.62.0]: https://github.com/numbersprotocol/capture-lite/compare/0.61.2...0.62.0
+[0.61.2]: https://github.com/numbersprotocol/capture-lite/compare/0.61.1...0.61.2
+[0.61.1]: https://github.com/numbersprotocol/capture-lite/compare/0.61.0...0.61.1
+[0.61.0]: https://github.com/numbersprotocol/capture-lite/compare/0.60.4...0.61.0
 [0.60.4]: https://github.com/numbersprotocol/capture-lite/compare/0.60.3...0.60.4
 [0.60.3]: https://github.com/numbersprotocol/capture-lite/compare/0.60.2...0.60.3
 [0.60.2]: https://github.com/numbersprotocol/capture-lite/releases/tag/0.60.2
