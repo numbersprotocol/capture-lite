@@ -15,7 +15,7 @@ export class ExploreTabComponent {
   readonly bubbleIframeUrl$ = this.diaBackendAuthService.token$.pipe(
     isNonNullable(),
     map(token => {
-      return `https://captureappiframe.bubbleapps.io/version-test?token=${token}`;
+      return `https://captureappiframe.numbersprotocol.io/?token=${token}`;
     })
   );
 
