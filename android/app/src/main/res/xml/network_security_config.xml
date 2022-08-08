@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="false">localhost</domain>
         <domain includeSubdomains="true">10.5.5.9</domain>
+        <domain includeSubdomains="true">captureappiframe.numbersprotocol.io</domain>
     </domain-config>
 </network-security-config>
