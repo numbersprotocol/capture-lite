@@ -6,6 +6,6 @@
 .bubble-iframe {
   background-color: black;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - var(--ion-safe-area-bottom) - 48px);
   border: 0;
 }
