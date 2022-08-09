@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.63.1] - 2022-08-09
+
+### Fixed
+
+1. Use custom camera on native platforms (#1914)
+1. Adjust iframe height from 100vh to (100vh - bottom safe area - 48px) for showing entire popup list (#1915)
+1. Hide donation button on the asset/prod page (#1916)
+1. Include iframe URL to the trusted domains on Android (#1918)
+1. Fix iOS status bar appearance (#1919)
+1. Update splash screen to rebrand version (#1920)
+1. Set iframe height from 100% to (100vh - top safe area - bottom safe area - 66px) for smooth scrolling (#1921)
+
 ## [0.63.0] - 2022-08-03
 
 ### Added
@@ -1726,8 +1738,9 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.63.0...HEAD
-[0.63.0]: https://github.com/numbersprotocol/capture-lite/compare/0.61.2...0.63.0
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.63.1...HEAD
+[0.63.1]: https://github.com/numbersprotocol/capture-lite/compare/0.63.0...0.63.1
+[0.63.0]: https://github.com/numbersprotocol/capture-lite/compare/0.62.0...0.63.0
 [0.62.0]: https://github.com/numbersprotocol/capture-lite/compare/0.61.2...0.62.0
 [0.61.2]: https://github.com/numbersprotocol/capture-lite/compare/0.61.1...0.61.2
 [0.61.1]: https://github.com/numbersprotocol/capture-lite/compare/0.61.0...0.61.1
