@@ -87,7 +87,7 @@ jobs:
   notification-success:
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]'
-    needs: test
+    needs: [android, ios]
 
     steps:
       - uses: actions/checkout@v2
@@ -101,7 +101,7 @@ jobs:
 
   notification-failure:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [android, ios]
     if: ${{ failure() && github.actor != 'dependabot[bot]'}}
 
     steps:
