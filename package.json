@@ -91,7 +91,7 @@
     "@angular-eslint/schematics": "^12.3.1",
     "@angular-eslint/template-parser": "^12.3.1",
     "@angular/cli": "^12.2.4",
-    "@angular/compiler": "^12.2.4",
+    "@angular/compiler": "^14.1.1",
     "@angular/compiler-cli": "^12.2.4",
     "@angular/language-service": "^12.2.4",
     "@capacitor/cli": "^3.4.1",
