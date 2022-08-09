@@ -30,6 +30,7 @@ mat-toolbar {
   overflow: auto;
 
   iframe {
+    /*  stylelint-disable-next-line declaration-colon-newline-after  */
     height: calc(
       100vh - var(--ion-safe-area-bottom) - var(--ion-safe-area-top) - 66px
     );
