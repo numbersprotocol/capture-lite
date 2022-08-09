@@ -151,6 +151,7 @@ export class HomePage {
   }
 
   private async promptAppUpdateIfAny() {
+    return;
     // Not applicable to Web App
     if (!this.platform.is('hybrid')) return;
 
@@ -259,7 +260,7 @@ export class HomePage {
   }
 
   captureWithCustomCamera() {
-    if (!this.platform.is('android') || !this.platform.is('ios')) {
+    if (!this.platform.is('hybrid')) {
       this.capture();
     } else {
       const captureIndex = this.afterCaptureTabIndex;

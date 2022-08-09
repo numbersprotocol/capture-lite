@@ -6,6 +6,9 @@
 .bubble-iframe {
   background-color: black;
   width: 100vw;
-  height: 100vh;
+  /*  stylelint-disable-next-line declaration-colon-newline-after  */
+  height: calc(
+    100vh - var(--ion-safe-area-bottom) - var(--ion-safe-area-top) - 48px
+  );
   border: 0;
 }

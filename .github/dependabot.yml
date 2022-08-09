@@ -5,4 +5,4 @@ updates:
     schedule:
       interval: 'monthly'
     target-branch: 'develop'
-    open-pull-requests-limit: 100
+    open-pull-requests-limit: 5
