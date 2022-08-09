@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 1. Fix iOS status bar appearance (#1919)
 1. Update splash screen to rebrand version (#1920)
 1. Set iframe height from 100% to (100vh - top safe area - bottom safe area - 66px) for smooth scrolling (#1921)
+1. Remove testing verison URLs (#1924)
 
 ## [0.63.0] - 2022-08-03
 
