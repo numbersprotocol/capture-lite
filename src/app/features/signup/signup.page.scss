@@ -2,14 +2,17 @@
   padding: 0 16px 16px;
 
   .logo {
-    width: 100%;
+    width: 50%;
+    margin: 0 auto;
     display: flex;
     flex: 1;
     height: 35vh;
     justify-content: center;
     align-items: center;
-    background-color: var(--ion-color-primary);
-    mask: url('/assets/images/capture.svg') no-repeat center;
+    background-color: white;
+    /*  stylelint-disable-next-line declaration-colon-newline-after  */
+    mask: url('/assets/images/icons/capture-rebrand-wordmark.svg') no-repeat
+      center;
   }
 
   button {
