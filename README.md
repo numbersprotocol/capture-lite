@@ -18,12 +18,14 @@ Install the dependencies.
 npm i
 ```
 
-Set the system environment variables `NUMBERS_STORAGE_BASE_URL`, `NUMBERS_STORAGE_TRUSTED_CLIENT_KEY`, and `NUMBERS_BUBBLE_DB_URL` before building the app by appending the following string in `~/.profile`:
+Set the system environment variables `NUMBERS_STORAGE_BASE_URL`, `NUMBERS_STORAGE_TRUSTED_CLIENT_KEY`, `NUMBERS_BUBBLE_DB_URL`, `BUBBLE_API_URL` and `APPS_FLYER_DEV_KEY` before building the app by appending the following string in `~/.profile`:
 
 ```txt
 export NUMBERS_STORAGE_BASE_URL="THE PRIVATE BASE URL"
 export NUMBERS_STORAGE_TRUSTED_CLIENT_KEY="THE TRUSTED CLIENT KEY"
 export NUMBERS_BUBBLE_DB_URL="THE BUBBLE DB URL"
+export BUBBLE_API_URL="BUBBLE API URL"
+export APPS_FLYER_DEV_KEY="APPS FLYER DEV KEY
 ```
 
 Preview the app in web browser.
