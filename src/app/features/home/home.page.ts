@@ -151,8 +151,6 @@ export class HomePage {
   }
 
   private async promptAppUpdateIfAny() {
-    return;
-    // Not applicable to Web App
     if (!this.platform.is('hybrid')) return;
 
     const backendAppInfo = await this.diaBackendService.appInfo$().toPromise();
