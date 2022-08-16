@@ -45,7 +45,7 @@ import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/pref
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
-  private readonly initialTabIndex = 2;
+  private readonly initialTabIndex = 0;
   private readonly afterCaptureTabIndex = 2;
   selectedTabIndex = this.initialTabIndex;
 
@@ -151,8 +151,6 @@ export class HomePage {
   }
 
   private async promptAppUpdateIfAny() {
-    return;
-    // Not applicable to Web App
     if (!this.platform.is('hybrid')) return;
 
     const backendAppInfo = await this.diaBackendService.appInfo$().toPromise();

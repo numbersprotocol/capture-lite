@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.63.2] - 2022-08-16
+
+### Fixed
+
+1. Update logo on the sign in/up page (#1944)
+1. Set initial tab from the profile tab to the explorer tab (#1945)
+1. Notify user if there is new version available. Disabled unexpectedly and fixed the regression (#1946)
+
 ## [0.63.1] - 2022-08-09
 
 ### Fixed
@@ -1739,7 +1747,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.63.1...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.63.2...HEAD
+[0.63.2]: https://github.com/numbersprotocol/capture-lite/compare/0.63.1...0.63.2
 [0.63.1]: https://github.com/numbersprotocol/capture-lite/compare/0.63.0...0.63.1
 [0.63.0]: https://github.com/numbersprotocol/capture-lite/compare/0.62.0...0.63.0
 [0.62.0]: https://github.com/numbersprotocol/capture-lite/compare/0.61.2...0.62.0
