@@ -346,6 +346,13 @@ export class HomePage {
       .subscribe();
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  navigateToExploreTab() {
+    if (this.selectedTabIndex === 0) {
+      window.location.reload();
+    }
+  }
+
   async navigateToInboxTab() {
     await this.userGuideService.showUserGuidesOnInboxTab();
     await this.userGuideService.setHasOpenedInboxTab(true);
