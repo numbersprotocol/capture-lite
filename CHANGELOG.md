@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.64.0] - 2022-08-23
+
+[Milestone Sprint 22.08.15](https://github.com/numbersprotocol/capture-lite/milestone/53)
+
+### Added
+
+1. Hide go-back button on the asset pages of the explorer tab (#1957)
+
+### Changed
+
+1. Use qa-release iframe until next stable release (#1958)
+
 ## [0.63.2] - 2022-08-16
 
 ### Fixed
@@ -1747,7 +1759,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.63.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.64.0...HEAD
+[0.64.0]: https://github.com/numbersprotocol/capture-lite/compare/0.63.2...0.64.0
 [0.63.2]: https://github.com/numbersprotocol/capture-lite/compare/0.63.1...0.63.2
 [0.63.1]: https://github.com/numbersprotocol/capture-lite/compare/0.63.0...0.63.1
 [0.63.0]: https://github.com/numbersprotocol/capture-lite/compare/0.62.0...0.63.0
