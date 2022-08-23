@@ -90,13 +90,15 @@
       >
         <mat-tab>
           <ng-template mat-tab-label>
-            <ion-icon
-              src="/assets/images/icons/search.svg"
-              class="tab-action-button-icon"
-              joyrideStep="highlightHomeTab"
-              title="Home Tab"
-              text="View created captures"
-            ></ion-icon>
+            <button mat-icon-button (click)="navigateToExploreTab()">
+              <ion-icon
+                src="/assets/images/icons/search.svg"
+                class="tab-action-button-icon"
+                joyrideStep="highlightHomeTab"
+                title="Home Tab"
+                text="View created captures"
+              ></ion-icon>
+            </button>
           </ng-template>
           <app-explore-tab></app-explore-tab>
         </mat-tab>
