@@ -137,7 +137,7 @@ jobs:
 
   create-github-release:
     runs-on: ubuntu-latest
-    needs: [deploy-play-store, deploy-app-store, build-apks-upload-google-drive]
+    needs: [deploy-play-store, deploy-app-store]
     steps:
       - uses: actions/checkout@v2
 
