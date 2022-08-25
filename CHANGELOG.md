@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.64.1] - 2022-08-25
+
+### Fixed
+
+1. Use qa-release iframe in the details page (#1967)
+2. Add AppsFlyer key in CI scripts (#1966, #1968)
+
 ## [0.64.0] - 2022-08-23
 
 [Milestone Sprint 22.08.15](https://github.com/numbersprotocol/capture-lite/milestone/53)
@@ -1759,7 +1766,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.64.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.64.1...HEAD
+[0.64.1]: https://github.com/numbersprotocol/capture-lite/compare/0.64.0...0.64.1
 [0.64.0]: https://github.com/numbersprotocol/capture-lite/compare/0.63.2...0.64.0
 [0.63.2]: https://github.com/numbersprotocol/capture-lite/compare/0.63.1...0.63.2
 [0.63.1]: https://github.com/numbersprotocol/capture-lite/compare/0.63.0...0.63.1
