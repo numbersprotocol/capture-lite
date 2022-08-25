@@ -210,7 +210,7 @@ export class DetailsPage {
     map(([detailedCapture]) => {
       const token = this.userToken;
       const host = 'https://captureappiframe.bubbleapps.io';
-      const path = 'asset_page';
+      const path = 'version-qa-release/asset_page';
       const params = `pid=${detailedCapture.id}&token=${token}&iframeLoadedFrom=CaptureApp`;
       const url = `${host}/${path}?${params}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
