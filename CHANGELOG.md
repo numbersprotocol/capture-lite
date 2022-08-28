@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.64.3] - 2022-08-29
+
+### Changed
+
+1. Update asset_page URL params (#1989)
+2. Make iframe URL configurable (#1979)
+
+### Fixed
+
+1. Put user email at center in the capture tab (#1969)
+
 ## [0.64.2] - 2022-08-25
 
 ### Fixed
@@ -1772,7 +1783,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.64.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.64.3...HEAD
+[0.64.3]: https://github.com/numbersprotocol/capture-lite/compare/0.64.2...0.64.3
 [0.64.2]: https://github.com/numbersprotocol/capture-lite/compare/0.64.1...0.64.2
 [0.64.1]: https://github.com/numbersprotocol/capture-lite/compare/0.64.0...0.64.1
 [0.64.0]: https://github.com/numbersprotocol/capture-lite/compare/0.63.2...0.64.0

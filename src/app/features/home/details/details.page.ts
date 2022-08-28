@@ -29,6 +29,7 @@ import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.servic
 import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { BUBBLE_IFRAME_URL } from '../../../shared/dia-backend/secret';
 import { DiaBackendWorkflowService } from '../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { MediaStore } from '../../../shared/media/media-store/media-store.service';
@@ -183,11 +184,8 @@ export class DetailsPage {
   readonly iframeUrl$ = this.activeDetailedCapture$.pipe(
     distinctUntilChanged(),
     map(detailedCapture => {
-      const host = 'https://captureappiframe.bubbleapps.io';
-      const path = '';
-      const params = `pid=${detailedCapture.id}&iframeLoadedFrom=CaptureApp`;
-      // const params = `pid=288036ab-5768-4270-988b-a85d7bd11eb3&iframeLoadedFrom=CaptureApp`;
-      const url = `${host}/${path}?${params}`;
+      const params = `nid=${detailedCapture.id}&from=mycapture`;
+      const url = `${BUBBLE_IFRAME_URL}/?${params}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     })
   );
@@ -209,10 +207,8 @@ export class DetailsPage {
     distinctUntilChanged(),
     map(([detailedCapture]) => {
       const token = this.userToken;
-      const host = 'https://captureappiframe.bubbleapps.io';
-      const path = 'version-qa-release/asset_page';
-      const params = `pid=${detailedCapture.id}&token=${token}&iframeLoadedFrom=CaptureApp`;
-      const url = `${host}/${path}?${params}`;
+      const params = `nid=${detailedCapture.id}&token=${token}&from=mycapture`;
+      const url = `${BUBBLE_IFRAME_URL}/asset_page?${params}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     })
   );
@@ -257,7 +253,7 @@ export class DetailsPage {
 
   iframeUrlFor(detailedCapture: any) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
-      `https://captureappiframe.bubbleapps.io/asset_page?pid=${detailedCapture.id}`
+      `${BUBBLE_IFRAME_URL}/asset_page?nid=${detailedCapture.id}`
     );
   }
 

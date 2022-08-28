@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { map } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
 import { ErrorService } from '../../../../shared/error/error.service';
 import { NetworkService } from '../../../../shared/network/network.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
@@ -15,7 +16,7 @@ export class ExploreTabComponent {
   readonly bubbleIframeUrl$ = this.diaBackendAuthService.token$.pipe(
     isNonNullable(),
     map(token => {
-      return `https://captureappiframe.numbersprotocol.io/version-qa-release/?token=${token}`;
+      return `${BUBBLE_IFRAME_URL}/?token=${token}`;
     })
   );
 
