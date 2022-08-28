@@ -184,7 +184,7 @@ export class DetailsPage {
   readonly iframeUrl$ = this.activeDetailedCapture$.pipe(
     distinctUntilChanged(),
     map(detailedCapture => {
-      const params = `pid=${detailedCapture.id}&iframeLoadedFrom=CaptureApp`;
+      const params = `nid=${detailedCapture.id}&from=mycapture`;
       const url = `${BUBBLE_IFRAME_URL}/?${params}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     })
@@ -207,7 +207,7 @@ export class DetailsPage {
     distinctUntilChanged(),
     map(([detailedCapture]) => {
       const token = this.userToken;
-      const params = `pid=${detailedCapture.id}&token=${token}&iframeLoadedFrom=CaptureApp`;
+      const params = `nid=${detailedCapture.id}&token=${token}&from=mycapture`;
       const url = `${BUBBLE_IFRAME_URL}/asset_page?${params}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     })
@@ -253,7 +253,7 @@ export class DetailsPage {
 
   iframeUrlFor(detailedCapture: any) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
-      `${BUBBLE_IFRAME_URL}/asset_page?pid=${detailedCapture.id}`
+      `${BUBBLE_IFRAME_URL}/asset_page?nid=${detailedCapture.id}`
     );
   }
 
