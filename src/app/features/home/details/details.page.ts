@@ -41,7 +41,7 @@ import {
   switchTap,
   VOID$,
 } from '../../../utils/rx-operators/rx-operators';
-import { getAssetProfileUrl } from '../../../utils/url';
+import { getAssetProfieForNFTSE } from '../../../utils/url';
 import {
   DetailedCapture,
   InformationSessionService,
@@ -566,7 +566,7 @@ export class DetailsPage {
         concatMap(([detailedCapture, tmpShareToken]) =>
           defer(() =>
             Browser.open({
-              url: getAssetProfileUrl(
+              url: getAssetProfieForNFTSE(
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 detailedCapture.id!,
                 tmpShareToken

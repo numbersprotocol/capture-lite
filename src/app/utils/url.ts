@@ -12,6 +12,13 @@ export function getAssetProfileUrl(id: string, token?: string) {
   return `https://authmedia.net/asset-profile?cid=${id}`;
 }
 
+export function getAssetProfieForNFTSE(id: string, token?: string) {
+  if (token) {
+    return `https://nftsearch.site/asset-profile?cid=${id}&token=${token}`;
+  }
+  return `https://nftsearch.site/asset-profile?cid=${id}`;
+}
+
 export function getAppDownloadLink(isPlatform: (platformName: any) => boolean) {
   if (isPlatform('ios'))
     return 'https://apps.apple.com/en/app/capture-app/id1536388009';
