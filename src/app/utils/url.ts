@@ -14,7 +14,7 @@ export function getAssetProfileUrl(id: string, token?: string) {
 
 export function getAssetProfieForNFTSE(id: string, token?: string) {
   if (token) {
-    return `https://nftsearch.site/asset-profile?cid=${id}&token=${token}`;
+    return `https://nftsearch.site/asset-profile?cid=${id}&tmp_token=${token}`;
   }
   return `https://nftsearch.site/asset-profile?cid=${id}`;
 }
