@@ -4,7 +4,7 @@
   *transloco="let t"
 >
   <ng-container *ngIf="(mode$ | ngrxPush) === 'capture'">
-    <div id="camera-flash-placeholder"></div>
+    <div id="camera-flash-placeholder" (click)="focus($event)"></div>
 
     <mat-icon
       *ngIf="isFlashAvailable"
