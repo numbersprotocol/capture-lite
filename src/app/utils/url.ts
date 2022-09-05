@@ -12,7 +12,7 @@ export function getAssetProfileUrl(id: string, token?: string) {
   return `https://authmedia.net/asset-profile?cid=${id}`;
 }
 
-export function getAssetProfieForNSE(id: string, token?: string) {
+export function getAssetProfileForNSE(id: string, token?: string) {
   if (token) {
     return `https://nftsearch.site/asset-profile?cid=${id}&tmp_token=${token}`;
   }
