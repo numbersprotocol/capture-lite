@@ -187,6 +187,11 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.isFlashOn = (await this.customCameraService.isTorchOn()).result;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  async focus(event: PointerEvent | MouseEvent) {
+    await this.customCameraService.focus(event.x, event.y);
+  }
+
   async leaveCustomCamera() {
     return this.location.back();
   }
