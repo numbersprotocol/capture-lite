@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -19,7 +19,7 @@ import { EMAIL_REGEXP } from '../../utils/validation';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage {
-  form = new FormGroup({});
+  form = new UntypedFormGroup({});
 
   model: SignupFormModel = {
     email: '',
@@ -78,7 +78,7 @@ export class SignupPage {
       {
         validators: {
           fieldMatch: {
-            expression: (control: FormGroup) => {
+            expression: (control: UntypedFormGroup) => {
               const { password, confirmPassword } = control.value;
               return (
                 confirmPassword === password ||
@@ -93,7 +93,7 @@ export class SignupPage {
             errorPath: 'confirmPassword',
           },
           referralCodeValidator: {
-            expression: (control: FormGroup) => {
+            expression: (control: UntypedFormGroup) => {
               const alphanumeric = /^[A-Z0-9]{6}$/g;
               const { referralCodeOptional } = control.value;
 

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
@@ -31,11 +31,11 @@ import {
   styleUrls: ['./phone-verification.page.scss'],
 })
 export class PhoneVerificationPage {
-  phoneNumberForm = new FormGroup({});
+  phoneNumberForm = new UntypedFormGroup({});
   phoneNumberModel: phoneNumberFormModel = { phoneNumber: '' };
   phoneNumberFields: FormlyFieldConfig[] = [];
 
-  verificationCodeForm = new FormGroup({});
+  verificationCodeForm = new UntypedFormGroup({});
   verificationCodeModel: verificationCodeModel = { verificationCode: '' };
   verificationCodeFields: FormlyFieldConfig[] = [];
 
