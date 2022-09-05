@@ -62,8 +62,7 @@ app-avatar {
 }
 
 .capture-container {
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 16px;
 }
 
 app-capture-item {
@@ -84,7 +83,7 @@ app-capture-item {
       object-fit: cover;
       object-position: center;
       overflow: hidden;
-      border-radius: 4px;
+      border-radius: 16px;
     }
 
     ion-icon {

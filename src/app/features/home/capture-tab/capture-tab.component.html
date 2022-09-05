@@ -27,42 +27,28 @@
 
   <div *ngSwitchCase="'captured'">
     <div class="capture-container" *transloco="let t">
-      <ng-container
-        *ngFor="
-          let group of capturesByDate$
-            | ngrxPush
-            | keyvalue: keyDescendingOrder;
-          first as isFirstGroup;
-          trackBy: trackCaptureGroupByDate
-        "
-      >
-        <div class="mat-title">{{ group.key | date: 'longDate' }}</div>
-        <mat-grid-list cols="2" gutterSize="8px">
-          <mat-grid-tile
-            *ngFor="
-              let proof of group.value;
-              first as isFirstProof;
-              trackBy: trackCaptureItem
-            "
-            class="capture-item"
-            [joyrideStep]="
-              isFirstGroup && isFirstProof
-                ? 'highlightFirstCapture'
-                : 'notFirst'
-            "
-            [title]="t('userGuide.capturedItem')"
-            [text]="t('userGuide.openToSeeDetailsAndMoreActionItems')"
-          >
-            <app-capture-item [proof]="proof"></app-capture-item>
-          </mat-grid-tile>
-        </mat-grid-list>
-      </ng-container>
+      <mat-grid-list cols="2" gutterSize="16px">
+        <mat-grid-tile
+          *ngFor="
+            let proof of captures$ | ngrxPush;
+            first as isFirstProof;
+            trackBy: trackCaptureItem
+          "
+          class="capture-item"
+          [joyrideStep]="isFirstProof ? 'highlightFirstCapture' : 'notFirst'"
+          [title]="t('userGuide.capturedItem')"
+          [text]="t('userGuide.openToSeeDetailsAndMoreActionItems')"
+        >
+          <app-capture-item [proof]="proof"></app-capture-item>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
   </div>
 
   <div class="post-captures" *ngSwitchCase="'collected'">
-    <mat-grid-list cols="2" gutterSize="8px">
+    <mat-grid-list cols="2" gutterSize="16px">
       <mat-grid-tile
+        class="capture-item"
         *ngFor="
           let postCapture of postCaptures$ | ngrxPush;
           trackBy: trackPostCapture
