@@ -37,7 +37,7 @@
         "
       >
         <div class="mat-title">{{ group.key | date: 'longDate' }}</div>
-        <mat-grid-list cols="3" gutterSize="8px">
+        <mat-grid-list cols="2" gutterSize="8px">
           <mat-grid-tile
             *ngFor="
               let proof of group.value;
@@ -61,7 +61,7 @@
   </div>
 
   <div class="post-captures" *ngSwitchCase="'collected'">
-    <mat-grid-list cols="3" gutterSize="8px">
+    <mat-grid-list cols="2" gutterSize="8px">
       <mat-grid-tile
         *ngFor="
           let postCapture of postCaptures$ | ngrxPush;
