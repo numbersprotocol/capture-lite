@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
@@ -29,7 +29,7 @@ import { EMAIL_REGEXP } from '../../utils/validation';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-  readonly form = new FormGroup({});
+  readonly form = new UntypedFormGroup({});
 
   readonly model: LoginFormModel = { email: '', password: '' };
 

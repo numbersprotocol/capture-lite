@@ -16,7 +16,7 @@
       <div class="vertical-pacing-12"></div>
       <ngx-qrcode
         [elementType]="elementType"
-        [value]="assetWalletAddr$ | ngrxPush"
+        [value]="(assetWalletAddr$ | ngrxPush)!"
         cssClass="qr-code"
         [margin]="0"
         [width]="150"
