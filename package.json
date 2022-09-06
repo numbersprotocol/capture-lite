@@ -13,7 +13,7 @@
     "build.ios": "npm run build && cap sync ios",
     "test": "npm run preconfig && ng test",
     "test.ci": "npm run preconfig && ng test --no-watch --no-progress --source-map=false --browsers=ChromeHeadlessCI",
-    "lint": "npm run preconfig && prettier --check . && stylelint \"**/*.{css,scss,sass}\" && ng lint",
+    "lint": "npm run preconfig && prettier --check . && stylelint \"**/*.{css,scss,sass}\" && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng lint",
     "e2e": "npm run preconfig && ng e2e",
     "prepare": "husky install"
   },
