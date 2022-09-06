@@ -213,6 +213,22 @@ export class DetailsPage {
     })
   );
 
+  readonly iframeUrlWithJWTToken$ = combineLatest([
+    this.activeDetailedCapture$,
+    defer(() => this.diaBackendAuthService.queryJWTToken$()),
+  ]).pipe(
+    distinctUntilChanged(),
+    map(([detailedCapture, token]) => {
+      const params =
+        `nid=${detailedCapture.id}` +
+        `&token=${token.access}` +
+        `&refresh_token=${token.refresh}` +
+        `&from=mycapture`;
+      const url = `${BUBBLE_IFRAME_URL}/asset_page?${params}`;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    })
+  );
+
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
   constructor(
