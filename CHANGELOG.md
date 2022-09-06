@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.65.0] - 2022-09-06
+
+[Milestone Sprint 22.08.29](https://github.com/numbersprotocol/capture-lite/milestone/54)
+
+### Added
+
+1. Replace Authmedia by NSE (#2000)
+2. Support tapping to focus in camera (#2001)
+
+### Changed
+
+1. Make iframe URL configurable (#1979)
+2. Update asset_page URL params (#1989)
+3. Update grid layout in profile tab (#2022)
+4. Preserve tab state (#2027, #2034)
+5. Use new JWT in iframe (#2037)
+
+### Fixed
+
+1. Centerize user email on profile (#1969)
+
 ## [0.64.3] - 2022-08-29
 
 ### Changed
@@ -1783,7 +1804,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.64.3...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.65.0...HEAD
+[0.65.0]: https://github.com/numbersprotocol/capture-lite/compare/0.64.3...0.65.0
 [0.64.3]: https://github.com/numbersprotocol/capture-lite/compare/0.64.2...0.64.3
 [0.64.2]: https://github.com/numbersprotocol/capture-lite/compare/0.64.1...0.64.2
 [0.64.1]: https://github.com/numbersprotocol/capture-lite/compare/0.64.0...0.64.1
