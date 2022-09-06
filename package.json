@@ -51,7 +51,7 @@
     "@capacitor/storage": "^1.2.4",
     "@ionic/angular": "^6.2.5",
     "@ionic/core": "^6.2.5",
-    "@ionic/pwa-elements": "^3.0.2",
+    "@ionic/pwa-elements": "^3.1.1",
     "@ngneat/transloco": "^2.22.0",
     "@ngneat/until-destroy": "^8.1.0",
     "@ngrx/component": "^14.3.0",
