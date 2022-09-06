@@ -55,7 +55,9 @@
       "
     >
       <div class="slide">
-        <iframe [src]="iframeUrlWithJWTToken$ | ngrxPush"></iframe>
+        <div *ngIf="iframeUrlWithJWTToken$ | ngrxPush as iframeUrlWithJWTToken">
+          <iframe [src]="iframeUrlWithJWTToken"></iframe>
+        </div>
       </div>
     </ng-template>
   </swiper>
