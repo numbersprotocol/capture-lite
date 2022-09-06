@@ -43,6 +43,10 @@ export class CaptureTabComponent {
     )
   );
 
+  readonly captures$ = this.proofs$.pipe(
+    map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp))
+  );
+
   readonly networkConnected$ = this.networkService.connected$;
 
   readonly postCaptures$ = this.networkConnected$.pipe(

@@ -41,7 +41,7 @@ import {
   switchTap,
   VOID$,
 } from '../../../utils/rx-operators/rx-operators';
-import { getAssetProfileUrl } from '../../../utils/url';
+import { getAssetProfileForNSE } from '../../../utils/url';
 import {
   DetailedCapture,
   InformationSessionService,
@@ -208,6 +208,22 @@ export class DetailsPage {
     map(([detailedCapture]) => {
       const token = this.userToken;
       const params = `nid=${detailedCapture.id}&token=${token}&from=mycapture`;
+      const url = `${BUBBLE_IFRAME_URL}/asset_page?${params}`;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    })
+  );
+
+  readonly iframeUrlWithJWTToken$ = combineLatest([
+    this.activeDetailedCapture$,
+    defer(() => this.diaBackendAuthService.queryJWTToken$()),
+  ]).pipe(
+    distinctUntilChanged(),
+    map(([detailedCapture, token]) => {
+      const params =
+        `nid=${detailedCapture.id}` +
+        `&token=${token.access}` +
+        `&refresh_token=${token.refresh}` +
+        `&from=mycapture`;
       const url = `${BUBBLE_IFRAME_URL}/asset_page?${params}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     })
@@ -566,7 +582,7 @@ export class DetailsPage {
         concatMap(([detailedCapture, tmpShareToken]) =>
           defer(() =>
             Browser.open({
-              url: getAssetProfileUrl(
+              url: getAssetProfileForNSE(
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 detailedCapture.id!,
                 tmpShareToken

@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { Action, Param } from '../service/actions.service';
@@ -10,7 +10,7 @@ import { Action, Param } from '../service/actions.service';
   styleUrls: ['./actions-dialog.component.scss'],
 })
 export class ActionsDialogComponent {
-  readonly form = new FormGroup({});
+  readonly form = new UntypedFormGroup({});
   readonly fields: FormlyFieldConfig[] = [];
   readonly model: any = {};
 

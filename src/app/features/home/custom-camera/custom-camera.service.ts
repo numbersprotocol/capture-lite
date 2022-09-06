@@ -115,6 +115,13 @@ export class CustomCameraService {
     return Promise.resolve();
   }
 
+  async focus(x: number, y: number) {
+    if (this.isNativePlatform) {
+      return await PreviewCamera.focus({ x, y });
+    }
+    return Promise.resolve();
+  }
+
   async isTorchAvailable(): Promise<boolean> {
     if (this.isNativePlatform) {
       return (await PreviewCamera.isTorchAvailable()).result;
