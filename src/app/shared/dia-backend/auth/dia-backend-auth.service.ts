@@ -128,6 +128,18 @@ export class DiaBackendAuthService {
       );
   }
 
+  queryJWTToken$() {
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers => {
+        return this.httpClient.post<QueryJWTTokenResponse>(
+          `${BASE_URL}/api/v3/auth/qjwt/`,
+          {},
+          { headers }
+        );
+      })
+    );
+  }
+
   private readUser$() {
     return defer(() => this.getAuthHeaders()).pipe(
       concatMap(headers =>
@@ -411,6 +423,11 @@ interface LoginResult {
 
 export interface LoginResponse {
   readonly auth_token: string;
+}
+
+export interface QueryJWTTokenResponse {
+  readonly access: string;
+  readonly refresh: string;
 }
 
 export interface ReadUserResponse {
