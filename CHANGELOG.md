@@ -1810,25 +1810,20 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-<<<<<<< HEAD
 [unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.65.0...HEAD
-[0.65.0]: https://github.com/numbersprotocol/capture-lite/compare/0.64.3...0.65.0
-=======
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.64.4...HEAD
+[0.65.0]: https://github.com/numbersprotocol/capture-lite/compare/0.64.4...0.65.0
 [0.64.4]: https://github.com/numbersprotocol/capture-lite/compare/0.64.3...0.64.4
-
-> > > > > > > develop
-> > > > > > > [0.64.3]: https://github.com/numbersprotocol/capture-lite/compare/0.64.2...0.64.3
-> > > > > > > [0.64.2]: https://github.com/numbersprotocol/capture-lite/compare/0.64.1...0.64.2
-> > > > > > > [0.64.1]: https://github.com/numbersprotocol/capture-lite/compare/0.64.0...0.64.1
-> > > > > > > [0.64.0]: https://github.com/numbersprotocol/capture-lite/compare/0.63.2...0.64.0
-> > > > > > > [0.63.2]: https://github.com/numbersprotocol/capture-lite/compare/0.63.1...0.63.2
-> > > > > > > [0.63.1]: https://github.com/numbersprotocol/capture-lite/compare/0.63.0...0.63.1
-> > > > > > > [0.63.0]: https://github.com/numbersprotocol/capture-lite/compare/0.62.0...0.63.0
-> > > > > > > [0.62.0]: https://github.com/numbersprotocol/capture-lite/compare/0.61.2...0.62.0
-> > > > > > > [0.61.2]: https://github.com/numbersprotocol/capture-lite/compare/0.61.1...0.61.2
-> > > > > > > [0.61.1]: https://github.com/numbersprotocol/capture-lite/compare/0.61.0...0.61.1
-> > > > > > > [0.61.0]: https://github.com/numbersprotocol/capture-lite/compare/0.60.4...0.61.0
-> > > > > > > [0.60.4]: https://github.com/numbersprotocol/capture-lite/compare/0.60.3...0.60.4
-> > > > > > > [0.60.3]: https://github.com/numbersprotocol/capture-lite/compare/0.60.2...0.60.3
-> > > > > > > [0.60.2]: https://github.com/numbersprotocol/capture-lite/releases/tag/0.60.2
+[0.64.3]: https://github.com/numbersprotocol/capture-lite/compare/0.64.2...0.64.3
+[0.64.2]: https://github.com/numbersprotocol/capture-lite/compare/0.64.1...0.64.2
+[0.64.1]: https://github.com/numbersprotocol/capture-lite/compare/0.64.0...0.64.1
+[0.64.0]: https://github.com/numbersprotocol/capture-lite/compare/0.63.2...0.64.0
+[0.63.2]: https://github.com/numbersprotocol/capture-lite/compare/0.63.1...0.63.2
+[0.63.1]: https://github.com/numbersprotocol/capture-lite/compare/0.63.0...0.63.1
+[0.63.0]: https://github.com/numbersprotocol/capture-lite/compare/0.62.0...0.63.0
+[0.62.0]: https://github.com/numbersprotocol/capture-lite/compare/0.61.2...0.62.0
+[0.61.2]: https://github.com/numbersprotocol/capture-lite/compare/0.61.1...0.61.2
+[0.61.1]: https://github.com/numbersprotocol/capture-lite/compare/0.61.0...0.61.1
+[0.61.0]: https://github.com/numbersprotocol/capture-lite/compare/0.60.4...0.61.0
+[0.60.4]: https://github.com/numbersprotocol/capture-lite/compare/0.60.3...0.60.4
+[0.60.3]: https://github.com/numbersprotocol/capture-lite/compare/0.60.2...0.60.3
+[0.60.2]: https://github.com/numbersprotocol/capture-lite/releases/tag/0.60.2
