@@ -50,14 +50,24 @@ mat-icon.temporarily-hidden {
 
 .camera-buttons-container {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+  flex-direction: column;
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   padding: 16px 8px;
+
+  .zoom-slider {
+    margin: 0 auto;
+    width: 80vw;
+  }
+
+  .main-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
 }
 
 #camera-flash-placeholder {
