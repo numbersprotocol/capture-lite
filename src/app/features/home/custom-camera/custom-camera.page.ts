@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -44,6 +44,14 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   isFlashOn = false;
   isFlashAvailable = false;
 
+  minZoomFactor = 0;
+  maxZoomFactor = 0;
+  curZoomFactor = 0;
+
+  get canZoomInOut() {
+    return this.minZoomFactor < this.maxZoomFactor;
+  }
+
   readonly lastConnectedGoProDevice$ =
     this.goProBluetoothService.lastConnectedDevice$;
 
@@ -53,7 +61,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly customCameraService: CustomCameraService,
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly errorService: ErrorService,
-    private readonly userGuideService: UserGuideService
+    private readonly userGuideService: UserGuideService,
+    private readonly ref: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -131,6 +140,13 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   async syncCameraState() {
     this.isFlashOn = (await this.isTorchOn()).result;
     this.isFlashAvailable = await this.customCameraService.isTorchAvailable();
+
+    if (this.isFlashAvailable) {
+      this.minZoomFactor = await this.customCameraService.minZoomFactor();
+      this.maxZoomFactor = await this.customCameraService.maxZoomFactor();
+      this.customCameraService.zoom(0);
+      console.log(`maxZoomFactor: ${this.maxZoomFactor}`);
+    }
   }
 
   onPress() {
@@ -190,6 +206,16 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   // eslint-disable-next-line class-methods-use-this
   async focus(event: PointerEvent | MouseEvent) {
     await this.customCameraService.focus(event.x, event.y);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  zoomFactorChange(event: any) {
+    this.customCameraService.zoom(event.detail.value);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  zoomFactorChanging(value: any) {
+    console.log(value);
   }
 
   async leaveCustomCamera() {

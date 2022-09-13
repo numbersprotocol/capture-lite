@@ -122,6 +122,29 @@ export class CustomCameraService {
     return Promise.resolve();
   }
 
+  async minZoomFactor(): Promise<number> {
+    const defaultMinAvailableZoom = 0;
+    if (this.isNativePlatform) {
+      return (await PreviewCamera.minAvailableZoom()).result;
+    }
+    return defaultMinAvailableZoom;
+  }
+
+  async maxZoomFactor(): Promise<number> {
+    const defaultMaxAvailableZoom = 0;
+    if (this.isNativePlatform) {
+      return (await PreviewCamera.maxAvailableZoom()).result;
+    }
+    return Promise.resolve(defaultMaxAvailableZoom);
+  }
+
+  async zoom(zoomFactor: any) {
+    if (this.isNativePlatform) {
+      return await PreviewCamera.zoom({ factor: zoomFactor });
+    }
+    return Promise.resolve();
+  }
+
   async isTorchAvailable(): Promise<boolean> {
     if (this.isNativePlatform) {
       return (await PreviewCamera.isTorchAvailable()).result;
