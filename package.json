@@ -30,7 +30,7 @@
     "@angular/router": "^14.2.0",
     "@awesome-cordova-plugins/in-app-purchase-2": "^5.43.0",
     "@capacitor-community/advertising-id": "^1.0.0",
-    "@capacitor-community/bluetooth-le": "^1.7.0",
+    "@capacitor-community/bluetooth-le": "^1.8.3",
     "@capacitor-community/http": "github:numbersprotocol/http#fix-catch-disabled-Local-Network-case-on-iOS",
     "@capacitor-community/wifi": "github:numbersprotocol/community-capacitor-wifi#capacitor3",
     "@capacitor/android": "https://gitpkg.now.sh/numbersprotocol/capacitor/android?release-3.4.1-range-request-fix",
