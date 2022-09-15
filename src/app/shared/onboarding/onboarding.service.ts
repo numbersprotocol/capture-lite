@@ -67,6 +67,35 @@ export class OnboardingService {
     ]);
   }
 
+  async shouldShowOnboardingTutotrial() {
+    const shownTutorialVersion = await this.hasShownTutorialVersion();
+    if (
+      shownTutorialVersion === '' ||
+      this.isLowerThanRebrandVersion(shownTutorialVersion)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private isLowerThanRebrandVersion(shownTutorialVersion: string): boolean {
+    const rebrandVersion = '0.65.1';
+    const rebrandVersionArray = rebrandVersion.split('.');
+    const shownTutorialVersionArray = shownTutorialVersion.split('.');
+
+    for (const index in shownTutorialVersionArray) {
+      const shownNumber = shownTutorialVersionArray[index];
+      const rebrandNumber = rebrandVersionArray[index];
+      if (shownNumber < rebrandNumber) {
+        return true;
+      } else if (shownNumber > rebrandNumber) {
+        return false;
+      }
+    }
+    return false;
+  }
+
   /**
    * @deprecated use `onboard` instead
    */
