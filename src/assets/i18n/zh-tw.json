@@ -382,21 +382,21 @@
   "onboarding": {
     "slide1": {
       "title": "發現",
-      "subtitle": "發現您的朋友出售或分享的最新 NFT。"
+      "subtitle": "好友出售/分享的 NFT"
     },
     "slide2": {
-      "title": "創造",
-      "subtitle": "通過簡單的步驟創建您自己的 NFT。"
+      "title": "建立",
+      "subtitle": "通過簡單的步驟建立您的 NFT"
     },
     "slide3": {
       "title": "蒐集",
-      "subtitle": "收集具有唯一 Web3 註冊的唯一 NFT。"
+      "subtitle": "蒐集具有 Web3 註冊、獨一無二的NFT"
     },
     "slide4": {
-      "title": "自己的",
-      "subtitle": "擁有自己的資產並創建去中心化證明。"
+      "title": "擁有",
+      "subtitle": "擁有自己的資產並建立去中心化證明"
     },
     "skip": "跳過",
-    "exploreCapture": "探索 Capture"
+    "exploreCapture": "開始體驗 Capture"
   }
 }
