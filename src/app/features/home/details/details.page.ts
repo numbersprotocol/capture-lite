@@ -335,7 +335,7 @@ export class DetailsPage {
         switchMap(c => c.postCreationWorkflowCompleted$)
       ),
       this.translocoService.selectTranslateObject({
-        'message.viewBlockchainCertificate': null,
+        'message.viewBlockchainProfile': null,
         'message.copyIpfsAddress': null,
         'message.shareAssetProfile': null,
       }),
@@ -348,7 +348,7 @@ export class DetailsPage {
             diaBackendAsset,
             postCreationWorkflowCompleted,
             [
-              messageViewBlockchainCertificate,
+              messageViewBlockchainProfile,
               messageCopyIpfsAddress,
               messageShareAssetProfile,
             ],
@@ -357,7 +357,7 @@ export class DetailsPage {
               const buttons: ActionSheetButton[] = [];
               if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
-                  text: messageViewBlockchainCertificate,
+                  text: messageViewBlockchainProfile,
                   handler: () => {
                     this.openCertificate();
                     resolve();
@@ -428,7 +428,7 @@ export class DetailsPage {
         'message.viewOnCaptureClub': null,
         'message.deregisterFromNetwork': null,
         'message.mintNftToken': null,
-        'message.viewBlockchainCertificate': null,
+        'message.viewBlockchainProfile': null,
         'message.viewSupportingVideoOnIpfs': null,
         networkActions: null,
       }),
@@ -445,7 +445,7 @@ export class DetailsPage {
               messageViewOnCaptureClub,
               messageDeregisterFromNetwork,
               messageMintNftToken,
-              messageViewBlockchainCertificate,
+              messageViewBlockchainProfile,
               messageViewSupportingVideoOnIpfs,
               messageNetworkActions,
             ],
@@ -500,7 +500,7 @@ export class DetailsPage {
               }
               if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
-                  text: messageViewBlockchainCertificate,
+                  text: messageViewBlockchainProfile,
                   handler: () => {
                     this.openCertificate();
                     resolve();

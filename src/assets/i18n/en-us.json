@@ -172,7 +172,7 @@
     "transferOwnership": "Transfer ownership",
     "deregisterFromNetwork": "Deregister from network",
     "viewOnCaptureClub": "View on CaptureClub",
-    "viewBlockchainCertificate": "View blockchain certificate",
+    "viewBlockchainProfile": "View blockchain profile",
     "confirmDelete": "Your local data will be wiped out after deletion. Please double-check that you have created a backup and understand the risk.",
     "confirmLogout": "Your local data will be wipe out after logout. You can restore your Captures after login again.",
     "resetPasswordEnterEmail": "To reset the password, you have to enter your registered email.",
@@ -273,7 +273,7 @@
       "viewSupportingVideoOnIpfsIsUnavailable": "View supporting video on IPFS action is unavailable. Please try again later.",
       "deregisterFromNetworkIsUnavailable": "Deregister from network action is unavailable. Please try again later.",
       "mintNftTokenIsUnavailable": "Mint NFT token action is unavailable. Please try again later.",
-      "viewBlockchainCertificateIsUnavailable": "View blockchain certificate action is unavailable. Please try again later.",
+      "viewBlockchainProfileIsUnavailable": "View blockchain profile action is unavailable. Please try again later.",
       "networkActionsAreUnavailable": "Network Actions are unavailable. Please try again later."
     }
   },
@@ -378,5 +378,25 @@
   "inAppPurchase": {
     "failedToInitInAppStore": "An error occurred during the initialization of the In-App Store. Please check your Internet connection quality.",
     "inAppPurchaseErrorOcurred": "In-App Purchase error occurred. Please try again later."
+  },
+  "onboarding": {
+    "slide1": {
+      "title": "Discover",
+      "subtitle": "Discover the latest NFTs sold or shared by your friends."
+    },
+    "slide2": {
+      "title": "Create",
+      "subtitle": "Create your own NFTs in simple steps."
+    },
+    "slide3": {
+      "title": "Collect",
+      "subtitle": "Collect the unique NFTs with unique Web3 registration."
+    },
+    "slide4": {
+      "title": "Own",
+      "subtitle": "Own your own asset and create decentralized proof."
+    },
+    "skip": "Skip",
+    "exploreCapture": "Explore Capture"
   }
 }

@@ -1,43 +1,92 @@
+$top-section-height: calc(64px + env(safe-area-inset-top));
+$bottom-section-height: calc(56px + env(safe-area-inset-bottom));
+$ion-slides-height: calc(
+  100vh - #{$top-section-height} - #{$bottom-section-height}
+);
+$ion-slide-img-height: 50vh;
+
 ion-content {
+  .top-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 8px;
+    padding-left: 24px;
+    padding-top: 4vh;
+    height: $top-section-height;
+    width: 100vw;
+
+    ion-img {
+      height: 32px;
+      width: 135px;
+    }
+
+    button {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 21px;
+      text-align: right;
+      color: white;
+      border: none;
+    }
+  }
+
   ion-slides {
-    --bullet-background-active: white;
+    height: $ion-slides-height;
+
+    --bullet-background: white;
+    --bullet-background-active: #486cd9;
 
     ion-slide {
       flex-direction: column;
+      justify-content: space-around;
       background-color: var(--noir-primary);
-      height: 100vh;
 
-      svg {
-        padding-top: 8vh;
-        padding-bottom: calc(12vh + env(safe-area-inset-bottom));
+      .slide-image {
+        height: $ion-slide-img-height;
+        width: 100vw;
+        object-fit: cover;
       }
 
-      button {
-        position: absolute;
-        bottom: 10px;
-        right: 20px;
+      .slide-text {
+        padding-left: 4vw;
+        padding-right: 4vw;
+
+        .title {
+          font-weight: 700;
+          text-align: center;
+          color: white;
+          font-size: 32px;
+        }
+
+        .spacer {
+          height: 2vh;
+        }
+
+        .subtitle {
+          font-weight: 500;
+          text-align: center;
+          color: white;
+          opacity: 0.75;
+          font-size: 16px;
+        }
+      }
+
+      .mat-button-height-placeholder {
+        height: 36px;
+      }
+
+      .mat-raised-button.mat-primary {
         color: white;
-        font-size: 20px;
-        padding-bottom: calc(5vh + env(safe-area-inset-bottom));
-        border: none;
+        width: calc(100vw - 32px);
+        border-radius: 37px;
       }
     }
   }
-}
 
-.pagination-bullets {
-  bottom: 16px;
-}
-
-.ios text {
-  font-family: Helvetica, Arial, Verdana, Tahoma, sans-serif;
-}
-
-@media (min-height: 750px) {
-  .ios div {
-    position: relative;
-    width: 100%;
-    padding: 30px;
-    height: 90%;
+  .bottom-section {
+    height: $bottom-section-height;
   }
 }

@@ -36,41 +36,59 @@
     </mat-icon>
 
     <div class="camera-buttons-container">
-      <mat-icon class="temporarily-hidden" id="gallery-icon">
-        video_collection
-      </mat-icon>
+      <div *ngIf="isFlashAvailable" class="zoom-slider">
+        <ion-range
+          (ionChange)="zoomFactorChange($event)"
+          [disabled]="!canZoomInOut"
+          [min]="minZoomFactor"
+          [max]="maxZoomFactor"
+          [value]="curZoomFactor"
+          step="0.1"
+        >
+          <ion-icon slot="start" name="remove-outline"></ion-icon>
+          <ion-icon slot="end" name="add-outline"></ion-icon>
+        </ion-range>
+      </div>
 
-      <circle-progress
-        (click)="onPress()"
-        [maxTime]="maxRecordTimeInMilliseconds"
-        ngxLongPress2
-        (onLongPress)="onLongPress()"
-        (onLongPressing)="onLongPressing($event)"
-        (onReleasePressing)="onReleasePressing()"
-        [percent]="curRecordTimeInPercent"
-        [radius]="38"
-        [outerStrokeWidth]="6"
-        [innerStrokeWidth]="4"
-        [outerStrokeColor]="'#78C000'"
-        [innerStrokeColor]="'#F2F2F2'"
-        [showTitle]="false"
-        [showUnits]="false"
-        [showSubtitle]="false"
-        [animation]="false"
-        [animationDuration]="0"
-        joyrideStep="highlightCustomCameraCaptureButton"
-        [title]="t('userGuide.cameraUsageGuide')"
-        [text]="t('userGuide.tapToTakeAPhotoAndLongPressToRecordVideo')"
-      ></circle-progress>
+      <div class="main-buttons">
+        <mat-icon class="temporarily-hidden" id="gallery-icon">
+          video_collection
+        </mat-icon>
 
-      <mat-icon
-        (click)="flipCamera()"
-        joyrideStep="highlightCustomCameraFlipButton"
-        [title]="t('userGuide.cameraUsageGuide')"
-        [text]="t('userGuide.flipTheCameraToSwitchBetweenFrontAndBackCameras')"
-      >
-        flip_camera_android
-      </mat-icon>
+        <circle-progress
+          (click)="onPress()"
+          [maxTime]="maxRecordTimeInMilliseconds"
+          ngxLongPress2
+          (onLongPress)="onLongPress()"
+          (onLongPressing)="onLongPressing($event)"
+          (onReleasePressing)="onReleasePressing()"
+          [percent]="curRecordTimeInPercent"
+          [radius]="38"
+          [outerStrokeWidth]="6"
+          [innerStrokeWidth]="4"
+          [outerStrokeColor]="'#78C000'"
+          [innerStrokeColor]="'#F2F2F2'"
+          [showTitle]="false"
+          [showUnits]="false"
+          [showSubtitle]="false"
+          [animation]="false"
+          [animationDuration]="0"
+          joyrideStep="highlightCustomCameraCaptureButton"
+          [title]="t('userGuide.cameraUsageGuide')"
+          [text]="t('userGuide.tapToTakeAPhotoAndLongPressToRecordVideo')"
+        ></circle-progress>
+
+        <mat-icon
+          (click)="flipCamera()"
+          joyrideStep="highlightCustomCameraFlipButton"
+          [title]="t('userGuide.cameraUsageGuide')"
+          [text]="
+            t('userGuide.flipTheCameraToSwitchBetweenFrontAndBackCameras')
+          "
+        >
+          flip_camera_android
+        </mat-icon>
+      </div>
     </div>
   </ng-container>
   <ng-container *ngIf="(mode$ | ngrxPush) === 'pre-publish'">
