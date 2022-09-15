@@ -224,7 +224,7 @@ export class DetailsPage {
         `&token=${token.access}` +
         `&refresh_token=${token.refresh}` +
         `&from=mycapture`;
-      const url = `${BUBBLE_IFRAME_URL}/asset_page?${params}`;
+      const url = `${BUBBLE_IFRAME_URL}/version-qa-release/asset_page?${params}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     })
   );

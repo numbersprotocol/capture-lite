@@ -16,7 +16,7 @@ export class ExploreTabComponent {
   readonly bubbleIframeUrlWithJWTToken$ = defer(() => {
     return this.diaBackendAuthService.queryJWTToken$().pipe(
       map(token => {
-        return `${BUBBLE_IFRAME_URL}/?token=${token.access}&refresh_token=${token.refresh}`;
+        return `${BUBBLE_IFRAME_URL}/version-qa-release/?token=${token.access}&refresh_token=${token.refresh}`;
       })
     );
   });
