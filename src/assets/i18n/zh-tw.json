@@ -378,5 +378,25 @@
   "inAppPurchase": {
     "failedToInitInAppStore": "App 購買功能發生錯誤，請檢查網路連線狀況",
     "inAppPurchaseErrorOcurred": "發生 App 內購買錯誤，請稍後再試"
+  },
+  "onboarding": {
+    "slide1": {
+      "title": "發現",
+      "subtitle": "發現您的朋友出售或分享的最新 NFT。"
+    },
+    "slide2": {
+      "title": "創造",
+      "subtitle": "通過簡單的步驟創建您自己的 NFT。"
+    },
+    "slide3": {
+      "title": "蒐集",
+      "subtitle": "收集具有唯一 Web3 註冊的唯一 NFT。"
+    },
+    "slide4": {
+      "title": "自己的",
+      "subtitle": "擁有自己的資產並創建去中心化證明。"
+    },
+    "skip": "跳過",
+    "exploreCapture": "探索 Capture"
   }
 }

@@ -378,5 +378,25 @@
   "inAppPurchase": {
     "failedToInitInAppStore": "An error occurred during the initialization of the In-App Store. Please check your Internet connection quality.",
     "inAppPurchaseErrorOcurred": "In-App Purchase error occurred. Please try again later."
+  },
+  "onboarding": {
+    "slide1": {
+      "title": "Discover",
+      "subtitle": "Discover the latest NFTs sold or shared by your friends."
+    },
+    "slide2": {
+      "title": "Create",
+      "subtitle": "Create your own NFTs in simple steps."
+    },
+    "slide3": {
+      "title": "Collect",
+      "subtitle": "Collect the unique NFTs with unique Web3 registration."
+    },
+    "slide4": {
+      "title": "Own",
+      "subtitle": "Own your own asset and create decentralized proof."
+    },
+    "skip": "Skip",
+    "exploreCapture": "Explore Capture"
   }
 }
