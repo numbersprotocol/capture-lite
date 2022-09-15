@@ -107,12 +107,7 @@ export class HomePage {
   }
 
   private async onboardingRedirect() {
-    if (
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      !this.userGuideIsTemporarelyDisabled &&
-      this.platform.is('ios') &&
-      (await this.onboardingService.hasShownTutorialVersion()) === ''
-    ) {
+    if (await this.onboardingService.shouldShowOnboardingTutotrial()) {
       return this.router.navigate(['tutorial'], {
         relativeTo: this.route,
       });
