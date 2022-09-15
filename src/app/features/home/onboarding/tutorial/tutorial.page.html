@@ -1,166 +1,59 @@
 <ion-content *transloco="let t">
-  <ion-slides #slides pager>
+  <div class="top-section">
+    <ion-img src="/assets/images/icons/capture-rebrand-wordmark.svg"> </ion-img>
+    <button *ngIf="!isLastSlide" (click)="skipSlides()" mat-stroked-button>
+      {{ t('onboarding.skip') }}
+    </button>
+  </div>
+  <ion-slides
+    #slides
+    [pager]="isLastSlide === false"
+    (ionSlideDidChange)="ionSlideDidChange($event)"
+  >
     <ion-slide>
-      <ng-container>
-        <svg
-          version="1.1"
-          id="圖層_1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          x="0px"
-          y="0px"
-          viewBox="0 0 360 639"
-          enable-background="new 0 0 360 639"
-          xml:space="preserve"
-        >
-          <image
-            overflow="visible"
-            width="360"
-            height="639"
-            xlink:href="/assets/images/tutorial-1.png"
-          ></image>
-          <text transform="matrix(1 0 0 1 88.6169 279.2624)">
-            <tspan x="0" y="0" fill="#FFFFFF" font-size="24px">
-              {{ t('tutorial.switchBetween0') }}
-            </tspan>
-            <tspan x="-12.6" y="28.8" fill="#FFFFFF" font-size="24px">
-              {{ t('tutorial.switchBetween1') }}
-            </tspan>
-            <tspan x="4.8" y="57.6" fill="#FFFFFF" font-size="24px">
-              {{ t('tutorial.switchBetween2') }}
-            </tspan>
-          </text>
-          <text
-            transform="matrix(1 0 0 1 100 519.6104)"
-            fill="#FFFFFF"
-            font-size="24px"
-          >
-            {{ t('tutorial.viewYourCollections') }}
-          </text>
-        </svg>
-      </ng-container>
-      <button (click)="slides.slideNext()" mat-stroked-button>
-        {{ t('next') }}
-      </button>
+      <img src="/assets/images/onboarding/image-1.jpeg" class="slide-image" />
+      <div class="slide-text">
+        <div class="title">{{ t('onboarding.slide1.title') }}</div>
+        <div class="spacer"></div>
+        <div class="subtitle">{{ t('onboarding.slide1.subtitle') }}</div>
+      </div>
+      <div class="mat-button-height-placeholder"></div>
     </ion-slide>
     <ion-slide>
-      <ng-container>
-        <svg
-          version="1.1"
-          id="圖層_1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          x="0px"
-          y="0px"
-          viewBox="0 0 360 639"
-          enable-background="new 0 0 360 639"
-          xml:space="preserve"
-        >
-          <image
-            overflow="visible"
-            width="359"
-            height="639"
-            xlink:href="/assets/images/tutorial-2.png"
-          ></image>
-          <text
-            transform="matrix(1 0 0 1 90 460.2997)"
-            fill="#FFFFFF"
-            font-size="24px"
-          >
-            {{ t('tutorial.createCaptures') }}
-          </text>
-          <text
-            transform="matrix(1 0 0 1 20 397.8444)"
-            fill="#FFFFFF"
-            font-size="24px"
-          >
-            {{ t('tutorial.viewCreatedCaptures') }}
-          </text>
-        </svg>
-      </ng-container>
-      <button (click)="slides.slideNext()" mat-stroked-button>
-        {{ t('next') }}
-      </button>
+      <img src="/assets/images/onboarding/image-2.jpeg" class="slide-image" />
+      <div class="slide-text">
+        <div class="title">{{ t('onboarding.slide2.title') }}</div>
+        <div class="spacer"></div>
+        <div class="subtitle">{{ t('onboarding.slide2.subtitle') }}</div>
+      </div>
+      <div class="mat-button-height-placeholder"></div>
     </ion-slide>
     <ion-slide>
-      <ng-container>
-        <svg
-          version="1.1"
-          id="圖層_1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          x="0px"
-          y="0px"
-          viewBox="0 0 360 639"
-          enable-background="new 0 0 360 639"
-          xml:space="preserve"
-        >
-          <image
-            overflow="visible"
-            width="360"
-            height="639"
-            xlink:href="/assets/images/tutorial-3.png"
-          ></image>
-          <text
-            transform="matrix(1 0 0 1 158.3539 116.3548)"
-            fill="#FFFFFF"
-            font-size="24px"
-          >
-            {{ t('tutorial.viewMore') }}
-          </text>
-          <text
-            transform="matrix(1 0 0 1 40 480)"
-            fill="#FFFFFF"
-            font-size="24px"
-          >
-            {{ t('tutorial.openCertificate') }}
-          </text>
-        </svg>
-      </ng-container>
-      <button (click)="slides.slideNext()" mat-stroked-button>
-        {{ t('next') }}
-      </button>
+      <img src="/assets/images/onboarding/image-3.jpeg" class="slide-image" />
+      <div class="slide-text">
+        <div class="title">{{ t('onboarding.slide3.title') }}</div>
+        <div class="spacer"></div>
+        <div class="subtitle">{{ t('onboarding.slide3.subtitle') }}</div>
+      </div>
+      <div class="mat-button-height-placeholder"></div>
     </ion-slide>
     <ion-slide>
-      <ng-container>
-        <svg
-          version="1.1"
-          id="圖層_1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          x="0px"
-          y="0px"
-          viewBox="0 0 360 639"
-          enable-background="new 0 0 360 639"
-          xml:space="preserve"
-        >
-          <image
-            overflow="visible"
-            width="360"
-            height="639"
-            xlink:href="/assets/images/tutorial-4.png"
-          ></image>
-          <text
-            transform="matrix(1 0 0 1 127.9265 65)"
-            fill="#000"
-            font-size="24px"
-          >
-            {{ t('tutorial.histories') }}
-          </text>
-          <g>
-            <text
-              transform="matrix(1 0 0 1 159.2167 200)"
-              fill="#FFFFFF"
-              font-size="24px"
-            >
-              {{ t('tutorial.messageInbox') }}
-            </text>
-          </g>
-        </svg>
-      </ng-container>
-      <button routerLink="/home" mat-stroked-button>
-        {{ t('start') }}
+      <img src="/assets/images/onboarding/image-4.jpeg" class="slide-image" />
+      <div class="slide-text">
+        <div class="title">{{ t('onboarding.slide4.title') }}</div>
+        <div class="spacer"></div>
+        <div class="subtitle">{{ t('onboarding.slide4.subtitle') }}</div>
+      </div>
+      <button
+        routerLink="/home"
+        color="primary"
+        mat-raised-button
+        class="explore-catpure"
+      >
+        {{ t('onboarding.exploreCapture') | uppercase }}
       </button>
     </ion-slide>
   </ion-slides>
+
+  <div class="bottom-section"></div>
 </ion-content>

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { IonSlides } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { OnboardingService } from '../../../../shared/onboarding/onboarding.service';
 
@@ -9,7 +10,30 @@ import { OnboardingService } from '../../../../shared/onboarding/onboarding.serv
   styleUrls: ['./tutorial.page.scss'],
 })
 export class TutorialPage {
-  constructor(private readonly onboardingService: OnboardingService) {
+  isLastSlide = false;
+
+  @ViewChild('slides') slides?: IonSlides;
+
+  constructor(
+    private readonly onboardingService: OnboardingService,
+    private readonly ref: ChangeDetectorRef
+  ) {
     this.onboardingService.onboard$().pipe(untilDestroyed(this)).subscribe();
+  }
+
+  async ionSlideDidChange(_: any) {
+    if (!this.slides) return;
+
+    const curSlideIndex = await this.slides.getActiveIndex();
+    const totalSlides = await this.slides.length();
+
+    this.isLastSlide = curSlideIndex === totalSlides - 1;
+  }
+
+  async skipSlides() {
+    if (!this.slides) return;
+
+    const totalSlides = await this.slides.length();
+    await this.slides.slideTo(totalSlides - 1);
   }
 }
