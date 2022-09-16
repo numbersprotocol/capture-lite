@@ -382,19 +382,19 @@
   "onboarding": {
     "slide1": {
       "title": "Discover",
-      "subtitle": "Discover the latest NFTs sold or shared by your friends."
+      "subtitle": "Discover the latest NFTs to be created, sold or shared by your network"
     },
     "slide2": {
       "title": "Create",
-      "subtitle": "Create your own NFTs in simple steps."
+      "subtitle": "In a few simple steps, create your own unique NFTs"
     },
     "slide3": {
       "title": "Collect",
-      "subtitle": "Collect the unique NFTs with unique Web3 registration."
+      "subtitle": "Using our Web3 registration, collect unique NFTs"
     },
     "slide4": {
       "title": "Own",
-      "subtitle": "Own your own asset and create decentralized proof."
+      "subtitle": "Own your assets and create on-chain, decentralized proof"
     },
     "skip": "Skip",
     "exploreCapture": "Explore Capture"
