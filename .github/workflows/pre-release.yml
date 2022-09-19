@@ -43,9 +43,14 @@ jobs:
       - name: Upload debug APK and metadata to Artifacts
         uses: actions/upload-artifact@v3
         with:
-          path: |
-            ./android/app/build/outputs/apk/debug/app-debug.apk
-            ./android/app/build/outputs/apk/debug/output-metadata.json
+          name: app-debug.apk
+          path: ./android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload debug metadata to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: output-metadata.json
+          path: ./android/app/build/outputs/apk/debug/output-metadata.json
 
   upload-android-qa:
     runs-on: ubuntu-latest
@@ -116,6 +121,7 @@ jobs:
       - name: Upload release AAB to Artifacts
         uses: actions/upload-artifact@v3
         with:
+          name: app-release.aab
           path: ./android/app/build/outputs/bundle/release/app-release.aab
 
   deploy-play-store:
@@ -204,6 +210,7 @@ jobs:
       - name: Upload IPA
         uses: actions/upload-artifact@v3
         with:
+          name: App.ipa
           path: build/App.ipa
 
   deploy-app-store:
