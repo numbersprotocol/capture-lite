@@ -213,6 +213,16 @@ jobs:
           name: App.ipa
           path: build/App.ipa
 
+      - name: Save iOS build number
+        run: |
+          echo ${{ steps.current-time.outputs.formattedTime }} > build/ios-build-number.txt
+
+      - name: Upload iOS build number
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-build-number.txt
+          path: build/ios-build-number.txt
+
   deploy-app-store:
     runs-on: macos-latest
     needs: build-ios-prod
@@ -227,6 +237,11 @@ jobs:
         with:
           name: App.ipa
 
+      - name: Download iOS build number
+        uses: actions/download-artifact@v3
+        with:
+          name: ios-build-number.txt
+
       - name: Upload IPA to App Store (Testflight)
         uses: Apple-Actions/upload-testflight-build@master
         with:
@@ -234,10 +249,6 @@ jobs:
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
-
-      - name: Save iOS build number
-        run: |
-          echo ${{ steps.current-time.outputs.formattedTime }} > build/ios-build-number.txt
 
       - name: Upload iOS build number as artifact
         uses: actions/upload-artifact@v2
