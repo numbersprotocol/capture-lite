@@ -93,12 +93,12 @@ export class CaptureItemComponent {
 
   @HostListener('click')
   onClick() {
-    return this.isCollecting$
+    return this.hasUploaded$
       .pipe(
         first(),
-        switchMap(isCollecting =>
+        switchMap(hasUploaded =>
           iif(
-            () => !isCollecting,
+            () => hasUploaded,
             this.oldProofHash$.pipe(
               first(),
               concatMap(oldProofHash =>
