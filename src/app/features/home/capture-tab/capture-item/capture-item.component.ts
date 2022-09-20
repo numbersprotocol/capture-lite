@@ -1,8 +1,10 @@
 import { Component, HostListener, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, iif, of, ReplaySubject } from 'rxjs';
+import { combineLatest, of, ReplaySubject } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -88,32 +90,37 @@ export class CaptureItemComponent {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly sanitizer: DomSanitizer,
-    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
+    private readonly toastController: ToastController,
+    private readonly translocoService: TranslocoService
   ) {}
 
   @HostListener('click')
-  onClick() {
-    return this.isCollecting$
-      .pipe(
-        first(),
-        switchMap(isCollecting =>
-          iif(
-            () => !isCollecting,
-            this.oldProofHash$.pipe(
-              first(),
-              concatMap(oldProofHash =>
-                this.router.navigate(
-                  ['details', { type: 'capture', hash: oldProofHash }],
-                  {
-                    relativeTo: this.route,
-                  }
-                )
-              )
+  async onClick() {
+    const hasUploaded = await this.hasUploaded$.pipe(first()).toPromise();
+    if (hasUploaded) {
+      this.oldProofHash$
+        .pipe(
+          first(),
+          concatMap(oldProofHash =>
+            this.router.navigate(
+              ['details', { type: 'capture', hash: oldProofHash }],
+              { relativeTo: this.route }
             )
-          )
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
+          ),
+          untilDestroyed(this)
+        )
+        .subscribe();
+    } else {
+      this.toastController
+        .create({
+          message: this.translocoService.translate(
+            'home.profileTab.captureNotUploadedYet'
+          ),
+          duration: 2000,
+          color: 'primary',
+        })
+        .then(toast => toast.present());
+    }
   }
 }

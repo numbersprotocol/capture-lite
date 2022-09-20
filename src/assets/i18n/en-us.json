@@ -262,7 +262,8 @@
   "home": {
     "profileTab": {
       "captured": "Captured",
-      "collected": "Collected"
+      "collected": "Collected",
+      "captureNotUploadedYet": "Capture not uploaded yet"
     }
   },
   "details": {
