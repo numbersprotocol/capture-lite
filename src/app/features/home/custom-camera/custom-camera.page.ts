@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 import { Location } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
+import { NavController, Platform } from '@ionic/angular';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CaptureResult, PreviewCamera } from '@numbersprotocol/preview-camera';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { ErrorService } from '../../../shared/error/error.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import { GoProBluetoothService } from '../../settings/go-pro/services/go-pro-bluetooth.service';
@@ -48,6 +49,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   maxZoomFactor = 0;
   curZoomFactor = 0;
 
+  private backButtonPrioritySubscription?: Subscription;
+
   get canZoomInOut() {
     return this.minZoomFactor < this.maxZoomFactor;
   }
@@ -62,7 +65,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly errorService: ErrorService,
     private readonly userGuideService: UserGuideService,
-    private readonly ref: ChangeDetectorRef
+    private readonly platform: Platform,
+    private readonly navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -86,6 +90,19 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   async ionViewDidEnter() {
     await this.userGuideService.showUserGuidesOnCustomCameraPage();
     await this.userGuideService.setHasOpenedCustomCameraPage(true);
+
+    this.backButtonPrioritySubscription =
+      this.platform.backButton.subscribeWithPriority(1, () => {
+        if (this.mode$.value === 'pre-publish') {
+          this.discardCurrentCapture();
+        } else {
+          this.navCtrl.back();
+        }
+      });
+  }
+
+  ionViewWillLeave() {
+    this.backButtonPrioritySubscription?.unsubscribe();
   }
 
   ngOnDestroy(): void {
@@ -179,9 +196,11 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   discardCurrentCapture() {
-    this.mode$.next('capture');
-    this.startPreviewCamera();
-    this.removeCurrentCapture();
+    if (this.mode$.value === 'pre-publish') {
+      this.mode$.next('capture');
+      this.startPreviewCamera();
+      this.removeCurrentCapture();
+    }
   }
 
   async confirmCurrentCapture() {
