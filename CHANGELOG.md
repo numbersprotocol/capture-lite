@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.66.2] - 2022-09-20
+
+### Fixed
+
+1. User can click Capture after uploading is completed (#2082)
+2. Press Android back button after taking photo and before pressing confirm, go back to camera (#2092)
+
 ## [0.66.0] - 2022-09-15
 
 ### Added
@@ -1821,7 +1828,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.66.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.66.2...HEAD
+[0.66.2]: https://github.com/numbersprotocol/capture-lite/compare/0.66.0...0.66.2
 [0.66.0]: https://github.com/numbersprotocol/capture-lite/compare/0.65.0...0.66.0
 [0.65.0]: https://github.com/numbersprotocol/capture-lite/compare/0.64.4...0.65.0
 [0.64.4]: https://github.com/numbersprotocol/capture-lite/compare/0.64.3...0.64.4
