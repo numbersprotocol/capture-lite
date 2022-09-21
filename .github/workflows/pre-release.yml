@@ -253,7 +253,7 @@ jobs:
       - name: Upload iOS build number as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ios-build-number
+          name: ios-build-number.txt
           path: build/ios-build-number.txt
 
   get-ios-build-number:
@@ -265,7 +265,7 @@ jobs:
       - name: Download iOS build number
         uses: actions/download-artifact@v2
         with:
-          name: ios-build-number
+          name: ios-build-number.txt
 
       - name: Set iOS build number as Environment Variable
         run: |
