@@ -383,11 +383,11 @@
   "onboarding": {
     "slide1": {
       "title": "發現",
-      "subtitle": "好友出售/分享的 NFT"
+      "subtitle": "觀看好友出售/分享的 NFT"
     },
     "slide2": {
       "title": "建立",
-      "subtitle": "通過簡單的步驟建立您的 NFT"
+      "subtitle": "通過簡單的步驟建立您獨一無二的 NFT"
     },
     "slide3": {
       "title": "蒐集",
@@ -395,7 +395,7 @@
     },
     "slide4": {
       "title": "擁有",
-      "subtitle": "擁有自己的資產並建立去中心化證明"
+      "subtitle": "擁有自己的資產並建立鏈上去中心化證明"
     },
     "skip": "跳過",
     "exploreCapture": "開始體驗 Capture"
