@@ -8,11 +8,12 @@
 <ng-template #bubbleIframe>
   <div
     *ngIf="
-      bubbleIframeUrlWithJWTToken$ | ngrxPush as bubbleIframeUrlWithJWTToken
+      bubbleIframeUrlWithCachedJWTToke$
+        | ngrxPush as bubbleIframeUrlWithCachedJWTToken
     "
   >
     <iframe
-      [src]="bubbleIframeUrlWithJWTToken | safeResourceUrl"
+      [src]="bubbleIframeUrlWithCachedJWTToken | safeResourceUrl"
       class="bubble-iframe"
     ></iframe>
   </div>
