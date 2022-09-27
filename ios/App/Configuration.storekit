@@ -15,7 +15,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "cap_lite_consumable_bronze_pack_099",
+      "productID" : "capture_lite_consumable_bronze_pack_099",
       "referenceName" : "Bronze Pack",
       "type" : "Consumable"
     },
@@ -30,7 +30,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "cap_lite_consumable_silver_pack_199",
+      "productID" : "capture_lite_consumable_silver_pack_199",
       "referenceName" : "Silver Pack",
       "type" : "Consumable"
     },
@@ -45,7 +45,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "cap_lite_consumable_gold_pack_299",
+      "productID" : "capture_lite_consumable_gold_pack_299",
       "referenceName" : "Gold Pack",
       "type" : "Consumable"
     },
@@ -60,7 +60,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "cap_lite_consumable_platinum_pack_399",
+      "productID" : "capture_lite_consumable_platinum_pack_399",
       "referenceName" : "Platinum Pack",
       "type" : "Consumable"
     }

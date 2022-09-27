@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { defer } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
-import { BASE_URL, BUBBLE_API_URL } from '../secret';
+import { BASE_URL, BUBBLE_IFRAME_URL } from '../secret';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +33,7 @@ export class DiaBackendNumService {
     // ask @ethan wu to change bubble endpoint from POST to GET
     return defer(() =>
       this.httpClient.post<NumPointPriceListResponse>(
-        `${BUBBLE_API_URL}/version-num-points-price-list/api/1.1/wf/num-points-price-list`,
+        `${BUBBLE_IFRAME_URL}/api/1.1/wf/get_num_price`,
         {}
       )
     );
