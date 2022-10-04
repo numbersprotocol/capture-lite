@@ -49,6 +49,9 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   maxZoomFactor = 0;
   curZoomFactor = 0;
 
+  cameraQuality: 'low' | 'hq' = 'hq';
+  cameraGesture: any;
+
   private backButtonPrioritySubscription?: Subscription;
 
   get canZoomInOut() {
@@ -141,6 +144,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   async startPreviewCamera() {
     await this.customCameraService.startPreviewCamera();
+    await this.customCameraService.setCameraQuality(this.cameraQuality);
     await this.syncCameraState();
   }
 
@@ -246,6 +250,12 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.router.navigate(['/settings', 'go-pro', 'media-list-on-camera'], {
       state: { shouldStartPreviewCameraOnLeave: true },
     });
+  }
+
+  setCameraQuality(quality: 'low' | 'hq') {
+    this.cameraQuality = quality;
+    this.customCameraService.setCameraQuality(quality);
+    // TODO: send change camera quality command to native side
   }
 
   private removeCurrentCapture() {
