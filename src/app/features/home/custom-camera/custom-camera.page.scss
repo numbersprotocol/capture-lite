@@ -6,6 +6,17 @@ ion-content {
   --background: transparent;
 }
 
+ion-fab-button {
+  font-size: 14px;
+  width: 64px;
+
+  --border-radius: 8px;
+}
+
+ion-fab-list {
+  right: 8px;
+}
+
 mat-icon {
   color: #f2f2f2;
   font-size: 36px;
