@@ -279,7 +279,9 @@
     }
   },
   "customCamera": {
-    "confirmCapture": "確認"
+    "confirmCapture": "確認",
+    "max": "最大",
+    "social": "社會的"
   },
   "wallets": {
     "wallets": "錢包",
