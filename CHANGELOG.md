@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.67.0] - 2022-10-04
+
+### Changed
+
+1. Camera supports 2 resolutions: max and social (#2154)
+1. Remove CC from menu (#2147)
+1. Update NUM price list endpoint (#2109)
+
+### Fixed
+
+1. Use lighter Capture icon to improve loading speed (#2123, #2110)
+1. Update onboarding texts to the final version (#2078)
+1. Cache and reuse JWT token until near expiration (#2121)
+1. Fix typos (#2122)
+1. Fix Android notification icon (#2107)
+
 ## [0.66.3] - 2022-09-21
 
 ### Changed
@@ -1842,7 +1858,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.66.3...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.67.0...HEAD
+[0.67.0]: https://github.com/numbersprotocol/capture-lite/compare/0.66.3...0.67.0
 [0.66.3]: https://github.com/numbersprotocol/capture-lite/compare/0.66.2...0.66.3
 [0.66.2]: https://github.com/numbersprotocol/capture-lite/compare/0.66.1...0.66.2
 [0.66.1]: https://github.com/numbersprotocol/capture-lite/compare/0.66.0...0.66.1
