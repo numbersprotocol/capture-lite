@@ -215,7 +215,7 @@ export class DetailsPage {
 
   readonly iframeUrlWithJWTToken$ = combineLatest([
     this.activeDetailedCapture$,
-    defer(() => this.diaBackendAuthService.queryJWTToken$()),
+    this.diaBackendAuthService.cachedQueryJWTToken$,
   ]).pipe(
     distinctUntilChanged(),
     map(([detailedCapture, token]) => {

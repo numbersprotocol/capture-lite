@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Device } from '@capacitor/device';
 import { Storage } from '@capacitor/storage';
 import { isEqual, reject } from 'lodash-es';
-import { combineLatest, defer, forkJoin, Observable, Subject } from 'rxjs';
+import { combineLatest, defer, forkJoin, Observable, of, Subject } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
@@ -12,8 +12,10 @@ import {
   map,
   pluck,
   repeatWhen,
+  switchMap,
   tap,
 } from 'rxjs/operators';
+import { secondSince } from '../../../utils/date';
 import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { LanguageService } from '../../language/service/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
@@ -69,6 +71,17 @@ export class DiaBackendAuthService {
   readonly points$ = this.preferences.getNumber$(PrefKeys.POINTS);
 
   readonly referralCode$ = this.preferences.getString$(PrefKeys.REFERRAL_CODE);
+
+  readonly cachedQueryJWTToken$ = defer(() =>
+    this.getCachedQueryJWTToken()
+  ).pipe(
+    switchMap(cachedToken => {
+      if (cachedToken === undefined || this.isJWTTokenExpired(cachedToken)) {
+        return this.queryJWTTokenWithCaching$();
+      }
+      return of(cachedToken);
+    })
+  );
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -136,6 +149,19 @@ export class DiaBackendAuthService {
           {},
           { headers }
         );
+      })
+    );
+  }
+
+  queryJWTTokenWithCaching$() {
+    return this.queryJWTToken$().pipe(
+      map(queryJWTTokenResponse => {
+        const cachedQueryJWTToken: CachedQueryJWTToken = {
+          ...queryJWTTokenResponse,
+          timestamp: Date.now(),
+        };
+        this.setCachedQueryJWTToken(cachedQueryJWTToken);
+        return cachedQueryJWTToken;
       })
     );
   }
@@ -357,6 +383,34 @@ export class DiaBackendAuthService {
     };
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  private isJWTTokenExpired(token: CachedQueryJWTToken) {
+    const secondsSinceCached = secondSince(token.timestamp);
+    // In the backend Query JWT Token expires in 5 minutes.
+    // We consider not expired if it's 4 minutes old, so we have 1 minute in buffer
+    const expiredAfterSeconds = 240; // 4 minutes
+    return secondsSinceCached > expiredAfterSeconds;
+  }
+
+  private async getCachedQueryJWTToken() {
+    const value = await this.preferences.getString(
+      PrefKeys.CACHED_QUERY_JWT_TOKEN
+    );
+    if (value === '') return undefined;
+    const token: Partial<CachedQueryJWTToken> = JSON.parse(value);
+    if (!token.access || !token.refresh || !token.timestamp) {
+      return undefined;
+    }
+    return token as CachedQueryJWTToken;
+  }
+
+  private async setCachedQueryJWTToken(value: CachedQueryJWTToken) {
+    return this.preferences.setString(
+      PrefKeys.CACHED_QUERY_JWT_TOKEN,
+      JSON.stringify(value)
+    );
+  }
+
   private async getToken() {
     return new Promise<string>(resolve => {
       this.preferences.getString(PrefKeys.TOKEN).then(token => {
@@ -414,6 +468,7 @@ const enum PrefKeys {
   PHONE_VERIFIED = 'PHONE_VERIFIED',
   POINTS = 'POINTS',
   REFERRAL_CODE = 'REFERRAL_CODE',
+  CACHED_QUERY_JWT_TOKEN = 'CACHED_QUERY_JWT_TOKEN',
 }
 
 interface LoginResult {
@@ -428,6 +483,10 @@ export interface LoginResponse {
 export interface QueryJWTTokenResponse {
   readonly access: string;
   readonly refresh: string;
+}
+
+export interface CachedQueryJWTToken extends QueryJWTTokenResponse {
+  readonly timestamp: number;
 }
 
 export interface ReadUserResponse {
