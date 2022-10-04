@@ -29,11 +29,6 @@
           </a>
         </mat-list-item>
         <mat-list-item>
-          <a (click)="sidenav.close(); openCaptureClub()" mat-list-item>
-            CaptureClub
-          </a>
-        </mat-list-item>
-        <mat-list-item>
           <a routerLink="/invitation" (click)="sidenav.close()" mat-list-item>
             {{ t('invitation.invitation') }}
           </a>
@@ -92,13 +87,13 @@
         <mat-tab>
           <ng-template mat-tab-label>
             <button mat-icon-button (click)="navigateToExploreTab()">
-              <ion-icon
-                src="/assets/images/icons/search.svg"
+              <mat-icon
+                svgIcon="search"
                 class="tab-action-button-icon"
                 joyrideStep="highlightHomeTab"
                 title="Home Tab"
                 text="View created captures"
-              ></ion-icon>
+              ></mat-icon>
             </button>
           </ng-template>
           <app-explore-tab></app-explore-tab>
@@ -106,32 +101,30 @@
         <mat-tab disabled>
           <ng-template mat-tab-label>
             <button mat-icon-button (click)="captureWithCustomCamera()">
-              <ion-icon
-                src="/assets/images/icons/capture.svg"
+              <mat-icon
+                svgIcon="capture"
                 class="tab-action-button-icon"
                 joyrideStep="highlightCaptureButton"
                 [title]="t('userGuide.capture')"
                 [text]="
                   t('userGuide.createCapturesByTakingPhotosOrRecordingVideos')
                 "
-              >
-                camera_alt
-              </ion-icon>
+              ></mat-icon>
             </button>
           </ng-template>
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <button mat-icon-button (click)="navigateToInboxTab()">
-              <ion-icon
-                src="/assets/images/icons/profile.svg"
+              <mat-icon
+                svgIcon="profile"
                 class="tab-action-button-icon"
                 joyrideStep="highlightInboxTab"
                 [title]="t('userGuide.inboxTab')"
                 [text]="
                   t('userGuide.visitInboxForPurchasedItemsAndGiftsReceived')
                 "
-              ></ion-icon>
+              ></mat-icon>
             </button>
           </ng-template>
           <app-capture-tab></app-capture-tab>

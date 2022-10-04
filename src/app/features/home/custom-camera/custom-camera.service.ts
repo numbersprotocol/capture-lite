@@ -152,6 +152,12 @@ export class CustomCameraService {
     return false;
   }
 
+  async setCameraQuality(quality: 'low' | 'hq'): Promise<void> {
+    if (!this.isNativePlatform) return;
+
+    await PreviewCamera.setQuality({ quality });
+  }
+
   private get isNativePlatform() {
     return this.platform.is('ios') || this.platform.is('android');
   }

@@ -174,9 +174,9 @@ export class LoginPage {
       .subscribe();
   }
 
-  async forgetPassword() {
+  async forgotPassword() {
     const alert = await this.alertController.create({
-      header: this.translocoService.translate('forgetPassword'),
+      header: this.translocoService.translate('forgotPassword'),
       message: this.translocoService.translate(
         'message.resetPasswordEnterEmail'
       ),

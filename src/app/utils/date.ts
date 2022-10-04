@@ -5,3 +5,9 @@ export function calcDaysBetweenDates(a: Date, b: Date) {
   const diffDays = Math.ceil(diffTime / millisecondsInOneDay);
   return diffDays;
 }
+
+export function secondSince(timestamp: number) {
+  const now = Date.now();
+  const milliseconds = 1000;
+  return Math.ceil((now - timestamp) / milliseconds);
+}

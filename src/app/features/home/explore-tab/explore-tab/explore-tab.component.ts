@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { defer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
-import { ErrorService } from '../../../../shared/error/error.service';
 import { NetworkService } from '../../../../shared/network/network.service';
 
 @Component({
@@ -13,20 +10,17 @@ import { NetworkService } from '../../../../shared/network/network.service';
   styleUrls: ['./explore-tab.component.scss'],
 })
 export class ExploreTabComponent {
-  readonly bubbleIframeUrlWithJWTToken$ = defer(() => {
-    return this.diaBackendAuthService.queryJWTToken$().pipe(
+  readonly bubbleIframeUrlWithCachedJWTToke$ =
+    this.diaBackendAuthService.cachedQueryJWTToken$.pipe(
       map(token => {
         return `${BUBBLE_IFRAME_URL}/?token=${token.access}&refresh_token=${token.refresh}`;
       })
     );
-  });
 
   readonly networkConnected$ = this.networkService.connected$;
 
   constructor(
-    private readonly sanitizer: DomSanitizer,
     private readonly networkService: NetworkService,
-    private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly errorService: ErrorService
+    private readonly diaBackendAuthService: DiaBackendAuthService
   ) {}
 }
