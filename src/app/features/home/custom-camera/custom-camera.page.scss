@@ -7,7 +7,14 @@ ion-content {
 }
 
 ion-fab-button {
-  font-size: 12px;
+  font-size: 14px;
+  width: 64px;
+
+  --border-radius: 8px;
+}
+
+ion-fab-list {
+  right: 8px;
 }
 
 mat-icon {
