@@ -39,6 +39,9 @@
               },
               {
                 "input": "node_modules/material-design-icons-iconfont/dist/material-design-icons.css"
+              },
+              {
+                "input": "node_modules/@pqina/pintura/pintura.css"
               }
             ],
             "scripts": [],
