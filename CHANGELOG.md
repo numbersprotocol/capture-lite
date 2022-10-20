@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.67.1] - 2022-10-21
+
+### Fixed
+
+1. Request num points on wallets page only (#2182)
+1. Implement pseudo lazy loading in the capture tab (#2200)
+
 ## [0.67.0] - 2022-10-04
 
 ### Changed
@@ -1858,7 +1865,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.67.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.67.1...HEAD
+[0.67.1]: https://github.com/numbersprotocol/capture-lite/compare/0.67.0...0.67.1
 [0.67.0]: https://github.com/numbersprotocol/capture-lite/compare/0.66.3...0.67.0
 [0.66.3]: https://github.com/numbersprotocol/capture-lite/compare/0.66.2...0.66.3
 [0.66.2]: https://github.com/numbersprotocol/capture-lite/compare/0.66.1...0.66.2

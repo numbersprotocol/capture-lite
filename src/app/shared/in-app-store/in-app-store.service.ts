@@ -56,7 +56,6 @@ export class InAppStoreService implements OnDestroy {
   async initialize() {
     // Usefull for UI development in WEB environment
     if (!this.isNativePlatform()) {
-      this.refreshNumPointsPricing();
       const mockData = generateMockInAppProducts();
       this.inAppProducts$.next(mockData);
       return;
@@ -64,7 +63,6 @@ export class InAppStoreService implements OnDestroy {
 
     try {
       await this.platform.ready();
-      await this.refreshNumPointsPricing();
 
       this.regiseterStoreListeners();
       this.registerStoreProducts();
