@@ -1,135 +1,133 @@
-<ion-content>
-  <mat-sidenav-container *transloco="let t">
-    <mat-sidenav #sidenav mode="over" autoFocus="false">
-      <mat-toolbar>
-        <button (click)="sidenav.toggle()" mat-icon-button>
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-        <span>{{ username$ | ngrxPush }}</span>
-      </mat-toolbar>
-      <mat-nav-list>
-        <mat-list-item>
-          <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>
-            {{ t('profile') }}
-          </a>
-        </mat-list-item>
-        <mat-list-item>
-          <a routerLink="/contacts" (click)="sidenav.close()" mat-list-item>
-            {{ t('contacts') }}
-          </a>
-        </mat-list-item>
-        <mat-list-item>
-          <a routerLink="/wallets" (click)="sidenav.close()" mat-list-item>
-            {{ t('wallets.wallets') }}
-          </a>
-        </mat-list-item>
-        <mat-list-item>
-          <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>
-            {{ t('settings') }}
-          </a>
-        </mat-list-item>
-        <mat-list-item>
-          <a routerLink="/invitation" (click)="sidenav.close()" mat-list-item>
-            {{ t('invitation.invitation') }}
-          </a>
-        </mat-list-item>
-        <mat-list-item>
-          <a routerLink="/privacy" (click)="sidenav.close()" mat-list-item>
-            {{ t('privacy') }}
-          </a>
-        </mat-list-item>
-        <mat-list-item>
-          <a routerLink="/about" (click)="sidenav.close()" mat-list-item>
-            {{ t('about') }}
-          </a>
-        </mat-list-item>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <mat-toolbar *ngIf="selectedTabIndex === 2">
-        <button (click)="sidenav.toggle()" mat-icon-button>
-          <mat-icon>menu</mat-icon>
-        </button>
-        <span class="toolbar-spacer"></span>
-        <button routerLink="activities" mat-icon-button>
-          <mat-icon
-            joyrideStep="highlightActivityButton"
-            [title]="t('userGuide.activities')"
-            [text]="
-              t(
-                'userGuide.viewTheHistoryOfYourCaptureAndNetworkActionTransactions'
-              )
-            "
-            >history</mat-icon
-          >
-        </button>
-        <button routerLink="inbox" mat-icon-button>
-          <mat-icon
-            *ngrxLet="hasNewInbox$ as hasNewInbox"
-            matBadge="&#8288;"
-            [matBadgeHidden]="!hasNewInbox"
-            matBadgeSize="small"
-            matBadgeColor="warn"
-          >
-            email</mat-icon
-          >
-        </button>
-      </mat-toolbar>
-      <mat-tab-group
-        preserveContent
-        headerPosition="below"
-        mat-stretch-tabs
-        mat-align-tabs="center"
-        [disablePagination]="true"
-        [(selectedIndex)]="selectedTabIndex"
-        animationDuration="0ms"
-      >
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <button mat-icon-button (click)="navigateToExploreTab()">
-              <mat-icon
-                svgIcon="search"
-                class="tab-action-button-icon"
-                joyrideStep="highlightHomeTab"
-                title="Home Tab"
-                text="View created captures"
-              ></mat-icon>
-            </button>
-          </ng-template>
-          <app-explore-tab></app-explore-tab>
-        </mat-tab>
-        <mat-tab disabled>
-          <ng-template mat-tab-label>
-            <button mat-icon-button (click)="captureWithCustomCamera()">
-              <mat-icon
-                svgIcon="capture"
-                class="tab-action-button-icon"
-                joyrideStep="highlightCaptureButton"
-                [title]="t('userGuide.capture')"
-                [text]="
-                  t('userGuide.createCapturesByTakingPhotosOrRecordingVideos')
-                "
-              ></mat-icon>
-            </button>
-          </ng-template>
-        </mat-tab>
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <button mat-icon-button (click)="navigateToInboxTab()">
-              <mat-icon
-                svgIcon="profile"
-                class="tab-action-button-icon"
-                joyrideStep="highlightInboxTab"
-                [title]="t('userGuide.inboxTab')"
-                [text]="
-                  t('userGuide.visitInboxForPurchasedItemsAndGiftsReceived')
-                "
-              ></mat-icon>
-            </button>
-          </ng-template>
-          <app-capture-tab></app-capture-tab>
-        </mat-tab>
-      </mat-tab-group>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</ion-content>
+<mat-sidenav-container *transloco="let t">
+  <mat-sidenav #sidenav mode="over" autoFocus="false">
+    <mat-toolbar>
+      <button (click)="sidenav.toggle()" mat-icon-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span>{{ username$ | ngrxPush }}</span>
+    </mat-toolbar>
+    <mat-nav-list>
+      <mat-list-item>
+        <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>
+          {{ t('profile') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/contacts" (click)="sidenav.close()" mat-list-item>
+          {{ t('contacts') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/wallets" (click)="sidenav.close()" mat-list-item>
+          {{ t('wallets.wallets') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>
+          {{ t('settings') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/invitation" (click)="sidenav.close()" mat-list-item>
+          {{ t('invitation.invitation') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/privacy" (click)="sidenav.close()" mat-list-item>
+          {{ t('privacy') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/about" (click)="sidenav.close()" mat-list-item>
+          {{ t('about') }}
+        </a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar *ngIf="selectedTabIndex === 2">
+      <button (click)="sidenav.toggle()" mat-icon-button>
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-spacer"></span>
+      <button routerLink="activities" mat-icon-button>
+        <mat-icon
+          joyrideStep="highlightActivityButton"
+          [title]="t('userGuide.activities')"
+          [text]="
+            t(
+              'userGuide.viewTheHistoryOfYourCaptureAndNetworkActionTransactions'
+            )
+          "
+          >history</mat-icon
+        >
+      </button>
+      <button routerLink="inbox" mat-icon-button>
+        <mat-icon
+          *ngrxLet="hasNewInbox$ as hasNewInbox"
+          matBadge="&#8288;"
+          [matBadgeHidden]="!hasNewInbox"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+        >
+          email</mat-icon
+        >
+      </button>
+    </mat-toolbar>
+    <mat-tab-group
+      preserveContent
+      headerPosition="below"
+      mat-stretch-tabs
+      mat-align-tabs="center"
+      [disablePagination]="true"
+      [(selectedIndex)]="selectedTabIndex"
+      animationDuration="0ms"
+    >
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <button mat-icon-button (click)="navigateToExploreTab()">
+            <mat-icon
+              svgIcon="search"
+              class="tab-action-button-icon"
+              joyrideStep="highlightHomeTab"
+              title="Home Tab"
+              text="View created captures"
+            ></mat-icon>
+          </button>
+        </ng-template>
+        <app-explore-tab></app-explore-tab>
+      </mat-tab>
+      <mat-tab disabled>
+        <ng-template mat-tab-label>
+          <button mat-icon-button (click)="captureWithCustomCamera()">
+            <mat-icon
+              svgIcon="capture"
+              class="tab-action-button-icon"
+              joyrideStep="highlightCaptureButton"
+              [title]="t('userGuide.capture')"
+              [text]="
+                t('userGuide.createCapturesByTakingPhotosOrRecordingVideos')
+              "
+            ></mat-icon>
+          </button>
+        </ng-template>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <button mat-icon-button (click)="navigateToInboxTab()">
+            <mat-icon
+              svgIcon="profile"
+              class="tab-action-button-icon"
+              joyrideStep="highlightInboxTab"
+              [title]="t('userGuide.inboxTab')"
+              [text]="
+                t('userGuide.visitInboxForPurchasedItemsAndGiftsReceived')
+              "
+            ></mat-icon>
+          </button>
+        </ng-template>
+        <app-capture-tab></app-capture-tab>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-sidenav-content>
+</mat-sidenav-container>

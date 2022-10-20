@@ -1,74 +1,84 @@
-<ion-refresher slot="fixed" (ionRefresh)="refreshCaptures($event)">
-  <ion-refresher-content></ion-refresher-content>
-</ion-refresher>
-<mat-card *transloco="let t" class="user-card" id="user-card">
-  <app-avatar mat-card-avatar></app-avatar>
-  <mat-card-header>
-    <mat-card-title>{{ username$ | ngrxPush }}</mat-card-title>
-    <div class="vertical-space-8"></div>
-    <mat-card-subtitle>{{ email$ | ngrxPush }} </mat-card-subtitle>
-  </mat-card-header>
-</mat-card>
-<app-uploading-bar></app-uploading-bar>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshCaptures($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <mat-card *transloco="let t" class="user-card" id="user-card">
+    <app-avatar mat-card-avatar></app-avatar>
+    <mat-card-header>
+      <mat-card-title>{{ username$ | ngrxPush }}</mat-card-title>
+      <div class="vertical-space-8"></div>
+      <mat-card-subtitle>{{ email$ | ngrxPush }} </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+  <app-uploading-bar></app-uploading-bar>
 
-<div [ngSwitch]="categories">
-  <ion-segment mode="md" [(ngModel)]="categories">
-    <ion-segment-button value="captured">
-      <ion-label>{{ 'home.profileTab.captured' | transloco }}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="collected">
-      <ion-label>{{ 'home.profileTab.collected' | transloco }}</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+  <div [ngSwitch]="categories">
+    <ion-segment mode="md" [(ngModel)]="categories">
+      <ion-segment-button value="captured">
+        <ion-label>{{ 'home.profileTab.captured' | transloco }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="collected">
+        <ion-label>{{ 'home.profileTab.collected' | transloco }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
-  <p *ngIf="(networkConnected$ | ngrxPush) === false" class="network-status">
-    {{ 'message.networkNotConnected' | transloco }}
-  </p>
+    <p *ngIf="(networkConnected$ | ngrxPush) === false" class="network-status">
+      {{ 'message.networkNotConnected' | transloco }}
+    </p>
 
-  <div *ngSwitchCase="'captured'">
-    <div class="capture-container" *transloco="let t">
+    <div *ngSwitchCase="'captured'">
+      <div class="capture-container" *transloco="let t">
+        <mat-grid-list cols="2" gutterSize="16px">
+          <mat-grid-tile
+            *ngFor="
+              let proof of capturedTabItems$ | ngrxPush;
+              first as isFirstProof;
+              trackBy: trackCaptureItem
+            "
+            class="capture-item"
+            [joyrideStep]="isFirstProof ? 'highlightFirstCapture' : 'notFirst'"
+            [title]="t('userGuide.capturedItem')"
+            [text]="t('userGuide.openToSeeDetailsAndMoreActionItems')"
+          >
+            <app-capture-item [proof]="proof"></app-capture-item>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </div>
+
+    <div class="post-captures" *ngSwitchCase="'collected'">
       <mat-grid-list cols="2" gutterSize="16px">
         <mat-grid-tile
-          *ngFor="
-            let proof of captures$ | ngrxPush;
-            first as isFirstProof;
-            trackBy: trackCaptureItem
-          "
           class="capture-item"
-          [joyrideStep]="isFirstProof ? 'highlightFirstCapture' : 'notFirst'"
-          [title]="t('userGuide.capturedItem')"
-          [text]="t('userGuide.openToSeeDetailsAndMoreActionItems')"
+          *ngFor="
+            let postCapture of collectedTabItems$ | ngrxPush;
+            trackBy: trackPostCapture
+          "
+          [routerLink]="[
+            'details',
+            { type: 'post-capture', id: postCapture.id }
+          ]"
         >
-          <app-capture-item [proof]="proof"></app-capture-item>
+          <ng-container *ngIf="postCapture.asset_file_mime_type as mimeType">
+            <ion-icon
+              *ngIf="mimeType | startsWith: 'video'"
+              name="videocam"
+              class="is-video"
+            ></ion-icon>
+          </ng-container>
+          <ion-icon
+            *ngIf="postCapture.source_type === 'store'"
+            name="storefront"
+            class="is-from-store"
+          ></ion-icon>
+          <ion-img [src]="postCapture.asset_file_thumbnail"></ion-img>
         </mat-grid-tile>
       </mat-grid-list>
     </div>
   </div>
 
-  <div class="post-captures" *ngSwitchCase="'collected'">
-    <mat-grid-list cols="2" gutterSize="16px">
-      <mat-grid-tile
-        class="capture-item"
-        *ngFor="
-          let postCapture of postCaptures$ | ngrxPush;
-          trackBy: trackPostCapture
-        "
-        [routerLink]="['details', { type: 'post-capture', id: postCapture.id }]"
-      >
-        <ng-container *ngIf="postCapture.asset_file_mime_type as mimeType">
-          <ion-icon
-            *ngIf="mimeType | startsWith: 'video'"
-            name="videocam"
-            class="is-video"
-          ></ion-icon>
-        </ng-container>
-        <ion-icon
-          *ngIf="postCapture.source_type === 'store'"
-          name="storefront"
-          class="is-from-store"
-        ></ion-icon>
-        <ion-img [src]="postCapture.asset_file_thumbnail"></ion-img>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </div>
-</div>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreItems($event)">
+    <ion-infinite-scroll-content loading-spinner="bubbles">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
