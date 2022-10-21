@@ -366,6 +366,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = G7NB5YCKAP;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = G7NB5YCKAP;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -373,7 +374,8 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = io.numbersprotocol.capturelite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = NumbersAppDistributionV2;
+				PROVISIONING_PROFILE_SPECIFIER = NumbersAppDistributionV3;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NumbersAppDistributionV3;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG USE_PUSH";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -391,13 +393,15 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = G7NB5YCKAP;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = G7NB5YCKAP;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 0.67.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.numbersprotocol.capturelite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = NumbersAppDistributionV2;
+				PROVISIONING_PROFILE_SPECIFIER = NumbersAppDistributionV3;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NumbersAppDistributionV3;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_PUSH;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
