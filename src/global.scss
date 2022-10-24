@@ -171,12 +171,11 @@ body.dark .mat-tab-group {
 // styling for ngx-joyride END
 
 .pintura-editor {
-  --color-background: 0, 0, 0 !important;
-  --color-foreground: 255, 255, 255 !important;
-
-  --color-primary: #486cd9 !important;
-  --color-primary-dark: #1a80ec !important;
-  --color-primary-text: #fff !important;
-  --color-secondary: #03a9f4 !important;
-  --color-secondary-dark: #046bbf !important;
+  --color-background: 0, 0, 0 !important; /* stylelint-disable-line declaration-no-important */
+  --color-foreground: 255, 255, 255 !important; /* stylelint-disable-line declaration-no-important */
+  --color-primary: #486cd9 !important; /* stylelint-disable-line declaration-no-important */
+  --color-primary-dark: #1a80ec !important; /* stylelint-disable-line declaration-no-important */
+  --color-primary-text: white !important; /* stylelint-disable-line declaration-no-important */
+  --color-secondary: #03a9f4 !important; /* stylelint-disable-line declaration-no-important */
+  --color-secondary-dark: #046bbf !important; /* stylelint-disable-line declaration-no-important */
 }
