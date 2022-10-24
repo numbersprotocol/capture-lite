@@ -7,14 +7,32 @@
     (click)="onConfirm()"
     class="confirm-button"
     mat-flat-button
-    *transloco="let t"
+    *ngIf="(isProcessingImage$ | ngrxPush) === false"
   >
-    {{ t('customCamera.confirmCapture') | uppercase }}
+    {{ 'customCamera.confirmCapture' | transloco }}
   </button>
 </div>
 
-<div class="preview" *ngIf="curCaptureFilePath && curCaptureMimeType">
-  <app-media [src]="curCaptureSrc" [mimeType]="curCaptureMimeType"></app-media>
+<div class="preview">
+  <app-media
+    *ngIf="isVideo$ | ngrxPush"
+    [src]="curCaptureSrc$ | ngrxPush"
+    [mimeType]="curCaptureMimeType$ | ngrxPush"
+  ></app-media>
+
+  <div
+    *ngIf="curImageBase64$ | ngrxPush as curImageBase64"
+    class="image-editor-container"
+  >
+    <pintura-editor
+      [src]="curImageBase64"
+      [options]="pinturaEditorOptions"
+      (processstart)="handleEditorProcessStart()"
+      (processabort)="handleEditorProcessAbort()"
+      (processerror)="handelEditorProcessError()"
+      (process)="handleEditorProcess($event)"
+    ></pintura-editor>
+  </div>
 </div>
 
-<div class="footer"></div>
+<div class="footer" *ngIf="isVideo$ | ngrxPush"></div>
