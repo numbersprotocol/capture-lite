@@ -33,6 +33,7 @@ npm-debug.log*
 /www
 .gradle/
 secret.ts
+.npmrc
 
 resources/android/icon
 resources/android/splash
