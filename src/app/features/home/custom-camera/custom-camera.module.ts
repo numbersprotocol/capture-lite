@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { AngularPinturaModule } from '@pqina/angular-pintura';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { JoyrideModule } from 'ngx-joyride';
 import { NgxLongPress2Module } from 'ngx-long-press2';
@@ -15,6 +16,7 @@ import { PrePublishModeComponent } from './pre-publish-mode/pre-publish-mode.com
     NgxLongPress2Module,
     NgCircleProgressModule.forRoot({}),
     JoyrideModule.forChild(),
+    AngularPinturaModule,
   ],
   providers: [CustomCameraService],
   declarations: [CustomCameraPage, PrePublishModeComponent],

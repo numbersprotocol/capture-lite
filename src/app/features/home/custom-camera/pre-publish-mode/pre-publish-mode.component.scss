@@ -1,9 +1,27 @@
+$action-buttons-height: 48px;
+$action-buttons-padding-top: calc(var(--ion-safe-area-top) + 4px);
+$action-buttons-padding-bottom: 4px;
+$action-buttons-total-height: calc(
+  #{$action-buttons-height} + #{$action-buttons-padding-top} + #{$action-buttons-padding-bottom}
+);
+
+$footer-height: 75px;
+$footer-padding-top: 4px;
+$footer-padding-bottom: calc(var(--ion-safe-area-bottom) + 4px);
+$footer-total-height: calc(
+  #{$footer-height} + #{$footer-padding-top} + #{$footer-padding-bottom}
+);
+
+$image-editor-container-height: calc(
+  100vh - #{$action-buttons-total-height} - #{$footer-padding-bottom}
+);
+
 .action-buttons {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  padding: calc(var(--ion-safe-area-top) + 4px) 16px;
+  padding: $action-buttons-padding-top 16px $action-buttons-padding-bottom;
   background-color: black;
   display: flex;
   flex-direction: row;
@@ -16,7 +34,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: calc(var(--ion-safe-area-bottom) + 4px) 16px;
+  padding: $footer-padding-top 16px $footer-padding-bottom;
   background-color: black;
   display: flex;
   flex-direction: row;
@@ -44,11 +62,16 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
 
   app-media {
     width: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  .image-editor-container {
+    height: $image-editor-container-height;
+    width: 100vw;
   }
 }

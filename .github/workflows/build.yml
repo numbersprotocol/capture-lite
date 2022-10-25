@@ -20,6 +20,11 @@ jobs:
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
 
+      - name: Generate .npmrc for pintura package
+        env:
+          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
+        run: npm run preconfig.npmrc
+
       - name: Install dependencies
         run: npm install
 
@@ -31,6 +36,7 @@ jobs:
           NUMBERS_BUBBLE_IFRAME_URL: ${{ secrets.NUMBERS_BUBBLE_IFRAME_URL }}
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           APPS_FLYER_DEV_KEY: ${{ secrets.APPS_FLYER_DEV_KEY }}
+          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
         run: npm run build
 
       - name: Build Android
@@ -55,6 +61,11 @@ jobs:
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
 
+      - name: Generate .npmrc for pintura package
+        env:
+          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
+        run: npm run preconfig.npmrc
+
       - name: Install dependencies
         run: npm install
 
@@ -66,6 +77,7 @@ jobs:
           NUMBERS_BUBBLE_IFRAME_URL: ${{ secrets.NUMBERS_BUBBLE_IFRAME_URL }}
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           APPS_FLYER_DEV_KEY: ${{ secrets.APPS_FLYER_DEV_KEY }}
+          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
         run: npm run build
 
       - name: Import the Code-Signing PKCS12 Certificate

@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.68.0] - 2022-10-25
+
+### Changed
+
+1. Support photo editor (#2208)
+
+### Fixed
+
+1. Remove duplicate network status (#2203)
+1. Fix camera crash on iOS when recording video (#2209)
+1. Rename Itegrity Key to Integrity Wallet (#2210)
+
 ## [0.67.1] - 2022-10-21
 
 ### Fixed
@@ -1865,7 +1877,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.67.1...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.68.0...HEAD
+[0.68.0]: https://github.com/numbersprotocol/capture-lite/compare/0.67.1...0.68.0
 [0.67.1]: https://github.com/numbersprotocol/capture-lite/compare/0.67.0...0.67.1
 [0.67.0]: https://github.com/numbersprotocol/capture-lite/compare/0.66.3...0.67.0
 [0.66.3]: https://github.com/numbersprotocol/capture-lite/compare/0.66.2...0.66.3
