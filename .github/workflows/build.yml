@@ -34,6 +34,7 @@ jobs:
           NUMBERS_BUBBLE_IFRAME_URL: ${{ secrets.NUMBERS_BUBBLE_IFRAME_URL }}
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           APPS_FLYER_DEV_KEY: ${{ secrets.APPS_FLYER_DEV_KEY }}
+          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
         run: npm run build
 
       - name: Build Android
@@ -72,6 +73,7 @@ jobs:
           NUMBERS_BUBBLE_IFRAME_URL: ${{ secrets.NUMBERS_BUBBLE_IFRAME_URL }}
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           APPS_FLYER_DEV_KEY: ${{ secrets.APPS_FLYER_DEV_KEY }}
+          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
         run: npm run build
 
       - name: Import the Code-Signing PKCS12 Certificate
