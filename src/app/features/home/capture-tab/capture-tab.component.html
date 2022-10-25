@@ -22,10 +22,6 @@
       </ion-segment-button>
     </ion-segment>
 
-    <p *ngIf="(networkConnected$ | ngrxPush) === false" class="network-status">
-      {{ 'message.networkNotConnected' | transloco }}
-    </p>
-
     <div *ngSwitchCase="'captured'">
       <div class="capture-container" *transloco="let t">
         <mat-grid-list cols="2" gutterSize="16px">
