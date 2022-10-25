@@ -1,5 +1,4 @@
 $action-buttons-height: 48px;
-// $action-buttons-padding-vertical: calc(var(--ion-safe-area-top) + 4px);
 $action-buttons-padding-top: calc(var(--ion-safe-area-top) + 4px);
 $action-buttons-padding-bottom: 4px;
 $action-buttons-total-height: calc(
@@ -7,7 +6,6 @@ $action-buttons-total-height: calc(
 );
 
 $footer-height: 75px;
-// $footer-padding-vertical: calc(var(--ion-safe-area-bottom) + 4px);
 $footer-padding-top: 4px;
 $footer-padding-bottom: calc(var(--ion-safe-area-bottom) + 4px);
 $footer-total-height: calc(
