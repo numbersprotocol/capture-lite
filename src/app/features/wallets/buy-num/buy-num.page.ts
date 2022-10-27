@@ -51,10 +51,12 @@ export class BuyNumPage implements OnInit {
 
   async showNumPointsQuantity(numPoints: number) {
     const info = this.translocoService.translate(
-      'wallets.buyNum.thisPackageIncludesXNumPoints',
-      { points: numPoints }
+      'wallets.buyCredits.thisPackageIncludeXCredits',
+      { credits: numPoints }
     );
-    const okText = this.translocoService.translate('wallets.buyNum.okIGotIt');
+    const okText = this.translocoService.translate(
+      'wallets.buyCredits.okIGotIt'
+    );
     const alert = await this.alertController.create({
       header: info,
       buttons: [okText],
