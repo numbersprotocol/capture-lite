@@ -2,13 +2,15 @@
   <button routerLink="/wallets" routerDirection="back" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <span>{{ t('wallets.buyNum.buyNum') }}</span>
+  <span>{{ t('wallets.buyCredits.buyCredits') }}</span>
 </mat-toolbar>
 
 <ion-content *transloco="let t">
   <ion-list lines="none">
     <ion-list-header *ngIf="(totalProducts$ | ngrxPush) === 0">
-      {{ t('wallets.buyNum.inAppProductsNotAvailableYetPleaseTryAgainLater') }}
+      {{
+        t('wallets.buyCredits.inAppProductsNotAvailableYetPleaseTryAgainLater')
+      }}
     </ion-list-header>
 
     <ion-card *ngFor="let product of inAppProducts$ | async; let first = first">
@@ -37,7 +39,9 @@
           fill="outline"
           color="success"
         >
-          {{ t('wallets.buyNum.buyPoints', { points: product.numPoints }) }}
+          {{
+            t('wallets.buyCredits.buyXCredits', { credits: product.numPoints })
+          }}
           <ion-spinner
             *ngIf="product.inAppProduct.state !== 'valid'"
           ></ion-spinner>
