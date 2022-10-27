@@ -309,12 +309,13 @@
     "pending": "Pending",
     "total": "Total",
     "calculateGasFee": "Calculate Gas",
-    "buyNum": {
-      "buyNum": "Buy NUM Points",
-      "buyPoints": "Buy {{points}} Points",
-      "pointsAdded": "{{points}} NUM points added",
-      "failedToAddPoints": "Failed to add points",
-      "thisPackageIncludesXNumPoints": "This package include {{points}} NUM points.",
+    "buyCredits": {
+      "credits": "Credits",
+      "buyCredits": "Buy Credits",
+      "buyXCredits": "Buy {{credits}} credits",
+      "xCreditsAdded": "{{credits}} credits added",
+      "failedToAddCredits": "Failed to add credits",
+      "thisPackageIncludeXCredits": "This package include {{credits}} credits",
       "okIGotIt": "Ok, I got it",
       "inAppProductsNotAvailableYetPleaseTryAgainLater": "In App Products are not available yet. Try again later."
     }

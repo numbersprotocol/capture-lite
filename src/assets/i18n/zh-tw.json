@@ -309,14 +309,15 @@
     "pending": "待計算",
     "total": "總額",
     "calculateGasFee": "計算油費",
-    "buyNum": {
-      "buyNum": "購買 NUM 點數",
-      "buyPoints": "購買{{points}}點數",
-      "pointsAdded": "加值 {{points}} NUM 點數",
-      "failedToAddPoints": "加值失敗",
-      "thisPackageIncludesXNumPoints": "此方案包括{{points}}個 NUM 點數",
-      "okIGotIt": "好，我了解",
-      "inAppProductsNotAvailableYetPleaseTryAgainLater": "App 內購買目前無法使用，請稍後再試"
+    "buyCredits": {
+      "credits": "點數",
+      "buyCredits": "購買點數",
+      "buyXCredits": "購買 {{credits}} 點",
+      "xCreditsAdded": "已添加 {{credits}} 點",
+      "failedToAddCredits": "添加點數失敗",
+      "thisPackageIncludeXCredits": "此方案包含 {{credits}} 點",
+      "okIGotIt": "Ok, I got it",
+      "inAppProductsNotAvailableYetPleaseTryAgainLater": "App 內購買目前無法使用，請稍後再試."
     }
   },
   "invitation": {
