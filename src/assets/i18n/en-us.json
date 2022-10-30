@@ -190,7 +190,8 @@
     "mintNftAlert": "Once the NFT is minted, photo and its information can be accessed publicly. Do you still want to proceed?",
     "sentSuccessfully": "Sent Successfully",
     "confirmCopyPrivateKey": "Warning: Please do not expose your private key to anyone. Lost of private key may cause your account to be lost permanently.",
-    "hasListedInCaptureClub": "This asset has already been listed in CaptureClub."
+    "hasListedInCaptureClub": "This asset has already been listed in CaptureClub.",
+    "notListedInCaptureClub": "This asset is not listed in CaptureClub"
   },
   "error": {
     "validationError": "Invalid operation. Please check your input again.",
@@ -268,7 +269,18 @@
   },
   "details": {
     "collect": "collect",
+    "noNetworkConnectionCannotPerformAction": "No internet connection. Cannot perform the action.",
+    "confirmUnpublish": "Are you sure you want to Unpublish",
+    "actions": {
+      "edit": "Edit",
+      "mintAndShare": "Mint & Share",
+      "unpublish": "Unpublish",
+      "networkActions": "Network Actions",
+      "remove": "Remove"
+    },
     "error": {
+      "canNotPerformMintAndShareAction": "Can not perform Mint & Share action",
+      "canNotPerformOpenNetworkActions": "Can not perform open Network Actions page",
       "transferOwnershipActionIsUnavailable": "Transfer ownership action is unavailable. Please try again later.",
       "viewOnCaptureClubIsUnavailable": "View on CaptureClub action is unavailable. Please try again later.",
       "viewSupportingVideoOnIpfsIsUnavailable": "View supporting video on IPFS action is unavailable. Please try again later.",
