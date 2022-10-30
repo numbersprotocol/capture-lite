@@ -535,7 +535,48 @@ export class DetailsPage {
   }
 
   private async handleUnpublishAction() {
-    throw new Error('Method not implemented.');
+    const unpublishAction$ = this.activeDetailedCapture$.pipe(
+      first(),
+      switchMap(activeDetailedCapture => {
+        return this.diaBackendStoreService.listAllProducts$({
+          associated_id: activeDetailedCapture.id,
+          service_name: 'CaptureClub',
+        });
+      }),
+      switchMap(response => {
+        if (response.count === 0 || !response.results[0].enabled) {
+          throw new Error(
+            this.translocoService.translate('message.notListedInCaptureClub')
+          );
+        }
+        return this.diaBackendStoreService.unpublish$(response.results[0].id);
+      }),
+      catchError((err: unknown) => this.errorService.toastError$(err))
+    );
+
+    const confirmed = await this.confirmAlert.present({
+      message: this.translocoService.translate('details.confirmUnpublish'),
+    });
+
+    if (confirmed) {
+      this.networkService.connected$
+        .pipe(
+          first(),
+          concatMap(networkConnected => {
+            if (!networkConnected) {
+              return this.errorService.toastError$(
+                this.translocoService.translate(
+                  'details.noNetworkConnectionCannotPerformAction'
+                )
+              );
+            }
+            return this.blockingActionService
+              .run$(unpublishAction$)
+              .pipe(untilDestroyed(this));
+          })
+        )
+        .subscribe();
+    }
   }
 
   private handleOpenNetworkActions() {
