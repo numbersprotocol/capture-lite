@@ -580,7 +580,45 @@ export class DetailsPage {
   }
 
   private handleOpenNetworkActions() {
-    throw new Error('Method not implemented.');
+    combineLatest([
+      this.networkConnected$,
+      this.activeDetailedCapture$,
+      this.activeDetailedCapture$.pipe(
+        switchMap(c => c.postCreationWorkflowCompleted$)
+      ),
+    ])
+      .pipe(
+        first(),
+        concatMap(
+          ([
+            networkConnected,
+            detailedCapture,
+            postCreationWorkflowCompleted,
+          ]) => {
+            if (!networkConnected) {
+              return this.errorService.toastError$(
+                this.translocoService.translate(
+                  'details.noNetworkConnectionCannotPerformAction'
+                )
+              );
+            }
+
+            if (postCreationWorkflowCompleted) {
+              return this.router.navigate(
+                ['actions', { id: detailedCapture.id }],
+                { relativeTo: this.route }
+              );
+            }
+
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'details.error.canNotPerformOpenNetworkActions'
+              )
+            );
+          }
+        )
+      )
+      .subscribe();
   }
 
   private async handleRemoveAction() {
