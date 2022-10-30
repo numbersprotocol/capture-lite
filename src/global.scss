@@ -179,3 +179,9 @@ body.dark .mat-tab-group {
   --color-secondary: #03a9f4 !important; /* stylelint-disable-line declaration-no-important */
   --color-secondary-dark: #046bbf !important; /* stylelint-disable-line declaration-no-important */
 }
+
+.details-page-options-menu-remove-button {
+  span {
+    color: #f33434;
+  }
+}

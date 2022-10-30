@@ -33,6 +33,7 @@ import { BUBBLE_IFRAME_URL } from '../../../shared/dia-backend/secret';
 import { DiaBackendWorkflowService } from '../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { MediaStore } from '../../../shared/media/media-store/media-store.service';
+import { NetworkService } from '../../../shared/network/network.service';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import { ShareService } from '../../../shared/share/share.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
@@ -231,6 +232,8 @@ export class DetailsPage {
 
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
+  readonly networkConnected$ = this.networkService.connected$;
+
   constructor(
     private readonly sanitizer: DomSanitizer,
     private readonly proofRepository: ProofRepository,
@@ -252,7 +255,8 @@ export class DetailsPage {
     private readonly alertController: AlertController,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly userGuideService: UserGuideService,
-    private readonly actionsService: ActionsService
+    private readonly actionsService: ActionsService,
+    private readonly networkService: NetworkService
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -413,6 +417,79 @@ export class DetailsPage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  async openOptionsMenuEvenOffline() {
+    this.userGuideService.setHasClickedDetailsPageOptionsMenu(true);
+
+    return new Promise<void>(resolve => {
+      const buttons: ActionSheetButton[] = [];
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.edit'),
+        handler: () => {
+          this.handleEditAction();
+          resolve();
+        },
+      });
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.mintAndShare'),
+        handler: () => {
+          this.handleMintAndShareAction();
+          resolve();
+        },
+      });
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.unpublish'),
+        handler: () => {
+          this.handleUnpublishAction();
+          resolve();
+        },
+      });
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.networkActions'),
+        handler: () => {
+          this.handleOpenNetworkActions();
+          resolve();
+        },
+      });
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.remove'),
+        cssClass: 'details-page-options-menu-remove-button',
+        handler: () => {
+          this.handleRemoveAction();
+          resolve();
+        },
+      });
+
+      this.actionSheetController
+        .create({ buttons })
+        .then(sheet => sheet.present());
+    });
+  }
+
+  private handleEditAction() {
+    throw new Error('Method not implemented.');
+  }
+
+  private async handleMintAndShareAction() {
+    throw new Error('Method not implemented.');
+  }
+
+  private async handleUnpublishAction() {
+    throw new Error('Method not implemented.');
+  }
+
+  private handleOpenNetworkActions() {
+    throw new Error('Method not implemented.');
+  }
+
+  private async handleRemoveAction() {
+    throw new Error('Method not implemented.');
   }
 
   openOptionsMenu() {
