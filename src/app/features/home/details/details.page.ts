@@ -622,7 +622,48 @@ export class DetailsPage {
   }
 
   private async handleRemoveAction() {
-    throw new Error('Method not implemented.');
+    const removeAction$ = this.activeDetailedCapture$.pipe(
+      first(),
+      switchTap(activeDetailedCapture =>
+        defer(() => {
+          if (activeDetailedCapture.id) {
+            return this.diaBackendAssetRepository.removeCaptureById$(
+              activeDetailedCapture.id
+            );
+          }
+          return VOID$;
+        })
+      ),
+      concatMap(activeDetailedCapture => activeDetailedCapture.proof$),
+      concatMap(proof => {
+        if (proof) return this.proofRepository.remove(proof);
+        return VOID$;
+      }),
+      catchError((err: unknown) => this.errorService.toastError$(err)),
+      concatMapTo(defer(() => this.router.navigate(['..'])))
+    );
+
+    const confirmed = await this.confirmAlert.present();
+
+    if (confirmed) {
+      this.networkConnected$
+        .pipe(
+          first(),
+          concatMap(networkConnected => {
+            if (!networkConnected) {
+              return this.errorService.toastError$(
+                this.translocoService.translate(
+                  'details.noNetworkConnectionCannotPerformAction'
+                )
+              );
+            }
+            return this.blockingActionService
+              .run$(removeAction$)
+              .pipe(untilDestroyed(this));
+          })
+        )
+        .subscribe();
+    }
   }
 
   openOptionsMenu() {
