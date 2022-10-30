@@ -30,6 +30,7 @@ import { ContactSelectionDialogComponent } from '../../../shared/contact-selecti
 import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../shared/dia-backend/secret';
+import { DiaBackendStoreService } from '../../../shared/dia-backend/store/dia-backend-store.service';
 import { DiaBackendWorkflowService } from '../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { MediaStore } from '../../../shared/media/media-store/media-store.service';
@@ -256,7 +257,8 @@ export class DetailsPage {
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly userGuideService: UserGuideService,
     private readonly actionsService: ActionsService,
-    private readonly networkService: NetworkService
+    private readonly networkService: NetworkService,
+    private readonly diaBackendStoreService: DiaBackendStoreService
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -473,7 +475,21 @@ export class DetailsPage {
   }
 
   private handleEditAction() {
-    throw new Error('Method not implemented.');
+    this.networkConnected$
+      .pipe(
+        first(),
+        concatMap(networkConnected => {
+          if (!networkConnected) {
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'details.noNetworkConnectionCannotPerformAction'
+              )
+            );
+          }
+          return this.editCaption();
+        })
+      )
+      .subscribe();
   }
 
   private async handleMintAndShareAction() {
