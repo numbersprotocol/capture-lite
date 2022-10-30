@@ -114,6 +114,7 @@ export class AppComponent {
       'capture-rebrand-arrow-left',
       'capture-rebrand-share',
       'capture-rebrand-more-horiz',
+      'capture-reband-camera-grid',
       'capture',
       'profile',
       'search',
