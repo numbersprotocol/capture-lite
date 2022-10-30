@@ -493,7 +493,45 @@ export class DetailsPage {
   }
 
   private async handleMintAndShareAction() {
-    throw new Error('Method not implemented.');
+    combineLatest([
+      this.networkConnected$,
+      this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
+      this.activeDetailedCapture$.pipe(
+        switchMap(c => c.postCreationWorkflowCompleted$)
+      ),
+    ])
+      .pipe(
+        first(),
+        concatMap(
+          ([
+            networkConnected,
+            diaBackendAsset,
+            postCreationWorkflowCompleted,
+          ]) => {
+            if (!networkConnected) {
+              return this.errorService.toastError$(
+                this.translocoService.translate(
+                  'details.noNetworkConnectionCannotPerformAction'
+                )
+              );
+            }
+
+            if (
+              postCreationWorkflowCompleted &&
+              diaBackendAsset?.nft_token_id === null
+            ) {
+              return this.mintNft();
+            }
+
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'details.error.canNotPerformMintAndShareAction'
+              )
+            );
+          }
+        )
+      )
+      .subscribe();
   }
 
   private async handleUnpublishAction() {
