@@ -5,9 +5,14 @@ import {
   Inject,
   Input,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { FilesystemPlugin } from '@capacitor/filesystem';
-import { getEditorDefaults } from '@pqina/pintura';
+import {
+  ColorMatrix,
+  getEditorDefaults,
+  PinturaDefaultImageWriterResult,
+} from '@pqina/pintura';
 import { BehaviorSubject, combineLatest, EMPTY, of, ReplaySubject } from 'rxjs';
 import { catchError, filter, first, map, switchMap, tap } from 'rxjs/operators';
 import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
@@ -22,7 +27,20 @@ type CaptureMimeType = 'image/jpeg' | 'video/mp4';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrePublishModeComponent {
-  readonly pinturaEditorOptions: any = { ...getEditorDefaults() };
+  readonly pinturaEditorOptions: any = {
+    ...getEditorDefaults({
+      enableUtils: false,
+      enableZoomControls: false,
+      cropEnableRotationInput: false,
+      cropEnableZoomInput: false,
+      cropEnableButtonFlipHorizontal: false,
+      cropEnableButtonRotateLeft: false,
+      cropEnableImageSelection: false,
+      enableToolbar: false,
+    }),
+  };
+
+  private toggleBlackAndWhiteFilter = true;
 
   readonly curCaptureFilePath$ = new ReplaySubject<string>(1);
 
@@ -68,6 +86,8 @@ export class PrePublishModeComponent {
 
   @Output() confirm: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild('pinturaEditor') pintura?: any;
+
   constructor(
     @Inject(FILESYSTEM_PLUGIN)
     private readonly filesystemPlugin: FilesystemPlugin
@@ -83,6 +103,38 @@ export class PrePublishModeComponent {
 
   handelEditorProcessError() {
     this.isProcessingImage$.next(false);
+  }
+
+  async applyBlackAndWhiteFilter() {
+    const monoFilter: ColorMatrix = [
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+      0.212, 0.715, 0.114, 0, 0, 0.212, 0.715, 0.114, 0, 0, 0.212, 0.715, 0.114,
+      0, 0, 0, 0, 0, 1, 0,
+    ];
+    const filter = this.toggleBlackAndWhiteFilter ? monoFilter : undefined;
+    const result: PinturaDefaultImageWriterResult =
+      await this.pintura.editor.processImage({ imageColorMatrix: { filter } });
+    this.saveImageChangesToOriginalImageFile(result);
+    this.toggleBlackAndWhiteFilter = !this.toggleBlackAndWhiteFilter;
+  }
+
+  private async saveImageChangesToOriginalImageFile(
+    result: PinturaDefaultImageWriterResult
+  ) {
+    const base64 = await blobToBase64(result.dest);
+    combineLatest([this.curCaptureFilePath$, of(base64)])
+      .pipe(
+        first(),
+        switchMap(([path, data]) =>
+          this.filesystemPlugin.writeFile({ path, data })
+        ),
+        tap(() => this.isProcessingImage$.next(false)),
+        catchError(() => {
+          this.isProcessingImage$.next(false);
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   async handleEditorProcess(imageWriterResult: any): Promise<void> {
