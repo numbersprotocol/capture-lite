@@ -67,6 +67,12 @@ body.dark .mat-toolbar {
   color: var(--ion-color-primary);
 }
 
+.details-page-options-menu-remove-button {
+  span {
+    color: #f33434;
+  }
+}
+
 mat-toolbar.mat-toolbar {
   background-color: var(--ion-background-color);
   color: var(--ion-color-primary);
@@ -178,10 +184,4 @@ body.dark .mat-tab-group {
   --color-primary-text: white !important; /* stylelint-disable-line declaration-no-important */
   --color-secondary: #03a9f4 !important; /* stylelint-disable-line declaration-no-important */
   --color-secondary-dark: #046bbf !important; /* stylelint-disable-line declaration-no-important */
-}
-
-.details-page-options-menu-remove-button {
-  span {
-    color: #f33434;
-  }
 }
