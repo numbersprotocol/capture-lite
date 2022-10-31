@@ -178,7 +178,7 @@ export class MediaStore {
   }
 
   private async makeThumbnail(index: string, mimeType: MimeType) {
-    const thumbnailSize = 100;
+    const thumbnailSize = 500;
     const thumbnailBlob = mimeType.startsWith('video')
       ? await makeVideoThumbnail({
           videoUrl: await this.getUrl(index, mimeType),
@@ -336,7 +336,7 @@ export const enum OnWriteExistStrategy {
 async function makeImageThumbnail({
   image,
   width,
-  quality = 0.6,
+  quality = 0.8,
 }: {
   image: Blob;
   width: number;
