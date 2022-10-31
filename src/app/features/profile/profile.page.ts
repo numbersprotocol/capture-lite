@@ -111,36 +111,6 @@ export class ProfilePage {
       )
       .subscribe();
   }
-
-  /**
-   * // TODO: Integrate Storage Backend delete function after it's ready.
-   * Delete user account from Storage Backend.
-   */
-  async delete() {
-    const email: string = await this.diaBackendAuthService.getEmail();
-
-    const action$ = this.diaBackendAuthService.deleteUser$(email).pipe(
-      // logout
-      concatMapTo(defer(() => this.mediaStore.clear())),
-      concatMapTo(defer(() => this.database.clear())),
-      concatMapTo(defer(() => this.preferenceManager.clear())),
-      concatMapTo(defer(reloadApp)),
-      catchError((err: unknown) => this.errorService.toastError$(err))
-    );
-
-    return defer(() =>
-      this.confirmAlert.present({
-        message: this.translocoService.translate('message.confirmDelete'),
-      })
-    )
-      .pipe(
-        concatMap(result =>
-          iif(() => result, this.blockingActionService.run$(action$))
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
-  }
 }
 
 // Reload the app to force app to re-run the initialization in AppModule.
