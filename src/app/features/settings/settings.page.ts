@@ -18,6 +18,7 @@ import { ErrorService } from '../../shared/error/error.service';
 import { LanguageService } from '../../shared/language/service/language.service';
 import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
+import { reloadApp } from '../../utils/miscellaneous';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -97,9 +98,4 @@ export class SettingsPage {
       )
       .subscribe();
   }
-}
-
-// Reload the app to force app to re-run the initialization in AppModule.
-function reloadApp() {
-  location.href = 'index.html';
 }
