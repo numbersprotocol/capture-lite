@@ -124,13 +124,13 @@ export class InAppStoreService implements OnDestroy {
       inAppProduct.finish();
 
       this.notifyUser(
-        this.translocoService.translate('wallets.buyNum.pointsAdded', {
-          points: pointsToAdd,
+        this.translocoService.translate('wallets.buyCredits.xCreditsAdded', {
+          credits: pointsToAdd,
         })
       );
     } catch (error) {
       const errorMessage = this.translocoService.translate(
-        'wallets.buyNum.failedToAddPoints'
+        'wallets.buyCredits.failedToAddCredits'
       );
       this.errorService.toastError$(errorMessage).toPromise();
     }

@@ -41,7 +41,7 @@
         <ng-template #balanceLoading>
           <mat-spinner diameter="15"></mat-spinner>
         </ng-template>
-        Points:
+        {{ t('wallets.buyCredits.credits') }}:
         <span
           class="bep20-points"
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
@@ -54,7 +54,7 @@
           id="buy-num-btn"
           size="small"
           class="num-operation-btn"
-          >{{ t('buy') }} NUM</ion-button
+          >{{ t('wallets.buyCredits.buyCredits') }}</ion-button
         >
         <ion-button
           *ngIf="shouldHideDepositButton === false"
