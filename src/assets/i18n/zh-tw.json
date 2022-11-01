@@ -190,7 +190,8 @@
     "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？",
     "sentSuccessfully": "成功送出",
     "confirmCopyPrivateKey": "警告：請不要向任何人揭露您的金鑰，未保管好金鑰可能導致您永遠失去您的帳號。",
-    "hasListedInCaptureClub": "該資產已在 CaptureClub 上架。"
+    "hasListedInCaptureClub": "該資產已在 CaptureClub 上架。",
+    "notListedInCaptureClub": "該資產未上架 CaptureClub"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",
@@ -268,7 +269,18 @@
   },
   "details": {
     "collect": "蒐集",
+    "noNetworkConnectionCannotPerformAction": "沒有網絡連接。 無法執行該操作。",
+    "confirmUnpublish": "您確定要取消發布嗎",
+    "actions": {
+      "edit": "編輯",
+      "mintAndShare": "鑄造並分享",
+      "unpublish": "取消發布",
+      "networkActions": "網絡動作",
+      "remove": "移除"
+    },
     "error": {
+      "canNotPerformMintAndShareAction": "無法執行鑄造及分享",
+      "canNotPerformOpenNetworkActions": "無法打開網絡動作頁面",
       "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",
       "viewOnCaptureClubIsUnavailable": "暫時無法在 CaptureClub 觀看，請稍後再試。",
       "viewSupportingVideoOnIpfsIsUnavailable": "暫時無法觀看 IPFS 影片，請稍後再試。",
@@ -309,14 +321,15 @@
     "pending": "待計算",
     "total": "總額",
     "calculateGasFee": "計算油費",
-    "buyNum": {
-      "buyNum": "購買 NUM 點數",
-      "buyPoints": "購買{{points}}點數",
-      "pointsAdded": "加值 {{points}} NUM 點數",
-      "failedToAddPoints": "加值失敗",
-      "thisPackageIncludesXNumPoints": "此方案包括{{points}}個 NUM 點數",
-      "okIGotIt": "好，我了解",
-      "inAppProductsNotAvailableYetPleaseTryAgainLater": "App 內購買目前無法使用，請稍後再試"
+    "buyCredits": {
+      "credits": "點數",
+      "buyCredits": "購買點數",
+      "buyXCredits": "購買 {{credits}} 點",
+      "xCreditsAdded": "已添加 {{credits}} 點",
+      "failedToAddCredits": "添加點數失敗",
+      "thisPackageIncludeXCredits": "此方案包含 {{credits}} 點",
+      "okIGotIt": "Ok, I got it",
+      "inAppProductsNotAvailableYetPleaseTryAgainLater": "App 內購買目前無法使用，請稍後再試."
     }
   },
   "invitation": {

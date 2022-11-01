@@ -20,6 +20,11 @@ jobs:
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
 
+      - name: Generate .npmrc for pintura package
+        env:
+          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
+        run: npm run preconfig.npmrc
+
       - name: Install dependencies
         run: npm install
 
@@ -40,6 +45,11 @@ jobs:
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
+
+      - name: Generate .npmrc for pintura package
+        env:
+          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
+        run: npm run preconfig.npmrc
 
       - name: Install dependencies
         run: npm install

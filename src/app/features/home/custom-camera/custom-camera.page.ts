@@ -258,6 +258,11 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     // TODO: send change camera quality command to native side
   }
 
+  toggleCameraQuality() {
+    if (this.cameraQuality === 'hq') this.setCameraQuality('low');
+    else this.setCameraQuality('hq');
+  }
+
   private removeCurrentCapture() {
     this.customCameraService.removeFile(this.curCaptureFilePath);
     this.curCaptureFilePath = undefined;
