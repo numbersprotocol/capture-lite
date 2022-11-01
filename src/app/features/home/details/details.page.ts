@@ -30,9 +30,11 @@ import { ContactSelectionDialogComponent } from '../../../shared/contact-selecti
 import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../shared/dia-backend/secret';
+import { DiaBackendStoreService } from '../../../shared/dia-backend/store/dia-backend-store.service';
 import { DiaBackendWorkflowService } from '../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { MediaStore } from '../../../shared/media/media-store/media-store.service';
+import { NetworkService } from '../../../shared/network/network.service';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import { ShareService } from '../../../shared/share/share.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
@@ -231,6 +233,8 @@ export class DetailsPage {
 
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
+  readonly networkConnected$ = this.networkService.connected$;
+
   constructor(
     private readonly sanitizer: DomSanitizer,
     private readonly proofRepository: ProofRepository,
@@ -252,7 +256,9 @@ export class DetailsPage {
     private readonly alertController: AlertController,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly userGuideService: UserGuideService,
-    private readonly actionsService: ActionsService
+    private readonly actionsService: ActionsService,
+    private readonly networkService: NetworkService,
+    private readonly diaBackendStoreService: DiaBackendStoreService
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -413,6 +419,251 @@ export class DetailsPage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  async openOptionsMenuEvenOffline() {
+    this.userGuideService.setHasClickedDetailsPageOptionsMenu(true);
+
+    return new Promise<void>(resolve => {
+      const buttons: ActionSheetButton[] = [];
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.edit'),
+        handler: () => {
+          this.handleEditAction();
+          resolve();
+        },
+      });
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.mintAndShare'),
+        handler: () => {
+          this.handleMintAndShareAction();
+          resolve();
+        },
+      });
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.unpublish'),
+        handler: () => {
+          this.handleUnpublishAction();
+          resolve();
+        },
+      });
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.networkActions'),
+        handler: () => {
+          this.handleOpenNetworkActions();
+          resolve();
+        },
+      });
+
+      buttons.push({
+        text: this.translocoService.translate('details.actions.remove'),
+        cssClass: 'details-page-options-menu-remove-button',
+        handler: () => {
+          this.handleRemoveAction();
+          resolve();
+        },
+      });
+
+      this.actionSheetController
+        .create({ buttons })
+        .then(sheet => sheet.present());
+    });
+  }
+
+  private handleEditAction() {
+    this.networkConnected$
+      .pipe(
+        first(),
+        concatMap(networkConnected => {
+          if (!networkConnected) {
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'details.noNetworkConnectionCannotPerformAction'
+              )
+            );
+          }
+          return this.editCaption();
+        })
+      )
+      .subscribe();
+  }
+
+  private async handleMintAndShareAction() {
+    combineLatest([
+      this.networkConnected$,
+      this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
+      this.activeDetailedCapture$.pipe(
+        switchMap(c => c.postCreationWorkflowCompleted$)
+      ),
+    ])
+      .pipe(
+        first(),
+        concatMap(
+          ([
+            networkConnected,
+            diaBackendAsset,
+            postCreationWorkflowCompleted,
+          ]) => {
+            if (!networkConnected) {
+              return this.errorService.toastError$(
+                this.translocoService.translate(
+                  'details.noNetworkConnectionCannotPerformAction'
+                )
+              );
+            }
+
+            if (
+              postCreationWorkflowCompleted &&
+              diaBackendAsset?.nft_token_id === null
+            ) {
+              return this.mintNft();
+            }
+
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'details.error.canNotPerformMintAndShareAction'
+              )
+            );
+          }
+        )
+      )
+      .subscribe();
+  }
+
+  private async handleUnpublishAction() {
+    const unpublishAction$ = this.activeDetailedCapture$.pipe(
+      first(),
+      switchMap(activeDetailedCapture => {
+        return this.diaBackendStoreService.listAllProducts$({
+          associated_id: activeDetailedCapture.id,
+          service_name: 'CaptureClub',
+        });
+      }),
+      switchMap(response => {
+        if (response.count === 0 || !response.results[0].enabled) {
+          throw new Error(
+            this.translocoService.translate('message.notListedInCaptureClub')
+          );
+        }
+        return this.diaBackendStoreService.unpublish$(response.results[0].id);
+      }),
+      catchError((err: unknown) => this.errorService.toastError$(err))
+    );
+
+    const confirmed = await this.confirmAlert.present({
+      message: this.translocoService.translate('details.confirmUnpublish'),
+    });
+
+    if (confirmed) {
+      this.networkService.connected$
+        .pipe(
+          first(),
+          concatMap(networkConnected => {
+            if (!networkConnected) {
+              return this.errorService.toastError$(
+                this.translocoService.translate(
+                  'details.noNetworkConnectionCannotPerformAction'
+                )
+              );
+            }
+            return this.blockingActionService
+              .run$(unpublishAction$)
+              .pipe(untilDestroyed(this));
+          })
+        )
+        .subscribe();
+    }
+  }
+
+  private handleOpenNetworkActions() {
+    combineLatest([
+      this.networkConnected$,
+      this.activeDetailedCapture$,
+      this.activeDetailedCapture$.pipe(
+        switchMap(c => c.postCreationWorkflowCompleted$)
+      ),
+    ])
+      .pipe(
+        first(),
+        concatMap(
+          ([
+            networkConnected,
+            detailedCapture,
+            postCreationWorkflowCompleted,
+          ]) => {
+            if (!networkConnected) {
+              return this.errorService.toastError$(
+                this.translocoService.translate(
+                  'details.noNetworkConnectionCannotPerformAction'
+                )
+              );
+            }
+
+            if (postCreationWorkflowCompleted) {
+              return this.router.navigate(
+                ['actions', { id: detailedCapture.id }],
+                { relativeTo: this.route }
+              );
+            }
+
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'details.error.canNotPerformOpenNetworkActions'
+              )
+            );
+          }
+        )
+      )
+      .subscribe();
+  }
+
+  private async handleRemoveAction() {
+    const removeAction$ = this.activeDetailedCapture$.pipe(
+      first(),
+      switchTap(activeDetailedCapture =>
+        defer(() => {
+          if (activeDetailedCapture.id) {
+            return this.diaBackendAssetRepository.removeCaptureById$(
+              activeDetailedCapture.id
+            );
+          }
+          return VOID$;
+        })
+      ),
+      concatMap(activeDetailedCapture => activeDetailedCapture.proof$),
+      concatMap(proof => {
+        if (proof) return this.proofRepository.remove(proof);
+        return VOID$;
+      }),
+      catchError((err: unknown) => this.errorService.toastError$(err)),
+      concatMapTo(defer(() => this.router.navigate(['..'])))
+    );
+
+    const confirmed = await this.confirmAlert.present();
+
+    if (confirmed) {
+      this.networkConnected$
+        .pipe(
+          first(),
+          concatMap(networkConnected => {
+            if (!networkConnected) {
+              return this.errorService.toastError$(
+                this.translocoService.translate(
+                  'details.noNetworkConnectionCannotPerformAction'
+                )
+              );
+            }
+            return this.blockingActionService
+              .run$(removeAction$)
+              .pipe(untilDestroyed(this));
+          })
+        )
+        .subscribe();
+    }
   }
 
   openOptionsMenu() {

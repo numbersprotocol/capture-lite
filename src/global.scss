@@ -67,6 +67,12 @@ body.dark .mat-toolbar {
   color: var(--ion-color-primary);
 }
 
+.details-page-options-menu-remove-button {
+  span {
+    color: #f33434;
+  }
+}
+
 mat-toolbar.mat-toolbar {
   background-color: var(--ion-background-color);
   color: var(--ion-color-primary);

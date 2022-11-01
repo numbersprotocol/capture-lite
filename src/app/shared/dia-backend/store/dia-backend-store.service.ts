@@ -56,6 +56,18 @@ export class DiaBackendStoreService {
       })
     );
   }
+
+  unpublish$(id: string) {
+    return defer(() => this.authService.getAuthHeadersWithApiKey()).pipe(
+      concatMap(headers => {
+        return this.httpClient.post(
+          `${BASE_URL}/api/v3/store/products/${id}/disable/`,
+          {},
+          { headers }
+        );
+      })
+    );
+  }
 }
 
 export interface NetworkAppOrder {
