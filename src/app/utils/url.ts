@@ -1,3 +1,4 @@
+import { BUBBLE_IFRAME_URL } from '../shared/dia-backend/secret';
 import { urlToDownloadApp } from './constants';
 import { MimeType } from './mime-type';
 
@@ -17,6 +18,10 @@ export function getAssetProfileForNSE(id: string, token?: string) {
     return `https://nftsearch.site/asset-profile?cid=${id}&tmp_token=${token}`;
   }
   return `https://nftsearch.site/asset-profile?cid=${id}`;
+}
+
+export function getAssetProfileForCaptureIframe(cid: string) {
+  return `${BUBBLE_IFRAME_URL}/asset_page?nid=${cid}`;
 }
 
 export function getAppDownloadLink(isPlatform: (platformName: any) => boolean) {
