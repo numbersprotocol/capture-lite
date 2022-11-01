@@ -25,6 +25,7 @@
     class="image-editor-container"
   >
     <pintura-editor
+      #pinturaEditor
       [src]="curImageBase64"
       [options]="pinturaEditorOptions"
       (processstart)="handleEditorProcessStart()"
@@ -32,6 +33,19 @@
       (processerror)="handelEditorProcessError()"
       (process)="handleEditorProcess($event)"
     ></pintura-editor>
+  </div>
+
+  <div class="image-editor-custom-buttons">
+    <button
+      (click)="applyBlackAndWhiteFilter()"
+      class="back-button"
+      mat-mini-fab
+    >
+      <mat-icon
+        class="black-and-white-filter-button"
+        svgIcon="capture-rebrand-camera-auto-enhance"
+      ></mat-icon>
+    </button>
   </div>
 </div>
 

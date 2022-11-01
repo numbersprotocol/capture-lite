@@ -14,6 +14,13 @@
       {{ isFlashOn ? 'flash_on' : 'flash_off' }}
     </mat-icon>
 
+    <mat-icon
+      class="camera-quality-button"
+      [svgIcon]="'capture-rebrand-camera-' + cameraQuality"
+      (click)="toggleCameraQuality()"
+    >
+    </mat-icon>
+
     <div
       class="select-from-go-pro-camera-button"
       *ngIf="lastConnectedGoProDevice$ | ngrxPush"
@@ -91,32 +98,6 @@
       </div>
     </div>
   </ng-container>
-
-  <!-- fab placed in the center of the content with a list on each side -->
-  <ion-fab
-    *ngIf="(mode$ | ngrxPush) === 'capture'"
-    vertical="start"
-    style="margin-top: 80px"
-    horizontal="end"
-    slot="fixed"
-  >
-    <ion-fab-button size="small">
-      {{
-        cameraQuality === 'hq'
-          ? t('customCamera.max')
-          : t('customCamera.social')
-      }}
-    </ion-fab-button>
-
-    <ion-fab-list side="bottom">
-      <ion-fab-button (click)="setCameraQuality('hq')">
-        {{ t('customCamera.max') }}
-      </ion-fab-button>
-      <ion-fab-button (click)="setCameraQuality('low')">
-        {{ t('customCamera.social') }}
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
 
   <ng-container *ngIf="(mode$ | ngrxPush) === 'pre-publish'">
     <app-pre-publish-mode
