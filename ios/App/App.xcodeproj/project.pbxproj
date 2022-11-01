@@ -374,8 +374,8 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = io.numbersprotocol.capturelite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = NumbersAppDistributionV3;
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NumbersAppDistributionV3;
+				PROVISIONING_PROFILE_SPECIFIER = NumbersAppDistributionV4;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NumbersAppDistributionV4;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG USE_PUSH";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -400,8 +400,8 @@
 				MARKETING_VERSION = 0.68.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.numbersprotocol.capturelite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = NumbersAppDistributionV3;
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NumbersAppDistributionV3;
+				PROVISIONING_PROFILE_SPECIFIER = NumbersAppDistributionV4;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NumbersAppDistributionV4;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_PUSH;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
