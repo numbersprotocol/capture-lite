@@ -1,20 +1,7 @@
 <div class="action-buttons">
-  <div class="left-side-buttons">
-    <button (click)="onDiscard()" class="back-button" mat-mini-fab>
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <div class="h-space-12"></div>
-    <button
-      (click)="applyBlackAndWhiteFilter()"
-      class="back-button"
-      mat-mini-fab
-    >
-      <mat-icon
-        class="black-and-white-filter-button"
-        svgIcon="capture-reband-camera-grid"
-      ></mat-icon>
-    </button>
-  </div>
+  <button (click)="onDiscard()" class="back-button" mat-mini-fab>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
 
   <button
     (click)="onConfirm()"
@@ -46,6 +33,19 @@
       (processerror)="handelEditorProcessError()"
       (process)="handleEditorProcess($event)"
     ></pintura-editor>
+  </div>
+
+  <div class="image-editor-custom-buttons">
+    <button
+      (click)="applyBlackAndWhiteFilter()"
+      class="back-button"
+      mat-mini-fab
+    >
+      <mat-icon
+        class="black-and-white-filter-button"
+        svgIcon="capture-reband-camera-grid"
+      ></mat-icon>
+    </button>
   </div>
 </div>
 

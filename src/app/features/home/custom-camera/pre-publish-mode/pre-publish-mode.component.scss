@@ -11,9 +11,10 @@ $footer-padding-bottom: calc(var(--ion-safe-area-bottom) + 4px);
 $footer-total-height: calc(
   #{$footer-height} + #{$footer-padding-top} + #{$footer-padding-bottom}
 );
+$image-editor-custom-buttons-height: calc(24px + 48px);
 
 $image-editor-container-height: calc(
-  100vh - #{$action-buttons-total-height} - #{$footer-padding-bottom}
+  100vh - #{$action-buttons-total-height} - #{$footer-padding-bottom} - #{$image-editor-custom-buttons-height}
 );
 
 .h-space-12 {
@@ -31,11 +32,6 @@ $image-editor-container-height: calc(
   flex-direction: row;
   justify-content: space-between;
   z-index: 100;
-
-  .left-side-buttons {
-    display: flex;
-    flex-direction: row;
-  }
 }
 
 .footer {
@@ -71,7 +67,7 @@ $image-editor-container-height: calc(
   overflow: auto;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
 
   app-media {
     width: 100%;
@@ -82,5 +78,13 @@ $image-editor-container-height: calc(
   .image-editor-container {
     height: $image-editor-container-height;
     width: 100vw;
+  }
+
+  .image-editor-custom-buttons {
+    position: absolute;
+    width: 100vw;
+    bottom: 32px;
+    display: flex;
+    justify-content: center;
   }
 }
