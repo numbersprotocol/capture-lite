@@ -9,6 +9,7 @@ import { catchError, first, map } from 'rxjs/operators';
 import { OrderHistoryService } from '../../../../shared/actions/service/order-history.service';
 import { ErrorService } from '../../../../shared/error/error.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import { getAssetProfileForCaptureIframe } from '../../../../utils/url';
 
 const { Browser, Clipboard } = Plugins;
 @UntilDestroy({ checkProperties: true })
@@ -42,11 +43,13 @@ export class NetworkActionOrderDetailsPage {
   // eslint-disable-next-line class-methods-use-this
   openResultUrl(url: string) {
     if (url) {
-      Browser.open({
-        url: `${url}`,
-        toolbarColor: '#564dfc',
-      });
+      Browser.open({ url, toolbarColor: '#000000' });
     }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  resultUrlFromAssetId(assetId: string) {
+    return getAssetProfileForCaptureIframe(assetId);
   }
 
   async copyToClipboard(value: string) {
