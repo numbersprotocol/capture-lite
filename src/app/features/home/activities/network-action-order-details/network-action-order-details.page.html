@@ -49,13 +49,18 @@
             <ion-label>{{ t('resultUrl') }}:</ion-label>
           </ion-col>
           <ion-col class="wrap-text" align="end">
-            <ion-label (click)="openResultUrl(order.result_url_text)">
-              <a *ngIf="order.result_url_text !== undefined">
-                {{ order.result_url_text }}
-              </a>
-              <ion-text *ngIf="order.result_url_text === undefined">{{
-                t('noResultUrlAvailable')
-              }}</ion-text>
+            <ion-label
+              *ngIf="order.result_url_text !== undefined"
+              (click)="openResultUrl(order.result_url_text)"
+            >
+              <a> {{ order.result_url_text }} </a>
+            </ion-label>
+
+            <ion-label
+              *ngIf="order.result_url_text === undefined"
+              (click)="openResultUrl(resultUrlFromAssetId(order.asset_id_text))"
+            >
+              <a> {{ resultUrlFromAssetId(order.asset_id_text) }} </a>
             </ion-label>
           </ion-col>
           <ion-col size="1"> </ion-col>
