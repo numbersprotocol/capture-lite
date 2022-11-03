@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.69.0] - 2022-11-01
+
+### Changed
+
+1. User can unpublish asset from CaptureClub (#2258)
+2. Rebrand NUM Points to Capture Credits (#2259)
+3. Move delete account button from profile page to settings page (#2260)
+
+### Fixed
+
+1. Make photo editor to respect UI design of black-white filter and HD button (#2257)
+1. Result RUL in the network app history should be URL of Capture asset page (#2255)
+1. Increase thumbnail resolution to 500x500 in profile tab (#2256)
+1. Fix CI build (#2251, #2252)
+
 ## [0.68.0] - 2022-10-25
 
 ### Changed
@@ -1877,7 +1892,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.68.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.69.0...HEAD
+[0.69.0]: https://github.com/numbersprotocol/capture-lite/compare/0.68.0...0.69.0
 [0.68.0]: https://github.com/numbersprotocol/capture-lite/compare/0.67.1...0.68.0
 [0.67.1]: https://github.com/numbersprotocol/capture-lite/compare/0.67.0...0.67.1
 [0.67.0]: https://github.com/numbersprotocol/capture-lite/compare/0.66.3...0.67.0
