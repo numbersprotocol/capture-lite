@@ -29,6 +29,7 @@ import { DiaBackendService } from '../../shared/dia-backend/service/dia-backend-
 import { DiaBackendTransactionRepository } from '../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../shared/error/error.service';
+import { IframeService } from '../../shared/iframe/iframe.service';
 import { MigrationService } from '../../shared/migration/service/migration.service';
 import { OnboardingService } from '../../shared/onboarding/onboarding.service';
 import { UserGuideService } from '../../shared/user-guide/user-guide.service';
@@ -85,7 +86,8 @@ export class HomePage {
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly diaBackendWalletService: DiaBackendWalletService,
     private readonly userGuideService: UserGuideService,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly iframeService: IframeService
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -344,7 +346,8 @@ export class HomePage {
   // eslint-disable-next-line class-methods-use-this
   navigateToExploreTab() {
     if (this.selectedTabIndex === 0) {
-      window.location.reload();
+      // window.location.reload();
+      this.iframeService.refreshExploreTabIframe();
     }
   }
 
