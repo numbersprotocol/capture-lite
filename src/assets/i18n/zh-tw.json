@@ -190,8 +190,8 @@
     "mintNftAlert": "NFT 代幣鑄造後，影像以及所有資訊都將可被公開檢視。確定要繼續嗎？",
     "sentSuccessfully": "成功送出",
     "confirmCopyPrivateKey": "警告：請不要向任何人揭露您的金鑰，未保管好金鑰可能導致您永遠失去您的帳號。",
-    "hasListedInCaptureClub": "該資產已在 CaptureClub 上架。",
-    "notListedInCaptureClub": "該資產未上架 CaptureClub"
+    "hasListedInCaptureApp": "該資產已在 Capture App 上架。",
+    "notListedInCaptureApp": "該資產未上架 Capture App"
   },
   "error": {
     "validationError": "操作或輸入有誤，請確認您的操作正確。",
