@@ -279,7 +279,7 @@
       "remove": "移除"
     },
     "error": {
-      "canNotPerformMintAndShareAction": "無法執行鑄造及分享",
+      "canNotPerformMintAndShareAction": "該資產已鑄造完成，無法再次鑄造與分享",
       "canNotPerformOpenNetworkActions": "無法打開網絡動作頁面",
       "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",
       "viewOnCaptureClubIsUnavailable": "暫時無法在 CaptureClub 觀看，請稍後再試。",
