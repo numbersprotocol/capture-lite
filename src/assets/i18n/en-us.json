@@ -279,7 +279,7 @@
       "remove": "Remove"
     },
     "error": {
-      "canNotPerformMintAndShareAction": "Can not perform Mint & Share action",
+      "canNotPerformMintAndShareAction": "This asset is minted so that can not perform Mint & Share action",
       "canNotPerformOpenNetworkActions": "Can not perform open Network Actions page",
       "transferOwnershipActionIsUnavailable": "Transfer ownership action is unavailable. Please try again later.",
       "viewOnCaptureClubIsUnavailable": "View on CaptureClub action is unavailable. Please try again later.",
