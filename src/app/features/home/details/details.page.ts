@@ -10,7 +10,14 @@ import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, EMPTY, Observable, ReplaySubject } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  defer,
+  EMPTY,
+  Observable,
+  ReplaySubject,
+} from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -215,12 +222,15 @@ export class DetailsPage {
     })
   );
 
+  readonly refreshIframeAction$ = new BehaviorSubject<Date>(new Date());
+
   readonly iframeUrlWithJWTToken$ = combineLatest([
     this.activeDetailedCapture$,
     this.diaBackendAuthService.cachedQueryJWTToken$,
+    this.refreshIframeAction$,
   ]).pipe(
     distinctUntilChanged(),
-    map(([detailedCapture, token]) => {
+    map(([detailedCapture, token, _]) => {
       const params =
         `nid=${detailedCapture.id}` +
         `&token=${token.access}` +
@@ -1024,6 +1034,7 @@ export class DetailsPage {
             this.captionOn = false;
             this.changeDetectorRef.detectChanges();
             this.captionOn = true;
+            this.refreshIframeAction$.next(new Date());
           })
         )
       ),
