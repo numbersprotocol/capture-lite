@@ -7,10 +7,7 @@ import { mapTo, tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AndroidBackButtonService {
-  private readonly androidBackButtonEvent$ = fromEvent(
-    document,
-    'ionBackButton'
-  );
+  readonly androidBackButtonEvent$ = fromEvent(document, 'ionBackButton');
 
   constructor(private readonly zone: NgZone) {}
 
