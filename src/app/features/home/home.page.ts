@@ -354,8 +354,7 @@ export class HomePage {
 
   private shouldNavigateBackExploreIframe(): void {
     if (this.selectedTabIndex === 0 && this.router.url === '/home') {
-      // eslint-disable-next-line no-console
-      console.log('TODO: send post message to explore iframe');
+      this.iframeService.navigateBackExploreTabIframe();
     }
   }
 
