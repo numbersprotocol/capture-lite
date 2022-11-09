@@ -546,7 +546,7 @@ export class DetailsPage {
       switchMap(response => {
         if (response.count === 0 || !response.results[0].enabled) {
           throw new Error(
-            this.translocoService.translate('message.notListedInCaptureClub')
+            this.translocoService.translate('message.notListedInCaptureApp')
           );
         }
         return this.diaBackendStoreService.unpublish$(response.results[0].id);

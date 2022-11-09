@@ -88,7 +88,7 @@ export class ActionsPage {
         concatMap(([response, cid]) => {
           if (response.count > 0) {
             throw new Error(
-              this.translocoService.translate('message.hasListedInCaptureClub')
+              this.translocoService.translate('message.hasListedInCaptureApp')
             );
           }
           return of(cid);
@@ -107,9 +107,7 @@ export class ActionsPage {
             );
             if (listedAsSeries) {
               throw new Error(
-                this.translocoService.translate(
-                  'message.hasListedInCaptureClub'
-                )
+                this.translocoService.translate('message.hasListedInCaptureApp')
               );
             }
             if (response.next == null) {
