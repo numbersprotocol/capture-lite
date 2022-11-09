@@ -17,6 +17,7 @@ import { CapacitorPluginsModule } from './capacitor-plugins/capacitor-plugins.mo
 import { ContactSelectionDialogComponent } from './contact-selection-dialog/contact-selection-dialog.component';
 import { FriendInvitationDialogComponent } from './contact-selection-dialog/friend-invitation-dialog/friend-invitation-dialog.component';
 import { ExportPrivateKeyModalComponent } from './export-private-key-modal/export-private-key-modal.component';
+import { IframeService } from './iframe/iframe.service';
 import { MaterialModule } from './material/material.module';
 import { MediaRebrandedComponent } from './media/component/media-rebranded.component';
 import { MediaComponent } from './media/component/media.component';
@@ -60,6 +61,7 @@ const providers = [
   GoProWifiService,
   GoProMediaService,
   UserGuideService,
+  IframeService,
 ];
 
 @NgModule({
