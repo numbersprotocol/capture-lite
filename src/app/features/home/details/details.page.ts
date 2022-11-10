@@ -428,14 +428,6 @@ export class DetailsPage {
       const buttons: ActionSheetButton[] = [];
 
       buttons.push({
-        text: this.translocoService.translate('details.actions.edit'),
-        handler: () => {
-          this.handleEditAction();
-          resolve();
-        },
-      });
-
-      buttons.push({
         text: this.translocoService.translate('details.actions.mintAndShare'),
         handler: () => {
           this.handleMintAndShareAction();
