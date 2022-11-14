@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 
 import { EditCaptionPage } from './edit-caption.page';
 
@@ -11,7 +11,7 @@ describe('EditCaptionPage', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [EditCaptionPage],
-        imports: [IonicModule.forRoot()],
+        imports: [SharedTestingModule],
       }).compileComponents();
 
       fixture = TestBed.createComponent(EditCaptionPage);
