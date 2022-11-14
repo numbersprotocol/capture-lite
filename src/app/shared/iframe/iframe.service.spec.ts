@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { SharedTestingModule } from '../shared-testing.module';
 
 import { IframeService } from './iframe.service';
 
@@ -6,7 +7,7 @@ describe('IframeService', () => {
   let service: IframeService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({ imports: [SharedTestingModule] });
     service = TestBed.inject(IframeService);
   });
 
