@@ -3,8 +3,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { fromEvent } from 'rxjs';
+import { combineLatest, fromEvent } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
+import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
 import { IframeService } from '../../../../shared/iframe/iframe.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 
@@ -20,11 +22,17 @@ export class EditCaptionPage {
     isNonNullable()
   );
 
-  iframeUrl$ = this.id$.pipe(
-    map(id => {
-      const BUBBLE_IFRAME_URL =
-        'https://iframe-postmsg-experiment.bubbleapps.io/version-test/edit-caption';
-      const url = `${BUBBLE_IFRAME_URL}/?id=${id}`;
+  iframeUrl$ = combineLatest([
+    this.id$,
+    this.diaBackendAuthService.cachedQueryJWTToken$,
+  ]).pipe(
+    map(([id, token]) => {
+      const params =
+        `nid=${id}` +
+        `&token=${token.access}` +
+        `&refresh_token=${token.refresh}` +
+        `&from=mycapture`;
+      const url = `${BUBBLE_IFRAME_URL}/edit?${params}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     })
   );
@@ -33,7 +41,8 @@ export class EditCaptionPage {
     private readonly route: ActivatedRoute,
     private readonly sanitizer: DomSanitizer,
     private readonly navController: NavController,
-    private readonly iframeService: IframeService
+    private readonly iframeService: IframeService,
+    private readonly diaBackendAuthService: DiaBackendAuthService
   ) {
     this.processIframeEvents();
   }
