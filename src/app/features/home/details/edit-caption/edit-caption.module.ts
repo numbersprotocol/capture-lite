@@ -1,20 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-import { IonicModule } from '@ionic/angular';
 
 import { EditCaptionPageRoutingModule } from './edit-caption-routing.module';
 
+import { SharedModule } from '../../../../shared/shared.module';
 import { EditCaptionPage } from './edit-caption.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    EditCaptionPageRoutingModule,
-  ],
+  imports: [SharedModule, EditCaptionPageRoutingModule],
   declarations: [EditCaptionPage],
 })
 export class EditCaptionPageModule {}
