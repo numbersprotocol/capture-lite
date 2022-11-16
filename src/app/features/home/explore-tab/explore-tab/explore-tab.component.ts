@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
 import { IframeService } from '../../../../shared/iframe/iframe.service';
 import { NetworkService } from '../../../../shared/network/network.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-explore-tab',
   templateUrl: './explore-tab.component.html',
@@ -25,10 +27,26 @@ export class ExploreTabComponent {
 
   readonly networkConnected$ = this.networkService.connected$;
 
+  @ViewChild('exploreIframe') exploreIframe?: ElementRef<HTMLIFrameElement>;
+
   constructor(
     private readonly networkService: NetworkService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly iframeService: IframeService,
     private readonly sanitizer: DomSanitizer
-  ) {}
+  ) {
+    iframeService.exploreTabIframeNavigateBack$
+      .pipe(
+        tap(_ => this.navigateBackExploreIframe()),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  navigateBackExploreIframe() {
+    this.exploreIframe?.nativeElement.contentWindow?.postMessage(
+      'android-back-button',
+      BUBBLE_IFRAME_URL
+    );
+  }
 }

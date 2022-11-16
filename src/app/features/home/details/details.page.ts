@@ -438,13 +438,14 @@ export class DetailsPage {
         },
       });
 
-      buttons.push({
-        text: this.translocoService.translate('details.actions.mintAndShare'),
-        handler: () => {
-          this.handleMintAndShareAction();
-          resolve();
-        },
-      });
+      // Temporarely remove Mint & Share button
+      // buttons.push({
+      //   text: this.translocoService.translate('details.actions.mintAndShare'),
+      //   handler: () => {
+      //     this.handleMintAndShareAction();
+      //     resolve();
+      //   },
+      // });
 
       buttons.push({
         text: this.translocoService.translate('details.actions.unpublish'),
