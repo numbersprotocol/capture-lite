@@ -19,6 +19,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./actions/actions.module').then(m => m.ActionsPageModule),
   },
+  {
+    path: 'edit-caption',
+    loadChildren: () =>
+      import('./edit-caption/edit-caption.module').then(
+        m => m.EditCaptionPageModule
+      ),
+  },
 ];
 
 @NgModule({

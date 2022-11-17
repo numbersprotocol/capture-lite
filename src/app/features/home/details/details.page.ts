@@ -33,6 +33,7 @@ import { BUBBLE_IFRAME_URL } from '../../../shared/dia-backend/secret';
 import { DiaBackendStoreService } from '../../../shared/dia-backend/store/dia-backend-store.service';
 import { DiaBackendWorkflowService } from '../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../shared/error/error.service';
+import { IframeService } from '../../../shared/iframe/iframe.service';
 import { MediaStore } from '../../../shared/media/media-store/media-store.service';
 import { NetworkService } from '../../../shared/network/network.service';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
@@ -218,9 +219,10 @@ export class DetailsPage {
   readonly iframeUrlWithJWTToken$ = combineLatest([
     this.activeDetailedCapture$,
     this.diaBackendAuthService.cachedQueryJWTToken$,
+    this.iframeService.detailsPageIframeReloadRequested$,
   ]).pipe(
     distinctUntilChanged(),
-    map(([detailedCapture, token]) => {
+    map(([detailedCapture, token, _]) => {
       const params =
         `nid=${detailedCapture.id}` +
         `&token=${token.access}` +
@@ -258,7 +260,8 @@ export class DetailsPage {
     private readonly userGuideService: UserGuideService,
     private readonly actionsService: ActionsService,
     private readonly networkService: NetworkService,
-    private readonly diaBackendStoreService: DiaBackendStoreService
+    private readonly diaBackendStoreService: DiaBackendStoreService,
+    private readonly iframeService: IframeService
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -476,10 +479,10 @@ export class DetailsPage {
   }
 
   private handleEditAction() {
-    this.networkConnected$
+    combineLatest([this.networkConnected$, this.activeDetailedCapture$])
       .pipe(
         first(),
-        concatMap(networkConnected => {
+        switchTap(([networkConnected, detailedCapture]) => {
           if (!networkConnected) {
             return this.errorService.toastError$(
               this.translocoService.translate(
@@ -487,7 +490,10 @@ export class DetailsPage {
               )
             );
           }
-          return this.editCaption();
+          return this.router.navigate(
+            ['edit-caption', { id: detailedCapture.id }],
+            { relativeTo: this.route }
+          );
         })
       )
       .subscribe();
