@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.69.2] - 2022-11-17
+
+### Changed
+
+1. User can update asset info by clicking the `Edit` option (#2310)
+
+### Fixed
+
+1. Fix Android go back button navigation (#2298)
+2. Disable the `Mint & Share` option temporarily (#2311)
+
 ## [0.69.1] - 2022-11-08
 
 ### Fixed
@@ -1901,7 +1912,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.69.1...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.69.2...HEAD
+[0.69.2]: https://github.com/numbersprotocol/capture-lite/compare/0.69.1...0.69.2
 [0.69.1]: https://github.com/numbersprotocol/capture-lite/compare/0.69.0...0.69.1
 [0.69.0]: https://github.com/numbersprotocol/capture-lite/compare/0.68.0...0.69.0
 [0.68.0]: https://github.com/numbersprotocol/capture-lite/compare/0.67.1...0.68.0

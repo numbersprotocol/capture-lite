@@ -20,6 +20,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
+import { AndroidBackButtonService } from '../../shared/android-back-button/android-back-button.service';
 import { CameraService } from '../../shared/camera/camera.service';
 import { CaptureService, Media } from '../../shared/capture/capture.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
@@ -87,7 +88,8 @@ export class HomePage {
     private readonly diaBackendWalletService: DiaBackendWalletService,
     private readonly userGuideService: UserGuideService,
     private readonly platform: Platform,
-    private readonly iframeService: IframeService
+    private readonly iframeService: IframeService,
+    private readonly androidBackButtonService: AndroidBackButtonService
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -103,6 +105,13 @@ export class HomePage {
           defer(() => this.userGuideService.showUserGuidesOnHomePage())
         ),
         catchError((err: unknown) => this.errorService.toastError$(err)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+
+    this.androidBackButtonService.androidBackButtonEvent$
+      .pipe(
+        tap(_ => this.shouldNavigateBackExploreIframe()),
         untilDestroyed(this)
       )
       .subscribe();
@@ -341,6 +350,12 @@ export class HomePage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  private shouldNavigateBackExploreIframe(): void {
+    if (this.selectedTabIndex === 0 && this.router.url === '/home') {
+      this.iframeService.navigateBackExploreTabIframe();
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
