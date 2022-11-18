@@ -20,9 +20,46 @@ export class MockAppPlugin implements AppPlugin {
     throw new Error('Method not implemented.');
   }
 
+  // addListener(
+  //   eventName: 'appStateChange',
+  //   listenerFunc: StateChangeListener
+  // ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  // addListener(
+  //   eventName: 'appUrlOpen',
+  //   listenerFunc: URLOpenListener
+  // ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  // addListener(
+  //   eventName: 'appRestoredResult',
+  //   listenerFunc: RestoredListener
+  // ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  // addListener(
+  //   eventName: 'backButton',
+  //   listenerFunc: BackButtonListener
+  // ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  // addListener(
+  //   _eventName: any,
+  //   _listenerFunc: any
+  // ): Promise<PluginListenerHandle> & PluginListenerHandle {
+  //   // eslint-disable-next-line @typescript-eslint/no-empty-function
+  //   const remove = async () => {};
+  //   const listenerHandler: any = Promise.resolve({ remove });
+  //   Object.defineProperty(listenerHandler, 'remove', {
+  //     value: async () => Promise.resolve({ remove }),
+  //   });
+  //   return listenerHandler;
+  // }
+
   addListener(
     eventName: 'appStateChange',
     listenerFunc: StateChangeListener
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  addListener(
+    eventName: 'pause',
+    listenerFunc: () => void
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  addListener(
+    eventName: 'resume',
+    listenerFunc: () => void
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
   addListener(
     eventName: 'appUrlOpen',
@@ -36,10 +73,7 @@ export class MockAppPlugin implements AppPlugin {
     eventName: 'backButton',
     listenerFunc: BackButtonListener
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
-    _eventName: any,
-    _listenerFunc: any
-  ): Promise<PluginListenerHandle> & PluginListenerHandle {
+  async addListener(_: unknown, __: unknown): Promise<PluginListenerHandle> {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const remove = async () => {};
     const listenerHandler: any = Promise.resolve({ remove });
