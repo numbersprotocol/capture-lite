@@ -61,7 +61,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
       directory: this.directory,
       path: '',
     });
-    if (!dirs.files.includes(this.rootDir)) {
+    if (!dirs.files.find(f => f.name.includes(this.rootDir))) {
       await this.filesystemPlugin.mkdir({
         directory: this.directory,
         path: this.rootDir,
@@ -72,7 +72,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
       directory: this.directory,
       path: this.rootDir,
     });
-    return files.files.includes(`${this.id}.json`);
+    return files.files.find(f => f.name.includes(`${this.id}.json`));
   }
 
   private async createEmptyJson() {
