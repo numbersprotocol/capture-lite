@@ -133,7 +133,12 @@ export class CustomCameraService {
   async maxZoomFactor(): Promise<number> {
     const defaultMaxAvailableZoom = 0;
     if (this.isNativePlatform) {
-      return (await PreviewCamera.maxAvailableZoom()).result;
+      let maxZoomFactor = (await PreviewCamera.maxAvailableZoom()).result;
+      const sensitivityFactor = 4;
+      if (maxZoomFactor > 0) {
+        maxZoomFactor /= sensitivityFactor;
+      }
+      return maxZoomFactor;
     }
     return Promise.resolve(defaultMaxAvailableZoom);
   }
