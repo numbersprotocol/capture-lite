@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
-import { NavController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CaptureResult, PreviewCamera } from '@numbersprotocol/preview-camera';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -68,8 +68,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly errorService: ErrorService,
     private readonly userGuideService: UserGuideService,
-    private readonly platform: Platform,
-    private readonly navCtrl: NavController
+    private readonly platform: Platform
   ) {}
 
   ngOnInit() {
@@ -99,7 +98,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
         if (this.mode$.value === 'pre-publish') {
           this.discardCurrentCapture();
         } else {
-          this.navCtrl.back();
+          this.leaveCustomCamera();
         }
       });
   }
