@@ -242,7 +242,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   async leaveCustomCamera() {
-    return this.location.back();
+    this.router.navigate(['..']);
   }
 
   async captureFromGoPro() {
