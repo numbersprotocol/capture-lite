@@ -27,7 +27,7 @@
     <pintura-editor
       #pinturaEditor
       [src]="curImageBase64"
-      [options]="pinturaEditorOptions"
+      [options]="pinturaEditorOptions$ | ngrxPush"
       (processstart)="handleEditorProcessStart()"
       (processabort)="handleEditorProcessAbort()"
       (processerror)="handelEditorProcessError()"
@@ -38,12 +38,23 @@
   <div class="image-editor-custom-buttons">
     <button
       (click)="applyBlackAndWhiteFilter()"
-      class="back-button"
+      class="image-editor-button"
       mat-mini-fab
     >
       <mat-icon
         class="black-and-white-filter-button"
         svgIcon="capture-rebrand-camera-auto-enhance"
+      ></mat-icon>
+    </button>
+
+    <button
+      (click)="toggleCropImageFeature()"
+      class="image-editor-button"
+      mat-mini-fab
+    >
+      <mat-icon
+        class="black-and-white-filter-button"
+        svgIcon="capture-rebrand-camera-crop"
       ></mat-icon>
     </button>
   </div>

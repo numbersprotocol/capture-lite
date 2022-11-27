@@ -8,11 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FilesystemPlugin } from '@capacitor/filesystem';
-import {
-  ColorMatrix,
-  getEditorDefaults,
-  PinturaDefaultImageWriterResult,
-} from '@pqina/pintura';
+import { ColorMatrix, getEditorDefaults } from '@pqina/pintura';
 import { BehaviorSubject, combineLatest, EMPTY, of, ReplaySubject } from 'rxjs';
 import { catchError, filter, first, map, switchMap, tap } from 'rxjs/operators';
 import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
@@ -39,6 +35,12 @@ export class PrePublishModeComponent {
       enableToolbar: false,
     }),
   };
+
+  readonly pinturaEditorOptions$: any = new BehaviorSubject<any>(
+    this.pinturaEditorOptions
+  );
+
+  private toggleCropFeature = false;
 
   private toggleBlackAndWhiteFilter = true;
 
@@ -112,29 +114,27 @@ export class PrePublishModeComponent {
       0, 0, 0, 0, 0, 1, 0,
     ];
     const filter = this.toggleBlackAndWhiteFilter ? monoFilter : undefined;
-    const result: PinturaDefaultImageWriterResult =
-      await this.pintura.editor.processImage({ imageColorMatrix: { filter } });
-    this.saveImageChangesToOriginalImageFile(result);
+    await this.pintura.editor.processImage({ imageColorMatrix: { filter } });
     this.toggleBlackAndWhiteFilter = !this.toggleBlackAndWhiteFilter;
   }
 
-  private async saveImageChangesToOriginalImageFile(
-    result: PinturaDefaultImageWriterResult
-  ) {
-    const base64 = await blobToBase64(result.dest);
-    combineLatest([this.curCaptureFilePath$, of(base64)])
-      .pipe(
-        first(),
-        switchMap(([path, data]) =>
-          this.filesystemPlugin.writeFile({ path, data })
-        ),
-        tap(() => this.isProcessingImage$.next(false)),
-        catchError(() => {
-          this.isProcessingImage$.next(false);
-          return EMPTY;
-        })
-      )
-      .subscribe();
+  async toggleCropImageFeature() {
+    this.toggleCropFeature = !this.toggleCropFeature;
+    this.pinturaEditorOptions$.next({
+      ...getEditorDefaults({
+        enableUtils: false,
+        enableZoomControls: false,
+        cropEnableRotationInput: false,
+        cropEnableZoomInput: false,
+        cropEnableButtonFlipHorizontal: false,
+        cropEnableButtonRotateLeft: false,
+        cropEnableImageSelection: this.toggleCropFeature,
+        enableToolbar: false,
+      }),
+    });
+    if (this.toggleCropFeature === false) {
+      await this.pintura.editor.processImage();
+    }
   }
 
   async handleEditorProcess(imageWriterResult: any): Promise<void> {
