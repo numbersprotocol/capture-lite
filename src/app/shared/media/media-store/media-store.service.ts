@@ -133,13 +133,15 @@ export class MediaStore {
           path: `${this.rootDir}/${index}.${extension}`,
         });
       } catch (error: any) {
-        // In capture app we get "File does not exist error"
-        // if currentPlatform.isAndroid() === true &&
-        //    fileToBeDeleted.isCapturedFromIphone() === true
-        // When we delete capture from iPhone that was captured
-        // by Android "File does not exists" is not thrown.
-        // So we can silently ignore "File does not exist" error
-        // while deleting capture from FileSystem only.
+        /* WORKAROUND
+         * In capture app we get "File does not exist error"
+         * if currentPlatform.isAndroid() === true &&
+         *    fileToBeDeleted.isCapturedFromIphone() === true
+         * When we delete capture from iPhone that was captured
+         * by Android "File does not exists" is not thrown.
+         * So we can silently ignore "File does not exist" error
+         * while deleting capture from FileSystem only.
+         */
         if (error.message !== 'File does not exist') {
           throw error;
         }
