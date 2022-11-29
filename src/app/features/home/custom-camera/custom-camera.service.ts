@@ -59,8 +59,36 @@ export class CustomCameraService {
       const mimeType = itemToUpload.mimeType;
       await this.captureService.capture({ base64, mimeType });
       await this.removeFile(filePath);
-    } catch (error) {
-      const errMsg = this.translocoService.translate(`error.internetError`);
+    } catch (error: any) {
+      let errMsg = this.translocoService.translate(`error.unknownError`);
+
+      if (
+        error instanceof TypeError &&
+        (error.message ===
+          "undefined is not an object (evaluating 'subtle.digest')" || // on iOS
+          error.message ===
+            "Cannot read properties of undefined (reading 'digest')") // on Android
+      ) {
+        /**
+         * Web Crypto APIs are available only in secure contexts (HTTPS)
+         * You can read more at https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API
+         *
+         * In ionic app it happens during development aka when we run app via livereload
+         * $ ionic cap run ios/android -l --external
+         * because liverload is server over http not https
+         *
+         * By default in capacitor.config.json server.androidScheme = http might be
+         * the reason why it happened in production android environment .
+         *
+         * Since we changed server.androidScheme = https in capacitor.config.json
+         * This error should not occur, but in case it does we catch it
+         * and ask user to re-install app
+         */
+        errMsg = this.translocoService.translate(
+          `error.webCryptoApiNotAvailable`
+        );
+      }
+
       await this.errorService.toastError$(errMsg).toPromise();
     }
   }

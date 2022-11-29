@@ -201,6 +201,7 @@
     "internetError": "Internet connection error. Please check your Internet connection quality.",
     "timeoutError": "Operation timeout. Please try again later.",
     "unknownError": "An error has occurred. Please try again later.",
+    "webCryptoApiNotAvailable": "For some reason Web Crypto API is not available on your app version, please re-install the app.",
     "geolocation": {
       "permissionDeniedError": "Location permission is denied. Please turn your location permission on to enable the full feature of Capture app.",
       "timeoutError": "Location collection timeout, possibly due to weak network connectivity or GPS signals.",
