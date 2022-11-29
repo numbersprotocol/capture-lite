@@ -4,7 +4,9 @@ import { PluginListenerHandle } from '@capacitor/core';
 import {
   AppendFileOptions as FileAppendOptions,
   CopyOptions,
+  CopyResult,
   DeleteFileOptions as FileDeleteOptions,
+  FileInfo,
   FilesystemPlugin,
   GetUriOptions,
   GetUriResult,
@@ -88,9 +90,13 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
       return { files: [] };
     }
     return {
-      files: directory.map(filePath =>
-        filePath.replace(RegExp(`^${targetDirectory}`), '')
-      ),
+      files: directory.map<FileInfo>(filePath => ({
+        name: filePath.replace(RegExp(`^${targetDirectory}`), ''),
+        type: 'file',
+        uri: filePath.replace(RegExp(`^${targetDirectory}`), ''),
+        mtime: 0,
+        size: 0,
+      })),
     };
   }
 
@@ -106,7 +112,7 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
     throw new Error('Method not implemented.');
   }
 
-  async copy(_: CopyOptions): Promise<void> {
+  async copy(_: CopyOptions): Promise<CopyResult> {
     throw new Error('Method not implemented.');
   }
 

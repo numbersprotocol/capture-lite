@@ -38,11 +38,6 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Uses Bluetooth to connect and interact with GoPro or any other Bluetooth devices.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>

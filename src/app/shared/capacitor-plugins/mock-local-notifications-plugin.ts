@@ -5,6 +5,7 @@ import {
   ActionPerformed as LocalNotificationActionPerformed,
   ActionType as LocalNotificationActionType,
   Channel as NotificationChannel,
+  DeliveredNotifications,
   EnabledResult as LocalNotificationEnabledResult,
   ListChannelsResult as NotificationChannelList,
   LocalNotificationSchema as LocalNotification,
@@ -79,6 +80,16 @@ export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
   }
 
   async removeAllListeners(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  async getDeliveredNotifications(): Promise<DeliveredNotifications> {
+    throw new Error('Method not implemented.');
+  }
+  async removeDeliveredNotifications(_: DeliveredNotifications): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  async removeAllDeliveredNotifications(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }
