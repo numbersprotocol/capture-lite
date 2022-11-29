@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.69.3] - 2022-11-28
+
+### Fixed
+
+1. Fix "File does not exist" error when deleting an asset (#2339)
+2. Fix NUM price status after a product is unlisted (#2336)
+3. Improve camera zoom in/out sensitivity (#2330)
+4. Fix Android Store uploading error by updating Android API to version 32 (#2325)
+
 ## [0.69.2] - 2022-11-17
 
 ### Changed
@@ -1912,7 +1921,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.69.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.69.3...HEAD
+[0.69.3]: https://github.com/numbersprotocol/capture-lite/compare/0.69.2...0.69.3
 [0.69.2]: https://github.com/numbersprotocol/capture-lite/compare/0.69.1...0.69.2
 [0.69.1]: https://github.com/numbersprotocol/capture-lite/compare/0.69.0...0.69.1
 [0.69.0]: https://github.com/numbersprotocol/capture-lite/compare/0.68.0...0.69.0
