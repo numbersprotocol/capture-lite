@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.70.0] - 2022-11-29
+
+### Added
+
+1. Cropping camera images (#2344)
+
+### Changed
+
+1. Upgrade Capacitor from 3 to 4 (#2329)
+
+### Fixed
+
+1. User cannot confirm camera image on Pixel 6a (#2346)
+2. User cannot close camera on Pixel 6a (#2332)
+
 ## [0.69.3] - 2022-11-28
 
 ### Fixed
@@ -1921,7 +1936,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.69.3...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.70.0...HEAD
+[0.70.0]: https://github.com/numbersprotocol/capture-lite/compare/0.69.3...0.70.0
 [0.69.3]: https://github.com/numbersprotocol/capture-lite/compare/0.69.2...0.69.3
 [0.69.2]: https://github.com/numbersprotocol/capture-lite/compare/0.69.1...0.69.2
 [0.69.1]: https://github.com/numbersprotocol/capture-lite/compare/0.69.0...0.69.1

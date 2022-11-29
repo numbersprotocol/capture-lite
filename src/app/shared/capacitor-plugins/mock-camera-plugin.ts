@@ -26,6 +26,14 @@ export class MockCameraPlugin implements CameraPlugin {
     throw new Error('Method not implemented.');
   }
 
+  async pickLimitedLibraryPhotos(): Promise<GalleryPhotos> {
+    throw new Error('Method not implemented.');
+  }
+
+  async getLimitedLibraryPhotos(): Promise<GalleryPhotos> {
+    throw new Error('Method not implemented.');
+  }
+
   addListener(
     _eventName: string,
     _listenerFunc: () => any

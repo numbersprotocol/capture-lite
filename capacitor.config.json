@@ -17,5 +17,8 @@
       "iconColor": "#564dfc"
     }
   },
-  "cordova": {}
+  "cordova": {},
+  "server": {
+    "androidScheme": "https"
+  }
 }

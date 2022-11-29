@@ -55,6 +55,14 @@ $image-editor-container-height: calc(
   box-shadow: none;
 }
 
+.image-editor-button {
+  background: #ffffff40 !important; /* stylelint-disable-line declaration-no-important */
+  color: white !important; /* stylelint-disable-line declaration-no-important */
+  backdrop-filter: blur(4px);
+  box-shadow: none;
+  margin: 0 16px;
+}
+
 .confirm-button {
   background: #486cd9 !important; /* stylelint-disable-line declaration-no-important */
   color: white !important; /* stylelint-disable-line declaration-no-important */

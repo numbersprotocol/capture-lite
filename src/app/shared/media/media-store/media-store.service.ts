@@ -51,7 +51,7 @@ export class MediaStore {
         directory: this.directory,
         path: '',
       });
-      if (!dirs.files.includes(this.rootDir)) {
+      if (!dirs.files.find(f => f.name.includes(this.rootDir))) {
         await this.filesystemPlugin.mkdir({
           directory: this.directory,
           path: this.rootDir,
@@ -158,7 +158,10 @@ export class MediaStore {
       path: `${this.rootDir}`,
     });
     const extension = await this.getExtension(index);
-    return result.files.includes(`${index}.${extension}`);
+    return (
+      result.files.find(f => f.name.includes(`${index}.${extension}`)) !==
+      undefined
+    );
   }
 
   getThumbnailUrl$(index: string, mimeType: MimeType) {
