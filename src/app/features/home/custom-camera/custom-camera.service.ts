@@ -59,9 +59,8 @@ export class CustomCameraService {
       const mimeType = itemToUpload.mimeType;
       await this.captureService.capture({ base64, mimeType });
       await this.removeFile(filePath);
-    } catch (error) {
-      const errMsg = this.translocoService.translate(`error.internetError`);
-      await this.errorService.toastError$(errMsg).toPromise();
+    } catch (error: any) {
+      await this.errorService.toastError$(error.message).toPromise();
     }
   }
 
