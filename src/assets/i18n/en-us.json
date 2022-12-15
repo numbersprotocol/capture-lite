@@ -291,7 +291,7 @@
     }
   },
   "customCamera": {
-    "confirmCapture": "Confirm",
+    "confirmCapture": "Next",
     "max": "Max",
     "social": "Social"
   },
