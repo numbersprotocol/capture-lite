@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
-import { StatusBar, Style } from '@capacitor/status-bar';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { CaptureResult, PreviewCamera } from '@numbersprotocol/preview-camera';
@@ -182,7 +181,6 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     await this.customCameraService.startPreviewCamera();
     await this.customCameraService.setCameraQuality(this.cameraQuality$.value);
     await this.syncCameraState();
-    await StatusBar.setStyle({ style: Style.Dark });
   }
 
   stopPreviewCamera() {
