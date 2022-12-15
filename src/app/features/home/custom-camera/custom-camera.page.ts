@@ -1,68 +1,94 @@
-/* eslint-disable no-console */
-import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { Platform } from '@ionic/angular';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { CaptureResult, PreviewCamera } from '@numbersprotocol/preview-camera';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, interval, Subscription } from 'rxjs';
+import {
+  finalize,
+  map,
+  mapTo,
+  scan,
+  switchMap,
+  take,
+  takeWhile,
+  tap,
+  throttleTime,
+} from 'rxjs/operators';
 import { ErrorService } from '../../../shared/error/error.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import { GoProBluetoothService } from '../../settings/go-pro/services/go-pro-bluetooth.service';
-import {
-  CustomCameraMediaItem,
-  MAX_RECORD_TIME_IN_MILLISECONDS,
-} from './custom-camera';
+import { MAX_RECORD_TIME_IN_MILLISECONDS } from './custom-camera';
 import { CustomCameraService } from './custom-camera.service';
+
+type CameraMode = 'story' | 'photo' | 'gopro' | 'pre-publish';
+type CameraQuality = 'low' | 'hq';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-custom-camera',
   templateUrl: './custom-camera.page.html',
   styleUrls: ['./custom-camera.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomCameraPage implements OnInit, OnDestroy {
   private captureVideoFinishedListener?: PluginListenerHandle;
   private capturePhotoFinishedListener?: PluginListenerHandle;
 
-  maxRecordTimeInMilliseconds = MAX_RECORD_TIME_IN_MILLISECONDS;
-  curRecordTimeInMilliseconds = 0;
-  curRecordTimeInPercent = 0;
-
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-  scaleDownAnimationAfterDelay = 230;
+  maxRecordTimeInSeconds = MAX_RECORD_TIME_IN_MILLISECONDS / 1000;
+  maxRecordTimeInMilliseconds = MAX_RECORD_TIME_IN_MILLISECONDS;
+  curRecordTimeInPercent$ = new BehaviorSubject<number>(0);
+  isRecording$ = new BehaviorSubject(false);
 
-  curSessionCaptureMediaItems: CustomCameraMediaItem[] = [];
+  mode$ = new BehaviorSubject<CameraMode>('photo');
+  lastCaptureMode: CameraMode = 'photo';
 
-  mode$ = new BehaviorSubject<'capture' | 'pre-publish'>('capture');
+  isStoryMode$ = this.mode$.pipe(map(mode => mode === 'story'));
+  isPhotoMode$ = this.mode$.pipe(map(mode => mode === 'photo'));
+  isGoProMode$ = this.mode$.pipe(map(mode => mode === 'gopro'));
+  selectedModeCSSClass$ = this.mode$.pipe(
+    map(mode => {
+      if (mode === 'story') return 'story-mode-selected';
+      if (mode === 'photo') return 'photo-mode-selected';
+      if (mode === 'gopro') return 'gopro-mode-selected';
+      return '';
+    })
+  );
 
   curCaptureFilePath?: string;
   curCaptureMimeType?: 'image/jpeg' | 'video/mp4';
   curCaptureType?: 'image' | 'video' = 'image';
   curCaptureSrc?: string;
 
-  isFlashOn = false;
-  isFlashAvailable = false;
+  isFlashOn$ = new BehaviorSubject(false);
+  isFlashAvailable$ = new BehaviorSubject(false);
 
-  minZoomFactor = 0;
-  maxZoomFactor = 0;
-  curZoomFactor = 0;
+  lastZoomScale = 0;
+  minZoomFactor$ = new BehaviorSubject(0);
+  maxZoomFactor$ = new BehaviorSubject(0);
+  curZoomFactor$ = new BehaviorSubject(0);
+  cameraZoomEvents$ = new BehaviorSubject<number>(0);
 
-  cameraQuality: 'low' | 'hq' = 'hq';
-  cameraGesture: any;
+  cameraQuality$ = new BehaviorSubject<CameraQuality>('hq');
 
   private backButtonPrioritySubscription?: Subscription;
 
   get canZoomInOut() {
-    return this.minZoomFactor < this.maxZoomFactor;
+    return this.minZoomFactor$.value < this.maxZoomFactor$.value;
   }
 
   readonly lastConnectedGoProDevice$ =
     this.goProBluetoothService.lastConnectedDevice$;
 
   constructor(
-    private readonly location: Location,
     private readonly router: Router,
     private readonly customCameraService: CustomCameraService,
     private readonly goProBluetoothService: GoProBluetoothService,
@@ -85,13 +111,23 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     ).then((listener: any) => (this.captureVideoFinishedListener = listener));
 
     this.startPreviewCamera();
-
-    this.syncCameraState();
   }
 
   async ionViewDidEnter() {
     await this.userGuideService.showUserGuidesOnCustomCameraPage();
     await this.userGuideService.setHasOpenedCustomCameraPage(true);
+
+    const cameraShouldBeReadyAfter = 1000;
+    setTimeout(() => this.syncCameraState(), cameraShouldBeReadyAfter);
+
+    const zoomUpdateFrequency = 10;
+    this.cameraZoomEvents$
+      .pipe(
+        throttleTime(zoomUpdateFrequency),
+        switchMap(zoom => this.customCameraService.zoom(zoom)),
+        untilDestroyed(this)
+      )
+      .subscribe();
 
     this.backButtonPrioritySubscription =
       this.platform.backButton.subscribeWithPriority(1, () => {
@@ -135,6 +171,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
       this.curCaptureMimeType = mimeType;
       this.curCaptureType = type;
       this.curCaptureSrc = Capacitor.convertFileSrc(filePath);
+      this.lastCaptureMode = this.mode$.value;
       this.mode$.next('pre-publish');
 
       this.stopPreviewCamera();
@@ -143,11 +180,11 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   async startPreviewCamera() {
     await this.customCameraService.startPreviewCamera();
-    await this.customCameraService.setCameraQuality(this.cameraQuality);
+    await this.customCameraService.setCameraQuality(this.cameraQuality$.value);
     await this.syncCameraState();
+    await StatusBar.setStyle({ style: Style.Dark });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   stopPreviewCamera() {
     this.customCameraService.stopPreviewCamera();
   }
@@ -158,21 +195,59 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   async syncCameraState() {
-    this.isFlashOn = (await this.isTorchOn()).result;
-    this.isFlashAvailable = await this.customCameraService.isTorchAvailable();
+    this.isFlashOn$.next((await this.isTorchOn()).result);
+    this.isFlashAvailable$.next(
+      await this.customCameraService.isTorchAvailable()
+    );
 
-    if (this.isFlashAvailable) {
-      this.minZoomFactor = await this.customCameraService.minZoomFactor();
-      this.maxZoomFactor = await this.customCameraService.maxZoomFactor();
+    if (this.isFlashAvailable$.value) {
+      this.minZoomFactor$.next(await this.customCameraService.minZoomFactor());
+      this.maxZoomFactor$.next(await this.customCameraService.maxZoomFactor());
       this.customCameraService.zoom(0);
-      console.log(`maxZoomFactor: ${this.maxZoomFactor}`);
     }
   }
 
   onPress() {
-    this.userGuideService.setHasCapturedPhotoWithCustomCamera(true);
-    this.customCameraService.takePhoto();
-    this.flashCameraScreen();
+    if (this.mode$.value === 'photo') {
+      this.flashCameraScreen();
+      this.customCameraService.takePhoto();
+      this.userGuideService.setHasCapturedPhotoWithCustomCamera(true);
+    } else {
+      if (this.isRecording$.value === true) {
+        this.isRecording$.next(false);
+      } else {
+        this.isRecording$.next(true);
+        this.customCameraService.startRecord();
+        const intervalRate = 50;
+        combineLatest([this.isRecording$, interval(intervalRate)])
+          .pipe(
+            takeWhile(([isRecording]) => isRecording),
+            take(this.maxRecordTimeInMilliseconds / intervalRate),
+            untilDestroyed(this),
+            mapTo(intervalRate),
+            scan((acc: number, curr: number) => acc + curr, 0),
+            tap(recordTime => {
+              this.curRecordTimeInPercent$.next(
+                this.timeInPercents(recordTime)
+              );
+            }),
+            finalize(() => {
+              this.isRecording$.next(false);
+              this.customCameraService.stopRecord();
+              this.curRecordTimeInPercent$.next(0);
+            })
+          )
+          .subscribe();
+      }
+    }
+  }
+
+  private timeInPercents(timeSinceRecording: number): number {
+    return Math.floor(
+      (timeSinceRecording / this.maxRecordTimeInMilliseconds) *
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+        100
+    );
   }
 
   onLongPress() {
@@ -180,27 +255,9 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.customCameraService.startRecord();
   }
 
-  onLongPressing(longPressDurationInMilliSeconds: any) {
-    this.curRecordTimeInMilliseconds = longPressDurationInMilliSeconds;
-
-    this.curRecordTimeInPercent = Math.floor(
-      (this.curRecordTimeInMilliseconds / this.maxRecordTimeInMilliseconds) *
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        100
-    );
-  }
-
-  onReleasePressing() {
-    if (this.curRecordTimeInMilliseconds > 0) {
-      this.curRecordTimeInMilliseconds = 0;
-      this.curRecordTimeInPercent = 0;
-      this.customCameraService.stopRecord();
-    }
-  }
-
   discardCurrentCapture() {
     if (this.mode$.value === 'pre-publish') {
-      this.mode$.next('capture');
+      this.mode$.next(this.lastCaptureMode);
       this.startPreviewCamera();
       this.removeCurrentCapture();
     }
@@ -221,23 +278,50 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   async enableTorch() {
-    await this.customCameraService.enableTorch(!this.isFlashOn);
-    this.isFlashOn = (await this.customCameraService.isTorchOn()).result;
+    await this.customCameraService.enableTorch(!this.isFlashOn$.value);
+    this.isFlashOn$.next((await this.customCameraService.isTorchOn()).result);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async focus(event: PointerEvent | MouseEvent) {
     await this.customCameraService.focus(event.x, event.y);
   }
 
   // eslint-disable-next-line class-methods-use-this
   zoomFactorChange(event: any) {
-    this.customCameraService.zoom(event.detail.value);
+    const newZooomFactor = event.detail.value;
+    this.curZoomFactor$.next(newZooomFactor);
+    this.cameraZoomEvents$.next(newZooomFactor);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  zoomFactorChanging(value: any) {
-    console.log(value);
+  handlePinchStart(event: unknown) {
+    const e = event as HammerInput;
+    this.lastZoomScale = e.scale;
+  }
+
+  handlePinchIn(event: unknown) {
+    const e = event as HammerInput;
+    const zoomOutSensitivity = 2;
+    const zoom = Math.abs(e.scale - this.lastZoomScale) / zoomOutSensitivity;
+    this.lastZoomScale = e.scale;
+    let newZoomFactor = this.curZoomFactor$.value - zoom;
+    if (newZoomFactor < this.minZoomFactor$.value) {
+      newZoomFactor = this.minZoomFactor$.value;
+    }
+    this.curZoomFactor$.next(newZoomFactor);
+    this.cameraZoomEvents$.next(newZoomFactor);
+  }
+
+  handlePinchOut(event: unknown) {
+    const e = event as HammerInput;
+    const zoomInSensitivity = 8;
+    const zoom = Math.abs(e.scale - this.lastZoomScale) / zoomInSensitivity;
+    this.lastZoomScale = e.scale;
+    let newZoomFactor = this.curZoomFactor$.value + zoom;
+    if (newZoomFactor > this.maxZoomFactor$.value) {
+      newZoomFactor = this.maxZoomFactor$.value;
+    }
+    this.curZoomFactor$.next(newZoomFactor);
+    this.cameraZoomEvents$.next(newZoomFactor);
   }
 
   async leaveCustomCamera() {
@@ -252,14 +336,60 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   setCameraQuality(quality: 'low' | 'hq') {
-    this.cameraQuality = quality;
+    this.cameraQuality$.next(quality);
     this.customCameraService.setCameraQuality(quality);
     // TODO: send change camera quality command to native side
   }
 
   toggleCameraQuality() {
-    if (this.cameraQuality === 'hq') this.setCameraQuality('low');
+    if (this.cameraQuality$.value === 'hq') this.setCameraQuality('low');
     else this.setCameraQuality('hq');
+  }
+
+  selectMode(mode: CameraMode) {
+    if (!this.canChangeCameraMode) return;
+
+    // TODO: when we add go pro support make sure
+    // 1. stop camera preview
+    // before switching to go pro mode
+    this.mode$.next(mode);
+  }
+
+  onSwipeLeft(_: Event) {
+    if (!this.canChangeCameraMode) return;
+
+    if (this.mode$.value === 'story') {
+      this.mode$.next('photo');
+      return;
+    }
+
+    // Temporary disable to use go pro mode.
+    // if (this.mode$.value === 'photo') {
+    //   // TODO: check if allowed to switch to "gopro"
+    //   // TODO: stop camera preview
+    //   this.mode$.next('gopro');
+    //   return;
+    // }
+  }
+
+  onSwipeRight(_: Event) {
+    if (!this.canChangeCameraMode) return;
+    // Temporary disable to use go pro mode.
+    // if (this.mode$.value === 'gopro') {
+    //   // TODO: check if allowed to switch to photo
+    //   // TODO: start camera preview
+    //   this.mode$.next('photo');
+    //   return;
+    // }
+    if (this.mode$.value === 'photo') {
+      // TODO: check if allowed to switch to "story"
+      this.mode$.next('story');
+      return;
+    }
+  }
+
+  private get canChangeCameraMode() {
+    return this.isRecording$.value === false;
   }
 
   private removeCurrentCapture() {
@@ -282,11 +412,11 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   // eslint-disable-next-line class-methods-use-this
   private flashCameraScreen() {
-    const element = document.getElementById('camera-flash-placeholder');
-    element?.classList.add('flash-camera-animation');
+    const element = document.getElementsByClassName('camera-container')[0];
+    element.classList.add('flash-camera-animation');
     const flashCameraTimeout = 1000;
     setTimeout(
-      () => element?.classList.remove('flash-camera-animation'),
+      () => element.classList.remove('flash-camera-animation'),
       flashCameraTimeout
     );
   }
