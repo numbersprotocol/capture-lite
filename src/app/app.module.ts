@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
 import { InAppPurchase2 } from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
@@ -25,6 +25,7 @@ import { SharedModule } from './shared/shared.module';
     FormlyModule.forRoot({ extras: { lazyRender: true } }),
     FormlyMaterialModule,
     JoyrideModule.forRoot(),
+    HammerModule,
   ],
   providers: [
     {
