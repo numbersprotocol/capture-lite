@@ -11,6 +11,7 @@
         <mat-icon
           *ngIf="isFlashAvailable$ | ngrxPush"
           class="flash-camera-button"
+          [ngClass]="customOrientation$ | ngrxPush"
           (click)="enableTorch()"
         >
           {{ (isFlashOn$ | ngrxPush) ? 'flash_on' : 'flash_off' }}
@@ -18,6 +19,7 @@
 
         <mat-icon
           class="camera-quality-button"
+          [ngClass]="customOrientation$ | ngrxPush"
           [svgIcon]="'capture-rebrand-camera-' + (cameraQuality$ | ngrxPush)"
           (click)="toggleCameraQuality()"
         >
@@ -25,6 +27,7 @@
 
         <div
           class="select-from-go-pro-camera-button"
+          [ngClass]="customOrientation$ | ngrxPush"
           *ngIf="lastConnectedGoProDevice$ | ngrxPush"
           (click)="captureFromGoPro()"
         >
@@ -34,6 +37,7 @@
 
         <mat-icon
           class="close-camera-button"
+          [ngClass]="customOrientation$ | ngrxPush"
           (click)="leaveCustomCamera()"
           joyrideStep="highlightCustomCameraCloseButton"
           [title]="t('userGuide.cameraUsageGuide')"
@@ -129,6 +133,7 @@
 
           <mat-icon
             (click)="flipCamera()"
+            [ngClass]="customOrientation$ | ngrxPush"
             joyrideStep="highlightCustomCameraFlipButton"
             [title]="t('userGuide.cameraUsageGuide')"
             [text]="

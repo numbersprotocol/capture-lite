@@ -8,7 +8,11 @@ import { Router } from '@angular/router';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { CaptureResult, PreviewCamera } from '@numbersprotocol/preview-camera';
+import {
+  CaptureResult,
+  CustomOrientation,
+  PreviewCamera,
+} from '@numbersprotocol/preview-camera';
 import { BehaviorSubject, combineLatest, interval, Subscription } from 'rxjs';
 import {
   finalize,
@@ -78,6 +82,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   cameraQuality$ = new BehaviorSubject<CameraQuality>('hq');
 
+  customOrientation$ = new BehaviorSubject<CustomOrientation>('portraitUp');
+
   private backButtonPrioritySubscription?: Subscription;
 
   get canZoomInOut() {
@@ -108,6 +114,10 @@ export class CustomCameraPage implements OnInit, OnDestroy {
       'captureVideoFinished',
       this.onCaptureVideoFinished.bind(this)
     ).then((listener: any) => (this.captureVideoFinishedListener = listener));
+
+    PreviewCamera.addListener('accelerometerOrientation', ({ orientation }) => {
+      this.customOrientation$.next(orientation);
+    });
 
     this.startPreviewCamera();
   }
@@ -145,6 +155,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.capturePhotoFinishedListener?.remove();
     this.captureVideoFinishedListener?.remove();
+    PreviewCamera.removeAllListeners();
     this.stopPreviewCamera();
   }
 
@@ -284,7 +295,6 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     await this.customCameraService.focus(event.x, event.y);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   zoomFactorChange(event: any) {
     const newZooomFactor = event.detail.value;
     this.curZoomFactor$.next(newZooomFactor);
