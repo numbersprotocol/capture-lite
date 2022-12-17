@@ -301,13 +301,11 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.cameraZoomEvents$.next(newZooomFactor);
   }
 
-  handlePinchStart(event: unknown) {
-    const e = event as HammerInput;
+  handlePinchStart(e: any) {
     this.lastZoomScale = e.scale;
   }
 
-  handlePinchIn(event: unknown) {
-    const e = event as HammerInput;
+  handlePinchIn(e: any) {
     const zoomOutSensitivity = 2;
     const zoom = Math.abs(e.scale - this.lastZoomScale) / zoomOutSensitivity;
     this.lastZoomScale = e.scale;
@@ -319,8 +317,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.cameraZoomEvents$.next(newZoomFactor);
   }
 
-  handlePinchOut(event: unknown) {
-    const e = event as HammerInput;
+  handlePinchOut(e: any) {
     const zoomInSensitivity = 8;
     const zoom = Math.abs(e.scale - this.lastZoomScale) / zoomInSensitivity;
     this.lastZoomScale = e.scale;
