@@ -172,7 +172,7 @@
     "transferOwnership": "Transfer ownership",
     "deregisterFromNetwork": "Deregister from network",
     "viewOnCaptureClub": "View on CaptureClub",
-    "viewBlockchainProfile": "View blockchain profile",
+    "viewAssetProfile": "View asset profile",
     "confirmDelete": "Your local data will be wiped out after deletion. Please double-check that you have created a backup and understand the risk.",
     "confirmLogout": "Your local data will be wipe out after logout. You can restore your Captures after login again.",
     "resetPasswordEnterEmail": "To reset the password, you have to enter your registered email.",
@@ -286,7 +286,7 @@
       "viewSupportingVideoOnIpfsIsUnavailable": "View supporting video on IPFS action is unavailable. Please try again later.",
       "deregisterFromNetworkIsUnavailable": "Deregister from network action is unavailable. Please try again later.",
       "mintNftTokenIsUnavailable": "Mint NFT token action is unavailable. Please try again later.",
-      "viewBlockchainProfileIsUnavailable": "View blockchain profile action is unavailable. Please try again later.",
+      "viewAssetProfileIsUnavailable": "View asset profile action is unavailable. Please try again later.",
       "networkActionsAreUnavailable": "Network Actions are unavailable. Please try again later."
     }
   },
