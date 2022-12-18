@@ -344,7 +344,7 @@ export class DetailsPage {
         switchMap(c => c.postCreationWorkflowCompleted$)
       ),
       this.translocoService.selectTranslateObject({
-        'message.viewBlockchainProfile': null,
+        'message.viewAssetProfile': null,
         'message.copyIpfsAddress': null,
         'message.shareAssetProfile': null,
       }),
@@ -357,7 +357,7 @@ export class DetailsPage {
             diaBackendAsset,
             postCreationWorkflowCompleted,
             [
-              messageViewBlockchainProfile,
+              messageviewAssetProfile,
               messageCopyIpfsAddress,
               messageShareAssetProfile,
             ],
@@ -366,7 +366,7 @@ export class DetailsPage {
               const buttons: ActionSheetButton[] = [];
               if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
-                  text: messageViewBlockchainProfile,
+                  text: messageviewAssetProfile,
                   handler: () => {
                     this.openCertificate();
                     resolve();
@@ -686,7 +686,7 @@ export class DetailsPage {
         'message.viewOnCaptureClub': null,
         'message.deregisterFromNetwork': null,
         'message.mintNftToken': null,
-        'message.viewBlockchainProfile': null,
+        'message.viewAssetProfile': null,
         'message.viewSupportingVideoOnIpfs': null,
         networkActions: null,
       }),
@@ -703,7 +703,7 @@ export class DetailsPage {
               messageViewOnCaptureClub,
               messageDeregisterFromNetwork,
               messageMintNftToken,
-              messageViewBlockchainProfile,
+              messageviewAssetProfile,
               messageViewSupportingVideoOnIpfs,
               messageNetworkActions,
             ],
@@ -758,7 +758,7 @@ export class DetailsPage {
               }
               if (postCreationWorkflowCompleted && detailedCapture.id) {
                 buttons.push({
-                  text: messageViewBlockchainProfile,
+                  text: messageviewAssetProfile,
                   handler: () => {
                     this.openCertificate();
                     resolve();
