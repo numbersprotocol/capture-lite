@@ -365,7 +365,6 @@ export class DetailsPage {
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
               if (postCreationWorkflowCompleted && detailedCapture.id) {
-                debugger;
                 buttons.push({
                   text: messageviewAssetProfile,
                   handler: () => {
