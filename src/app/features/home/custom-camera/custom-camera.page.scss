@@ -118,6 +118,23 @@ mat-icon {
   font-size: 36px;
   height: 36px;
   width: 36px;
+  transition: all 0.5s ease-out !important; /* stylelint-disable-line declaration-no-important */
+}
+
+mat-icon.portraitUp {
+  transform: rotate(0);
+}
+
+mat-icon.landscapeRight {
+  transform: rotate(-90deg);
+}
+
+mat-icon.landscapeDown {
+  transform: rotate(180deg);
+}
+
+mat-icon.landscapeLeft {
+  transform: rotate(90deg);
 }
 
 mat-icon.flash-camera-button {
