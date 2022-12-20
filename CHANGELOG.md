@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.71.0] - 2022-12-20
+
+### Added
+
+1. Add auto rotate in camera to make asset generation UX like using native camera (#2401)
+1. Add tab mode in camera to show current mode is to take photo or video (story) (#2398)
+
+### Fixed
+
+1. Fix white flash happened when switching views on iOS (#2371)
+1. Fix text in the camera's next button (#2370)
+1. Fix missing necessary build file (#2372)
+1. Fix CI linting error (#2392)
+
 ## [0.70.0] - 2022-11-29
 
 ### Added
@@ -1936,7 +1950,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.70.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.71.0...HEAD
+[0.71.0]: https://github.com/numbersprotocol/capture-lite/compare/0.70.0...0.71.0
 [0.70.0]: https://github.com/numbersprotocol/capture-lite/compare/0.69.3...0.70.0
 [0.69.3]: https://github.com/numbersprotocol/capture-lite/compare/0.69.2...0.69.3
 [0.69.2]: https://github.com/numbersprotocol/capture-lite/compare/0.69.1...0.69.2

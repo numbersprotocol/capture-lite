@@ -1,100 +1,148 @@
-<ion-content
-  [fullscreen]="true"
-  [style.--background]="'transparent'"
-  *transloco="let t"
->
-  <ng-container *ngIf="(mode$ | ngrxPush) === 'capture'">
-    <div id="camera-flash-placeholder" (click)="focus($event)"></div>
-
-    <mat-icon
-      *ngIf="isFlashAvailable"
-      class="flash-camera-button"
-      (click)="enableTorch()"
-    >
-      {{ isFlashOn ? 'flash_on' : 'flash_off' }}
-    </mat-icon>
-
-    <mat-icon
-      class="camera-quality-button"
-      [svgIcon]="'capture-rebrand-camera-' + cameraQuality"
-      (click)="toggleCameraQuality()"
-    >
-    </mat-icon>
-
-    <div
-      class="select-from-go-pro-camera-button"
-      *ngIf="lastConnectedGoProDevice$ | ngrxPush"
-      (click)="captureFromGoPro()"
-    >
-      GoPro
-      <mat-icon> featured_video </mat-icon>
-    </div>
-
-    <mat-icon
-      class="close-camera-button"
-      (click)="leaveCustomCamera()"
-      joyrideStep="highlightCustomCameraCloseButton"
-      [title]="t('userGuide.cameraUsageGuide')"
-      [text]="
-        t('userGuide.afterTakingPhotosOrRecordingVideosCloseAndGoBackHome')
-      "
-    >
-      close
-    </mat-icon>
-
-    <div class="camera-buttons-container">
-      <div *ngIf="isFlashAvailable" class="zoom-slider">
-        <ion-range
-          (ionChange)="zoomFactorChange($event)"
-          [disabled]="!canZoomInOut"
-          [min]="minZoomFactor"
-          [max]="maxZoomFactor"
-          [value]="curZoomFactor"
-          step="0.1"
+<ion-content [fullscreen]="true" *transloco="let t">
+  <ng-container
+    *ngIf="
+      (isStoryMode$ | ngrxPush) ||
+      (isPhotoMode$ | ngrxPush) ||
+      (isGoProMode$ | ngrxPush)
+    "
+  >
+    <div class="camera-container">
+      <div class="camera-header">
+        <mat-icon
+          *ngIf="isFlashAvailable$ | ngrxPush"
+          class="flash-camera-button"
+          [ngClass]="customOrientation$ | ngrxPush"
+          (click)="enableTorch()"
         >
-          <ion-icon slot="start" name="remove-outline"></ion-icon>
-          <ion-icon slot="end" name="add-outline"></ion-icon>
-        </ion-range>
-      </div>
-
-      <div class="main-buttons">
-        <mat-icon class="temporarily-hidden" id="gallery-icon">
-          video_collection
+          {{ (isFlashOn$ | ngrxPush) ? 'flash_on' : 'flash_off' }}
         </mat-icon>
-
-        <circle-progress
-          (click)="onPress()"
-          [maxTime]="maxRecordTimeInMilliseconds"
-          ngxLongPress2
-          (onLongPress)="onLongPress()"
-          (onLongPressing)="onLongPressing($event)"
-          (onReleasePressing)="onReleasePressing()"
-          [percent]="curRecordTimeInPercent"
-          [radius]="38"
-          [outerStrokeWidth]="6"
-          [innerStrokeWidth]="4"
-          [outerStrokeColor]="'#78C000'"
-          [innerStrokeColor]="'#F2F2F2'"
-          [showTitle]="false"
-          [showUnits]="false"
-          [showSubtitle]="false"
-          [animation]="false"
-          [animationDuration]="0"
-          joyrideStep="highlightCustomCameraCaptureButton"
-          [title]="t('userGuide.cameraUsageGuide')"
-          [text]="t('userGuide.tapToTakeAPhotoAndLongPressToRecordVideo')"
-        ></circle-progress>
 
         <mat-icon
-          (click)="flipCamera()"
-          joyrideStep="highlightCustomCameraFlipButton"
+          class="camera-quality-button"
+          [ngClass]="customOrientation$ | ngrxPush"
+          [svgIcon]="'capture-rebrand-camera-' + (cameraQuality$ | ngrxPush)"
+          (click)="toggleCameraQuality()"
+        >
+        </mat-icon>
+
+        <div
+          class="select-from-go-pro-camera-button"
+          [ngClass]="customOrientation$ | ngrxPush"
+          *ngIf="lastConnectedGoProDevice$ | ngrxPush"
+          (click)="captureFromGoPro()"
+        >
+          GoPro
+          <mat-icon> featured_video </mat-icon>
+        </div>
+
+        <mat-icon
+          class="close-camera-button"
+          [ngClass]="customOrientation$ | ngrxPush"
+          (click)="leaveCustomCamera()"
+          joyrideStep="highlightCustomCameraCloseButton"
           [title]="t('userGuide.cameraUsageGuide')"
           [text]="
-            t('userGuide.flipTheCameraToSwitchBetweenFrontAndBackCameras')
+            t('userGuide.afterTakingPhotosOrRecordingVideosCloseAndGoBackHome')
           "
         >
-          flip_camera_android
+          close
         </mat-icon>
+      </div>
+      <div
+        class="camera-preview"
+        (swipeleft)="onSwipeLeft($event)"
+        (swiperight)="onSwipeRight($event)"
+        (pinchstart)="handlePinchStart($event)"
+        (pinchin)="handlePinchIn($event)"
+        (pinchout)="handlePinchOut($event)"
+      ></div>
+
+      <ion-range
+        class="zoom-slider"
+        (ionChange)="zoomFactorChange($event)"
+        [disabled]="!canZoomInOut"
+        [min]="minZoomFactor$ | ngrxPush"
+        [max]="maxZoomFactor$ | ngrxPush"
+        [value]="curZoomFactor$ | ngrxPush"
+        step="0.1"
+      >
+        <ion-icon slot="start" name="remove-outline"></ion-icon>
+        <ion-icon slot="end" name="add-outline"></ion-icon>
+      </ion-range>
+
+      <div
+        class="camera-footer"
+        (swipeleft)="onSwipeLeft($event)"
+        (swiperight)="onSwipeRight($event)"
+      >
+        <div
+          class="footer-camera-modes"
+          [ngClass]="selectedModeCSSClass$ | ngrxPush"
+        >
+          <div
+            class="camera-mode-item"
+            [ngClass]="{ selected: isStoryMode$ | ngrxPush }"
+            (click)="selectMode('story')"
+          >
+            STORY
+          </div>
+          <div
+            class="camera-mode-item"
+            [ngClass]="{ selected: isPhotoMode$ | ngrxPush }"
+            (click)="selectMode('photo')"
+          >
+            PHOTO
+          </div>
+          <div class="camera-mode-item">
+            <!-- Temporary disable/hide GO PRO mode 
+              But we need this element for proper positioning -->
+          </div>
+        </div>
+        <div class="footer-camera-buttons">
+          <mat-icon class="temporarily-hidden" id="gallery-icon">
+            video_collection
+          </mat-icon>
+
+          <circle-progress
+            (click)="onPress()"
+            ngxLongPress2
+            [maxTime]="maxRecordTimeInMilliseconds"
+            [percent]="(curRecordTimeInPercent$ | ngrxPush) ?? 0"
+            [outerStrokeColor]="
+              (curRecordTimeInPercent$ | ngrxPush) === 0
+                ? 'transparent'
+                : '#E32323'
+            "
+            [radius]="38"
+            [backgroundPadding]="-6"
+            [outerStrokeWidth]="4"
+            [space]="3"
+            [innerStrokeWidth]="2"
+            [backgroundStrokeWidth]="6"
+            [outerStrokeLinecap]="'round'"
+            [backgroundStroke]="'#ffffff'"
+            [innerStrokeColor]="'#000000'"
+            [backgroundColor]="
+              (isPhotoMode$ | ngrxPush) ? '#ffffff' : '#E32323'
+            "
+            [showTitle]="false"
+            [showUnits]="false"
+            [showSubtitle]="false"
+            [animation]="false"
+          ></circle-progress>
+
+          <mat-icon
+            (click)="flipCamera()"
+            [ngClass]="customOrientation$ | ngrxPush"
+            joyrideStep="highlightCustomCameraFlipButton"
+            [title]="t('userGuide.cameraUsageGuide')"
+            [text]="
+              t('userGuide.flipTheCameraToSwitchBetweenFrontAndBackCameras')
+            "
+          >
+            flip_camera_android
+          </mat-icon>
+        </div>
       </div>
     </div>
   </ng-container>

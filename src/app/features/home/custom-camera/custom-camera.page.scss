@@ -1,3 +1,10 @@
+$camera-header-height: calc(86px - env(safe-area-inset-top));
+$camera-zoom-slider-height: calc(58px - env(safe-area-inset-bottom));
+$camera-footer-height: calc(168px - env(safe-area-inset-bottom));
+$camera-preview-height: calc(
+  100% - #{$camera-header-height} - #{$camera-zoom-slider-height} - #{$camera-footer-height}
+);
+
 :host {
   background-color: transparent;
 }
@@ -6,15 +13,104 @@ ion-content {
   --background: transparent;
 }
 
-ion-fab-button {
-  font-size: 14px;
-  width: 64px;
+.camera-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  // background-color: white;
+  // opacity: 0.8;
 
-  --border-radius: 8px;
-}
+  .camera-header {
+    height: $camera-header-height;
+    background-color: rgba(0 0 0 / 0.5);
+    padding-top: 16px;
+    // opacity: 0.4;
+  }
 
-ion-fab-list {
-  right: 8px;
+  .camera-preview {
+    height: $camera-preview-height;
+    // background-color: green;
+    // opacity: 0.4;
+  }
+
+  ion-range.zoom-slider {
+    height: $camera-zoom-slider-height;
+    margin: 0 auto;
+    width: 80vw;
+
+    --bar-height: 8px;
+    --bar-border-radius: 8px;
+    --bar-background: rgba(0 0 0 / 0.5);
+    --bar-background-active: white;
+    --knob-background: white;
+  }
+
+  .camera-footer {
+    height: $camera-footer-height;
+    width: 100%;
+    // background-color: blue;
+    background-color: rgba(0 0 0 / 0.5);
+    // opacity: 0.4;
+    display: flex;
+    flex-direction: column;
+
+    .footer-camera-modes {
+      width: 100%;
+      height: 28px;
+      margin: 16px 0 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      .camera-mode-item {
+        width: 68px;
+        height: 27px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 37px;
+        margin: 0 8px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 13px;
+        text-transform: uppercase;
+        color: white;
+      }
+
+      .selected {
+        color: black;
+        background: white;
+        transition: background-color 500ms linear;
+      }
+    }
+
+    .story-mode-selected {
+      transform: translateX(84px);
+      transition: 0.3s ease-in-out;
+      -webkit-transition: 0.3s ease-in-out;
+    }
+
+    .photo-mode-selected {
+      transform: translateX(0);
+      transition: 0.3s ease-in-out;
+      -webkit-transition: 0.3s ease-in-out;
+    }
+
+    .gopro-mode-selected {
+      transform: translateX(-84px);
+      transition: 0.3s ease-in-out;
+      -webkit-transition: 0.3s ease-in-out;
+    }
+
+    .footer-camera-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
 }
 
 mat-icon {
@@ -22,6 +118,23 @@ mat-icon {
   font-size: 36px;
   height: 36px;
   width: 36px;
+  transition: all 0.5s ease-out !important; /* stylelint-disable-line declaration-no-important */
+}
+
+mat-icon.portraitUp {
+  transform: rotate(0);
+}
+
+mat-icon.landscapeRight {
+  transform: rotate(-90deg);
+}
+
+mat-icon.landscapeDown {
+  transform: rotate(180deg);
+}
+
+mat-icon.landscapeLeft {
+  transform: rotate(90deg);
 }
 
 mat-icon.flash-camera-button {
@@ -63,36 +176,6 @@ mat-icon.temporarily-hidden {
     height: 24px;
     width: 24px;
   }
-}
-
-.camera-buttons-container {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 16px 8px;
-
-  .zoom-slider {
-    margin: 0 auto;
-    width: 80vw;
-  }
-
-  .main-buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-  }
-}
-
-#camera-flash-placeholder {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  top: 0;
-  height: 100%;
 }
 
 @keyframes flash-camera-keyframes {

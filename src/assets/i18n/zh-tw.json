@@ -291,7 +291,7 @@
     }
   },
   "customCamera": {
-    "confirmCapture": "確認",
+    "confirmCapture": "下一步",
     "max": "最佳畫質",
     "social": "瀏覽畫質"
   },
