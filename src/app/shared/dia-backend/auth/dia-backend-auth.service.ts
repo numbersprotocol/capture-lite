@@ -251,9 +251,29 @@ export class DiaBackendAuthService {
   updateUser$({ username }: { username: string }) {
     return defer(() => this.getAuthHeaders()).pipe(
       concatMap(headers =>
-        this.httpClient.patch<UpdateUserResponse>(
+        this.httpClient.patch<UpdateEmailResponse>(
           `${BASE_URL}/auth/users/me/`,
           { username },
+          { headers }
+        )
+      ),
+      concatMapTo(this.readUser$()),
+      concatMap(response =>
+        forkJoin([
+          this.setUsername(response.username),
+          this.setEmail(response.email),
+          this.setRerferralCode(response.referral_code),
+        ])
+      )
+    );
+  }
+
+  updateEmail$({ email }: { email: string }) {
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.patch<UpdateEmailResponse>(
+          `${BASE_URL}/auth/users/me/`,
+          { email },
           { headers }
         )
       ),
@@ -511,6 +531,9 @@ interface CreateUserResponse {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface UpdateUserResponse {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface UpdateEmailResponse {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ResendActivationEmailResponse {}

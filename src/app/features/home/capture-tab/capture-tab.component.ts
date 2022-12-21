@@ -143,6 +143,40 @@ export class CaptureTabComponent {
       .subscribe();
   }
 
+  async editEmail() {
+    const alert = await this.alertController.create({
+      header: this.translocoService.translate('editEmail'),
+      inputs: [
+        {
+          name: 'email',
+          type: 'text',
+          value: await this.diaBackendAuthService.getEmail(),
+        },
+      ],
+      buttons: [
+        {
+          text: this.translocoService.translate('cancel'),
+          role: 'cancel',
+        },
+        {
+          text: this.translocoService.translate('ok'),
+          handler: value => this.updateEmail(value.email),
+        },
+      ],
+    });
+    return alert.present();
+  }
+
+  private updateEmail(email: string) {
+    const action$ = this.diaBackendAuthService
+      .updateEmail$({ email })
+      .pipe(catchError((err: unknown) => this.errorService.toastError$(err)));
+    return this.blockingActionService
+      .run$(action$)
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
+
   // eslint-disable-next-line class-methods-use-this
   keyDescendingOrder(
     a: KeyValue<string, Proof[]>,
