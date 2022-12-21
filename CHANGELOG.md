@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.71.1] - 2022-12-21
+
+### Changed
+
+1. Rename Story to Short (#2406)
+
 ## [0.71.0] - 2022-12-20
 
 ### Added
@@ -1950,7 +1956,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.71.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.71.1...HEAD
+[0.71.1]: https://github.com/numbersprotocol/capture-lite/compare/0.71.0...0.71.1
 [0.71.0]: https://github.com/numbersprotocol/capture-lite/compare/0.70.0...0.71.0
 [0.70.0]: https://github.com/numbersprotocol/capture-lite/compare/0.69.3...0.70.0
 [0.69.3]: https://github.com/numbersprotocol/capture-lite/compare/0.69.2...0.69.3
