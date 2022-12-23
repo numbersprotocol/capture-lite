@@ -1,6 +1,6 @@
-$camera-header-height: calc(86px - env(safe-area-inset-top));
-$camera-zoom-slider-height: calc(58px - env(safe-area-inset-bottom));
-$camera-footer-height: calc(168px - env(safe-area-inset-bottom));
+$camera-header-height: calc(64px);
+$camera-zoom-slider-height: calc(58px);
+$camera-footer-height: calc(168px);
 $camera-preview-height: calc(
   100% - #{$camera-header-height} - #{$camera-zoom-slider-height} - #{$camera-footer-height}
 );
