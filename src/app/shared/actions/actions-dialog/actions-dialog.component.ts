@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Platform } from '@ionic/angular';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { Action, Param } from '../service/actions.service';
 
@@ -20,7 +21,8 @@ export class ActionsDialogComponent {
 
   constructor(
     private readonly dialogRef: MatDialogRef<ActionsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: MatDialogData
+    @Inject(MAT_DIALOG_DATA) public data: MatDialogData,
+    private readonly platform: Platform
   ) {
     if (data.action !== undefined && data.params !== undefined) {
       this.title = data.action.title_text;
@@ -28,6 +30,7 @@ export class ActionsDialogComponent {
       this.params = data.params;
       this.createFormModel();
       this.createFormFields();
+      this.autoFocusFirstFieldOnIOS();
     }
   }
 
@@ -81,6 +84,18 @@ export class ActionsDialogComponent {
           },
         });
     }
+  }
+
+  autoFocusFirstFieldOnIOS() {
+    if (!this.platform.is('ios')) return;
+    if (this.fields.length <= 0) return;
+    if (
+      this.fields[0].templateOptions?.type !== 'number' &&
+      this.fields[0].templateOptions?.type !== 'text'
+    )
+      return;
+    const autoFocusAfterMilliseconds = 700;
+    setTimeout(() => (this.fields[0].focus = true), autoFocusAfterMilliseconds);
   }
 
   send() {
