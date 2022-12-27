@@ -19,8 +19,8 @@ export class DiaBackendWalletService {
   readonly assetWalletEthNumBalance$ = this.preferences.getNumber$(
     PrefKeys.ASSET_WALLET_ETH_NUM_BALANCE
   );
-  readonly assetWalletBscNumBalance$ = this.preferences.getNumber$(
-    PrefKeys.ASSET_WALLET_BSC_NUM_BALANCE
+  readonly assetWalletMainnetNumBalance$ = this.preferences.getNumber$(
+    PrefKeys.ASSET_WALLET_MAINNET_NUM_BALANCE
   );
   readonly assetWalletAddr$ = this.preferences.getString$(
     PrefKeys.ASSET_WALLET_ADDR
@@ -30,8 +30,8 @@ export class DiaBackendWalletService {
     PrefKeys.INTEGRITY_WALLET_ETH_NUM_BALANCE
   );
 
-  readonly integrityWalletBscNumBalance$ = this.preferences.getNumber$(
-    PrefKeys.INTEGRITY_WALLET_BSC_NUM_BALANCE
+  readonly integrityWalletMainnetNumBalance$ = this.preferences.getNumber$(
+    PrefKeys.INTEGRITY_WALLET_MAINNET_NUM_BALANCE
   );
 
   // For integrity wallet addr, use WebCryptoApiSignatureProvider.publicKey$
@@ -91,8 +91,8 @@ export class DiaBackendWalletService {
             diaBackendWallet.num_balance.eth_num
           ),
           this.preferences.setNumber(
-            PrefKeys.ASSET_WALLET_BSC_NUM_BALANCE,
-            diaBackendWallet.num_balance.bsc_num
+            PrefKeys.ASSET_WALLET_MAINNET_NUM_BALANCE,
+            diaBackendWallet.num_balance.num
           ),
           this.preferences.setString(
             PrefKeys.ASSET_WALLET_ADDR,
@@ -117,16 +117,16 @@ export class DiaBackendWalletService {
             integrityWallet.num_balance.eth_num
           ),
           this.preferences.setNumber(
-            PrefKeys.INTEGRITY_WALLET_BSC_NUM_BALANCE,
-            integrityWallet.num_balance.bsc_num
+            PrefKeys.INTEGRITY_WALLET_MAINNET_NUM_BALANCE,
+            integrityWallet.num_balance.num
           ),
           this.preferences.setNumber(
             PrefKeys.ASSET_WALLET_ETH_NUM_BALANCE,
             assetWallet.num_balance.eth_num
           ),
           this.preferences.setNumber(
-            PrefKeys.ASSET_WALLET_BSC_NUM_BALANCE,
-            assetWallet.num_balance.bsc_num
+            PrefKeys.ASSET_WALLET_MAINNET_NUM_BALANCE,
+            assetWallet.num_balance.num
           ),
         ])
       )
@@ -141,6 +141,7 @@ export interface DiaBackendWallet {
   num_balance: {
     bsc_num: number;
     eth_num: number;
+    num: number;
   };
   address: string;
   private_key: string;
@@ -150,8 +151,8 @@ export interface DiaBackendWallet {
 
 const enum PrefKeys {
   ASSET_WALLET_ETH_NUM_BALANCE = 'ASSET_WALLET_ETH_NUM_BALANCE',
-  ASSET_WALLET_BSC_NUM_BALANCE = 'ASSET_WALLET_BSC_NUM_BALANCE',
+  ASSET_WALLET_MAINNET_NUM_BALANCE = 'ASSET_WALLET_MAINNET_NUM_BALANCE',
   ASSET_WALLET_ADDR = 'ASSET_WALLET_ADDR',
   INTEGRITY_WALLET_ETH_NUM_BALANCE = 'INTEGRITY_WALLET_ETH_NUM_BALANCE',
-  INTEGRITY_WALLET_BSC_NUM_BALANCE = 'INTEGRITY_WALLET_BSC_NUM_BALANCE',
+  INTEGRITY_WALLET_MAINNET_NUM_BALANCE = 'INTEGRITY_WALLET_MAINNET_NUM_BALANCE',
 }
