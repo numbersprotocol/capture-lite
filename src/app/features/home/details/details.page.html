@@ -55,8 +55,14 @@
       "
     >
       <div class="slide">
+        <div *ngIf="isIframeHidden$ | ngrxPush" class="iframe-loading-spinner">
+          <ion-spinner name="lines-sharp"></ion-spinner>
+        </div>
         <div *ngIf="iframeUrlWithJWTToken$ | ngrxPush as iframeUrlWithJWTToken">
-          <iframe [src]="iframeUrlWithJWTToken"></iframe>
+          <iframe
+            [src]="iframeUrlWithJWTToken"
+            [ngStyle]="iframeHiddenStyle$ | ngrxPush"
+          ></iframe>
         </div>
       </div>
     </ng-template>

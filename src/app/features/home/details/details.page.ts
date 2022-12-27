@@ -10,7 +10,15 @@ import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, EMPTY, Observable, ReplaySubject } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  defer,
+  EMPTY,
+  fromEvent,
+  Observable,
+  ReplaySubject,
+} from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -237,6 +245,12 @@ export class DetailsPage {
 
   readonly networkConnected$ = this.networkService.connected$;
 
+  readonly isIframeHidden$ = new BehaviorSubject(true);
+
+  readonly iframeHiddenStyle$ = this.isIframeHidden$.pipe(
+    map(hidden => ({ visibility: hidden ? 'hidden' : 'visible' }))
+  );
+
   constructor(
     private readonly sanitizer: DomSanitizer,
     private readonly proofRepository: ProofRepository,
@@ -274,6 +288,8 @@ export class DetailsPage {
         untilDestroyed(this)
       )
       .subscribe();
+
+    this.processIframePageLoadEvents();
   }
 
   iframeUrlFor(detailedCapture: any) {
@@ -671,6 +687,29 @@ export class DetailsPage {
         )
         .subscribe();
     }
+  }
+
+  private processIframePageLoadEvents() {
+    fromEvent(window, 'message')
+      .pipe(
+        tap(event => {
+          const postMessageEvent = event as MessageEvent;
+          const hideIframeOnEvents = [
+            'iframe-on-beforeunload', // not firing on safari as of Dec 27 22
+            'iframe-on-unload',
+            'iframe-on-DOMContentLoaded',
+          ];
+          const showIframeOnEvents = ['iframe-on-load'];
+          if (hideIframeOnEvents.includes(postMessageEvent.data)) {
+            this.isIframeHidden$.next(true);
+          }
+          if (showIframeOnEvents.includes(postMessageEvent.data)) {
+            this.isIframeHidden$.next(false);
+          }
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   openOptionsMenu() {
