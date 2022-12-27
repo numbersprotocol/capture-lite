@@ -30,10 +30,10 @@
           </ion-row>
         </ion-col>
       </ion-row>
-      <ion-row id="bep20-points-row" class="text-black">
+      <ion-row id="mainnet-points-row" class="text-black">
         MAINNET:
         <span
-          class="bep20-points"
+          class="mainnet-points"
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
         >
           ${{ mainNumBalance$ | ngrxPush | number : '1.2-2' }}
@@ -43,7 +43,7 @@
         </ng-template>
         {{ t('wallets.buyCredits.credits') }}:
         <span
-          class="bep20-points"
+          class="mainnet-points"
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
           >{{ points$ | ngrxPush | number : '1.2-2' }}</span
         >
