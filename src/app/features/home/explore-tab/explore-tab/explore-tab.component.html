@@ -5,6 +5,10 @@
   {{ 'message.networkNotConnected' | transloco }}
 </div>
 
+<div *ngIf="isIframeHidden$ | ngrxPush" class="iframe-loading-spinner">
+  <ion-spinner name="lines-sharp"></ion-spinner>
+</div>
+
 <ng-template #bubbleIframe>
   <div
     *ngIf="
@@ -15,6 +19,7 @@
     <iframe
       #exploreIframe
       [src]="bubbleIframeUrlWithCachedJWTToken"
+      [ngStyle]="iframeHiddenStyle$ | ngrxPush"
       class="bubble-iframe"
     ></iframe>
   </div>

@@ -3,6 +3,18 @@
   text-align: center;
 }
 
+.iframe-loading-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+  }
+}
+
 .bubble-iframe {
   background-color: black;
   width: 100vw;
