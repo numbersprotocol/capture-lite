@@ -1,12 +1,16 @@
 <div *transloco="let t">
-  <div *ngrxLet="asset_wallet_bsc_num_balance$ as asset_wallet_bsc_num_balance">
+  <div
+    *ngrxLet="
+      asset_wallet_mainnet_num_balance$ as asset_wallet_mainnet_num_balance
+    "
+  >
     <h2 mat-dialog-title>{{ t('payment.confirmPayment') }}</h2>
     <ion-row style="border-bottom: groove">
       <ion-col>
         <ion-label>{{ t('payment.price') }}</ion-label>
       </ion-col>
       <ion-col align="end">
-        <ion-label>{{ orderStatus.price | number: '1.2-2' }} NUM</ion-label>
+        <ion-label>{{ orderStatus.price | number : '1.2-2' }} NUM</ion-label>
       </ion-col>
     </ion-row>
     <ion-row style="border-bottom: groove">
@@ -14,7 +18,7 @@
         <ion-label>{{ t('payment.fee') }}</ion-label>
       </ion-col>
       <ion-col align="end">
-        <ion-label>{{ orderStatus.fee | number: '1.2-2' }} NUM</ion-label>
+        <ion-label>{{ orderStatus.fee | number : '1.2-2' }} NUM</ion-label>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -23,11 +27,11 @@
       </ion-col>
       <ion-col align="end">
         <ion-label
-          >{{ orderStatus.total_cost | number: '1.2-2' }} NUM</ion-label
+          >{{ orderStatus.total_cost | number : '1.2-2' }} NUM</ion-label
         >
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="asset_wallet_bsc_num_balance < num_charged">
+    <ion-row *ngIf="asset_wallet_mainnet_num_balance < num_charged">
       <ion-col style="padding-top: 0; padding-bottom: 0" align="end">
         <ion-label style="color: red; font-size: 15px">{{
           t('insufficientNum')
@@ -37,7 +41,7 @@
     <mat-dialog-actions align="end">
       <button mat-button (click)="cancel()">{{ t('cancel') }}</button>
       <button
-        [disabled]="asset_wallet_bsc_num_balance < num_charged"
+        [disabled]="asset_wallet_mainnet_num_balance < num_charged"
         mat-button
         color="primary"
         (click)="ok()"
