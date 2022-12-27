@@ -5,7 +5,9 @@
   <mat-card *transloco="let t" class="user-card" id="user-card">
     <app-avatar mat-card-avatar></app-avatar>
     <mat-card-header>
-      <mat-card-title>{{ username$ | ngrxPush }}</mat-card-title>
+      <mat-card-title (click)="editUsername()">{{
+        username$ | ngrxPush
+      }}</mat-card-title>
       <div class="vertical-space-8"></div>
       <mat-card-subtitle>{{ email$ | ngrxPush }} </mat-card-subtitle>
     </mat-card-header>
@@ -57,7 +59,7 @@
         >
           <ng-container *ngIf="postCapture.asset_file_mime_type as mimeType">
             <ion-icon
-              *ngIf="mimeType | startsWith: 'video'"
+              *ngIf="mimeType | startsWith : 'video'"
               name="videocam"
               class="is-video"
             ></ion-icon>
