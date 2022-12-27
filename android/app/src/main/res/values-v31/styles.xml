@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--    These styles will be applied to Android API 26 and above-->
-    <style name="AppTheme.NoActionBarLaunch" parent="AppTheme.NoActionBar">
+    <!--    These styles will be applied to Android API 31 and above-->
+    <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
         <!--    Splash Screen Related configs    -->
-        <item name="android:background">@drawable/splash</item>
+        <item name="android:windowBackground">@color/splash_screen_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo_icon_only</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/splash_branding_text</item>
         <!--    App Launch Bar Related configs    -->
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
