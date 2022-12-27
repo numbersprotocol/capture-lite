@@ -37,8 +37,8 @@ export class WalletsPage {
     '0xeceb87cf00dcbf2d4e2880223743ff087a995ad9';
   readonly domainBscScan = 'bscscan.com';
 
-  readonly bscNumBalance$ =
-    this.diaBackendWalletService.assetWalletBscNumBalance$;
+  readonly mainNumBalance$ =
+    this.diaBackendWalletService.assetWalletMainnetNumBalance$;
   readonly points$ = this.diaBackendAuthService.points$;
 
   readonly totalBalance$ = new BehaviorSubject<number>(0);
@@ -74,11 +74,11 @@ export class WalletsPage {
       )
     );
 
-    combineLatest([this.bscNumBalance$, this.points$])
+    combineLatest([this.mainNumBalance$, this.points$])
       .pipe(
         first(),
         map(
-          ([bscNumBalance, points]) => Number(bscNumBalance) + Number(points)
+          ([mainNumBalance, points]) => Number(mainNumBalance) + Number(points)
         ),
         untilDestroyed(this)
       )

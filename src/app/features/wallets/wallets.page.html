@@ -31,12 +31,12 @@
         </ion-col>
       </ion-row>
       <ion-row id="bep20-points-row" class="text-black">
-        BEP20:
+        MAINNET:
         <span
           class="bep20-points"
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
         >
-          ${{ bscNumBalance$ | ngrxPush | number: '1.2-2' }}
+          ${{ mainNumBalance$ | ngrxPush | number : '1.2-2' }}
         </span>
         <ng-template #balanceLoading>
           <mat-spinner diameter="15"></mat-spinner>
@@ -45,7 +45,7 @@
         <span
           class="bep20-points"
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
-          >{{ points$ | ngrxPush | number: '1.2-2' }}</span
+          >{{ points$ | ngrxPush | number : '1.2-2' }}</span
         >
       </ion-row>
       <ion-row id="buy-deposit-withdraw-row">
