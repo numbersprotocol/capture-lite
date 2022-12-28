@@ -79,12 +79,12 @@
             </h1>
           </ion-col>
           <ion-col offset="0.5">
-            <h6>BEP20</h6>
+            <h6>MAINNET</h6>
             <h5>
               {{
                 (mode === 'withdraw'
-                  ? assetWalletBscNumBalance$
-                  : integrityWalletBscNumBalance$
+                  ? assetWalletMainnetNumBalance$
+                  : integrityWalletMainnetNumBalance$
                 )
                   | ngrxPush
                   | currency
@@ -107,12 +107,12 @@
             </h1>
           </ion-col>
           <ion-col offset="0.5">
-            <h6>BEP20</h6>
+            <h6>MAINNET</h6>
             <h5>
               {{
                 (mode === 'withdraw'
-                  ? integrityWalletBscNumBalance$
-                  : assetWalletBscNumBalance$
+                  ? integrityWalletMainnetNumBalance$
+                  : assetWalletMainnetNumBalance$
                 )
                   | ngrxPush
                   | currency

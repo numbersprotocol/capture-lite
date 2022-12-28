@@ -33,12 +33,10 @@ import { ExportPrivateKeyModalComponent } from '../../shared/export-private-key-
   styleUrls: ['./wallets.page.scss'],
 })
 export class WalletsPage {
-  readonly contractAddressNUMBEP20 =
-    '0xeceb87cf00dcbf2d4e2880223743ff087a995ad9';
-  readonly domainBscScan = 'bscscan.com';
+  readonly domainMainnetNum = 'mainnet.num.network';
 
-  readonly bscNumBalance$ =
-    this.diaBackendWalletService.assetWalletBscNumBalance$;
+  readonly mainNumBalance$ =
+    this.diaBackendWalletService.assetWalletMainnetNumBalance$;
   readonly points$ = this.diaBackendAuthService.points$;
 
   readonly totalBalance$ = new BehaviorSubject<number>(0);
@@ -74,11 +72,11 @@ export class WalletsPage {
       )
     );
 
-    combineLatest([this.bscNumBalance$, this.points$])
+    combineLatest([this.mainNumBalance$, this.points$])
       .pipe(
         first(),
         map(
-          ([bscNumBalance, points]) => Number(bscNumBalance) + Number(points)
+          ([mainNumBalance, points]) => Number(mainNumBalance) + Number(points)
         ),
         untilDestroyed(this)
       )
@@ -105,8 +103,8 @@ export class WalletsPage {
         first(),
         switchMap(address =>
           Browser.open({
-            url: `https://${this.domainBscScan}/token/${this.contractAddressNUMBEP20}?a=${address}`,
-            toolbarColor: '#564dfc',
+            url: `https://${this.domainMainnetNum}/address/${address}`,
+            toolbarColor: '#000000',
           })
         ),
         untilDestroyed(this)

@@ -30,20 +30,27 @@
           </ion-row>
         </ion-col>
       </ion-row>
-      <ion-row id="bep20-points-row" class="text-black">
-        BEP20:
-        <span
-          class="bep20-points"
+      <ion-row id="mainnet-points-row" class="text-black">
+        MAINNET:
+        <ng-container
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
         >
-          ${{ bscNumBalance$ | ngrxPush | number: '1.2-2' }}
-        </span>
+          <span class="mainnet-points">
+            ${{ mainNumBalance$ | ngrxPush | number: '1.2-2' }}
+          </span>
+          <ion-icon
+            name="information-circle"
+            #mainnetBalanceTooltip="matTooltip"
+            (click)="mainnetBalanceTooltip.toggle()"
+            [matTooltip]="t('wallets.mainnetNumInfo')"
+          ></ion-icon>
+        </ng-container>
         <ng-template #balanceLoading>
           <mat-spinner diameter="15"></mat-spinner>
         </ng-template>
         {{ t('wallets.buyCredits.credits') }}:
         <span
-          class="bep20-points"
+          class="mainnet-points"
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
           >{{ points$ | ngrxPush | number: '1.2-2' }}</span
         >
@@ -124,9 +131,9 @@
       <mat-icon mat-list-icon>history</mat-icon>
       <div mat-line>{{ t('wallets.assetWalletHistory') }}</div>
       <div mat-line>
-        <a (click)="openAssetWalletHistory()">{{
-          t('wallets.viewOnBscScan')
-        }}</a>
+        <a (click)="openAssetWalletHistory()">
+          {{ t('wallets.viewOnExplore') }}
+        </a>
       </div>
     </mat-list-item>
   </mat-list>
