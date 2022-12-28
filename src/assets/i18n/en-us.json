@@ -309,6 +309,7 @@
     "integrityWallet": "Integrity Wallet",
     "integrityWalletTooltip": "Wallet used for creating Signatures",
     "viewOnBscScan": "View on BscScan",
+    "viewOnExplore": "View on Explore",
     "exportIntegrityKey": "Export Integrity Wallet",
     "transfer": "Transfer",
     "withdraw": "Withdraw",
