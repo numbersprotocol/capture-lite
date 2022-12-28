@@ -86,6 +86,15 @@ export class ActionsDialogComponent {
     }
   }
 
+  /**
+   * This workaround is specific to iOS.
+   * Action dialog form fields are created using @ngx-formly.
+   * On Android it auto-focuses on 1st field even if 1st field is prepopulated.
+   * On iOS it focuses on field that is not prepopulated yet thus having
+   * different behavior based on Platform. To unify behavior this methods
+   * forces to focus on 1st field on iOS platform.
+   * @returns
+   */
   autoFocusFirstFieldOnIOS() {
     if (!this.platform.is('ios')) return;
     if (this.fields.length <= 0) return;
