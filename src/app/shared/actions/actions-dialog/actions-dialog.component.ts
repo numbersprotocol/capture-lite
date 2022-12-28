@@ -87,6 +87,7 @@ export class ActionsDialogComponent {
   }
 
   /**
+   * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/2284
    * This workaround is specific to iOS.
    * Action dialog form fields are created using @ngx-formly.
    * On Android it auto-focuses on 1st field even if 1st field is prepopulated.
