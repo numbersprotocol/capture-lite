@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.72.0] - 2022-12-23
+
+### Added
+
+1. Support native NUM in wallet (#2425)
+2. User can update username (#2426)
+
+### Changed
+
+1. Update splash screen design for Android 12 breaking change (#2424)
+
+### Fixed
+
+1. Avoid white flash on some OEM Android by setting Capacitor webview to dard (#2436)
+2. Force focus to 1st field in dialog on iOS (#2419)
+3. Remove iframe URL from clear traffic config (#2412)
+4. Fix translation (#2411)
+5. Fix linting (#2437)
+
 ## [0.71.2] - 2022-12-23
 
 ### Fixed
@@ -1962,7 +1981,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.71.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.72.0...HEAD
+[0.72.0]: https://github.com/numbersprotocol/capture-lite/compare/0.71.2...0.72.0
 [0.71.2]: https://github.com/numbersprotocol/capture-lite/compare/0.71.1...0.71.2
 [0.71.1]: https://github.com/numbersprotocol/capture-lite/compare/0.71.0...0.71.1
 [0.71.0]: https://github.com/numbersprotocol/capture-lite/compare/0.70.0...0.71.0
