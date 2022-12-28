@@ -1,5 +1,6 @@
 package io.numbersprotocol.capturelite;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import com.getcapacitor.BridgeActivity;
@@ -10,6 +11,22 @@ import android.content.res.Configuration;
 import android.webkit.WebSettings;
 
 public class MainActivity extends BridgeActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    forceWebViewDarkMode();
+  }
+
+  private void forceWebViewDarkMode() {
+    // WORKAROUND: Some Android devices have white flash during iframe load, and navigation
+    // since capture app heavily relies on bubble app that runs inside iframe it's important
+    // to prevent white flash. Another thing is capture app has dark theme only so we are safe to
+    // forcefully set capacitor's WebView to Dark
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      this.getBridge().getWebView().getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+    }
+  }
+
   void setDarkMode() {
     // WORKAROUND: Android device doesn't support media query for prefers-color-scheme
     // @reference: https://github.com/ionic-team/capacitor/discussions/1978#discussioncomment-708439
@@ -34,6 +51,6 @@ public class MainActivity extends BridgeActivity {
   @Override
   public void onResume() {
     super.onResume();
-    setDarkMode();
+    // setDarkMode();
   }
 }
