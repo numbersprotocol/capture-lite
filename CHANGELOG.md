@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.72.1] - 2022-12-23
+
+### Fixed
+
+1. Fix wallet page wording (#2438)
+
 ## [0.72.0] - 2022-12-23
 
 ### Added
