@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Platform } from '@ionic/angular';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { Action, Param } from '../service/actions.service';
 
@@ -20,7 +21,8 @@ export class ActionsDialogComponent {
 
   constructor(
     private readonly dialogRef: MatDialogRef<ActionsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: MatDialogData
+    @Inject(MAT_DIALOG_DATA) public data: MatDialogData,
+    private readonly platform: Platform
   ) {
     if (data.action !== undefined && data.params !== undefined) {
       this.title = data.action.title_text;
@@ -28,6 +30,7 @@ export class ActionsDialogComponent {
       this.params = data.params;
       this.createFormModel();
       this.createFormFields();
+      this.autoFocusFirstFieldOnIOS();
     }
   }
 
@@ -81,6 +84,28 @@ export class ActionsDialogComponent {
           },
         });
     }
+  }
+
+  /**
+   * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/2284
+   * This workaround is specific to iOS.
+   * Action dialog form fields are created using @ngx-formly.
+   * On Android it auto-focuses on 1st field even if 1st field is prepopulated.
+   * On iOS it focuses on field that is not prepopulated yet thus having
+   * different behavior based on Platform. To unify behavior this methods
+   * forces to focus on 1st field on iOS platform.
+   * @returns
+   */
+  autoFocusFirstFieldOnIOS() {
+    if (!this.platform.is('ios')) return;
+    if (this.fields.length <= 0) return;
+    if (
+      this.fields[0].templateOptions?.type !== 'number' &&
+      this.fields[0].templateOptions?.type !== 'text'
+    )
+      return;
+    const autoFocusAfterMilliseconds = 700;
+    setTimeout(() => (this.fields[0].focus = true), autoFocusAfterMilliseconds);
   }
 
   send() {
