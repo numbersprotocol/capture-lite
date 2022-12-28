@@ -298,6 +298,7 @@
   "wallets": {
     "wallets": "Wallets",
     "pullToRefreshBalance": "Pull to refresh balance",
+    "mainnetNumInfo": "The amount only supports reflecting your native NUM token currently, if you want to check NUM on ETH or BSC, please copy your asset wallet address and check it on Etherscan or Bscsan.",
     "assetWallet": "Asset Wallet",
     "assetWalletHistory": "Asset Wallet History",
     "myAssetWallet": "My Asset Wallet",

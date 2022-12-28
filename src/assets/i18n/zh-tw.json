@@ -298,6 +298,7 @@
   "wallets": {
     "wallets": "錢包",
     "pullToRefreshBalance": "下拉以刷新餘額",
+    "mainnetNumInfo": "本金額目前僅支援顯示您在主網上的 NUM 代幣，如果您想查看在 ETH 或 BSC 上的 NUM 代幣，請複制您的資產錢包地址，並在 Etherscan 或 Bscsan 上查看。",
     "assetWallet": "資產錢包",
     "assetWalletHistory": "資產交易紀錄",
     "myAssetWallet": "我的資產錢包",
