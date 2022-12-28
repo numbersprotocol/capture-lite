@@ -11,8 +11,8 @@ import { DiaBackendWalletService } from '../dia-backend/wallet/dia-backend-walle
 export class OrderDetailDialogComponent {
   readonly orderStatus: NetworkAppOrder;
   num_charged = 0;
-  readonly asset_wallet_bsc_num_balance$ =
-    this.diaBackendWalletService.assetWalletBscNumBalance$;
+  readonly asset_wallet_mainnet_num_balance$ =
+    this.diaBackendWalletService.assetWalletMainnetNumBalance$;
 
   constructor(
     private readonly dialogRef: MatDialogRef<OrderDetailDialogComponent>,

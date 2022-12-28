@@ -28,10 +28,10 @@ export class TransferPage {
   elementType = NgxQrcodeElementTypes.URL;
 
   readonly assetWalletAddr$ = this.diaBackendWalletService.assetWalletAddr$;
-  readonly assetWalletBscNumBalance$ =
-    this.diaBackendWalletService.assetWalletBscNumBalance$;
-  readonly integrityWalletBscNumBalance$ =
-    this.diaBackendWalletService.integrityWalletBscNumBalance$;
+  readonly assetWalletMainnetNumBalance$ =
+    this.diaBackendWalletService.assetWalletMainnetNumBalance$;
+  readonly integrityWalletMainnetNumBalance$ =
+    this.diaBackendWalletService.integrityWalletMainnetNumBalance$;
 
   transferAmount: number | null = null;
 
