@@ -32,12 +32,19 @@
       </ion-row>
       <ion-row id="mainnet-points-row" class="text-black">
         MAINNET:
-        <span
-          class="mainnet-points"
+        <ng-container
           *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
         >
-          ${{ mainNumBalance$ | ngrxPush | number : '1.2-2' }}
-        </span>
+          <span class="mainnet-points">
+            ${{ mainNumBalance$ | ngrxPush | number : '1.2-2' }}
+          </span>
+          <ion-icon
+            name="information-circle"
+            #mainnetBalanceTooltip="matTooltip"
+            (click)="mainnetBalanceTooltip.toggle()"
+            [matTooltip]="'Mainnet NUM balance'"
+          ></ion-icon>
+        </ng-container>
         <ng-template #balanceLoading>
           <mat-spinner diameter="15"></mat-spinner>
         </ng-template>
