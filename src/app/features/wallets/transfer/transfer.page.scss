@@ -177,6 +177,7 @@ ion-card {
 }
 
 .asset-wallet-qr-code-container {
+  color: white !important; /* stylelint-disable-line declaration-no-important */
   max-width: 300px;
   margin: 0 auto;
   display: flex;
