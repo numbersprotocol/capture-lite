@@ -1995,6 +1995,7 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Android - the APK file `app-debug.apk` is attached to this release
 
 [unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.72.2...HEAD
+[0.72.2]: https://github.com/numbersprotocol/capture-lite/compare/0.72.1...0.72.2
 [0.72.1]: https://github.com/numbersprotocol/capture-lite/compare/0.72.0...0.72.1
 [0.72.0]: https://github.com/numbersprotocol/capture-lite/compare/0.71.2...0.72.0
 [0.71.2]: https://github.com/numbersprotocol/capture-lite/compare/0.71.1...0.71.2
