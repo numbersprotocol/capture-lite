@@ -8,6 +8,30 @@ ion-select {
   width: auto;
 }
 
+ion-toggle {
+  height: 8px;
+  width: 28px;
+
+  --handle-height: 16px;
+  --handle-width: 16px;
+}
+
+ion-toggle::part(track) {
+  background: #6f6f6f;
+}
+
+ion-toggle::part(handle) {
+  background: white;
+}
+
+ion-toggle.toggle-checked::part(track) {
+  background: #486cd980;
+}
+
+ion-toggle.toggle-checked::part(handle) {
+  background: #486cd9;
+}
+
 a {
   text-decoration: none;
   color: white;

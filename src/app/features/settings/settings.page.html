@@ -33,6 +33,7 @@
     <ion-item>
       <ion-label>{{ t('collectLocationInfo') }}</ion-label>
       <ion-toggle
+        color="primary"
         [checked]="isLocationInfoCollectionEnabled$ | ngrxPush"
         (ionChange)="setLocationInfoCollection($event)"
         slot="end"
