@@ -258,6 +258,7 @@
     "confirmPayment": "Your Order",
     "price": "Fee",
     "fee": "Gas",
+    "estimatedFee": "Est. Gas Fee",
     "totalCost": "Total Cost"
   },
   "home": {
@@ -319,10 +320,10 @@
     "moveNumBetweenAssetWallet": "Move NUM between asset wallet",
     "andIntegrityWallet": "and integrity wallet",
     "requestSent": "request sent",
-    "gasFee": "Gas Fee",
+    "estimatedGasFee": "Est. Gas Fee",
     "pending": "Pending",
     "total": "Total",
-    "calculateGasFee": "Calculate Gas",
+    "calculateEstimatedGasFee": "Calculate Est. Gas",
     "buyCredits": {
       "credits": "Credits",
       "buyCredits": "Buy Credits",
