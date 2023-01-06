@@ -6,8 +6,8 @@
 </mat-toolbar>
 
 <ion-content *transloco="let t">
-  <ion-list lines="none">
-    <ion-item>
+  <ion-list>
+    <ion-item lines="inset">
       <ion-label>{{ t('languages') }}</ion-label>
       <ion-select
         [value]="currentLanguageKey$ | ngrxPush"
