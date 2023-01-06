@@ -11,6 +11,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
+import { CapacitorFactsProvider } from '../../shared/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { Database } from '../../shared/database/database.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
@@ -31,6 +32,11 @@ export class SettingsPage {
 
   readonly currentLanguageKey$ = this.languageService.currentLanguageKey$;
 
+  readonly isDeviceInfoCollectionEnabled$ =
+    this.capacitorFactsProvider.isDeviceInfoCollectionEnabled$;
+  readonly isLocationInfoCollectionEnabled$ =
+    this.capacitorFactsProvider.isGeolocationInfoCollectionEnabled$;
+
   readonly hiddenOptionClicks$ = new Subject<void>();
   private readonly requiredClicks = 7;
   showHiddenOption = false;
@@ -44,7 +50,8 @@ export class SettingsPage {
     private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly confirmAlert: ConfirmAlert
+    private readonly confirmAlert: ConfirmAlert,
+    private readonly capacitorFactsProvider: CapacitorFactsProvider
   ) {}
 
   ionViewDidEnter() {
@@ -67,6 +74,16 @@ export class SettingsPage {
 
   public onSettingsToolbarClicked() {
     this.hiddenOptionClicks$.next();
+  }
+
+  async setDeviceInfoCollection(event: any) {
+    const enable = Boolean(event.detail.checked);
+    return this.capacitorFactsProvider.setDeviceInfoCollection(enable);
+  }
+
+  async setLocationInfoCollection(event: any) {
+    const enable = Boolean(event.detail.checked);
+    return this.capacitorFactsProvider.setGeolocationInfoCollection(enable);
   }
 
   /**
