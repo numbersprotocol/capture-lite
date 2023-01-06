@@ -1,6 +1,11 @@
 <mat-toolbar *transloco="let t">
-  <button routerLink=".." routerDirection="back" mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
+  <button
+    routerLink=".."
+    routerDirection="back"
+    mat-mini-fab
+    class="capture-rebranded-button"
+  >
+    <mat-icon svgIcon="capture-rebrand-arrow-left"></mat-icon>
   </button>
   <span (click)="onSettingsToolbarClicked()">{{ t('settings') }}</span>
 </mat-toolbar>
