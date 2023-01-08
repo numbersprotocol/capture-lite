@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.72.3] - 2023-01-06
+
+### Fixed
+
+1. Revert workaround for forcing webview dark mode on Android (#2457)
+2. Revert qr code text color to white in Transfer page (#2460)
+
 ## [0.72.2] - 2023-01-04
 
 ### Fixed
@@ -1994,7 +2001,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.72.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.72.3...HEAD
+[0.72.3]: https://github.com/numbersprotocol/capture-lite/compare/0.72.2...0.72.3
 [0.72.2]: https://github.com/numbersprotocol/capture-lite/compare/0.72.1...0.72.2
 [0.72.1]: https://github.com/numbersprotocol/capture-lite/compare/0.72.0...0.72.1
 [0.72.0]: https://github.com/numbersprotocol/capture-lite/compare/0.71.2...0.72.0
