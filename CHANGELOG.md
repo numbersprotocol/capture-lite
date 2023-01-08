@@ -14,7 +14,7 @@ To check the difference between the last releaes and the latest dev status, clic
 ### Fixed
 
 1. Revert workaround for forcing webview dark mode on Android (#2457)
-2. Revert qr code text color to white in Transfer page
+2. Revert qr code text color to white in Transfer page (#2460)
 
 ## [0.72.2] - 2023-01-04
 
