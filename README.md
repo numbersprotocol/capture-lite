@@ -111,6 +111,10 @@ npm run build.android
 
 ### Release
 
+See the [Capture App release flow (Miro)](https://miro.com/app/board/o9J_knEiIYo=/?moveToWidget=3458764542656055086&cot=14).
+
+Some nodes below:
+
 Bump version in `package.json`.
 
 ```json
@@ -124,7 +128,7 @@ Bump version in `android/app/build.gradle`.
 ```gradle
 android {
     defaultConfig {
-        versionCode <versionCode += a_diff*100 + b_diff*10 + c_diff>
+        versionCode <versionCode++>
         versionName "a.b.c"
     }
 }
@@ -134,17 +138,8 @@ Run `npm i` to update `package-lock.json`.
 
 Write the changelog in `CHANGELOG.md`.
 
-When push to the `master` branch with new version in the `package.json` file, GitHub Action would automatically do the following jobs:
+When push to the `master` branch with new version tag, GitHub Action would automatically do the following jobs:
 
 1. Create release GitHub page with debug APK.
-1. Publish the app to Play Console on alpha track.
-1. Upload debug apk to Google Drive.
+1. Publish the app to Play Console on alpha track and Apple Store.
 1. Send notification to the private `reminder-releases` slack channel.
-
-If error occur in `deploy-app-store` GitHub Action, most likely it's due to some weird error with GitHub MacOS runner or iOS server. Re-run the failed job should fix that. However, you might run into
-
-```
-Error: Validation Failed: {"resource":"Release","code":"already_exists","field":"tag_name"}
-```
-
-In this case, you could delete the releae tag by doing `git push --delete origin tagname`. E.g. `git push --delete origin 0.53.0`.
