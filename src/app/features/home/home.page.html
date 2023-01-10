@@ -13,9 +13,17 @@
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a routerLink="/invitation" (click)="sidenav.close()" mat-list-item>
-          {{ t('invitation.invitation') }}
+        <a
+          routerLink="/invitation"
+          (click)="sidenav.close()"
+          mat-line
+          class="title"
+        >
+          {{ t('invitation.inviteFriends') }}
         </a>
+        <p mat-line class="subtitle">
+          {{ t('invitation.inviteFriendsBenefit') }}
+        </p>
       </mat-list-item>
       <mat-list-item>
         <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>
