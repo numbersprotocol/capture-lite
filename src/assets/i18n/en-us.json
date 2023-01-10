@@ -336,6 +336,8 @@
   },
   "invitation": {
     "invitation": "Invitation",
+    "inviteFriends": "Invite friends",
+    "inviteFriendsBenefit": "Get 5 credits for each accepted invitation",
     "shareInvitationCode": "Share invitation code",
     "shareToGetRewarded": "Share to get rewarded",
     "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "Use my referral code {{referralCode}} to sign up for Capture App, pass verification and we both get NUM Points reward!"
