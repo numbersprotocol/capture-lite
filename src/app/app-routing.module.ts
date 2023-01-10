@@ -89,6 +89,13 @@ const routes: Routes = [
         m => m.DataPolicyPageModule
       ),
   },
+  {
+    path: 'terms-of-use',
+    loadChildren: () =>
+      import('./features/terms-of-use/terms-of-use.module').then(
+        m => m.TermsOfUsePageModule
+      ),
+  },
 ];
 @NgModule({
   imports: [

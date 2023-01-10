@@ -1,0 +1,27 @@
+<ng-container *ngIf="(networkConnected$ | async) === true; else bubbleIframe">
+  <mat-toolbar>
+    <button
+      routerLink=".."
+      routerDirection="back"
+      mat-mini-fab
+      class="capture-rebranded-button"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span>{{ 'termsOfUse' | transloco }}</span>
+  </mat-toolbar>
+  <div class="no-network-text">
+    {{ 'message.networkNotConnected' | transloco }}
+  </div>
+</ng-container>
+
+<ng-template #bubbleIframe>
+  <iframe
+    [src]="termsOfUseUrl | safeResourceUrl"
+    class="bubble-iframe"
+  ></iframe>
+  <ion-spinner
+    *ngIf="(iframeLoaded$ | async) !== true"
+    name="lines-sharp"
+  ></ion-spinner>
+</ng-template>
