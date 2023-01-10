@@ -182,6 +182,7 @@ ion-card {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: white !important; /* stylelint-disable-line declaration-no-important */
 }
 
 .qr-code-info {
