@@ -8,18 +8,13 @@
     </mat-toolbar>
     <mat-nav-list>
       <mat-list-item>
-        <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>
-          {{ t('profile') }}
-        </a>
-      </mat-list-item>
-      <mat-list-item>
-        <a routerLink="/contacts" (click)="sidenav.close()" mat-list-item>
-          {{ t('contacts') }}
-        </a>
-      </mat-list-item>
-      <mat-list-item>
         <a routerLink="/wallets" (click)="sidenav.close()" mat-list-item>
           {{ t('wallets.wallets') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/invitation" (click)="sidenav.close()" mat-list-item>
+          {{ t('invitation.invitation') }}
         </a>
       </mat-list-item>
       <mat-list-item>
@@ -28,8 +23,13 @@
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a routerLink="/invitation" (click)="sidenav.close()" mat-list-item>
-          {{ t('invitation.invitation') }}
+        <a routerLink="/contacts" (click)="sidenav.close()" mat-list-item>
+          {{ t('contacts') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>
+          {{ t('profile') }}
         </a>
       </mat-list-item>
       <mat-list-item>
