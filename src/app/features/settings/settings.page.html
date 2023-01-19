@@ -7,7 +7,7 @@
   >
     <mat-icon svgIcon="capture-rebrand-arrow-left"></mat-icon>
   </button>
-  <span (click)="onSettingsToolbarClicked()">{{ t('settings') }}</span>
+  <span (click)="onSettingsToolbarClicked()">{{ t('settings.settings') }}</span>
 </mat-toolbar>
 
 <ion-content *transloco="let t">
@@ -80,8 +80,35 @@
         slot="end"
       ></ion-icon>
     </ion-item>
-    <ion-item (click)="deleteAccount()">
+    <ion-item (click)="confirmDelete()">
       <ion-label color="primary">{{ 'delete' | transloco }}</ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-modal id="backup-private-key-modal" #modal>
+    <ng-template>
+      <ion-card>
+        <ion-card-content>
+          <div class="backup-modal-warning-text">
+            {{ t('settings.pleasePressThePrivateKeyBelowToCopy') }}
+          </div>
+
+          <ion-item button (click)="copyPrivateKeyToClipboard()">
+            <ion-label>
+              {{ privateKeyTruncated$ | async }}
+            </ion-label>
+            <ion-icon name="copy-outline" slot="end"></ion-icon>
+          </ion-item>
+
+          <ion-button
+            expand="block"
+            fill="clear"
+            (click)="modal.dismiss(); this.deleteAccount()"
+          >
+            {{ t('settings.iHaveCopiedMyPrivateKey') }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </ion-modal>
 </ion-content>

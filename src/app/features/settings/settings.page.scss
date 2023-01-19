@@ -22,6 +22,34 @@ ion-select {
   width: auto;
 }
 
+ion-modal#backup-private-key-modal {
+  margin: 8px;
+
+  --width: fit-content;
+  --min-width: 250px;
+  --height: fit-content;
+
+  ion-card {
+    padding: 8px;
+
+    ion-card-content {
+      .backup-modal-warning-text {
+        font-size: 14px;
+        padding-bottom: 24px;
+      }
+
+      ion-item {
+        margin-bottom: 24px;
+
+        ion-label {
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
 ion-toggle {
   height: 8px;
   width: 28px;

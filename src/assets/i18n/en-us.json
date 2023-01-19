@@ -1,7 +1,6 @@
 {
   "capture": "Capture",
   "profile": "Profile",
-  "settings": "Settings",
   "privacy": "Privacy",
   "informationDetails": "Information Details",
   "caption": "Caption",
@@ -336,6 +335,11 @@
       "okIGotIt": "Ok, I got it",
       "inAppProductsNotAvailableYetPleaseTryAgainLater": "In App Products are not available yet. Try again later."
     }
+  },
+  "settings": {
+    "settings": "Settings",
+    "pleasePressThePrivateKeyBelowToCopy": "Please press the private key below to copy. It is important to keep your private key in a safe place.",
+    "iHaveCopiedMyPrivateKey": "I have copied my private key"
   },
   "invitation": {
     "invitation": "Invitation",
