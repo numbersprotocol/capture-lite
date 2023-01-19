@@ -8,6 +8,13 @@ const routes: Routes = [
     component: SettingsPage,
   },
   {
+    path: 'email-verification',
+    loadChildren: () =>
+      import('./email-verification/email-verification.module').then(
+        m => m.EmailVerificationPageModule
+      ),
+  },
+  {
     path: 'go-pro',
     loadChildren: () =>
       import('./go-pro/go-pro.module').then(m => m.GoProPageModule),
