@@ -115,7 +115,7 @@
           </button>
         </ng-template>
       </mat-tab>
-      <mat-tab>
+      <mat-tab [disabled]="(hasLoggedIn$ | async) === false">
         <ng-template mat-tab-label>
           <button mat-icon-button (click)="navigateToInboxTab()">
             <mat-icon
