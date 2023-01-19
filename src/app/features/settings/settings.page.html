@@ -38,6 +38,18 @@
         slot="end"
       ></ion-toggle>
     </ion-item>
+    <ion-item>
+      <ion-label>{{ t('version') }}</ion-label>
+      <ion-text slot="end"> {{ version$ | ngrxPush }} </ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ t('contactUs') }}</ion-label>
+      <ion-text slot="end">
+        <a href="mailto:service@numbersprotocol.io">
+          service@numbersprotocol.io
+        </a>
+      </ion-text>
+    </ion-item>
 
     <ion-item
       *ngIf="showHiddenOption"
