@@ -40,6 +40,11 @@
           {{ t('dataPolicy') }}
         </a>
       </mat-list-item>
+      <mat-list-item>
+        <a routerLink="/terms-of-use" (click)="sidenav.close()" mat-list-item>
+          {{ t('termsOfUse') }}
+        </a>
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
