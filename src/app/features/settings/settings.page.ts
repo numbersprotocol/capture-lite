@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, iif, Subject } from 'rxjs';
+import { defer, EMPTY, iif, Subject } from 'rxjs';
 import {
   catchError,
   concatMap,
   concatMapTo,
   count,
+  first,
+  map,
+  switchMap,
   take,
   tap,
 } from 'rxjs/operators';
@@ -38,6 +42,17 @@ export class SettingsPage {
   readonly isLocationInfoCollectionEnabled$ =
     this.capacitorFactsProvider.isGeolocationInfoCollectionEnabled$;
 
+  readonly email$ = this.diaBackendAuthService.email$;
+  readonly emailVerified$ = this.diaBackendAuthService.emailVerified$;
+  readonly emailVerifiedIcon$ = this.emailVerified$.pipe(
+    map(verified =>
+      verified ? 'checkmark-done-circle-outline' : 'alert-circle-outline'
+    )
+  );
+  readonly emailVerifiedIconColor$ = this.emailVerified$.pipe(
+    map(verified => (verified ? 'primary' : 'danger'))
+  );
+
   readonly version$ = this.versionService.version$;
 
   readonly hiddenOptionClicks$ = new Subject<void>();
@@ -55,7 +70,9 @@ export class SettingsPage {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly confirmAlert: ConfirmAlert,
     private readonly capacitorFactsProvider: CapacitorFactsProvider,
-    private readonly versionService: VersionService
+    private readonly versionService: VersionService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {}
 
   ionViewDidEnter() {
@@ -88,6 +105,20 @@ export class SettingsPage {
   async setLocationInfoCollection(event: any) {
     const enable = Boolean(event.detail.checked);
     return this.capacitorFactsProvider.setGeolocationInfoCollection(enable);
+  }
+
+  emailVerification() {
+    this.emailVerified$
+      .pipe(
+        first(),
+        switchMap(emailVerified => {
+          if (emailVerified) return EMPTY;
+          return this.router.navigate(['email-verification'], {
+            relativeTo: this.route,
+          });
+        })
+      )
+      .subscribe();
   }
 
   /**
