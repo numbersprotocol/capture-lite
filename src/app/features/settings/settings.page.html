@@ -1,13 +1,18 @@
 <mat-toolbar *transloco="let t">
-  <button routerLink=".." routerDirection="back" mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
+  <button
+    routerLink=".."
+    routerDirection="back"
+    mat-mini-fab
+    class="capture-rebranded-button"
+  >
+    <mat-icon svgIcon="capture-rebrand-arrow-left"></mat-icon>
   </button>
   <span (click)="onSettingsToolbarClicked()">{{ t('settings') }}</span>
 </mat-toolbar>
 
 <ion-content *transloco="let t">
-  <ion-list lines="none">
-    <ion-item>
+  <ion-list>
+    <ion-item lines="inset">
       <ion-label>{{ t('languages') }}</ion-label>
       <ion-select
         [value]="currentLanguageKey$ | ngrxPush"
@@ -21,6 +26,35 @@
           {{ language.value }}
         </ion-select-option>
       </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ t('collectDeviceInfo') }}</ion-label>
+      <ion-toggle
+        [checked]="isDeviceInfoCollectionEnabled$ | ngrxPush"
+        (ionChange)="setDeviceInfoCollection($event)"
+        slot="end"
+      ></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ t('collectLocationInfo') }}</ion-label>
+      <ion-toggle
+        color="primary"
+        [checked]="isLocationInfoCollectionEnabled$ | ngrxPush"
+        (ionChange)="setLocationInfoCollection($event)"
+        slot="end"
+      ></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ t('version') }}</ion-label>
+      <ion-text slot="end"> {{ version$ | ngrxPush }} </ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ t('contactUs') }}</ion-label>
+      <ion-text slot="end">
+        <a href="mailto:service@numbersprotocol.io">
+          service@numbersprotocol.io
+        </a>
+      </ion-text>
     </ion-item>
 
     <ion-item
@@ -37,6 +71,15 @@
       <ion-label>User Guide Preferences</ion-label>
     </ion-item>
 
+    <ion-item>
+      <ion-label>{{ email$ | async }}</ion-label>
+      <ion-icon
+        [name]="emailVerifiedIcon$ | async"
+        [color]="emailVerifiedIconColor$ | async"
+        (click)="emailVerification()"
+        slot="end"
+      ></ion-icon>
+    </ion-item>
     <ion-item (click)="deleteAccount()">
       <ion-label color="primary">{{ 'delete' | transloco }}</ion-label>
     </ion-item>
