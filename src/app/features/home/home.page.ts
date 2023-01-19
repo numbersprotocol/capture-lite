@@ -379,7 +379,7 @@ export class HomePage {
     }
   }
 
-  async navigateToInboxTab() {
+  async navigateToProfileTab() {
     const hasLoggedIn = await this.diaBackendAuthService.hasLoggedIn();
     if (!hasLoggedIn) return this.redirectToLoginPage();
     await this.userGuideService.showUserGuidesOnInboxTab();
