@@ -6,22 +6,5 @@
 </mat-toolbar>
 
 <div class="page-content">
-  <mat-list *transloco="let t">
-    <mat-list-item>
-      <mat-icon mat-list-icon>perm_device_information</mat-icon>
-      <div mat-line>{{ t('collectDeviceInfo') }}</div>
-      <mat-slide-toggle
-        [checked]="isDeviceInfoCollectionEnabled$ | ngrxPush"
-        (change)="setDeviceInfoCollection($event.checked)"
-      ></mat-slide-toggle>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-icon mat-list-icon>my_location</mat-icon>
-      <div mat-line>{{ t('collectLocationInfo') }}</div>
-      <mat-slide-toggle
-        [checked]="isLocationInfoCollectionEnabled$ | ngrxPush"
-        (change)="setLocationInfoCollection($event.checked)"
-      ></mat-slide-toggle>
-    </mat-list-item>
-  </mat-list>
+  <!-- TODO: we will add iframe to display privacy policy term, but for now keep it blank -->
 </div>
