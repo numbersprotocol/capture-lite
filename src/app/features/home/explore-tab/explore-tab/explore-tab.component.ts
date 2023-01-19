@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, startWith, tap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
 import { IframeService } from '../../../../shared/iframe/iframe.service';
@@ -19,10 +19,12 @@ export class ExploreTabComponent {
     this.diaBackendAuthService.cachedQueryJWTToken$,
     this.iframeService.exploreTabRefreshRequested$,
   ]).pipe(
+    startWith([undefined, undefined]),
     map(([token, _]) => {
-      const url = `${BUBBLE_IFRAME_URL}/?token=${token.access}&refresh_token=${token.refresh}`;
-      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    })
+      if (!token) return BUBBLE_IFRAME_URL;
+      return `${BUBBLE_IFRAME_URL}/?token=${token.access}&refresh_token=${token.refresh}`;
+    }),
+    map(url => this.sanitizer.bypassSecurityTrustResourceUrl(url))
   );
 
   readonly networkConnected$ = this.networkService.connected$;
