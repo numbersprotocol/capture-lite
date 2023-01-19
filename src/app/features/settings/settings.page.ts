@@ -19,6 +19,7 @@ import { ErrorService } from '../../shared/error/error.service';
 import { LanguageService } from '../../shared/language/service/language.service';
 import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
+import { VersionService } from '../../shared/version/version.service';
 import { reloadApp } from '../../utils/miscellaneous';
 
 @UntilDestroy({ checkProperties: true })
@@ -37,6 +38,8 @@ export class SettingsPage {
   readonly isLocationInfoCollectionEnabled$ =
     this.capacitorFactsProvider.isGeolocationInfoCollectionEnabled$;
 
+  readonly version$ = this.versionService.version$;
+
   readonly hiddenOptionClicks$ = new Subject<void>();
   private readonly requiredClicks = 7;
   showHiddenOption = false;
@@ -51,7 +54,8 @@ export class SettingsPage {
     private readonly translocoService: TranslocoService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly confirmAlert: ConfirmAlert,
-    private readonly capacitorFactsProvider: CapacitorFactsProvider
+    private readonly capacitorFactsProvider: CapacitorFactsProvider,
+    private readonly versionService: VersionService
   ) {}
 
   ionViewDidEnter() {
