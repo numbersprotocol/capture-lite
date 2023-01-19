@@ -12,13 +12,8 @@
           {{ t('wallets.wallets') }}
         </a>
       </mat-list-item>
-      <mat-list-item>
-        <a
-          routerLink="/invitation"
-          (click)="sidenav.close()"
-          mat-line
-          class="title"
-        >
+      <mat-list-item routerLink="/invitation" (click)="sidenav.close()">
+        <a mat-line class="title">
           {{ t('invitation.inviteFriends') }}
         </a>
         <p mat-line class="subtitle">
