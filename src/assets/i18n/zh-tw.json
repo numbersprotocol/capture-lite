@@ -1,7 +1,6 @@
 {
   "capture": "Capture",
   "profile": "個人資料",
-  "settings": "設定",
   "privacy": "隱私",
   "informationDetails": "詳細資訊",
   "caption": "標題",
@@ -333,6 +332,11 @@
       "okIGotIt": "Ok, I got it",
       "inAppProductsNotAvailableYetPleaseTryAgainLater": "App 內購買目前無法使用，請稍後再試."
     }
+  },
+  "settings": {
+    "settings": "設定",
+    "pleasePressThePrivateKeyBelowToCopy": "請點擊下方私鑰複製，並妥善保存您的私鑰，私鑰遺失您將會永久失去該錢包的存取權。",
+    "iHaveCopiedMyPrivateKey": "我已複製私鑰，並已了解遺失私鑰的風險"
   },
   "invitation": {
     "invitation": "邀請",

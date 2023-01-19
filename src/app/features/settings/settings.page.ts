@@ -1,16 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Clipboard } from '@capacitor/clipboard';
+import { IonModal } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, iif, Subject } from 'rxjs';
+import { defer, Subject } from 'rxjs';
 import {
   catchError,
-  concatMap,
   concatMapTo,
   count,
+  first,
+  map,
+  switchMap,
   take,
   tap,
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
+import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { Database } from '../../shared/database/database.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
@@ -35,6 +41,16 @@ export class SettingsPage {
   private readonly requiredClicks = 7;
   showHiddenOption = false;
 
+  private readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
+  readonly privateKeyTruncated$ = this.privateKey$.pipe(
+    map(key => {
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+      return `${key.slice(0, 6)}******${key.slice(key.length - 6)}`;
+    })
+  );
+
+  @ViewChild('modal') modal?: IonModal;
+
   constructor(
     private readonly languageService: LanguageService,
     private readonly database: Database,
@@ -44,7 +60,9 @@ export class SettingsPage {
     private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly confirmAlert: ConfirmAlert
+    private readonly confirmAlert: ConfirmAlert,
+    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
+    private readonly snackBar: MatSnackBar
   ) {}
 
   ionViewDidEnter() {
@@ -69,6 +87,28 @@ export class SettingsPage {
     this.hiddenOptionClicks$.next();
   }
 
+  async confirmDelete() {
+    const confirmed = await this.confirmAlert.present({
+      message: this.translocoService.translate('message.confirmDelete'),
+    });
+    if (!confirmed) return;
+    this.modal?.present();
+  }
+
+  async copyPrivateKeyToClipboard() {
+    return this.privateKey$
+      .pipe(
+        first(),
+        switchMap(privateKey => Clipboard.write({ string: privateKey })),
+        tap(() => {
+          this.snackBar.open(
+            this.translocoService.translate('message.copiedToClipboard')
+          );
+        })
+      )
+      .subscribe();
+  }
+
   /**
    * // TODO: Integrate Storage Backend delete function after it's ready.
    * Delete user account from Storage Backend.
@@ -85,17 +125,9 @@ export class SettingsPage {
       catchError((err: unknown) => this.errorService.toastError$(err))
     );
 
-    return defer(() =>
-      this.confirmAlert.present({
-        message: this.translocoService.translate('message.confirmDelete'),
-      })
-    )
-      .pipe(
-        concatMap(result =>
-          iif(() => result, this.blockingActionService.run$(action$))
-        ),
-        untilDestroyed(this)
-      )
+    return this.blockingActionService
+      .run$(action$)
+      .pipe(untilDestroyed(this))
       .subscribe();
   }
 }
