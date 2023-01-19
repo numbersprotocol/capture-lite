@@ -90,7 +90,9 @@
   "editUsername": "修改使用者名稱",
   "forgotPassword": "忘記密碼",
   "resetPassword": "重設密碼",
-  "contacts": "聯絡人",
+  "friends": "好友",
+  "dataPolicy": "數據政策",
+  "termsOfUse": "使用條款",
   "takePicture": "拍攝照片",
   "recordVideo": "錄製影片",
   "videoLimitation": "影片錄製限制",
@@ -336,6 +338,8 @@
   },
   "invitation": {
     "invitation": "邀請",
+    "inviteFriends": "邀請好友",
+    "inviteFriendsBenefit": "每個接受的邀請可獲得 5 個積分",
     "shareInvitationCode": "分享邀請碼",
     "shareToGetRewarded": "分享以獲得獎勵",
     "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "透過我的推薦碼 {{referralCode}} 在 Capture App 註冊，一起獲得 NUM Points!"

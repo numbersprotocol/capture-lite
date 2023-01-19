@@ -48,7 +48,7 @@
   "signup": "Sign Up",
   "resendActivationEmail": "Resend Activation Email",
   "alreadyHaveAnAccount": "Already Have an Account",
-  "logout": "Log Out",
+  "logout": "Logout",
   "moreInformation": "More Information",
   "mediaId": "Media ID",
   "media": "Media",
@@ -90,7 +90,9 @@
   "editUsername": "Edit Username",
   "forgotPassword": "Forgot Password",
   "resetPassword": "Reset Password",
-  "contacts": "Contacts",
+  "friends": "Friends",
+  "dataPolicy": "Data policy",
+  "termsOfUse": "Terms of use",
   "takePicture": "Take Picture",
   "recordVideo": "Record Video",
   "videoLimitation": "Video Limitation",
@@ -336,6 +338,8 @@
   },
   "invitation": {
     "invitation": "Invitation",
+    "inviteFriends": "Invite friends",
+    "inviteFriendsBenefit": "Get 5 credits for each accepted invitation",
     "shareInvitationCode": "Share invitation code",
     "shareToGetRewarded": "Share to get rewarded",
     "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "Use my referral code {{referralCode}} to sign up for Capture App, pass verification and we both get NUM Points reward!"
