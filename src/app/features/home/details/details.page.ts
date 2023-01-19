@@ -184,6 +184,10 @@ export class DetailsPage {
     )
   );
 
+  readonly isCollectedCapture$ = this.type$.pipe(
+    map(type => type === 'post-capture')
+  );
+
   readonly iframeUrl$ = this.activeDetailedCapture$.pipe(
     distinctUntilChanged(),
     map(detailedCapture => {
@@ -427,55 +431,69 @@ export class DetailsPage {
   async openOptionsMenuEvenOffline() {
     this.userGuideService.setHasClickedDetailsPageOptionsMenu(true);
 
-    return new Promise<void>(resolve => {
-      const buttons: ActionSheetButton[] = [];
+    this.isCollectedCapture$
+      .pipe(
+        first(),
+        map(isCollectedCapture => {
+          return new Promise<void>(resolve => {
+            const buttons: ActionSheetButton[] = [];
 
-      buttons.push({
-        text: this.translocoService.translate('details.actions.edit'),
-        handler: () => {
-          this.handleEditAction();
-          resolve();
-        },
-      });
+            if (!isCollectedCapture) {
+              buttons.push({
+                text: this.translocoService.translate('details.actions.edit'),
+                handler: () => {
+                  this.handleEditAction();
+                  resolve();
+                },
+              });
+            }
+            // Temporarely remove Mint & Share button
+            // buttons.push({
+            //   text: this.translocoService.translate('details.actions.mintAndShare'),
+            //   handler: () => {
+            //     this.handleMintAndShareAction();
+            //     resolve();
+            //   },
+            // });
 
-      // Temporarely remove Mint & Share button
-      // buttons.push({
-      //   text: this.translocoService.translate('details.actions.mintAndShare'),
-      //   handler: () => {
-      //     this.handleMintAndShareAction();
-      //     resolve();
-      //   },
-      // });
+            if (!isCollectedCapture) {
+              buttons.push({
+                text: this.translocoService.translate(
+                  'details.actions.unpublish'
+                ),
+                handler: () => {
+                  this.handleUnpublishAction();
+                  resolve();
+                },
+              });
+            }
 
-      buttons.push({
-        text: this.translocoService.translate('details.actions.unpublish'),
-        handler: () => {
-          this.handleUnpublishAction();
-          resolve();
-        },
-      });
+            buttons.push({
+              text: this.translocoService.translate(
+                'details.actions.networkActions'
+              ),
+              handler: () => {
+                this.handleOpenNetworkActions();
+                resolve();
+              },
+            });
 
-      buttons.push({
-        text: this.translocoService.translate('details.actions.networkActions'),
-        handler: () => {
-          this.handleOpenNetworkActions();
-          resolve();
-        },
-      });
+            buttons.push({
+              text: this.translocoService.translate('details.actions.remove'),
+              cssClass: 'details-page-options-menu-remove-button',
+              handler: () => {
+                this.handleRemoveAction();
+                resolve();
+              },
+            });
 
-      buttons.push({
-        text: this.translocoService.translate('details.actions.remove'),
-        cssClass: 'details-page-options-menu-remove-button',
-        handler: () => {
-          this.handleRemoveAction();
-          resolve();
-        },
-      });
-
-      this.actionSheetController
-        .create({ buttons })
-        .then(sheet => sheet.present());
-    });
+            this.actionSheetController
+              .create({ buttons })
+              .then(sheet => sheet.present());
+          });
+        })
+      )
+      .subscribe();
   }
 
   private handleEditAction() {

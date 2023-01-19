@@ -1,10 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Clipboard } from '@capacitor/clipboard';
 import { IonModal } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, Subject } from 'rxjs';
+import { defer, EMPTY, Subject } from 'rxjs';
 import {
   catchError,
   concatMapTo,
@@ -16,6 +17,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
+import { CapacitorFactsProvider } from '../../shared/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
 import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { Database } from '../../shared/database/database.service';
@@ -24,6 +26,7 @@ import { ErrorService } from '../../shared/error/error.service';
 import { LanguageService } from '../../shared/language/service/language.service';
 import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
+import { VersionService } from '../../shared/version/version.service';
 import { reloadApp } from '../../utils/miscellaneous';
 
 @UntilDestroy({ checkProperties: true })
@@ -36,6 +39,24 @@ export class SettingsPage {
   readonly langauges = this.languageService.languages;
 
   readonly currentLanguageKey$ = this.languageService.currentLanguageKey$;
+
+  readonly isDeviceInfoCollectionEnabled$ =
+    this.capacitorFactsProvider.isDeviceInfoCollectionEnabled$;
+  readonly isLocationInfoCollectionEnabled$ =
+    this.capacitorFactsProvider.isGeolocationInfoCollectionEnabled$;
+
+  readonly email$ = this.diaBackendAuthService.email$;
+  readonly emailVerified$ = this.diaBackendAuthService.emailVerified$;
+  readonly emailVerifiedIcon$ = this.emailVerified$.pipe(
+    map(verified =>
+      verified ? 'checkmark-done-circle-outline' : 'alert-circle-outline'
+    )
+  );
+  readonly emailVerifiedIconColor$ = this.emailVerified$.pipe(
+    map(verified => (verified ? 'primary' : 'danger'))
+  );
+
+  readonly version$ = this.versionService.version$;
 
   readonly hiddenOptionClicks$ = new Subject<void>();
   private readonly requiredClicks = 7;
@@ -61,6 +82,10 @@ export class SettingsPage {
     private readonly translocoService: TranslocoService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly confirmAlert: ConfirmAlert,
+    private readonly capacitorFactsProvider: CapacitorFactsProvider,
+    private readonly versionService: VersionService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     private readonly snackBar: MatSnackBar
   ) {}
@@ -85,6 +110,30 @@ export class SettingsPage {
 
   public onSettingsToolbarClicked() {
     this.hiddenOptionClicks$.next();
+  }
+
+  async setDeviceInfoCollection(event: any) {
+    const enable = Boolean(event.detail.checked);
+    return this.capacitorFactsProvider.setDeviceInfoCollection(enable);
+  }
+
+  async setLocationInfoCollection(event: any) {
+    const enable = Boolean(event.detail.checked);
+    return this.capacitorFactsProvider.setGeolocationInfoCollection(enable);
+  }
+
+  emailVerification() {
+    this.emailVerified$
+      .pipe(
+        first(),
+        switchMap(emailVerified => {
+          if (emailVerified) return EMPTY;
+          return this.router.navigate(['email-verification'], {
+            relativeTo: this.route,
+          });
+        })
+      )
+      .subscribe();
   }
 
   async confirmDelete() {

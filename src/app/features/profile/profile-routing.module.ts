@@ -14,13 +14,6 @@ const routes: Routes = [
         m => m.PhoneVerificationPageModule
       ),
   },
-  {
-    path: 'email-verification',
-    loadChildren: () =>
-      import('./email-verification/email-verification.module').then(
-        m => m.EmailVerificationPageModule
-      ),
-  },
 ];
 
 @NgModule({

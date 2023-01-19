@@ -33,8 +33,10 @@ ion-card {
   }
 
   h6.gas-fee-text {
+    font-size: 13px;
+
     @media (max-width: 360px) {
-      font-size: 14px;
+      font-size: 11px;
     }
   }
 
@@ -62,12 +64,13 @@ ion-card {
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
     right: 5%;
-    width: 80%;
+    width: 90%;
+    font-size: 12px;
 
     --border-radius: 10px;
 
     @media (max-width: 360px) {
-      font-size: 12px;
+      font-size: 10px;
     }
   }
 }
