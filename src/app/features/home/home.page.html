@@ -129,7 +129,9 @@
             ></mat-icon>
           </button>
         </ng-template>
-        <app-capture-tab></app-capture-tab>
+        <ng-template matTabContent>
+          <app-capture-tab></app-capture-tab>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>
