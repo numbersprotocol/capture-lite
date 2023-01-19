@@ -82,6 +82,13 @@ const routes: Routes = [
         m => m.InvitationPageModule
       ),
   },
+  {
+    path: 'data-policy',
+    loadChildren: () =>
+      import('./features/data-policy/data-policy.module').then(
+        m => m.DataPolicyPageModule
+      ),
+  },
 ];
 @NgModule({
   imports: [
