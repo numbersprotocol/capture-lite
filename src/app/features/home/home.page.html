@@ -45,6 +45,11 @@
           {{ t('termsOfUse') }}
         </a>
       </mat-list-item>
+      <mat-list-item>
+        <a class="logout" (click)="sidenav.close(); logout()" mat-list-item>
+          {{ t('logout') }}
+        </a>
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

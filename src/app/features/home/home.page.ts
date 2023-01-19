@@ -14,6 +14,7 @@ import { combineLatest, defer, EMPTY, iif, of } from 'rxjs';
 import {
   catchError,
   concatMap,
+  concatMapTo,
   first,
   map,
   startWith,
@@ -21,9 +22,11 @@ import {
   tap,
 } from 'rxjs/operators';
 import { AndroidBackButtonService } from '../../shared/android-back-button/android-back-button.service';
+import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
 import { CameraService } from '../../shared/camera/camera.service';
 import { CaptureService, Media } from '../../shared/capture/capture.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
+import { Database } from '../../shared/database/database.service';
 import { DiaBackendAssetRepository } from '../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendService } from '../../shared/dia-backend/service/dia-backend-service.service';
@@ -31,9 +34,12 @@ import { DiaBackendTransactionRepository } from '../../shared/dia-backend/transa
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../shared/error/error.service';
 import { IframeService } from '../../shared/iframe/iframe.service';
+import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { MigrationService } from '../../shared/migration/service/migration.service';
 import { OnboardingService } from '../../shared/onboarding/onboarding.service';
+import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
 import { UserGuideService } from '../../shared/user-guide/user-guide.service';
+import { reloadApp } from '../../utils/miscellaneous';
 import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
 import { getAppDownloadLink } from '../../utils/url';
 import { GoProBluetoothService } from '../settings/go-pro/services/go-pro-bluetooth.service';
@@ -89,7 +95,11 @@ export class HomePage {
     private readonly userGuideService: UserGuideService,
     private readonly platform: Platform,
     private readonly iframeService: IframeService,
-    private readonly androidBackButtonService: AndroidBackButtonService
+    private readonly androidBackButtonService: AndroidBackButtonService,
+    private readonly database: Database,
+    private readonly preferenceManager: PreferenceManager,
+    private readonly mediaStore: MediaStore,
+    private readonly blockingActionService: BlockingActionService
   ) {
     this.downloadExpiredPostCaptures();
   }
@@ -369,5 +379,26 @@ export class HomePage {
   async navigateToInboxTab() {
     await this.userGuideService.showUserGuidesOnInboxTab();
     await this.userGuideService.setHasOpenedInboxTab(true);
+  }
+
+  logout() {
+    const action$ = defer(() => this.mediaStore.clear()).pipe(
+      concatMapTo(defer(() => this.database.clear())),
+      concatMapTo(defer(() => this.preferenceManager.clear())),
+      concatMapTo(defer(reloadApp)),
+      catchError((err: unknown) => this.errorService.toastError$(err))
+    );
+    return defer(() =>
+      this.confirmAlert.present({
+        message: this.translocoService.translate('message.confirmLogout'),
+      })
+    )
+      .pipe(
+        concatMap(result =>
+          iif(() => result, this.blockingActionService.run$(action$))
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 }
