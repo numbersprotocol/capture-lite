@@ -12,8 +12,8 @@ import {
 import { environment } from '../../../../environments/environment';
 
 export const languages: { [key: string]: string } = {
-  'en-us': 'English (United State)',
-  'zh-tw': '繁體中文（台灣）',
+  'en-us': 'English',
+  'zh-tw': '繁體中文',
 };
 
 export const defaultLanguage =
