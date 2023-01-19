@@ -260,6 +260,7 @@
     "confirmPayment": "你的訂單",
     "price": "費用",
     "fee": "油費",
+    "estimatedFee": "預估礦工費",
     "totalCost": "總額"
   },
   "home": {
@@ -321,10 +322,10 @@
     "viewOnBscScan": "在 BscScan 上查看",
     "viewOnExplore": "在 Explore 上查看",
     "exportIntegrityKey": "匯出完整性錢包",
-    "gasFee": "油費",
+    "estimatedGasFee": "預估礦工費",
     "pending": "待計算",
     "total": "總額",
-    "calculateGasFee": "計算油費",
+    "calculateEstimatedGasFee": "計算預估礦工費",
     "buyCredits": {
       "credits": "點數",
       "buyCredits": "購買點數",
