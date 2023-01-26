@@ -1,0 +1,39 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    color: white;
+  }
+
+  .capture-rebranded-button {
+    margin: 0 4px;
+    background: #ffffff40 !important; /* stylelint-disable-line declaration-no-important */
+    color: white !important; /* stylelint-disable-line declaration-no-important */
+    backdrop-filter: blur(4px);
+    box-shadow: none;
+  }
+}
+
+.no-network-text {
+  font-size: 18px;
+  margin: auto;
+}
+
+.bubble-iframe {
+  background-color: black;
+  width: 100vw;
+  height: 100vh;
+  border: 0;
+}
+
+ion-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  scale: 1.5;
+}

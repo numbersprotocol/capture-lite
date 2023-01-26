@@ -1,7 +1,6 @@
 {
   "capture": "Capture",
   "profile": "個人資料",
-  "settings": "設定",
   "privacy": "隱私",
   "informationDetails": "詳細資訊",
   "caption": "標題",
@@ -90,7 +89,9 @@
   "editUsername": "修改使用者名稱",
   "forgotPassword": "忘記密碼",
   "resetPassword": "重設密碼",
-  "contacts": "聯絡人",
+  "friends": "好友",
+  "dataPolicy": "數據政策",
+  "termsOfUse": "使用條款",
   "takePicture": "拍攝照片",
   "recordVideo": "錄製影片",
   "videoLimitation": "影片錄製限制",
@@ -258,6 +259,7 @@
     "confirmPayment": "你的訂單",
     "price": "費用",
     "fee": "油費",
+    "estimatedFee": "預估礦工費",
     "totalCost": "總額"
   },
   "home": {
@@ -319,10 +321,10 @@
     "viewOnBscScan": "在 BscScan 上查看",
     "viewOnExplore": "在 Explore 上查看",
     "exportIntegrityKey": "匯出完整性錢包",
-    "gasFee": "油費",
+    "estimatedGasFee": "預估礦工費",
     "pending": "待計算",
     "total": "總額",
-    "calculateGasFee": "計算油費",
+    "calculateEstimatedGasFee": "計算預估礦工費",
     "buyCredits": {
       "credits": "點數",
       "buyCredits": "購買點數",
@@ -334,8 +336,15 @@
       "inAppProductsNotAvailableYetPleaseTryAgainLater": "App 內購買目前無法使用，請稍後再試."
     }
   },
+  "settings": {
+    "settings": "設定",
+    "pleasePressThePrivateKeyBelowToCopy": "請點擊下方私鑰複製，並妥善保存您的私鑰，私鑰遺失您將會永久失去該錢包的存取權。",
+    "iHaveCopiedMyPrivateKey": "我已複製私鑰，並已了解遺失私鑰的風險"
+  },
   "invitation": {
     "invitation": "邀請",
+    "inviteFriends": "邀請好友",
+    "inviteFriendsBenefit": "每個接受的邀請可獲得 5 個積分",
     "shareInvitationCode": "分享邀請碼",
     "shareToGetRewarded": "分享以獲得獎勵",
     "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "透過我的推薦碼 {{referralCode}} 在 Capture App 註冊，一起獲得 NUM Points!"

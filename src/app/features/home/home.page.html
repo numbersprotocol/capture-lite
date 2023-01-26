@@ -8,38 +8,41 @@
     </mat-toolbar>
     <mat-nav-list>
       <mat-list-item>
-        <a routerLink="/profile" (click)="sidenav.close()" mat-list-item>
-          {{ t('profile') }}
-        </a>
-      </mat-list-item>
-      <mat-list-item>
-        <a routerLink="/contacts" (click)="sidenav.close()" mat-list-item>
-          {{ t('contacts') }}
-        </a>
-      </mat-list-item>
-      <mat-list-item>
         <a routerLink="/wallets" (click)="sidenav.close()" mat-list-item>
           {{ t('wallets.wallets') }}
         </a>
       </mat-list-item>
+      <mat-list-item routerLink="/invitation" (click)="sidenav.close()">
+        <a mat-line class="title">
+          {{ t('invitation.inviteFriends') }}
+        </a>
+        <p mat-line class="subtitle">
+          {{ t('invitation.inviteFriendsBenefit') }}
+        </p>
+      </mat-list-item>
       <mat-list-item>
         <a routerLink="/settings" (click)="sidenav.close()" mat-list-item>
-          {{ t('settings') }}
+          {{ t('settings.settings') }}
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a routerLink="/invitation" (click)="sidenav.close()" mat-list-item>
-          {{ t('invitation.invitation') }}
+        <a routerLink="/contacts" (click)="sidenav.close()" mat-list-item>
+          {{ t('friends') }}
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a routerLink="/privacy" (click)="sidenav.close()" mat-list-item>
-          {{ t('privacy') }}
+        <a routerLink="/data-policy" (click)="sidenav.close()" mat-list-item>
+          {{ t('dataPolicy') }}
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a routerLink="/about" (click)="sidenav.close()" mat-list-item>
-          {{ t('about') }}
+        <a routerLink="/terms-of-use" (click)="sidenav.close()" mat-list-item>
+          {{ t('termsOfUse') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a class="logout" (click)="sidenav.close(); logout()" mat-list-item>
+          {{ t('logout') }}
         </a>
       </mat-list-item>
     </mat-nav-list>

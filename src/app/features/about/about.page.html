@@ -6,20 +6,5 @@
 </mat-toolbar>
 
 <div class="page-content">
-  <mat-list *transloco="let t">
-    <mat-list-item>
-      <mat-icon mat-list-icon>update</mat-icon>
-      <div mat-line>{{ t('version') }}</div>
-      <div mat-line>{{ version$ | ngrxPush }}</div>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-icon mat-list-icon>help</mat-icon>
-      <div mat-line>{{ t('contactUs') }}</div>
-      <div mat-line>
-        <a href="mailto:service@numbersprotocol.io">
-          service@numbersprotocol.io
-        </a>
-      </div>
-    </mat-list-item>
-  </mat-list>
+  <!-- TODO: add about page text according to design. blocked by @Noir -->
 </div>
