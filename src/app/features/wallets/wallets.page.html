@@ -1,149 +1,27 @@
-<mat-toolbar *transloco="let t">
-  <button routerLink=".." routerDirection="back" mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <span>{{ t('wallets.wallets') }}</span>
-</mat-toolbar>
+<ng-container *ngIf="(networkConnected$ | async) === false; else bubbleIframe">
+  <mat-toolbar>
+    <button
+      routerLink=".."
+      routerDirection="back"
+      mat-mini-fab
+      class="capture-rebranded-button"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span>{{ 'wallets.walets' | transloco }}</span>
+  </mat-toolbar>
+  <div class="no-network-text">
+    {{ 'message.networkNotConnected' | transloco }}
+  </div>
+</ng-container>
 
-<ion-content *transloco="let t">
-  <ion-refresher slot="fixed" (ionRefresh)="refreshBalance($event)">
-  </ion-refresher>
-  <p id="pull-to-refresh-help-text">
-    ↓{{ t('wallets.pullToRefreshBalance') }}↓
-  </p>
-  <ion-card>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="8">
-          <ion-text class="text-black">
-            <h1 class="balance-text">
-              {{ totalBalance$ | ngrxPush | currency }} NUM
-            </h1>
-          </ion-text>
-        </ion-col>
-        <ion-col offset="0.3">
-          <ion-row id="num-icon-row">
-            <ion-img src="../../../assets/images/num-icon.svg"></ion-img>
-            <ion-text class="text-black">
-              <h3 class="num-text">NUM</h3>
-            </ion-text>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-      <ion-row id="mainnet-points-row" class="text-black">
-        Mainnet:
-        <ng-container
-          *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
-        >
-          <span class="mainnet-points">
-            ${{ mainNumBalance$ | ngrxPush | number: '1.2-2' }}
-          </span>
-          <ion-icon
-            name="information-circle"
-            #mainnetBalanceTooltip="matTooltip"
-            (click)="mainnetBalanceTooltip.toggle()"
-            [matTooltip]="t('wallets.mainnetNumInfo')"
-          ></ion-icon>
-        </ng-container>
-        <ng-template #balanceLoading>
-          <mat-spinner diameter="15"></mat-spinner>
-        </ng-template>
-        {{ t('wallets.buyCredits.credits') }}:
-        <span
-          class="mainnet-points"
-          *ngIf="!(isLoadingBalance$ | ngrxPush); else balanceLoading"
-          >{{ points$ | ngrxPush | number: '1.2-2' }}</span
-        >
-      </ion-row>
-      <ion-row id="buy-deposit-withdraw-row">
-        <ion-button
-          (click)="navigateToBuyNumPage()"
-          id="buy-num-btn"
-          size="small"
-          class="num-operation-btn"
-          >{{ t('wallets.buyCredits.buyCredits') }}</ion-button
-        >
-        <ion-button
-          *ngIf="shouldHideDepositButton === false"
-          class="deposit-withdraw-num-btn num-operation-btn"
-          color="#7E7E7E"
-          fill="outline"
-          size="small"
-          (click)="onDepositWithdrawBtnClick('deposit')"
-          >{{ t('wallets.deposit') }}</ion-button
-        >
-        <ion-button
-          class="deposit-withdraw-num-btn num-operation-btn"
-          color="#7E7E7E"
-          fill="outline"
-          size="small"
-          (click)="onDepositWithdrawBtnClick('withdraw')"
-          >{{ t('wallets.withdraw') }}</ion-button
-        >
-      </ion-row>
-    </ion-grid>
-  </ion-card>
-
-  <mat-list>
-    <mat-list-item>
-      <mat-icon svgIcon="wallet" mat-list-icon></mat-icon>
-      <div mat-line>
-        {{ t('wallets.myAssetWallet') }}
-        <ion-icon
-          class="info-icon"
-          name="information-circle"
-          #assetWalletTooltip="matTooltip"
-          (click)="assetWalletTooltip.toggle()"
-          [matTooltip]="t('wallets.myAssetWalletTooltip')"
-        ></ion-icon>
-      </div>
-      <div mat-line>{{ assetWalletAddr$ | ngrxPush }}</div>
-      <button
-        mat-icon-button
-        *ngIf="assetWalletAddr$ | ngrxPush as assetWalletAddr"
-        (click)="copyToClipboard(assetWalletAddr)"
-      >
-        <mat-icon>content_copy</mat-icon>
-      </button>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-icon mat-list-icon>vpn_key</mat-icon>
-      <div mat-line>
-        {{ t('wallets.integrityWallet') }}
-        <ion-icon
-          class="info-icon"
-          name="information-circle"
-          #integrityKeyTooltip="matTooltip"
-          (click)="integrityKeyTooltip.toggle()"
-          [matTooltip]="t('wallets.integrityWalletTooltip')"
-        ></ion-icon>
-      </div>
-      <div mat-line>{{ publicKey$ | ngrxPush }}</div>
-      <button
-        mat-icon-button
-        *ngIf="publicKey$ | ngrxPush as publicKey"
-        (click)="copyToClipboard(publicKey)"
-      >
-        <mat-icon>content_copy</mat-icon>
-      </button>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-icon mat-list-icon>history</mat-icon>
-      <div mat-line>{{ t('wallets.assetWalletHistory') }}</div>
-      <div mat-line>
-        <a (click)="openAssetWalletHistory()">
-          {{ t('wallets.viewOnExplore') }}
-        </a>
-      </div>
-    </mat-list-item>
-  </mat-list>
-  <ion-button
-    expand="block"
-    color="danger"
-    fill="outline"
-    id="export-integrity-wallet-btn"
-    (click)="exportIntegrityWalletPrivateKey()"
-  >
-    {{ t('wallets.exportIntegrityKey') }}
-  </ion-button>
-</ion-content>
+<ng-template #bubbleIframe>
+  <iframe
+    [src]="iframeUrl$ | async | safeResourceUrl"
+    class="bubble-iframe"
+  ></iframe>
+  <ion-spinner
+    *ngIf="(iframeLoaded$ | async) !== true"
+    name="lines-sharp"
+  ></ion-spinner>
+</ng-template>

@@ -6,11 +6,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
 import { Clipboard } from '@capacitor/clipboard';
-import { Platform } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { NgxQrcodeElementTypes } from '@techiediaries/ngx-qrcode';
-import { BehaviorSubject, combineLatest, forkJoin } from 'rxjs';
+import { BehaviorSubject, combineLatest, forkJoin, fromEvent } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -23,6 +23,7 @@ import {
 import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
+import { BUBBLE_IFRAME_URL } from '../../shared/dia-backend/secret';
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { ErrorService } from '../../shared/error/error.service';
 import { ExportPrivateKeyModalComponent } from '../../shared/export-private-key-modal/export-private-key-modal.component';
@@ -48,6 +49,15 @@ export class WalletsPage {
   readonly isLoadingBalance$ = new BehaviorSubject<boolean>(false);
   readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
 
+  readonly iframeUrl$ = this.diaBackendAuthService.cachedQueryJWTToken$.pipe(
+    map(token => {
+      const queryParams = `token=${token.access}&refresh_token=${token.refresh}`;
+      const url = `${BUBBLE_IFRAME_URL}/version-v230116-ethan/wallet?${queryParams}`;
+      return url;
+    })
+  );
+  readonly iframeLoaded$ = new BehaviorSubject(false);
+
   elementType = NgxQrcodeElementTypes.URL;
   shouldHideDepositButton = false;
 
@@ -63,7 +73,8 @@ export class WalletsPage {
     private readonly dialog: MatDialog,
     private readonly errorService: ErrorService,
     private readonly router: Router,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly navController: NavController
   ) {
     this.matIconRegistry.addSvgIcon(
       'wallet',
@@ -83,6 +94,73 @@ export class WalletsPage {
       .subscribe(totalBalance => this.totalBalance$.next(totalBalance));
 
     this.shouldHideDepositButton = this.platform.is('ios');
+  }
+
+  ionViewDidEnter() {
+    this.processIframeEvents();
+  }
+
+  private processIframeEvents() {
+    fromEvent(window, 'message')
+      .pipe(
+        tap(event => {
+          const postMessageEvent = event as MessageEvent;
+          switch (postMessageEvent.data) {
+            case 'iframe-on-load':
+              this.iframeLoaded$.next(true);
+              break;
+            case 'iframeBackButtonClicked':
+              this.navController.pop();
+              break;
+            case 'iframe-buy-num-button-clicked':
+              this.navigateToBuyNumPage();
+              break;
+            case 'iframe-copy-to-clipboard-asset-wallet':
+              this.copyToClipboardAssetWallet();
+              break;
+            case 'iframe-copy-to-clipboard-integrity-wallet':
+              this.copyToClipboardIntegrityWallet();
+              break;
+            case 'iframe-copy-to-clipboard-private-key':
+              this.copyToClipboardPrivateKey();
+              break;
+            default:
+              break;
+          }
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private copyToClipboardAssetWallet() {
+    this.assetWalletAddr$
+      .pipe(
+        first(),
+        concatMap(assetWalletAddr => this.copyToClipboard(assetWalletAddr)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private copyToClipboardIntegrityWallet() {
+    this.publicKey$
+      .pipe(
+        first(),
+        concatMap(publicKey => this.copyToClipboard(publicKey)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private copyToClipboardPrivateKey() {
+    this.privateKey$
+      .pipe(
+        first(),
+        concatMap(privateKey => this.copyToClipboard(privateKey)),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   // eslint-disable-next-line class-methods-use-this
