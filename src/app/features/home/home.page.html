@@ -115,9 +115,9 @@
           </button>
         </ng-template>
       </mat-tab>
-      <mat-tab>
+      <mat-tab [disabled]="(hasLoggedIn$ | async) === false">
         <ng-template mat-tab-label>
-          <button mat-icon-button (click)="navigateToInboxTab()">
+          <button mat-icon-button (click)="navigateToProfileTab()">
             <mat-icon
               svgIcon="profile"
               class="tab-action-button-icon"
@@ -129,7 +129,9 @@
             ></mat-icon>
           </button>
         </ng-template>
-        <app-capture-tab></app-capture-tab>
+        <ng-template matTabContent>
+          <app-capture-tab></app-capture-tab>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>

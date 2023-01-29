@@ -59,6 +59,8 @@ export class HomePage {
 
   readonly username$ = this.diaBackendAuthService.username$;
 
+  readonly hasLoggedIn$ = this.diaBackendAuthService.hasLoggedIn$;
+
   private readonly userGuideIsTemporarelyDisabled = true;
 
   readonly hasNewInbox$ = this.diaBackendTransactionRepository.inbox$.pipe(
@@ -104,20 +106,23 @@ export class HomePage {
     this.downloadExpiredPostCaptures();
   }
 
-  ionViewDidEnter() {
-    of(this.onboardingService.isNewLogin)
-      .pipe(
-        concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
-        catchError(() => VOID$),
-        switchTapTo(defer(() => this.promptAppUpdateIfAny())),
-        switchTapTo(defer(() => this.onboardingRedirect())),
-        switchTapTo(
-          defer(() => this.userGuideService.showUserGuidesOnHomePage())
-        ),
-        catchError((err: unknown) => this.errorService.toastError$(err)),
-        untilDestroyed(this)
-      )
-      .subscribe();
+  async ionViewDidEnter() {
+    const hasLoggedIn = await this.diaBackendAuthService.hasLoggedIn();
+    if (hasLoggedIn) {
+      of(this.onboardingService.isNewLogin)
+        .pipe(
+          concatMap(isNewLogin => this.migrationService.migrate$(isNewLogin)),
+          catchError(() => VOID$),
+          switchTapTo(defer(() => this.promptAppUpdateIfAny())),
+          switchTapTo(defer(() => this.onboardingRedirect())),
+          switchTapTo(
+            defer(() => this.userGuideService.showUserGuidesOnHomePage())
+          ),
+          catchError((err: unknown) => this.errorService.toastError$(err)),
+          untilDestroyed(this)
+        )
+        .subscribe();
+    }
 
     this.androidBackButtonService.androidBackButtonEvent$
       .pipe(
@@ -273,14 +278,12 @@ export class HomePage {
       .subscribe();
   }
 
-  captureWithCustomCamera() {
-    if (!this.platform.is('hybrid')) {
-      this.capture();
-    } else {
-      const captureIndex = this.afterCaptureTabIndex;
-      this.selectedTabIndex = captureIndex;
-      this.router.navigate(['home', 'custom-camera']);
-    }
+  async captureWithCustomCamera() {
+    const hasLoggedIn = await this.diaBackendAuthService.hasLoggedIn();
+    if (!hasLoggedIn) return this.redirectToLoginPage();
+    if (!this.platform.is('hybrid')) return this.capture();
+    this.selectedTabIndex = this.afterCaptureTabIndex;
+    this.router.navigate(['home', 'custom-camera']);
   }
 
   private presentCaptureActions$() {
@@ -376,9 +379,15 @@ export class HomePage {
     }
   }
 
-  async navigateToInboxTab() {
+  async navigateToProfileTab() {
+    const hasLoggedIn = await this.diaBackendAuthService.hasLoggedIn();
+    if (!hasLoggedIn) return this.redirectToLoginPage();
     await this.userGuideService.showUserGuidesOnInboxTab();
     await this.userGuideService.setHasOpenedInboxTab(true);
+  }
+
+  private async redirectToLoginPage() {
+    this.router.navigate(['/', 'login']);
   }
 
   logout() {

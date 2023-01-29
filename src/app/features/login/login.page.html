@@ -1,4 +1,13 @@
 <div *transloco="let t" class="page-content">
+  <button
+    routerLink=".."
+    routerDirection="back"
+    mat-mini-fab
+    class="capture-rebranded-button"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+
   <div class="logo"></div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
