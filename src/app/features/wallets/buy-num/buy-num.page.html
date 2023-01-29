@@ -17,9 +17,7 @@
       <ion-item>
         <ion-label>
           <div class="in-app-product-description">
-            <div
-              [ngClass]="{ 'title-text': !first, 'title-text-large': first }"
-            >
+            <div class="title-text">
               {{ product.inAppProduct.title }}
               <ion-icon
                 class="num-point-info"
@@ -28,7 +26,7 @@
                 name="alert-circle-outline"
               ></ion-icon>
             </div>
-            <div class="subtitle-text" *ngIf="!first">
+            <div class="subtitle-text">
               {{ product.inAppProduct.price }}
             </div>
           </div>
