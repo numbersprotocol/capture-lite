@@ -41,6 +41,11 @@
         </a>
       </mat-list-item>
       <mat-list-item>
+        <a routerLink="/faq" (click)="sidenav.close()" mat-list-item>
+          {{ t('faq') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
         <a class="logout" (click)="sidenav.close(); logout()" mat-list-item>
           {{ t('logout') }}
         </a>
