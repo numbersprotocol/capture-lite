@@ -4,6 +4,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, fromEvent } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BUBBLE_IFRAME_URL } from '../../shared/dia-backend/secret';
+import { BubbleToIonicPostMessage } from '../../shared/iframe/iframe';
 import { NetworkService } from '../../shared/network/network.service';
 
 @UntilDestroy()
@@ -31,11 +32,14 @@ export class DataPolicyPage {
       .pipe(
         tap(event => {
           const postMessageEvent = event as MessageEvent;
-          if (postMessageEvent.data === 'iframe-on-load') {
-            this.iframeLoaded$.next(true);
-          }
-          if (postMessageEvent.data === 'iframeBackButtonClicked') {
-            this.navController.back();
+          const data = postMessageEvent.data as BubbleToIonicPostMessage;
+          switch (data) {
+            case BubbleToIonicPostMessage.IFRAME_ON_LOAD:
+              this.iframeLoaded$.next(true);
+              break;
+            case BubbleToIonicPostMessage.IFRAME_BACK_BUTTON_CLICKED:
+              this.navController.back();
+              break;
           }
         }),
         untilDestroyed(this)
