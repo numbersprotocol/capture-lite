@@ -28,7 +28,7 @@ export class WalletsPage {
   readonly iframeUrl$ = this.diaBackendAuthService.cachedQueryJWTToken$.pipe(
     map(token => {
       const queryParams = `token=${token.access}&refresh_token=${token.refresh}`;
-      const url = `${BUBBLE_IFRAME_URL}/version-v230116-ethan/wallet?${queryParams}`;
+      const url = `${BUBBLE_IFRAME_URL}/version-qa-release/wallet?${queryParams}`;
       return url;
     })
   );
