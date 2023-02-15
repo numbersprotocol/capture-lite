@@ -53,8 +53,9 @@ import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/pref
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
-  private readonly initialTabIndex = 0;
-  private readonly afterCaptureTabIndex = 2;
+  readonly initialTabIndex = 0;
+  private readonly afterCaptureTabIndex = 0;
+  private readonly exploreTabIndex = 2;
   selectedTabIndex = this.initialTabIndex;
 
   readonly username$ = this.diaBackendAuthService.username$;
@@ -257,8 +258,7 @@ export class HomePage {
 
   capture() {
     return defer(() => {
-      const captureIndex = this.afterCaptureTabIndex;
-      this.selectedTabIndex = captureIndex;
+      this.selectedTabIndex = this.afterCaptureTabIndex;
       return this.presentCaptureActions$();
     })
       .pipe(
@@ -277,8 +277,7 @@ export class HomePage {
     if (!this.platform.is('hybrid')) {
       this.capture();
     } else {
-      const captureIndex = this.afterCaptureTabIndex;
-      this.selectedTabIndex = captureIndex;
+      this.selectedTabIndex = this.afterCaptureTabIndex;
       this.router.navigate(['home', 'custom-camera']);
     }
   }
@@ -363,14 +362,17 @@ export class HomePage {
   }
 
   private shouldNavigateBackExploreIframe(): void {
-    if (this.selectedTabIndex === 0 && this.router.url === '/home') {
+    if (
+      this.selectedTabIndex === this.exploreTabIndex &&
+      this.router.url === '/home'
+    ) {
       this.iframeService.navigateBackExploreTabIframe();
     }
   }
 
   // eslint-disable-next-line class-methods-use-this
   navigateToExploreTab() {
-    if (this.selectedTabIndex === 0) {
+    if (this.selectedTabIndex === this.exploreTabIndex) {
       // window.location.reload();
       this.iframeService.refreshExploreTabIframe();
     }
