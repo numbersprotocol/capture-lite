@@ -50,6 +50,7 @@
       </div>
       <div
         class="camera-preview"
+        (click)="focus($event)"
         (swipeleft)="onSwipeLeft($event)"
         (swiperight)="onSwipeRight($event)"
         (pinchstart)="handlePinchStart($event)"
