@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.74.2] - 2023-02-14
+
+### Fixed
+
+1. Disable deprecated uploadBitcode in ios CI
+
 ## [0.74.0] - 2023-02-14
 
 ### Added
@@ -2030,7 +2036,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.74.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.74.2...HEAD
+[0.74.2]: https://github.com/numbersprotocol/capture-lite/compare/0.74.0...0.74.2
 [0.74.0]: https://github.com/numbersprotocol/capture-lite/compare/0.73.0...0.74.0
 [0.73.1]: https://github.com/numbersprotocol/capture-lite/compare/0.72.4...0.73.1
 [0.72.4]: https://github.com/numbersprotocol/capture-lite/compare/0.72.3...0.72.4
