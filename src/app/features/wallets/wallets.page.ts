@@ -12,6 +12,7 @@ import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../shared/dia-backend/secret';
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
+import { BubbleToIonicPostMessage } from '../../shared/iframe/iframe';
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-wallets',
@@ -56,23 +57,24 @@ export class WalletsPage {
       .pipe(
         tap(event => {
           const postMessageEvent = event as MessageEvent;
-          switch (postMessageEvent.data) {
-            case 'iframe-on-load':
+          const data = postMessageEvent.data as BubbleToIonicPostMessage;
+          switch (data) {
+            case BubbleToIonicPostMessage.IFRAME_ON_LOAD:
               this.iframeLoaded$.next(true);
               break;
-            case 'iframeBackButtonClicked':
+            case BubbleToIonicPostMessage.IFRAME_BACK_BUTTON_CLICKED:
               this.navController.pop();
               break;
-            case 'iframe-buy-num-button-clicked':
+            case BubbleToIonicPostMessage.IFRAME_BUY_NUM_BUTTON_CLICKED:
               this.navigateToBuyNumPage();
               break;
-            case 'iframe-copy-to-clipboard-asset-wallet':
+            case BubbleToIonicPostMessage.IFRAME_COPY_TO_CLIPBOARD_ASSET_WALLET:
               this.copyToClipboardAssetWallet();
               break;
-            case 'iframe-copy-to-clipboard-integrity-wallet':
+            case BubbleToIonicPostMessage.IFRAME_COPY_TO_CLIPBOARD_INTEGRITY_WALLET:
               this.copyToClipboardIntegrityWallet();
               break;
-            case 'iframe-copy-to-clipboard-private-key':
+            case BubbleToIonicPostMessage.IFRAME_COPY_TO_CLIPBOARD_PRIVATE_KEY:
               this.copyToClipboardPrivateKey();
               break;
             default:
