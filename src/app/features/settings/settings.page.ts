@@ -158,14 +158,10 @@ export class SettingsPage {
       .subscribe();
   }
 
-  /**
-   * // TODO: Integrate Storage Backend delete function after it's ready.
-   * Delete user account from Storage Backend.
-   */
   async deleteAccount() {
     const email: string = await this.diaBackendAuthService.getEmail();
 
-    const action$ = this.diaBackendAuthService.deleteUser$(email).pipe(
+    const action$ = this.diaBackendAuthService.deleteAccount$(email).pipe(
       // logout
       concatMapTo(defer(() => this.mediaStore.clear())),
       concatMapTo(defer(() => this.database.clear())),
