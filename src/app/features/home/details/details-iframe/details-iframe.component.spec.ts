@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 
 import { DetailsIframeComponent } from './details-iframe.component';
 
@@ -11,7 +11,7 @@ describe('DetailedCaptureIframeComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [DetailsIframeComponent],
-        imports: [IonicModule.forRoot()],
+        imports: [SharedTestingModule],
       }).compileComponents();
 
       fixture = TestBed.createComponent(DetailsIframeComponent);
