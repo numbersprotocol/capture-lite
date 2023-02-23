@@ -1,4 +1,5 @@
 import { formatDate, KeyValue } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -136,11 +137,23 @@ export class CaptureTabComponent {
   private updateUsername(username: string) {
     const action$ = this.diaBackendAuthService
       .updateUser$({ username })
-      .pipe(catchError((err: unknown) => this.errorService.toastError$(err)));
+      .pipe(catchError((err: unknown) => this.handleUpdateUsernameError$(err)));
     return this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))
       .subscribe();
+  }
+
+  private handleUpdateUsernameError$(err: unknown) {
+    if (err instanceof HttpErrorResponse) {
+      const errorType = err.error.error?.type;
+      if (errorType === 'duplicate_username') {
+        return this.errorService.toastError$(
+          this.translocoService.translate(`error.diaBackend.${errorType}`)
+        );
+      }
+    }
+    return this.errorService.toastError$(err);
   }
 
   // eslint-disable-next-line class-methods-use-this
