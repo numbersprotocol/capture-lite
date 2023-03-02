@@ -3,7 +3,7 @@
     <!--    These styles will be applied to Android API 26 and above-->
     <style name="AppTheme.NoActionBarLaunch" parent="AppTheme.NoActionBar">
         <!--    Splash Screen Related configs    -->
-        <item name="android:background">@drawable/splash</item>
+        <item name="android:background">@drawable/splash_centered</item>
         <!--    App Launch Bar Related configs    -->
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>

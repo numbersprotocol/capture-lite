@@ -5,6 +5,7 @@ import { combineLatest } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
+import { IonicToBubblePostMessage } from '../../../../shared/iframe/iframe';
 import { IframeService } from '../../../../shared/iframe/iframe.service';
 import { NetworkService } from '../../../../shared/network/network.service';
 
@@ -45,7 +46,7 @@ export class ExploreTabComponent {
 
   navigateBackExploreIframe() {
     this.exploreIframe?.nativeElement.contentWindow?.postMessage(
-      'android-back-button',
+      IonicToBubblePostMessage.ANDROID_BACK_BUTTON,
       BUBBLE_IFRAME_URL
     );
   }

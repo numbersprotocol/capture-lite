@@ -41,6 +41,11 @@
         </a>
       </mat-list-item>
       <mat-list-item>
+        <a routerLink="/faq" (click)="sidenav.close()" mat-list-item>
+          {{ t('faq') }}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
         <a class="logout" (click)="sidenav.close(); logout()" mat-list-item>
           {{ t('logout') }}
         </a>
@@ -48,7 +53,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar *ngIf="selectedTabIndex === 2">
+    <mat-toolbar *ngIf="selectedTabIndex === initialTabIndex">
       <button (click)="sidenav.toggle()" mat-icon-button>
         <mat-icon>menu</mat-icon>
       </button>
@@ -88,17 +93,19 @@
     >
       <mat-tab>
         <ng-template mat-tab-label>
-          <button mat-icon-button (click)="navigateToExploreTab()">
+          <button mat-icon-button (click)="navigateToInboxTab()">
             <mat-icon
-              svgIcon="search"
+              svgIcon="profile"
               class="tab-action-button-icon"
-              joyrideStep="highlightHomeTab"
-              title="Home Tab"
-              text="View created captures"
+              joyrideStep="highlightInboxTab"
+              [title]="t('userGuide.inboxTab')"
+              [text]="
+                t('userGuide.visitInboxForPurchasedItemsAndGiftsReceived')
+              "
             ></mat-icon>
           </button>
         </ng-template>
-        <app-explore-tab></app-explore-tab>
+        <app-capture-tab></app-capture-tab>
       </mat-tab>
       <mat-tab disabled>
         <ng-template mat-tab-label>
@@ -117,19 +124,17 @@
       </mat-tab>
       <mat-tab>
         <ng-template mat-tab-label>
-          <button mat-icon-button (click)="navigateToInboxTab()">
+          <button mat-icon-button (click)="navigateToExploreTab()">
             <mat-icon
-              svgIcon="profile"
+              svgIcon="search"
               class="tab-action-button-icon"
-              joyrideStep="highlightInboxTab"
-              [title]="t('userGuide.inboxTab')"
-              [text]="
-                t('userGuide.visitInboxForPurchasedItemsAndGiftsReceived')
-              "
+              joyrideStep="highlightHomeTab"
+              title="Home Tab"
+              text="View created captures"
             ></mat-icon>
           </button>
         </ng-template>
-        <app-capture-tab></app-capture-tab>
+        <app-explore-tab></app-explore-tab>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>
