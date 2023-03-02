@@ -345,7 +345,7 @@
   "invitation": {
     "invitation": "邀請",
     "inviteFriends": "邀請好友",
-    "inviteFriendsBenefit": "每個接受的邀請可獲得 5 個積分",
+    "inviteFriendsBenefit": "每個接受的邀請可獲得 3 個積分",
     "shareInvitationCode": "分享邀請碼",
     "shareToGetRewarded": "分享以獲得獎勵",
     "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "透過我的推薦碼 {{referralCode}} 在 Capture App 註冊，一起獲得 NUM Points!"
