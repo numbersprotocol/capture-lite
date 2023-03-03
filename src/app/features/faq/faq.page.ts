@@ -9,13 +9,13 @@ import { NetworkService } from '../../shared/network/network.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-data-policy',
-  templateUrl: './data-policy.page.html',
-  styleUrls: ['./data-policy.page.scss'],
+  selector: 'app-faq',
+  templateUrl: './faq.page.html',
+  styleUrls: ['./faq.page.scss'],
 })
-export class DataPolicyPage {
+export class FaqPage {
   readonly networkConnected$ = this.networkService.connected$;
-  readonly dataPolicyUrl = `${BUBBLE_IFRAME_URL}/data_policy`;
+  readonly iframeUrl = `${BUBBLE_IFRAME_URL}/version-v230207-sam/faq`;
   readonly iframeLoaded$ = new BehaviorSubject(false);
 
   constructor(

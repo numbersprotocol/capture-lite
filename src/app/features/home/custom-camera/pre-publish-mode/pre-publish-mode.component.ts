@@ -40,6 +40,8 @@ export class PrePublishModeComponent {
     this.pinturaEditorOptions
   );
 
+  private editorImageState: any;
+
   private toggleCropFeature = false;
 
   private toggleBlackAndWhiteFilter = true;
@@ -95,6 +97,10 @@ export class PrePublishModeComponent {
     private readonly filesystemPlugin: FilesystemPlugin
   ) {}
 
+  handleEditorUpdate(imageState: any): void {
+    this.editorImageState = imageState;
+  }
+
   handleEditorProcessStart() {
     this.isProcessingImage$.next(true);
   }
@@ -107,6 +113,24 @@ export class PrePublishModeComponent {
     this.isProcessingImage$.next(false);
   }
 
+  async handleEditorProcess(imageWriterResult: any): Promise<void> {
+    const base64 = await blobToBase64(imageWriterResult.dest as File);
+    combineLatest([this.curCaptureFilePath$, of(base64)])
+      .pipe(
+        first(),
+        switchMap(([path, data]) =>
+          this.filesystemPlugin.writeFile({ path, data })
+        ),
+        tap(() => this.isProcessingImage$.next(false)),
+        tap(() => this.confirm.emit(null)),
+        catchError(() => {
+          this.isProcessingImage$.next(false);
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
+
   async applyBlackAndWhiteFilter() {
     const monoFilter: ColorMatrix = [
       // eslint-disable-next-line @typescript-eslint/no-magic-numbers
@@ -114,7 +138,7 @@ export class PrePublishModeComponent {
       0, 0, 0, 0, 0, 1, 0,
     ];
     const filter = this.toggleBlackAndWhiteFilter ? monoFilter : undefined;
-    await this.pintura.editor.processImage({ imageColorMatrix: { filter } });
+    this.pintura.editor.imageColorMatrix = { filter };
     this.toggleBlackAndWhiteFilter = !this.toggleBlackAndWhiteFilter;
   }
 
@@ -132,34 +156,13 @@ export class PrePublishModeComponent {
         enableToolbar: false,
       }),
     });
-    if (this.toggleCropFeature === false) {
-      await this.pintura.editor.processImage();
-    }
-  }
-
-  async handleEditorProcess(imageWriterResult: any): Promise<void> {
-    const base64 = await blobToBase64(imageWriterResult.dest as File);
-
-    combineLatest([this.curCaptureFilePath$, of(base64)])
-      .pipe(
-        first(),
-        switchMap(([path, data]) =>
-          this.filesystemPlugin.writeFile({ path, data })
-        ),
-        tap(() => this.isProcessingImage$.next(false)),
-        catchError(() => {
-          this.isProcessingImage$.next(false);
-          return EMPTY;
-        })
-      )
-      .subscribe();
   }
 
   onDiscard() {
     this.discard.emit(null);
   }
 
-  onConfirm() {
-    this.confirm.emit(null);
+  async onConfirm() {
+    await this.pintura.editor.processImage(this.editorImageState);
   }
 }

@@ -7,6 +7,7 @@ import { combineLatest, fromEvent } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
+import { BubbleToIonicPostMessage } from '../../../../shared/iframe/iframe';
 import { IframeService } from '../../../../shared/iframe/iframe.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 
@@ -52,14 +53,15 @@ export class EditCaptionPage {
       .pipe(
         tap(event => {
           const postMessageEvent = event as MessageEvent;
-
-          if (postMessageEvent.data === 'edit-caption-cancel') {
-            this.navController.back();
-          }
-
-          if (postMessageEvent.data === 'edit-caption-save') {
-            this.iframeService.refreshDetailsPageIframe();
-            this.navController.back();
+          const data = postMessageEvent.data as BubbleToIonicPostMessage;
+          switch (data) {
+            case BubbleToIonicPostMessage.EDIT_CAPTION_CANCEL:
+              this.navController.back();
+              break;
+            case BubbleToIonicPostMessage.EDIT_CAPTION_SAVE:
+              this.iframeService.refreshDetailsPageIframe();
+              this.navController.back();
+              break;
           }
         }),
         untilDestroyed(this)
