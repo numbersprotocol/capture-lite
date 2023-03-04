@@ -12,7 +12,7 @@ import {
 } from 'rxjs/operators';
 import { VOID$ } from '../../../utils/rx-operators/rx-operators';
 import { CollectorService } from '../../collector/collector.service';
-import { WebCryptoApiSignatureProvider } from '../../collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { CaptureAppWebCryptoApiSignatureProvider } from '../../collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -46,7 +46,7 @@ export class MigrationService {
     private readonly preferenceManager: PreferenceManager,
     private readonly onboardingService: OnboardingService,
     private readonly versionService: VersionService,
-    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider
+    private readonly capAppWebCryptoApiSignatureProvider: CaptureAppWebCryptoApiSignatureProvider
   ) {}
 
   migrate$(skip?: boolean) {
@@ -161,7 +161,7 @@ export class MigrationService {
           err.status === HttpErrorCode.NOT_FOUND
         ) {
           return defer(() =>
-            this.webCryptoApiSignatureProvider.getPrivateKey()
+            this.capAppWebCryptoApiSignatureProvider.getPrivateKey()
           ).pipe(
             concatMap(privateKey =>
               this.diaBackendWalletService.setIntegrityWallet$(privateKey)
@@ -171,7 +171,7 @@ export class MigrationService {
         throw err;
       }),
       concatMap(assetWallet =>
-        this.webCryptoApiSignatureProvider.importKeys(
+        this.capAppWebCryptoApiSignatureProvider.importKeys(
           assetWallet.address,
           assetWallet.private_key
         )

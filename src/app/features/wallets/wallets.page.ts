@@ -8,7 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { NgxQrcodeElementTypes } from '@techiediaries/ngx-qrcode';
 import { BehaviorSubject, fromEvent } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
-import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { CaptureAppWebCryptoApiSignatureProvider } from '../../shared/collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../shared/dia-backend/secret';
 import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-backend-wallet.service';
@@ -19,8 +19,8 @@ import { DiaBackendWalletService } from '../../shared/dia-backend/wallet/dia-bac
   styleUrls: ['./wallets.page.scss'],
 })
 export class WalletsPage {
-  readonly publicKey$ = this.webCryptoApiSignatureProvider.publicKey$;
-  readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
+  readonly publicKey$ = this.capAppWebCryptoApiSignatureProvider.publicKey$;
+  readonly privateKey$ = this.capAppWebCryptoApiSignatureProvider.privateKey$;
   readonly assetWalletAddr$ = this.diaBackendWalletService.assetWalletAddr$;
 
   readonly networkConnected$ = this.diaBackendWalletService.networkConnected$;
@@ -42,7 +42,7 @@ export class WalletsPage {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly snackBar: MatSnackBar,
     private readonly translocoService: TranslocoService,
-    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
+    private readonly capAppWebCryptoApiSignatureProvider: CaptureAppWebCryptoApiSignatureProvider,
     private readonly router: Router,
     private readonly navController: NavController
   ) {}
