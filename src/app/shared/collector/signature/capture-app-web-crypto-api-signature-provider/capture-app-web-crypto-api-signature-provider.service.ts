@@ -13,6 +13,7 @@ import { SignatureProvider } from '../signature-provider';
 export class CaptureAppWebCryptoApiSignatureProvider
   implements SignatureProvider
 {
+  readonly deprecatedProviderId = 'WebCryptoApiSignatureProvider';
   readonly id = 'CaptureAppWebCryptoApiSignatureProvider';
 
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
@@ -24,6 +25,7 @@ export class CaptureAppWebCryptoApiSignatureProvider
   constructor(private readonly preferenceManager: PreferenceManager) {}
 
   async initialize() {
+    await this.copyKeysFromWebCryptoApiSignatureProviderIfAny();
     const originalPublicKey = await this.getPublicKey();
     const originalPrivateKey = await this.getPrivateKey();
     if (
@@ -59,6 +61,30 @@ export class CaptureAppWebCryptoApiSignatureProvider
   async importKeys(publicKey: string, privateKey: string) {
     await this.preferences.setString(PrefKeys.PUBLIC_KEY, publicKey);
     await this.preferences.setString(PrefKeys.PRIVATE_KEY, privateKey);
+  }
+
+  /**
+   * Will copy public, private key from WebCryptoApiSignatureProvider preferences
+   * to CaptureAppWebCryptoApiSignatureProvider preferences if there are any keys
+   */
+  private async copyKeysFromWebCryptoApiSignatureProviderIfAny() {
+    const publicKey = await this.getWebCryptoApiSignatureProviderPublicKey();
+    const privateKey = await this.getWebCryptoApiSignatureProviderPrivateKey();
+    if (!!publicKey && !!privateKey) {
+      await this.importKeys(publicKey, privateKey);
+    }
+  }
+
+  private async getWebCryptoApiSignatureProviderPublicKey() {
+    return this.preferenceManager
+      .getPreferences(this.deprecatedProviderId)
+      .getString(PrefKeys.PUBLIC_KEY);
+  }
+
+  private async getWebCryptoApiSignatureProviderPrivateKey() {
+    return this.preferenceManager
+      .getPreferences(this.deprecatedProviderId)
+      .getString(PrefKeys.PRIVATE_KEY);
   }
 }
 
