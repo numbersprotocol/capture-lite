@@ -10,8 +10,10 @@ import { SignatureProvider } from '../signature-provider';
 @Injectable({
   providedIn: 'root',
 })
-export class WebCryptoApiSignatureProvider implements SignatureProvider {
-  readonly id = 'WebCryptoApiSignatureProvider';
+export class CaptureAppWebCryptoApiSignatureProvider
+  implements SignatureProvider
+{
+  readonly id = 'CaptureAppWebCryptoApiSignatureProvider';
 
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
 

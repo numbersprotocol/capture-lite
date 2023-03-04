@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { BehaviorSubject, combineLatest, defer, EMPTY, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, combineLatest, defer } from 'rxjs';
 import { concatMap, first, map, pluck, tap } from 'rxjs/operators';
-import { WebCryptoApiSignatureProvider } from '../../collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { CaptureAppWebCryptoApiSignatureProvider } from '../../collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { DiaBackendAssetRepository } from '../../dia-backend/asset/dia-backend-asset-repository.service';
 import { BUBBLE_DB_URL } from '../../dia-backend/secret';
 import { NetworkAppOrder } from '../../dia-backend/store/dia-backend-store.service';
@@ -25,7 +25,7 @@ export class OrderHistoryService {
 
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
+    private readonly capAppWebCryptoApiSignatureProvider: CaptureAppWebCryptoApiSignatureProvider,
     private readonly proofRepository: ProofRepository,
     private readonly sanitizer: DomSanitizer,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
@@ -50,7 +50,7 @@ export class OrderHistoryService {
 
   createOrderHistory$(networkAppOrder: NetworkAppOrder, cid: string) {
     return defer(() =>
-      this.webCryptoApiSignatureProvider.publicKey$.pipe(
+      this.capAppWebCryptoApiSignatureProvider.publicKey$.pipe(
         concatMap(publicKey =>
           this.httpClient.post<BubbleCreateNewThingResponse>(
             `${BUBBLE_DB_URL}/api/1.1/obj/order`,
@@ -77,7 +77,7 @@ export class OrderHistoryService {
   */
   getOrdersHistory$() {
     return defer(() =>
-      this.webCryptoApiSignatureProvider.publicKey$.pipe(
+      this.capAppWebCryptoApiSignatureProvider.publicKey$.pipe(
         concatMap(publicKey =>
           this.httpClient
             .get<GetActionsResponse<BubbleOrderHistoryRecord>>(
