@@ -50,7 +50,7 @@
     "@capacitor/push-notifications": "^4.0.0",
     "@capacitor/share": "^4.0.0",
     "@capacitor/splash-screen": "^4.0.0",
-    "@capacitor/storage": "^1.2.4",
+    "@capacitor/storage": "^1.2.5",
     "@ionic/angular": "^6.2.5",
     "@ionic/core": "^6.2.5",
     "@ionic/pwa-elements": "^3.0.2",
