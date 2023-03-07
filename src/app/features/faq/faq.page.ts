@@ -15,7 +15,7 @@ import { NetworkService } from '../../shared/network/network.service';
 })
 export class FaqPage {
   readonly networkConnected$ = this.networkService.connected$;
-  readonly iframeUrl = `${BUBBLE_IFRAME_URL}/version-v230207-sam/faq`;
+  readonly iframeUrl = `${BUBBLE_IFRAME_URL}/faq`;
   readonly iframeLoaded$ = new BehaviorSubject(false);
 
   constructor(
