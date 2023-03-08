@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   BehaviorSubject,
   combineLatest,
@@ -22,6 +23,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import { ErrorService } from '../../../error/error.service';
 import { NetworkService } from '../../../network/network.service';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import { getOldProof } from '../../../repositories/proof/old-proof-adapter';
@@ -57,7 +59,9 @@ export class DiaBackendAssetUploadingService {
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly networkService: NetworkService,
     private readonly preferenceManager: PreferenceManager,
-    private readonly proofRepository: ProofRepository
+    private readonly proofRepository: ProofRepository,
+    private readonly errorService: ErrorService,
+    private readonly translocoService: TranslocoService
   ) {}
 
   initialize$() {
@@ -126,6 +130,16 @@ export class DiaBackendAssetUploadingService {
           err.error.error.type === 'duplicate_asset_not_allowed'
         ) {
           return this.diaBackendAssetRepository.fetchByProof$(proof);
+        }
+        if (
+          err instanceof HttpErrorResponse &&
+          err.error.error.type === 'asset_commit_insufficient_fund'
+        ) {
+          const toastError = this.translocoService.translate(
+            `error.diaBackend.${err.error.error.type}`
+          );
+          this.errorService.toastError$(toastError).subscribe();
+          this.pause();
         }
         return throwError(err);
       }),
