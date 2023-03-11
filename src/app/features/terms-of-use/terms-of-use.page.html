@@ -1,13 +1,6 @@
 <ng-container *ngIf="(networkConnected$ | async) === false; else bubbleIframe">
   <mat-toolbar>
-    <button
-      routerLink=".."
-      routerDirection="back"
-      mat-mini-fab
-      class="capture-rebranded-button"
-    >
-      <mat-icon>arrow_back</mat-icon>
-    </button>
+    <app-capture-back-button></app-capture-back-button>
     <span>{{ 'termsOfUse' | transloco }}</span>
   </mat-toolbar>
   <div class="no-network-text">

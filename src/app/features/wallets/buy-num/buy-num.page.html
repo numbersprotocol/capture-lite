@@ -1,7 +1,5 @@
 <mat-toolbar *transloco="let t">
-  <button routerLink="/wallets" routerDirection="back" mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
-  </button>
+  <app-capture-back-button></app-capture-back-button>
   <span>{{ t('wallets.buyCredits.buyCredits') }}</span>
 </mat-toolbar>
 

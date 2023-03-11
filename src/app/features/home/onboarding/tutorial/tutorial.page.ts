@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { IonSlides } from '@ionic/angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonSlides, NavController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { OnboardingService } from '../../../../shared/onboarding/onboarding.service';
 
@@ -16,7 +16,7 @@ export class TutorialPage {
 
   constructor(
     private readonly onboardingService: OnboardingService,
-    private readonly ref: ChangeDetectorRef
+    private readonly navController: NavController
   ) {
     this.onboardingService.onboard$().pipe(untilDestroyed(this)).subscribe();
   }
@@ -35,5 +35,9 @@ export class TutorialPage {
 
     const totalSlides = await this.slides.length();
     await this.slides.slideTo(totalSlides - 1);
+  }
+
+  closeTutorialPage() {
+    this.navController.back();
   }
 }
