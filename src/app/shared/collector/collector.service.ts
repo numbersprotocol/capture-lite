@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CameraSource } from '@capacitor/camera';
 import { MediaStore } from '../media/media-store/media-store.service';
 import {
   Assets,
@@ -20,17 +21,17 @@ export class CollectorService {
 
   constructor(private readonly mediaStore: MediaStore) {}
 
-  async run(assets: Assets, capturedTimestamp: number) {
+  async run(assets: Assets, capturedTimestamp: number, source: CameraSource) {
     const truth = await this.collectTruth(assets, capturedTimestamp);
     const proof = await Proof.from(this.mediaStore, assets, truth);
-    await this.generateSignature(proof);
+    await this.generateSignature(proof, source);
     proof.isCollected = true;
     return proof;
   }
 
-  async generateSignature(proof: Proof) {
+  async generateSignature(proof: Proof, source: CameraSource) {
     const signedMessage = await proof.generateSignedMessage();
-    const signatures = await this.signMessage(signedMessage);
+    const signatures = await this.signMessage(signedMessage, source);
     proof.setSignatures(signatures);
     return proof;
   }
@@ -52,13 +53,16 @@ export class CollectorService {
     };
   }
 
-  private async signMessage(message: SignedMessage): Promise<Signatures> {
+  private async signMessage(
+    message: SignedMessage,
+    source: CameraSource
+  ): Promise<Signatures> {
     const serializedSortedSignedMessage =
       getSerializedSortedSignedMessage(message);
     return Object.fromEntries(
       await Promise.all(
         [...this.signatureProviders].map(async provider => [
-          provider.id,
+          provider.idFor(source),
           await provider.provide(serializedSortedSignedMessage),
         ])
       )
