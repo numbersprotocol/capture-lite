@@ -76,6 +76,7 @@ export class CameraService {
             resolve({
               base64,
               mimeType: file.type as MimeType,
+              source: CameraSource.Camera,
             })
           );
       };
@@ -99,6 +100,7 @@ function cameraPhotoToPhoto(cameraPhoto: CameraPhoto): Media {
     mimeType: fromExtension(cameraPhoto.format),
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     base64: cameraPhoto.base64String!,
+    source: CameraSource.Camera,
   };
 }
 
