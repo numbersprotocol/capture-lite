@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CameraSource } from '@capacitor/camera';
 import { BehaviorSubject } from 'rxjs';
 import { MimeType } from '../../utils/mime-type';
 import { CollectorService } from '../collector/collector.service';
@@ -22,10 +23,10 @@ export class CaptureService {
     private readonly collectorService: CollectorService
   ) {}
 
-  async capture(source: Media) {
+  async capture(media: Media) {
     const proof = await Proof.from(
       this.mediaStore,
-      { [source.base64]: { mimeType: source.mimeType } },
+      { [media.base64]: { mimeType: media.mimeType } },
       { timestamp: Date.now(), providers: {} },
       {}
     );
@@ -37,7 +38,8 @@ export class CaptureService {
     );
     const collected = await this.collectorService.run(
       await proof.getAssets(),
-      proof.timestamp
+      proof.timestamp,
+      media.source
     );
     // eslint-disable-next-line rxjs/no-subject-value
     const newCollectingOldProofHashes = this._collectingOldProofHashes$.value;
@@ -54,4 +56,5 @@ export class CaptureService {
 export interface Media {
   readonly mimeType: MimeType;
   readonly base64: string;
+  readonly source: CameraSource;
 }
