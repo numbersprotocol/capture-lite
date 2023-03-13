@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CameraSource } from '@capacitor/camera';
 import {
   createEthAccount,
   loadEthAccount,
@@ -23,6 +24,17 @@ export class CaptureAppWebCryptoApiSignatureProvider
   readonly privateKey$ = this.preferences.getString$(PrefKeys.PRIVATE_KEY);
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
+
+  idFor(source: any): string {
+    switch (source) {
+      case CameraSource.Photos:
+        return 'UploaderWebCryptoApiSignatureProvider';
+      case CameraSource.Camera:
+        return this.id;
+      default:
+        return this.id;
+    }
+  }
 
   async initialize() {
     await this.copyKeysFromWebCryptoApiSignatureProviderIfAny();
