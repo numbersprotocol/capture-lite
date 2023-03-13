@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { CameraSource } from '@capacitor/camera';
 import { defer, forkJoin, iif } from 'rxjs';
 import {
   catchError,
@@ -185,7 +186,9 @@ export class MigrationService {
       map(proofs => proofs.filter(proof => !proof.signatureVersion)),
       concatMap(proofs =>
         forkJoin(
-          proofs.map(proof => this.collectorService.generateSignature(proof))
+          proofs.map(proof =>
+            this.collectorService.generateSignature(proof, CameraSource.Camera)
+          )
         ).pipe(defaultIfEmpty(proofs))
       ),
       concatMap(proofs =>
