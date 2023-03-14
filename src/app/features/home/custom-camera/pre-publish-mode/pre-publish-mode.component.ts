@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FilesystemPlugin } from '@capacitor/filesystem';
 import { ColorMatrix, getEditorDefaults } from '@pqina/pintura';
-import { BehaviorSubject, combineLatest, EMPTY, of, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, EMPTY, ReplaySubject, combineLatest, of } from 'rxjs';
 import { catchError, filter, first, map, switchMap, tap } from 'rxjs/operators';
 import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
@@ -122,7 +122,7 @@ export class PrePublishModeComponent {
           this.filesystemPlugin.writeFile({ path, data })
         ),
         tap(() => this.isProcessingImage$.next(false)),
-        tap(() => this.confirm.emit(null)),
+        tap(() => this.confirm.emit(true)),
         catchError(() => {
           this.isProcessingImage$.next(false);
           return EMPTY;
@@ -159,10 +159,30 @@ export class PrePublishModeComponent {
   }
 
   onDiscard() {
-    this.discard.emit(null);
+    this.discard.emit(true);
   }
 
   async onConfirm() {
-    await this.pintura.editor.processImage(this.editorImageState);
+    this.isImage$
+      .pipe(
+        first(),
+        tap(isImage => {
+          if (isImage) {
+            this.pintura.editor.processImage(this.editorImageState);
+            /**
+             * `this.confirm.emit()` for images will be called from
+             * `handleEditorProcess` method which is triggered by
+             * `this.pintura.editor.processImage(this.editorImageState)`
+             */
+          } else {
+            this.confirm.emit(true);
+            /**
+             * for video we do not need to do any pre-porcessing (editing)
+             * therefore we just call this.confirm.emit(true)
+             */
+          }
+        })
+      )
+      .subscribe();
   }
 }
