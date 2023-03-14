@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { FilesystemPlugin } from '@capacitor/filesystem';
 import { Platform } from '@ionic/angular';
@@ -48,7 +49,11 @@ export class CustomCameraService {
     return newItem;
   }
 
-  async uploadToCapture(filePath: string, type: CustomCameraMediaType) {
+  async uploadToCapture(
+    filePath: string,
+    type: CustomCameraMediaType,
+    source: CameraSource
+  ) {
     const itemToUpload = this.mediaItemFromFilePath(filePath, type);
 
     try {
@@ -57,7 +62,7 @@ export class CustomCameraService {
         .toPromise();
       const base64 = await blobToBase64(itemBlob);
       const mimeType = itemToUpload.mimeType;
-      await this.captureService.capture({ base64, mimeType });
+      await this.captureService.capture({ base64, mimeType, source });
       await this.removeFile(filePath);
     } catch (error) {
       const errMsg = this.translocoService.translate(`error.internetError`);
