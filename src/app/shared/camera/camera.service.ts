@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { AppPlugin } from '@capacitor/app';
 import {
+  Photo as CameraPhoto,
   CameraPlugin,
   CameraResultType,
   CameraSource,
-  Photo as CameraPhoto,
 } from '@capacitor/camera';
 import { Subject } from 'rxjs';
 import { blobToBase64 } from '../../utils/encoding/encoding';
-import { fromExtension, MimeType } from '../../utils/mime-type';
+import { MimeType, fromExtension } from '../../utils/mime-type';
 import {
   APP_PLUGIN,
   CAMERA_PLUGIN,
@@ -49,6 +49,15 @@ export class CameraService {
       allowEditing: false,
     });
     return cameraPhotoToPhoto(cameraPhoto);
+  }
+
+  async pickPhoto(): Promise<CameraPhoto> {
+    return this.cameraPlugin.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Photos,
+      quality: 100,
+      allowEditing: false,
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
