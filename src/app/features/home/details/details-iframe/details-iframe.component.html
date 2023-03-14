@@ -1,0 +1,13 @@
+<ng-container *ngIf="networkConnected$ | ngrxPush; else noNetworkText">
+  <ng-container *ngIf="iframeUrl$ | ngrxPush as iframeUrl">
+    <iframe [src]="iframeUrl"></iframe>
+  </ng-container>
+  <ion-spinner *ngIf="!(iframeLoaded$ | ngrxPush)" name="lines-sharp">
+  </ion-spinner>
+</ng-container>
+
+<ng-template #noNetworkText>
+  <div class="no-network-text">
+    {{ 'message.networkNotConnected' | transloco }}
+  </div>
+</ng-template>
