@@ -46,9 +46,7 @@ export class WalletsPage {
     private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
     private readonly router: Router,
     private readonly navController: NavController
-  ) {}
-
-  ionViewDidEnter() {
+  ) {
     this.processIframeEvents();
   }
 
@@ -63,7 +61,7 @@ export class WalletsPage {
               this.iframeLoaded$.next(true);
               break;
             case BubbleToIonicPostMessage.IFRAME_BACK_BUTTON_CLICKED:
-              this.navController.pop();
+              this.navController.back();
               break;
             case BubbleToIonicPostMessage.IFRAME_BUY_NUM_BUTTON_CLICKED:
               this.navigateToBuyNumPage();
