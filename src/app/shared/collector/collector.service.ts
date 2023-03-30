@@ -10,6 +10,7 @@ import {
   Truth,
 } from '../repositories/proof/proof';
 import { FactsProvider } from './facts/facts-provider';
+import { CaptureAppWebCryptoApiSignatureProvider } from './signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { SignatureProvider } from './signature/signature-provider';
 
 @Injectable({
@@ -30,7 +31,9 @@ export class CollectorService {
   }
 
   async generateSignature(proof: Proof, source: CameraSource) {
-    const signedMessage = await proof.generateSignedMessage();
+    const recorder =
+      CaptureAppWebCryptoApiSignatureProvider.recorderFor(source);
+    const signedMessage = await proof.generateSignedMessage(recorder);
     const signatures = await this.signMessage(signedMessage, source);
     proof.setSignatures(signatures);
     return proof;

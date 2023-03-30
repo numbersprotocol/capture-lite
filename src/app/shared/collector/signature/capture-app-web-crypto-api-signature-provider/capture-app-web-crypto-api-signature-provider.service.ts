@@ -5,7 +5,7 @@ import {
   loadEthAccount,
 } from '../../../../utils/crypto/crypto';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
-import { Signature } from '../../../repositories/proof/proof';
+import { RecorderType, Signature } from '../../../repositories/proof/proof';
 import { SignatureProvider } from '../signature-provider';
 
 @Injectable({
@@ -33,6 +33,24 @@ export class CaptureAppWebCryptoApiSignatureProvider
         return this.id;
       default:
         return this.id;
+    }
+  }
+
+  /**
+   * Determines the appropriate recorder type based on the camera source.
+   *
+   * @param cameraSource - The CameraSource used for determining the recorder type
+   * @returns The RecorderType associated with the given camera source
+   */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  static recorderFor(source: CameraSource): RecorderType {
+    switch (source) {
+      case CameraSource.Photos:
+        return RecorderType.UploaderWebCryptoApiSignatureProvider;
+      case CameraSource.Camera:
+        return RecorderType.CaptureAppWebCryptoApiSignatureProvider;
+      default:
+        return RecorderType.Capture;
     }
   }
 

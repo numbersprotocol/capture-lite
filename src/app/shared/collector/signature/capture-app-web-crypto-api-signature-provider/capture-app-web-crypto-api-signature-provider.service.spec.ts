@@ -2,7 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { defer } from 'rxjs';
 import { concatMapTo } from 'rxjs/operators';
 import { sortObjectDeeplyByKey } from '../../../../utils/immutable/immutable';
-import { isSignature, SignedMessage } from '../../../repositories/proof/proof';
+import {
+  isSignature,
+  RecorderType,
+  SignedMessage,
+} from '../../../repositories/proof/proof';
 import { SharedTestingModule } from '../../../shared-testing.module';
 import { CaptureAppWebCryptoApiSignatureProvider } from './capture-app-web-crypto-api-signature-provider.service';
 
@@ -58,7 +62,7 @@ describe('CaptureAppWebCryptoApiSignatureProvider', () => {
   it('should provide signature', async () => {
     const signedMessage: SignedMessage = {
       spec_version: '',
-      recorder: '',
+      recorder: RecorderType.Capture,
       created_at: 0,
       proof_hash: '',
       asset_mime_type: '',
