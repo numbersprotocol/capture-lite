@@ -8,6 +8,7 @@ import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { PreviewCamera } from '@numbersprotocol/preview-camera';
 import { BehaviorSubject } from 'rxjs';
+import { CameraService } from '../../../shared/camera/camera.service';
 import { FILESYSTEM_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { CaptureService } from '../../../shared/capture/capture.service';
 import { ErrorService } from '../../../shared/error/error.service';
@@ -34,7 +35,8 @@ export class CustomCameraService {
     private readonly translocoService: TranslocoService,
     @Inject(FILESYSTEM_PLUGIN)
     private readonly filesystemPlugin: FilesystemPlugin,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly cameraService: CameraService
   ) {}
 
   private mediaItemFromFilePath(
@@ -79,6 +81,10 @@ export class CustomCameraService {
   async stopPreviewCamera() {
     this.changeGlobalCSSBackgroundToTransparentRevert();
     return PreviewCamera.stopPreview().catch(() => ({}));
+  }
+
+  async pickImage() {
+    return this.cameraService.pickPhoto();
   }
 
   // eslint-disable-next-line class-methods-use-this

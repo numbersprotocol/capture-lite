@@ -205,6 +205,22 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.customCameraService.stopPreviewCamera();
   }
 
+  async pickImage() {
+    try {
+      const image = await this.customCameraService.pickImage();
+      await this.prePublish(
+        { filePath: image.path },
+        'image',
+        CameraSource.Photos
+      );
+    } catch (error) {
+      /**
+       * Error mighght happen if user didn't pick photo or video,
+       * we'll handle such error quietly without notifying user.
+       */
+    }
+  }
+
   async flipCamera() {
     await this.customCameraService.flipCamera();
     await this.syncCameraState();
