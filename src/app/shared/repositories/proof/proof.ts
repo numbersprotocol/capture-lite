@@ -11,7 +11,11 @@ import {
   OnWriteExistStrategy,
 } from '../../media/media-store/media-store.service';
 
-const RECORDER = 'Capture';
+export enum RecorderType {
+  Capture = 'Capture',
+  CaptureAppWebCryptoApiSignatureProvider = 'CaptureAppWebCryptoApiSignatureProvider',
+  UploaderWebCryptoApiSignatureProvider = 'UploaderWebCryptoApiSignatureProvider',
+}
 const SIGNATURE_VERSION = '2.0.0';
 
 export class Proof {
@@ -200,10 +204,21 @@ export class Proof {
     return Object.fromEntries(factEntries) as Facts;
   }
 
-  async generateSignedMessage() {
+  /**
+   * Generates a signed message with the provided recorder type.
+   *
+   * @param recorderType - The type of recorder used for signing the message
+   * (default is RecorderType.CAPTURE). Related discussion comments:
+   * - https://github.com/numbersprotocol/capture-lite/issues/779#issuecomment-880330292
+   * - https://app.asana.com/0/0/1204012493522134/1204289040001270/f
+   * @returns A promise that resolves to the generated signed message
+   */
+  async generateSignedMessage(
+    recorder: RecorderType = RecorderType.Capture
+  ): Promise<SignedMessage> {
     const signedMessage: SignedMessage = {
       spec_version: SIGNATURE_VERSION,
-      recorder: RECORDER,
+      recorder: recorder,
       created_at: this.truth.timestamp,
       location_latitude: this.geolocationLatitude,
       location_longitude: this.geolocationLongitude,
@@ -387,7 +402,7 @@ export interface IndexedProofView extends Tuple {
  */
 export interface SignedMessage {
   spec_version: string;
-  recorder: string;
+  recorder: RecorderType;
   created_at: number;
   location_latitude?: number;
   location_longitude?: number;

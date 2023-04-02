@@ -10,7 +10,7 @@ import { CameraService } from './shared/camera/camera.service';
 import { CaptureService } from './shared/capture/capture.service';
 import { CollectorService } from './shared/collector/collector.service';
 import { CapacitorFactsProvider } from './shared/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
-import { WebCryptoApiSignatureProvider } from './shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { CaptureAppWebCryptoApiSignatureProvider } from './shared/collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { DiaBackendAssetUploadingService } from './shared/dia-backend/asset/uploading/dia-backend-asset-uploading.service';
 import { DiaBackendAuthService } from './shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendNotificationService } from './shared/dia-backend/notification/dia-backend-notification.service';
@@ -33,7 +33,7 @@ export class AppComponent {
     private readonly iconRegistry: MatIconRegistry,
     private readonly sanitizer: DomSanitizer,
     private readonly capacitorFactsProvider: CapacitorFactsProvider,
-    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
+    private readonly capAppWebCryptoApiSignatureProvider: CaptureAppWebCryptoApiSignatureProvider,
     private readonly captureService: CaptureService,
     private readonly cameraService: CameraService,
     private readonly errorService: ErrorService,
@@ -92,10 +92,10 @@ export class AppComponent {
   }
 
   initializeCollector() {
-    this.webCryptoApiSignatureProvider.initialize();
+    this.capAppWebCryptoApiSignatureProvider.initialize();
     this.collectorService.addFactsProvider(this.capacitorFactsProvider);
     this.collectorService.addSignatureProvider(
-      this.webCryptoApiSignatureProvider
+      this.capAppWebCryptoApiSignatureProvider
     );
   }
 
