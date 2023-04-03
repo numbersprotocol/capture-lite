@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { AppPlugin } from '@capacitor/app';
 import {
+  Photo as CameraPhoto,
   CameraPlugin,
   CameraResultType,
   CameraSource,
-  Photo as CameraPhoto,
 } from '@capacitor/camera';
 import { Subject } from 'rxjs';
 import { blobToBase64 } from '../../utils/encoding/encoding';
-import { fromExtension, MimeType } from '../../utils/mime-type';
+import { MimeType, fromExtension } from '../../utils/mime-type';
 import {
   APP_PLUGIN,
   CAMERA_PLUGIN,
@@ -51,6 +51,15 @@ export class CameraService {
     return cameraPhotoToPhoto(cameraPhoto);
   }
 
+  async pickPhoto(): Promise<CameraPhoto> {
+    return this.cameraPlugin.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Photos,
+      quality: 100,
+      allowEditing: false,
+    });
+  }
+
   // eslint-disable-next-line class-methods-use-this
   async recordVideo(): Promise<Media> {
     return new Promise<Media>((resolve, reject) => {
@@ -76,6 +85,7 @@ export class CameraService {
             resolve({
               base64,
               mimeType: file.type as MimeType,
+              source: CameraSource.Camera,
             })
           );
       };
@@ -99,6 +109,7 @@ function cameraPhotoToPhoto(cameraPhoto: CameraPhoto): Media {
     mimeType: fromExtension(cameraPhoto.format),
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     base64: cameraPhoto.base64String!,
+    source: CameraSource.Camera,
   };
 }
 

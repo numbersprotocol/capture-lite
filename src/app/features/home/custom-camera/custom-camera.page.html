@@ -100,9 +100,7 @@
           </div>
         </div>
         <div class="footer-camera-buttons">
-          <mat-icon class="temporarily-hidden" id="gallery-icon">
-            video_collection
-          </mat-icon>
+          <mat-icon (click)="pickImage()"> imagesmode </mat-icon>
 
           <circle-progress
             (click)="onPress()"

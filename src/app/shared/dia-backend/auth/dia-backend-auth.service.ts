@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Device } from '@capacitor/device';
 import { Storage } from '@capacitor/storage';
@@ -20,7 +20,7 @@ import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { LanguageService } from '../../language/service/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
-import { BASE_URL, TRUSTED_CLIENT_KEY } from '../secret';
+import { BASE_URL, PIPEDREAM_URL, TRUSTED_CLIENT_KEY } from '../secret';
 
 @Injectable({
   providedIn: 'root',
@@ -288,6 +288,19 @@ export class DiaBackendAuthService {
           this.setRerferralCode(response.referral_code),
         ])
       )
+    );
+  }
+
+  deleteAccount$(email: string) {
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(authHeaders => {
+        const body = { email };
+        return this.httpClient.post<any>(`${PIPEDREAM_URL}`, body, {
+          headers: new HttpHeaders()
+            .set('Authorization', `${authHeaders.authorization}`)
+            .set('Content-Type', 'application/json'),
+        });
+      })
     );
   }
 

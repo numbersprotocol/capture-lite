@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { TestBed } from '@angular/core/testing';
+import { CameraSource } from '@capacitor/camera';
 import { MimeType } from '../../utils/mime-type';
 import {
   AssetMeta,
@@ -27,7 +28,7 @@ describe('CollectorService', () => {
   it('should be created', () => expect(service).toBeTruthy());
 
   it('should get the stored proof after run', async () => {
-    const proof = await service.run(ASSETS, Date.now());
+    const proof = await service.run(ASSETS, Date.now(), CameraSource.Camera);
     expect(await proof.getAssets()).toEqual(ASSETS);
   });
 
@@ -35,7 +36,7 @@ describe('CollectorService', () => {
     service.addFactsProvider(mockFactsProvider);
     service.removeFactsProvider(mockFactsProvider);
 
-    const proof = await service.run(ASSETS, Date.now());
+    const proof = await service.run(ASSETS, Date.now(), CameraSource.Camera);
 
     expect(proof.truth.providers).toEqual({});
   });
@@ -44,20 +45,20 @@ describe('CollectorService', () => {
     service.addSignatureProvider(mockSignatureProvider);
     service.removeSignatureProvider(mockSignatureProvider);
 
-    const proof = await service.run(ASSETS, Date.now());
+    const proof = await service.run(ASSETS, Date.now(), CameraSource.Camera);
 
     expect(proof.signatures).toEqual({});
   });
 
   it('should get the stored proof with provided facts', async () => {
     service.addFactsProvider(mockFactsProvider);
-    const proof = await service.run(ASSETS, Date.now());
+    const proof = await service.run(ASSETS, Date.now(), CameraSource.Camera);
     expect(proof.truth.providers).toEqual({ [mockFactsProvider.id]: FACTS });
   });
 
   it('should get the stored proof with provided signature', async () => {
     service.addSignatureProvider(mockSignatureProvider);
-    const proof = await service.run(ASSETS, Date.now());
+    const proof = await service.run(ASSETS, Date.now(), CameraSource.Camera);
     expect(proof.signatures).toEqual({ [mockSignatureProvider.id]: SIGNATURE });
   });
 });
@@ -104,6 +105,9 @@ const SIGNATURE: Signature = {
 };
 class MockSignatureProvider implements SignatureProvider {
   readonly id = 'MockSignatureProvider';
+  idFor(_source: any): string {
+    return this.id;
+  }
   // eslint-disable-next-line @typescript-eslint/require-await
   async provide(_: string) {
     return SIGNATURE;

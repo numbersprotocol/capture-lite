@@ -232,7 +232,8 @@
       "invalid_network_app_name": "Invalid network app.",
       "invalid_referral_code": "Invalid referral code",
       "duplicate_email": "The email has already been registered",
-      "duplicate_username": "User with this username already exists"
+      "duplicate_username": "User with this username already exists",
+      "asset_commit_insufficient_fund": "Insufficient NUM balance. Please top up your balance to complete the asset registration."
     },
     "wallets": {
       "emptyTransferAmount": "Please enter a valid transfer amount.",

@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { FilesystemPlugin } from '@capacitor/filesystem';
 import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { PreviewCamera } from '@numbersprotocol/preview-camera';
 import { BehaviorSubject } from 'rxjs';
+import { CameraService } from '../../../shared/camera/camera.service';
 import { FILESYSTEM_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { CaptureService } from '../../../shared/capture/capture.service';
 import { ErrorService } from '../../../shared/error/error.service';
@@ -33,7 +35,8 @@ export class CustomCameraService {
     private readonly translocoService: TranslocoService,
     @Inject(FILESYSTEM_PLUGIN)
     private readonly filesystemPlugin: FilesystemPlugin,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly cameraService: CameraService
   ) {}
 
   private mediaItemFromFilePath(
@@ -48,7 +51,11 @@ export class CustomCameraService {
     return newItem;
   }
 
-  async uploadToCapture(filePath: string, type: CustomCameraMediaType) {
+  async uploadToCapture(
+    filePath: string,
+    type: CustomCameraMediaType,
+    source: CameraSource
+  ) {
     const itemToUpload = this.mediaItemFromFilePath(filePath, type);
 
     try {
@@ -57,7 +64,7 @@ export class CustomCameraService {
         .toPromise();
       const base64 = await blobToBase64(itemBlob);
       const mimeType = itemToUpload.mimeType;
-      await this.captureService.capture({ base64, mimeType });
+      await this.captureService.capture({ base64, mimeType, source });
       await this.removeFile(filePath);
     } catch (error) {
       const errMsg = this.translocoService.translate(`error.internetError`);
@@ -74,6 +81,10 @@ export class CustomCameraService {
   async stopPreviewCamera() {
     this.changeGlobalCSSBackgroundToTransparentRevert();
     return PreviewCamera.stopPreview().catch(() => ({}));
+  }
+
+  async pickImage() {
+    return this.cameraService.pickPhoto();
   }
 
   // eslint-disable-next-line class-methods-use-this

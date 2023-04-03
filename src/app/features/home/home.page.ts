@@ -6,11 +6,12 @@ import { Browser } from '@capacitor/browser';
 import {
   ActionSheetController,
   AlertController,
+  NavController,
   Platform,
 } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, EMPTY, iif, of } from 'rxjs';
+import { EMPTY, combineLatest, defer, iif, of } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -40,7 +41,7 @@ import { OnboardingService } from '../../shared/onboarding/onboarding.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
 import { UserGuideService } from '../../shared/user-guide/user-guide.service';
 import { reloadApp } from '../../utils/miscellaneous';
-import { switchTapTo, VOID$ } from '../../utils/rx-operators/rx-operators';
+import { VOID$, switchTapTo } from '../../utils/rx-operators/rx-operators';
 import { getAppDownloadLink } from '../../utils/url';
 import { GoProBluetoothService } from '../settings/go-pro/services/go-pro-bluetooth.service';
 import { UpdateAppDialogComponent } from './in-app-updates/update-app-dialog/update-app-dialog.component';
@@ -100,9 +101,11 @@ export class HomePage {
     private readonly database: Database,
     private readonly preferenceManager: PreferenceManager,
     private readonly mediaStore: MediaStore,
-    private readonly blockingActionService: BlockingActionService
+    private readonly blockingActionService: BlockingActionService,
+    private readonly navController: NavController
   ) {
     this.downloadExpiredPostCaptures();
+    this.overrideAndroidBackButtonBehavior();
   }
 
   ionViewDidEnter() {
@@ -116,13 +119,6 @@ export class HomePage {
           defer(() => this.userGuideService.showUserGuidesOnHomePage())
         ),
         catchError((err: unknown) => this.errorService.toastError$(err)),
-        untilDestroyed(this)
-      )
-      .subscribe();
-
-    this.androidBackButtonService.androidBackButtonEvent$
-      .pipe(
-        tap(_ => this.shouldNavigateBackExploreIframe()),
         untilDestroyed(this)
       )
       .subscribe();
@@ -256,6 +252,27 @@ export class HomePage {
       .subscribe();
   }
 
+  /**
+   * WORKAROUND: override android back button default
+   * behavior to ensure capture ionic navigaiton and
+   * capture app iframe navigatioins behave as expected.
+   */
+  overrideAndroidBackButtonBehavior() {
+    this.androidBackButtonService
+      .overrideAndroidBackButtonBehavior$(() => {
+        const shouldNavigateBackExploreTabIframe =
+          this.selectedTabIndex === this.exploreTabIndex &&
+          this.router.url === '/home';
+        if (shouldNavigateBackExploreTabIframe) {
+          this.iframeService.navigateBackExploreTabIframe();
+        } else {
+          this.navController.back();
+        }
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
+
   capture() {
     return defer(() => {
       this.selectedTabIndex = this.afterCaptureTabIndex;
@@ -359,15 +376,6 @@ export class HomePage {
         untilDestroyed(this)
       )
       .subscribe();
-  }
-
-  private shouldNavigateBackExploreIframe(): void {
-    if (
-      this.selectedTabIndex === this.exploreTabIndex &&
-      this.router.url === '/home'
-    ) {
-      this.iframeService.navigateBackExploreTabIframe();
-    }
   }
 
   // eslint-disable-next-line class-methods-use-this

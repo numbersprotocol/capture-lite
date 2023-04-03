@@ -29,17 +29,6 @@ mat-toolbar {
   height: 100%;
   overflow: auto;
 
-  iframe {
-    /*  stylelint-disable-next-line declaration-colon-newline-after  */
-    height: calc(
-      100vh - var(--ion-safe-area-bottom) - var(--ion-safe-area-top) - 66px
-    );
-    width: 92vw;
-    margin: 0 4vw;
-    border: none;
-    background-color: black;
-  }
-
   app-media-rebranded {
     border-radius: 16px;
     overflow: hidden;

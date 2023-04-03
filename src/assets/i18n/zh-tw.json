@@ -232,7 +232,8 @@
       "invalid_network_app_name": "無效的網絡動作。",
       "invalid_referral_code": "無效的推薦代碼",
       "duplicate_email": "該電子郵件已註冊",
-      "duplicate_username": "用戶名已被其他使用者使用"
+      "duplicate_username": "用戶名已被其他使用者使用",
+      "asset_commit_insufficient_fund": "NUM 餘額不足。 請加值您的帳戶以完成區塊鏈註冊。"
     },
     "wallets": {
       "emptyTransferAmount": "請輸入有效轉帳金額。",
