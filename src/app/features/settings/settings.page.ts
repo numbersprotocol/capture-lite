@@ -5,7 +5,7 @@ import { Clipboard } from '@capacitor/clipboard';
 import { IonModal } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { defer, EMPTY, Subject } from 'rxjs';
+import { EMPTY, Subject, defer } from 'rxjs';
 import {
   catchError,
   concatMapTo,
@@ -18,7 +18,7 @@ import {
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
 import { CapacitorFactsProvider } from '../../shared/collector/facts/capacitor-facts-provider/capacitor-facts-provider.service';
-import { WebCryptoApiSignatureProvider } from '../../shared/collector/signature/web-crypto-api-signature-provider/web-crypto-api-signature-provider.service';
+import { CaptureAppWebCryptoApiSignatureProvider } from '../../shared/collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../shared/confirm-alert/confirm-alert.service';
 import { Database } from '../../shared/database/database.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
@@ -62,7 +62,8 @@ export class SettingsPage {
   private readonly requiredClicks = 7;
   showHiddenOption = false;
 
-  private readonly privateKey$ = this.webCryptoApiSignatureProvider.privateKey$;
+  private readonly privateKey$ =
+    this.capAppWebCryptoApiSignatureProvider.privateKey$;
   readonly privateKeyTruncated$ = this.privateKey$.pipe(
     map(key => {
       // eslint-disable-next-line @typescript-eslint/no-magic-numbers
@@ -86,7 +87,7 @@ export class SettingsPage {
     private readonly versionService: VersionService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly webCryptoApiSignatureProvider: WebCryptoApiSignatureProvider,
+    private readonly capAppWebCryptoApiSignatureProvider: CaptureAppWebCryptoApiSignatureProvider,
     private readonly snackBar: MatSnackBar
   ) {}
 
@@ -158,14 +159,10 @@ export class SettingsPage {
       .subscribe();
   }
 
-  /**
-   * // TODO: Integrate Storage Backend delete function after it's ready.
-   * Delete user account from Storage Backend.
-   */
   async deleteAccount() {
     const email: string = await this.diaBackendAuthService.getEmail();
 
-    const action$ = this.diaBackendAuthService.deleteUser$(email).pipe(
+    const action$ = this.diaBackendAuthService.deleteAccount$(email).pipe(
       // logout
       concatMapTo(defer(() => this.mediaStore.clear())),
       concatMapTo(defer(() => this.database.clear())),

@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import '@capacitor-community/http';
 import { Http } from '@capacitor-community/http';
+import { CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import {
   Directory as FilesystemDirectory,
@@ -84,7 +85,11 @@ export class GoProMediaService {
       const mimeType = urlIsImage(mediaFile.url) ? 'image/jpeg' : 'video/mp4';
       isDownloaded = true;
 
-      await this.captureService.capture({ base64, mimeType });
+      await this.captureService.capture({
+        base64,
+        mimeType,
+        source: CameraSource.Camera,
+      });
       isCaptured = true;
 
       // delete temp downloaded file

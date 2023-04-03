@@ -1,12 +1,5 @@
 <mat-toolbar *transloco="let t">
-  <button
-    routerLink=".."
-    routerDirection="back"
-    mat-mini-fab
-    class="capture-rebranded-button"
-  >
-    <mat-icon svgIcon="capture-rebrand-arrow-left"></mat-icon>
-  </button>
+  <app-capture-back-button></app-capture-back-button>
   <div class="toolbar-spacer"></div>
   <ng-container *ngrxLet="activeDetailedCapture$ as activeDetailedCapture">
     <button
@@ -18,9 +11,6 @@
       <mat-icon svgIcon="capture-rebrand-share"></mat-icon>
     </button>
   </ng-container>
-  <!-- <button mat-mini-fab class="capture-rebranded-button">
-    <mat-icon svgIcon="capture-rebrand-support"></mat-icon>
-  </button> -->
   <button
     *ngIf="(isFromSeriesPage$ | ngrxPush) === false"
     (click)="openOptionsMenuEvenOffline()"
@@ -55,9 +45,9 @@
       "
     >
       <div class="slide">
-        <div *ngIf="iframeUrlWithJWTToken$ | ngrxPush as iframeUrlWithJWTToken">
-          <iframe [src]="iframeUrlWithJWTToken"></iframe>
-        </div>
+        <app-detailed-capture-iframe
+          [detailedCapture]="detailedCapture"
+        ></app-detailed-capture-iframe>
       </div>
     </ng-template>
   </swiper>

@@ -19,7 +19,7 @@ jobs:
 
       - name: Get release version
         id: version_check
-        run: echo "version_new=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+        run: echo "version=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
 
       - name: Build Ionic
         env:
@@ -90,7 +90,7 @@ jobs:
 
       - name: Get release version
         id: version_check
-        run: echo "version_new=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+        run: echo "version=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
 
       - name: Build Ionic
         env:
@@ -166,7 +166,7 @@ jobs:
 
       - name: Get release version
         id: version_check
-        run: echo "version_new=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+        run: echo "version=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
 
       - name: Build Ionic
         env:
@@ -286,7 +286,7 @@ jobs:
 
       - name: Get release version
         id: version_check
-        run: echo "version_new=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+        run: echo "version=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
 
       - name: Create GitHub prerelease
         id: create_release

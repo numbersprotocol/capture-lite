@@ -1,7 +1,5 @@
 <mat-toolbar>
-  <button routerLink=".." routerDirection="back" mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
-  </button>
+  <app-capture-back-button></app-capture-back-button>
 </mat-toolbar>
 <div *ngrxLet="series$ as series" class="page-content">
   <ion-card>

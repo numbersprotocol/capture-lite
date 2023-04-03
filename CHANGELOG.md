@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.77.0] - 2023-04-03
+
+### Added
+
+1. Feature upload image (#2671)
+1. Feature show clear error handling of change username on my capture page (#2664)
+1. Feature special provider for photos taken from capture app (#2667)
+
+### Fixed
+
+1. Fix for ios action of capture ci fail to upload ipa to test flight (#2668)
+1. Fix show message if asset registration insufficient num (#2669)
+1. Fix ionic navigation with iframe back button (#2670)
+1. Fix issue capture details swipe left right is not showing expected capture (#2665)
+1. Fix delete account should work real (#2666)
+
 ## [0.75.2] - 2023-03-13
 
 ### Fixed
@@ -2069,7 +2085,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.75.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.77.0...HEAD
+[0.77.0]: https://github.com/numbersprotocol/capture-lite/compare/0.75.2...0.77.0
 [0.75.2]: https://github.com/numbersprotocol/capture-lite/compare/0.75.1...0.75.2
 [0.75.1]: https://github.com/numbersprotocol/capture-lite/compare/0.75.0...0.75.1
 [0.75.0]: https://github.com/numbersprotocol/capture-lite/compare/0.74.2...0.75.0

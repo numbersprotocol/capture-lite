@@ -188,15 +188,6 @@ export class DetailsPage {
     map(type => type === 'post-capture')
   );
 
-  readonly iframeUrl$ = this.activeDetailedCapture$.pipe(
-    distinctUntilChanged(),
-    map(detailedCapture => {
-      const params = `nid=${detailedCapture.id}&from=mycapture`;
-      const url = `${BUBBLE_IFRAME_URL}/?${params}`;
-      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    })
-  );
-
   readonly activeDetailedCaptureTmpShareToken$ =
     this._activeDetailedCapture$.pipe(
       distinctUntilChanged(),
@@ -207,35 +198,6 @@ export class DetailsPage {
     );
 
   userToken: string | undefined;
-
-  readonly iframeUrlWithToken$ = combineLatest([
-    this.activeDetailedCapture$,
-  ]).pipe(
-    distinctUntilChanged(),
-    map(([detailedCapture]) => {
-      const token = this.userToken;
-      const params = `nid=${detailedCapture.id}&token=${token}&from=mycapture`;
-      const url = `${BUBBLE_IFRAME_URL}/asset_page?${params}`;
-      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    })
-  );
-
-  readonly iframeUrlWithJWTToken$ = combineLatest([
-    this.activeDetailedCapture$,
-    this.diaBackendAuthService.cachedQueryJWTToken$,
-    this.iframeService.detailsPageIframeReloadRequested$,
-  ]).pipe(
-    distinctUntilChanged(),
-    map(([detailedCapture, token, _]) => {
-      const params =
-        `nid=${detailedCapture.id}` +
-        `&token=${token.access}` +
-        `&refresh_token=${token.refresh}` +
-        `&from=mycapture`;
-      const url = `${BUBBLE_IFRAME_URL}/asset_page?${params}`;
-      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    })
-  );
 
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 

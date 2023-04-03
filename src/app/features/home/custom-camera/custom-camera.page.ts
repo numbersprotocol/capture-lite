@@ -5,6 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { CameraSource } from '@capacitor/camera';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -13,7 +14,7 @@ import {
   CustomOrientation,
   PreviewCamera,
 } from '@numbersprotocol/preview-camera';
-import { BehaviorSubject, combineLatest, interval, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, combineLatest, interval } from 'rxjs';
 import {
   finalize,
   map,
@@ -49,6 +50,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   maxRecordTimeInSeconds = MAX_RECORD_TIME_IN_MILLISECONDS / 1000;
   maxRecordTimeInMilliseconds = MAX_RECORD_TIME_IN_MILLISECONDS;
   curRecordTimeInPercent$ = new BehaviorSubject<number>(0);
+  curCaptureCameraSource: CameraSource = CameraSource.Camera;
   isRecording$ = new BehaviorSubject(false);
 
   mode$ = new BehaviorSubject<CameraMode>('photo');
@@ -161,14 +163,18 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   // PreviewCamera Plugin methods
   private async onCapturePhotoFinished(data: CaptureResult): Promise<void> {
-    this.uploadItem(data, 'image');
+    this.prePublish(data, 'image', CameraSource.Camera);
   }
 
   private async onCaptureVideoFinished(data: CaptureResult): Promise<void> {
-    this.uploadItem(data, 'video');
+    this.prePublish(data, 'video', CameraSource.Camera);
   }
 
-  private async uploadItem(data: CaptureResult, type: 'image' | 'video') {
+  private async prePublish(
+    data: CaptureResult,
+    type: 'image' | 'video',
+    source: CameraSource
+  ) {
     if (data.errorMessage) {
       await this.errorService.toastError$(data.errorMessage).toPromise();
     } else if (data.filePath) {
@@ -181,6 +187,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
       this.curCaptureMimeType = mimeType;
       this.curCaptureType = type;
       this.curCaptureSrc = Capacitor.convertFileSrc(filePath);
+      this.curCaptureCameraSource = source;
       this.lastCaptureMode = this.mode$.value;
       this.mode$.next('pre-publish');
 
@@ -196,6 +203,22 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   stopPreviewCamera() {
     this.customCameraService.stopPreviewCamera();
+  }
+
+  async pickImage() {
+    try {
+      const image = await this.customCameraService.pickImage();
+      await this.prePublish(
+        { filePath: image.path },
+        'image',
+        CameraSource.Photos
+      );
+    } catch (error) {
+      /**
+       * Error mighght happen if user didn't pick photo or video,
+       * we'll handle such error quietly without notifying user.
+       */
+    }
   }
 
   async flipCamera() {
@@ -276,7 +299,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     if (this.curCaptureFilePath && this.curCaptureType) {
       this.customCameraService.uploadToCapture(
         this.curCaptureFilePath,
-        this.curCaptureType
+        this.curCaptureType,
+        this.curCaptureCameraSource
       );
       this.leaveCustomCamera();
     }
