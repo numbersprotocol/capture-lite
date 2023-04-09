@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To check the difference between the last releaes and the latest dev status, click the link above.
 
+## [0.77.1] - 2023-04-07
+
+### Fixed
+
+1. Fix GitHub CI, add missing PIPEDREAM_DELETE_CAPTURE_ACCOUNT to pre-release.yml & build-apks.yml (#2700)
+
 ## [0.77.0] - 2023-04-03
 
 ### Added
@@ -2085,7 +2091,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.77.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.77.1...HEAD
+[0.77.1]: https://github.com/numbersprotocol/capture-lite/compare/0.77.0...0.77.1
 [0.77.0]: https://github.com/numbersprotocol/capture-lite/compare/0.75.2...0.77.0
 [0.75.2]: https://github.com/numbersprotocol/capture-lite/compare/0.75.1...0.75.2
 [0.75.1]: https://github.com/numbersprotocol/capture-lite/compare/0.75.0...0.75.1

@@ -56,6 +56,7 @@ jobs:
           NUMBERS_BUBBLE_DB_URL: ${{ secrets[matrix.bubble_db_url] }}
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
+          PIPEDREAM_DELETE_CAPTURE_ACCOUNT: ${{ secrets.PIPEDREAM_DELETE_CAPTURE_ACCOUNT }}
         run: |
           npm install -g @ionic/cli
           npm install
