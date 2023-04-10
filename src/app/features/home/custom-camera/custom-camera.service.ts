@@ -8,10 +8,12 @@ import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { PreviewCamera } from '@numbersprotocol/preview-camera';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CameraService } from '../../../shared/camera/camera.service';
 import { FILESYSTEM_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { CaptureService } from '../../../shared/capture/capture.service';
 import { ErrorService } from '../../../shared/error/error.service';
+import { PreferenceManager } from '../../../shared/preference-manager/preference-manager.service';
 import { blobToBase64 } from '../../../utils/encoding/encoding';
 import {
   CustomCameraMediaItem,
@@ -23,7 +25,21 @@ import {
   providedIn: 'root',
 })
 export class CustomCameraService {
+  private readonly preferences = this.preferenceManager.getPreferences(
+    'CustomCameraService'
+  );
+
   private readonly globalCSSClass = 'custom-camera-transparent-background';
+
+  readonly isSaveToCameraRollEnabled$ = this.preferences
+    .getString$(PrefKeys.SHOULD_SAVE_TO_CAMERA_ROLL)
+    .pipe(
+      map(value => {
+        const shouldSave = this.mapStringToSaveToCameraRollDecision(value);
+        if (shouldSave === 'yes') return true;
+        return false;
+      })
+    );
 
   uploadInProgress$ = new BehaviorSubject<boolean>(false);
 
@@ -36,7 +52,8 @@ export class CustomCameraService {
     @Inject(FILESYSTEM_PLUGIN)
     private readonly filesystemPlugin: FilesystemPlugin,
     private readonly platform: Platform,
-    private readonly cameraService: CameraService
+    private readonly cameraService: CameraService,
+    private readonly preferenceManager: PreferenceManager
   ) {}
 
   private mediaItemFromFilePath(
@@ -49,6 +66,22 @@ export class CustomCameraService {
       type === 'image' ? 'image/jpeg' : 'video/mp4';
     const newItem = { filePath, src, safeUrl, type, mimeType };
     return newItem;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async saveCaptureToUserDevice(captureFilePath: string) {
+    try {
+      await PreviewCamera.saveFileToUserDevice({ filePath: captureFilePath });
+    } catch (error: unknown) {
+      /**
+       * Several reasons might cause this error:
+       * - User didn't grant permission to write.
+       * - User has no storage.
+       * - etc.
+       * In the future report to crashlytics.
+       */
+      this.errorService.toastError$(error).subscribe();
+    }
   }
 
   async uploadToCapture(
@@ -184,6 +217,39 @@ export class CustomCameraService {
     await PreviewCamera.setQuality({ quality });
   }
 
+  async shouldAskSaveToCameraRoll(): Promise<boolean> {
+    if ((await this.getShouldSaveToCameraRoll()) === 'undecided') return true;
+    return false;
+  }
+
+  async getShouldSaveToCameraRoll(): Promise<SaveToCameraRollDecision> {
+    const result = await this.preferences.getString(
+      PrefKeys.SHOULD_SAVE_TO_CAMERA_ROLL
+    );
+    return this.mapStringToSaveToCameraRollDecision(result);
+  }
+
+  async setShouldSaveToCameraRoll(value: SaveToCameraRollDecision) {
+    return this.preferences.setString(
+      PrefKeys.SHOULD_SAVE_TO_CAMERA_ROLL,
+      value
+    );
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private mapStringToSaveToCameraRollDecision(
+    value: string
+  ): SaveToCameraRollDecision {
+    switch (value) {
+      case 'yes':
+        return 'yes';
+      case 'no':
+        return 'no';
+      default:
+        return 'no';
+    }
+  }
+
   private get isNativePlatform() {
     return this.platform.is('ios') || this.platform.is('android');
   }
@@ -197,4 +263,10 @@ export class CustomCameraService {
     document.querySelector('body')?.classList.remove(this.globalCSSClass);
     document.querySelector('ion-app')?.classList.remove(this.globalCSSClass);
   }
+}
+
+type SaveToCameraRollDecision = 'undecided' | 'yes' | 'no';
+
+const enum PrefKeys {
+  SHOULD_SAVE_TO_CAMERA_ROLL = 'SHOULD_SAVE_TO_CAMERA_ROLL',
 }
