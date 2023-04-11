@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CameraSource } from '@capacitor/camera';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
@@ -40,7 +35,6 @@ type CameraQuality = 'low' | 'hq';
   selector: 'app-custom-camera',
   templateUrl: './custom-camera.page.html',
   styleUrls: ['./custom-camera.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomCameraPage implements OnInit, OnDestroy {
   private captureVideoFinishedListener?: PluginListenerHandle;
