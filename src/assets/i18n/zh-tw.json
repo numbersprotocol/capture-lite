@@ -297,7 +297,10 @@
   "customCamera": {
     "confirmCapture": "下一步",
     "max": "最佳畫質",
-    "social": "瀏覽畫質"
+    "social": "瀏覽畫質",
+    "error": {
+      "duplicateAsset": "您嘗試上傳的資產已有上鏈紀錄，請重新嘗試，或聯繫開發團隊取得協助。"
+    }
   },
   "wallets": {
     "wallets": "錢包",

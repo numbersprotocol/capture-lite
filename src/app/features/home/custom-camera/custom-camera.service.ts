@@ -66,8 +66,18 @@ export class CustomCameraService {
       const mimeType = itemToUpload.mimeType;
       await this.captureService.capture({ base64, mimeType, source });
       await this.removeFile(filePath);
-    } catch (error) {
-      const errMsg = this.translocoService.translate(`error.internetError`);
+    } catch (error: unknown) {
+      await this.handleUploadToCaptureError(error);
+    }
+  }
+
+  private async handleUploadToCaptureError(error: unknown) {
+    if (error instanceof Error && error.message.startsWith('Tuples existed')) {
+      const translation = 'customCamera.error.duplicateAsset';
+      const errorMsg = this.translocoService.translate(translation);
+      await this.errorService.toastError$(errorMsg).toPromise();
+    } else {
+      const errMsg = this.translocoService.translate('error.unknownError');
       await this.errorService.toastError$(errMsg).toPromise();
     }
   }
