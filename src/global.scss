@@ -28,6 +28,13 @@
 /* Swiper */
 @import '~swiper/swiper.scss';
 
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('./assets/fonts/space-grotesk/SpaceGrotesk-Regular.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
 html {
   --ion-safe-area-top: env(safe-area-inset-top);
   --ion-safe-area-bottom: env(safe-area-inset-bottom);

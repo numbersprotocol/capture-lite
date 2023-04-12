@@ -1,0 +1,91 @@
+<div class="capture-details">
+  <ng-container *ngIf="detailedCapture$ | ngrxPush as capture">
+    <app-media
+      [src]="capture.mediaUrl$ | ngrxPush"
+      [mimeType]="capture.mediaMimeType$ | ngrxPush"
+      [routerLink]="[
+        '/media-viewer',
+        capture.mediaUrl$ | ngrxPush,
+        { mimeType: capture.mediaMimeType$ | ngrxPush }
+      ]"
+    ></app-media>
+
+    <section class="caption">
+      <ng-container *ngIf="captionOn">
+        <ng-container *ngrxLet="capture.caption$ as caption">
+          <span *ngIf="caption; else emptyCaption">
+            {{ caption }}
+          </span>
+          <ng-template #emptyCaption>
+            <span>No Caption.</span>
+          </ng-template>
+        </ng-container>
+      </ng-container>
+    </section>
+
+    <section class="profile">
+      <div>
+        <app-avatar [editable]="false"></app-avatar>
+        <span class="creator"> {{ capture.creator$ | ngrxPush }}</span>
+      </div>
+    </section>
+
+    <section class="information">
+      <div (click)="openMap()">
+        <span class="label">Location: </span>
+        <span class="value">{{ capture.locationDisplay$ | ngrxPush }}</span>
+      </div>
+      <div>
+        <span class="label">Date:</span>
+        <span class="value">{{ date$ | ngrxPush }}</span>
+      </div>
+      <div>
+        <span class="label">NFT: </span>
+        <span class="value">
+          <ng-container *ngrxLet="nftToken$ as nftToken">
+            <ng-container *ngIf="nftToken !== null">
+              {{ nftToken.tokenType }}
+              <a href="{{ nftToken.explorerUrl }}">
+                {{ nftToken.tokenId }}
+              </a>
+            </ng-container>
+            <ng-container *ngIf="nftToken === null">
+              Not yet minted
+            </ng-container>
+          </ng-container>
+        </span>
+      </div>
+      <ng-container *ngIf="capture.id; else notRegistered">
+        <div (click)="openCertificate()">
+          <span class="label">NID: </span>
+          <span class="value">{{ capture.id }}</span>
+        </div>
+      </ng-container>
+      <ng-template #notRegistered>
+        <div>
+          <span class="label">NID: </span>
+          <span class="value">{{ 'notRegistered' | transloco }}</span>
+        </div>
+      </ng-template>
+    </section>
+
+    <section class="information" [ngClass]="{ hidden: !informationShowMore }">
+      <div>
+        <span class="label">Hash: </span>
+        <span class="value">{{ capture.hash }}</span>
+      </div>
+      <div>
+        <span class="label">MIME Type: </span>
+        <span class="value"> {{ capture.mediaMimeType$ | ngrxPush }} </span>
+      </div>
+      <div>
+        <span class="label">Signature: </span>
+        <span class="value">{{ signature$ | ngrxPush }}</span>
+      </div>
+    </section>
+
+    <ion-button class="no-spacing" fill="clear" (click)="toggleShowMore()">
+      {{ informationShowMore ? 'Show less' : 'Show more...' }}
+    </ion-button>
+  </ng-container>
+</div>

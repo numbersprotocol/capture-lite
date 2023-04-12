@@ -1,0 +1,93 @@
+@mixin capture-details-text {
+  /* stylelint-disable font-family-no-missing-generic-family-keyword */
+  font-family: 'Space Grotesk';
+  /* stylelint-enable font-family-no-missing-generic-family-keyword */
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: rgba(255 255 255 / 0.75);
+}
+
+@mixin capture-details-horizontal-margin {
+  margin-left: 46px;
+  margin-right: 46px;
+}
+
+div.capture-details {
+  max-width: 80%;
+  margin: 0 auto 256px;
+
+  app-media {
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+
+  section.caption {
+    margin-top: 16px;
+    margin-bottom: 32px;
+
+    span {
+      @include capture-details-text;
+    }
+  }
+
+  section.profile {
+    margin-bottom: 46px;
+
+    div {
+      display: flex;
+      align-items: flex-start;
+
+      app-avatar {
+        width: 40px;
+        height: 40px;
+      }
+
+      span.creator {
+        @include capture-details-text;
+
+        color: white;
+        font-weight: 700;
+        margin-left: 8px;
+        font-size: 16px;
+      }
+    }
+  }
+
+  section.information {
+    div {
+      display: flex;
+      align-content: flex-start;
+      flex-wrap: wrap;
+
+      span.label {
+        @include capture-details-text;
+        color: white;
+        font-weight: 700;
+        margin-right: 4px;
+        overflow-wrap: normal;
+      }
+
+      span.value {
+        @include capture-details-text;
+        overflow-wrap: anywhere;
+      }
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  ion-button.no-spacing {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    --margin-start: 0;
+    --margin-end: 0;
+    --margin-top: 0;
+    --margin-bottom: 0;
+  }
+}
