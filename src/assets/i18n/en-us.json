@@ -429,6 +429,11 @@
       "subtitle": "Own your assets and create on-chain, decentralized proof"
     },
     "skip": "Skip",
-    "exploreCapture": "Explore Capture"
+    "exploreCapture": "Explore Capture",
+    "createCapturePopUp": {
+      "title": "Create Captures",
+      "content": "Press the camera button below to create your first Capture. Captures are blockchain photos with a better, open and transparent provenance.",
+      "close": "Continue"
+    }
   }
 }
