@@ -1,14 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { combineLatest, fromEvent, ReplaySubject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { ReplaySubject, combineLatest, fromEvent } from 'rxjs';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import {
   CachedQueryJWTToken,
   DiaBackendAuthService,
 } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
 import { NetworkService } from '../../../../shared/network/network.service';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { DetailedCapture } from '../information/session/information-session.service';
 
 @UntilDestroy()
@@ -25,8 +26,14 @@ export class DetailsIframeComponent {
     if (value) this.detailedCapture$.next(value);
   }
 
+  private readonly detailedCaptureId$ = this.detailedCapture$.pipe(
+    map(detailedCapture => detailedCapture.id),
+    isNonNullable(),
+    distinctUntilChanged()
+  );
+
   readonly iframeUrl$ = combineLatest([
-    this.detailedCapture$,
+    this.detailedCaptureId$,
     this.diaBackendAuthService.cachedQueryJWTToken$,
   ]).pipe(
     map(([detailedCapture, token]) => {
@@ -46,11 +53,11 @@ export class DetailsIframeComponent {
   ) {}
 
   private generateIframeUrl(
-    detailedCapture: DetailedCapture,
+    detailedCaptureId: string,
     token: CachedQueryJWTToken
   ) {
     const params =
-      `nid=${detailedCapture.id}` +
+      `nid=${detailedCaptureId}` +
       `&token=${token.access}` +
       `&refresh_token=${token.refresh}` +
       `&from=mycapture`;
