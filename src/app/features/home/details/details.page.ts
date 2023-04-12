@@ -10,7 +10,7 @@ import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, EMPTY, Observable, ReplaySubject } from 'rxjs';
+import { EMPTY, Observable, ReplaySubject, combineLatest, defer } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -40,9 +40,9 @@ import { ProofRepository } from '../../../shared/repositories/proof/proof-reposi
 import { ShareService } from '../../../shared/share/share.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import {
+  VOID$,
   isNonNullable,
   switchTap,
-  VOID$,
 } from '../../../utils/rx-operators/rx-operators';
 import { getAssetProfileForNSE } from '../../../utils/url';
 import {
@@ -202,6 +202,18 @@ export class DetailsPage {
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
 
   readonly networkConnected$ = this.networkService.connected$;
+
+  readonly hasUploaded$ = this._activeDetailedCapture$.pipe(
+    distinctUntilChanged(),
+    map(activeDetailedCapture => !!activeDetailedCapture.id)
+  );
+
+  readonly showCaptureDetailsInIframe$ = combineLatest([
+    this.networkConnected$,
+    this.hasUploaded$,
+  ]).pipe(
+    map(([networkConnected, hasUploaded]) => networkConnected && hasUploaded)
+  );
 
   constructor(
     private readonly sanitizer: DomSanitizer,
@@ -459,16 +471,15 @@ export class DetailsPage {
   }
 
   private handleEditAction() {
-    combineLatest([this.networkConnected$, this.activeDetailedCapture$])
+    combineLatest([
+      this.showCaptureDetailsInIframe$,
+      this.activeDetailedCapture$,
+    ])
       .pipe(
         first(),
-        switchTap(([networkConnected, detailedCapture]) => {
-          if (!networkConnected) {
-            return this.errorService.toastError$(
-              this.translocoService.translate(
-                'details.noNetworkConnectionCannotPerformAction'
-              )
-            );
+        switchTap(([showCaptureDetailsInIframe, detailedCapture]) => {
+          if (!showCaptureDetailsInIframe) {
+            return this.editCaptionOnIonic();
           }
           return this.router.navigate(
             ['edit-caption', { id: detailedCapture.id }],
@@ -942,7 +953,16 @@ export class DetailsPage {
     }
   }
 
-  async editCaption() {
+  /**
+   * Edit capture caption on Ionic side when
+   * - capture is not registered yer
+   * - user is offline
+   * In other edit caption happens on Iframe side.
+   *
+   * NOTE: method name is following the naming convention of actionOnPlatform.
+   * Therefore methods name is editCaptionOnIonic instead of editCaptionOnIonicSide
+   */
+  async editCaptionOnIonic() {
     return this.activeDetailedCapture$
       .pipe(
         first(),
