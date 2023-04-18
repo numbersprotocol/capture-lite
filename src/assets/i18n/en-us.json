@@ -297,7 +297,10 @@
   "customCamera": {
     "confirmCapture": "Next",
     "max": "Max",
-    "social": "Social"
+    "social": "Social",
+    "error": {
+      "duplicateAsset": "The asset you are trying to upload already exists on the blockchain. Please try again or contact support."
+    }
   },
   "wallets": {
     "wallets": "Wallets",
