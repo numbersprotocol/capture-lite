@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.77.2] - 2023-04-18
+
+### Fixed
+
+1. Fix issue When asset registration is incomplete the asset page will repeatedly reload (#2725)
+1. Fix error message for iOS duplicate photo uploads (#2724)
+
 To check the difference between the last releaes and the latest dev status, click the link above.
 
 ## [0.77.1] - 2023-04-07
