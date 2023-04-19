@@ -93,7 +93,7 @@ export class CaptureItemComponent {
 
   @HostListener('click')
   async onClick() {
-    return this.isCollecting$
+    this.isCollecting$
       .pipe(
         first(),
         switchMap(isCollecting =>
