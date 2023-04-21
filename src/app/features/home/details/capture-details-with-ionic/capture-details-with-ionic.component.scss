@@ -63,6 +63,7 @@ div.capture-details {
 
       span.label {
         @include capture-details-text;
+
         color: white;
         font-weight: 700;
         margin-right: 4px;
@@ -71,6 +72,7 @@ div.capture-details {
 
       span.value {
         @include capture-details-text;
+
         overflow-wrap: anywhere;
       }
     }
