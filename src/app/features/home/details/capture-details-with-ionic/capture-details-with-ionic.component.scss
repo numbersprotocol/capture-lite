@@ -26,6 +26,7 @@ div.capture-details {
   section.caption {
     margin-top: 16px;
     margin-bottom: 32px;
+    text-align: start;
 
     span {
       @include capture-details-text;
@@ -37,7 +38,7 @@ div.capture-details {
 
     div {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
 
       app-avatar {
         width: 40px;
