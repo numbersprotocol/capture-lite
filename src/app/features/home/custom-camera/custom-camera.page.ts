@@ -340,13 +340,6 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     try {
       if (!this.curCaptureFilePath || !this.curCaptureType) return;
 
-      const should = await this.customCameraService.getShouldSaveToCameraRoll();
-      if (should === SaveToCameraRollDecision.YES) {
-        this.customCameraService.saveCaptureToUserDevice(
-          this.curCaptureFilePath
-        );
-      }
-
       this.customCameraService.uploadToCapture(
         this.curCaptureFilePath,
         this.curCaptureType,

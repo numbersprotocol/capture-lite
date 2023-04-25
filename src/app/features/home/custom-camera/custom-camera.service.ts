@@ -109,6 +109,12 @@ export class CustomCameraService {
       const base64 = await blobToBase64(itemBlob);
       const mimeType = itemToUpload.mimeType;
       await this.captureService.capture({ base64, mimeType, source });
+
+      const should = await this.getShouldSaveToCameraRoll();
+      if (should === SaveToCameraRollDecision.YES) {
+        await this.saveCaptureToUserDevice(filePath);
+      }
+
       await this.removeFile(filePath);
     } catch (error: unknown) {
       await this.handleUploadToCaptureError(error);
