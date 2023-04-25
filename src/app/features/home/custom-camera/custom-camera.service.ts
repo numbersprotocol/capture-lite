@@ -32,12 +32,23 @@ export class CustomCameraService {
   private readonly globalCSSClass = 'custom-camera-transparent-background';
 
   readonly isSaveToCameraRollEnabled$ = this.preferences
-    .getString$(PrefKeys.SHOULD_SAVE_TO_CAMERA_ROLL)
+    .getString$(
+      PrefKeys.SHOULD_SAVE_TO_CAMERA_ROLL,
+      SaveToCameraRollDecision.UNDECIDED
+    )
     .pipe(
       map(value => {
         const shouldSave = this.mapStringToSaveToCameraRollDecision(value);
-        if (shouldSave === 'yes') return true;
-        return false;
+        switch (shouldSave) {
+          case SaveToCameraRollDecision.YES:
+            return true;
+          case SaveToCameraRollDecision.NO:
+            return false;
+          case SaveToCameraRollDecision.UNDECIDED:
+            return false;
+          default:
+            return false;
+        }
       })
     );
 
@@ -218,13 +229,15 @@ export class CustomCameraService {
   }
 
   async shouldAskSaveToCameraRoll(): Promise<boolean> {
-    if ((await this.getShouldSaveToCameraRoll()) === 'undecided') return true;
+    const result = await this.getShouldSaveToCameraRoll();
+    if (result === SaveToCameraRollDecision.UNDECIDED) return true;
     return false;
   }
 
   async getShouldSaveToCameraRoll(): Promise<SaveToCameraRollDecision> {
     const result = await this.preferences.getString(
-      PrefKeys.SHOULD_SAVE_TO_CAMERA_ROLL
+      PrefKeys.SHOULD_SAVE_TO_CAMERA_ROLL,
+      SaveToCameraRollDecision.UNDECIDED
     );
     return this.mapStringToSaveToCameraRollDecision(result);
   }
@@ -241,12 +254,12 @@ export class CustomCameraService {
     value: string
   ): SaveToCameraRollDecision {
     switch (value) {
-      case 'yes':
-        return 'yes';
-      case 'no':
-        return 'no';
+      case 'YES':
+        return SaveToCameraRollDecision.YES;
+      case 'NO':
+        return SaveToCameraRollDecision.NO;
       default:
-        return 'no';
+        return SaveToCameraRollDecision.UNDECIDED;
     }
   }
 
@@ -265,7 +278,11 @@ export class CustomCameraService {
   }
 }
 
-type SaveToCameraRollDecision = 'undecided' | 'yes' | 'no';
+export const enum SaveToCameraRollDecision {
+  UNDECIDED = 'UNDECIDED',
+  YES = 'YES',
+  NO = 'NO',
+}
 
 const enum PrefKeys {
   SHOULD_SAVE_TO_CAMERA_ROLL = 'SHOULD_SAVE_TO_CAMERA_ROLL',

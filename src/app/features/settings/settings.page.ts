@@ -28,7 +28,10 @@ import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
 import { VersionService } from '../../shared/version/version.service';
 import { reloadApp } from '../../utils/miscellaneous';
-import { CustomCameraService } from '../home/custom-camera/custom-camera.service';
+import {
+  CustomCameraService,
+  SaveToCameraRollDecision,
+} from '../home/custom-camera/custom-camera.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -129,7 +132,9 @@ export class SettingsPage {
 
   async setShouldSaveToCameraRoll(event: any) {
     const enable = Boolean(event.detail.checked);
-    const shouldSave = enable ? 'yes' : 'no';
+    const shouldSave = enable
+      ? SaveToCameraRollDecision.YES
+      : SaveToCameraRollDecision.NO;
     return this.customCameraService.setShouldSaveToCameraRoll(shouldSave);
   }
 

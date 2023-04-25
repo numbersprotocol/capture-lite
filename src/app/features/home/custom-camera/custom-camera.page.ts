@@ -28,7 +28,10 @@ import { ErrorService } from '../../../shared/error/error.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import { GoProBluetoothService } from '../../settings/go-pro/services/go-pro-bluetooth.service';
 import { MAX_RECORD_TIME_IN_MILLISECONDS } from './custom-camera';
-import { CustomCameraService } from './custom-camera.service';
+import {
+  CustomCameraService,
+  SaveToCameraRollDecision,
+} from './custom-camera.service';
 
 type CameraMode = 'story' | 'photo' | 'gopro' | 'pre-publish';
 type CameraQuality = 'low' | 'hq';
@@ -307,12 +310,16 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
       const confirmed = await this.showSaveToCameraRollConfirmAlert();
       if (!confirmed) {
-        await this.customCameraService.setShouldSaveToCameraRoll('no');
+        await this.customCameraService.setShouldSaveToCameraRoll(
+          SaveToCameraRollDecision.NO
+        );
         await this.uploadCurrentCapture();
         return;
       }
 
-      await this.customCameraService.setShouldSaveToCameraRoll('yes');
+      await this.customCameraService.setShouldSaveToCameraRoll(
+        SaveToCameraRollDecision.YES
+      );
       await this.uploadCurrentCapture();
     } catch (error: unknown) {
       this.errorService.toastError$(error).subscribe();
@@ -334,7 +341,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
       if (!this.curCaptureFilePath || !this.curCaptureType) return;
 
       const should = await this.customCameraService.getShouldSaveToCameraRoll();
-      if (should === 'yes') {
+      if (should === SaveToCameraRollDecision.YES) {
         this.customCameraService.saveCaptureToUserDevice(
           this.curCaptureFilePath
         );
