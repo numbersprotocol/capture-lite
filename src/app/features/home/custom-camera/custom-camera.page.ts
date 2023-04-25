@@ -308,18 +308,12 @@ export class CustomCameraPage implements OnInit, OnDestroy {
         return;
       }
 
-      const confirmed = await this.showSaveToCameraRollConfirmAlert();
-      if (!confirmed) {
-        await this.customCameraService.setShouldSaveToCameraRoll(
-          SaveToCameraRollDecision.NO
-        );
-        await this.uploadCurrentCapture();
-        return;
-      }
+      const alertConfirmed = await this.showSaveToCameraRollConfirmAlert();
+      const shouldSave = alertConfirmed
+        ? SaveToCameraRollDecision.YES
+        : SaveToCameraRollDecision.NO;
+      await this.customCameraService.setShouldSaveToCameraRoll(shouldSave);
 
-      await this.customCameraService.setShouldSaveToCameraRoll(
-        SaveToCameraRollDecision.YES
-      );
       await this.uploadCurrentCapture();
     } catch (error: unknown) {
       this.errorService.toastError$(error).subscribe();
