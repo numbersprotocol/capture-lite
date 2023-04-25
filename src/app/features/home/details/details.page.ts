@@ -479,7 +479,11 @@ export class DetailsPage {
         first(),
         switchTap(([showCaptureDetailsInIframe, detailedCapture]) => {
           if (!showCaptureDetailsInIframe) {
-            return this.editCaptionOnIonic();
+            return this.errorService.toastError$(
+              this.translocoService.translate(
+                'details.noNetworkConnectionCannotPerformAction'
+              )
+            );
           }
           return this.router.navigate(
             ['edit-caption', { id: detailedCapture.id }],
@@ -951,53 +955,6 @@ export class DetailsPage {
         .pipe(untilDestroyed(this))
         .subscribe();
     }
-  }
-
-  /**
-   * Edit capture caption on Ionic side when
-   * - capture is not registered yer
-   * - user is offline
-   * In other edit caption happens on Iframe side.
-   *
-   * NOTE: method name is following the naming convention of actionOnPlatform.
-   * Therefore methods name is editCaptionOnIonic instead of editCaptionOnIonicSide
-   */
-  async editCaptionOnIonic() {
-    return this.activeDetailedCapture$
-      .pipe(
-        first(),
-        concatMap(activeDetailedCapture => activeDetailedCapture.caption$),
-        concatMap(caption =>
-          this.alertController.create({
-            header: this.translocoService.translate('editCaption'),
-            inputs: [
-              {
-                name: 'caption',
-                type: 'text',
-                value: caption,
-              },
-            ],
-            buttons: [
-              {
-                text: this.translocoService.translate('cancel'),
-                role: 'cancel',
-              },
-              {
-                text: this.translocoService.translate('ok'),
-                handler: value => this.updateCaption(value.caption),
-              },
-            ],
-          })
-        ),
-        concatMap(
-          alert =>
-            new Promise<void>(resolve => {
-              alert.present().then(() => resolve());
-            })
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
   }
 
   togglePanel() {
