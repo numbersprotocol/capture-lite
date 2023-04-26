@@ -27,7 +27,7 @@ export class CaptureDetailsWithIonicComponent {
     switchMap(c => c.timestamp$),
     map(timestamp => {
       return timestamp
-        ? this.datePipe.transform(timestamp, "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+        ? this.datePipe.transform(timestamp, 'MMMM d, y')
         : this.translocoService.translate('notDisclosed');
     }),
     shareReplay({ bufferSize: 1, refCount: true })
