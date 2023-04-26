@@ -31,60 +31,78 @@
     </section>
 
     <section class="information">
-      <div (click)="openMap()">
-        <span class="label">Location: </span>
-        <span class="value">{{ capture.locationDisplay$ | ngrxPush }}</span>
-      </div>
-      <div>
-        <span class="label">Date:</span>
-        <span class="value">{{ date$ | ngrxPush }}</span>
-      </div>
-      <div>
-        <span class="label">NFT: </span>
-        <span class="value">
-          <ng-container *ngrxLet="nftToken$ as nftToken">
-            <ng-container *ngIf="nftToken !== null">
-              {{ nftToken.tokenType }}
-              <a href="{{ nftToken.explorerUrl }}">
-                {{ nftToken.tokenId }}
-              </a>
+      <ion-item lines="none" class="list-header">Details</ion-item>
+      <ion-list>
+        <ion-item (click)="openMap()">
+          <ion-label class="left-text">Location</ion-label>
+          <ion-label class="right-text">
+            {{ capture.locationDisplay$ | ngrxPush }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label class="left-text">Date</ion-label>
+          <ion-label class="right-text">
+            {{ date$ | ngrxPush }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label class="left-text">NFT</ion-label>
+          <ion-label class="right-text">
+            <ng-container *ngrxLet="nftToken$ as nftToken">
+              <ng-container *ngIf="nftToken !== null">
+                {{ nftToken.tokenType }}
+                <a href="{{ nftToken.explorerUrl }}">
+                  {{ nftToken.tokenId }}
+                </a>
+              </ng-container>
+              <ng-container *ngIf="nftToken === null">
+                Not yet minted
+              </ng-container>
             </ng-container>
-            <ng-container *ngIf="nftToken === null">
-              Not yet minted
-            </ng-container>
-          </ng-container>
-        </span>
-      </div>
-      <ng-container *ngIf="capture.id; else notRegistered">
-        <div (click)="openCertificate()">
-          <span class="label">NID: </span>
-          <span class="value">{{ capture.id }}</span>
-        </div>
-      </ng-container>
-      <ng-template #notRegistered>
-        <div>
-          <span class="label">NID: </span>
-          <span class="value">{{ 'notRegistered' | transloco }}</span>
-        </div>
-      </ng-template>
+          </ion-label>
+        </ion-item>
+
+        <ng-container *ngIf="capture.id; else notRegistered">
+          <ion-item (click)="openCertificate()">
+            <ion-label class="left-text">NID</ion-label>
+            <ion-label class="right-text">{{ capture.id }}</ion-label>
+          </ion-item>
+        </ng-container>
+        <ng-template #notRegistered>
+          <ion-item>
+            <ion-label class="left-text">NID</ion-label>
+            <ion-label class="right-text">
+              {{ 'notRegistered' | transloco }}
+            </ion-label>
+          </ion-item>
+        </ng-template>
+
+        <ion-item *ngIf="informationShowMore">
+          <ion-label class="left-text">Hash</ion-label>
+          <ion-label class="right-text">
+            {{ capture.hash }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="informationShowMore">
+          <ion-label class="left-text">MIME Type</ion-label>
+          <ion-label class="right-text">
+            {{ capture.mediaMimeType$ | ngrxPush }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="informationShowMore">
+          <ion-label class="left-text">Signature</ion-label>
+          <ion-label class="right-text">
+            {{ signature$ | ngrxPush }}
+          </ion-label>
+        </ion-item>
+      </ion-list>
     </section>
 
-    <section class="information" [ngClass]="{ hidden: !informationShowMore }">
-      <div>
-        <span class="label">Hash: </span>
-        <span class="value">{{ capture.hash }}</span>
-      </div>
-      <div>
-        <span class="label">MIME Type: </span>
-        <span class="value"> {{ capture.mediaMimeType$ | ngrxPush }} </span>
-      </div>
-      <div>
-        <span class="label">Signature: </span>
-        <span class="value">{{ signature$ | ngrxPush }}</span>
-      </div>
-    </section>
-
-    <ion-button class="no-spacing" fill="clear" (click)="toggleShowMore()">
+    <ion-button fill="clear" (click)="toggleShowMore()">
       {{ informationShowMore ? 'Show less' : 'Show more...' }}
     </ion-button>
   </ng-container>

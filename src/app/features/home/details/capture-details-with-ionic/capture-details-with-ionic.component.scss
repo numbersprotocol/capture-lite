@@ -9,12 +9,12 @@
 }
 
 @mixin capture-details-horizontal-margin {
-  margin-left: 46px;
-  margin-right: 46px;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 div.capture-details {
-  max-width: 80%;
+  max-width: 90%;
   margin: 0 auto 256px;
 
   app-media {
@@ -28,13 +28,17 @@ div.capture-details {
     margin-bottom: 32px;
     text-align: start;
 
+    @include capture-details-horizontal-margin;
+
     span {
       @include capture-details-text;
     }
   }
 
   section.profile {
-    margin-bottom: 46px;
+    margin-bottom: 24px;
+
+    @include capture-details-horizontal-margin;
 
     div {
       display: flex;
@@ -57,40 +61,24 @@ div.capture-details {
   }
 
   section.information {
-    div {
-      display: flex;
-      align-content: flex-start;
-      flex-wrap: wrap;
-
-      span.label {
-        @include capture-details-text;
-
-        color: white;
-        font-weight: 700;
-        margin-right: 4px;
-        overflow-wrap: normal;
-      }
-
-      span.value {
-        @include capture-details-text;
-
-        overflow-wrap: anywhere;
-      }
+    ion-item.list-header {
+      color: white;
+      opacity: 0.5;
     }
-  }
 
-  .hidden {
-    display: none;
-  }
+    ion-label.left-text {
+      flex: 2;
+      color: white;
+    }
 
-  ion-button.no-spacing {
-    --padding-start: 0;
-    --padding-end: 0;
-    --padding-top: 0;
-    --padding-bottom: 0;
-    --margin-start: 0;
-    --margin-end: 0;
-    --margin-top: 0;
-    --margin-bottom: 0;
+    ion-label.right-text {
+      flex: 4;
+      color: white;
+      opacity: 0.5;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }
