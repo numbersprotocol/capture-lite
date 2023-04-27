@@ -283,6 +283,7 @@
       "remove": "移除"
     },
     "error": {
+      "canNotPerfomEditAction": "暫時無法編輯。請確認連線穩定，或在資產註冊完成後再重試。",
       "canNotPerformMintAndShareAction": "該資產已鑄造完成，無法再次鑄造與分享",
       "canNotPerformOpenNetworkActions": "無法打開網絡動作頁面",
       "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",

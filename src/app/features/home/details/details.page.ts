@@ -481,7 +481,7 @@ export class DetailsPage {
           if (!showCaptureDetailsInIframe) {
             return this.errorService.toastError$(
               this.translocoService.translate(
-                'details.noNetworkConnectionCannotPerformAction'
+                'details.error.canNotPerfomEditAction'
               )
             );
           }
