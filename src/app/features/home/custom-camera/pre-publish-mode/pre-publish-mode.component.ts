@@ -42,7 +42,7 @@ export class PrePublishModeComponent {
 
   private editorImageState: any;
 
-  private toggleCropFeature = false;
+  private isCropFeatureEnabled = false;
 
   private toggleBlackAndWhiteFilter = true;
 
@@ -143,7 +143,7 @@ export class PrePublishModeComponent {
   }
 
   async toggleCropImageFeature() {
-    this.toggleCropFeature = !this.toggleCropFeature;
+    this.isCropFeatureEnabled = !this.isCropFeatureEnabled;
     this.pinturaEditorOptions$.next({
       ...getEditorDefaults({
         enableUtils: false,
@@ -152,7 +152,7 @@ export class PrePublishModeComponent {
         cropEnableZoomInput: false,
         cropEnableButtonFlipHorizontal: false,
         cropEnableButtonRotateLeft: false,
-        cropEnableImageSelection: this.toggleCropFeature,
+        cropEnableImageSelection: this.isCropFeatureEnabled,
         enableToolbar: false,
       }),
     });
