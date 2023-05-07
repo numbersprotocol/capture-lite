@@ -1,14 +1,26 @@
 <div class="capture-details">
   <ng-container *ngIf="detailedCapture$ | ngrxPush as capture">
-    <app-media
-      [src]="capture.mediaUrl$ | ngrxPush"
-      [mimeType]="capture.mediaMimeType$ | ngrxPush"
+    <div
+      class="capture-thumbnail"
       [routerLink]="[
         '/media-viewer',
         capture.mediaUrl$ | ngrxPush,
         { mimeType: capture.mediaMimeType$ | ngrxPush }
       ]"
-    ></app-media>
+    >
+      <img
+        *ngIf="thumbnailUrl$ | ngrxPush as thumbnailUrl"
+        loading="lazy"
+        decoding="async"
+        [src]="thumbnailUrl"
+      />
+      <mat-icon
+        *ngIf="isThumbnailMissing$ | ngrxPush"
+        class="is-thumbnail-missing"
+      >
+        broken_image
+      </mat-icon>
+    </div>
 
     <section class="caption">
       <ng-container *ngIf="captionOn">

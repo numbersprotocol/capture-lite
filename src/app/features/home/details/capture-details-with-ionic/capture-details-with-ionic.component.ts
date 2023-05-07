@@ -1,10 +1,19 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Browser } from '@capacitor/browser';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { EMPTY, ReplaySubject, combineLatest, defer } from 'rxjs';
-import { concatMap, first, map, shareReplay, switchMap } from 'rxjs/operators';
+import { EMPTY, ReplaySubject, combineLatest, defer, of } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  first,
+  map,
+  shareReplay,
+  switchMap,
+} from 'rxjs/operators';
+import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { getAssetProfileForNSE } from '../../../../utils/url';
 import { DetailedCapture } from '../information/session/information-session.service';
 
@@ -19,6 +28,19 @@ export class CaptureDetailsWithIonicComponent {
 
   readonly detailedCapture$ = new ReplaySubject<DetailedCapture>(1);
   readonly detailedCaptureTmpShareToken$ = new ReplaySubject<string>(1);
+  readonly thumbnailUrl$ = this.detailedCapture$.pipe(
+    switchMap(capture => capture.proof$),
+    isNonNullable(),
+    switchMap(proof => proof.thumbnailUrl$),
+    isNonNullable(),
+    map(url => {
+      if (url) return this.sanitizer.bypassSecurityTrustUrl(url);
+      return undefined;
+    }),
+    catchError(() => of(undefined)),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+  readonly isThumbnailMissing$ = this.thumbnailUrl$.pipe(map(url => !url));
   readonly nftToken$ = this.detailedCapture$.pipe(
     switchMap(c => c.nftToken$),
     shareReplay({ bufferSize: 1, refCount: true })
@@ -53,7 +75,8 @@ export class CaptureDetailsWithIonicComponent {
 
   constructor(
     private readonly translocoService: TranslocoService,
-    private readonly datePipe: DatePipe
+    private readonly datePipe: DatePipe,
+    private readonly sanitizer: DomSanitizer
   ) {}
 
   openMap() {
