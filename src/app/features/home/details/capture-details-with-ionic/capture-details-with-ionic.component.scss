@@ -67,11 +67,15 @@ div.capture-details {
     }
 
     ion-label.left-text {
+      @include capture-details-text;
+
       flex: 2;
       color: white;
     }
 
     ion-label.right-text {
+      @include capture-details-text;
+
       flex: 4;
       color: white;
       opacity: 0.5;
