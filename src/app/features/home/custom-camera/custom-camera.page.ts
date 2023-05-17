@@ -172,14 +172,25 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   // PreviewCamera Plugin methods
   private async onCapturePhotoFinished(data: CaptureResult): Promise<void> {
-    this.prePublish(data, 'image', CameraSource.Camera);
+    this.prepareMediaForPublishing(data, 'image', CameraSource.Camera);
   }
 
   private async onCaptureVideoFinished(data: CaptureResult): Promise<void> {
-    this.prePublish(data, 'video', CameraSource.Camera);
+    this.prepareMediaForPublishing(data, 'video', CameraSource.Camera);
   }
 
-  private async prePublish(
+  /**
+   * Prepare the captured media for publishing by setting the appropriate properties.
+   * In prepublishing phase if media is video it will show preview.
+   * If media is image user can also edit it:
+   * - resize, crop
+   * - change to black and white.
+   *
+   * @param data The captured data.
+   * @param type The media type, either 'image' or 'video'.
+   * @param source The source of the media capture, such as Camera or Photos.
+   */
+  private async prepareMediaForPublishing(
     data: CaptureResult,
     type: 'image' | 'video',
     source: CameraSource
@@ -259,7 +270,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   async pickImage() {
     try {
       const image = await this.customCameraService.pickImage();
-      await this.prePublish(
+      await this.prepareMediaForPublishing(
         { filePath: image.path },
         'image',
         CameraSource.Photos
