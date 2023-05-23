@@ -434,6 +434,11 @@
       "subtitle": "擁有自己的資產並建立鏈上去中心化證明"
     },
     "skip": "跳過",
-    "exploreCapture": "開始體驗 Capture"
+    "exploreCapture": "開始體驗 Capture",
+    "createCapturePopUp": {
+      "title": "建立 Captures",
+      "content": "按下下方的相機按鈕，建立您的第一個 Capture。Capture 是區塊鏈照片，擁有更開放和透明的來源證明。",
+      "close": "繼續"
+    }
   }
 }

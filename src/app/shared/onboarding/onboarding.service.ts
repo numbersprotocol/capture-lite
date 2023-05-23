@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { forkJoin } from 'rxjs';
-import { concatMap, first } from 'rxjs/operators';
+import { combineLatest, forkJoin } from 'rxjs';
+import { concatMap, first, map } from 'rxjs/operators';
 import { PreferenceManager } from '../preference-manager/preference-manager.service';
 import { VersionService } from '../version/version.service';
 
@@ -9,11 +9,29 @@ import { VersionService } from '../version/version.service';
 })
 export class OnboardingService {
   private static readonly UNKNOWN_ONBOARDING_TIMESTAMP = 0;
+  /**
+   * The delay (in milliseconds) before showing oboarding pop-ups to avoid overwhelming users
+   * with other app start prompts, such as onboarding slides or restore captures pop-ups.
+   */
+  static readonly ONBOARDING_POP_UP_DELAY = 1000;
 
   private readonly preferences =
     this.preferenceManager.getPreferences('OnboardingService');
 
   isNewLogin = false;
+
+  shouldEncourageUserToTakePhoto$ = combineLatest([
+    this.preferences.getBoolean$(
+      PrefKeys.HAS_PREFETCHED_DIA_BACKEND_ASSETS,
+      false
+    ),
+    this.preferences.getBoolean$(
+      PrefKeys.DID_ENCOURAGE_USER_TO_TAKE_PHOTO,
+      false
+    ),
+  ]).pipe(
+    map(([hasPrefetched, didEncourage]) => hasPrefetched && !didEncourage)
+  );
 
   constructor(
     private readonly preferenceManager: PreferenceManager,
@@ -148,6 +166,20 @@ export class OnboardingService {
       value
     );
   }
+
+  async didEncourageUserToTakePhoto() {
+    return this.preferences.getBoolean(
+      PrefKeys.DID_ENCOURAGE_USER_TO_TAKE_PHOTO,
+      false
+    );
+  }
+
+  async setDidEncourageUserToTakePhoto(value: boolean) {
+    return this.preferences.setBoolean(
+      PrefKeys.DID_ENCOURAGE_USER_TO_TAKE_PHOTO,
+      value
+    );
+  }
 }
 
 const enum PrefKeys {
@@ -161,4 +193,5 @@ const enum PrefKeys {
   HAS_SHOWN_TUTORIAL_VERSION = 'HAS_SHOWN_TUTORIAL_VERSION',
   HAS_CREATED_OR_IMPORTED_INTEGRITY_WALLET = 'HAS_CREATED_OR_IMPORTED_INTEGRITY_WALLET',
   HAS_SYNC_ASSET_WALLET_BALANCE = 'HAS_SYNC_ASSET_WALLET_BALANCE',
+  DID_ENCOURAGE_USER_TO_TAKE_PHOTO = 'DID_ENCOURAGE_USER_TO_TAKE_PHOTO',
 }

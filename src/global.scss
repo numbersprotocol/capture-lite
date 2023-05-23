@@ -134,6 +134,13 @@ body.dark .num-transfer-dialog mat-dialog-container {
   background-color: white;
 }
 
+body.dark .onboarding-pop-up-dialog mat-dialog-container {
+  background-color: white;
+  border-radius: 16px;
+  max-width: 364px;
+  // max-height: 438px;
+}
+
 body.dark .mat-card {
   background-color: var(--ion-color-light-shade);
 }
