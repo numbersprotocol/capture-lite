@@ -283,6 +283,7 @@
       "remove": "Remove"
     },
     "error": {
+      "canNotPerfomEditAction": "Temporarily unable to edit. Retry with stable connection or post-asset registration.",
       "canNotPerformMintAndShareAction": "This asset is minted so that can not perform Mint & Share action",
       "canNotPerformOpenNetworkActions": "Can not perform open Network Actions page",
       "transferOwnershipActionIsUnavailable": "Transfer ownership action is unavailable. Please try again later.",
