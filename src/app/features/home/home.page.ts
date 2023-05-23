@@ -424,11 +424,38 @@ export class HomePage {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  navigateToExploreTab() {
+  async navigateToExploreTab() {
     if (this.selectedTabIndex === this.exploreTabIndex) {
       // window.location.reload();
       this.iframeService.refreshExploreTabIframe();
     }
+    const didExplain = await this.onboardingService.didExplainExploreTab();
+    if (didExplain === false) {
+      await new Promise(resolve => {
+        setTimeout(resolve, OnboardingService.ONBOARDING_POP_UP_DELAY);
+      });
+      this.showExplainExploreTabPopUpDialog();
+      this.onboardingService.setDidExplainExploreTab(true);
+    }
+  }
+
+  private showExplainExploreTabPopUpDialog() {
+    const panelClass = 'onboarding-pop-up-dialog';
+    const data: OnboardingPopUpDialogData = {
+      title: this.translocoService.translate(
+        'onboarding.explainExploreTabPopUp.title'
+      ),
+      content: this.translocoService.translate(
+        'onboarding.explainExploreTabPopUp.content'
+      ),
+      close: this.translocoService.translate(
+        'onboarding.explainExploreTabPopUp.close'
+      ),
+    };
+    return this.dialog.open(OnboardingPopUpDialogComponent, {
+      panelClass,
+      data,
+    });
   }
 
   async navigateToInboxTab() {

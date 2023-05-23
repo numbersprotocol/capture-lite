@@ -180,6 +180,14 @@ export class OnboardingService {
       value
     );
   }
+
+  async didExplainExploreTab() {
+    return this.preferences.getBoolean(PrefKeys.DID_EXPLAIN_EXPLORE_TAB, false);
+  }
+
+  async setDidExplainExploreTab(value: boolean) {
+    return this.preferences.setBoolean(PrefKeys.DID_EXPLAIN_EXPLORE_TAB, value);
+  }
 }
 
 const enum PrefKeys {
@@ -194,4 +202,5 @@ const enum PrefKeys {
   HAS_CREATED_OR_IMPORTED_INTEGRITY_WALLET = 'HAS_CREATED_OR_IMPORTED_INTEGRITY_WALLET',
   HAS_SYNC_ASSET_WALLET_BALANCE = 'HAS_SYNC_ASSET_WALLET_BALANCE',
   DID_ENCOURAGE_USER_TO_TAKE_PHOTO = 'DID_ENCOURAGE_USER_TO_TAKE_PHOTO',
+  DID_EXPLAIN_EXPLORE_TAB = 'DID_EXPLAIN_EXPLORE_TAB',
 }
