@@ -5,7 +5,8 @@
     (click)="selectAvatar()"
   ></ion-img>
   <ng-template #placeholder>
-    <mat-icon (click)="selectAvatar()">add_a_photo</mat-icon>
+    <mat-icon *ngIf="editable" (click)="selectAvatar()"> add_a_photo </mat-icon>
+    <mat-icon *ngIf="!editable" class="view-only"> account_circle </mat-icon>
   </ng-template>
 
   <input

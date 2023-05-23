@@ -184,13 +184,15 @@ export class DiaBackendAuthService {
     username: string,
     email: string,
     password: string,
-    referralCodeOptional: string
+    referralCodeOptional: string,
+    device?: UserDevice
   ) {
-    const requestBody: any = {
+    const requestBody: Partial<SignUpRequestBody> = {
       username,
       email,
       password,
       referral_code: referralCodeOptional,
+      device,
     };
     if (referralCodeOptional === '') delete requestBody.referral_code;
 
@@ -230,6 +232,14 @@ export class DiaBackendAuthService {
         )
       )
     );
+  }
+
+  readDevice$() {
+    return combineLatest([
+      this.pushNotificationService.getToken$(),
+      defer(() => Device.getInfo()),
+      defer(() => Device.getId()),
+    ]);
   }
 
   private updateDevice$(headers: { [header: string]: string | string[] }) {
@@ -549,4 +559,23 @@ type GetAvatarResponse = UploadAvatarResponse;
 
 interface UploadAvatarResponse {
   readonly profile_picture_thumbnail?: string;
+}
+
+/**
+ * Represents the request body for https://dia-backend-dev.numbersprotocol.io/api/v3/redoc/#operation/auth_users_create
+ */
+export interface SignUpRequestBody {
+  username: string;
+  email: string;
+  password: string;
+  activation_method: 'skip' | 'legacy' | 'code';
+  language: 'en-us' | 'zh-tw';
+  referral_code: string;
+  device?: UserDevice;
+}
+
+export interface UserDevice {
+  fcm_token: string;
+  platform: 'ios' | 'android' | 'web';
+  device_identifier: string;
 }

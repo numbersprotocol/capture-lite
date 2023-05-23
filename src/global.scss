@@ -28,6 +28,13 @@
 /* Swiper */
 @import '~swiper/swiper.scss';
 
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('./assets/fonts/space-grotesk/SpaceGrotesk-Regular.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
 html {
   --ion-safe-area-top: env(safe-area-inset-top);
   --ion-safe-area-bottom: env(safe-area-inset-bottom);
@@ -125,6 +132,13 @@ body.dark .mat-dialog-container {
 
 body.dark .num-transfer-dialog mat-dialog-container {
   background-color: white;
+}
+
+body.dark .onboarding-pop-up-dialog mat-dialog-container {
+  background-color: white;
+  border-radius: 16px;
+  max-width: 364px;
+  // max-height: 438px;
 }
 
 body.dark .mat-card {

@@ -45,9 +45,17 @@
       "
     >
       <div class="slide">
-        <app-detailed-capture-iframe
+        <!-- Show capture details with Ionic when capture is not uploaded or the network is disconnected -->
+        <app-capture-details-with-ionic
+          *ngIf="(showCaptureDetailsInIframe$ | ngrxPush) === false"
           [detailedCapture]="detailedCapture"
-        ></app-detailed-capture-iframe>
+        ></app-capture-details-with-ionic>
+
+        <!-- Show capture details with an iframe when capture is uploaded and the network is connected -->
+        <app-capture-details-with-iframe
+          *ngIf="(showCaptureDetailsInIframe$ | ngrxPush) === true"
+          [detailedCapture]="detailedCapture"
+        ></app-capture-details-with-iframe>
       </div>
     </ng-template>
   </swiper>

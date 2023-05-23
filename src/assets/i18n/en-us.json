@@ -283,6 +283,7 @@
       "remove": "Remove"
     },
     "error": {
+      "canNotPerfomEditAction": "Temporarily unable to edit. Retry with stable connection or post-asset registration.",
       "canNotPerformMintAndShareAction": "This asset is minted so that can not perform Mint & Share action",
       "canNotPerformOpenNetworkActions": "Can not perform open Network Actions page",
       "transferOwnershipActionIsUnavailable": "Transfer ownership action is unavailable. Please try again later.",
@@ -298,6 +299,10 @@
     "confirmCapture": "Next",
     "max": "Max",
     "social": "Social",
+    "saveToDeviceGalleryAlert": {
+      "header": "Save to Device Gallery",
+      "messsage": "With \"Save to Device Gallery\", you can specify whether to save all or none of your captured pictures or videos to your device."
+    },
     "error": {
       "duplicateAsset": "The asset you are trying to upload already exists on the blockchain. Please try again or contact support."
     }
@@ -429,6 +434,16 @@
       "subtitle": "Own your assets and create on-chain, decentralized proof"
     },
     "skip": "Skip",
-    "exploreCapture": "Explore Capture"
+    "exploreCapture": "Explore Capture",
+    "createCapturePopUp": {
+      "title": "Create Captures",
+      "content": "Press the camera button below to create your first Capture. Captures are blockchain photos with a better, open and transparent provenance.",
+      "close": "Continue"
+    },
+    "explainExploreTabPopUp": {
+      "title": "Explore Captures!",
+      "content": "This page shows Captures taken by other creative users. Explore, collect, then Mint and Share your Captures with the world!",
+      "close": "Continue"
+    }
   }
 }

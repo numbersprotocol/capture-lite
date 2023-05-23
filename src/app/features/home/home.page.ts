@@ -16,6 +16,9 @@ import {
   catchError,
   concatMap,
   concatMapTo,
+  delay,
+  distinctUntilChanged,
+  filter,
   first,
   map,
   startWith,
@@ -37,6 +40,10 @@ import { ErrorService } from '../../shared/error/error.service';
 import { IframeService } from '../../shared/iframe/iframe.service';
 import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { MigrationService } from '../../shared/migration/service/migration.service';
+import {
+  OnboardingPopUpDialogComponent,
+  OnboardingPopUpDialogData,
+} from '../../shared/onboarding/onboarding-pop-up-dialog/onboarding-pop-up-dialog.component';
 import { OnboardingService } from '../../shared/onboarding/onboarding.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
 import { UserGuideService } from '../../shared/user-guide/user-guide.service';
@@ -106,6 +113,7 @@ export class HomePage {
   ) {
     this.downloadExpiredPostCaptures();
     this.overrideAndroidBackButtonBehavior();
+    this.encourageUserToTakePhoto();
   }
 
   ionViewDidEnter() {
@@ -161,6 +169,43 @@ export class HomePage {
       }
     }
     await this.onboardingService.setHasPrefetchedDiaBackendAssets(true);
+  }
+
+  /**
+   * Displays a modal encouraging user to take a photo, if necessary.
+   * Encourage pop up is delayed by 1 second to avoid overwhelming users
+   * with app start prompts, such as onboarding slides or restore captures popups.
+   */
+  async encourageUserToTakePhoto() {
+    this.onboardingService.shouldEncourageUserToTakePhoto$
+      .pipe(
+        filter(shouldEncourage => shouldEncourage === true),
+        distinctUntilChanged(),
+        delay(OnboardingService.ONBOARDING_POP_UP_DELAY),
+        map(() => this.showEncourageUserToTakePhotoPopUpDialog()),
+        tap(() => this.onboardingService.setDidEncourageUserToTakePhoto(true)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private showEncourageUserToTakePhotoPopUpDialog() {
+    const panelClass = 'onboarding-pop-up-dialog';
+    const data: OnboardingPopUpDialogData = {
+      title: this.translocoService.translate(
+        'onboarding.createCapturePopUp.title'
+      ),
+      content: this.translocoService.translate(
+        'onboarding.createCapturePopUp.content'
+      ),
+      close: this.translocoService.translate(
+        'onboarding.createCapturePopUp.close'
+      ),
+    };
+    return this.dialog.open(OnboardingPopUpDialogComponent, {
+      panelClass,
+      data,
+    });
   }
 
   private async promptAppUpdateIfAny() {
@@ -379,11 +424,38 @@ export class HomePage {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  navigateToExploreTab() {
+  async navigateToExploreTab() {
     if (this.selectedTabIndex === this.exploreTabIndex) {
       // window.location.reload();
       this.iframeService.refreshExploreTabIframe();
     }
+    const didExplain = await this.onboardingService.didExplainExploreTab();
+    if (didExplain === false) {
+      await new Promise(resolve => {
+        setTimeout(resolve, OnboardingService.ONBOARDING_POP_UP_DELAY);
+      });
+      this.showExplainExploreTabPopUpDialog();
+      this.onboardingService.setDidExplainExploreTab(true);
+    }
+  }
+
+  private showExplainExploreTabPopUpDialog() {
+    const panelClass = 'onboarding-pop-up-dialog';
+    const data: OnboardingPopUpDialogData = {
+      title: this.translocoService.translate(
+        'onboarding.explainExploreTabPopUp.title'
+      ),
+      content: this.translocoService.translate(
+        'onboarding.explainExploreTabPopUp.content'
+      ),
+      close: this.translocoService.translate(
+        'onboarding.explainExploreTabPopUp.close'
+      ),
+    };
+    return this.dialog.open(OnboardingPopUpDialogComponent, {
+      panelClass,
+      data,
+    });
   }
 
   async navigateToInboxTab() {

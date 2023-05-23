@@ -11,30 +11,21 @@ jobs:
     strategy:
       matrix:
         include:
-          - folder_name: storage-dev-bubble-qa
-            storage_base_url: NUMBERS_STORAGE_DEV_BASE_URL
-            storage_trusted_client_key: NUMBERS_STORAGE_DEV_TRUSTED_CLIENT_KEY
-            bubble_db_url: NUMBERS_BUBBLE_DB_QA_URL
-          - folder_name: storage-qa-bubble-qa
+          - folder_name: test-storage-backend
             storage_base_url: NUMBERS_STORAGE_QA_BASE_URL
             storage_trusted_client_key: NUMBERS_STORAGE_QA_TRUSTED_CLIENT_KEY
-            bubble_db_url: NUMBERS_BUBBLE_DB_QA_URL
-          - folder_name: storage-prod-bubble-qa
+            bubble_iframe_url: NUMBERS_BUBBLE_IFRAME_URL
+            bubble_db_url: NUMBERS_BUBBLE_DB_URL # FIXME: rename to networ_action_url: NUMBERS_NETWORK_ACTION_URL
+          - folder_name: test-bubble-iframe
             storage_base_url: NUMBERS_STORAGE_BASE_URL
             storage_trusted_client_key: NUMBERS_STORAGE_TRUSTED_CLIENT_KEY
-            bubble_db_url: NUMBERS_BUBBLE_DB_QA_URL
-          - folder_name: storage-dev-bubble-prod
-            storage_base_url: NUMBERS_STORAGE_DEV_BASE_URL
-            storage_trusted_client_key: NUMBERS_STORAGE_DEV_TRUSTED_CLIENT_KEY
-            bubble_db_url: NUMBERS_BUBBLE_DB_URL
-          - folder_name: storage-qa-bubble-prod
-            storage_base_url: NUMBERS_STORAGE_QA_BASE_URL
-            storage_trusted_client_key: NUMBERS_STORAGE_QA_TRUSTED_CLIENT_KEY
-            bubble_db_url: NUMBERS_BUBBLE_DB_URL
-          - folder_name: storage-prod-bubble-prod
+            bubble_iframe_url: NUMBERS_BUBBLE_IFRAME_URL_QA_RELEASE
+            bubble_db_url: NUMBERS_BUBBLE_DB_URL # FIXME: rename to networ_action_url: NUMBERS_NETWORK_ACTION_URL
+          - folder_name: test-network-actions
             storage_base_url: NUMBERS_STORAGE_BASE_URL
             storage_trusted_client_key: NUMBERS_STORAGE_TRUSTED_CLIENT_KEY
-            bubble_db_url: NUMBERS_BUBBLE_DB_URL
+            bubble_iframe_url: NUMBERS_BUBBLE_IFRAME_URL
+            bubble_db_url: NUMBERS_BUBBLE_DB_QA_URL # FIXME: rename to networ_action_url: NUMBERS_NETWORK_ACTION_QA_URL
     steps:
       - uses: actions/checkout@v2
 
@@ -53,9 +44,11 @@ jobs:
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets[matrix.storage_base_url] }}
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets[matrix.storage_trusted_client_key] }}
+          NUMBERS_BUBBLE_IFRAME_URL: ${{ secrets[matrix.bubble_iframe_url] }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets[matrix.bubble_db_url] }}
-          BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
-          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
+          BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL}} # FIXME: remove BUBBLE_API_URL, not used in capture app.
+          APPS_FLYER_DEV_KEY: '-' # Empty string prevents apps flyer SDK initialization for non-public flavors.
+          NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }} # same for public, non-public flavors.
           PIPEDREAM_DELETE_CAPTURE_ACCOUNT: ${{ secrets.PIPEDREAM_DELETE_CAPTURE_ACCOUNT }}
         run: |
           npm install -g @ionic/cli

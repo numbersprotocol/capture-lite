@@ -1,8 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { JoyrideModule } from 'ngx-joyride';
 import { SwiperModule } from 'swiper/angular';
 import { SharedModule } from '../../../shared/shared.module';
-import { DetailsIframeComponent } from './details-iframe/details-iframe.component';
+import { CaptureDetailsWithIframeComponent } from './capture-details-with-iframe/capture-details-with-iframe.component';
+import { CaptureDetailsWithIonicComponent } from './capture-details-with-ionic/capture-details-with-ionic.component';
 import { DetailsPageRoutingModule } from './details-routing.module';
 import { DetailsPage } from './details.page';
 
@@ -13,6 +15,11 @@ import { DetailsPage } from './details.page';
     SwiperModule,
     JoyrideModule.forChild(),
   ],
-  declarations: [DetailsPage, DetailsIframeComponent],
+  providers: [DatePipe],
+  declarations: [
+    DetailsPage,
+    CaptureDetailsWithIframeComponent,
+    CaptureDetailsWithIonicComponent,
+  ],
 })
 export class DetailsPageModule {}

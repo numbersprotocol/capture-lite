@@ -283,6 +283,7 @@
       "remove": "移除"
     },
     "error": {
+      "canNotPerfomEditAction": "暫時無法編輯。請確認連線穩定，或在資產註冊完成後再重試。",
       "canNotPerformMintAndShareAction": "該資產已鑄造完成，無法再次鑄造與分享",
       "canNotPerformOpenNetworkActions": "無法打開網絡動作頁面",
       "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",
@@ -298,6 +299,10 @@
     "confirmCapture": "下一步",
     "max": "最佳畫質",
     "social": "瀏覽畫質",
+    "saveToDeviceGalleryAlert": {
+      "header": "儲存至本機相簿",
+      "messsage": "使用“儲存到本機相簿”，您可以選擇將拍攝的圖片或影片保存到您的設備。"
+    },
     "error": {
       "duplicateAsset": "您嘗試上傳的資產已有上鏈紀錄，請重新嘗試，或聯繫開發團隊取得協助。"
     }
@@ -429,6 +434,16 @@
       "subtitle": "擁有自己的資產並建立鏈上去中心化證明"
     },
     "skip": "跳過",
-    "exploreCapture": "開始體驗 Capture"
+    "exploreCapture": "開始體驗 Capture",
+    "createCapturePopUp": {
+      "title": "建立 Captures",
+      "content": "按下下方的相機按鈕，建立您的第一個 Capture。Capture 是區塊鏈照片，擁有更開放和透明的來源證明。",
+      "close": "繼續"
+    },
+    "explainExploreTabPopUp": {
+      "title": "探索 Captures",
+      "content": "這個頁面顯示其他用戶拍攝的 Capture。探索、收集，然後創造你自己的 Capture，與世界分享吧！",
+      "close": "繼續"
+    }
   }
 }
