@@ -132,6 +132,11 @@ export class CustomCameraService {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  async requestPermissions() {
+    return PreviewCamera.requestPermissions();
+  }
+
   async startPreviewCamera() {
     return PreviewCamera.startPreview()
       .then(this.changeGlobalCSSBackgroundToTransparent.bind(this))
