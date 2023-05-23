@@ -24,15 +24,33 @@ export class AppsFlyerService {
 
   constructor(private readonly platform: Platform) {}
 
-  async initAppFlyerSDK() {
+  async initAppsFlyerSDK() {
     await this.platform.ready();
+
+    if (this.shouldInit === false) return;
+
     if (this.platform.is('ios')) {
       await AdvertisingId.requestTracking();
     }
 
-    if (this.isNativePlatform) {
-      AppsFlyer.initSDK(this.afConfig);
+    await AppsFlyer.initSDK(this.afConfig);
+  }
+
+  private get shouldInit() {
+    /**
+     * Do not init apps flyer SDK if dev key is not provided.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!APPS_FLYER_DEV_KEY) {
+      return false;
     }
+    /**
+     * Do not init apps flyer SDK in Web environment.
+     */
+    if (!this.isNativePlatform) {
+      return false;
+    }
+    return true;
   }
 
   async trackUserOpenedWalletsPage() {
@@ -44,6 +62,6 @@ export class AppsFlyerService {
   }
 
   private get isNativePlatform() {
-    return this.platform.is('ios') || this.platform.is('android');
+    return this.platform.is('hybrid');
   }
 }

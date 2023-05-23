@@ -23,6 +23,7 @@ import { MaterialModule } from './material/material.module';
 import { MediaRebrandedComponent } from './media/component/media-rebranded.component';
 import { MediaComponent } from './media/component/media.component';
 import { MigratingDialogComponent } from './migration/migrating-dialog/migrating-dialog.component';
+import { OnboardingPopUpDialogComponent } from './onboarding/onboarding-pop-up-dialog/onboarding-pop-up-dialog.component';
 import { OrderDetailDialogComponent } from './order-detail-dialog/order-detail-dialog.component';
 import { SafeResourceUrlPipe } from './pipes/safe-resource-url/safe-resource-url.pipe';
 import { StartsWithPipe } from './pipes/starts-with/starts-with.pipe';
@@ -41,6 +42,7 @@ const declarations = [
   ExportPrivateKeyModalComponent,
   OrderDetailDialogComponent,
   CaptureBackButtonComponent,
+  OnboardingPopUpDialogComponent,
 ];
 
 const imports = [

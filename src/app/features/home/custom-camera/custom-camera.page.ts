@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CameraSource } from '@capacitor/camera';
+import { CameraPlugin, CameraSource } from '@capacitor/camera';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import {
   CaptureResult,
@@ -21,11 +22,16 @@ import {
   tap,
   throttleTime,
 } from 'rxjs/operators';
+import { CAMERA_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
+import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import { GoProBluetoothService } from '../../settings/go-pro/services/go-pro-bluetooth.service';
 import { MAX_RECORD_TIME_IN_MILLISECONDS } from './custom-camera';
-import { CustomCameraService } from './custom-camera.service';
+import {
+  CustomCameraService,
+  SaveToCameraRollDecision,
+} from './custom-camera.service';
 
 type CameraMode = 'story' | 'photo' | 'gopro' | 'pre-publish';
 type CameraQuality = 'low' | 'hq';
@@ -95,7 +101,11 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly errorService: ErrorService,
     private readonly userGuideService: UserGuideService,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly confirmAlert: ConfirmAlert,
+    @Inject(CAMERA_PLUGIN)
+    private readonly cameraPlugin: CameraPlugin,
+    private readonly translocoService: TranslocoService
   ) {}
 
   ngOnInit() {
@@ -289,14 +299,50 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     }
   }
 
-  async confirmCurrentCapture() {
-    if (this.curCaptureFilePath && this.curCaptureType) {
+  async confirmCurrentCapture(): Promise<void> {
+    try {
+      const shouldAskSaveToCameraRoll =
+        await this.customCameraService.shouldAskSaveToCameraRoll();
+      if (shouldAskSaveToCameraRoll === false) {
+        await this.uploadCurrentCapture();
+        return;
+      }
+
+      const alertConfirmed = await this.showSaveToCameraRollConfirmAlert();
+      const shouldSave = alertConfirmed
+        ? SaveToCameraRollDecision.YES
+        : SaveToCameraRollDecision.NO;
+      await this.customCameraService.setShouldSaveToCameraRoll(shouldSave);
+
+      await this.uploadCurrentCapture();
+    } catch (error: unknown) {
+      this.errorService.toastError$(error).subscribe();
+    }
+  }
+
+  private async showSaveToCameraRollConfirmAlert(): Promise<boolean> {
+    const header = this.translocoService.translate(
+      'customCamera.saveToDeviceGalleryAlert.header'
+    );
+    const message = this.translocoService.translate(
+      'customCamera.saveToDeviceGalleryAlert.messsage'
+    );
+    return await this.confirmAlert.present({ header, message });
+  }
+
+  private async uploadCurrentCapture() {
+    try {
+      if (!this.curCaptureFilePath || !this.curCaptureType) return;
+
       this.customCameraService.uploadToCapture(
         this.curCaptureFilePath,
         this.curCaptureType,
         this.curCaptureCameraSource
       );
+
       this.leaveCustomCamera();
+    } catch (error: unknown) {
+      this.errorService.toastError$(error).pipe(take(1)).subscribe();
     }
   }
 

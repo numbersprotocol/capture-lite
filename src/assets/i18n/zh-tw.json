@@ -283,6 +283,7 @@
       "remove": "移除"
     },
     "error": {
+      "canNotPerfomEditAction": "暫時無法編輯。請確認連線穩定，或在資產註冊完成後再重試。",
       "canNotPerformMintAndShareAction": "該資產已鑄造完成，無法再次鑄造與分享",
       "canNotPerformOpenNetworkActions": "無法打開網絡動作頁面",
       "transferOwnershipActionIsUnavailable": "暫時無法轉換所有權，請稍後再試。",
@@ -298,6 +299,10 @@
     "confirmCapture": "下一步",
     "max": "最佳畫質",
     "social": "瀏覽畫質",
+    "saveToDeviceGalleryAlert": {
+      "header": "儲存至本機相簿",
+      "messsage": "使用“儲存到本機相簿”，您可以選擇將拍攝的圖片或影片保存到您的設備。"
+    },
     "error": {
       "duplicateAsset": "您嘗試上傳的資產已有上鏈紀錄，請重新嘗試，或聯繫開發團隊取得協助。"
     }

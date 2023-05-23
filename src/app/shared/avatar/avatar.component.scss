@@ -7,7 +7,7 @@
   justify-content: center;
   object-fit: cover;
   object-position: center;
-  background-color: #56ccf2;
+  background-color: white;
   border-radius: 50%;
 }
 
@@ -17,4 +17,8 @@ input {
 
 mat-icon {
   color: black;
+}
+
+mat-icon.view-only {
+  transform: scale(1.8);
 }

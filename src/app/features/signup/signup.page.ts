@@ -6,7 +6,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { combineLatest, defer } from 'rxjs';
-import { catchError, concatMapTo, first, tap } from 'rxjs/operators';
+import { catchError, concatMap, concatMapTo, first, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../shared/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../shared/error/error.service';
@@ -192,72 +192,78 @@ export class SignupPage {
   }
 
   onSubmit() {
-    const action$ = this.diaBackendAuthService
-      .createUser$(
-        this.model.username,
-        this.model.email,
-        this.model.password,
-        this.model.referralCodeOptional
-      )
-      .pipe(
-        first(),
-        concatMapTo(
-          defer(() =>
-            this.router.navigate(
-              [
-                '/login',
-                { email: this.model.email, password: this.model.password },
-              ],
-              { replaceUrl: true }
-            )
+    const device$ = this.diaBackendAuthService.readDevice$();
+    const createUser$ = device$.pipe(
+      concatMap(([fcmToken, deviceInfo, deviceId]) => {
+        return this.diaBackendAuthService.createUser$(
+          this.model.username,
+          this.model.email,
+          this.model.password,
+          this.model.referralCodeOptional,
+          {
+            fcm_token: fcmToken,
+            platform: deviceInfo.platform,
+            device_identifier: deviceId.uuid,
+          }
+        );
+      })
+    );
+    const action$ = createUser$.pipe(
+      first(),
+      concatMapTo(
+        defer(() =>
+          this.router.navigate(
+            [
+              '/login',
+              { email: this.model.email, password: this.model.password },
+            ],
+            { replaceUrl: true }
           )
-        ),
-        catchError((err: unknown) => {
-          if (
-            err instanceof HttpErrorResponse &&
-            err.error.error?.type === 'duplicate_email'
-          ) {
-            return this.errorService.toastError$(
-              this.translocoService.translate(
-                'error.diaBackend.duplicate_email'
-              )
-            );
-          }
-          if (
-            err instanceof HttpErrorResponse &&
-            err.error.error?.details?.username?.length > 0
-          ) {
-            return this.errorService.toastError$(
-              this.translocoService.translate(
-                'error.diaBackend.duplicate_username'
-              )
-            );
-          }
-          if (
-            err instanceof HttpErrorResponse &&
-            err.error.error?.type === 'invalid_referral_code'
-          ) {
-            return this.errorService.toastError$(
-              this.translocoService.translate(
-                'error.diaBackend.invalid_referral_code'
-              )
-            );
-          }
-          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-          if (err instanceof HttpErrorResponse && err.status === 401)
-            return this.errorService.toastError$(
-              this.translocoService.translate(
-                'error.diaBackend.untrusted_client'
-              )
-            );
-          return this.errorService.toastError$(err);
-        })
-      );
-
+        )
+      ),
+      catchError((err: unknown) => {
+        return this.handleOnSubmitError(err);
+      })
+    );
     this.blockingActionService
       .run$(action$)
       .pipe(untilDestroyed(this))
       .subscribe();
+  }
+
+  private handleOnSubmitError(err: unknown) {
+    if (
+      err instanceof HttpErrorResponse &&
+      err.error.error?.type === 'duplicate_email'
+    ) {
+      return this.errorService.toastError$(
+        this.translocoService.translate('error.diaBackend.duplicate_email')
+      );
+    }
+    if (
+      err instanceof HttpErrorResponse &&
+      err.error.error?.details?.username?.length > 0
+    ) {
+      return this.errorService.toastError$(
+        this.translocoService.translate('error.diaBackend.duplicate_username')
+      );
+    }
+    if (
+      err instanceof HttpErrorResponse &&
+      err.error.error?.type === 'invalid_referral_code'
+    ) {
+      return this.errorService.toastError$(
+        this.translocoService.translate(
+          'error.diaBackend.invalid_referral_code'
+        )
+      );
+    }
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    if (err instanceof HttpErrorResponse && err.status === 401)
+      return this.errorService.toastError$(
+        this.translocoService.translate('error.diaBackend.untrusted_client')
+      );
+    return this.errorService.toastError$(err);
   }
 }
 

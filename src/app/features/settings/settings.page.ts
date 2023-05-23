@@ -28,6 +28,10 @@ import { MediaStore } from '../../shared/media/media-store/media-store.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
 import { VersionService } from '../../shared/version/version.service';
 import { reloadApp } from '../../utils/miscellaneous';
+import {
+  CustomCameraService,
+  SaveToCameraRollDecision,
+} from '../home/custom-camera/custom-camera.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -44,6 +48,8 @@ export class SettingsPage {
     this.capacitorFactsProvider.isDeviceInfoCollectionEnabled$;
   readonly isLocationInfoCollectionEnabled$ =
     this.capacitorFactsProvider.isGeolocationInfoCollectionEnabled$;
+  readonly isSaveToCameraRollEnabled$ =
+    this.customCameraService.isSaveToCameraRollEnabled$;
 
   readonly email$ = this.diaBackendAuthService.email$;
   readonly emailVerified$ = this.diaBackendAuthService.emailVerified$;
@@ -88,7 +94,8 @@ export class SettingsPage {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly capAppWebCryptoApiSignatureProvider: CaptureAppWebCryptoApiSignatureProvider,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
+    private readonly customCameraService: CustomCameraService
   ) {}
 
   ionViewDidEnter() {
@@ -121,6 +128,14 @@ export class SettingsPage {
   async setLocationInfoCollection(event: any) {
     const enable = Boolean(event.detail.checked);
     return this.capacitorFactsProvider.setGeolocationInfoCollection(enable);
+  }
+
+  async setShouldSaveToCameraRoll(event: any) {
+    const enable = Boolean(event.detail.checked);
+    const shouldSave = enable
+      ? SaveToCameraRollDecision.YES
+      : SaveToCameraRollDecision.NO;
+    return this.customCameraService.setShouldSaveToCameraRoll(shouldSave);
   }
 
   emailVerification() {
