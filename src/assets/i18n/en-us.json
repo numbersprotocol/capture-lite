@@ -299,6 +299,10 @@
     "confirmCapture": "Next",
     "max": "Max",
     "social": "Social",
+    "saveToDeviceGalleryAlert": {
+      "header": "Save to Device Gallery",
+      "messsage": "With \"Save to Device Gallery\", you can specify whether to save all or none of your captured pictures or videos to your device."
+    },
     "error": {
       "duplicateAsset": "The asset you are trying to upload already exists on the blockchain. Please try again or contact support."
     }
