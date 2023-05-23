@@ -46,7 +46,7 @@ export class AppComponent {
     diaBackendNotificationService: DiaBackendNotificationService,
     uploadService: DiaBackendAssetUploadingService
   ) {
-    appsFlyerService.initAppFlyerSDK();
+    appsFlyerService.initAppsFlyerSDK();
     notificationService.requestPermission();
     pushNotificationService.register();
     langaugeService.initialize();
