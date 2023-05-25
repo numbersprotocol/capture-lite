@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.79.0] - 2023-05-25
+
+### Added
+
+1. Feat add status bar in ionic page between image and caption (#2810)
+
+### Fixed
+
+1. Refactor pre publish component (#2809)
+1. Fix issue flip camera for oppo and other devices if any (#2811)
+1. Fix issue error message when without device permission (#2812)
+
+## [0.78.0] - 2023-04-24
+
+### Added
+
+1. Feat capture app flavours should be built automatically by CI/CD (#2731)
+1. Feat set device information when user signing up (#2732)
+1. Feat should be able to view photos even if the registration fails (#2733)
+1. Feat asset saved to device camera roll (#2734)
+1. Feat when user first open capture app pop up to encourage users to take a photo (#2735)
+
 ## [0.77.2] - 2023-04-18
 
 ### Fixed
@@ -2098,7 +2120,10 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.77.1...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.79.0...HEAD
+[0.79.0]: https://github.com/numbersprotocol/capture-lite/compare/0.78.0...0.79.0
+[0.78.0]: https://github.com/numbersprotocol/capture-lite/compare/0.77.2...0.78.0
+[0.77.2]: https://github.com/numbersprotocol/capture-lite/compare/0.77.1...0.77.2
 [0.77.1]: https://github.com/numbersprotocol/capture-lite/compare/0.77.0...0.77.1
 [0.77.0]: https://github.com/numbersprotocol/capture-lite/compare/0.75.2...0.77.0
 [0.75.2]: https://github.com/numbersprotocol/capture-lite/compare/0.75.1...0.75.2

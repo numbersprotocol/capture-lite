@@ -82,5 +82,9 @@
 	{
 		"pkg": "capacitor-blob-writer",
 		"classpath": "com.equimaps.capacitorblobwriter.BlobWriter"
+	},
+	{
+		"pkg": "capacitor-native-settings",
+		"classpath": "nl.raphael.settings.NativeSettingsPlugin"
 	}
 ]

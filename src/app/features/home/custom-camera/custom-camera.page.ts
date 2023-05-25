@@ -10,6 +10,11 @@ import {
   CustomOrientation,
   PreviewCamera,
 } from '@numbersprotocol/preview-camera';
+import {
+  AndroidSettings,
+  IOSSettings,
+  NativeSettings,
+} from 'capacitor-native-settings';
 import { BehaviorSubject, Subscription, combineLatest, interval } from 'rxjs';
 import {
   finalize,
@@ -200,9 +205,51 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   async startPreviewCamera() {
+    if ((await this.canStartPreviewCamera()) === false) {
+      return;
+    }
+
     await this.customCameraService.startPreviewCamera();
     await this.customCameraService.setCameraQuality(this.cameraQuality$.value);
     await this.syncCameraState();
+  }
+
+  async canStartPreviewCamera() {
+    try {
+      const permissions = await this.customCameraService.requestPermissions();
+      if (
+        permissions.camera !== 'granted' ||
+        permissions.microphone !== 'granted'
+      ) {
+        const confirmed = await this.confirmAlert.present({
+          header: this.translocoService.translate(
+            'customCamera.requestCameraPermissions.title'
+          ),
+          message: this.translocoService.translate(
+            'customCamera.requestCameraPermissions.explanation'
+          ),
+          confirmButtonText: this.translocoService.translate(
+            'customCamera.requestCameraPermissions.openSettings'
+          ),
+        });
+        if (confirmed) {
+          NativeSettings.open({
+            optionAndroid: AndroidSettings.ApplicationDetails,
+            optionIOS: IOSSettings.App,
+          });
+        }
+        this.leaveCustomCamera();
+        return false;
+      }
+      return true;
+    } catch (_error: unknown) {
+      // FIXME: report _error to crashlytics.
+      const errMsg = this.translocoService.translate(
+        'customCamera.error.canNotStartCamera'
+      );
+      this.errorService.toastError$(errMsg).subscribe();
+      return false;
+    }
   }
 
   stopPreviewCamera() {
