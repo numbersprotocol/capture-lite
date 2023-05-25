@@ -303,8 +303,14 @@
       "header": "Save to Device Gallery",
       "messsage": "With \"Save to Device Gallery\", you can specify whether to save all or none of your captured pictures or videos to your device."
     },
+    "requestCameraPermissions": {
+      "title": "Allow camera access in device settings",
+      "explanation": "To use the camera, please grant permission for the camera and microphone. The microphone permission is necessary to record videos with sound.",
+      "openSettings": "Open Settings"
+    },
     "error": {
-      "duplicateAsset": "The asset you are trying to upload already exists on the blockchain. Please try again or contact support."
+      "duplicateAsset": "The asset you are trying to upload already exists on the blockchain. Please try again or contact support.",
+      "canNotStartCamera": "Sorry, we encountered an issue while starting the camera. We apologize for the inconvenience. If the problem persists, please report the issue to our developers through the 'Contact Developers' section on the app's support page. Your feedback will help us improve the app and resolve the issue faster. Thank you for your understanding and cooperation."
     }
   },
   "wallets": {

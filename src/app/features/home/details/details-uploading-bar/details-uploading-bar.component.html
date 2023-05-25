@@ -1,0 +1,7 @@
+<ng-container *ngIf="(networkConnected$ | ngrxPush) === false">
+  <mat-toolbar color="background" class="thin-upload-bar" id="thin-upload-bar">
+    <span class="text">
+      {{ 'message.networkNotConnected' | transloco }}
+    </span>
+  </mat-toolbar>
+</ng-container>

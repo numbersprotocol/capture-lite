@@ -15,12 +15,11 @@
 
 div.capture-details {
   max-width: 90%;
-  margin: 0 auto 256px;
+  margin: 8px auto;
 
   .capture-thumbnail {
     border-radius: 20px;
     overflow: hidden;
-    aspect-ratio: 1;
     position: relative;
 
     img {
@@ -104,4 +103,8 @@ div.capture-details {
       text-overflow: ellipsis;
     }
   }
+}
+
+.bottom-spacer {
+  height: 256px;
 }

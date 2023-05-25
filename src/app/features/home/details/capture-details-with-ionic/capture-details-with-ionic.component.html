@@ -1,5 +1,5 @@
-<div class="capture-details">
-  <ng-container *ngIf="detailedCapture$ | ngrxPush as capture">
+<ng-container *ngIf="detailedCapture$ | ngrxPush as capture">
+  <div class="capture-details">
     <div
       class="capture-thumbnail"
       [routerLink]="[
@@ -21,7 +21,11 @@
         broken_image
       </mat-icon>
     </div>
+  </div>
 
+  <app-details-uploading-bar></app-details-uploading-bar>
+
+  <div class="capture-details">
     <section class="caption">
       <ng-container *ngIf="captionOn">
         <ng-container *ngrxLet="capture.caption$ as caption">
@@ -117,5 +121,7 @@
     <ion-button fill="clear" (click)="toggleShowMore()" mode="md">
       {{ informationShowMore ? 'Show less' : 'Show more...' }}
     </ion-button>
-  </ng-container>
-</div>
+  </div>
+
+  <div class="bottom-spacer"></div>
+</ng-container>
