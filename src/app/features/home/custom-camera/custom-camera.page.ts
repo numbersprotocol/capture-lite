@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { CameraPlugin, CameraSource } from '@capacitor/camera';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
+import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -47,6 +48,7 @@ import {
 
 type CameraMode = 'story' | 'photo' | 'gopro' | 'pre-publish';
 type CameraQuality = 'low' | 'hq';
+type MediaType = 'image' | 'video';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -82,7 +84,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   curCaptureFilePath?: string;
   curCaptureMimeType?: 'image/jpeg' | 'video/mp4';
-  curCaptureType?: 'image' | 'video' = 'image';
+  curCaptureType?: MediaType = 'image';
   curCaptureSrc?: string;
 
   isFlashOn$ = new BehaviorSubject(false);
@@ -187,7 +189,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   private async prePublish(
     data: CaptureResult,
-    type: 'image' | 'video',
+    type: MediaType,
     source: CameraSource
   ) {
     if (data.errorMessage) {
@@ -278,6 +280,40 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     }
   }
 
+  async pickMedia() {
+    try {
+      const result = await FilePicker.pickMedia();
+      const file = result.files[0];
+
+      if (file.path === undefined) return;
+
+      const filePath = file.path;
+      let fileType: MediaType = 'image';
+
+      if (file.mimeType.startsWith('video/')) {
+        fileType = 'video';
+      } else {
+        throw 'Unknow media type';
+      }
+
+      await this.prepareMediaForPublishing(
+        { filePath },
+        fileType,
+        CameraSource.Photos
+      );
+
+      // Handle output if necessary
+    } catch (error) {
+      /**
+       * Error mighght happen if user didn't pick photo or video,
+       * we could handle such error quietly without notifying user.
+       *
+       * However other errors might occur, these error should be
+       * reported to cray reporting system (crayshlyitcs etc)
+       */
+    }
+  }
+
   async flipCamera() {
     await this.customCameraService.flipCamera();
     await this.syncCameraState();
@@ -355,7 +391,9 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   async confirmCurrentCapture(): Promise<void> {
     try {
       const shouldAskSaveToCameraRoll =
-        await this.customCameraService.shouldAskSaveToCameraRoll();
+        this.curCaptureCameraSource !== CameraSource.Photos &&
+        (await this.customCameraService.shouldAskSaveToCameraRoll());
+
       if (shouldAskSaveToCameraRoll === false) {
         await this.uploadCurrentCapture();
         return;

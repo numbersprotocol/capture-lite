@@ -14,7 +14,6 @@ import { FILESYSTEM_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-p
 import { CaptureService } from '../../../shared/capture/capture.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { PreferenceManager } from '../../../shared/preference-manager/preference-manager.service';
-import { blobToBase64 } from '../../../utils/encoding/encoding';
 import {
   CustomCameraMediaItem,
   CustomCameraMediaType,
@@ -100,14 +99,14 @@ export class CustomCameraService {
     type: CustomCameraMediaType,
     source: CameraSource
   ) {
-    const itemToUpload = this.mediaItemFromFilePath(filePath, type);
-
     try {
-      const itemBlob = await this.httpClient
-        .get(itemToUpload.src, { responseType: 'blob' })
-        .toPromise();
-      const base64 = await blobToBase64(itemBlob);
-      const mimeType = itemToUpload.mimeType;
+      const readFileResult = await this.filesystemPlugin.readFile({
+        path: filePath,
+      });
+      const base64 = readFileResult.data;
+
+      const mimeType = type === 'image' ? 'image/jpeg' : 'video/mp4';
+
       await this.captureService.capture({ base64, mimeType, source });
 
       const should = await this.getShouldSaveToCameraRoll();
@@ -115,7 +114,9 @@ export class CustomCameraService {
         await this.saveCaptureToUserDevice(filePath);
       }
 
-      await this.removeFile(filePath);
+      if (source === CameraSource.Camera) {
+        await this.removeFile(filePath);
+      }
     } catch (error: unknown) {
       await this.handleUploadToCaptureError(error);
     }
