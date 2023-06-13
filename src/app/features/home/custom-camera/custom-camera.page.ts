@@ -553,7 +553,10 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   private removeCurrentCapture() {
-    this.customCameraService.removeFile(this.curCaptureFilePath);
+    this.customCameraService.removeFile(
+      this.curCaptureFilePath,
+      this.curCaptureCameraSource
+    );
     this.curCaptureFilePath = undefined;
     this.curCaptureMimeType = undefined;
     this.curCaptureSrc = undefined;

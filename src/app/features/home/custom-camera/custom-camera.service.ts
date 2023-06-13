@@ -109,14 +109,16 @@ export class CustomCameraService {
 
       await this.captureService.capture({ base64, mimeType, source });
 
-      const should = await this.getShouldSaveToCameraRoll();
-      if (should === SaveToCameraRollDecision.YES) {
+      const shouldSaveFileToUserDevice =
+        (await this.getShouldSaveToCameraRoll()) ===
+        SaveToCameraRollDecision.YES;
+      const fileNotFromGallery = source !== CameraSource.Photos;
+
+      if (shouldSaveFileToUserDevice && fileNotFromGallery) {
         await this.saveCaptureToUserDevice(filePath);
       }
 
-      if (source === CameraSource.Camera) {
-        await this.removeFile(filePath);
-      }
+      await this.removeFile(filePath, source);
     } catch (error: unknown) {
       await this.handleUploadToCaptureError(error);
     }
@@ -173,8 +175,9 @@ export class CustomCameraService {
     return PreviewCamera.stopRecord().catch(() => ({}));
   }
 
-  async removeFile(filePath: string | undefined) {
+  async removeFile(filePath: string | undefined, source: CameraSource) {
     if (!filePath) return;
+    if (source === CameraSource.Photos) return; // Do not delete files picked from gallery
     await this.filesystemPlugin.deleteFile({ path: filePath });
   }
 
