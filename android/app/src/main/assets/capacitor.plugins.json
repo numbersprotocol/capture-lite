@@ -68,6 +68,10 @@
 		"classpath": "com.capacitorjs.plugins.storage.StoragePlugin"
 	},
 	{
+		"pkg": "@capawesome/capacitor-file-picker",
+		"classpath": "io.capawesome.capacitorjs.plugins.filepicker.FilePickerPlugin"
+	},
+	{
 		"pkg": "@numbersprotocol/preview-camera",
 		"classpath": "io.numbersprotocol.capturelite.plugins.previewcamera.PreviewCameraPlugin"
 	},
