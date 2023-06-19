@@ -22,7 +22,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
-import SwiperCore, { Swiper, Virtual } from 'swiper/core';
+import SwiperCore, { Swiper, Virtual } from 'swiper';
 import { ActionsService } from '../../../shared/actions/service/actions.service';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
