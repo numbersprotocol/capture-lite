@@ -1,19 +1,14 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CameraPlugin, CameraSource } from '@capacitor/camera';
-import { Capacitor, PluginListenerHandle } from '@capacitor/core';
+import { CameraSource } from '@capacitor/camera';
+import { Capacitor } from '@capacitor/core';
 import { FilePicker } from '@capawesome/capacitor-file-picker';
-import { NavController, Platform } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import {
-  CaptureResult,
+  CaptureErrorResult,
+  CaptureSuccessResult,
   CustomOrientation,
   PreviewCamera,
 } from '@numbersprotocol/preview-camera';
@@ -35,12 +30,14 @@ import {
   throttleTime,
 } from 'rxjs/operators';
 import { AndroidBackButtonService } from '../../../shared/android-back-button/android-back-button.service';
-import { CAMERA_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import { GoProBluetoothService } from '../../settings/go-pro/services/go-pro-bluetooth.service';
-import { MAX_RECORD_TIME_IN_MILLISECONDS } from './custom-camera';
+import {
+  MAX_RECORD_TIME_IN_MILLISECONDS,
+  toCustomCameraMimeType,
+} from './custom-camera';
 import {
   CustomCameraService,
   SaveToCameraRollDecision,
@@ -57,9 +54,6 @@ type MediaType = 'image' | 'video';
   styleUrls: ['./custom-camera.page.scss'],
 })
 export class CustomCameraPage implements OnInit, OnDestroy {
-  private captureVideoFinishedListener?: PluginListenerHandle;
-  private capturePhotoFinishedListener?: PluginListenerHandle;
-
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   maxRecordTimeInSeconds = MAX_RECORD_TIME_IN_MILLISECONDS / 1000;
   maxRecordTimeInMilliseconds = MAX_RECORD_TIME_IN_MILLISECONDS;
@@ -82,6 +76,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     })
   );
 
+  curCaptureFileSize?: number;
   curCaptureFilePath?: string;
   curCaptureMimeType?: 'image/jpeg' | 'video/mp4';
   curCaptureType?: MediaType = 'image';
@@ -113,10 +108,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly goProBluetoothService: GoProBluetoothService,
     private readonly errorService: ErrorService,
     private readonly userGuideService: UserGuideService,
-    private readonly platform: Platform,
     private readonly confirmAlert: ConfirmAlert,
-    @Inject(CAMERA_PLUGIN)
-    private readonly cameraPlugin: CameraPlugin,
     private readonly translocoService: TranslocoService,
     private readonly ref: ChangeDetectorRef,
     private readonly androidBackButtonService: AndroidBackButtonService,
@@ -125,22 +117,51 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.debugOnlyPreventContextMenuFromLongPressContextMenu();
+    this.addPreviewCameraListeners();
+    this.startPreviewCamera();
+  }
 
-    PreviewCamera.addListener(
-      'capturePhotoFinished',
-      this.onCapturePhotoFinished.bind(this)
-    ).then((listener: any) => (this.capturePhotoFinishedListener = listener));
+  private addPreviewCameraListeners() {
+    PreviewCamera.addListener('captureSuccessResult', result => {
+      this.handleCaptureSuccessResult(result);
+    });
 
-    PreviewCamera.addListener(
-      'captureVideoFinished',
-      this.onCaptureVideoFinished.bind(this)
-    ).then((listener: any) => (this.captureVideoFinishedListener = listener));
+    PreviewCamera.addListener('captureErrorResult', result => {
+      this.handleCaptureErrorResult(result);
+    });
 
     PreviewCamera.addListener('accelerometerOrientation', ({ orientation }) => {
       this.customOrientation$.next(orientation);
     });
+  }
 
-    this.startPreviewCamera();
+  private handleCaptureSuccessResult(result: CaptureSuccessResult) {
+    this.prepareForPublishing(result, CameraSource.Camera);
+  }
+
+  private handleCaptureErrorResult(result: CaptureErrorResult) {
+    this.errorService.toastError$(result.errorMessage).subscribe();
+  }
+
+  private prepareForPublishing(
+    result: CaptureSuccessResult,
+    source: CameraSource
+  ) {
+    this.curCaptureFileSize = result.size;
+    this.curCaptureFilePath = result.path;
+    this.curCaptureMimeType = result.mimeType;
+    this.curCaptureType = result.mimeType === 'image/jpeg' ? 'image' : 'video';
+    this.curCaptureSrc = Capacitor.convertFileSrc(result.path);
+    this.curCaptureCameraSource = source;
+    this.lastCaptureMode = this.mode$.value;
+    this.mode$.next('pre-publish');
+
+    this.stopPreviewCamera();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private async removePreviewCameraListeners() {
+    await PreviewCamera.removeAllListeners();
   }
 
   async ionViewDidEnter() {
@@ -172,44 +193,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.capturePhotoFinishedListener?.remove();
-    this.captureVideoFinishedListener?.remove();
-    PreviewCamera.removeAllListeners();
+    this.removePreviewCameraListeners();
     this.stopPreviewCamera();
-  }
-
-  // PreviewCamera Plugin methods
-  private async onCapturePhotoFinished(data: CaptureResult): Promise<void> {
-    this.prePublish(data, 'image', CameraSource.Camera);
-  }
-
-  private async onCaptureVideoFinished(data: CaptureResult): Promise<void> {
-    this.prePublish(data, 'video', CameraSource.Camera);
-  }
-
-  private async prePublish(
-    data: CaptureResult,
-    type: MediaType,
-    source: CameraSource
-  ) {
-    if (data.errorMessage) {
-      await this.errorService.toastError$(data.errorMessage).toPromise();
-    } else if (data.filePath) {
-      const filePath = data.filePath;
-
-      let mimeType: 'image/jpeg' | 'video/mp4' = 'image/jpeg';
-      if (type === 'video') mimeType = 'video/mp4';
-
-      this.curCaptureFilePath = filePath;
-      this.curCaptureMimeType = mimeType;
-      this.curCaptureType = type;
-      this.curCaptureSrc = Capacitor.convertFileSrc(filePath);
-      this.curCaptureCameraSource = source;
-      this.lastCaptureMode = this.mode$.value;
-      this.mode$.next('pre-publish');
-
-      this.stopPreviewCamera();
-    }
   }
 
   async startPreviewCamera() {
@@ -229,17 +214,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
         permissions.camera !== 'granted' ||
         permissions.microphone !== 'granted'
       ) {
-        const confirmed = await this.confirmAlert.present({
-          header: this.translocoService.translate(
-            'customCamera.requestCameraPermissions.title'
-          ),
-          message: this.translocoService.translate(
-            'customCamera.requestCameraPermissions.explanation'
-          ),
-          confirmButtonText: this.translocoService.translate(
-            'customCamera.requestCameraPermissions.openSettings'
-          ),
-        });
+        const confirmed = await this.showOpenSettingsConfirmAlert();
         if (confirmed) {
           NativeSettings.open({
             optionAndroid: AndroidSettings.ApplicationDetails,
@@ -260,57 +235,55 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     }
   }
 
+  private async showOpenSettingsConfirmAlert() {
+    return await this.confirmAlert.present({
+      header: this.translocoService.translate(
+        'customCamera.requestCameraPermissions.title'
+      ),
+      message: this.translocoService.translate(
+        'customCamera.requestCameraPermissions.explanation'
+      ),
+      confirmButtonText: this.translocoService.translate(
+        'customCamera.requestCameraPermissions.openSettings'
+      ),
+    });
+  }
+
   stopPreviewCamera() {
     this.customCameraService.stopPreviewCamera();
   }
 
-  async pickImage() {
-    try {
-      const image = await this.customCameraService.pickImage();
-      await this.prePublish(
-        { filePath: image.path },
-        'image',
-        CameraSource.Photos
-      );
-    } catch (error) {
-      /**
-       * Error mighght happen if user didn't pick photo or video,
-       * we'll handle such error quietly without notifying user.
-       */
-    }
-  }
-
+  /**
+   * Handles media picking, prepares it for publishing, and deals with possible errors.
+   */
   async pickMedia() {
     try {
-      const result = await FilePicker.pickMedia();
-      const file = result.files[0];
+      const filePickerResult = await FilePicker.pickMedia();
+      const file = filePickerResult.files[0];
 
       if (file.path === undefined) return;
 
-      const filePath = file.path;
-      let fileType: MediaType = 'image';
+      const result: CaptureSuccessResult = {
+        mimeType: toCustomCameraMimeType(file.mimeType),
+        name: file.name,
+        path: file.path,
+        size: file.size,
+      };
 
-      if (file.mimeType.startsWith('video/')) {
-        fileType = 'video';
-      } else {
-        throw 'Unknow media type';
+      this.prepareForPublishing(result, CameraSource.Photos);
+    } catch (error: any) {
+      // User didn't pick a file, in this case, we do not bother the user by showing any alerts.
+      if (
+        !(error instanceof Error && error.message === 'pickFiles canceled.')
+      ) {
+        /**
+         * Error handling: In case the media picking or prepareForPublishing fails,
+         * an error should be reported to the crash reporting system (currently not in place).
+         * TODO: Implement error reporting to the crash reporting system when available.
+         */
+        // Error not reported due to the absence of a crash reporting system.
+        this.errorService.toastError$(error.message ?? error).subscribe();
       }
-
-      await this.prepareMediaForPublishing(
-        { filePath },
-        fileType,
-        CameraSource.Photos
-      );
-
-      // Handle output if necessary
-    } catch (error) {
-      /**
-       * Error mighght happen if user didn't pick photo or video,
-       * we could handle such error quietly without notifying user.
-       *
-       * However other errors might occur, these error should be
-       * reported to cray reporting system (crayshlyitcs etc)
-       */
     }
   }
 

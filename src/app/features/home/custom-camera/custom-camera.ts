@@ -13,3 +13,15 @@ export interface CustomCameraMediaItem {
   type: CustomCameraMediaType;
   mimeType: CustomCameraMimeType;
 }
+
+export function toCustomCameraMimeType(
+  mimeType: string
+): 'image/jpeg' | 'video/mp4' {
+  if (mimeType.startsWith('image/')) {
+    return 'image/jpeg';
+  }
+  if (mimeType.startsWith('video/')) {
+    return 'video/mp4';
+  }
+  throw TypeError(`Unsupported mimeType: ${mimeType}`);
+}
