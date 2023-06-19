@@ -11,12 +11,21 @@
     [src]="src"
     (load)="onImageLoaded()"
   />
-  <video
-    *ngIf="isVideo$ | ngrxPush"
-    [src]="src"
-    autoplay
-    [muted]="'muted'"
-    playsinline
-    (loadeddata)="onVideoLoaded()"
-  ></video>
+
+  <!-- Plays video with Android Native Player -->
+  <ng-container *ngIf="(playWithAndroidNativePlayer$ | async) === true">
+    <preview-video [id]="previewVideoId" #previewVideo></preview-video>
+  </ng-container>
+
+  <!-- Plays video with HTML video tag -->
+  <ng-container *ngIf="(playWithAndroidNativePlayer$ | async) === false">
+    <video
+      *ngIf="isVideo$ | ngrxPush"
+      [src]="src"
+      autoplay
+      [muted]="'muted'"
+      playsinline
+      (loadeddata)="onVideoLoaded()"
+    ></video>
+  </ng-container>
 </ng-container>

@@ -146,13 +146,12 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="(mode$ | ngrxPush) === 'pre-publish'">
-    <app-pre-publish-mode
-      [curCaptureFilePath]="curCaptureFilePath"
-      [curCaptureMimeType]="curCaptureMimeType"
-      [curCaptureSrc]="curCaptureSrc"
-      (confirm)="confirmCurrentCapture()"
-      (discard)="discardCurrentCapture()"
-    ></app-pre-publish-mode>
-  </ng-container>
+  <app-pre-publish-mode
+    *ngIf="(mode$ | ngrxPush) === 'pre-publish'"
+    [curCaptureFilePath]="curCaptureFilePath"
+    [curCaptureMimeType]="curCaptureMimeType"
+    [curCaptureSrc]="curCaptureSrc"
+    (confirm)="confirmCurrentCapture()"
+    (discard)="discardCurrentCapture()"
+  ></app-pre-publish-mode>
 </ion-content>

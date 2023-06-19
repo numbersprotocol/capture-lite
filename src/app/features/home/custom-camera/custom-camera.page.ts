@@ -1,8 +1,14 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { CameraPlugin, CameraSource } from '@capacitor/camera';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
-import { Platform } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import {
@@ -15,7 +21,7 @@ import {
   IOSSettings,
   NativeSettings,
 } from 'capacitor-native-settings';
-import { BehaviorSubject, Subscription, combineLatest, interval } from 'rxjs';
+import { BehaviorSubject, combineLatest, interval } from 'rxjs';
 import {
   finalize,
   map,
@@ -27,6 +33,7 @@ import {
   tap,
   throttleTime,
 } from 'rxjs/operators';
+import { AndroidBackButtonService } from '../../../shared/android-back-button/android-back-button.service';
 import { CAMERA_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ErrorService } from '../../../shared/error/error.service';
@@ -91,8 +98,6 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   customOrientation$ = new BehaviorSubject<CustomOrientation>('portraitUp');
 
-  private backButtonPrioritySubscription?: Subscription;
-
   get canZoomInOut() {
     return this.minZoomFactor$.value < this.maxZoomFactor$.value;
   }
@@ -110,7 +115,10 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly confirmAlert: ConfirmAlert,
     @Inject(CAMERA_PLUGIN)
     private readonly cameraPlugin: CameraPlugin,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly ref: ChangeDetectorRef,
+    private readonly androidBackButtonService: AndroidBackButtonService,
+    private readonly navController: NavController
   ) {}
 
   ngOnInit() {
@@ -149,18 +157,16 @@ export class CustomCameraPage implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.backButtonPrioritySubscription =
-      this.platform.backButton.subscribeWithPriority(1, () => {
+    this.androidBackButtonService
+      .overrideAndroidBackButtonBehavior$(() => {
         if (this.mode$.value === 'pre-publish') {
           this.discardCurrentCapture();
         } else {
           this.leaveCustomCamera();
         }
-      });
-  }
-
-  ionViewWillLeave() {
-    this.backButtonPrioritySubscription?.unsubscribe();
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -452,7 +458,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   }
 
   async leaveCustomCamera() {
-    this.router.navigate(['..']);
+    this.navController.back();
   }
 
   async captureFromGoPro() {
@@ -524,6 +530,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.curCaptureFilePath = undefined;
     this.curCaptureMimeType = undefined;
     this.curCaptureSrc = undefined;
+    this.ref.detectChanges();
   }
 
   // eslint-disable-next-line class-methods-use-this
