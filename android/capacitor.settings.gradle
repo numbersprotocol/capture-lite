@@ -53,8 +53,14 @@ project(':capacitor-splash-screen').projectDir = new File('../node_modules/@capa
 include ':capacitor-storage'
 project(':capacitor-storage').projectDir = new File('../node_modules/@capacitor/storage/android')
 
+include ':capawesome-capacitor-file-picker'
+project(':capawesome-capacitor-file-picker').projectDir = new File('../node_modules/@capawesome/capacitor-file-picker/android')
+
 include ':numbersprotocol-preview-camera'
 project(':numbersprotocol-preview-camera').projectDir = new File('../node_modules/@numbersprotocol/preview-camera/android')
+
+include ':numbersprotocol-preview-memory'
+project(':numbersprotocol-preview-memory').projectDir = new File('../node_modules/@numbersprotocol/preview-memory/android')
 
 include ':numbersprotocol-preview-video'
 project(':numbersprotocol-preview-video').projectDir = new File('../node_modules/@numbersprotocol/preview-video/android')
