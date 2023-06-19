@@ -17,6 +17,7 @@
   <app-media
     *ngIf="isVideo$ | ngrxPush"
     [src]="curCaptureSrc$ | ngrxPush"
+    [filePath]="curCaptureFilePath$ | ngrxPush"
     [mimeType]="curCaptureMimeType$ | ngrxPush"
   ></app-media>
 
