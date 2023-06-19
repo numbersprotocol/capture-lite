@@ -8,11 +8,29 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FilesystemPlugin } from '@capacitor/filesystem';
+import { AlertController } from '@ionic/angular';
+import { TranslocoService } from '@ngneat/transloco';
+import { PreviewMemory } from '@numbersprotocol/preview-memory';
 import { ColorMatrix, getEditorDefaults } from '@pqina/pintura';
-import { BehaviorSubject, EMPTY, ReplaySubject, combineLatest, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  EMPTY,
+  ReplaySubject,
+  combineLatest,
+  defer,
+  from,
+  iif,
+  of,
+} from 'rxjs';
 import { catchError, filter, first, map, switchMap, tap } from 'rxjs/operators';
 import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
+import { ErrorService } from '../../../../shared/error/error.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
+import {
+  calculateBase64Size,
+  hasEnoughMemoryForEncoding,
+} from '../../../../utils/memory';
+import { VOID$ } from '../../../../utils/rx-operators/rx-operators';
 
 type CaptureMimeType = 'image/jpeg' | 'video/mp4';
 
@@ -46,6 +64,8 @@ export class PrePublishModeComponent {
 
   private toggleBlackAndWhiteFilter = true;
 
+  readonly curCaptureFileSize$ = new ReplaySubject<number>(1);
+
   readonly curCaptureFilePath$ = new ReplaySubject<string>(1);
 
   readonly curCaptureMimeType$ = new ReplaySubject<CaptureMimeType>(1);
@@ -71,6 +91,24 @@ export class PrePublishModeComponent {
     map(result => `data:image/jpeg;base64,${result.data}`)
   );
 
+  readonly curFileBase64Size$ = this.curCaptureFileSize$.pipe(
+    map(fileSize => calculateBase64Size(fileSize))
+  );
+
+  readonly curAvailableMemory$ = defer(() =>
+    from(PreviewMemory.getAvailableMemory()).pipe(map(memory => memory.value))
+  );
+
+  readonly hasEnoughMemoryForEncoding$ = combineLatest([
+    this.curFileBase64Size$,
+    this.curAvailableMemory$,
+  ]).pipe(map(([size, memory]) => hasEnoughMemoryForEncoding(size, memory)));
+
+  @Input()
+  set curCaptureFileSize(value: number | undefined) {
+    if (value) this.curCaptureFileSize$.next(value);
+  }
+
   @Input()
   set curCaptureFilePath(value: string | undefined) {
     if (value) this.curCaptureFilePath$.next(value);
@@ -94,7 +132,10 @@ export class PrePublishModeComponent {
 
   constructor(
     @Inject(FILESYSTEM_PLUGIN)
-    private readonly filesystemPlugin: FilesystemPlugin
+    private readonly filesystemPlugin: FilesystemPlugin,
+    private readonly errorService: ErrorService,
+    private readonly alertController: AlertController,
+    private readonly translocoService: TranslocoService
   ) {}
 
   handleEditorUpdate(imageState: any): void {
@@ -163,25 +204,87 @@ export class PrePublishModeComponent {
   }
 
   async onConfirm() {
-    this.isImage$
+    const runConfirmAction$ = this.isImage$.pipe(
+      first(),
+      tap(isImage => (isImage ? this.confirmImage() : this.confirmVideo()))
+    );
+
+    const showNotEnougMemoryAction$ = defer(() =>
+      this.showNotEnoughMemoryModal()
+    );
+
+    this.hasEnoughMemoryForEncoding$
       .pipe(
         first(),
-        tap(isImage => {
-          if (isImage) {
-            this.pintura.editor.processImage(this.editorImageState);
-            /**
-             * `this.confirm.emit()` for images will be called from
-             * `handleEditorProcess` method which is triggered by
-             * `this.pintura.editor.processImage(this.editorImageState)`
-             */
-          } else {
-            this.confirm.emit(true);
-            /**
-             * for video we do not need to do any pre-porcessing (editing)
-             * therefore we just call this.confirm.emit(true)
-             */
+        switchMap(hasEnoughMemory =>
+          iif(
+            () => hasEnoughMemory,
+            runConfirmAction$,
+            showNotEnougMemoryAction$
+          )
+        ),
+        catchError((error: unknown) => this.errorService.toastError$(error))
+      )
+      .subscribe();
+  }
+
+  private confirmImage() {
+    /**
+     * `this.confirm.emit()` for images will be called from
+     * `handleEditorProcess` method which is triggered by
+     * `this.pintura.editor.processImage(this.editorImageState)`
+     */
+    this.pintura.editor.processImage(this.editorImageState);
+  }
+
+  private confirmVideo() {
+    /**
+     * Since there is no pre-processing required for videos,
+     * we directly emit a true event to confirm the video.
+     */
+    this.confirm.emit(true);
+  }
+
+  private showNotEnoughMemoryModal() {
+    const translations$ = this.translocoService.selectTranslateObject({
+      'customCamera.error.uploadImageIsTooLarge.title': null,
+      'customCamera.error.uploadImageIsTooLarge.message': null,
+      'customCamera.error.uploadVideoIsTooLarge.title': null,
+      'customCamera.error.uploadVideoIsTooLarge.message': null,
+      ok: null,
+    });
+
+    combineLatest([this.curCaptureMimeType$, translations$])
+      .pipe(
+        first(),
+        switchMap(([curCaptureMimeType, translations]) => {
+          const [
+            uploadImageIsTooLargeHeader,
+            uploadImageIsTooLargeMessage,
+            uploadVideoIsTooLargeHeader,
+            uploadVideoIsTooLargeMessage,
+            okButtonText,
+          ] = translations;
+
+          if (curCaptureMimeType.startsWith('image/')) {
+            return this.alertController.create({
+              header: uploadImageIsTooLargeHeader,
+              message: uploadImageIsTooLargeMessage,
+              buttons: [{ text: okButtonText }],
+            });
           }
-        })
+
+          if (curCaptureMimeType.startsWith('video/')) {
+            return this.alertController.create({
+              header: uploadVideoIsTooLargeHeader,
+              message: uploadVideoIsTooLargeMessage,
+              buttons: [{ text: okButtonText }],
+            });
+          }
+
+          return VOID$;
+        }),
+        tap(alertElement => alertElement?.present())
       )
       .subscribe();
   }
