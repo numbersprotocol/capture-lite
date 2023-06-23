@@ -10,7 +10,6 @@ import {
 import { FilesystemPlugin } from '@capacitor/filesystem';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
-import { PreviewMemory } from '@numbersprotocol/preview-memory';
 import { ColorMatrix, getEditorDefaults } from '@pqina/pintura';
 import {
   BehaviorSubject,
@@ -18,7 +17,6 @@ import {
   ReplaySubject,
   combineLatest,
   defer,
-  from,
   iif,
   of,
 } from 'rxjs';
@@ -26,11 +24,9 @@ import { catchError, filter, first, map, switchMap, tap } from 'rxjs/operators';
 import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacitor-plugins.module';
 import { ErrorService } from '../../../../shared/error/error.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
-import {
-  calculateBase64Size,
-  hasEnoughMemoryForEncoding,
-} from '../../../../utils/memory';
+import { calculateBase64Size } from '../../../../utils/memory';
 import { VOID$ } from '../../../../utils/rx-operators/rx-operators';
+import { MAX_ALLOWED_UPLOAD_SIZE_IN_BYTES } from '../custom-camera';
 
 type CaptureMimeType = 'image/jpeg' | 'video/mp4';
 
@@ -95,14 +91,14 @@ export class PrePublishModeComponent {
     map(fileSize => calculateBase64Size(fileSize))
   );
 
-  readonly curAvailableMemory$ = defer(() =>
-    from(PreviewMemory.getAvailableMemory()).pipe(map(memory => memory.value))
+  readonly maxAllowedFileSize$ = defer(() =>
+    of(MAX_ALLOWED_UPLOAD_SIZE_IN_BYTES)
   );
 
-  readonly hasEnoughMemoryForEncoding$ = combineLatest([
-    this.curFileBase64Size$,
-    this.curAvailableMemory$,
-  ]).pipe(map(([size, memory]) => hasEnoughMemoryForEncoding(size, memory)));
+  readonly hasEnoughMemoryForUpload$ = combineLatest([
+    this.curCaptureFileSize$,
+    this.maxAllowedFileSize$,
+  ]).pipe(map(([curSize, maxSize]) => curSize < maxSize));
 
   @Input()
   set curCaptureFileSize(value: number | undefined) {
@@ -213,7 +209,7 @@ export class PrePublishModeComponent {
       this.showNotEnoughMemoryModal()
     );
 
-    this.hasEnoughMemoryForEncoding$
+    this.hasEnoughMemoryForUpload$
       .pipe(
         first(),
         switchMap(hasEnoughMemory =>
