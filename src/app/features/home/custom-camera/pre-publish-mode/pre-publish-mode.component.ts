@@ -25,7 +25,6 @@ import { FILESYSTEM_PLUGIN } from '../../../../shared/capacitor-plugins/capacito
 import { ErrorService } from '../../../../shared/error/error.service';
 import { blobToBase64 } from '../../../../utils/encoding/encoding';
 import { calculateBase64Size } from '../../../../utils/memory';
-import { VOID$ } from '../../../../utils/rx-operators/rx-operators';
 import { MAX_ALLOWED_UPLOAD_SIZE_IN_BYTES } from '../custom-camera';
 
 type CaptureMimeType = 'image/jpeg' | 'video/mp4';
@@ -95,7 +94,7 @@ export class PrePublishModeComponent {
     of(MAX_ALLOWED_UPLOAD_SIZE_IN_BYTES)
   );
 
-  readonly hasEnoughMemoryForUpload$ = combineLatest([
+  readonly isFileSizeExceeded$ = combineLatest([
     this.curCaptureFileSize$,
     this.maxAllowedFileSize$,
   ]).pipe(map(([curSize, maxSize]) => curSize < maxSize));
@@ -205,18 +204,18 @@ export class PrePublishModeComponent {
       tap(isImage => (isImage ? this.confirmImage() : this.confirmVideo()))
     );
 
-    const showNotEnougMemoryAction$ = defer(() =>
-      this.showNotEnoughMemoryModal()
+    const showIsFileSizeExceededAction$ = defer(() =>
+      this.showIsFileSizeExceededModal()
     );
 
-    this.hasEnoughMemoryForUpload$
+    this.isFileSizeExceeded$
       .pipe(
         first(),
         switchMap(hasEnoughMemory =>
           iif(
             () => hasEnoughMemory,
             runConfirmAction$,
-            showNotEnougMemoryAction$
+            showIsFileSizeExceededAction$
           )
         ),
         catchError((error: unknown) => this.errorService.toastError$(error))
@@ -241,46 +240,24 @@ export class PrePublishModeComponent {
     this.confirm.emit(true);
   }
 
-  private showNotEnoughMemoryModal() {
+  private showIsFileSizeExceededModal() {
     const translations$ = this.translocoService.selectTranslateObject({
-      'customCamera.error.uploadImageIsTooLarge.title': null,
-      'customCamera.error.uploadImageIsTooLarge.message': null,
-      'customCamera.error.uploadVideoIsTooLarge.title': null,
-      'customCamera.error.uploadVideoIsTooLarge.message': null,
+      'customCamera.error.fileSizeExeedsLimit': null,
       ok: null,
     });
 
-    combineLatest([this.curCaptureMimeType$, translations$])
+    translations$
       .pipe(
         first(),
-        switchMap(([curCaptureMimeType, translations]) => {
-          const [
-            uploadImageIsTooLargeHeader,
-            uploadImageIsTooLargeMessage,
-            uploadVideoIsTooLargeHeader,
-            uploadVideoIsTooLargeMessage,
-            okButtonText,
-          ] = translations;
+        switchMap(translations => {
+          const [fileSizeExeedsLimit, okButtonText] = translations;
 
-          if (curCaptureMimeType.startsWith('image/')) {
-            return this.alertController.create({
-              header: uploadImageIsTooLargeHeader,
-              message: uploadImageIsTooLargeMessage,
-              buttons: [{ text: okButtonText }],
-            });
-          }
-
-          if (curCaptureMimeType.startsWith('video/')) {
-            return this.alertController.create({
-              header: uploadVideoIsTooLargeHeader,
-              message: uploadVideoIsTooLargeMessage,
-              buttons: [{ text: okButtonText }],
-            });
-          }
-
-          return VOID$;
+          return this.alertController.create({
+            message: fileSizeExeedsLimit,
+            buttons: [{ text: okButtonText }],
+          });
         }),
-        tap(alertElement => alertElement?.present())
+        tap(alertElement => alertElement.present())
       )
       .subscribe();
   }
