@@ -194,7 +194,7 @@ export class SignupPage {
   onSubmit() {
     const device$ = this.diaBackendAuthService.readDevice$();
     const createUser$ = device$.pipe(
-      concatMap(([fcmToken, deviceInfo, deviceId]) => {
+      concatMap(([fcmToken, deviceInfo, device]) => {
         return this.diaBackendAuthService.createUser$(
           this.model.username,
           this.model.email,
@@ -203,7 +203,7 @@ export class SignupPage {
           {
             fcm_token: fcmToken,
             platform: deviceInfo.platform,
-            device_identifier: deviceId.uuid,
+            device_identifier: device.identifier,
           }
         );
       })
