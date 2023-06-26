@@ -13,7 +13,6 @@ import { TranslocoService } from '@ngneat/transloco';
 import { ColorMatrix, getEditorDefaults } from '@pqina/pintura';
 import {
   BehaviorSubject,
-  EMPTY,
   ReplaySubject,
   combineLatest,
   defer,
@@ -159,9 +158,9 @@ export class PrePublishModeComponent {
         ),
         tap(() => this.isProcessingImage$.next(false)),
         tap(() => this.confirm.emit(true)),
-        catchError(() => {
+        catchError((error: unknown) => {
           this.isProcessingImage$.next(false);
-          return EMPTY;
+          return this.errorService.toastError$(error);
         })
       )
       .subscribe();

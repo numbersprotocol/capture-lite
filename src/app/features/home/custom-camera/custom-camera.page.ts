@@ -2,8 +2,9 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
-import { FilePicker } from '@capawesome/capacitor-file-picker';
-import { NavController } from '@ionic/angular';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { FilePicker, PickedFile } from '@capawesome/capacitor-file-picker';
+import { NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import {
@@ -112,7 +113,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly translocoService: TranslocoService,
     private readonly ref: ChangeDetectorRef,
     private readonly androidBackButtonService: AndroidBackButtonService,
-    private readonly navController: NavController
+    private readonly navController: NavController,
+    private readonly platform: Platform
   ) {}
 
   ngOnInit() {
@@ -261,12 +263,14 @@ export class CustomCameraPage implements OnInit, OnDestroy {
       const filePickerResult = await FilePicker.pickMedia();
       const file = filePickerResult.files[0];
 
-      if (file.path === undefined) return;
+      const filePath = await this.convertFilePath(file);
+
+      if (filePath === undefined) return;
 
       const result: CaptureSuccessResult = {
         mimeType: toCustomCameraMimeType(file.mimeType),
         name: file.name,
-        path: file.path,
+        path: filePath,
         size: file.size,
       };
 
@@ -285,6 +289,50 @@ export class CustomCameraPage implements OnInit, OnDestroy {
         this.errorService.toastError$(error.message ?? error).subscribe();
       }
     }
+  }
+
+  private async convertFilePath(file: PickedFile): Promise<string | undefined> {
+    /**
+     * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/2857
+     * Convert Android picked image file path to "file:///" format for editing and saving.
+     *
+     * Here is the explanation of the WORKAROUND:
+     * We have a CapacitorJS project where we encounter an issue with picking images
+     * from the gallery on Android. When users pick media from the gallery on iOS, the
+     * file path is in the format "file:///", while on Android it is in the format
+     * "content:///". This discrepancy in file paths poses a challenge for us as we
+     * need to perform additional pre-publish editing, such as cropping and applying a
+     * grayscale filter, on the picked images. However, to save the edited image to the
+     * file system, we require the file path to be in the "file:///" format instead of
+     * "content:///".
+     *
+     * To address this issue, we have implemented a workaround that involves copying
+     * the picked image to the file system, ensuring that the file path is in the
+     * required "file:///" format. This workaround allows us to seamlessly perform the
+     * necessary editing operations on the image and successfully save it to the file
+     * system.
+     *
+     * Note: This workaround is specifically designed to handle picked images from the
+     * gallery on Android and does not impact the functionality on iOS.
+     *
+     * Please make sure to adjust the placeholders ("<issue link>",
+     * "<workaround-purpose>") with the relevant information in your specific context.
+     */
+
+    if (file.path === undefined) return undefined;
+
+    if (this.platform.is('android') && file.mimeType.startsWith('image/')) {
+      const readFileResult = await Filesystem.readFile({ path: file.path });
+      const writeFileresult = await Filesystem.writeFile({
+        data: readFileResult.data,
+        path: `${Date.now()}/${file.name}`,
+        directory: Directory.Cache,
+        recursive: true,
+      });
+      return writeFileresult.uri;
+    }
+
+    return file.path;
   }
 
   async flipCamera() {
