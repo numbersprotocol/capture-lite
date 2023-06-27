@@ -47,7 +47,7 @@ jobs:
           NUMBERS_BUBBLE_IFRAME_URL: ${{ secrets[matrix.bubble_iframe_url] }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets[matrix.bubble_db_url] }}
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL}} # FIXME: remove BUBBLE_API_URL, not used in capture app.
-          APPS_FLYER_DEV_KEY: '-' # Empty string prevents apps flyer SDK initialization for non-public flavors.
+          APPS_FLYER_DEV_KEY: '' # Empty string prevents apps flyer SDK initialization for non-public flavors.
           NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }} # same for public, non-public flavors.
           PIPEDREAM_DELETE_CAPTURE_ACCOUNT: ${{ secrets.PIPEDREAM_DELETE_CAPTURE_ACCOUNT }}
         run: |
