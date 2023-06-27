@@ -64,7 +64,7 @@
     "@ngx-formly/schematics": "^5.10.22",
     "@numbersprotocol/preview-camera": "github:numbersprotocol/preview-camera#0.0.17",
     "@numbersprotocol/preview-memory": "github:numbersprotocol/preview-memory#0.0.2",
-    "@numbersprotocol/preview-video": "github:numbersprotocol/preview-video#0.0.3",
+    "@numbersprotocol/preview-video": "github:numbersprotocol/preview-video#0.0.4",
     "@pqina/angular-pintura": "^8.44.1",
     "@pqina/pintura": "^8.44.1",
     "@techiediaries/ngx-qrcode": "^9.1.0",
