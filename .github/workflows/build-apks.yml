@@ -51,6 +51,7 @@ jobs:
           NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }} # same for public, non-public flavors.
           PIPEDREAM_DELETE_CAPTURE_ACCOUNT: ${{ secrets.PIPEDREAM_DELETE_CAPTURE_ACCOUNT }}
         run: |
+          npm run preconfig.npmrc
           npm install -g @ionic/cli
           npm install
           npm run build
