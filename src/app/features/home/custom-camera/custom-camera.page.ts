@@ -315,8 +315,6 @@ export class CustomCameraPage implements OnInit, OnDestroy {
      * Note: This workaround is specifically designed to handle picked images from the
      * gallery on Android and does not impact the functionality on iOS.
      *
-     * Please make sure to adjust the placeholders ("<issue link>",
-     * "<workaround-purpose>") with the relevant information in your specific context.
      */
 
     if (file.path === undefined) return undefined;
