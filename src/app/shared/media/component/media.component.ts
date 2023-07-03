@@ -10,11 +10,13 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Capacitor } from '@capacitor/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { PreviewVideo } from '@numbersprotocol/preview-video';
-import { BehaviorSubject, EMPTY, ReplaySubject, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, combineLatest, of } from 'rxjs';
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
 import { MimeType } from '../../../utils/mime-type';
+import { ErrorService } from '../../error/error.service';
 
 @UntilDestroy()
 @Component({
@@ -70,7 +72,9 @@ export class MediaComponent implements AfterViewInit, OnDestroy {
     private readonly sanitizer: DomSanitizer,
     private readonly ref: ChangeDetectorRef,
     private readonly renderer: Renderer2,
-    private readonly elementRef: ElementRef
+    private readonly elementRef: ElementRef,
+    private readonly errorService: ErrorService,
+    private readonly translocoService: TranslocoService
   ) {}
 
   ngAfterViewInit(): void {
@@ -125,8 +129,9 @@ export class MediaComponent implements AfterViewInit, OnDestroy {
            * an error should be reported to the crash reporting system (currently not in place).
            * TODO: Implement error reporting to the crash reporting system when available.
            */
-          // Error not reported due to absence of crash reporting system.
-          return EMPTY;
+          return this.errorService.toastError$(
+            this.translocoService.translate('error.unknownError')
+          );
         }),
         untilDestroyed(this, 'destroyNativePlayer')
       )
