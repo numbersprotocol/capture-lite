@@ -17,7 +17,6 @@ import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
 import { MimeType } from '../../../utils/mime-type';
 
 @UntilDestroy()
-@UntilDestroy()
 @Component({
   selector: 'app-media',
   templateUrl: './media.component.html',
