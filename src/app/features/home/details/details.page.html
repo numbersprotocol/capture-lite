@@ -39,6 +39,7 @@
   >
     <ng-template
       swiperSlide
+      let-data
       *ngFor="
         let detailedCapture of detailedCaptures;
         trackBy: trackDetailedCapture
@@ -55,6 +56,7 @@
         <app-capture-details-with-iframe
           *ngIf="(showCaptureDetailsInIframe$ | ngrxPush) === true"
           [detailedCapture]="detailedCapture"
+          [slideIsActive]="data.isActive"
         ></app-capture-details-with-iframe>
       </div>
     </ng-template>

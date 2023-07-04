@@ -1,8 +1,16 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NavController, Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ReplaySubject, combineLatest, fromEvent } from 'rxjs';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { BehaviorSubject, ReplaySubject, combineLatest, fromEvent } from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import {
   CachedQueryJWTToken,
   DiaBackendAuthService,
@@ -34,9 +42,17 @@ export class CaptureDetailsWithIframeComponent {
     distinctUntilChanged()
   );
 
+  private readonly slideIsActive$ = new ReplaySubject<boolean>(1);
+  @Input() set slideIsActive(value: boolean | undefined) {
+    this.slideIsActive$.next(Boolean(value));
+  }
+
+  readonly reloadIframe$ = new BehaviorSubject<boolean>(true);
+
   readonly iframeUrl$ = combineLatest([
     this.detailedCaptureId$,
     this.diaBackendAuthService.cachedQueryJWTToken$,
+    this.reloadIframe$,
   ]).pipe(
     map(([detailedCaptureId, token]) => {
       return this.generateIframeUrl(detailedCaptureId, token);
@@ -48,11 +64,44 @@ export class CaptureDetailsWithIframeComponent {
     untilDestroyed(this)
   );
 
+  readonly captionEdited$ = fromEvent<MessageEvent>(window, 'message').pipe(
+    map(event => event.data === BubbleToIonicPostMessage.EDIT_CAPTION_SAVE),
+    untilDestroyed(this)
+  );
+
   constructor(
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly sanitizer: DomSanitizer,
-    private readonly networkService: NetworkService
-  ) {}
+    private readonly networkService: NetworkService,
+    private readonly navController: NavController,
+    private readonly platform: Platform
+  ) {
+    this.reloadIframeOnCaptionChange();
+  }
+
+  private reloadIframeOnCaptionChange() {
+    combineLatest([this.slideIsActive$, this.captionEdited$])
+      .pipe(
+        filter(([isActive, captionEdited]) => isActive && captionEdited),
+        tap(() => this.reloadIframe$.next(true)),
+        switchMap(() =>
+          this.iframeLoaded$.pipe(
+            take(1),
+            tap(() => {
+              /**
+               * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/2723
+               * Navigate back 1 time programmatically when iframe is reloaded
+               */
+              if (this.platform.is('android')) {
+                this.navController.back();
+              }
+            })
+          )
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
 
   private generateIframeUrl(
     detailedCaptureId: string,
