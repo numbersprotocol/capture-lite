@@ -95,6 +95,13 @@ export class CustomCameraService {
     }
   }
 
+  /**
+   * Upload the captured media to the backend.
+   *
+   * @param filePath The file path of the captured media.
+   * @param type The media type, either 'image' or 'video'.
+   * @param source The source of the media capture, such as Camera or Photos (Gallery).
+   */
   async uploadToCapture(
     filePath: string,
     type: CustomCameraMediaType,
