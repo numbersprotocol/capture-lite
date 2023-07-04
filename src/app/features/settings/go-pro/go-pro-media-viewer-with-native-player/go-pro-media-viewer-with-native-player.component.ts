@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
-import { PreviewVideo } from '@numbersprotocol/preview-video';
 import { GoProFile } from '../go-pro-media-file';
 
 @Component({
@@ -33,24 +32,24 @@ export class GoProMediaViewerWithNativePlayerComponent
   ngOnInit(): void {
     if (!this.mediaFile?.url) return;
     if (this.platform.is('hybrid')) {
-      PreviewVideo.playFullScreenFromRemote({ url: this.mediaFile.url });
-      this.onIOSPlayerDismissedListener = PreviewVideo.addListener(
-        'iosPlayerDismissed',
-        (_info: any) => this.navController.back()
-      );
+      // PreviewVideo.playFullScreenFromRemote({ url: this.mediaFile.url });
+      // this.onIOSPlayerDismissedListener = PreviewVideo.addListener(
+      //   'iosPlayerDismissed',
+      //   (_info: any) => this.navController.back()
+      // );
     }
   }
 
   ngOnDestroy(): void {
     if (this.platform.is('hybrid')) {
-      PreviewVideo.stopFullScreen();
-      this.onIOSPlayerDismissedListener?.remove();
+      // PreviewVideo.stopFullScreen();
+      // this.onIOSPlayerDismissedListener?.remove();
     }
   }
 
   dismiss() {
     if (this.platform.is('hybrid')) {
-      PreviewVideo.stopFullScreen();
+      // PreviewVideo.stopFullScreen();
     }
     this.navController.back();
   }

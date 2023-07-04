@@ -100,7 +100,7 @@
           </div>
         </div>
         <div class="footer-camera-buttons">
-          <mat-icon (click)="pickImage()"> imagesmode </mat-icon>
+          <mat-icon (click)="pickMedia()"> imagesmode </mat-icon>
 
           <circle-progress
             (click)="onPress()"
@@ -146,13 +146,13 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="(mode$ | ngrxPush) === 'pre-publish'">
-    <app-pre-publish-mode
-      [curCaptureFilePath]="curCaptureFilePath"
-      [curCaptureMimeType]="curCaptureMimeType"
-      [curCaptureSrc]="curCaptureSrc"
-      (confirm)="confirmCurrentCapture()"
-      (discard)="discardCurrentCapture()"
-    ></app-pre-publish-mode>
-  </ng-container>
+  <app-pre-publish-mode
+    *ngIf="(mode$ | ngrxPush) === 'pre-publish'"
+    [curCaptureFileSize]="curCaptureFileSize"
+    [curCaptureFilePath]="curCaptureFilePath"
+    [curCaptureMimeType]="curCaptureMimeType"
+    [curCaptureSrc]="curCaptureSrc"
+    (confirm)="confirmCurrentCapture()"
+    (discard)="discardCurrentCapture()"
+  ></app-pre-publish-mode>
 </ion-content>
