@@ -40,6 +40,15 @@ jobs:
           diff-search: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Setup rclone
+        env:
+          RCLONE_CONFIG_BASE64: ${{ secrets.RCLONE_CONFIG_BASE64 }}
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+          mkdir -p ~/.config/rclone
+          echo -n "$RCLONE_CONFIG_BASE64" | base64 -d > ~/.config/rclone/rclone.conf
+          rclone lsd gdrive:/
+
       - name: Build Ionic
         env:
           NUMBERS_STORAGE_BASE_URL: ${{ secrets[matrix.storage_base_url] }}
@@ -47,10 +56,11 @@ jobs:
           NUMBERS_BUBBLE_IFRAME_URL: ${{ secrets[matrix.bubble_iframe_url] }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets[matrix.bubble_db_url] }}
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL}} # FIXME: remove BUBBLE_API_URL, not used in capture app.
-          APPS_FLYER_DEV_KEY: '-' # Empty string prevents apps flyer SDK initialization for non-public flavors.
+          APPS_FLYER_DEV_KEY: '' # Empty string prevents apps flyer SDK initialization for non-public flavors.
           NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }} # same for public, non-public flavors.
           PIPEDREAM_DELETE_CAPTURE_ACCOUNT: ${{ secrets.PIPEDREAM_DELETE_CAPTURE_ACCOUNT }}
         run: |
+          npm run preconfig.npmrc
           npm install -g @ionic/cli
           npm install
           npm run build
@@ -62,10 +72,5 @@ jobs:
           ./gradlew assembleDebug
 
       - name: Upload matrix build outputs to Google Drive
-        uses: numbersprotocol/action-google-drive@master
-        with:
-          skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
-          google-client-id: ${{ secrets.SKICKA_GOOGLE_CLIENT_ID }}
-          google-client-secret: ${{ secrets.SKICKA_GOOGLE_CLIENT_SECRET }}
-          upload-from: ./android/app/build/outputs/apk/debug/
-          upload-to: /capture-lite/apk/${{github.ref_name}}/${{ matrix.folder_name }}/
+        run: |
+          rclone copy ./android/app/build/outputs/apk/debug/ gdrive:/${{github.ref_name}}/${{ matrix.folder_name }}/

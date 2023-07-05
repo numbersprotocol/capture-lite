@@ -14,7 +14,6 @@ import { FILESYSTEM_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-p
 import { CaptureService } from '../../../shared/capture/capture.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { PreferenceManager } from '../../../shared/preference-manager/preference-manager.service';
-import { blobToBase64 } from '../../../utils/encoding/encoding';
 import {
   CustomCameraMediaItem,
   CustomCameraMediaType,
@@ -95,27 +94,38 @@ export class CustomCameraService {
     }
   }
 
+  /**
+   * Upload the captured media to the backend.
+   *
+   * @param filePath The file path of the captured media.
+   * @param type The media type, either 'image' or 'video'.
+   * @param source The source of the media capture, such as Camera or Photos (Gallery).
+   */
   async uploadToCapture(
     filePath: string,
     type: CustomCameraMediaType,
     source: CameraSource
   ) {
-    const itemToUpload = this.mediaItemFromFilePath(filePath, type);
-
     try {
-      const itemBlob = await this.httpClient
-        .get(itemToUpload.src, { responseType: 'blob' })
-        .toPromise();
-      const base64 = await blobToBase64(itemBlob);
-      const mimeType = itemToUpload.mimeType;
+      const readFileResult = await this.filesystemPlugin.readFile({
+        path: filePath,
+      });
+      const base64 = readFileResult.data;
+
+      const mimeType = type === 'image' ? 'image/jpeg' : 'video/mp4';
+
       await this.captureService.capture({ base64, mimeType, source });
 
-      const should = await this.getShouldSaveToCameraRoll();
-      if (should === SaveToCameraRollDecision.YES) {
+      const shouldSaveFileToUserDevice =
+        (await this.getShouldSaveToCameraRoll()) ===
+        SaveToCameraRollDecision.YES;
+      const fileNotFromGallery = source !== CameraSource.Photos;
+
+      if (shouldSaveFileToUserDevice && fileNotFromGallery) {
         await this.saveCaptureToUserDevice(filePath);
       }
 
-      await this.removeFile(filePath);
+      await this.removeFile(filePath, source);
     } catch (error: unknown) {
       await this.handleUploadToCaptureError(error);
     }
@@ -172,8 +182,9 @@ export class CustomCameraService {
     return PreviewCamera.stopRecord().catch(() => ({}));
   }
 
-  async removeFile(filePath: string | undefined) {
+  async removeFile(filePath: string | undefined, source: CameraSource) {
     if (!filePath) return;
+    if (source === CameraSource.Photos) return; // Do not delete files picked from gallery
     await this.filesystemPlugin.deleteFile({ path: filePath });
   }
 

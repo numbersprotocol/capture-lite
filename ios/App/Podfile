@@ -28,6 +28,7 @@ def capacitor_pods
   pod 'CapacitorShare', :path => '../../node_modules/@capacitor/share'
   pod 'CapacitorSplashScreen', :path => '../../node_modules/@capacitor/splash-screen'
   pod 'CapacitorStorage', :path => '../../node_modules/@capacitor/storage'
+  pod 'CapawesomeCapacitorFilePicker', :path => '../../node_modules/@capawesome/capacitor-file-picker'
   pod 'NumbersprotocolPreviewCamera', :path => '../../node_modules/@numbersprotocol/preview-camera'
   pod 'NumbersprotocolPreviewVideo', :path => '../../node_modules/@numbersprotocol/preview-video'
   pod 'AppsflyerCapacitorPlugin', :path => '../../node_modules/appsflyer-capacitor-plugin'

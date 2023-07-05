@@ -40,8 +40,8 @@ export class AppsFlyerService {
     /**
      * Do not init apps flyer SDK if dev key is not provided.
      */
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!APPS_FLYER_DEV_KEY) {
+    // eslint-disable-next-line no-extra-boolean-cast, @typescript-eslint/no-unnecessary-condition
+    if (!!APPS_FLYER_DEV_KEY) {
       return false;
     }
     /**
