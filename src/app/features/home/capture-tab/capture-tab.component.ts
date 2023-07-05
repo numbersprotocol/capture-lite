@@ -27,7 +27,7 @@ import { ProofRepository } from '../../../shared/repositories/proof/proof-reposi
   styleUrls: ['./capture-tab.component.scss'],
 })
 export class CaptureTabComponent {
-  categories: 'captured' | 'collected' = 'captured';
+  categories: 'validated' | 'collected' = 'validated';
 
   readonly username$ = this.diaBackendAuthService.username$;
 
@@ -75,7 +75,7 @@ export class CaptureTabComponent {
     )
   );
 
-  readonly capturedTabItems$ = combineLatest([
+  readonly validatedTabItems$ = combineLatest([
     this.captures$,
     this.capturedTabPage$,
   ]).pipe(
@@ -98,7 +98,7 @@ export class CaptureTabComponent {
 
   loadMoreItems(event: any) {
     switch (this.categories) {
-      case 'captured':
+      case 'validated':
         this.capturedTabPage$.next(this.capturedTabPage$.value + 1);
         break;
       case 'collected':
