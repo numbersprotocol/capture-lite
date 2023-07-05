@@ -14,20 +14,20 @@
   </mat-card>
   <app-uploading-bar></app-uploading-bar>
 
-  <div [ngSwitch]="categories">
-    <ion-segment mode="md" [(ngModel)]="categories">
-      <ion-segment-button value="validated">
+  <div [ngSwitch]="segment">
+    <ion-segment mode="md" [(ngModel)]="segment">
+      <ion-segment-button [value]="captureTabSegments.VERIFIED">
         <ion-label>{{ 'home.profileTab.validated' | transloco }}</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="collected">
+      <ion-segment-button [value]="captureTabSegments.COLLECTED">
         <ion-label>{{ 'home.profileTab.collected' | transloco }}</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="draft">
+      <ion-segment-button [value]="captureTabSegments.DRAFT">
         <ion-label>{{ 'home.profileTab.draft' | transloco }}</ion-label>
       </ion-segment-button>
     </ion-segment>
 
-    <div *ngSwitchCase="'validated'">
+    <div *ngSwitchCase="captureTabSegments.VERIFIED">
       <div class="capture-container" *transloco="let t">
         <mat-grid-list cols="2" gutterSize="16px">
           <mat-grid-tile
@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <div class="post-captures" *ngSwitchCase="'collected'">
+    <div class="post-captures" *ngSwitchCase="captureTabSegments.COLLECTED">
       <mat-grid-list cols="2" gutterSize="16px">
         <mat-grid-tile
           class="capture-item"
@@ -77,7 +77,7 @@
       </mat-grid-list>
     </div>
 
-    <div *ngSwitchCase="'draft'">
+    <div *ngSwitchCase="captureTabSegments.DRAFT">
       <div class="capture-container" *transloco="let t">
         <mat-grid-list cols="2" gutterSize="16px">
           <mat-grid-tile
