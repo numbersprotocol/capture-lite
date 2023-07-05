@@ -27,7 +27,7 @@ import { ProofRepository } from '../../../shared/repositories/proof/proof-reposi
   styleUrls: ['./capture-tab.component.scss'],
 })
 export class CaptureTabComponent {
-  categories: 'validated' | 'collected' = 'validated';
+  categories: 'validated' | 'collected' | 'draft' = 'validated';
 
   readonly username$ = this.diaBackendAuthService.username$;
 
@@ -62,22 +62,41 @@ export class CaptureTabComponent {
 
   private readonly itemsPerPage = 10;
 
-  readonly capturedTabPage$ = new BehaviorSubject<number>(0);
+  readonly capturedTabPageIndex$ = new BehaviorSubject<number>(0);
 
-  readonly collectedTabPage$ = new BehaviorSubject<number>(0);
+  readonly collectedTabPageIndex$ = new BehaviorSubject<number>(0);
+
+  readonly draftTabPageIndex$ = new BehaviorSubject<number>(0);
 
   readonly collectedTabItems$ = combineLatest([
     this.postCaptures$,
-    this.collectedTabPage$,
+    this.collectedTabPageIndex$,
   ]).pipe(
     map(([items, page]) =>
       items.slice(0, page * this.itemsPerPage + this.itemsPerPage)
     )
   );
 
+  readonly validatedCaptures$ = this.captures$.pipe(
+    map(proofs => proofs.filter(p => p.diaBackendAssetId !== undefined))
+  );
+
   readonly validatedTabItems$ = combineLatest([
-    this.captures$,
-    this.capturedTabPage$,
+    this.validatedCaptures$,
+    this.capturedTabPageIndex$,
+  ]).pipe(
+    map(([items, page]) =>
+      items.slice(0, page * this.itemsPerPage + this.itemsPerPage)
+    )
+  );
+
+  readonly draftCaptures$ = this.captures$.pipe(
+    map(proofs => proofs.filter(p => p.diaBackendAssetId === undefined))
+  );
+
+  readonly draftTabItems$ = combineLatest([
+    this.draftCaptures$,
+    this.draftTabPageIndex$,
   ]).pipe(
     map(([items, page]) =>
       items.slice(0, page * this.itemsPerPage + this.itemsPerPage)
@@ -99,11 +118,13 @@ export class CaptureTabComponent {
   loadMoreItems(event: any) {
     switch (this.categories) {
       case 'validated':
-        this.capturedTabPage$.next(this.capturedTabPage$.value + 1);
+        this.capturedTabPageIndex$.next(this.capturedTabPageIndex$.value + 1);
         break;
       case 'collected':
-        this.collectedTabPage$.next(this.collectedTabPage$.value + 1);
+        this.collectedTabPageIndex$.next(this.collectedTabPageIndex$.value + 1);
         break;
+      case 'draft':
+        this.draftTabPageIndex$.next(this.draftTabPageIndex$.value + 1);
     }
 
     const eventTarget = event.target as HTMLIonInfiniteScrollElement;
@@ -184,8 +205,9 @@ export class CaptureTabComponent {
       .refresh()
       .pipe(
         finalize(() => {
-          this.capturedTabPage$.next(0);
-          this.collectedTabPage$.next(0);
+          this.capturedTabPageIndex$.next(0);
+          this.collectedTabPageIndex$.next(0);
+          this.draftTabPageIndex$.next(0);
           return (<CustomEvent>event).detail.complete();
         })
       )
