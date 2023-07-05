@@ -22,6 +22,9 @@
       <ion-segment-button value="collected">
         <ion-label>{{ 'home.profileTab.collected' | transloco }}</ion-label>
       </ion-segment-button>
+      <ion-segment-button value="draft">
+        <ion-label>{{ 'home.profileTab.draft' | transloco }}</ion-label>
+      </ion-segment-button>
     </ion-segment>
 
     <div *ngSwitchCase="'validated'">
@@ -72,6 +75,22 @@
           <ion-img [src]="postCapture.asset_file_thumbnail"></ion-img>
         </mat-grid-tile>
       </mat-grid-list>
+    </div>
+
+    <div *ngSwitchCase="'draft'">
+      <div class="capture-container" *transloco="let t">
+        <mat-grid-list cols="2" gutterSize="16px">
+          <mat-grid-tile
+            *ngFor="
+              let proof of draftTabItems$ | ngrxPush;
+              trackBy: trackCaptureItem
+            "
+            class="capture-item"
+          >
+            <app-capture-item [proof]="proof"></app-capture-item>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
     </div>
   </div>
 
