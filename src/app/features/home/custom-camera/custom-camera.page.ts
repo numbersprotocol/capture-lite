@@ -28,6 +28,10 @@ import {
   throttleTime,
 } from 'rxjs/operators';
 import { CAMERA_PLUGIN } from '../../../shared/capacitor-plugins/capacitor-plugins.module';
+import {
+  CaptureTabSegments,
+  CaptureTabService,
+} from '../../../shared/capture-tab/capture-tab.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
@@ -110,7 +114,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly confirmAlert: ConfirmAlert,
     @Inject(CAMERA_PLUGIN)
     private readonly cameraPlugin: CameraPlugin,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly captureTabService: CaptureTabService
   ) {}
 
   ngOnInit() {
@@ -386,7 +391,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
         this.curCaptureType,
         this.curCaptureCameraSource
       );
-
+      this.captureTabService.focusTo(CaptureTabSegments.DRAFT);
       this.leaveCustomCamera();
     } catch (error: unknown) {
       this.errorService.toastError$(error).pipe(take(1)).subscribe();

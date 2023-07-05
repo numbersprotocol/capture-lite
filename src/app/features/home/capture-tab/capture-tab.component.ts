@@ -1,13 +1,24 @@
 import { formatDate, KeyValue } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash-es';
 import { BehaviorSubject, combineLatest, iif } from 'rxjs';
-import { catchError, finalize, map, pluck, switchMap } from 'rxjs/operators';
+import {
+  catchError,
+  finalize,
+  map,
+  pluck,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import {
+  CaptureTabSegments,
+  CaptureTabService,
+} from '../../../shared/capture-tab/capture-tab.service';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -26,8 +37,13 @@ import { ProofRepository } from '../../../shared/repositories/proof/proof-reposi
   templateUrl: './capture-tab.component.html',
   styleUrls: ['./capture-tab.component.scss'],
 })
-export class CaptureTabComponent {
-  categories: 'validated' | 'collected' | 'draft' = 'validated';
+export class CaptureTabComponent implements OnInit {
+  /**
+   * Enum values for the capture tab segments.
+   * Used in the HTML template to avoid hardcoded string values.
+   */
+  readonly captureTabSegments = CaptureTabSegments;
+  segment: CaptureTabSegments = CaptureTabSegments.COLLECTED;
 
   readonly username$ = this.diaBackendAuthService.username$;
 
@@ -112,18 +128,32 @@ export class CaptureTabComponent {
     private readonly networkService: NetworkService,
     private readonly translocoService: TranslocoService,
     private readonly errorService: ErrorService,
-    private readonly blockingActionService: BlockingActionService
+    private readonly blockingActionService: BlockingActionService,
+    private readonly captureTabService: CaptureTabService
   ) {}
 
+  ngOnInit(): void {
+    this.initSegmentListener();
+  }
+
+  private initSegmentListener() {
+    this.captureTabService.segment$
+      .pipe(
+        tap(segment => (this.segment = segment)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
   loadMoreItems(event: any) {
-    switch (this.categories) {
-      case 'validated':
+    switch (this.segment) {
+      case CaptureTabSegments.VERIFIED:
         this.capturedTabPageIndex$.next(this.capturedTabPageIndex$.value + 1);
         break;
-      case 'collected':
+      case CaptureTabSegments.COLLECTED:
         this.collectedTabPageIndex$.next(this.collectedTabPageIndex$.value + 1);
         break;
-      case 'draft':
+      case CaptureTabSegments.DRAFT:
         this.draftTabPageIndex$.next(this.draftTabPageIndex$.value + 1);
     }
 
