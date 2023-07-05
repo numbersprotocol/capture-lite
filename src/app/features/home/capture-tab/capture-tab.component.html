@@ -16,20 +16,20 @@
 
   <div [ngSwitch]="categories">
     <ion-segment mode="md" [(ngModel)]="categories">
-      <ion-segment-button value="captured">
-        <ion-label>{{ 'home.profileTab.captured' | transloco }}</ion-label>
+      <ion-segment-button value="validated">
+        <ion-label>{{ 'home.profileTab.validated' | transloco }}</ion-label>
       </ion-segment-button>
       <ion-segment-button value="collected">
         <ion-label>{{ 'home.profileTab.collected' | transloco }}</ion-label>
       </ion-segment-button>
     </ion-segment>
 
-    <div *ngSwitchCase="'captured'">
+    <div *ngSwitchCase="'validated'">
       <div class="capture-container" *transloco="let t">
         <mat-grid-list cols="2" gutterSize="16px">
           <mat-grid-tile
             *ngFor="
-              let proof of capturedTabItems$ | ngrxPush;
+              let proof of validatedTabItems$ | ngrxPush;
               first as isFirstProof;
               trackBy: trackCaptureItem
             "

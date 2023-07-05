@@ -266,7 +266,7 @@
   },
   "home": {
     "profileTab": {
-      "captured": "Captured",
+      "validated": "Validated",
       "collected": "Collected",
       "captureNotUploadedYet": "Capture not uploaded yet"
     }
