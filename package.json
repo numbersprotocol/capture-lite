@@ -51,7 +51,7 @@
     "@capacitor/share": "^4.0.0",
     "@capacitor/splash-screen": "^4.0.0",
     "@capacitor/storage": "^1.2.4",
-    "@capawesome/capacitor-file-picker": "^5.0.0",
+    "@capawesome/capacitor-file-picker": "^0.6.3",
     "@ionic/angular": "^6.2.5",
     "@ionic/core": "^6.2.5",
     "@ionic/pwa-elements": "^3.0.2",
