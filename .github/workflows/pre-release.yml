@@ -147,7 +147,7 @@ jobs:
         run: echo '${{ secrets.PLAY_CONSOLE_SERVICE_ACCOUNT_JSON }}' > service_account.json
 
       - name: Deploy to Play Store (closed alpha track)
-        uses: r0adkll/upload-google-play@v1.0.7
+        uses: r0adkll/upload-google-play@v1.1.1
         with:
           serviceAccountJson: service_account.json
           packageName: io.numbersprotocol.capturelite
