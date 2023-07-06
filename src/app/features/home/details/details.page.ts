@@ -29,7 +29,6 @@ import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.servic
 import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
-import { BUBBLE_IFRAME_URL } from '../../../shared/dia-backend/secret';
 import { DiaBackendStoreService } from '../../../shared/dia-backend/store/dia-backend-store.service';
 import { DiaBackendWorkflowService } from '../../../shared/dia-backend/workflow/dia-backend-workflow.service';
 import { ErrorService } from '../../../shared/error/error.service';
@@ -252,12 +251,6 @@ export class DetailsPage {
         untilDestroyed(this)
       )
       .subscribe();
-  }
-
-  iframeUrlFor(detailedCapture: any) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(
-      `${BUBBLE_IFRAME_URL}/asset_page?nid=${detailedCapture.id}`
-    );
   }
 
   async ionViewDidEnter() {
