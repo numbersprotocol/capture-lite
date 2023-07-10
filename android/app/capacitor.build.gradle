@@ -28,6 +28,8 @@ dependencies {
     implementation project(':capacitor-storage')
     implementation project(':capawesome-capacitor-file-picker')
     implementation project(':numbersprotocol-preview-camera')
+    implementation project(':numbersprotocol-preview-memory')
+    implementation project(':numbersprotocol-preview-thumbnail')
     implementation project(':numbersprotocol-preview-video')
     implementation project(':appsflyer-capacitor-plugin')
     implementation project(':capacitor-blob-writer')
