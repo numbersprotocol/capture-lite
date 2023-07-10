@@ -87,7 +87,7 @@ export class CapacitorFactsProvider implements FactsProvider {
       appBuild: appInfo.build,
       appId: appInfo.id,
       appName: appInfo.name,
-      uuid: (await Device.getId()).uuid,
+      uuid: (await Device.getId()).identifier,
       ...(await Device.getInfo()),
       ...(await Device.getBatteryInfo()),
     };
