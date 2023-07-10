@@ -266,8 +266,9 @@
   },
   "home": {
     "profileTab": {
-      "captured": "Captured",
+      "validated": "Validated",
       "collected": "Collected",
+      "draft": "Draft",
       "captureNotUploadedYet": "Capture not uploaded yet"
     }
   },
