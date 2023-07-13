@@ -79,6 +79,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   curCaptureFileSize?: number;
   curCaptureFilePath?: string;
+  curCaptureFileName?: string;
   curCaptureMimeType?: 'image/jpeg' | 'video/mp4';
   curCaptureType?: MediaType = 'image';
   curCaptureSrc?: string;
@@ -137,8 +138,32 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     });
   }
 
-  private handleCaptureSuccessResult(result: CaptureSuccessResult) {
-    this.prepareForPublishing(result, CameraSource.Camera);
+  private async handleCaptureSuccessResult(result: CaptureSuccessResult) {
+    const resultCopy = await this.copyResultIfNeeded(result);
+    this.prepareForPublishing(resultCopy, CameraSource.Camera);
+  }
+
+  private async copyResultIfNeeded(result: CaptureSuccessResult) {
+    /**
+     * WORKAROUND:
+     * On Android 13 capacitor filesystem plugin need to pass directory parameter to be
+     * able to re-write media file (aka when we edit image and save it the same file).
+     * Therefore we copy image to cache so we can re-write it if user crop/filter the image.
+     *
+     */
+    if (this.platform.is('android') && result.mimeType.startsWith('image/')) {
+      const originalFilePath = result.path;
+      const readFileResult = await Filesystem.readFile({ path: result.path });
+      const writeFileResult = await Filesystem.writeFile({
+        data: readFileResult.data,
+        path: `${result.name}`,
+        directory: Directory.Cache,
+        recursive: true,
+      });
+      result.path = writeFileResult.uri;
+      await Filesystem.deleteFile({ path: originalFilePath });
+    }
+    return result;
   }
 
   private handleCaptureErrorResult(result: CaptureErrorResult) {
@@ -151,6 +176,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
   ) {
     this.curCaptureFileSize = result.size;
     this.curCaptureFilePath = result.path;
+    this.curCaptureFileName = result.name;
     this.curCaptureMimeType = result.mimeType;
     this.curCaptureType = result.mimeType === 'image/jpeg' ? 'image' : 'video';
     this.curCaptureSrc = Capacitor.convertFileSrc(result.path);
@@ -323,7 +349,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
       const readFileResult = await Filesystem.readFile({ path: file.path });
       const writeFileresult = await Filesystem.writeFile({
         data: readFileResult.data,
-        path: `${Date.now()}/${file.name}`,
+        path: `${file.name}`,
         directory: Directory.Cache,
         recursive: true,
       });
