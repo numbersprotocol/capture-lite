@@ -145,7 +145,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   private async copyResultIfNeeded(result: CaptureSuccessResult) {
     /**
-     * WORKAROUND:
+     * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/2904
      * On Android 13 capacitor filesystem plugin need to pass directory parameter to be
      * able to re-write media file (aka when we edit image and save it the same file).
      * Therefore we copy image to cache so we can re-write it if user crop/filter the image.
