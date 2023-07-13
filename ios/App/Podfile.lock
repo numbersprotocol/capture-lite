@@ -47,7 +47,7 @@ PODS:
     - Capacitor
   - CapacitorStorage (1.2.4):
     - Capacitor
-  - CapawesomeCapacitorFilePicker (5.0.0):
+  - CapawesomeCapacitorFilePicker (0.6.3):
     - Capacitor
   - CordovaPlugins (5.0.5):
     - CapacitorCordova
@@ -109,6 +109,8 @@ PODS:
     - Capacitor
   - NumbersprotocolPreviewMemory (0.0.2):
     - Capacitor
+  - NumbersprotocolPreviewThumbnail (0.0.1):
+    - Capacitor
   - NumbersprotocolPreviewVideo (0.0.4):
     - Capacitor
   - PromisesObjC (2.2.0)
@@ -142,6 +144,7 @@ DEPENDENCIES:
   - FirebaseCore
   - "NumbersprotocolPreviewCamera (from `../../node_modules/@numbersprotocol/preview-camera`)"
   - "NumbersprotocolPreviewMemory (from `../../node_modules/@numbersprotocol/preview-memory`)"
+  - "NumbersprotocolPreviewThumbnail (from `../../node_modules/@numbersprotocol/preview-thumbnail`)"
   - "NumbersprotocolPreviewVideo (from `../../node_modules/@numbersprotocol/preview-video`)"
 
 SPEC REPOS:
@@ -211,6 +214,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@numbersprotocol/preview-camera"
   NumbersprotocolPreviewMemory:
     :path: "../../node_modules/@numbersprotocol/preview-memory"
+  NumbersprotocolPreviewThumbnail:
+    :path: "../../node_modules/@numbersprotocol/preview-thumbnail"
   NumbersprotocolPreviewVideo:
     :path: "../../node_modules/@numbersprotocol/preview-video"
 
@@ -238,7 +243,7 @@ SPEC CHECKSUMS:
   CapacitorShare: 427bba238a1e3f116b2b349019aec6ea7f42cebd
   CapacitorSplashScreen: 93a389d4f7673c08214ae25bb6f21d867d5305c5
   CapacitorStorage: 8ec2cf8fec179d829288b16c6fba6c3c43d2bdc9
-  CapawesomeCapacitorFilePicker: ec211560d209c2efa0e47dad3308bf497e6ce388
+  CapawesomeCapacitorFilePicker: f354c9ec6e4722908876032939a85ffb94642630
   CordovaPlugins: c905b3b4dfc87d2a11bdbdaf396289c4a22c39dd
   Firebase: facd334e557a979bd03a0b58d90fd56b52b8aba0
   FirebaseCore: d027ff503d37edb78db98429b11f580a24a7df2a
@@ -251,9 +256,10 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   NumbersprotocolPreviewCamera: 85a8c8bbb09f68b0bdb16e0853795c6c0205b1d5
   NumbersprotocolPreviewMemory: ffeff13462e015bfaf9f777525a949034860f4cb
+  NumbersprotocolPreviewThumbnail: 9ced7f36664a44cb04d1d6eda0cab64f748a7fb3
   NumbersprotocolPreviewVideo: 2cfa3fa666c83850903a220d74dc855ac5b6a520
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
 
-PODFILE CHECKSUM: 1f26ed9e4dde2462db99e6f11d4db07ca2c91d05
+PODFILE CHECKSUM: ca23a738e2088419c030723ec434a2f9bc1c78f0
 
 COCOAPODS: 1.12.0
