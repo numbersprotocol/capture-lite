@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Permissions -->
 
@@ -41,6 +42,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <!-- For in-app purchases -->
     <uses-permission android:name="com.android.vending.BILLING" />
+    <!-- https://dev.appsflyer.com/hc/docs/install-android-sdk#revoking-the-ad_id-permission -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove"/>
 
 
     <queries>

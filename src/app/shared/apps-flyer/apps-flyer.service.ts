@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AdvertisingId } from '@capacitor-community/advertising-id';
+import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { AFEvent, AFInit, AppsFlyer } from 'appsflyer-capacitor-plugin';
 import { APPS_FLYER_DEV_KEY } from '../dia-backend/secret';
@@ -11,7 +12,7 @@ export class AppsFlyerService {
   private readonly afConfig: AFInit = {
     appID: '1536388009', // AppStore Application ID. For iOS only.
     devKey: APPS_FLYER_DEV_KEY,
-    isDebug: false,
+    isDebug: true,
     waitForATTUserAuthorization: 15, // for iOS 14 and higher
     minTimeBetweenSessions: 6, // default 5 sec
     registerOnDeepLink: true,
@@ -25,32 +26,25 @@ export class AppsFlyerService {
   constructor(private readonly platform: Platform) {}
 
   async initAppsFlyerSDK() {
-    await this.platform.ready();
+    try {
+      await this.platform.ready();
 
-    if (this.shouldInit === false) return;
+      if (this.shouldInit === false) return;
 
-    if (this.platform.is('ios')) {
       await AdvertisingId.requestTracking();
-    }
 
-    await AppsFlyer.initSDK(this.afConfig);
+      await AppsFlyer.initSDK(this.afConfig);
+      console.log(`initAppsFlyerSDK SUCCESS`);
+    } catch (error) {
+      console.log(`initAppsFlyerSDK ERROR`);
+      console.log(error);
+      // TODO: report crashlytics
+    }
   }
 
   private get shouldInit() {
-    /**
-     * Do not init apps flyer SDK if dev key is not provided.
-     */
-    // eslint-disable-next-line no-extra-boolean-cast, @typescript-eslint/no-unnecessary-condition
-    if (!!APPS_FLYER_DEV_KEY) {
-      return false;
-    }
-    /**
-     * Do not init apps flyer SDK in Web environment.
-     */
-    if (!this.isNativePlatform) {
-      return false;
-    }
-    return true;
+    const isTruthy = Boolean(APPS_FLYER_DEV_KEY);
+    return isTruthy && this.isNativePlatform;
   }
 
   async trackUserOpenedWalletsPage() {
@@ -61,7 +55,8 @@ export class AppsFlyerService {
     return AppsFlyer.logEvent(data).catch(() => ({}));
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private get isNativePlatform() {
-    return this.platform.is('hybrid');
+    return Capacitor.isNativePlatform();
   }
 }
