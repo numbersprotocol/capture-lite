@@ -47,7 +47,7 @@ PODS:
     - Capacitor
   - CapacitorStorage (1.2.4):
     - Capacitor
-  - CapawesomeCapacitorFilePicker (5.0.0):
+  - CapawesomeCapacitorFilePicker (0.6.3):
     - Capacitor
   - CordovaPlugins (5.0.5):
     - CapacitorCordova
@@ -238,7 +238,7 @@ SPEC CHECKSUMS:
   CapacitorShare: 427bba238a1e3f116b2b349019aec6ea7f42cebd
   CapacitorSplashScreen: 93a389d4f7673c08214ae25bb6f21d867d5305c5
   CapacitorStorage: 8ec2cf8fec179d829288b16c6fba6c3c43d2bdc9
-  CapawesomeCapacitorFilePicker: ec211560d209c2efa0e47dad3308bf497e6ce388
+  CapawesomeCapacitorFilePicker: f354c9ec6e4722908876032939a85ffb94642630
   CordovaPlugins: c905b3b4dfc87d2a11bdbdaf396289c4a22c39dd
   Firebase: facd334e557a979bd03a0b58d90fd56b52b8aba0
   FirebaseCore: d027ff503d37edb78db98429b11f580a24a7df2a
@@ -256,4 +256,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1f26ed9e4dde2462db99e6f11d4db07ca2c91d05
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1
