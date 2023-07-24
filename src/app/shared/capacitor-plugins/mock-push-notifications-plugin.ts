@@ -1,14 +1,14 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 import { PluginListenerHandle } from '@capacitor/core';
 import {
-  ActionPerformed as PushNotificationActionPerformed,
   Channel as NotificationChannel,
-  DeliveredNotifications as PushNotificationDeliveredList,
   ListChannelsResult as NotificationChannelList,
   PermissionStatus,
   PushNotificationSchema as PushNotification,
-  PushNotificationsPlugin,
+  ActionPerformed as PushNotificationActionPerformed,
+  DeliveredNotifications as PushNotificationDeliveredList,
   Token as PushNotificationToken,
+  PushNotificationsPlugin,
 } from '@capacitor/push-notifications';
 
 export class MockPushNotificationsPlugin implements PushNotificationsPlugin {
@@ -17,6 +17,10 @@ export class MockPushNotificationsPlugin implements PushNotificationsPlugin {
   }
 
   async register(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  async unregister(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
