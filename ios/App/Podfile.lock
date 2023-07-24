@@ -39,7 +39,7 @@ PODS:
     - Capacitor
   - CapacitorNetwork (5.0.4):
     - Capacitor
-  - CapacitorPushNotifications (5.0.4):
+  - CapacitorPushNotifications (5.0.6):
     - Capacitor
   - CapacitorShare (5.0.4):
     - Capacitor
@@ -239,7 +239,7 @@ SPEC CHECKSUMS:
   CapacitorLocalNotifications: 2c95d27ccf9cc28ecc59d69b54d29074c1740172
   CapacitorNativeSettings: b6f40955945bc659f966a43fa54fc6be192d8f9b
   CapacitorNetwork: e2bd0bf1614aca34bb976f125a756a8a3df1c81a
-  CapacitorPushNotifications: 3704ac3dac68a9bfc669fb384cbc7beec9b1f100
+  CapacitorPushNotifications: 7eb70469f1fcc3dec07126336d4896520e4991db
   CapacitorShare: 427bba238a1e3f116b2b349019aec6ea7f42cebd
   CapacitorSplashScreen: 93a389d4f7673c08214ae25bb6f21d867d5305c5
   CapacitorStorage: 8ec2cf8fec179d829288b16c6fba6c3c43d2bdc9
