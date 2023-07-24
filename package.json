@@ -67,7 +67,7 @@
     "@pqina/angular-pintura": "^8.44.1",
     "@pqina/pintura": "^8.44.1",
     "@techiediaries/ngx-qrcode": "^9.1.0",
-    "appsflyer-capacitor-plugin": "^6.10.3",
+    "appsflyer-capacitor-plugin": "github:numbersprotocol/appsflyer-capacitor-plugin",
     "async-mutex": "^0.3.2",
     "buffer": "^5.7.1",
     "capacitor-blob-writer": "^1.0.4",
