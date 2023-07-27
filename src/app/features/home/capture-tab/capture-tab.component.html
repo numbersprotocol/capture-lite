@@ -14,22 +14,25 @@
   </mat-card>
   <app-uploading-bar></app-uploading-bar>
 
-  <div [ngSwitch]="categories">
-    <ion-segment mode="md" [(ngModel)]="categories">
-      <ion-segment-button value="captured">
-        <ion-label>{{ 'home.profileTab.captured' | transloco }}</ion-label>
+  <div [ngSwitch]="segment">
+    <ion-segment mode="md" [(ngModel)]="segment">
+      <ion-segment-button [value]="captureTabSegments.VERIFIED">
+        <ion-label>{{ 'home.profileTab.validated' | transloco }}</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="collected">
+      <ion-segment-button [value]="captureTabSegments.COLLECTED">
         <ion-label>{{ 'home.profileTab.collected' | transloco }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button [value]="captureTabSegments.DRAFT">
+        <ion-label>{{ 'home.profileTab.draft' | transloco }}</ion-label>
       </ion-segment-button>
     </ion-segment>
 
-    <div *ngSwitchCase="'captured'">
+    <div *ngSwitchCase="captureTabSegments.VERIFIED">
       <div class="capture-container" *transloco="let t">
         <mat-grid-list cols="2" gutterSize="16px">
           <mat-grid-tile
             *ngFor="
-              let proof of capturedTabItems$ | ngrxPush;
+              let proof of validatedTabItems$ | ngrxPush;
               first as isFirstProof;
               trackBy: trackCaptureItem
             "
@@ -44,7 +47,7 @@
       </div>
     </div>
 
-    <div class="post-captures" *ngSwitchCase="'collected'">
+    <div class="post-captures" *ngSwitchCase="captureTabSegments.COLLECTED">
       <mat-grid-list cols="2" gutterSize="16px">
         <mat-grid-tile
           class="capture-item"
@@ -72,6 +75,22 @@
           <ion-img [src]="postCapture.asset_file_thumbnail"></ion-img>
         </mat-grid-tile>
       </mat-grid-list>
+    </div>
+
+    <div *ngSwitchCase="captureTabSegments.DRAFT">
+      <div class="capture-container" *transloco="let t">
+        <mat-grid-list cols="2" gutterSize="16px">
+          <mat-grid-tile
+            *ngFor="
+              let proof of draftTabItems$ | ngrxPush;
+              trackBy: trackCaptureItem
+            "
+            class="capture-item"
+          >
+            <app-capture-item [proof]="proof"></app-capture-item>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
     </div>
   </div>
 
