@@ -80,10 +80,6 @@
 		"classpath": "io.numbersprotocol.capturelite.plugins.previewmemory.PreviewMemoryPlugin"
 	},
 	{
-		"pkg": "@numbersprotocol/preview-thumbnail",
-		"classpath": "io.numbersprotocol.capturelite.plugins.previewthumbnail.PreviewThumbnailPlugin"
-	},
-	{
 		"pkg": "@numbersprotocol/preview-video",
 		"classpath": "io.numbersprotocol.capturelite.plugins.previewvideo.PreviewVideoPlugin"
 	},
