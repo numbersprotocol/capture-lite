@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.82.2]
+
+### Added
+
+1. Add new tab "DRAFT" on mycapture tab (#2931)
+
+### Fixed
+
+1. Fix can't register new account on some android device (#2928)
+1. Fix User can’t register asset when using capture camera (#2930)
+1. Fix Change capture tab VALIDATED to VERIFIED (#2939)
+1. Fix 4k videos can not generate thumbnail on some android devices (Android only) (#2923). reverted (#2938)
+1. Fix show correct error mesage for sign up duplicate username error (#2926)
+
+### Changed
+
+1. Refactor details.page.ts according to ChatGPT suggestions (#2927)
+1. Migrate from Capacitor 4 to Capacitor 5 (#2918)
+
 ## [0.81.2] - 2023-06-04
 
 ### Added
@@ -2134,7 +2153,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.81.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.82.2...HEAD
+[0.82.2]: https://github.com/numbersprotocol/capture-lite/compare/0.81.2...0.82.2
 [0.81.2]: https://github.com/numbersprotocol/capture-lite/compare/0.79.0...0.81.2
 [0.79.0]: https://github.com/numbersprotocol/capture-lite/compare/0.78.0...0.79.0
 [0.78.0]: https://github.com/numbersprotocol/capture-lite/compare/0.77.2...0.78.0
