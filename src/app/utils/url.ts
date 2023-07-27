@@ -33,15 +33,3 @@ export function getAppDownloadLink(isPlatform: (platformName: any) => boolean) {
 
   return urlToDownloadApp;
 }
-
-/**
- * Reverts the file path obtained from Capacitor.convertFileSrc back to its original form.
- *
- * @param filePath - The file path to revert.
- * @returns The reverted file path.
- */
-export function revertCapacitorFilePath(filePath: string): string {
-  const capacitorFilePrefix = /https?:\/\/[^/]+\/_capacitor_file_\//;
-  const originalFilePrefix = 'file:///'; // Replace with your chosen variable name
-  return filePath.replace(capacitorFilePrefix, originalFilePrefix);
-}

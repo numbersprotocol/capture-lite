@@ -5,7 +5,6 @@ import {
   Directory as FilesystemDirectory,
   FilesystemPlugin,
 } from '@capacitor/filesystem';
-import { PreviewThumbnail } from '@numbersprotocol/preview-thumbnail';
 import { Mutex } from 'async-mutex';
 import write_blob from 'capacitor-blob-writer';
 import Compressor from 'compressorjs';
@@ -13,8 +12,8 @@ import { defer, merge } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { sha256WithBase64 } from '../../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
-import { MimeType, fromExtension, toExtension } from '../../../utils/mime-type';
-import { revertCapacitorFilePath, toDataUrl } from '../../../utils/url';
+import { fromExtension, MimeType, toExtension } from '../../../utils/mime-type';
+import { toDataUrl } from '../../../utils/url';
 import { FILESYSTEM_PLUGIN } from '../../capacitor-plugins/capacitor-plugins.module';
 import { Database } from '../../database/database.service';
 import { OnConflictStrategy, Tuple } from '../../database/table/table';
@@ -383,35 +382,7 @@ async function makeVideoThumbnail({
   videoUrl: string;
   width: number;
   quality?: number;
-}): Promise<Blob> {
-  /**
-   * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/2855
-   * Generate thumbnails for videos using a workaround.
-   *
-   * In the capture app, generating video thumbnails involves two steps:
-   * 1. Obtaining the first frame of the video.
-   * 2. Passing the first frame to Compresjs for thumbnail generation.
-   *
-   * Normally, the first step is achieved by using the HTML <video> tag, which works well
-   * on iOS, Android, and Web. However, due to limitations of the Android WebView, certain
-   * videos, such as 4k or HEVC videos, cannot be played using the <video> tag. This results
-   * in broken thumbnails when the first frame cannot be obtained.
-   *
-   * As a workaround, we will use @numbersprotocol/preview-thumbnail to obtain the first
-   * frame of any video, and then pass the result to the second step (Compressjs).
-   */
-  if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android') {
-    return new Promise<Blob>((resolve, reject) =>
-      PreviewThumbnail.thumbnailData({
-        video: revertCapacitorFilePath(videoUrl),
-      })
-        .then(({ value }) => base64ToBlob(value, 'image/jpeg'))
-        .then(image => makeImageThumbnail({ image, width, quality }))
-        .then(resolve)
-        .catch(reject)
-    );
-  }
-
+}) {
   return new Promise<Blob>((resolve, reject) => {
     const videoElement = document.createElement('video');
     videoElement.addEventListener('canplay', onCanPlay);
