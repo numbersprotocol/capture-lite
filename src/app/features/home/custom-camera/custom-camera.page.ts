@@ -31,6 +31,10 @@ import {
   throttleTime,
 } from 'rxjs/operators';
 import { AndroidBackButtonService } from '../../../shared/android-back-button/android-back-button.service';
+import {
+  CaptureTabSegments,
+  CaptureTabService,
+} from '../../../shared/capture-tab/capture-tab.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ErrorService } from '../../../shared/error/error.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
@@ -111,6 +115,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly userGuideService: UserGuideService,
     private readonly confirmAlert: ConfirmAlert,
     private readonly translocoService: TranslocoService,
+    private readonly captureTabService: CaptureTabService,
     private readonly ref: ChangeDetectorRef,
     private readonly androidBackButtonService: AndroidBackButtonService,
     private readonly navController: NavController,
@@ -449,7 +454,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
         this.curCaptureType,
         this.curCaptureCameraSource
       );
-
+      this.captureTabService.focusTo(CaptureTabSegments.DRAFT);
       this.leaveCustomCamera();
     } catch (error: unknown) {
       this.errorService.toastError$(error).pipe(take(1)).subscribe();

@@ -254,7 +254,7 @@ export class DiaBackendAuthService {
           {
             fcm_token: fcmToken,
             platform: deviceInfo.platform,
-            device_identifier: deviceId.uuid,
+            device_identifier: deviceId.identifier,
           },
           { headers }
         )

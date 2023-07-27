@@ -266,8 +266,9 @@
   },
   "home": {
     "profileTab": {
-      "captured": "瞬時影像",
+      "verified": "已驗證",
       "collected": "收藏",
+      "draft": "草稿",
       "captureNotUploadedYet": "Capture 尚未上傳"
     }
   },
