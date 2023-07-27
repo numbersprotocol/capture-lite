@@ -252,11 +252,10 @@
     "waitingToBeAccepted": "等待中"
   },
   "networkActionOrderState": {
-    "submitted": "已送出",
-    "paid": "繳費成功",
-    "payment_failed": "繳費失敗",
-    "completed": "已完成",
-    "failed": "已失敗"
+    "created": "已創建",
+    "pending": "處理中",
+    "success": "成功",
+    "failure": "已失敗"
   },
   "payment": {
     "confirmPayment": "你的訂單",

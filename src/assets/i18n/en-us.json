@@ -252,11 +252,10 @@
     "waitingToBeAccepted": "In Progress"
   },
   "networkActionOrderState": {
-    "submitted": "Submitted",
-    "paid": "Paid",
-    "payment_failed": "Payment Failed",
-    "completed": "Completed",
-    "failed": "Failed"
+    "created": "Created",
+    "pending:": "Pending",
+    "success": "Success",
+    "failure": "Failure"
   },
   "payment": {
     "confirmPayment": "Your Order",
