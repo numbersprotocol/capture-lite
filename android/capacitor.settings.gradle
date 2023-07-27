@@ -62,9 +62,6 @@ project(':numbersprotocol-preview-camera').projectDir = new File('../node_module
 include ':numbersprotocol-preview-memory'
 project(':numbersprotocol-preview-memory').projectDir = new File('../node_modules/@numbersprotocol/preview-memory/android')
 
-include ':numbersprotocol-preview-thumbnail'
-project(':numbersprotocol-preview-thumbnail').projectDir = new File('../node_modules/@numbersprotocol/preview-thumbnail/android')
-
 include ':numbersprotocol-preview-video'
 project(':numbersprotocol-preview-video').projectDir = new File('../node_modules/@numbersprotocol/preview-video/android')
 
