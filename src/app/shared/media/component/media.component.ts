@@ -175,15 +175,15 @@ export class MediaComponent implements AfterViewInit, OnDestroy {
    * and the native player is no longer needed.
    */
   private removeCSSClass() {
-    // Remove the CSS class from the body element
-    this.renderer.removeClass(
-      this.elementRef.nativeElement.ownerDocument.body,
-      this.globalCSSClass
-    );
-    // Remove the CSS class from the ion-app element
-    this.renderer.removeClass(
-      this.elementRef.nativeElement.ownerDocument.querySelector('ion-app'),
-      this.globalCSSClass
-    );
+    const bodyElement = this.elementRef.nativeElement.ownerDocument.body;
+    const ionAppElement =
+      this.elementRef.nativeElement.ownerDocument.querySelector('ion-app');
+
+    if (bodyElement && ionAppElement) {
+      // Remove the CSS class from the body element
+      this.renderer.removeClass(bodyElement, this.globalCSSClass);
+      // Remove the CSS class from the ion-app element
+      this.renderer.removeClass(ionAppElement, this.globalCSSClass);
+    }
   }
 }
