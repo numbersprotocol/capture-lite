@@ -1,8 +1,6 @@
 name: test
 
-on:
-  push:
-    branches: [master, develop, 'feature-*', 'fix-*', 'hotfix-*']
+on: [push, pull_request]
 
 jobs:
   lint:

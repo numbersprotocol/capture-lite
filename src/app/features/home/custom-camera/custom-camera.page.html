@@ -150,6 +150,7 @@
     *ngIf="(mode$ | ngrxPush) === 'pre-publish'"
     [curCaptureFileSize]="curCaptureFileSize"
     [curCaptureFilePath]="curCaptureFilePath"
+    [curCaptureFileName]="curCaptureFileName"
     [curCaptureMimeType]="curCaptureMimeType"
     [curCaptureSrc]="curCaptureSrc"
     (confirm)="confirmCurrentCapture()"
