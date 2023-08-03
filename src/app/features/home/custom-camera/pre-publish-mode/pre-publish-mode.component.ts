@@ -215,8 +215,8 @@ export class PrePublishModeComponent {
       tap(isImage => (isImage ? this.confirmImage() : this.confirmVideo()))
     );
 
-    const showIsFileSizeExceededAction$ = defer(() =>
-      this.showIsFileSizeExceededModal()
+    const showFileSizeExceededAction$ = defer(() =>
+      this.showFileSizeExceededModal()
     );
 
     const shouldShowFileSizeExeededDialog$ = combineLatest([
@@ -230,7 +230,7 @@ export class PrePublishModeComponent {
         switchMap(shouldShowFileSizeExeededDialog =>
           iif(
             () => shouldShowFileSizeExeededDialog,
-            showIsFileSizeExceededAction$,
+            showFileSizeExceededAction$,
             runConfirmAction$
           )
         )
@@ -255,7 +255,7 @@ export class PrePublishModeComponent {
     this.confirm.emit(true);
   }
 
-  private showIsFileSizeExceededModal() {
+  private showFileSizeExceededModal() {
     const translations$ = this.translocoService.selectTranslateObject({
       'customCamera.error.fileSizeExeedsLimit': null,
       ok: null,
