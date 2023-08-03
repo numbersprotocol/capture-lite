@@ -18,7 +18,7 @@ PODS:
     - Capacitor
   - CapacitorClipboard (5.0.4):
     - Capacitor
-  - CapacitorCommunityAdvertisingId (1.0.0):
+  - CapacitorCommunityAdvertisingId (5.0.0):
     - Capacitor
   - CapacitorCommunityBluetoothLe (2.2.3):
     - Capacitor
@@ -223,7 +223,7 @@ SPEC CHECKSUMS:
   CapacitorBrowser: 2688852d02f1e89560a31b70521c71a5e7348860
   CapacitorCamera: 9b5c8e809c1042f263994f97ba846aa37e974f12
   CapacitorClipboard: 46f3959735fa0d96b9989dafcc4aed52e624d163
-  CapacitorCommunityAdvertisingId: ffbeee30080f0057f7af6e465a7552b68a3d3fdf
+  CapacitorCommunityAdvertisingId: 41543d8212fb12b6913b798bf1442c2a6bc1ae91
   CapacitorCommunityBluetoothLe: 7de4f21022a05b15195abfb002872884d00715fc
   CapacitorCommunityHttp: 7be90668527ef14ee10d08135b0e00fac9cf8247
   CapacitorCommunityWifi: 47188c74f2c6bcaefb619380863be8c67b1917c8
