@@ -7,6 +7,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { CameraSource } from '@capacitor/camera';
 import { Directory, FilesystemPlugin } from '@capacitor/filesystem';
 import { AlertController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -58,6 +59,12 @@ export class PrePublishModeComponent {
 
   private toggleBlackAndWhiteFilter = true;
 
+  readonly curCaptureCameraSource$ = new ReplaySubject<CameraSource>(1);
+
+  readonly isFromGallery$ = this.curCaptureCameraSource$.pipe(
+    map(cameraSource => cameraSource === CameraSource.Photos)
+  );
+
   readonly curCaptureFileSize$ = new ReplaySubject<number>(1);
 
   readonly curCaptureFilePath$ = new ReplaySubject<string>(1);
@@ -98,7 +105,12 @@ export class PrePublishModeComponent {
   readonly isFileSizeExceeded$ = combineLatest([
     this.curCaptureFileSize$,
     this.maxAllowedFileSize$,
-  ]).pipe(map(([curSize, maxSize]) => curSize < maxSize));
+  ]).pipe(map(([curSize, maxSize]) => curSize > maxSize));
+
+  @Input()
+  set curCaptureCameraSource(value: CameraSource | undefined) {
+    if (value) this.curCaptureCameraSource$.next(value);
+  }
 
   @Input()
   set curCaptureFileSize(value: number | undefined) {
@@ -227,17 +239,21 @@ export class PrePublishModeComponent {
       this.showIsFileSizeExceededModal()
     );
 
-    this.isFileSizeExceeded$
+    const shouldShowFileSizeExeededDialog$ = combineLatest([
+      this.isFromGallery$,
+      this.isFileSizeExceeded$,
+    ]).pipe(map(([c1, c2]) => c1 === true && c2 === true));
+
+    shouldShowFileSizeExeededDialog$
       .pipe(
         first(),
-        switchMap(hasEnoughMemory =>
+        switchMap(shouldShowFileSizeExeededDialog =>
           iif(
-            () => hasEnoughMemory,
-            runConfirmAction$,
-            showIsFileSizeExceededAction$
+            () => shouldShowFileSizeExeededDialog,
+            showIsFileSizeExceededAction$,
+            runConfirmAction$
           )
-        ),
-        catchError((error: unknown) => this.errorService.toastError$(error))
+        )
       )
       .subscribe();
   }
