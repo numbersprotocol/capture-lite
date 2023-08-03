@@ -8,8 +8,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CameraSource } from '@capacitor/camera';
-import { FilesystemPlugin } from '@capacitor/filesystem';
-import { AlertController } from '@ionic/angular';
+import { Directory, FilesystemPlugin } from '@capacitor/filesystem';
+import { AlertController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { ColorMatrix, getEditorDefaults } from '@pqina/pintura';
 import {
@@ -69,6 +69,8 @@ export class PrePublishModeComponent {
 
   readonly curCaptureFilePath$ = new ReplaySubject<string>(1);
 
+  readonly curCaptureFileName$ = new ReplaySubject<string>(1);
+
   readonly curCaptureMimeType$ = new ReplaySubject<CaptureMimeType>(1);
 
   readonly curCaptureSrc$ = new ReplaySubject<string>(1);
@@ -121,6 +123,11 @@ export class PrePublishModeComponent {
   }
 
   @Input()
+  set curCaptureFileName(value: string | undefined) {
+    if (value) this.curCaptureFileName$.next(value);
+  }
+
+  @Input()
   set curCaptureMimeType(value: CaptureMimeType | undefined) {
     if (value) this.curCaptureMimeType$.next(value);
   }
@@ -141,7 +148,8 @@ export class PrePublishModeComponent {
     private readonly filesystemPlugin: FilesystemPlugin,
     private readonly errorService: ErrorService,
     private readonly alertController: AlertController,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly platform: Platform
   ) {}
 
   handleEditorUpdate(imageState: any): void {
@@ -162,12 +170,24 @@ export class PrePublishModeComponent {
 
   async handleEditorProcess(imageWriterResult: any): Promise<void> {
     const base64 = await blobToBase64(imageWriterResult.dest as File);
-    combineLatest([this.curCaptureFilePath$, of(base64)])
+    combineLatest([
+      this.curCaptureFilePath$,
+      of(base64),
+      this.isImage$,
+      this.curCaptureFileName$,
+    ])
       .pipe(
         first(),
-        switchMap(([path, data]) =>
-          this.filesystemPlugin.writeFile({ path, data })
-        ),
+        switchMap(([path, data, isImage, fileName]) => {
+          if (this.platform.is('android') && isImage) {
+            return this.filesystemPlugin.writeFile({
+              path: fileName,
+              data: data,
+              directory: Directory.Cache,
+            });
+          }
+          return this.filesystemPlugin.writeFile({ path, data });
+        }),
         tap(() => this.isProcessingImage$.next(false)),
         tap(() => this.confirm.emit(true)),
         catchError((error: unknown) => {

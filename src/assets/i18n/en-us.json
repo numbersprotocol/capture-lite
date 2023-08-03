@@ -109,6 +109,7 @@
   "yourPrivateKey": "Your Private Key",
   "copyToClipboard": "Copy To Clipboard",
   "order": "Order",
+  "orders": "Orders",
   "resultUrl": "Result URL",
   "noResultUrlAvailable": "No Result URL available",
   "insufficientNum": "Insufficient NUM",
@@ -156,7 +157,7 @@
     "pleaseWait": "Please wait...",
     "copiedToClipboard": "Copied to clipboard.",
     "invitationEmail": "Enter friend's email to send the invitation.",
-    "clickingSignupToAgreePolicy": "By clicking Sign Up, you agree to our <a href=\"https://ipfs-pin.numbersprotocol.io/ipfs/QmR2AB2qc1fbsTtf77WXmQn3fyNZskLUt1EG4Qoxxnt6Up\" target=\"_blank\">Privacy Policy</a>.",
+    "clickingSignupToAgreePolicy": "By clicking Sign Up you agree to our <a href=\"https://captureappiframe.numbersprotocol.io/terms_of_use\" target=\"_blank\">Terms of Use</a> and <a href=\"https://captureappiframe.numbersprotocol.io/data_policy\" target=\"_blank\">Data Policy</a>.",
     "sendPostCaptureAlert": "After this Capture is sent, the ownership will be transferred to the selected friend. Are you sure?",
     "transactionReceived": "A new Capture received.",
     "transactionExpired": "A Capture you sent is returned.",
@@ -251,11 +252,10 @@
     "waitingToBeAccepted": "In Progress"
   },
   "networkActionOrderState": {
-    "submitted": "Submitted",
-    "paid": "Paid",
-    "payment_failed": "Payment Failed",
-    "completed": "Completed",
-    "failed": "Failed"
+    "created": "Created",
+    "pending:": "Pending",
+    "success": "Success",
+    "failure": "Failure"
   },
   "payment": {
     "confirmPayment": "Your Order",

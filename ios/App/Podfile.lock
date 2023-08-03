@@ -18,7 +18,7 @@ PODS:
     - Capacitor
   - CapacitorClipboard (5.0.4):
     - Capacitor
-  - CapacitorCommunityAdvertisingId (1.0.0):
+  - CapacitorCommunityAdvertisingId (5.0.0):
     - Capacitor
   - CapacitorCommunityBluetoothLe (2.2.3):
     - Capacitor
@@ -33,13 +33,13 @@ PODS:
     - Capacitor
   - CapacitorGeolocation (5.0.4):
     - Capacitor
-  - CapacitorLocalNotifications (5.0.4):
+  - CapacitorLocalNotifications (5.0.6):
     - Capacitor
   - CapacitorNativeSettings (4.0.3):
     - Capacitor
   - CapacitorNetwork (5.0.4):
     - Capacitor
-  - CapacitorPushNotifications (5.0.4):
+  - CapacitorPushNotifications (5.0.6):
     - Capacitor
   - CapacitorShare (5.0.4):
     - Capacitor
@@ -223,7 +223,7 @@ SPEC CHECKSUMS:
   CapacitorBrowser: 2688852d02f1e89560a31b70521c71a5e7348860
   CapacitorCamera: 9b5c8e809c1042f263994f97ba846aa37e974f12
   CapacitorClipboard: 46f3959735fa0d96b9989dafcc4aed52e624d163
-  CapacitorCommunityAdvertisingId: ffbeee30080f0057f7af6e465a7552b68a3d3fdf
+  CapacitorCommunityAdvertisingId: 41543d8212fb12b6913b798bf1442c2a6bc1ae91
   CapacitorCommunityBluetoothLe: 7de4f21022a05b15195abfb002872884d00715fc
   CapacitorCommunityHttp: 7be90668527ef14ee10d08135b0e00fac9cf8247
   CapacitorCommunityWifi: 47188c74f2c6bcaefb619380863be8c67b1917c8
@@ -231,10 +231,10 @@ SPEC CHECKSUMS:
   CapacitorDevice: eb4b5e3b42ac35d2527f20aad296b59e0785dc8d
   CapacitorFilesystem: e1bdfab09b95b181c844c16abcfda45ec8e8ed6b
   CapacitorGeolocation: 33015be1ef496585a60da9efa1c5642ff8624db3
-  CapacitorLocalNotifications: 2c95d27ccf9cc28ecc59d69b54d29074c1740172
+  CapacitorLocalNotifications: c2d8b14794064fd4814b1d6c4ddbac8029afa295
   CapacitorNativeSettings: b6f40955945bc659f966a43fa54fc6be192d8f9b
   CapacitorNetwork: e2bd0bf1614aca34bb976f125a756a8a3df1c81a
-  CapacitorPushNotifications: 3704ac3dac68a9bfc669fb384cbc7beec9b1f100
+  CapacitorPushNotifications: 7eb70469f1fcc3dec07126336d4896520e4991db
   CapacitorShare: 427bba238a1e3f116b2b349019aec6ea7f42cebd
   CapacitorSplashScreen: 93a389d4f7673c08214ae25bb6f21d867d5305c5
   CapacitorStorage: 8ec2cf8fec179d829288b16c6fba6c3c43d2bdc9
