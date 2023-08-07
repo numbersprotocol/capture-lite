@@ -3,3 +3,11 @@ mat-toolbar {
     padding-right: 40px;
   }
 }
+
+ion-segment {
+  display: flex;
+
+  ion-segment-button {
+    flex: 1;
+  }
+}

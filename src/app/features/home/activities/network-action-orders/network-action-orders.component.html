@@ -1,42 +1,42 @@
-<mat-spinner diameter="30" *ngIf="isFetching$ | ngrxPush"></mat-spinner>
-
-<div *ngIf="!(isFetching$ | ngrxPush)">
-  <div *transloco="let t">
-    <mat-list *ngrxLet="networkActionOrders$ as networkActionOrders">
-      <h5 id="empty-orders-msg" *ngIf="networkActionOrders.length === 0">
-        {{ t('noNetworkActionOrdersFound') }}
-      </h5>
-      <ng-container
-        *ngFor="
-          let order of networkActionOrders;
-          last as isLast;
-          trackBy: trackNetworkActionOrderHistoryRecords
-        "
+<div *transloco="let t">
+  <mat-list *ngrxLet="orders$ as networkActionOrders">
+    <h5 id="empty-orders-msg" *ngIf="isOrdersEmpty$ | async">
+      {{ t('noNetworkActionOrdersFound') }}
+    </h5>
+    <ng-container
+      *ngFor="
+        let order of networkActionOrders;
+        last as isLast;
+        trackBy: trackByNetworkActionOrder
+      "
+    >
+      <mat-list-item
+        [routerLink]="['network-action-order-details', { order_id: order.id }]"
       >
-        <mat-list-item
-          [routerLink]="[
-            'network-action-order-details',
-            { order_id: order.order_id_text }
-          ]"
-        >
-          <img
-            decoding="async"
-            loading="lazy"
-            matListAvatar
-            [src]="
-              (order.assetThumbnailUrl$ | ngrxPush) ||
-              '/assets/images/image-placeholder.png'
-            "
-          />
-          <div mat-line>{{ order.network_app_name_text }}</div>
-          <div mat-line>{{ order.asset_id_text }}</div>
-          <div mat-line>{{ order['Created Date'] | date: 'short' }}</div>
-          <button [class]="order.status_text" mat-stroked-button disableRipple>
-            {{ t('networkActionOrderState.' + order.status_text) }}
-          </button>
-        </mat-list-item>
-        <mat-divider *ngIf="!isLast"></mat-divider>
-      </ng-container>
-    </mat-list>
-  </div>
+        <img
+          decoding="async"
+          loading="lazy"
+          matListAvatar
+          [src]="
+            (order.assetThumbnailUrl$ | ngrxPush) ||
+            '/assets/images/image-placeholder.png'
+          "
+        />
+        <div mat-line>{{ order.network_app_name }}</div>
+        <div mat-line>{{ order.action_args.nid || order.action_args.cid }}</div>
+        <div mat-line>{{ order.created_at | date: 'short' }}</div>
+        <button [class]="order.status" mat-stroked-button disableRipple>
+          {{ t('networkActionOrderState.' + order.status) }}
+        </button>
+      </mat-list-item>
+      <mat-divider *ngIf="!isLast"></mat-divider>
+    </ng-container>
+  </mat-list>
 </div>
+
+<ion-infinite-scroll
+  *ngIf="!(isOrdersEmpty$ | ngrxPush)"
+  (ionInfinite)="loadData($event)"
+>
+  <mat-spinner diameter="30"></mat-spinner>
+</ion-infinite-scroll>
