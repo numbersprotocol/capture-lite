@@ -117,10 +117,10 @@ export class NetworkActionOrderDetailsPage {
   }
 
   private copyToClipboardOrderId() {
-    this.order$
+    this.orderId$
       .pipe(
         first(),
-        concatMap(({ order_id_text }) => this.copyToClipboard(order_id_text))
+        concatMap(orderId => this.copyToClipboard(orderId))
       )
       .subscribe();
   }
