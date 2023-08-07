@@ -7,7 +7,6 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { CameraSource } from '@capacitor/camera';
 import { Directory, FilesystemPlugin } from '@capacitor/filesystem';
 import { AlertController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -59,12 +58,6 @@ export class PrePublishModeComponent {
 
   private toggleBlackAndWhiteFilter = true;
 
-  readonly curCaptureCameraSource$ = new ReplaySubject<CameraSource>(1);
-
-  readonly isFromGallery$ = this.curCaptureCameraSource$.pipe(
-    map(cameraSource => cameraSource === CameraSource.Photos)
-  );
-
   readonly curCaptureFileSize$ = new ReplaySubject<number>(1);
 
   readonly curCaptureFilePath$ = new ReplaySubject<string>(1);
@@ -105,12 +98,7 @@ export class PrePublishModeComponent {
   readonly isFileSizeExceeded$ = combineLatest([
     this.curCaptureFileSize$,
     this.maxAllowedFileSize$,
-  ]).pipe(map(([curSize, maxSize]) => curSize > maxSize));
-
-  @Input()
-  set curCaptureCameraSource(value: CameraSource | undefined) {
-    if (value) this.curCaptureCameraSource$.next(value);
-  }
+  ]).pipe(map(([curSize, maxSize]) => curSize < maxSize));
 
   @Input()
   set curCaptureFileSize(value: number | undefined) {
@@ -235,25 +223,21 @@ export class PrePublishModeComponent {
       tap(isImage => (isImage ? this.confirmImage() : this.confirmVideo()))
     );
 
-    const showFileSizeExceededAction$ = defer(() =>
-      this.showFileSizeExceededModal()
+    const showIsFileSizeExceededAction$ = defer(() =>
+      this.showIsFileSizeExceededModal()
     );
 
-    const shouldShowFileSizeExeededDialog$ = combineLatest([
-      this.isFromGallery$,
-      this.isFileSizeExceeded$,
-    ]).pipe(map(([c1, c2]) => c1 === true && c2 === true));
-
-    shouldShowFileSizeExeededDialog$
+    this.isFileSizeExceeded$
       .pipe(
         first(),
-        switchMap(shouldShowFileSizeExeededDialog =>
+        switchMap(hasEnoughMemory =>
           iif(
-            () => shouldShowFileSizeExeededDialog,
-            showFileSizeExceededAction$,
-            runConfirmAction$
+            () => hasEnoughMemory,
+            runConfirmAction$,
+            showIsFileSizeExceededAction$
           )
-        )
+        ),
+        catchError((error: unknown) => this.errorService.toastError$(error))
       )
       .subscribe();
   }
@@ -275,7 +259,7 @@ export class PrePublishModeComponent {
     this.confirm.emit(true);
   }
 
-  private showFileSizeExceededModal() {
+  private showIsFileSizeExceededModal() {
     const translations$ = this.translocoService.selectTranslateObject({
       'customCamera.error.fileSizeExeedsLimit': null,
       ok: null,
