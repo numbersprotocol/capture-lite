@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -38,6 +40,8 @@ export class AppComponent {
     private readonly cameraService: CameraService,
     private readonly errorService: ErrorService,
     private readonly inAppStoreService: InAppStoreService,
+    private readonly zone: NgZone,
+    private readonly router: Router,
     appsFlyerService: AppsFlyerService,
     notificationService: NotificationService,
     pushNotificationService: PushNotificationService,
@@ -58,6 +62,7 @@ export class AppComponent {
       .subscribe();
     this.inAppStoreService.initialize();
     this.initializeApp();
+    this.initializeDeepLinking();
     this.restoreAppState();
     this.initializeCollector();
     this.registerIcon();
@@ -79,6 +84,15 @@ export class AppComponent {
     await this.platform.ready();
     AppComponent.setDarkMode(true);
     await SplashScreen.hide();
+  }
+
+  async initializeDeepLinking() {
+    App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+      this.zone.run(() => {
+        const slug = event.url.split('.app').pop();
+        if (slug) this.router.navigateByUrl(slug);
+      });
+    });
   }
 
   private restoreAppState() {
