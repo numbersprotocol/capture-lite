@@ -41,7 +41,7 @@ export class ShareService {
 
   async shareReferralCode(referralCode: string) {
     const text = this.translocoService.translate(
-      'invitation.useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward',
+      'invitation.useMyReferralCodeToSignUpForCaptureCamPassVerificationAndWeBothGetNumCreditsReward',
       { referralCode: referralCode }
     );
 
