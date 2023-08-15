@@ -7,6 +7,7 @@ export enum BubbleToIonicPostMessage {
   IFRAME_COPY_TO_CLIPBOARD_ASSET_WALLET = 'iframe-copy-to-clipboard-asset-wallet',
   IFRAME_COPY_TO_CLIPBOARD_INTEGRITY_WALLET = 'iframe-copy-to-clipboard-integrity-wallet',
   IFRAME_COPY_TO_CLIPBOARD_PRIVATE_KEY = 'iframe-copy-to-clipboard-private-key',
+  IFRAME_COPY_TO_CLIPBOARD_ORDER_ID = 'iframe-copy-to-clipboard-order-id',
 }
 
 export enum IonicToBubblePostMessage {

@@ -1,1 +1,1 @@
-export const urlToDownloadApp = 'https://link.numbersprotocol.io/CaptureApp';
+export const urlToDownloadApp = 'https://link.numbersprotocol.io/CaptureCam';

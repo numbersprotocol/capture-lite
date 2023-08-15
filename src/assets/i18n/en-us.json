@@ -109,6 +109,7 @@
   "yourPrivateKey": "Your Private Key",
   "copyToClipboard": "Copy To Clipboard",
   "order": "Order",
+  "orders": "Orders",
   "resultUrl": "Result URL",
   "noResultUrlAvailable": "No Result URL available",
   "insufficientNum": "Insufficient NUM",
@@ -251,11 +252,10 @@
     "waitingToBeAccepted": "In Progress"
   },
   "networkActionOrderState": {
-    "submitted": "Submitted",
-    "paid": "Paid",
-    "payment_failed": "Payment Failed",
-    "completed": "Completed",
-    "failed": "Failed"
+    "created": "Created",
+    "pending:": "Pending",
+    "success": "Success",
+    "failure": "Failure"
   },
   "payment": {
     "confirmPayment": "Your Order",
@@ -365,7 +365,7 @@
     "inviteFriendsBenefit": "Get 3 credits for each accepted invitation",
     "shareInvitationCode": "Share invitation code",
     "shareToGetRewarded": "Share to get rewarded",
-    "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "Use my referral code {{referralCode}} to sign up for Capture App, pass verification and we both get NUM Points reward!"
+    "useMyReferralCodeToSignUpForCaptureCamPassVerificationAndWeBothGetNumCreditsReward": "Use my referral code {{referralCode}} to sign up for Capture Cam, pass verification and we both get NUM Credits reward!"
   },
   "gopro": {
     "setup": "GoPro Setup",

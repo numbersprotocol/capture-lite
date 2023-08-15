@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.83.2] - 2023-08-15
+
+### Added
+
+1. Feature v230808 configure capture app to receive deep links (#2974)
+1. Feature v230725 showing order information in the transaction (#2971)
+1. Feature set ios minimum version to 15.7 (#2967)
+1. Feature v230725 showing order information in the transaction (#2965)
+
+### Fixed
+
+1. Fix v230808 Update Invite Friends Message Text (#2980)
+1. Fix v230808 After edit caption need to press back button (#2973)
+1. Fix v230725 Update Icon to Reflect Completed Email Verification Process (#2963)
+1. Fix v230725 appsflyer after capacitor 5 migration (#2962)
+
 ## [0.82.4] - 2023-08-01
 
 ### Fixed
@@ -2164,7 +2180,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.83.2...HEAD
+[0.82.4]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.83.2
 [0.82.4]: https://github.com/numbersprotocol/capture-lite/compare/0.82.3...0.82.4
 [0.82.3]: https://github.com/numbersprotocol/capture-lite/compare/0.82.2...0.82.3
 [0.82.2]: https://github.com/numbersprotocol/capture-lite/compare/0.81.2...0.82.2

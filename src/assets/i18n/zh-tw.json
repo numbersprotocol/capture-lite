@@ -109,6 +109,7 @@
   "yourPrivateKey": "您的私鑰",
   "copyToClipboard": "複製到剪貼簿",
   "order": "訂單",
+  "orders": "訂單",
   "resultUrl": "結果連結",
   "insufficientNum": "NUM 餘額不足",
   "noResultUrlAvailable": "沒有可以顯示的結果連結",
@@ -251,11 +252,10 @@
     "waitingToBeAccepted": "等待中"
   },
   "networkActionOrderState": {
-    "submitted": "已送出",
-    "paid": "繳費成功",
-    "payment_failed": "繳費失敗",
-    "completed": "已完成",
-    "failed": "已失敗"
+    "created": "已創建",
+    "pending": "處理中",
+    "success": "成功",
+    "failure": "已失敗"
   },
   "payment": {
     "confirmPayment": "你的訂單",
@@ -365,7 +365,7 @@
     "inviteFriendsBenefit": "每個接受的邀請可獲得 3 個積分",
     "shareInvitationCode": "分享邀請碼",
     "shareToGetRewarded": "分享以獲得獎勵",
-    "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "透過我的推薦碼 {{referralCode}} 在 Capture App 註冊，一起獲得 NUM Points!"
+    "useMyReferralCodeToSignUpForCaptureCamPassVerificationAndWeBothGetNumCreditsReward": "透過我的推薦碼 {{referral code}} 在 Capture Cam 註冊，一起獲得 NUM Credits!"
   },
   "gopro": {
     "setup": "GoPro 設置",

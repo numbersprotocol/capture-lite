@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AdvertisingId } from '@capacitor-community/advertising-id';
+import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
-import { AFEvent, AFInit, AppsFlyer } from 'appsflyer-capacitor-plugin';
+import { AFInit, AppsFlyer } from 'appsflyer-capacitor-plugin';
 import { APPS_FLYER_DEV_KEY } from '../dia-backend/secret';
 
 @Injectable({
@@ -25,43 +26,33 @@ export class AppsFlyerService {
   constructor(private readonly platform: Platform) {}
 
   async initAppsFlyerSDK() {
-    await this.platform.ready();
+    try {
+      await this.platform.ready();
 
-    if (this.shouldInit === false) return;
+      if (this.shouldInit === false) return;
 
-    if (this.platform.is('ios')) {
       await AdvertisingId.requestTracking();
-    }
 
-    await AppsFlyer.initSDK(this.afConfig);
+      await AppsFlyer.initSDK(this.afConfig);
+    } catch (error) {
+      // TODO: Report error to Crashlytics or any other error reporting service if available.
+    }
   }
 
+  /**
+   * Determines whether AppsFlyer should be initialized.
+   * In APK debug or QA builds, we pass an empty string ("") as the APPS_FLYER_DEV_KEY
+   * to prevent AppsFlyer initialization. This approach helps avoid unnecessary analytics
+   * or install counts in development (DEV) or quality assurance (QA) builds.
+   * AppsFlyer will only be initialized if the following conditions are met:
+   * 1. The APPS_FLYER_DEV_KEY is truthy (not an empty string).
+   * 2. The app is running on a native platform (e.g., a mobile device).
+   *
+   * @returns {boolean} True if AppsFlyer should be initialized, otherwise false.
+   */
+  // eslint-disable-next-line class-methods-use-this
   private get shouldInit() {
-    /**
-     * Do not init apps flyer SDK if dev key is not provided.
-     */
-    // eslint-disable-next-line no-extra-boolean-cast, @typescript-eslint/no-unnecessary-condition
-    if (!!APPS_FLYER_DEV_KEY) {
-      return false;
-    }
-    /**
-     * Do not init apps flyer SDK in Web environment.
-     */
-    if (!this.isNativePlatform) {
-      return false;
-    }
-    return true;
-  }
-
-  async trackUserOpenedWalletsPage() {
-    if (this.isNativePlatform) return;
-
-    const data: AFEvent = { eventName: 'open-wallets-page' };
-
-    return AppsFlyer.logEvent(data).catch(() => ({}));
-  }
-
-  private get isNativePlatform() {
-    return this.platform.is('hybrid');
+    const isTruthy = Boolean(APPS_FLYER_DEV_KEY);
+    return isTruthy && Capacitor.isNativePlatform();
   }
 }
