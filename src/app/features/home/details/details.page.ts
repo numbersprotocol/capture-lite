@@ -25,6 +25,7 @@ import {
 import SwiperCore, { Swiper, Virtual } from 'swiper';
 import { ActionsService } from '../../../shared/actions/service/actions.service';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import { CaptureAppWebCryptoApiSignatureProvider } from '../../../shared/collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
@@ -239,7 +240,8 @@ export class DetailsPage {
     private readonly actionsService: ActionsService,
     private readonly networkService: NetworkService,
     private readonly diaBackendStoreService: DiaBackendStoreService,
-    private readonly iframeService: IframeService
+    private readonly iframeService: IframeService,
+    private readonly capAppWebCryptoApiSignatureProvider: CaptureAppWebCryptoApiSignatureProvider
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -321,6 +323,7 @@ export class DetailsPage {
       this.activeDetailedCapture$.pipe(
         switchMap(c => c.postCreationWorkflowCompleted$)
       ),
+      this.capAppWebCryptoApiSignatureProvider.publicKey$,
       this.translocoService.selectTranslateObject({
         'message.viewAssetProfile': null,
         'message.copyIpfsAddress': null,
@@ -334,6 +337,7 @@ export class DetailsPage {
             detailedCapture,
             diaBackendAsset,
             postCreationWorkflowCompleted,
+            publicKey,
             [
               messageviewAssetProfile,
               messageCopyIpfsAddress,
@@ -361,7 +365,11 @@ export class DetailsPage {
                   },
                 });
               }
-              if (diaBackendAsset?.cai_file) {
+
+              if (
+                diaBackendAsset?.owner_addresses.asset_wallet_address ===
+                publicKey
+              ) {
                 buttons.push({
                   text: messageShareAssetProfile,
                   handler: async () => {
