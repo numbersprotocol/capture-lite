@@ -13,7 +13,7 @@
   </ng-container>
   <button
     *ngIf="(isFromSeriesPage$ | ngrxPush) === false"
-    (click)="openOptionsMenuEvenOffline()"
+    (click)="openOptionsMenuWithAvailableOptions()"
     mat-mini-fab
     class="capture-rebranded-button"
     joyrideStep="highlightDetailsPageOptionsMenu"

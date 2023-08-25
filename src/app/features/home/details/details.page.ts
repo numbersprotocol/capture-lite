@@ -184,6 +184,10 @@ export class DetailsPage {
     )
   );
 
+  readonly postCreationWorkflowCompleted$ = this.activeDetailedCapture$.pipe(
+    switchMap(c => c.postCreationWorkflowCompleted$)
+  );
+
   readonly isCollectedCapture$ = this.type$.pipe(
     map(type => type === 'post-capture')
   );
@@ -398,6 +402,77 @@ export class DetailsPage {
           });
         }),
         untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  async openOptionsMenuWithAvailableOptions() {
+    combineLatest([
+      this.networkConnected$,
+      this.activeDetailedCapture$,
+      this.postCreationWorkflowCompleted$,
+      this.isCollectedCapture$,
+      this.translocoService.selectTranslateObject({
+        'details.actions.edit': null,
+        'details.actions.unpublish': null,
+        'details.actions.networkActions': null,
+        'details.actions.remove': null,
+      }),
+    ])
+      .pipe(
+        first(),
+        map(
+          ([
+            networkConnected,
+            activeDetailedCapture,
+            postCreationWorkflowCompleted,
+            isCollectedCapture,
+            [
+              editActionText,
+              unpublishActionText,
+              networkActionsText,
+              removeActionText,
+            ],
+          ]) => {
+            const buttons: ActionSheetButton[] = [];
+
+            if (
+              networkConnected &&
+              !isCollectedCapture &&
+              activeDetailedCapture.id
+            ) {
+              buttons.push({
+                text: editActionText,
+                handler: () => this.handleEditAction(),
+              });
+            }
+            if (
+              networkConnected &&
+              !isCollectedCapture &&
+              activeDetailedCapture.id
+            ) {
+              buttons.push({
+                text: unpublishActionText,
+                handler: () => this.handleUnpublishAction(),
+              });
+            }
+            if (networkConnected && postCreationWorkflowCompleted) {
+              buttons.push({
+                text: networkActionsText,
+                handler: () => this.handleOpenNetworkActions(),
+              });
+            }
+            buttons.push({
+              text: removeActionText,
+              handler: () => this.handleRemoveAction(),
+              cssClass: 'details-page-options-menu-remove-button',
+            });
+
+            return this.actionSheetController
+              .create({ buttons })
+              .then(sheet => sheet.present());
+          }
+        )
       )
       .subscribe();
   }
