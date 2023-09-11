@@ -21,8 +21,7 @@ export class InvitationPage implements OnInit {
 
   async refetchReferralCode() {
     const referralCode = await this.diaBackendAuthService.getReferralCode();
-    if (!referralCode)
-      await this.diaBackendAuthService.syncProfile$().toPromise();
+    if (!referralCode) await this.diaBackendAuthService.syncUser$().toPromise();
   }
 
   async shareReferralCode() {

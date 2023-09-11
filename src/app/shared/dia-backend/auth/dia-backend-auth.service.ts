@@ -151,7 +151,7 @@ export class DiaBackendAuthService {
       })
       .pipe(
         concatMap(response => this.setToken(response.auth_token)),
-        concatMapTo(this.syncProfile$()),
+        concatMapTo(this.syncUser$()),
         map(([username, _email]) => ({ username, email: _email }))
       );
   }
@@ -420,7 +420,7 @@ export class DiaBackendAuthService {
     );
   }
 
-  syncProfile$() {
+  syncUser$() {
     return this.readUser$().pipe(
       concatMap(response => {
         return forkJoin([
