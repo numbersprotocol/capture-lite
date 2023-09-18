@@ -1,0 +1,46 @@
+.container {
+  margin-bottom: 34px;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+
+  background-color: #212121;
+  border-radius: 4px;
+  border-color: #6f6f6f;
+  border-width: 1px;
+  border-style: solid;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      margin-top: 8px;
+      color: #fff;
+      /* Mobile/Paragraph */
+      font-family: 'Space Grotesk';
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  }
+
+  ion-img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16/9;
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+}
