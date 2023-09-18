@@ -14,7 +14,8 @@ form {
   padding: 16px;
 }
 
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+/*  stylelint-disable-next-line selector-pseudo-element-no-unknown */
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   background-color: #212121;
   border-radius: 4px;
 }
