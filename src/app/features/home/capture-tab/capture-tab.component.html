@@ -3,11 +3,16 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <mat-card *transloco="let t" class="user-card" id="user-card">
-    <app-avatar mat-card-avatar></app-avatar>
+    <app-avatar mat-card-avatar [editable]="false"></app-avatar>
     <mat-card-header>
-      <mat-card-title (click)="editUsername()">{{
-        username$ | ngrxPush
-      }}</mat-card-title>
+      <mat-card-title>
+        {{ username$ | ngrxPush }}
+        <ion-icon
+          src="assets/images/icons/edit.svg"
+          *ngIf="networkConnected$ | async"
+          routerLink="edit-profile"
+        ></ion-icon>
+      </mat-card-title>
       <div class="vertical-space-8"></div>
       <mat-card-subtitle>{{ email$ | ngrxPush }} </mat-card-subtitle>
     </mat-card-header>

@@ -1,0 +1,24 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    color: white;
+  }
+}
+
+form {
+  padding: 16px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  background-color: #212121;
+  border-radius: 4px;
+}
+
+ion-footer {
+  padding: 8px 16px;
+}
