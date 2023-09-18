@@ -136,6 +136,8 @@ export class AppComponent {
       'capture',
       'profile',
       'search',
+      'edit',
+      'capture-rebrand-add',
     ];
 
     for (const iconName of captureRebrandedIconNames) {
