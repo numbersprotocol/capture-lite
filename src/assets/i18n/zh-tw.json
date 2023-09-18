@@ -270,6 +270,17 @@
       "collected": "收藏",
       "draft": "草稿",
       "captureNotUploadedYet": "Capture 尚未上傳"
+    },
+    "editProfile": {
+      "editProfile": "編輯個人頁面",
+      "username": "用戶名稱",
+      "description": "描述",
+      "profilePicture": "個人頁面頭像",
+      "profileBackground": "個人頁面背景",
+      "saveChanges": "儲存變更",
+      "error": {
+        "mustBeBetween": "必須介於 {{ min }} 到 {{ max }} 個字元之間"
+      }
     }
   },
   "details": {
