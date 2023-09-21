@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { SharedModule } from '../../../../shared/shared.module';
+import { MatIconRegistry } from '@angular/material/icon';
+import { FakeMatIconRegistry } from '@angular/material/icon/testing';
+import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 import { ImageInputFormComponent } from './image-input-form.component';
 
 describe('ImageInputFormComponent', () => {
@@ -11,7 +13,10 @@ describe('ImageInputFormComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [ImageInputFormComponent],
-        imports: [SharedModule],
+        imports: [SharedTestingModule],
+        providers: [
+          { provide: MatIconRegistry, useClass: FakeMatIconRegistry },
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(ImageInputFormComponent);
