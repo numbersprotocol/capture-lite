@@ -72,7 +72,7 @@ export class NetworkActionOrderDetailsPage {
        */
       if (assetId) queryParams.append('asset_id', assetId);
 
-      return `${BUBBLE_IFRAME_URL}/version-test/order_details?${queryParams}`;
+      return `${BUBBLE_IFRAME_URL}/order_details?${queryParams}`;
     })
   );
 
