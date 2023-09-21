@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.85.2] - 2023-09-21
+
+### Added
+
+1.  Feature sprint 1 edit profile (#3028)
+
+### Fixed
+
+1.  Fix v230905 issue order details iframe url is broken (#3027)
+
+## [0.84.0] - 2023-08-29
+
+### Added
+
+1.  Feature v230822 use appsflyer official plugin (#3012)
+1.  Feature v230822 Remove options from list on ionic asset page (#3013)
+
+### Fixed
+
+1.  Fix v230814 issue Some asset can't show "share asset profile" on asset page (#3014)
+
 ## [0.83.2] - 2023-08-15
 
 ### Added
@@ -2180,7 +2201,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.83.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.85.2...HEAD
+[0.83.2]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.85.2
 [0.82.4]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.83.2
 [0.82.4]: https://github.com/numbersprotocol/capture-lite/compare/0.82.3...0.82.4
 [0.82.3]: https://github.com/numbersprotocol/capture-lite/compare/0.82.2...0.82.3

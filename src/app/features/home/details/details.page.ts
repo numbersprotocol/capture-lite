@@ -25,6 +25,7 @@ import {
 import SwiperCore, { Swiper, Virtual } from 'swiper';
 import { ActionsService } from '../../../shared/actions/service/actions.service';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import { CaptureAppWebCryptoApiSignatureProvider } from '../../../shared/collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
 import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
@@ -184,6 +185,10 @@ export class DetailsPage {
     )
   );
 
+  readonly postCreationWorkflowCompleted$ = this.activeDetailedCapture$.pipe(
+    switchMap(c => c.postCreationWorkflowCompleted$)
+  );
+
   readonly isCollectedCapture$ = this.type$.pipe(
     map(type => type === 'post-capture')
   );
@@ -239,7 +244,8 @@ export class DetailsPage {
     private readonly actionsService: ActionsService,
     private readonly networkService: NetworkService,
     private readonly diaBackendStoreService: DiaBackendStoreService,
-    private readonly iframeService: IframeService
+    private readonly iframeService: IframeService,
+    private readonly capAppWebCryptoApiSignatureProvider: CaptureAppWebCryptoApiSignatureProvider
   ) {
     this.initializeActiveDetailedCapture$
       .pipe(untilDestroyed(this))
@@ -321,6 +327,7 @@ export class DetailsPage {
       this.activeDetailedCapture$.pipe(
         switchMap(c => c.postCreationWorkflowCompleted$)
       ),
+      this.capAppWebCryptoApiSignatureProvider.publicKey$,
       this.translocoService.selectTranslateObject({
         'message.viewAssetProfile': null,
         'message.copyIpfsAddress': null,
@@ -334,6 +341,7 @@ export class DetailsPage {
             detailedCapture,
             diaBackendAsset,
             postCreationWorkflowCompleted,
+            publicKey,
             [
               messageviewAssetProfile,
               messageCopyIpfsAddress,
@@ -361,7 +369,11 @@ export class DetailsPage {
                   },
                 });
               }
-              if (diaBackendAsset?.cai_file) {
+
+              if (
+                diaBackendAsset?.owner_addresses.asset_wallet_address ===
+                publicKey
+              ) {
                 buttons.push({
                   text: messageShareAssetProfile,
                   handler: async () => {
@@ -402,70 +414,73 @@ export class DetailsPage {
       .subscribe();
   }
 
-  async openOptionsMenuEvenOffline() {
-    this.userGuideService.setHasClickedDetailsPageOptionsMenu(true);
-
-    this.isCollectedCapture$
+  async openOptionsMenuWithAvailableOptions() {
+    combineLatest([
+      this.networkConnected$,
+      this.activeDetailedCapture$,
+      this.postCreationWorkflowCompleted$,
+      this.isCollectedCapture$,
+      this.translocoService.selectTranslateObject({
+        'details.actions.edit': null,
+        'details.actions.unpublish': null,
+        'details.actions.networkActions': null,
+        'details.actions.remove': null,
+      }),
+    ])
       .pipe(
         first(),
-        map(isCollectedCapture => {
-          return new Promise<void>(resolve => {
+        map(
+          ([
+            networkConnected,
+            activeDetailedCapture,
+            postCreationWorkflowCompleted,
+            isCollectedCapture,
+            [
+              editActionText,
+              unpublishActionText,
+              networkActionsText,
+              removeActionText,
+            ],
+          ]) => {
             const buttons: ActionSheetButton[] = [];
 
-            if (!isCollectedCapture) {
+            if (
+              networkConnected &&
+              !isCollectedCapture &&
+              activeDetailedCapture.id
+            ) {
               buttons.push({
-                text: this.translocoService.translate('details.actions.edit'),
-                handler: () => {
-                  this.handleEditAction();
-                  resolve();
-                },
+                text: editActionText,
+                handler: () => this.handleEditAction(),
               });
             }
-            // Temporarely remove Mint & Share button
-            // buttons.push({
-            //   text: this.translocoService.translate('details.actions.mintAndShare'),
-            //   handler: () => {
-            //     this.handleMintAndShareAction();
-            //     resolve();
-            //   },
-            // });
-
-            if (!isCollectedCapture) {
+            if (
+              networkConnected &&
+              !isCollectedCapture &&
+              activeDetailedCapture.id
+            ) {
               buttons.push({
-                text: this.translocoService.translate(
-                  'details.actions.unpublish'
-                ),
-                handler: () => {
-                  this.handleUnpublishAction();
-                  resolve();
-                },
+                text: unpublishActionText,
+                handler: () => this.handleUnpublishAction(),
               });
             }
-
+            if (networkConnected && postCreationWorkflowCompleted) {
+              buttons.push({
+                text: networkActionsText,
+                handler: () => this.handleOpenNetworkActions(),
+              });
+            }
             buttons.push({
-              text: this.translocoService.translate(
-                'details.actions.networkActions'
-              ),
-              handler: () => {
-                this.handleOpenNetworkActions();
-                resolve();
-              },
-            });
-
-            buttons.push({
-              text: this.translocoService.translate('details.actions.remove'),
+              text: removeActionText,
+              handler: () => this.handleRemoveAction(),
               cssClass: 'details-page-options-menu-remove-button',
-              handler: () => {
-                this.handleRemoveAction();
-                resolve();
-              },
             });
 
-            this.actionSheetController
+            return this.actionSheetController
               .create({ buttons })
               .then(sheet => sheet.present());
-          });
-        })
+          }
+        )
       )
       .subscribe();
   }
@@ -666,120 +681,6 @@ export class DetailsPage {
         )
         .subscribe();
     }
-  }
-
-  openOptionsMenu() {
-    this.userGuideService.setHasClickedDetailsPageOptionsMenu(true);
-    combineLatest([
-      this.activeDetailedCapture$,
-      this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
-      this.activeDetailedCapture$.pipe(
-        switchMap(c => c.postCreationWorkflowCompleted$)
-      ),
-      this.translocoService.selectTranslateObject({
-        'message.transferOwnership': null,
-        'message.viewOnCaptureClub': null,
-        'message.deregisterFromNetwork': null,
-        'message.mintNftToken': null,
-        'message.viewAssetProfile': null,
-        'message.viewSupportingVideoOnIpfs': null,
-        networkActions: null,
-      }),
-    ])
-      .pipe(
-        first(),
-        concatMap(
-          ([
-            detailedCapture,
-            diaBackendAsset,
-            postCreationWorkflowCompleted,
-            [
-              messageTransferOwnership,
-              messageViewOnCaptureClub,
-              messageDeregisterFromNetwork,
-              messageMintNftToken,
-              messageviewAssetProfile,
-              messageViewSupportingVideoOnIpfs,
-              messageNetworkActions,
-            ],
-          ]) =>
-            new Promise<void>(resolve => {
-              const buttons: ActionSheetButton[] = [];
-              if (
-                postCreationWorkflowCompleted &&
-                diaBackendAsset?.supporting_file
-              ) {
-                buttons.push({
-                  text: messageViewSupportingVideoOnIpfs,
-                  handler: () => {
-                    this.openIpfsSupportingVideo();
-                  },
-                });
-              }
-              if (postCreationWorkflowCompleted && detailedCapture.id) {
-                buttons.push({
-                  text: messageTransferOwnership,
-                  handler: () => {
-                    this.openContactSelectionDialog();
-                    resolve();
-                  },
-                });
-              }
-              if (diaBackendAsset?.source_type === 'store') {
-                buttons.push({
-                  text: messageViewOnCaptureClub,
-                  handler: () => {
-                    this.openCaptureClub();
-                  },
-                });
-              }
-              buttons.push({
-                text: messageDeregisterFromNetwork,
-                handler: () => {
-                  this.remove().then(() => resolve());
-                },
-              });
-              if (
-                postCreationWorkflowCompleted &&
-                diaBackendAsset?.nft_token_id === null
-              ) {
-                buttons.push({
-                  text: messageMintNftToken,
-                  handler: () => {
-                    this.mintNft().then(() => resolve());
-                  },
-                  role: 'destructive',
-                });
-              }
-              if (postCreationWorkflowCompleted && detailedCapture.id) {
-                buttons.push({
-                  text: messageviewAssetProfile,
-                  handler: () => {
-                    this.openCertificate();
-                    resolve();
-                  },
-                });
-              }
-              if (postCreationWorkflowCompleted) {
-                buttons.push({
-                  text: messageNetworkActions,
-                  handler: () => {
-                    this.router.navigate(
-                      ['actions', { id: detailedCapture.id }],
-                      { relativeTo: this.route }
-                    );
-                    resolve();
-                  },
-                });
-              }
-              this.actionSheetController
-                .create({ buttons })
-                .then(sheet => sheet.present());
-            })
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
   }
 
   private openIpfsSupportingVideo() {

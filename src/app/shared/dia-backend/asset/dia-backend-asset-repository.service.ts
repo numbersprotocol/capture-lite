@@ -6,13 +6,13 @@ import {
 import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
+  ReplaySubject,
+  Subject,
   defer,
   forkJoin,
   iif,
   merge,
   of,
-  ReplaySubject,
-  Subject,
   throwError,
 } from 'rxjs';
 import {
@@ -27,18 +27,18 @@ import {
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { MimeType, toExtension } from '../../../utils/mime-type';
-import { isNonNullable, VOID$ } from '../../../utils/rx-operators/rx-operators';
+import { VOID$, isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { Tuple } from '../../database/table/table';
 import {
+  OldSignature,
+  SortedProofInformation,
   getOldProof,
   getOldSignatures,
   getSortedProofInformation,
-  OldSignature,
-  SortedProofInformation,
 } from '../../repositories/proof/old-proof-adapter';
 import {
-  getSerializedSortedSignedMessage,
   Proof,
+  getSerializedSortedSignedMessage,
 } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { PaginatedResponse } from '../pagination';
@@ -335,6 +335,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly is_original_owner: boolean;
   readonly owner: string;
   readonly owner_name: string;
+  readonly owner_addresses: OwnerAddresses;
   readonly asset_file: string;
   readonly asset_file_thumbnail: string;
   readonly asset_file_mime_type: MimeType;
@@ -355,6 +356,11 @@ export interface DiaBackendAsset extends Tuple {
   readonly caption: string;
   readonly post_creation_workflow_id: string;
   readonly mint_workflow_id: string;
+}
+
+export interface OwnerAddresses extends Tuple {
+  asset_wallet_address: string;
+  managed_wallet_address: string;
 }
 
 export type AssetDownloadField =
