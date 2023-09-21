@@ -270,6 +270,17 @@
       "collected": "Collected",
       "draft": "Draft",
       "captureNotUploadedYet": "Capture not uploaded yet"
+    },
+    "editProfile": {
+      "editProfile": "Edit profile",
+      "username": "Username",
+      "description": "Description",
+      "profilePicture": "Profile Picture",
+      "profileBackground": "Profile Background",
+      "saveChanges": "Save changes",
+      "error": {
+        "mustBeBetween": "Must be between {{ min }} to {{ max }} characters"
+      }
     }
   },
   "details": {

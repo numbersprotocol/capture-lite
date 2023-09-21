@@ -64,6 +64,17 @@ export class DiaBackendAuthService {
     repeatWhen(() => this.refreshAvatar$)
   );
 
+  readonly profileBackground$ = defer(() => this.getAuthHeaders()).pipe(
+    concatMap(headers =>
+      this.httpClient.get<ReadProfileResponse>(
+        `${BASE_URL}/auth/users/profile/`,
+        { headers }
+      )
+    ),
+    map(response => response.profile_background_thumbnail),
+    isNonNullable()
+  );
+
   readonly phoneVerified$ = this.preferences.getBoolean$(
     PrefKeys.PHONE_VERIFIED
   );
@@ -180,6 +191,19 @@ export class DiaBackendAuthService {
     );
   }
 
+  readProfile$() {
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.get<ReadProfileResponse>(
+          `${BASE_URL}/auth/users/profile/`,
+          {
+            headers,
+          }
+        )
+      )
+    );
+  }
+
   createUser$(
     username: string,
     email: string,
@@ -279,6 +303,36 @@ export class DiaBackendAuthService {
           this.setRerferralCode(response.referral_code),
         ])
       )
+    );
+  }
+
+  updateProfile$({
+    description,
+    profilePicture,
+    profileBackground,
+  }: {
+    description: string;
+    profilePicture?: File;
+    profileBackground?: File;
+  }) {
+    const formData = new FormData();
+    formData.append('description', description);
+    if (profilePicture) {
+      formData.append('profile_picture', profilePicture);
+    }
+    if (profileBackground) {
+      formData.append('profile_background', profileBackground);
+    }
+    return defer(() => this.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.patch<UpdateProfileResponse>(
+          `${BASE_URL}/auth/users/profile/`,
+          formData,
+          { headers }
+        )
+      ),
+      map(response => response.profile_picture_thumbnail),
+      tap(url => this.refreshAvatar$.next(url))
     );
   }
 
@@ -560,6 +614,18 @@ type GetAvatarResponse = UploadAvatarResponse;
 interface UploadAvatarResponse {
   readonly profile_picture_thumbnail?: string;
 }
+
+export interface ReadProfileResponse {
+  display_name: string;
+  profile_background: string;
+  profile_background_thumbnail: string;
+  profile_picture: string;
+  profile_picture_thumbnail: string;
+  description: string;
+  phone_number: string;
+}
+
+type UpdateProfileResponse = ReadProfileResponse;
 
 /**
  * Represents the request body for https://dia-backend-dev.numbersprotocol.io/api/v3/redoc/#operation/auth_users_create
