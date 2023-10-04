@@ -5,7 +5,7 @@
 
 <div class="page-content">
   <ng-container *ngFor="let action of actions$ | ngrxPush">
-    <ion-card (click)="doAction(action)">
+    <ion-card (click)="performAction(action)">
       <ion-card-header>
         <div class="header-text">
           <div class="header-title">{{ action.title_text }}</div>

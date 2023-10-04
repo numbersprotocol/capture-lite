@@ -1,0 +1,49 @@
+<mat-toolbar>
+  <app-capture-back-button></app-capture-back-button>
+  <span>{{ title$ | async | transloco }}</span>
+</mat-toolbar>
+
+<ng-container *ngIf="form$ | async as form; else loadingForm">
+  <ion-content>
+    <p class="description">
+      {{ description$ | async }}
+    </p>
+
+    <div class="image">
+      <ng-container *ngIf="thumbnail$ | async as thumb; else imgPlaceholder">
+        <ion-img [src]="thumb"></ion-img>
+      </ng-container>
+      <ng-template #imgPlaceholder>
+        <div class="img-placeholder"></div>
+      </ng-template>
+    </div>
+
+    <form [formGroup]="form.form">
+      <formly-form
+        [form]="form.form"
+        [fields]="form.fields"
+        [model]="form.model"
+      ></formly-form>
+    </form>
+  </ion-content>
+
+  <ion-footer>
+    <div class="price">
+      <div class="price-in-num">Price (NUM):</div>
+      <div class="price-number">{{ price$ | async }} NUM</div>
+    </div>
+
+    <ion-button
+      type="submit"
+      shape="round"
+      [disabled]="!form.form.valid"
+      (click)="performAction(form.model)"
+    >
+      {{ title$ | async | uppercase }}
+    </ion-button>
+  </ion-footer>
+</ng-container>
+
+<ng-template #loadingForm>
+  <ion-spinner name="lines-sharp"></ion-spinner>
+</ng-template>

@@ -1,0 +1,78 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    color: white;
+  }
+}
+
+ion-content {
+  --padding-start: 16px;
+  --padding-end: 16px;
+
+  .description {
+    margin: 24px 24px 48px;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    opacity: 0.75;
+  }
+
+  .image {
+    margin: 0 auto 56px;
+    aspect-ratio: 179 / 216;
+    border-radius: 16px;
+    overflow: hidden;
+    border-radius: 16px;
+    height: 25vh;
+
+    ion-img {
+      aspect-ratio: 179 / 216;
+      object-fit: cover;
+      object-position: center;
+      height: 100%;
+    }
+
+    img-placeholder {
+      background-color: #212121;
+    }
+  }
+}
+
+ion-footer {
+  display: flex;
+  padding: 16px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  .price-in-num {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 100%;
+    opacity: 0.5;
+  }
+
+  .price-number {
+    color: #fff;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+  }
+}
+
+ion-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  scale: 1.5;
+}
