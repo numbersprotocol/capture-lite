@@ -49,6 +49,7 @@ export class UploadingBarComponent {
           showProgressBar: tasks > 0 && networkConnected && !isPaused,
           showPauseButton: tasks > 0 && networkConnected && !isPaused,
           showResumeButton: tasks > 0 && networkConnected && isPaused,
+          hideUploadBar: tasks === 0,
         };
         return uploadingBarState;
       })
@@ -85,4 +86,5 @@ interface UploadingBarState {
   readonly showProgressBar: boolean;
   readonly showPauseButton: boolean;
   readonly showResumeButton: boolean;
+  readonly hideUploadBar: boolean;
 }
