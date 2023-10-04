@@ -56,21 +56,16 @@
   </mat-card>
   <app-uploading-bar></app-uploading-bar>
 
-  <div [ngSwitch]="segment" class="segment-container">
-    <ion-segment mode="ios" [(ngModel)]="segment">
+  <div [ngSwitch]="segment">
+    <ion-segment mode="md" [(ngModel)]="segment">
       <ion-segment-button [value]="captureTabSegments.VERIFIED">
-        <ion-icon src="assets/images/icons/capture-tab-verified.svg"></ion-icon>
+        <ion-label>{{ 'home.profileTab.verified' | transloco }}</ion-label>
       </ion-segment-button>
       <ion-segment-button [value]="captureTabSegments.COLLECTED">
-        <ion-icon
-          src="assets/images/icons/capture-tab-collected.svg"
-        ></ion-icon>
+        <ion-label>{{ 'home.profileTab.collected' | transloco }}</ion-label>
       </ion-segment-button>
       <ion-segment-button [value]="captureTabSegments.DRAFT">
-        <ion-icon
-          src="assets/images/icons/capture-tab-draft.svg"
-          class="font-size-scaled"
-        ></ion-icon>
+        <ion-label>{{ 'home.profileTab.draft' | transloco }}</ion-label>
       </ion-segment-button>
     </ion-segment>
 

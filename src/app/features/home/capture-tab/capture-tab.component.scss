@@ -145,21 +145,7 @@ app-capture-item {
   }
 }
 
-.segment-container {
-  margin-top: 16px;
-  padding: 8px 16px;
-
-  ion-segment {
-    --background: #212121;
-
-    ion-segment-button {
-      ion-icon {
-        margin: 8px;
-      }
-
-      ion-icon.font-size-scaled {
-        transform: scale(1.3);
-      }
-    }
-  }
+mat-grid-list {
+  margin-left: 12px;
+  margin-right: 12px;
 }
