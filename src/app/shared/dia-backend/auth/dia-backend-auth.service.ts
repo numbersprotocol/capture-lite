@@ -72,7 +72,20 @@ export class DiaBackendAuthService {
       )
     ),
     map(response => response.profile_background_thumbnail),
-    isNonNullable()
+    isNonNullable(),
+    repeatWhen(() => this.refreshAvatar$) // TODO: refreshProfile$
+  );
+
+  readonly profileDescription$ = defer(() => this.getAuthHeaders()).pipe(
+    concatMap(headers =>
+      this.httpClient.get<ReadProfileResponse>(
+        `${BASE_URL}/auth/users/profile/`,
+        { headers }
+      )
+    ),
+    map(response => response.description),
+    isNonNullable(),
+    repeatWhen(() => this.refreshAvatar$) // TODO: refreshProfile$
   );
 
   readonly phoneVerified$ = this.preferences.getBoolean$(
