@@ -1,10 +1,5 @@
-<ng-container *ngrxLet="uploadingBarState$ as uploadingBarState">
-  <mat-toolbar
-    color="background"
-    class="thin-upload-bar"
-    id="thin-upload-bar"
-    *ngIf="uploadingBarState.hideUploadBar === false"
-  >
+<mat-toolbar color="background" class="thin-upload-bar" id="thin-upload-bar">
+  <ng-container *ngrxLet="uploadingBarState$ as uploadingBarState">
     <span class="text spacer-text" *ngIf="uploadingBarState.spacer">{{
       uploadingBarState.text
     }}</span>
@@ -23,5 +18,5 @@
     <mat-icon *ngIf="uploadingBarState.showResumeButton" (click)="resume()"
       >publish</mat-icon
     >
-  </mat-toolbar>
-</ng-container>
+  </ng-container>
+</mat-toolbar>
