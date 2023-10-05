@@ -16,7 +16,7 @@ ion-content {
 
   .description {
     margin: 24px 24px 48px;
-    color: #fff;
+    color: white;
     text-align: center;
     font-size: 14px;
     font-style: normal;
@@ -30,7 +30,6 @@ ion-content {
     aspect-ratio: 179 / 216;
     border-radius: 16px;
     overflow: hidden;
-    border-radius: 16px;
     height: 25vh;
 
     ion-img {
@@ -62,7 +61,7 @@ ion-footer {
   }
 
   .price-number {
-    color: #fff;
+    color: white;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
