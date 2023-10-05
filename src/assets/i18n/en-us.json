@@ -308,6 +308,11 @@
       "networkActionsAreUnavailable": "Network Actions are unavailable. Please try again later."
     }
   },
+  "actions": {
+    "whatAreNetworkActions": "What are network actions?",
+    "everythingYouNeedToKnow": "Everything you need to know, in one simple guide.",
+    "view": "View"
+  },
   "customCamera": {
     "confirmCapture": "Next",
     "max": "Max",

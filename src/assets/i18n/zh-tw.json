@@ -308,6 +308,11 @@
       "networkActionsAreUnavailable": "暫時無法使用 Network Action，請稍後再試。"
     }
   },
+  "actions": {
+    "whatAreNetworkActions": "什麼是網絡操作？",
+    "everythingYouNeedToKnow": "一個簡單指南，告訴您需要知道的一切。",
+    "view": "查看"
+  },
   "customCamera": {
     "confirmCapture": "下一步",
     "max": "最佳畫質",

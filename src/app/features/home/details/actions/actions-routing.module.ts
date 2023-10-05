@@ -14,6 +14,13 @@ const routes: Routes = [
         m => m.ActionDetailsPageModule
       ),
   },
+  {
+    path: 'what-are-actions',
+    loadChildren: () =>
+      import('./what-are-actions/what-are-actions.module').then(
+        m => m.WhatAreActionsPageModule
+      ),
+  },
 ];
 
 @NgModule({

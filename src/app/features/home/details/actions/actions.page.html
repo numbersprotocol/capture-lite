@@ -4,6 +4,22 @@
 </mat-toolbar>
 
 <div class="page-content">
+  <ion-card>
+    <ion-card-header>
+      <div class="header-text-small">
+        <div class="header-title-small">
+          {{ 'actions.whatAreNetworkActions' | transloco }}
+        </div>
+        <div class="header-subtitle-small">
+          {{ 'actions.everythingYouNeedToKnow' | transloco }}
+        </div>
+      </div>
+      <ion-button shape="round" routerLink="what-are-actions">
+        {{ 'actions.view' | transloco }}
+      </ion-button>
+    </ion-card-header>
+  </ion-card>
+
   <ng-container *ngFor="let action of actions$ | ngrxPush">
     <ion-card (click)="performAction(action)">
       <ion-card-header>
