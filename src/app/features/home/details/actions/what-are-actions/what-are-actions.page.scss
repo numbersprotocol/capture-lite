@@ -10,22 +10,16 @@ mat-toolbar {
   }
 }
 
-.no-network-text {
-  font-size: 18px;
-  margin: auto;
-}
+ion-content {
+  --padding-start: 24px;
+  --padding-end: 24px;
 
-.bubble-iframe {
-  background-color: black;
-  width: 100vw;
-  height: 100vh;
-  border: 0;
-}
+  h1 {
+    margin-top: 32px;
+  }
 
-ion-spinner {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  scale: 1.5;
+  p {
+    opacity: 0.75;
+    margin-bottom: 32px;
+  }
 }

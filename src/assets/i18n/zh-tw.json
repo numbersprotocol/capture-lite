@@ -309,9 +309,13 @@
     }
   },
   "actions": {
+    "actions": "網絡動作",
     "whatAreNetworkActions": "什麼是網絡操作？",
-    "everythingYouNeedToKnow": "一個簡單指南，告訴您需要知道的一切。",
-    "view": "查看"
+    "everythingYouNeedToKnow": "簡易操作指南",
+    "view": "查看",
+    "whatAreActions": "什麼是操作?",
+    "whatAreActionsParagraph1": "什麼是 Action？ 作為 Web3.0 照片網絡，Capture 旨在成為管理 Web3 資產真實性、流動性和貨幣化的中心樞紐，並為用戶提供流暢的拍照體驗。使用 Capture，用戶可以使用 Capture Cam 拍照，然後在 Capture 生態系統中的各種平台和應用程序上無縫共享，無需將同張照片多次上傳到不同的平台。",
+    "whatAreActionsParagraph2": "通過在 Capture 網絡上註冊您的 Web3.0 資產（例如影像和影片），您可以確保這些資產是可追溯的並且可以被 Capture 生態系統信任。這允許生態系統中的其他應用程式為您的資產提供服務。此外，通過在 Capture 上註冊您的資產，您可以保留對它們的所有權，並有權在 Capture 生態系中使用它們。"
   },
   "customCamera": {
     "confirmCapture": "下一步",

@@ -1,17 +1,10 @@
-<ng-container *ngIf="(networkConnected$ | async) === false; else bubbleIframe">
-  <mat-toolbar>
-    <app-capture-back-button></app-capture-back-button>
-    <span>{{ 'networkActions' | transloco }}</span>
-  </mat-toolbar>
-  <div class="no-network-text">
-    {{ 'message.networkNotConnected' | transloco }}
-  </div>
-</ng-container>
+<mat-toolbar>
+  <app-capture-back-button></app-capture-back-button>
+  <span>{{ 'actions.actions' | transloco }}</span>
+</mat-toolbar>
 
-<ng-template #bubbleIframe>
-  <iframe [src]="iframeUrl | safeResourceUrl" class="bubble-iframe"></iframe>
-  <ion-spinner
-    *ngIf="(iframeLoaded$ | async) !== true"
-    name="lines-sharp"
-  ></ion-spinner>
-</ng-template>
+<ion-content>
+  <h1>{{ 'actions.whatAreActions' | transloco }}</h1>
+  <p>{{ 'actions.whatAreActionsParagraph1' | transloco }}</p>
+  <p>{{ 'actions.whatAreActionsParagraph2' | transloco }}</p>
+</ion-content>
