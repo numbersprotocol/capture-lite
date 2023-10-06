@@ -382,7 +382,15 @@ export class ActionDetailsPage {
         proof => {
           if (proof) {
             this.proofRepository.remove(proof);
-            this.router.navigate(['/home']);
+            /**
+             * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/3050
+             * After certain network actions we need to navigate user back to
+             * home page. We could not achieve this with this.router.navigate(['/home']);
+             * therefore we need to use `popstate` navigationTrigger.
+             */
+            this.navController.back(); // goes back to Actions page
+            this.navController.back(); // goes back to Details page
+            this.navController.back(); // goes back to Home page
           }
         }
       );
