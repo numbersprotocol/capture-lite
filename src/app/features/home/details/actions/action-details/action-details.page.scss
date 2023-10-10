@@ -52,19 +52,47 @@ ion-footer {
   justify-content: space-between;
   align-items: center;
 
-  .price-in-num {
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 100%;
-    opacity: 0.5;
+  .price {
+    margin-right: 8px;
+    white-space: nowrap;
+
+    .price-in-num {
+      color: white;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 100%;
+      opacity: 0.5;
+    }
+
+    .price-number {
+      color: white;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 700;
+    }
   }
 
-  .price-number {
+  .custom-button {
+    padding: 16px 20px;
+    background-color: #3880ff;
     color: white;
-    font-size: 20px;
+    border: none;
+    border-radius: 37px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.26px;
+    text-transform: uppercase;
+
+    &:hover {
+      background-color: #0056b3;
+    }
   }
 }
 
