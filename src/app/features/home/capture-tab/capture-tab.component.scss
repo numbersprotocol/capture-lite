@@ -16,6 +16,8 @@ mat-card {
   width: 100%;
   padding: 0 0 8px;
   box-shadow: none;
+  background-size: cover !important; /* stylelint-disable-line declaration-no-important */
+  background-position: center center !important; /* stylelint-disable-line declaration-no-important */
 
   mat-toolbar {
     background: transparent;
