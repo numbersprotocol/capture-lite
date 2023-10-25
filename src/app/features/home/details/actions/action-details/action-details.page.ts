@@ -305,7 +305,11 @@ export class ActionDetailsPage {
                 this.snackBar.open(
                   this.translocoService.translate('message.sentSuccessfully')
                 );
-                this.navController.back();
+                if (action.hide_capture_after_execution_boolean ?? false) {
+                  this.removeCaptureAndNavigateHome();
+                } else {
+                  this.navController.back();
+                }
               }),
               tap(networkAppOrder => {
                 if (action.ext_action_destination_text) {
@@ -314,10 +318,6 @@ export class ActionDetailsPage {
                     networkAppOrder.id
                   );
                 }
-              }),
-              tap(() => {
-                if (action.hide_capture_after_execution_boolean ?? false)
-                  this.removeCapture();
               }),
               untilDestroyed(this)
             );
@@ -376,21 +376,15 @@ export class ActionDetailsPage {
       .subscribe();
   }
 
-  removeCapture() {
+  removeCaptureAndNavigateHome() {
     if (this.informationSessionService.activatedDetailedCapture) {
       this.informationSessionService.activatedDetailedCapture.proof$.subscribe(
         proof => {
           if (proof) {
             this.proofRepository.remove(proof);
-            /**
-             * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/3050
-             * After certain network actions we need to navigate user back to
-             * home page. We could not achieve this with this.router.navigate(['/home']);
-             * therefore we need to use `popstate` navigationTrigger.
-             */
-            this.navController.back(); // goes back to Actions page
-            this.navController.back(); // goes back to Details page
-            this.navController.back(); // goes back to Home page
+            this.navController.navigateRoot('/home', {
+              animationDirection: 'back',
+            });
           }
         }
       );
