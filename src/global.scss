@@ -80,6 +80,12 @@ body.dark .mat-toolbar {
   }
 }
 
+.capture-tab-menu-logout-button {
+  span {
+    color: var(--ion-color-primary);
+  }
+}
+
 mat-toolbar.mat-toolbar {
   background-color: var(--ion-background-color);
   color: var(--ion-color-primary);

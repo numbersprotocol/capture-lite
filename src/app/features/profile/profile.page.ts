@@ -41,7 +41,7 @@ export class ProfilePage {
   ) {}
 
   ionViewWillEnter() {
-    forkJoin([this.diaBackendAuthService.syncProfile$()])
+    forkJoin([this.diaBackendAuthService.syncUser$()])
       .pipe(untilDestroyed(this))
       .subscribe();
   }

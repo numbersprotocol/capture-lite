@@ -173,7 +173,7 @@ export class EditProfilePage {
           )
       )
       .pipe(
-        switchMap(() => this.diaBackendAuthService.syncProfile$()),
+        switchMap(() => this.diaBackendAuthService.syncUser$()),
         untilDestroyed(this)
       );
     forkJoin([updateUserNameAction$, updateProfileAction$])
@@ -191,6 +191,24 @@ export class EditProfilePage {
       }
     }
     return this.errorService.toastError$(err);
+  }
+
+  private updateProfile() {
+    const updateProfileAction$ = this.diaBackendAuthService
+      .updateProfile$({
+        description: this.model.description,
+        profilePicture: this.model.profilePicture,
+        profileBackground: this.model.profileBackground,
+      })
+      .pipe(catchError((err: unknown) => this.handleUpdateProfileError(err)));
+
+    this.blockingActionService
+      .run$(updateProfileAction$)
+      .pipe(
+        switchMap(() => this.diaBackendAuthService.syncUser$()),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   private handleUpdateProfileError(err: unknown): any {

@@ -72,7 +72,20 @@ export class DiaBackendAuthService {
       )
     ),
     map(response => response.profile_background_thumbnail),
-    isNonNullable()
+    isNonNullable(),
+    repeatWhen(() => this.refreshAvatar$) // TODO: refreshProfile$
+  );
+
+  readonly profileDescription$ = defer(() => this.getAuthHeaders()).pipe(
+    concatMap(headers =>
+      this.httpClient.get<ReadProfileResponse>(
+        `${BASE_URL}/auth/users/profile/`,
+        { headers }
+      )
+    ),
+    map(response => response.description),
+    isNonNullable(),
+    repeatWhen(() => this.refreshAvatar$) // TODO: refreshProfile$
   );
 
   readonly phoneVerified$ = this.preferences.getBoolean$(
@@ -151,7 +164,7 @@ export class DiaBackendAuthService {
       })
       .pipe(
         concatMap(response => this.setToken(response.auth_token)),
-        concatMapTo(this.syncProfile$()),
+        concatMapTo(this.syncUser$()),
         map(([username, _email]) => ({ username, email: _email }))
       );
   }
@@ -420,7 +433,7 @@ export class DiaBackendAuthService {
     );
   }
 
-  syncProfile$() {
+  syncUser$() {
     return this.readUser$().pipe(
       concatMap(response => {
         return forkJoin([
