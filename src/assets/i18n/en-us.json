@@ -18,6 +18,7 @@
   "areYouSure": "Are You Sure",
   "cancel": "Cancel",
   "ok": "Ok",
+  "confirm": "Confirm",
   "emptyInbox": "Empty Inbox",
   "clickToEditCaption": "Click to Edit Caption",
   "editCaption": "Edit Caption",
@@ -306,6 +307,15 @@
       "viewAssetProfileIsUnavailable": "View asset profile action is unavailable. Please try again later.",
       "networkActionsAreUnavailable": "Network Actions are unavailable. Please try again later."
     }
+  },
+  "actions": {
+    "actions": "Actions",
+    "whatAreNetworkActions": "What are network actions?",
+    "everythingYouNeedToKnow": "Everything you need to know, in one simple guide.",
+    "view": "View",
+    "whatAreActions": "What are actions?",
+    "whatAreActionsParagraph1": "As a Web 3.0 photo network, Capture aims to become the central hub for managing the authenticity, liquidity and monetization of Web3 assets and providing an enhanced photo experience for users. With Capture, users can take a photo using the Capture Cam and then share it seamlessly across various platforms and applications in the Capture ecosystem, eliminating the need to upload the same photo multiple times to different platforms.",
+    "whatAreActionsParagraph2": "By registering your Web 3.0 assets, such as images and videos, on the Capture network, you can ensure that these assets are traceable and can be trusted by the Capture ecosystem. This allows other apps within the ecosystem to provide services for your assets. Additionally, by registering your assets on Capture, you retain ownership of them and have the freedom to use them within the Capture ecosystem as you see fit."
   },
   "customCamera": {
     "confirmCapture": "Next",

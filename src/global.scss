@@ -147,6 +147,13 @@ body.dark .onboarding-pop-up-dialog mat-dialog-container {
   // max-height: 438px;
 }
 
+body.dark .order-detail-dialog mat-dialog-container {
+  background-color: #212121;
+  border-radius: 8px;
+  max-width: 420px;
+  margin: auto;
+}
+
 body.dark .mat-card {
   background-color: var(--ion-color-light-shade);
 }
