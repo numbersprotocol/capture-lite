@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.86.4] - 2023-11-11
+
+### Added
+
+1. Feature newtork app ui update (#3073)
+1. Feature Update instructions about the upload size limitation (#3074)
+1. Feature fit figma profile page tab (#3075)
+
+### Fixed
+
+1. Fix Issue When user registers the account but user inputs the existing name the error message is wrong (#3076)
+
 ## [0.85.2] - 2023-09-21
 
 ### Added
@@ -2201,7 +2213,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.85.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.86.4...HEAD
+[0.86.4]: https://github.com/numbersprotocol/capture-lite/compare/0.83.2...0.86.4
 [0.83.2]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.85.2
 [0.82.4]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.83.2
 [0.82.4]: https://github.com/numbersprotocol/capture-lite/compare/0.82.3...0.82.4

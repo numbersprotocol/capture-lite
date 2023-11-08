@@ -25,8 +25,8 @@ import { ErrorService } from '../../../../shared/error/error.service';
 import { OrderDetailDialogComponent } from '../../../../shared/order-detail-dialog/order-detail-dialog.component';
 import { ProofRepository } from '../../../../shared/repositories/proof/proof-repository.service';
 import {
-  isNonNullable,
   VOID$,
+  isNonNullable,
 } from '../../../../utils/rx-operators/rx-operators';
 import { InformationSessionService } from '../information/session/information-session.service';
 
@@ -230,6 +230,13 @@ export class ActionsPage {
         }
       );
     }
+  }
+
+  performAction(action: Action) {
+    this.router.navigate(['action-details'], {
+      relativeTo: this.route,
+      state: action,
+    });
   }
 
   doAction(action: Action) {

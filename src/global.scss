@@ -80,6 +80,12 @@ body.dark .mat-toolbar {
   }
 }
 
+.capture-tab-menu-logout-button {
+  span {
+    color: var(--ion-color-primary);
+  }
+}
+
 mat-toolbar.mat-toolbar {
   background-color: var(--ion-background-color);
   color: var(--ion-color-primary);
@@ -139,6 +145,13 @@ body.dark .onboarding-pop-up-dialog mat-dialog-container {
   border-radius: 16px;
   max-width: 364px;
   // max-height: 438px;
+}
+
+body.dark .order-detail-dialog mat-dialog-container {
+  background-color: #212121;
+  border-radius: 8px;
+  max-width: 420px;
+  margin: auto;
 }
 
 body.dark .mat-card {
