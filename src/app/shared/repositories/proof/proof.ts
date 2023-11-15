@@ -29,6 +29,8 @@ export class Proof {
 
   signatureVersion?: string = undefined;
 
+  integritySha?: string = undefined;
+
   get timestamp() {
     return this.truth.timestamp;
   }
@@ -156,6 +158,11 @@ export class Proof {
 
   setSignatureVersion() {
     this.signatureVersion = SIGNATURE_VERSION;
+  }
+
+  setIntegritySha(integritySha: string) {
+    this.integritySha = integritySha;
+    return integritySha;
   }
 
   async getId() {

@@ -12,6 +12,7 @@ import {
 import { FactsProvider } from './facts/facts-provider';
 import { CaptureAppWebCryptoApiSignatureProvider } from './signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { SignatureProvider } from './signature/signature-provider';
+import { generateIntegritySha } from '../../utils/nit/nit';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +37,8 @@ export class CollectorService {
     const signedMessage = await proof.generateSignedMessage(recorder);
     const signatures = await this.signMessage(signedMessage, source);
     proof.setSignatures(signatures);
+    const integritySha = await generateIntegritySha(signedMessage);
+    proof.setIntegritySha(integritySha);
     return proof;
   }
 
