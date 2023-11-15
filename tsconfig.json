@@ -23,7 +23,10 @@
       "https": ["node_modules/https-browserify"],
       "os": ["node_modules/os-browserify"],
       "stream": ["node_modules/stream-browserify"],
-      "process": ["node_modules/process"]
+      "process": ["node_modules/process"],
+      "path": ["node_modules/path-browserify"],
+      "tty": ["node_modules/tty-browserify"],
+      "zlib": ["node_modules/browserify-zlib"]
     }
   },
   "angularCompilerOptions": {
