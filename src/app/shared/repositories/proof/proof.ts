@@ -112,6 +112,7 @@ export class Proof {
     proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
     proof.isCollected = indexedProofView.isCollected ?? false;
     proof.signatureVersion = indexedProofView.signatureVersion;
+    proof.integritySha = indexedProofView.integritySha;
     return proof;
   }
 
@@ -279,6 +280,7 @@ export class Proof {
       signatureVersion: this.signatureVersion,
       diaBackendAssetId: this.diaBackendAssetId,
       isCollected: this.isCollected,
+      integritySha: this.integritySha,
     };
   }
 
@@ -401,6 +403,7 @@ export interface IndexedProofView extends Tuple {
   readonly signatureVersion?: string;
   readonly diaBackendAssetId?: string;
   readonly isCollected?: boolean;
+  readonly integritySha?: string;
 }
 
 /**
