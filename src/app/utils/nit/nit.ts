@@ -6,7 +6,11 @@ import {
 
 export async function generateIntegritySha(message: SignedMessage) {
   const serializedSignedMessage = getSerializedSortedSignedMessage(message);
-  const dataBytes = ethers.toUtf8Bytes(serializedSignedMessage);
+
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  const data = JSON.stringify(JSON.stringify(serializedSignedMessage, null, 2));
+  const dataBytes = ethers.toUtf8Bytes(data);
+
   /**
    * WORKAROUND: <TODO-paste-related-url-link>
    * Ideally we should use nit module to get integritySha as show below
@@ -21,5 +25,6 @@ export async function generateIntegritySha(message: SignedMessage) {
    */
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   const integritySha = sha256(dataBytes).substring(2);
+
   return integritySha;
 }
