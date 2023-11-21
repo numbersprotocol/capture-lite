@@ -28,3 +28,25 @@ export async function generateIntegritySha(message: SignedMessage) {
 
   return integritySha;
 }
+
+export async function signWithIntegritySha(
+  sha256sum: string,
+  privateKey: string
+) {
+  const signer = new ethers.Wallet(privateKey);
+
+  /**
+   * WORKAROUND: <TODO-paste-related-url-link>
+   * Ideally we should use nit module to get sign integrity hash as show below
+   * ```
+   * import * as nit from "@numbersprotocol/nit";
+   * const signature = await nit.signIntegrityHash(sha256, signer);
+   * ```
+   * However installing "@numbersprotocol/nit" causing ionic build errors.
+   * Once "@numbersprotocol/nit" become browser friendly we can
+   * remove this workaround and completely rely on "@numbersprotocol/nit"
+   */
+  const signature = await signer.signMessage(sha256sum);
+
+  return signature;
+}
