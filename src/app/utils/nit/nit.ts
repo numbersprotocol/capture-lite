@@ -1,15 +1,14 @@
 import { ethers, sha256 } from 'ethers';
 import {
-  SignedMessage,
-  getSerializedSortedSignedMessage,
+  ProofMetadata,
+  getSerializedSortedProofMetadata,
 } from '../../shared/repositories/proof/proof';
 
-export async function generateIntegritySha(message: SignedMessage) {
-  const serializedSignedMessage = getSerializedSortedSignedMessage(message);
+export async function generateIntegritySha(proofMetadata: ProofMetadata) {
+  const serializedSortedProofMetadata =
+    getSerializedSortedProofMetadata(proofMetadata);
 
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-  const data = JSON.stringify(JSON.stringify(serializedSignedMessage, null, 2));
-  const dataBytes = ethers.toUtf8Bytes(data);
+  const dataBytes = ethers.toUtf8Bytes(serializedSortedProofMetadata);
 
   /**
    * WORKAROUND: <TODO-paste-related-url-link>
