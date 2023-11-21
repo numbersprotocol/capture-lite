@@ -4,6 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CameraSource } from '@capacitor/camera';
 import {
   BehaviorSubject,
   ReplaySubject,
@@ -28,6 +29,7 @@ import {
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { MimeType, toExtension } from '../../../utils/mime-type';
 import { VOID$, isNonNullable } from '../../../utils/rx-operators/rx-operators';
+import { CaptureAppWebCryptoApiSignatureProvider } from '../../collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { Tuple } from '../../database/table/table';
 import {
   OldSignature,
@@ -38,7 +40,7 @@ import {
 } from '../../repositories/proof/old-proof-adapter';
 import {
   Proof,
-  getSerializedSortedSignedMessage,
+  getSerializedSortedProofMetadata,
 } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { PaginatedResponse } from '../pagination';
@@ -386,11 +388,14 @@ async function buildFormDataToCreateAsset(proof: Proof) {
   const formData = new FormData();
 
   const info = await getSortedProofInformation(proof);
-  const signedMessage = await proof.generateSignedMessage();
-  const serializedSignedMessage =
-    getSerializedSortedSignedMessage(signedMessage);
+  const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
+    CameraSource.Camera // FIXME: should read actual CameraSource
+  );
+  const proofMetadata = await proof.generateProofMetadata(recorder);
+  const serializedSortedProofMetadata =
+    getSerializedSortedProofMetadata(proofMetadata);
   formData.set('meta', JSON.stringify(info));
-  formData.set('signed_metadata', serializedSignedMessage);
+  formData.set('signed_metadata', serializedSortedProofMetadata);
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
 
   const fileBase64 = Object.keys(await proof.getAssets())[0];
@@ -408,10 +413,11 @@ async function buildFormDataToCreateAsset(proof: Proof) {
 
 async function buildFormDataToUpdateSignature(proof: Proof) {
   const formData = new FormData();
-  const signedMessage = await proof.generateSignedMessage();
-  const serializedSignedMessage =
-    getSerializedSortedSignedMessage(signedMessage);
-  formData.set('signed_metadata', serializedSignedMessage);
+
+  const ProofMetadata = await proof.generateProofMetadata();
+  const serializedSortedProofMetadata =
+    getSerializedSortedProofMetadata(ProofMetadata);
+  formData.set('signed_metadata', serializedSortedProofMetadata);
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
   return formData;
 }

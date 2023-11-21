@@ -3,9 +3,9 @@ import { defer } from 'rxjs';
 import { concatMapTo } from 'rxjs/operators';
 import { sortObjectDeeplyByKey } from '../../../../utils/immutable/immutable';
 import {
-  isSignature,
+  ProofMetadata,
   RecorderType,
-  SignedMessage,
+  isSignature,
 } from '../../../repositories/proof/proof';
 import { SharedTestingModule } from '../../../shared-testing.module';
 import { CaptureAppWebCryptoApiSignatureProvider } from './capture-app-web-crypto-api-signature-provider.service';
@@ -60,7 +60,7 @@ describe('CaptureAppWebCryptoApiSignatureProvider', () => {
   });
 
   it('should provide signature', async () => {
-    const signedMessage: SignedMessage = {
+    const ProofMetadata: ProofMetadata = {
       spec_version: '',
       recorder: RecorderType.Capture,
       created_at: 0,
@@ -69,10 +69,10 @@ describe('CaptureAppWebCryptoApiSignatureProvider', () => {
       caption: '',
       information: {},
     };
-    const serializedSortedSignedMessage = JSON.stringify(
-      sortObjectDeeplyByKey(signedMessage as any).toJSON()
+    const serializedSortedProofMetadata = JSON.stringify(
+      sortObjectDeeplyByKey(ProofMetadata as any).toJSON()
     );
-    const signature = await provider.provide(serializedSortedSignedMessage);
+    const signature = await provider.provide(serializedSortedProofMetadata);
 
     expect(isSignature(signature)).toBeTrue();
   });

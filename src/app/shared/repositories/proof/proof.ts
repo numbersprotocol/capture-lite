@@ -1,10 +1,13 @@
+import { CameraSource } from '@capacitor/camera';
 import { snakeCase } from 'lodash';
 import { defer, iif, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { sha256WithString } from '../../../utils/crypto/crypto';
 import { sortObjectDeeplyByKey } from '../../../utils/immutable/immutable';
 import { MimeType } from '../../../utils/mime-type';
+import { generateIntegritySha } from '../../../utils/nit/nit';
 import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
+import { CaptureAppWebCryptoApiSignatureProvider } from '../../collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { Tuple } from '../../database/table/table';
 import {
   MediaStore,
@@ -221,10 +224,10 @@ export class Proof {
    * - https://app.asana.com/0/0/1204012493522134/1204289040001270/f
    * @returns A promise that resolves to the generated signed message
    */
-  async generateSignedMessage(
+  async generateProofMetadata(
     recorder: RecorderType = RecorderType.Capture
-  ): Promise<SignedMessage> {
-    const signedMessage: SignedMessage = {
+  ): Promise<ProofMetadata> {
+    const ProofMetadata: ProofMetadata = {
       spec_version: SIGNATURE_VERSION,
       recorder: recorder,
       created_at: this.truth.timestamp,
@@ -236,7 +239,7 @@ export class Proof {
       caption: '',
       information: this.getInformation(),
     };
-    return signedMessage;
+    return ProofMetadata;
   }
 
   /**
@@ -255,18 +258,19 @@ export class Proof {
   }
 
   async isVerified() {
-    const signedMessage: SignedMessage = await this.generateSignedMessage();
-    const serializedSortedSignedMessage =
-      getSerializedSortedSignedMessage(signedMessage);
+    // FIXME: Read CameraSource
+    const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
+      CameraSource.Camera
+    );
+    const proofMetadata: ProofMetadata = await this.generateProofMetadata(
+      recorder
+    );
+    const integritySha = await generateIntegritySha(proofMetadata);
     const results = await Promise.all(
       Object.entries(this.signatures).map(([id, signature]) =>
         Proof.signatureProviders
           .get(id)
-          ?.verify(
-            serializedSortedSignedMessage,
-            signature.signature,
-            signature.publicKey
-          )
+          ?.verify(integritySha, signature.signature, signature.publicKey)
       )
     );
     return results.every(result => result);
@@ -347,6 +351,11 @@ export const enum FactCategory {
   GEOLOCATION = 'geolocation',
 }
 
+export interface SignResult extends Tuple {
+  readonly signatures: Signatures;
+  readonly integritySha: string;
+}
+
 export interface Signatures extends Tuple {
   readonly [id: string]: Signature;
 }
@@ -384,8 +393,13 @@ export function getSerializedSortedSignedTargets(signedTargets: SignedTargets) {
   return JSON.stringify(sortObjectDeeplyByKey(signedTargets as any).toJSON());
 }
 
-export function getSerializedSortedSignedMessage(signedMessage: SignedMessage) {
-  return JSON.stringify(sortObjectDeeplyByKey(signedMessage as any).toJSON());
+export function getSerializedSortedProofMetadata(ProofMetadata: ProofMetadata) {
+  const indent = 2;
+  return JSON.stringify(
+    sortObjectDeeplyByKey(ProofMetadata as any).toJSON(),
+    null,
+    indent
+  );
 }
 
 interface SignatureVerifier {
@@ -410,7 +424,7 @@ export interface IndexedProofView extends Tuple {
  * The new signed message schema as discussed in
  * https://github.com/numbersprotocol/capture-lite/issues/779
  */
-export interface SignedMessage {
+export interface ProofMetadata {
   spec_version: string;
   recorder: RecorderType;
   created_at: number;

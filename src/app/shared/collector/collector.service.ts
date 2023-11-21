@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { CameraSource } from '@capacitor/camera';
+import { generateIntegritySha } from '../../utils/nit/nit';
 import { MediaStore } from '../media/media-store/media-store.service';
 import {
   Assets,
-  getSerializedSortedSignedMessage,
   Proof,
-  Signatures,
-  SignedMessage,
+  ProofMetadata,
+  SignResult,
   Truth,
+  getSerializedSortedProofMetadata,
 } from '../repositories/proof/proof';
 import { FactsProvider } from './facts/facts-provider';
 import { CaptureAppWebCryptoApiSignatureProvider } from './signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { SignatureProvider } from './signature/signature-provider';
-import { generateIntegritySha } from '../../utils/nit/nit';
 
 @Injectable({
   providedIn: 'root',
@@ -34,10 +34,18 @@ export class CollectorService {
   async generateSignature(proof: Proof, source: CameraSource) {
     const recorder =
       CaptureAppWebCryptoApiSignatureProvider.recorderFor(source);
-    const signedMessage = await proof.generateSignedMessage(recorder);
-    const signatures = await this.signMessage(signedMessage, source);
+    const proofMetadata = await proof.generateProofMetadata(recorder);
+    const { signatures, integritySha } = await this.signProofMetadata(
+      proofMetadata,
+      source
+    );
+    console.log(
+      'sign message ProofMetadata',
+      await getSerializedSortedProofMetadata(proofMetadata)
+    );
+    console.log('generated signatures', signatures);
+    console.log('generated integritySha', integritySha);
     proof.setSignatures(signatures);
-    const integritySha = await generateIntegritySha(signedMessage);
     proof.setIntegritySha(integritySha);
     return proof;
   }
@@ -59,20 +67,20 @@ export class CollectorService {
     };
   }
 
-  private async signMessage(
-    message: SignedMessage,
+  private async signProofMetadata(
+    proofMetadata: ProofMetadata,
     source: CameraSource
-  ): Promise<Signatures> {
-    const serializedSortedSignedMessage =
-      getSerializedSortedSignedMessage(message);
-    return Object.fromEntries(
+  ): Promise<SignResult> {
+    const integritySha = await generateIntegritySha(proofMetadata);
+    const signatures = Object.fromEntries(
       await Promise.all(
         [...this.signatureProviders].map(async provider => [
           provider.idFor(source),
-          await provider.provide(serializedSortedSignedMessage),
+          await provider.provide(integritySha),
         ])
       )
     );
+    return { signatures, integritySha };
   }
 
   addFactsProvider(provider: FactsProvider) {
