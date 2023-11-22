@@ -248,6 +248,26 @@ export class DiaBackendAssetRepository {
     );
   }
 
+  updateCaptureSignedMetadata$(proof: Proof) {
+    const update$ = forkJoin([
+      defer(() =>
+        this.authService.getAuthHeadersWithContentType('application/json')
+      ),
+      defer(() => buildObjectToUpdateSignedMetadata(proof)),
+    ]).pipe(
+      concatMap(([headers, payload]) =>
+        this.httpClient.patch<UpdateAssetResponse>(
+          `${BASE_URL}/api/v3/assets/${proof.diaBackendAssetId}/`,
+          payload,
+          { headers }
+        )
+      )
+    );
+    return defer(() =>
+      iif(() => proof.diaBackendAssetId === undefined, VOID$, update$)
+    );
+  }
+
   updateCapture$(id: string, formData: any) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
@@ -422,4 +442,16 @@ async function buildFormDataToUpdateSignature(proof: Proof) {
   formData.set('signed_metadata', serializedSortedProofMetadata);
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
   return formData;
+}
+
+async function buildObjectToUpdateSignedMetadata(proof: Proof) {
+  const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
+    proof.cameraSource
+  );
+  const proofMetadata = await proof.generateProofMetadata(recorder);
+  const serializedSortedProofMetadata =
+    getSerializedSortedProofMetadata(proofMetadata);
+  return {
+    signed_metadata: serializedSortedProofMetadata,
+  };
 }

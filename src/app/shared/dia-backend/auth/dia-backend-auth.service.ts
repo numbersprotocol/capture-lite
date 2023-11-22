@@ -474,6 +474,13 @@ export class DiaBackendAuthService {
     return { authorization: `token ${await this.getToken()}` };
   }
 
+  async getAuthHeadersWithContentType(contentType: string) {
+    return {
+      authorization: `token ${await this.getToken()}`,
+      'content-type': contentType,
+    };
+  }
+
   async getAuthHeadersWithApiKey() {
     return {
       authorization: `token ${await this.getToken()}`,

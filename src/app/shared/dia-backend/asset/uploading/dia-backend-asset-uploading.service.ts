@@ -101,6 +101,7 @@ export class DiaBackendAssetUploadingService {
       concatMap(proofs =>
         from(proofs).pipe(
           concatMap(proof => this.uploadProof$(proof)),
+          concatMap(proof => this.patchSignedMetadata$(proof)),
           concatMap(proof =>
             this.proofRepository.update(
               [proof],
@@ -155,6 +156,15 @@ export class DiaBackendAssetUploadingService {
         )
       )
     );
+  }
+
+  private patchSignedMetadata$(proof: Proof) {
+    return this.diaBackendAssetRepository
+      .updateCaptureSignedMetadata$(proof)
+      .pipe(
+        first(),
+        map(() => proof)
+      );
   }
 }
 
