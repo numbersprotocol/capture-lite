@@ -26,14 +26,18 @@ export class CollectorService {
   async run(assets: Assets, capturedTimestamp: number, source: CameraSource) {
     const truth = await this.collectTruth(assets, capturedTimestamp);
     const proof = await Proof.from(this.mediaStore, assets, truth);
-    await this.generateSignature(proof, source);
+    proof.cameraSource = source;
+    await this.generateSignature(proof, proof.cameraSource);
     proof.isCollected = true;
     return proof;
   }
 
+  // FIXME: @sultanmyrza get cameraSource from proof.cameraSource instead of passing separately
+  // TODO: @sultanmyrza remove 2nd parameter and make sure all other places get called accordinglyt
   async generateSignature(proof: Proof, source: CameraSource) {
-    const recorder =
-      CaptureAppWebCryptoApiSignatureProvider.recorderFor(source);
+    const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
+      proof.cameraSource
+    );
     const proofMetadata = await proof.generateProofMetadata(recorder);
     const { signatures, integritySha } = await this.signProofMetadata(
       proofMetadata,

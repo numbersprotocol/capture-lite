@@ -34,6 +34,13 @@ export class Proof {
 
   integritySha?: string = undefined;
 
+  /**
+   * Since capture cam originally capture photos/videos from camera we set cameraSource to
+   * CameraSource.Camera by default. If user picks photo/video from galley then cameraSource
+   * should be changed to CameraSource.Photos
+   */
+  cameraSource: CameraSource = CameraSource.Camera;
+
   get timestamp() {
     return this.truth.timestamp;
   }
@@ -116,6 +123,7 @@ export class Proof {
     proof.isCollected = indexedProofView.isCollected ?? false;
     proof.signatureVersion = indexedProofView.signatureVersion;
     proof.integritySha = indexedProofView.integritySha;
+    proof.cameraSource = indexedProofView.cameraSource;
     return proof;
   }
 
@@ -285,6 +293,7 @@ export class Proof {
       diaBackendAssetId: this.diaBackendAssetId,
       isCollected: this.isCollected,
       integritySha: this.integritySha,
+      cameraSource: this.cameraSource,
     };
   }
 
@@ -418,6 +427,7 @@ export interface IndexedProofView extends Tuple {
   readonly diaBackendAssetId?: string;
   readonly isCollected?: boolean;
   readonly integritySha?: string;
+  readonly cameraSource: CameraSource;
 }
 
 /**
