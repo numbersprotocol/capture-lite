@@ -4,7 +4,6 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CameraSource } from '@capacitor/camera';
 import {
   BehaviorSubject,
   ReplaySubject,
@@ -389,7 +388,7 @@ async function buildFormDataToCreateAsset(proof: Proof) {
 
   const info = await getSortedProofInformation(proof);
   const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
-    CameraSource.Camera // FIXME: should read actual CameraSource
+    proof.cameraSource
   );
   const proofMetadata = await proof.generateProofMetadata(recorder);
   const serializedSortedProofMetadata =
@@ -414,7 +413,10 @@ async function buildFormDataToCreateAsset(proof: Proof) {
 async function buildFormDataToUpdateSignature(proof: Proof) {
   const formData = new FormData();
 
-  const ProofMetadata = await proof.generateProofMetadata();
+  const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
+    proof.cameraSource
+  );
+  const ProofMetadata = await proof.generateProofMetadata(recorder);
   const serializedSortedProofMetadata =
     getSerializedSortedProofMetadata(ProofMetadata);
   formData.set('signed_metadata', serializedSortedProofMetadata);

@@ -266,9 +266,8 @@ export class Proof {
   }
 
   async isVerified() {
-    // FIXME: Read CameraSource
     const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
-      CameraSource.Camera
+      this.cameraSource
     );
     const proofMetadata: ProofMetadata = await this.generateProofMetadata(
       recorder
