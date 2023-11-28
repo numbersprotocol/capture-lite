@@ -396,6 +396,10 @@ async function buildFormDataToCreateAsset(proof: Proof) {
   formData.set('meta', JSON.stringify(info));
   formData.set('signed_metadata', serializedSortedProofMetadata);
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
+  // The default value for 'claim_is_creator' is set to false.
+  // However, for captures uploaded using the capture cam,
+  // this value should be specifically set to true.
+  formData.set('claim_is_creator', 'true');
 
   const fileBase64 = Object.keys(await proof.getAssets())[0];
   const mimeType = Object.values(proof.indexedAssets)[0].mimeType;
