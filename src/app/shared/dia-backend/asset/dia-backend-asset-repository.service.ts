@@ -216,7 +216,7 @@ export class DiaBackendAssetRepository {
 
   addCapture$(proof: Proof) {
     return forkJoin([
-      defer(() => this.authService.getAuthHeaders()),
+      defer(() => this.authService.getAuthHeadersWithApiKey()),
       defer(() => buildFormDataToCreateAsset(proof)),
     ]).pipe(
       concatMap(([headers, formData]) =>
