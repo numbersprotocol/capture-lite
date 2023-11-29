@@ -8,7 +8,6 @@ import {
   ProofMetadata,
   SignResult,
   Truth,
-  getSerializedSortedProofMetadata,
 } from '../repositories/proof/proof';
 import { FactsProvider } from './facts/facts-provider';
 import { CaptureAppWebCryptoApiSignatureProvider } from './signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
@@ -43,12 +42,6 @@ export class CollectorService {
       proofMetadata,
       source
     );
-    console.log(
-      'sign message ProofMetadata',
-      await getSerializedSortedProofMetadata(proofMetadata)
-    );
-    console.log('generated signatures', signatures);
-    console.log('generated integritySha', integritySha);
     proof.setSignatures(signatures);
     proof.setIntegritySha(integritySha);
     return proof;
