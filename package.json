@@ -1,6 +1,6 @@
 {
   "name": "capture-lite",
-  "version": "0.86.4",
+  "version": "0.87.0",
   "author": "numbersprotocol",
   "homepage": "https://numbersprotocol.io/",
   "scripts": {
@@ -75,6 +75,7 @@
     "capacitor-native-settings": "^4.0.3",
     "compressorjs": "^1.0.7",
     "cordova-plugin-purchase": "^11.0.0",
+    "ethers": "^6.8.1",
     "hammerjs": "^2.0.8",
     "immutable": "^4.0.0-rc.14",
     "lodash-es": "^4.17.21",

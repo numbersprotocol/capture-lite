@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CameraSource } from '@capacitor/camera';
+import { generateIntegritySha } from '../../utils/nit/nit';
 import { MediaStore } from '../media/media-store/media-store.service';
 import {
   Assets,
-  getSerializedSortedSignedMessage,
   Proof,
-  Signatures,
-  SignedMessage,
+  ProofMetadata,
+  SignResult,
   Truth,
 } from '../repositories/proof/proof';
 import { FactsProvider } from './facts/facts-provider';
@@ -25,17 +25,25 @@ export class CollectorService {
   async run(assets: Assets, capturedTimestamp: number, source: CameraSource) {
     const truth = await this.collectTruth(assets, capturedTimestamp);
     const proof = await Proof.from(this.mediaStore, assets, truth);
-    await this.generateSignature(proof, source);
+    proof.cameraSource = source;
+    await this.generateSignature(proof, proof.cameraSource);
     proof.isCollected = true;
     return proof;
   }
 
+  // FIXME: @sultanmyrza get cameraSource from proof.cameraSource instead of passing separately
+  // TODO: @sultanmyrza remove 2nd parameter and make sure all other places get called accordinglyt
   async generateSignature(proof: Proof, source: CameraSource) {
-    const recorder =
-      CaptureAppWebCryptoApiSignatureProvider.recorderFor(source);
-    const signedMessage = await proof.generateSignedMessage(recorder);
-    const signatures = await this.signMessage(signedMessage, source);
+    const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
+      proof.cameraSource
+    );
+    const proofMetadata = await proof.generateProofMetadata(recorder);
+    const { signatures, integritySha } = await this.signProofMetadata(
+      proofMetadata,
+      source
+    );
     proof.setSignatures(signatures);
+    proof.setIntegritySha(integritySha);
     return proof;
   }
 
@@ -56,20 +64,20 @@ export class CollectorService {
     };
   }
 
-  private async signMessage(
-    message: SignedMessage,
+  private async signProofMetadata(
+    proofMetadata: ProofMetadata,
     source: CameraSource
-  ): Promise<Signatures> {
-    const serializedSortedSignedMessage =
-      getSerializedSortedSignedMessage(message);
-    return Object.fromEntries(
+  ): Promise<SignResult> {
+    const integritySha = await generateIntegritySha(proofMetadata);
+    const signatures = Object.fromEntries(
       await Promise.all(
         [...this.signatureProviders].map(async provider => [
           provider.idFor(source),
-          await provider.provide(serializedSortedSignedMessage),
+          await provider.provide(integritySha),
         ])
       )
     );
+    return { signatures, integritySha };
   }
 
   addFactsProvider(provider: FactsProvider) {
