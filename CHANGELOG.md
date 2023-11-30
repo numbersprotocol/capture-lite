@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.87.0] - 2023-11-30
+
+### Added
+
+1. Feature add integrity sha on asset creation (#3094)
+1. Feature Add the API key to the header in the API that creates an asset to record the service_name of assets (#3117)
+
 ## [0.86.4] - 2023-11-11
 
 ### Added
@@ -2213,7 +2220,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.86.4...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.87.0...HEAD
+[0.87.0]: https://github.com/numbersprotocol/capture-lite/compare/0.86.4...0.87.0
 [0.86.4]: https://github.com/numbersprotocol/capture-lite/compare/0.83.2...0.86.4
 [0.83.2]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.85.2
 [0.82.4]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.83.2
