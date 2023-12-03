@@ -101,9 +101,16 @@ export class InAppStoreService implements OnDestroy {
     this.store.order(offer);
   }
 
-  private async finishPurchase(inAppProduct: IAPProduct) {
+  private async finishPurchase(receipt: CdvPurchase.VerifiedReceipt) {
+    const product = this.extractProductFromReceipt(receipt);
+
+    if (!product) {
+      receipt.finish();
+      return;
+    }
+
     const pointsToAdd = this.numPointsForProduct(
-      inAppProduct,
+      product.id,
       this.numPointPricesById$.value
     );
 
@@ -133,6 +140,18 @@ export class InAppStoreService implements OnDestroy {
       );
       this.errorService.toastError$(errorMessage).toPromise();
     }
+  }
+  // eslint-disable-next-line class-methods-use-this
+  private extractProductFromReceipt(receipt: CdvPurchase.VerifiedReceipt) {
+    for (const transaction of receipt.sourceReceipt.transactions) {
+      for (const product of transaction.products) {
+        const isIncluded = Object.values<string>(
+          CaptureInAppProductIds
+        ).includes(product.id);
+        if (isIncluded) return product;
+      }
+    }
+    return null;
   }
 
   private async notifyUser(message: string) {
@@ -207,11 +226,11 @@ export class InAppStoreService implements OnDestroy {
 
   // eslint-disable-next-line class-methods-use-this
   private numPointsForProduct(
-    product: CdvPurchase.Product,
+    productId: string,
     numPriceListById: NumPointPricesById
   ) {
-    if (product.id in numPriceListById) {
-      return numPriceListById[product.id].quantitiy;
+    if (productId in numPriceListById) {
+      return numPriceListById[productId].quantitiy;
     }
     return 0;
   }
