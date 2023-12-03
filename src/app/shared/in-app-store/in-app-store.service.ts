@@ -40,6 +40,8 @@ export class InAppStoreService implements OnDestroy {
     })
   );
 
+  readonly isProcessingOrder$ = new BehaviorSubject<boolean>(false);
+
   private readonly appId = 'io.numbersprotocol.capturelite';
 
   constructor(
@@ -97,6 +99,7 @@ export class InAppStoreService implements OnDestroy {
   purchase(product: CdvPurchase.Product) {
     const offer = product.getOffer();
     if (!offer) return;
+    this.isProcessingOrder$.next(true);
     this.store.order(offer);
   }
 
@@ -114,6 +117,8 @@ export class InAppStoreService implements OnDestroy {
     );
 
     alert(`Debug  ${pointsToAdd} points added`);
+
+    this.isProcessingOrder$.next(false);
     receipt.finish();
 
     return; // TODO: remove this line after UI testing
@@ -194,7 +199,11 @@ export class InAppStoreService implements OnDestroy {
     this.store.register(productsToRegister);
   }
 
-  private readonly onStoreError = (_: CdvPurchase.IError) => {
+  private readonly onStoreError = (error: CdvPurchase.IError) => {
+    this.isProcessingOrder$.next(false);
+
+    if (error.message === 'The user cancelled the order.') return;
+
     const errorMessage = this.translocoService.translate(
       'inAppPurchase.inAppPurchaseErrorOcurred'
     );

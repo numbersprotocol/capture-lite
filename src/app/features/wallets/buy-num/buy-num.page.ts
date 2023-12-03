@@ -1,10 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { filter, first, map, tap } from 'rxjs/operators';
+import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { InAppStoreService } from '../../../shared/in-app-store/in-app-store.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-buy-num',
   templateUrl: './buy-num.page.html',
@@ -33,11 +36,14 @@ export class BuyNumPage implements OnInit {
     tap(_ => this.ref.detectChanges())
   );
 
+  readonly isProcessingOrder$ = this.store.isProcessingOrder$;
+
   constructor(
     private readonly store: InAppStoreService,
     private readonly ref: ChangeDetectorRef,
     private readonly alertController: AlertController,
-    private readonly translocoService: TranslocoService
+    private readonly translocoService: TranslocoService,
+    private readonly blockingActionService: BlockingActionService
   ) {}
 
   ngOnInit() {
@@ -45,7 +51,16 @@ export class BuyNumPage implements OnInit {
   }
 
   purchase(product: CdvPurchase.Product) {
+    this.showLoadingIndicatorUntillOrderIsProcessed();
     this.store.purchase(product);
+  }
+
+  private showLoadingIndicatorUntillOrderIsProcessed() {
+    const action$ = this.isProcessingOrder$.pipe(
+      filter(isProcessing => isProcessing === false),
+      first()
+    );
+    this.blockingActionService.run$(action$).subscribe();
   }
 
   async showNumPointsQuantity(numPoints: number) {
