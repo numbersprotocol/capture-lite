@@ -32,7 +32,7 @@ export class InAppStoreService implements OnDestroy {
     map(([inAppProducts, numPointPricesById]) => {
       return inAppProducts.map<InAppProductsWithNumPoint>(inAppProduct => {
         const numPoints = this.numPointsForProduct(
-          inAppProduct,
+          inAppProduct.id,
           numPointPricesById
         );
         return { inAppProduct, numPoints };
