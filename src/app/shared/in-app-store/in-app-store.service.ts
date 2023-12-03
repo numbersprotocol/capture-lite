@@ -206,12 +206,11 @@ export class InAppStoreService implements OnDestroy {
     transacction.verify();
   };
 
-  private readonly onStoreProductVerified = (product: IAPProduct) => {
-    if (this.shouldIgnoreProduct(product)) {
-      return;
-    }
-    this.debugPrint('onStoreProductVerified', product);
-    this.finishPurchase(product);
+  private readonly onStoreProductVerified = (
+    receipt: CdvPurchase.VerifiedReceipt
+  ) => {
+    this.debugPrint('onStoreProductVerified', receipt);
+    this.finishPurchase(receipt);
   };
 
   private shouldIgnoreProduct(product: IAPProduct) {
