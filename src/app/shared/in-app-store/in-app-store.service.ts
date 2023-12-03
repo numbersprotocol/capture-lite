@@ -114,32 +114,36 @@ export class InAppStoreService implements OnDestroy {
       this.numPointPricesById$.value
     );
 
-    let receipt;
-    if (inAppProduct.transaction?.type === 'ios-appstore') {
-      receipt = inAppProduct.transaction.appStoreReceipt;
-    }
-    if (inAppProduct.transaction?.type === 'android-playstore') {
-      receipt = inAppProduct.transaction.receipt;
-    }
-    if (!receipt) return;
+    alert(`Debug  ${pointsToAdd} points added`);
+    receipt.finish();
 
-    try {
-      await this.diaBackendNumService
-        .purchaseNumPoints$(pointsToAdd, receipt)
-        .toPromise();
-      inAppProduct.finish();
+    return; // TODO: remove this line after UI testing
+    // let receipt;
+    // if (inAppProduct.transaction?.type === 'ios-appstore') {
+    //   receipt = inAppProduct.transaction.appStoreReceipt;
+    // }
+    // if (inAppProduct.transaction?.type === 'android-playstore') {
+    //   receipt = inAppProduct.transaction.receipt;
+    // }
+    // if (!receipt) return;
 
-      this.notifyUser(
-        this.translocoService.translate('wallets.buyCredits.xCreditsAdded', {
-          credits: pointsToAdd,
-        })
-      );
-    } catch (error) {
-      const errorMessage = this.translocoService.translate(
-        'wallets.buyCredits.failedToAddCredits'
-      );
-      this.errorService.toastError$(errorMessage).toPromise();
-    }
+    // try {
+    //   await this.diaBackendNumService
+    //     .purchaseNumPoints$(pointsToAdd, receipt)
+    //     .toPromise();
+    //   inAppProduct.finish();
+
+    //   this.notifyUser(
+    //     this.translocoService.translate('wallets.buyCredits.xCreditsAdded', {
+    //       credits: pointsToAdd,
+    //     })
+    //   );
+    // } catch (error) {
+    //   const errorMessage = this.translocoService.translate(
+    //     'wallets.buyCredits.failedToAddCredits'
+    //   );
+    //   this.errorService.toastError$(errorMessage).toPromise();
+    // }
   }
   // eslint-disable-next-line class-methods-use-this
   private extractProductFromReceipt(receipt: CdvPurchase.VerifiedReceipt) {
