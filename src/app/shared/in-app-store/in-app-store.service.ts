@@ -197,13 +197,11 @@ export class InAppStoreService implements OnDestroy {
     this.inAppProducts$.next(this.store.products);
   };
 
-  private readonly onStoreProductApproved = (product: IAPProduct) => {
-    if (this.shouldIgnoreProduct(product)) {
-      return;
-    }
-    this.debugPrint('onStoreProductApproved', product);
-    // TODO: in the future add validation logic here
-    product.verify();
+  private readonly onStoreProductApproved = (
+    transacction: CdvPurchase.Transaction
+  ) => {
+    this.debugPrint('onStoreProductApproved', transacction);
+    transacction.verify();
   };
 
   private readonly onStoreProductVerified = (product: IAPProduct) => {
