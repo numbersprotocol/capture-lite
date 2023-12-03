@@ -170,11 +170,12 @@ export class InAppStoreService implements OnDestroy {
     this.store.register(productsToRegister);
   }
 
-  private readonly onStoreError = (_: IAPError) => {
+  private readonly onStoreError = (_: CdvPurchase.IError) => {
     const errorMessage = this.translocoService.translate(
       'inAppPurchase.inAppPurchaseErrorOcurred'
     );
     this.errorService.toastError$(errorMessage).toPromise();
+    // TODO: report to remote error service
   };
 
   private readonly onStoreReady = () => {
