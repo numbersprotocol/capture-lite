@@ -95,8 +95,10 @@ export class InAppStoreService implements OnDestroy {
     }
   }
 
-  purchase(product: IAPProduct) {
-    this.store.order(product);
+  purchase(product: CdvPurchase.Product) {
+    const offer = product.getOffer();
+    if (!offer) return;
+    this.store.order(offer);
   }
 
   private async finishPurchase(inAppProduct: IAPProduct) {
