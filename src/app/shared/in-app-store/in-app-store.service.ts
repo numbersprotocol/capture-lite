@@ -243,7 +243,7 @@ export enum CaptureInAppProductIds {
 }
 
 interface InAppProductsWithNumPoint {
-  inAppProduct: IAPProduct;
+  inAppProduct: CdvPurchase.Product;
   numPoints: number;
 }
 
