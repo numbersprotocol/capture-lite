@@ -1,11 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import {
-  IAPError,
-  IAPProduct,
-  InAppPurchase2,
-} from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
+import 'cordova-plugin-purchase';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
@@ -24,8 +20,10 @@ import { ErrorService } from '../error/error.service';
 export class InAppStoreService implements OnDestroy {
   debugPrint = setupInAppPurchaseDebugPrint('InAppStoreService');
 
-  readonly inAppProducts$ = new BehaviorSubject<IAPProduct[]>([]);
+  readonly inAppProducts$ = new BehaviorSubject<CdvPurchase.Product[]>([]);
   readonly numPointPricesById$ = new BehaviorSubject<NumPointPricesById>({});
+
+  private store!: CdvPurchase.Store;
 
   readonly inAppProductsWithNumpoints$ = combineLatest([
     this.inAppProducts$,
@@ -45,7 +43,6 @@ export class InAppStoreService implements OnDestroy {
   private readonly appId = 'io.numbersprotocol.capturelite';
 
   constructor(
-    private readonly store: InAppPurchase2,
     private readonly platform: Platform,
     private readonly errorService: ErrorService,
     private readonly toastController: ToastController,
@@ -64,10 +61,10 @@ export class InAppStoreService implements OnDestroy {
     try {
       await this.platform.ready();
 
+      this.store = CdvPurchase.store;
+
       this.regiseterStoreListeners();
       this.registerStoreProducts();
-
-      this.store.refresh();
     } catch (error) {
       const errorMessage = this.translocoService.translate(
         'inAppPurchase.failedToInitInAppStore'
