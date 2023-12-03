@@ -60,11 +60,10 @@ export class InAppStoreService implements OnDestroy {
 
     try {
       await this.platform.ready();
-
       this.store = CdvPurchase.store;
-
       this.regiseterStoreListeners();
       this.registerStoreProducts();
+      this.store.initialize();
     } catch (error) {
       const errorMessage = this.translocoService.translate(
         'inAppPurchase.failedToInitInAppStore'
