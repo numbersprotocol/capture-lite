@@ -30,7 +30,6 @@
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
     "@awesome-cordova-plugins/core": "^5.46.0",
-    "@awesome-cordova-plugins/in-app-purchase-2": "^5.43.0",
     "@capacitor-community/advertising-id": "^5.0.0",
     "@capacitor-community/bluetooth-le": "^2.2.3",
     "@capacitor-community/http": "github:numbersprotocol/http#fix-catch-disabled-Local-Network-case-on-iOS",
