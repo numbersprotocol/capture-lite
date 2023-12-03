@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Platform, ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
@@ -105,44 +106,65 @@ export class InAppStoreService implements OnDestroy {
 
   private async finishPurchase(receipt: CdvPurchase.VerifiedReceipt) {
     const product = this.extractProductFromReceipt(receipt);
-
     if (!product) {
       receipt.finish();
+      this.isProcessingOrder$.next(false);
       return;
     }
 
-    const pointsToAdd = this.numPointsForProduct(
-      product.id,
-      this.numPointPricesById$.value
-    );
-
     const storeReceipt = this.extractStoreReceipt(receipt);
+    if (!storeReceipt) {
+      receipt.finish();
+      this.isProcessingOrder$.next(false);
+      return;
+    }
 
-    alert(`Debug  ${pointsToAdd} points added`);
+    try {
+      const pointsToAdd = this.numPointsForProduct(
+        product.id,
+        this.numPointPricesById$.value
+      );
 
-    this.isProcessingOrder$.next(false);
-    receipt.finish();
+      await this.diaBackendNumService
+        .purchaseNumPoints$(pointsToAdd, storeReceipt)
+        .toPromise();
 
-    if (!storeReceipt) return;
+      receipt.finish();
+      this.isProcessingOrder$.next(false);
 
-    return; // TODO: remove this line after UI testing
-    // try {
-    //   await this.diaBackendNumService
-    //     .purchaseNumPoints$(pointsToAdd, receipt)
-    //     .toPromise();
-    //   inAppProduct.finish();
-
-    //   this.notifyUser(
-    //     this.translocoService.translate('wallets.buyCredits.xCreditsAdded', {
-    //       credits: pointsToAdd,
-    //     })
-    //   );
-    // } catch (error) {
-    //   const errorMessage = this.translocoService.translate(
-    //     'wallets.buyCredits.failedToAddCredits'
-    //   );
-    //   this.errorService.toastError$(errorMessage).toPromise();
-    // }
+      this.notifyUser(
+        this.translocoService.translate('wallets.buyCredits.xCreditsAdded', {
+          credits: pointsToAdd,
+        })
+      );
+    } catch (error) {
+      if (
+        error instanceof HttpErrorResponse &&
+        error.error.error?.type === 'duplicate_receipt_id'
+      ) {
+        /**
+         * The receipt has already been used to get NUM points.
+         *
+         * In case of duplicate receipt id, the user has already received the points
+         * and we can ignore the error. Duplicate receipt can happen if callbacks
+         * registered in CdvPurchase is called twice. Issue is more related to plugin itslef:
+         * https://github.com/j3k0/cordova-plugin-purchase/issues/1458
+         *
+         * Thanks to our backend implementation, the user will not be given NUMs twice.
+         * In this case we just finish the receipt and make sure loading indicator is hidden.
+         */
+        receipt.finish();
+        this.isProcessingOrder$.next(false);
+      } else {
+        this.errorService
+          .toastError$(
+            this.translocoService.translate(
+              'wallets.buyCredits.failedToAddCredits'
+            )
+          )
+          .toPromise();
+      }
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
