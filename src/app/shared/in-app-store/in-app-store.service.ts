@@ -221,7 +221,7 @@ export class InAppStoreService implements OnDestroy {
 
   // eslint-disable-next-line class-methods-use-this
   private numPointsForProduct(
-    product: IAPProduct,
+    product: CdvPurchase.Product,
     numPriceListById: NumPointPricesById
   ) {
     if (product.id in numPriceListById) {
