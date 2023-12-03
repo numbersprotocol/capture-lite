@@ -116,21 +116,16 @@ export class InAppStoreService implements OnDestroy {
       this.numPointPricesById$.value
     );
 
+    const storeReceipt = this.extractStoreReceipt(receipt);
+
     alert(`Debug  ${pointsToAdd} points added`);
 
     this.isProcessingOrder$.next(false);
     receipt.finish();
 
-    return; // TODO: remove this line after UI testing
-    // let receipt;
-    // if (inAppProduct.transaction?.type === 'ios-appstore') {
-    //   receipt = inAppProduct.transaction.appStoreReceipt;
-    // }
-    // if (inAppProduct.transaction?.type === 'android-playstore') {
-    //   receipt = inAppProduct.transaction.receipt;
-    // }
-    // if (!receipt) return;
+    if (!storeReceipt) return;
 
+    return; // TODO: remove this line after UI testing
     // try {
     //   await this.diaBackendNumService
     //     .purchaseNumPoints$(pointsToAdd, receipt)
@@ -149,6 +144,7 @@ export class InAppStoreService implements OnDestroy {
     //   this.errorService.toastError$(errorMessage).toPromise();
     // }
   }
+
   // eslint-disable-next-line class-methods-use-this
   private extractProductFromReceipt(receipt: CdvPurchase.VerifiedReceipt) {
     for (const transaction of receipt.sourceReceipt.transactions) {
@@ -160,6 +156,24 @@ export class InAppStoreService implements OnDestroy {
       }
     }
     return null;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private extractStoreReceipt(
+    receipt: CdvPurchase.VerifiedReceipt
+  ): string | undefined {
+    const platform = receipt.sourceReceipt.platform;
+
+    if (platform === CdvPurchase.Platform.APPLE_APPSTORE) {
+      // nativeData is not documented, but it is there (can be veified by console.log(receipt))
+      return (receipt.sourceReceipt as any).nativeData.appStoreReceipt;
+    }
+
+    if (platform === CdvPurchase.Platform.GOOGLE_PLAY) {
+      // nativePurchase is not documented, but it is there (can be veified by console.log(receipt))
+      return (receipt.sourceReceipt.transactions[0] as any).nativePurchase
+        .receipt;
+    }
   }
 
   private async notifyUser(message: string) {
