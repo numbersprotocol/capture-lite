@@ -142,9 +142,9 @@ export class InAppStoreService implements OnDestroy {
   private regiseterStoreListeners() {
     this.store.error(this.onStoreError);
     this.store.ready(this.onStoreReady);
-    this.store.when('product').approved(this.onStoreProductApproved);
-    this.store.when('product').updated(this.onStoreProductUpdated);
-    this.store.when('product').verified(this.onStoreProductVerified);
+    this.store.when().approved(this.onStoreProductApproved);
+    this.store.when().productUpdated(this.onStoreProductUpdated);
+    this.store.when().verified(this.onStoreProductVerified);
   }
 
   private unregisterStoreListeners() {
