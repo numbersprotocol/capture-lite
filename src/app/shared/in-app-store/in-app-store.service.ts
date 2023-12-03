@@ -185,18 +185,16 @@ export class InAppStoreService implements OnDestroy {
     this.inAppProducts$.next(inAppProducts);
   };
 
-  private readonly onStoreProductUpdated = (updatedProduct: IAPProduct) => {
+  private readonly onStoreProductUpdated = (
+    updatedProduct: CdvPurchase.Product
+  ) => {
     if (this.shouldIgnoreProduct(updatedProduct)) {
       return;
     }
 
     this.debugPrint('onStoreProductUpdated', updatedProduct);
 
-    const inAppProducts = this.inAppProducts$.value.map(product =>
-      product.id === updatedProduct.id ? updatedProduct : product
-    );
-
-    this.inAppProducts$.next(inAppProducts);
+    this.inAppProducts$.next(this.store.products);
   };
 
   private readonly onStoreProductApproved = (product: IAPProduct) => {
