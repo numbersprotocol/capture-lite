@@ -181,21 +181,13 @@ export class InAppStoreService implements OnDestroy {
   };
 
   private readonly onStoreReady = () => {
-    const inAppProducts = this.store.products.filter(
-      product => this.shouldIgnoreProduct(product) === false
-    );
-    this.inAppProducts$.next(inAppProducts);
+    this.inAppProducts$.next(this.store.products);
   };
 
   private readonly onStoreProductUpdated = (
     updatedProduct: CdvPurchase.Product
   ) => {
-    if (this.shouldIgnoreProduct(updatedProduct)) {
-      return;
-    }
-
     this.debugPrint('onStoreProductUpdated', updatedProduct);
-
     this.inAppProducts$.next(this.store.products);
   };
 
@@ -212,13 +204,6 @@ export class InAppStoreService implements OnDestroy {
     this.debugPrint('onStoreProductVerified', receipt);
     this.finishPurchase(receipt);
   };
-
-  private shouldIgnoreProduct(product: IAPProduct) {
-    // For some reason on iOS there will be 1 in app product
-    // with product.id === io.numbersprotocol.capturelite
-    // we should ignore that product
-    return product.id === this.appId;
-  }
 
   // eslint-disable-next-line class-methods-use-this
   private numPointsForProduct(
