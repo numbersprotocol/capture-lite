@@ -25,7 +25,7 @@
               ></ion-icon>
             </div>
             <div class="subtitle-text">
-              {{ product.inAppProduct.price }}
+              {{ product.inAppProduct.pricing?.price }}
             </div>
           </div>
         </ion-label>
@@ -38,9 +38,6 @@
           {{
             t('wallets.buyCredits.buyXCredits', { credits: product.numPoints })
           }}
-          <ion-spinner
-            *ngIf="product.inAppProduct.state !== 'valid'"
-          ></ion-spinner>
         </ion-button>
       </ion-item>
     </ion-card>

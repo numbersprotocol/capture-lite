@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { IAPProduct } from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
 import { AlertController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { combineLatest } from 'rxjs';
@@ -45,7 +44,7 @@ export class BuyNumPage implements OnInit {
     this.store.refreshNumPointsPricing();
   }
 
-  purchase(product: IAPProduct) {
+  purchase(product: CdvPurchase.Product) {
     this.store.purchase(product);
   }
 
