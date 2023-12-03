@@ -156,17 +156,18 @@ export class InAppStoreService implements OnDestroy {
   }
 
   private registerStoreProducts() {
-    const consumableProductIds = [
-      CaptureInAppProductIds.BRONZE_PACK,
-      CaptureInAppProductIds.SLIVER_PACK,
-      CaptureInAppProductIds.GOLD_PACK,
-      CaptureInAppProductIds.PLATINUM_PACK,
-    ];
-    const type = this.store.CONSUMABLE;
+    const consumableProductIds = Object.values(CaptureInAppProductIds);
+    const type = CdvPurchase.ProductType.CONSUMABLE;
+    const appstorePlatform = CdvPurchase.Platform.APPLE_APPSTORE;
+    const googlePlayPlatform = CdvPurchase.Platform.GOOGLE_PLAY;
 
+    const productsToRegister: CdvPurchase.IRegisterProduct[] = [];
     for (const id of consumableProductIds) {
-      this.store.register({ id, type });
+      productsToRegister.push({ id, type, platform: appstorePlatform });
+      productsToRegister.push({ id, type, platform: googlePlayPlatform });
     }
+
+    this.store.register(productsToRegister);
   }
 
   private readonly onStoreError = (_: IAPError) => {
