@@ -1,11 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import {
-  IAPError,
-  IAPProduct,
-  InAppPurchase2,
-} from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
+import 'cordova-plugin-purchase';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
@@ -24,8 +21,10 @@ import { ErrorService } from '../error/error.service';
 export class InAppStoreService implements OnDestroy {
   debugPrint = setupInAppPurchaseDebugPrint('InAppStoreService');
 
-  readonly inAppProducts$ = new BehaviorSubject<IAPProduct[]>([]);
+  readonly inAppProducts$ = new BehaviorSubject<CdvPurchase.Product[]>([]);
   readonly numPointPricesById$ = new BehaviorSubject<NumPointPricesById>({});
+
+  private store!: CdvPurchase.Store;
 
   readonly inAppProductsWithNumpoints$ = combineLatest([
     this.inAppProducts$,
@@ -34,7 +33,7 @@ export class InAppStoreService implements OnDestroy {
     map(([inAppProducts, numPointPricesById]) => {
       return inAppProducts.map<InAppProductsWithNumPoint>(inAppProduct => {
         const numPoints = this.numPointsForProduct(
-          inAppProduct,
+          inAppProduct.id,
           numPointPricesById
         );
         return { inAppProduct, numPoints };
@@ -42,10 +41,11 @@ export class InAppStoreService implements OnDestroy {
     })
   );
 
+  readonly isProcessingOrder$ = new BehaviorSubject<boolean>(false);
+
   private readonly appId = 'io.numbersprotocol.capturelite';
 
   constructor(
-    private readonly store: InAppPurchase2,
     private readonly platform: Platform,
     private readonly errorService: ErrorService,
     private readonly toastController: ToastController,
@@ -63,11 +63,10 @@ export class InAppStoreService implements OnDestroy {
 
     try {
       await this.platform.ready();
-
+      this.store = CdvPurchase.store;
       this.regiseterStoreListeners();
       this.registerStoreProducts();
-
-      this.store.refresh();
+      this.store.initialize();
     } catch (error) {
       const errorMessage = this.translocoService.translate(
         'inAppPurchase.failedToInitInAppStore'
@@ -98,30 +97,40 @@ export class InAppStoreService implements OnDestroy {
     }
   }
 
-  purchase(product: IAPProduct) {
-    this.store.order(product);
+  purchase(product: CdvPurchase.Product) {
+    const offer = product.getOffer();
+    if (!offer) return;
+    this.isProcessingOrder$.next(true);
+    this.store.order(offer);
   }
 
-  private async finishPurchase(inAppProduct: IAPProduct) {
-    const pointsToAdd = this.numPointsForProduct(
-      inAppProduct,
-      this.numPointPricesById$.value
-    );
+  private async finishPurchase(receipt: CdvPurchase.VerifiedReceipt) {
+    const product = this.extractProductFromReceipt(receipt);
+    if (!product) {
+      receipt.finish();
+      this.isProcessingOrder$.next(false);
+      return;
+    }
 
-    let receipt;
-    if (inAppProduct.transaction?.type === 'ios-appstore') {
-      receipt = inAppProduct.transaction.appStoreReceipt;
+    const storeReceipt = this.extractStoreReceipt(receipt);
+    if (!storeReceipt) {
+      receipt.finish();
+      this.isProcessingOrder$.next(false);
+      return;
     }
-    if (inAppProduct.transaction?.type === 'android-playstore') {
-      receipt = inAppProduct.transaction.receipt;
-    }
-    if (!receipt) return;
 
     try {
+      const pointsToAdd = this.numPointsForProduct(
+        product.id,
+        this.numPointPricesById$.value
+      );
+
       await this.diaBackendNumService
-        .purchaseNumPoints$(pointsToAdd, receipt)
+        .purchaseNumPoints$(pointsToAdd, storeReceipt)
         .toPromise();
-      inAppProduct.finish();
+
+      receipt.finish();
+      this.isProcessingOrder$.next(false);
 
       this.notifyUser(
         this.translocoService.translate('wallets.buyCredits.xCreditsAdded', {
@@ -129,10 +138,63 @@ export class InAppStoreService implements OnDestroy {
         })
       );
     } catch (error) {
-      const errorMessage = this.translocoService.translate(
-        'wallets.buyCredits.failedToAddCredits'
-      );
-      this.errorService.toastError$(errorMessage).toPromise();
+      if (
+        error instanceof HttpErrorResponse &&
+        error.error.error?.type === 'duplicate_receipt_id'
+      ) {
+        /**
+         * The receipt has already been used to get NUM points.
+         *
+         * In case of duplicate receipt id, the user has already received the points
+         * and we can ignore the error. Duplicate receipt can happen if callbacks
+         * registered in CdvPurchase is called twice. Issue is more related to plugin itslef:
+         * https://github.com/j3k0/cordova-plugin-purchase/issues/1458
+         *
+         * Thanks to our backend implementation, the user will not be given NUMs twice.
+         * In this case we just finish the receipt and make sure loading indicator is hidden.
+         */
+        receipt.finish();
+        this.isProcessingOrder$.next(false);
+      } else {
+        this.errorService
+          .toastError$(
+            this.translocoService.translate(
+              'wallets.buyCredits.failedToAddCredits'
+            )
+          )
+          .toPromise();
+      }
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private extractProductFromReceipt(receipt: CdvPurchase.VerifiedReceipt) {
+    for (const transaction of receipt.sourceReceipt.transactions) {
+      for (const product of transaction.products) {
+        const isIncluded = Object.values<string>(
+          CaptureInAppProductIds
+        ).includes(product.id);
+        if (isIncluded) return product;
+      }
+    }
+    return null;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private extractStoreReceipt(
+    receipt: CdvPurchase.VerifiedReceipt
+  ): string | undefined {
+    const platform = receipt.sourceReceipt.platform;
+
+    if (platform === CdvPurchase.Platform.APPLE_APPSTORE) {
+      // nativeData is not documented, but it is there (can be veified by console.log(receipt))
+      return (receipt.sourceReceipt as any).nativeData.appStoreReceipt;
+    }
+
+    if (platform === CdvPurchase.Platform.GOOGLE_PLAY) {
+      // nativePurchase is not documented, but it is there (can be veified by console.log(receipt))
+      return (receipt.sourceReceipt.transactions[0] as any).nativePurchase
+        .receipt;
     }
   }
 
@@ -145,9 +207,9 @@ export class InAppStoreService implements OnDestroy {
   private regiseterStoreListeners() {
     this.store.error(this.onStoreError);
     this.store.ready(this.onStoreReady);
-    this.store.when('product').approved(this.onStoreProductApproved);
-    this.store.when('product').updated(this.onStoreProductUpdated);
-    this.store.when('product').verified(this.onStoreProductVerified);
+    this.store.when().approved(this.onStoreProductApproved);
+    this.store.when().productUpdated(this.onStoreProductUpdated);
+    this.store.when().verified(this.onStoreProductVerified);
   }
 
   private unregisterStoreListeners() {
@@ -159,78 +221,64 @@ export class InAppStoreService implements OnDestroy {
   }
 
   private registerStoreProducts() {
-    const consumableProductIds = [
-      CaptureInAppProductIds.BRONZE_PACK,
-      CaptureInAppProductIds.SLIVER_PACK,
-      CaptureInAppProductIds.GOLD_PACK,
-      CaptureInAppProductIds.PLATINUM_PACK,
-    ];
-    const type = this.store.CONSUMABLE;
+    const consumableProductIds = Object.values(CaptureInAppProductIds);
+    const type = CdvPurchase.ProductType.CONSUMABLE;
+    const appstorePlatform = CdvPurchase.Platform.APPLE_APPSTORE;
+    const googlePlayPlatform = CdvPurchase.Platform.GOOGLE_PLAY;
 
+    const productsToRegister: CdvPurchase.IRegisterProduct[] = [];
     for (const id of consumableProductIds) {
-      this.store.register({ id, type });
+      productsToRegister.push({ id, type, platform: appstorePlatform });
+      productsToRegister.push({ id, type, platform: googlePlayPlatform });
     }
+
+    this.store.register(productsToRegister);
   }
 
-  private readonly onStoreError = (_: IAPError) => {
+  private readonly onStoreError = (error: CdvPurchase.IError) => {
+    this.isProcessingOrder$.next(false);
+
+    if (error.message === 'The user cancelled the order.') return;
+
     const errorMessage = this.translocoService.translate(
       'inAppPurchase.inAppPurchaseErrorOcurred'
     );
     this.errorService.toastError$(errorMessage).toPromise();
+    // TODO: report to remote error service
   };
 
   private readonly onStoreReady = () => {
-    const inAppProducts = this.store.products.filter(
-      product => this.shouldIgnoreProduct(product) === false
-    );
-    this.inAppProducts$.next(inAppProducts);
+    this.inAppProducts$.next(this.store.products);
   };
 
-  private readonly onStoreProductUpdated = (updatedProduct: IAPProduct) => {
-    if (this.shouldIgnoreProduct(updatedProduct)) {
-      return;
-    }
-
+  private readonly onStoreProductUpdated = (
+    updatedProduct: CdvPurchase.Product
+  ) => {
     this.debugPrint('onStoreProductUpdated', updatedProduct);
-
-    const inAppProducts = this.inAppProducts$.value.map(product =>
-      product.id === updatedProduct.id ? updatedProduct : product
-    );
-
-    this.inAppProducts$.next(inAppProducts);
+    this.inAppProducts$.next(this.store.products);
   };
 
-  private readonly onStoreProductApproved = (product: IAPProduct) => {
-    if (this.shouldIgnoreProduct(product)) {
-      return;
-    }
-    this.debugPrint('onStoreProductApproved', product);
-    // TODO: in the future add validation logic here
-    product.verify();
+  private readonly onStoreProductApproved = (
+    transacction: CdvPurchase.Transaction
+  ) => {
+    this.debugPrint('onStoreProductApproved', transacction);
+    transacction.verify();
   };
 
-  private readonly onStoreProductVerified = (product: IAPProduct) => {
-    if (this.shouldIgnoreProduct(product)) {
-      return;
-    }
-    this.debugPrint('onStoreProductVerified', product);
-    this.finishPurchase(product);
+  private readonly onStoreProductVerified = (
+    receipt: CdvPurchase.VerifiedReceipt
+  ) => {
+    this.debugPrint('onStoreProductVerified', receipt);
+    this.finishPurchase(receipt);
   };
-
-  private shouldIgnoreProduct(product: IAPProduct) {
-    // For some reason on iOS there will be 1 in app product
-    // with product.id === io.numbersprotocol.capturelite
-    // we should ignore that product
-    return product.id === this.appId;
-  }
 
   // eslint-disable-next-line class-methods-use-this
   private numPointsForProduct(
-    product: IAPProduct,
+    productId: string,
     numPriceListById: NumPointPricesById
   ) {
-    if (product.id in numPriceListById) {
-      return numPriceListById[product.id].quantitiy;
+    if (productId in numPriceListById) {
+      return numPriceListById[productId].quantitiy;
     }
     return 0;
   }
@@ -248,7 +296,7 @@ export enum CaptureInAppProductIds {
 }
 
 interface InAppProductsWithNumPoint {
-  inAppProduct: IAPProduct;
+  inAppProduct: CdvPurchase.Product;
   numPoints: number;
 }
 
