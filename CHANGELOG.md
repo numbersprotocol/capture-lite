@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.87.1] - 2023-12-04
+
+### Fixed
+
+1. Fix in app purchase by migrating cordove-plugin-purchase to v13 (#3125)
+
 ## [0.87.0] - 2023-11-30
 
 ### Added
@@ -2220,7 +2226,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.87.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.87.1...HEAD
+[0.87.1]: https://github.com/numbersprotocol/capture-lite/compare/0.87.0...0.87.1
 [0.87.0]: https://github.com/numbersprotocol/capture-lite/compare/0.86.4...0.87.0
 [0.86.4]: https://github.com/numbersprotocol/capture-lite/compare/0.83.2...0.86.4
 [0.83.2]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.85.2

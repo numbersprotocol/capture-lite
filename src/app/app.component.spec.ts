@@ -1,7 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, waitForAsync } from '@angular/core/testing';
-import { InAppPurchase2 } from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
 import { Platform } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { CapacitorPluginsTestingModule } from './shared/capacitor-plugins/capacitor-plugins-testing.module';
@@ -22,12 +21,6 @@ describe('AppComponent', () => {
         is: platformIsSpy,
       });
 
-      const iap2SpyMethods = ['error', 'ready', 'when', 'refresh', 'off'];
-      const inAppPurchase2Spy = jasmine.createSpyObj(
-        'InAppPurchase2',
-        iap2SpyMethods
-      );
-
       TestBed.configureTestingModule({
         declarations: [AppComponent],
         schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -37,10 +30,7 @@ describe('AppComponent', () => {
           getTranslocoTestingModule(),
           MaterialTestingModule,
         ],
-        providers: [
-          { provide: Platform, useValue: platformSpy },
-          { provide: InAppPurchase2, useValue: inAppPurchase2Spy },
-        ],
+        providers: [{ provide: Platform, useValue: platformSpy }],
       }).compileComponents();
     })
   );

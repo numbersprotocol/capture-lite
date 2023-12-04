@@ -1,5 +1,4 @@
 import { isDevMode } from '@angular/core';
-import { IAPProduct } from '@awesome-cordova-plugins/in-app-purchase-2/ngx';
 import { CaptureInAppProductIds } from '../shared/in-app-store/in-app-store.service';
 
 export function truncateReceipt(recipt: string) {
@@ -32,72 +31,66 @@ export function setupInAppPurchaseDebugPrint(tag: string) {
  * does not work in Web environment therefore we can use this util function
  * to pupulate with mock product to develop UI with different product states
  */
-export function generateMockInAppProducts(): IAPProduct[] {
-  const mockInAppProductSample: IAPProduct = {
+export function generateMockInAppProducts(): CdvPurchase.Product[] {
+  const mockInAppProductSample: CdvPurchase.Product = {
     id: 'string',
-    alias: 'string',
-    type: 'string',
-    state: 'string',
+    className: 'Product',
+    platform: CdvPurchase.Platform.TEST,
+    offers: [],
+    pricing: undefined,
+    type: CdvPurchase.ProductType.CONSUMABLE,
     title: 'string',
     description: 'string',
-    priceMicros: 0,
-    price: 'string',
-    currency: 'string',
-    loaded: true,
-    valid: true,
     canPurchase: true,
     owned: true,
-    finish: () => ({}),
-    verify: () => ({}),
-    set: (_: string, __: any) => ({}),
-    stateChanged: () => ({}),
-    on: (_: string, __: any) => ({}),
-    once: (_: string, __: any) => ({}),
-    off: (_: any) => ({}),
-    trigger: (_: string, __: any) => ({}),
+    getOffer: () => undefined,
+    addOffer: () => ({} as CdvPurchase.Product),
   };
 
   return [
     {
       ...mockInAppProductSample,
       id: CaptureInAppProductIds.BRONZE_PACK,
-      title: 'Bronze Pack',
-      price: '0.99',
-      currency: 'USD',
+      title: '100 NumPoints',
+      description: '100 NumPoints',
+      pricing: undefined,
       canPurchase: true,
-      state: 'valid',
-      type: 'CONSUMABLE',
+      owned: true,
+      getOffer: () => undefined,
+      addOffer: () => ({} as CdvPurchase.Product),
     },
     {
       ...mockInAppProductSample,
-
       id: CaptureInAppProductIds.SLIVER_PACK,
-      title: 'Silver Pack',
-      price: '1.99',
-      state: 'valid',
-      canPurchase: false,
-      currency: 'USD',
-      type: 'CONSUMABLE',
+      title: '500 NumPoints',
+      description: '500 NumPoints',
+      pricing: undefined,
+      canPurchase: true,
+      owned: true,
+      getOffer: () => undefined,
+      addOffer: () => ({} as CdvPurchase.Product),
     },
     {
       ...mockInAppProductSample,
       id: CaptureInAppProductIds.GOLD_PACK,
-      title: 'Gold Pack',
-      price: '2.99',
-      state: 'valid',
-      currency: 'USD',
-      type: 'CONSUMABLE',
+      title: '1000 NumPoints',
+      description: '1000 NumPoints',
+      pricing: undefined,
       canPurchase: true,
+      owned: true,
+      getOffer: () => undefined,
+      addOffer: () => ({} as CdvPurchase.Product),
     },
     {
       ...mockInAppProductSample,
       id: CaptureInAppProductIds.PLATINUM_PACK,
-      title: 'Platinum Pack',
-      price: '3.99',
-      state: 'valid',
-      currency: 'USD',
-      type: 'CONSUMABLE',
+      title: '5000 NumPoints',
+      description: '5000 NumPoints',
+      pricing: undefined,
       canPurchase: true,
+      owned: true,
+      getOffer: () => undefined,
+      addOffer: () => ({} as CdvPurchase.Product),
     },
   ];
 }

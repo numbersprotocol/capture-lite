@@ -7,8 +7,8 @@ android {
         applicationId "io.numbersprotocol.capturelite"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 870
-        versionName "0.87.0"
+        versionCode 871
+        versionName "0.87.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
