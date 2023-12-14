@@ -172,7 +172,7 @@
     "networkNotConnected": "No internet connections.",
     "allPhotosRegistered": "All Captures registered on blockchain successfully",
     "confirmPrefetch": "Do you want to restore the registered Captures? It may take minutes to complete.",
-    "confirmSyncAndRestore": "This will download all assets again and making sure your local data is up to date",
+    "confirmSyncAndRestore": "This will download all assets and making sure your local data is up to date",
     "loadingPreviousData": "Restoring Captures...",
     "doNotTurnOffApp": "Please keep the screen on and DO NOT leave the app.",
     "upgrading": "Upgrading...",
