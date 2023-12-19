@@ -4,12 +4,15 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, fromEvent } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { first, map, tap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
 import { BubbleToIonicPostMessage } from '../../../../shared/iframe/iframe';
 import { IframeService } from '../../../../shared/iframe/iframe.service';
+import { getOldProof } from '../../../../shared/repositories/proof/old-proof-adapter';
+import { ProofRepository } from '../../../../shared/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
+import { InformationSessionService } from '../information/session/information-session.service';
 
 @UntilDestroy()
 @Component({
@@ -43,7 +46,9 @@ export class EditCaptionPage {
     private readonly sanitizer: DomSanitizer,
     private readonly navController: NavController,
     private readonly iframeService: IframeService,
-    private readonly diaBackendAuthService: DiaBackendAuthService
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly informationSessionService: InformationSessionService,
+    private readonly proofRepository: ProofRepository
   ) {
     this.processIframeEvents();
   }
@@ -60,6 +65,7 @@ export class EditCaptionPage {
               break;
             case BubbleToIonicPostMessage.EDIT_CAPTION_SAVE:
               this.iframeService.refreshDetailsPageIframe();
+              this.syncCaption();
               this.navController.back();
               break;
           }
@@ -67,5 +73,27 @@ export class EditCaptionPage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  syncCaption() {
+    if (this.informationSessionService.activatedDetailedCapture) {
+      combineLatest([
+        this.informationSessionService.activatedDetailedCapture.proof$,
+        this.informationSessionService.activatedDetailedCapture.caption$,
+      ])
+        .pipe(
+          first(),
+          tap(([proof, latestCaptionFromBackend]) => {
+            if (proof && latestCaptionFromBackend) {
+              proof.caption = latestCaptionFromBackend;
+              this.proofRepository.update(
+                [proof],
+                (x, y) => getOldProof(x).hash === getOldProof(y).hash
+              );
+            }
+          })
+        )
+        .subscribe();
+    }
   }
 }
