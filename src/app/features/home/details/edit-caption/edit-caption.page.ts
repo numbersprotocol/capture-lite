@@ -3,8 +3,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, fromEvent } from 'rxjs';
-import { first, map, tap } from 'rxjs/operators';
+import { combineLatest, fromEvent, of } from 'rxjs';
+import {
+  concatMap,
+  finalize,
+  first,
+  map,
+  tap as switchTap,
+} from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
 import { BubbleToIonicPostMessage } from '../../../../shared/iframe/iframe';
@@ -56,7 +62,7 @@ export class EditCaptionPage {
   processIframeEvents() {
     fromEvent(window, 'message')
       .pipe(
-        tap(event => {
+        switchTap(event => {
           const postMessageEvent = event as MessageEvent;
           const data = postMessageEvent.data as BubbleToIonicPostMessage;
           switch (data) {
@@ -65,8 +71,7 @@ export class EditCaptionPage {
               break;
             case BubbleToIonicPostMessage.EDIT_CAPTION_SAVE:
               this.iframeService.refreshDetailsPageIframe();
-              this.syncCaption();
-              this.navController.back();
+              this.syncCaptionAndNavigateBack();
               break;
           }
         }),
@@ -75,7 +80,7 @@ export class EditCaptionPage {
       .subscribe();
   }
 
-  syncCaption() {
+  syncCaptionAndNavigateBack() {
     if (this.informationSessionService.activatedDetailedCapture) {
       combineLatest([
         this.informationSessionService.activatedDetailedCapture.proof$,
@@ -83,15 +88,17 @@ export class EditCaptionPage {
       ])
         .pipe(
           first(),
-          tap(([proof, latestCaptionFromBackend]) => {
-            if (proof && latestCaptionFromBackend) {
+          concatMap(([proof, latestCaptionFromBackend]) => {
+            if (proof) {
               proof.caption = latestCaptionFromBackend;
-              this.proofRepository.update(
+              return this.proofRepository.update(
                 [proof],
                 (x, y) => getOldProof(x).hash === getOldProof(y).hash
               );
             }
-          })
+            return of(null);
+          }),
+          finalize(() => this.navController.back())
         )
         .subscribe();
     }
