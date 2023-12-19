@@ -72,8 +72,7 @@ export class CaptureItemComponent {
   );
 
   readonly hasCaption$ = this.proof$.pipe(
-    switchMap(proof => this.diaBackendAssetRepository.fetchByProof$(proof)),
-    map(asset => asset.caption !== '')
+    map(proof => proof.caption.trim() !== '')
   );
 
   readonly isVideo$ = this.proof$.pipe(
