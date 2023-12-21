@@ -26,6 +26,13 @@ export class Proof {
 
   diaBackendAssetId?: string = undefined;
 
+  /**
+   * The timestamp when the asset is uploaded to the backend, in the format "2023-12-21T01:15:17Z".
+   * By default, it is undefined. Once the asset is successfully uploaded, the uploadedAt property
+   * will be set to the timestamp provided by the backend.
+   */
+  uploadedAt?: string = undefined;
+
   isCollected = false;
 
   signatures: Signatures = {};
@@ -41,6 +48,36 @@ export class Proof {
    */
   cameraSource: CameraSource = CameraSource.Camera;
 
+  /**
+   * Used to sort the assets in the VERIFIED tab either by timestamp or uploadedAt (if available).
+   */
+  get uploadedAtOrTimestamp() {
+    const MILLISECONDS_PER_SECOND = 1000;
+    const LENGTH_IN_MILLISECONDS = 13;
+
+    // convert timestamp to milliseconds if needed
+    const proofTimestampInMilliseconds =
+      this.timestamp.toString().length === LENGTH_IN_MILLISECONDS
+        ? this.timestamp
+        : this.timestamp * MILLISECONDS_PER_SECOND;
+
+    try {
+      const serverTimestampInMilliseconds = Date.parse(this.uploadedAt ?? '');
+      return serverTimestampInMilliseconds || proofTimestampInMilliseconds;
+    } catch (error) {
+      return proofTimestampInMilliseconds;
+    }
+  }
+
+  /**
+   * The timestamp when the proof was first created or captured. Different from uploadedAt
+   * The timestamp is generated using Date.now() and is represented in milliseconds.
+   *
+   * Note: After restoring or syncing with the backend assets, the timestamp will be in seconds.
+   * For more details, refer to https://github.com/numbersprotocol/storage-backend/issues/976
+   *
+   * Note: Milliseconds are 13 digits long, while seconds are 10 digits long.
+   */
   get timestamp() {
     return this.truth.timestamp;
   }
@@ -120,6 +157,7 @@ export class Proof {
     );
     proof.setIndexedAssets(indexedProofView.indexedAssets);
     proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
+    proof.uploadedAt = indexedProofView.uploadedAt;
     proof.isCollected = indexedProofView.isCollected ?? false;
     proof.signatureVersion = indexedProofView.signatureVersion;
     proof.integritySha = indexedProofView.integritySha;
@@ -290,6 +328,7 @@ export class Proof {
       signatures: this.signatures,
       signatureVersion: this.signatureVersion,
       diaBackendAssetId: this.diaBackendAssetId,
+      uploadedAt: this.uploadedAt,
       isCollected: this.isCollected,
       integritySha: this.integritySha,
       cameraSource: this.cameraSource,
@@ -424,6 +463,7 @@ export interface IndexedProofView extends Tuple {
   readonly signatures: Signatures;
   readonly signatureVersion?: string;
   readonly diaBackendAssetId?: string;
+  readonly uploadedAt?: string;
   readonly isCollected?: boolean;
   readonly integritySha?: string;
   readonly cameraSource: CameraSource;
