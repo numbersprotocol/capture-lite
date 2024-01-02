@@ -71,9 +71,7 @@ export class CaptureItemComponent {
     )
   );
 
-  readonly hasCaption$ = this.proof$.pipe(
-    map(proof => proof.caption.trim() !== '')
-  );
+  readonly hasCaption$ = this.proof$.pipe(map(proof => proof.caption !== ''));
 
   readonly isVideo$ = this.proof$.pipe(
     concatMap(proof => proof.getFirstAssetMeta()),
