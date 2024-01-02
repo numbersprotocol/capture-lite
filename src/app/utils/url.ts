@@ -15,9 +15,9 @@ export function getAssetProfileUrl(id: string, token?: string) {
 
 export function getAssetProfileForNSE(id: string, token?: string) {
   if (token) {
-    return `https://nftsearch.site/asset-profile?cid=${id}&tmp_token=${token}`;
+    return `https://verify.numbersprotocol.io/asset-profile?cid=${id}&tmp_token=${token}`;
   }
-  return `https://nftsearch.site/asset-profile?cid=${id}`;
+  return `https://verify.numbersprotocol.io/asset-profile?cid=${id}`;
 }
 
 export function getAssetProfileForCaptureIframe(cid: string) {
