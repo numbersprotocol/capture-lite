@@ -61,12 +61,8 @@ export class Proof {
         ? this.timestamp
         : this.timestamp * MILLISECONDS_PER_SECOND;
 
-    try {
-      const serverTimestampInMilliseconds = Date.parse(this.uploadedAt ?? '');
-      return serverTimestampInMilliseconds || proofTimestampInMilliseconds;
-    } catch (error) {
-      return proofTimestampInMilliseconds;
-    }
+    const serverTimestampInMilliseconds = Date.parse(this.uploadedAt ?? '');
+    return serverTimestampInMilliseconds || proofTimestampInMilliseconds;
   }
 
   /**
