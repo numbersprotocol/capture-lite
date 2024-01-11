@@ -145,6 +145,7 @@ export class DiaBackendAssetUploadingService {
       }),
       map(diaBackendAsset => {
         proof.diaBackendAssetId = diaBackendAsset.id;
+        proof.uploadedAt = diaBackendAsset.uploaded_at;
         return proof;
       }),
       retryWhen(err$ =>
