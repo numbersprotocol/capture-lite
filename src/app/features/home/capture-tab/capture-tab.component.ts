@@ -1,6 +1,7 @@
 import { formatDate, KeyValue } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import {
   ActionSheetButton,
@@ -15,7 +16,6 @@ import {
   catchError,
   concatMap,
   concatMapTo,
-  finalize,
   map,
   pluck,
   shareReplay,
@@ -45,6 +45,7 @@ import { getOldProof } from '../../../shared/repositories/proof/old-proof-adapte
 import { Proof } from '../../../shared/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import { reloadApp } from '../../../utils/miscellaneous';
+import { PrefetchingDialogComponent } from '../onboarding/prefetching-dialog/prefetching-dialog.component';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -94,7 +95,9 @@ export class CaptureTabComponent implements OnInit {
   );
 
   readonly captures$ = this.proofs$.pipe(
-    map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp))
+    map(proofs =>
+      proofs.sort((a, b) => b.uploadedAtOrTimestamp - a.uploadedAtOrTimestamp)
+    )
   );
 
   readonly networkConnected$ = this.networkService.connected$;
@@ -158,6 +161,8 @@ export class CaptureTabComponent implements OnInit {
     private readonly mediaStore: MediaStore,
     private readonly database: Database,
     private readonly confirmAlert: ConfirmAlert,
+    private readonly dialog: MatDialog,
+
     private readonly preferenceManager: PreferenceManager,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly proofRepository: ProofRepository,
@@ -334,17 +339,29 @@ export class CaptureTabComponent implements OnInit {
     return item.id;
   }
 
-  refreshCaptures(event: Event) {
-    this.diaBackendAssetRefreshingService
-      .refresh()
-      .pipe(
-        finalize(() => {
-          this.capturedTabPageIndex$.next(0);
-          this.collectedTabPageIndex$.next(0);
-          this.draftTabPageIndex$.next(0);
-          return (<CustomEvent>event).detail.complete();
-        })
-      )
-      .subscribe();
+  async refreshCaptures(event: Event) {
+    (<CustomEvent>event).detail.complete();
+
+    const confirmRefresh = await this.showRefreshAlert();
+    if (confirmRefresh) {
+      this.capturedTabPageIndex$.next(0);
+      this.collectedTabPageIndex$.next(0);
+      this.draftTabPageIndex$.next(0);
+
+      return this.dialog.open(PrefetchingDialogComponent, {
+        disableClose: true,
+      });
+    }
+  }
+
+  private async showRefreshAlert() {
+    return this.confirmAlert.present({
+      header: this.translocoService.translate('syncAndRestore'),
+      message: this.translocoService.translate('message.confirmSyncAndRestore'),
+      confirmButtonText: this.translocoService.translate(
+        'confirmSyncAndRestore'
+      ),
+      cancelButtonText: this.translocoService.translate('cancelSyncAndRestore'),
+    });
   }
 }
