@@ -26,12 +26,6 @@ export class Proof {
 
   diaBackendAssetId?: string = undefined;
 
-  /**
-   * When user uploades a capture we do not have option to set caption. Therefore caption is empty
-   * by default. Everytime caption is updated we need to update the caption in the proof as well.
-   */
-  caption = '';
-
   isCollected = false;
 
   signatures: Signatures = {};
@@ -126,7 +120,6 @@ export class Proof {
     );
     proof.setIndexedAssets(indexedProofView.indexedAssets);
     proof.diaBackendAssetId = indexedProofView.diaBackendAssetId;
-    proof.caption = indexedProofView.caption ?? '';
     proof.isCollected = indexedProofView.isCollected ?? false;
     proof.signatureVersion = indexedProofView.signatureVersion;
     proof.integritySha = indexedProofView.integritySha;
@@ -297,7 +290,6 @@ export class Proof {
       signatures: this.signatures,
       signatureVersion: this.signatureVersion,
       diaBackendAssetId: this.diaBackendAssetId,
-      caption: this.caption,
       isCollected: this.isCollected,
       integritySha: this.integritySha,
       cameraSource: this.cameraSource,
@@ -432,7 +424,6 @@ export interface IndexedProofView extends Tuple {
   readonly signatures: Signatures;
   readonly signatureVersion?: string;
   readonly diaBackendAssetId?: string;
-  readonly caption?: string;
   readonly isCollected?: boolean;
   readonly integritySha?: string;
   readonly cameraSource: CameraSource;
