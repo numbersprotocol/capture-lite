@@ -95,9 +95,7 @@ export class CaptureTabComponent implements OnInit {
   );
 
   readonly captures$ = this.proofs$.pipe(
-    map(proofs =>
-      proofs.sort((a, b) => b.uploadedAtOrTimestamp - a.uploadedAtOrTimestamp)
-    )
+    map(proofs => proofs.sort((a, b) => b.timestamp - a.timestamp))
   );
 
   readonly networkConnected$ = this.networkService.connected$;
