@@ -287,43 +287,6 @@ describe('Proof utils', () => {
     const expected = `{\n  "asset_mime_type": "${ASSET1_MIMETYPE}",\n  "caption": "",\n  "created_at": ${TIMESTAMP},\n  "device_name": "${DEVICE_NAME_VALUE1}",\n  "information": {\n    "device.device_name": "${DEVICE_NAME_VALUE2}",\n    "device.humidity": 0.8,\n    "geolocation.geolocation_latitude": ${GEOLOCATION_LATITUDE2},\n    "geolocation.geolocation_longitude": ${GEOLOCATION_LONGITUDE2}\n  },\n  "location_latitude": ${GEOLOCATION_LATITUDE1},\n  "location_longitude": ${GEOLOCATION_LONGITUDE1},\n  "proof_hash": "${ASSET1_SHA256SUM}",\n  "recorder": "Capture",\n  "spec_version": "2.0.0"\n}`;
     expect(getSerializedSortedProofMetadata(ProofMetadata)).toEqual(expected);
   });
-
-  describe('uploadedAtOrTimestamp', () => {
-    it('should return timestamp in milliseconds when uploadedAt is undefined', async () => {
-      proof = await Proof.from(mediaStore, ASSETS, TRUTH, SIGNATURES_VALID);
-      expect(proof.uploadedAtOrTimestamp).toEqual(TRUTH.timestamp);
-    });
-
-    it('should return uploadedAt in milliseconds when uploadedAt is defined', async () => {
-      const date = '2023-12-21T01:15:17Z'; // sample returned by API
-      const dateInMilliseconds = Date.parse(date);
-
-      proof = await Proof.from(mediaStore, ASSETS, TRUTH, SIGNATURES_VALID);
-      proof.uploadedAt = date;
-
-      expect(proof.uploadedAtOrTimestamp).toEqual(dateInMilliseconds);
-    });
-
-    it('should return timestamp in milliseconds when uploadedAt is not a valid date', async () => {
-      proof = await Proof.from(mediaStore, ASSETS, TRUTH, SIGNATURES_VALID);
-      proof.uploadedAt = 'invalid date';
-      expect(proof.uploadedAtOrTimestamp).toEqual(TRUTH.timestamp);
-    });
-
-    it('should return timestamp in milliseconds when its in seconds', async () => {
-      const timestamp = 1627545600; // 29th July 2021 12:00:00 GMT
-      const timestampInMilliseconds = timestamp * 1000;
-
-      proof = await Proof.from(
-        mediaStore,
-        ASSETS,
-        { ...TRUTH, timestamp },
-        SIGNATURES_VALID
-      );
-
-      expect(proof.uploadedAtOrTimestamp).toEqual(timestampInMilliseconds);
-    });
-  });
 });
 
 const ASSET1_MIMETYPE: MimeType = 'image/png';

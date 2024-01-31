@@ -3,22 +3,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, fromEvent, of } from 'rxjs';
-import {
-  concatMap,
-  finalize,
-  first,
-  map,
-  tap as switchTap,
-} from 'rxjs/operators';
+import { combineLatest, fromEvent } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { DiaBackendAuthService } from '../../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../../shared/dia-backend/secret';
 import { BubbleToIonicPostMessage } from '../../../../shared/iframe/iframe';
 import { IframeService } from '../../../../shared/iframe/iframe.service';
-import { getOldProof } from '../../../../shared/repositories/proof/old-proof-adapter';
-import { ProofRepository } from '../../../../shared/repositories/proof/proof-repository.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
-import { InformationSessionService } from '../information/session/information-session.service';
 
 @UntilDestroy()
 @Component({
@@ -52,9 +43,7 @@ export class EditCaptionPage {
     private readonly sanitizer: DomSanitizer,
     private readonly navController: NavController,
     private readonly iframeService: IframeService,
-    private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly informationSessionService: InformationSessionService,
-    private readonly proofRepository: ProofRepository
+    private readonly diaBackendAuthService: DiaBackendAuthService
   ) {
     this.processIframeEvents();
   }
@@ -62,7 +51,7 @@ export class EditCaptionPage {
   processIframeEvents() {
     fromEvent(window, 'message')
       .pipe(
-        switchTap(event => {
+        tap(event => {
           const postMessageEvent = event as MessageEvent;
           const data = postMessageEvent.data as BubbleToIonicPostMessage;
           switch (data) {
@@ -71,36 +60,12 @@ export class EditCaptionPage {
               break;
             case BubbleToIonicPostMessage.EDIT_CAPTION_SAVE:
               this.iframeService.refreshDetailsPageIframe();
-              this.syncCaptionAndNavigateBack();
+              this.navController.back();
               break;
           }
         }),
         untilDestroyed(this)
       )
       .subscribe();
-  }
-
-  syncCaptionAndNavigateBack() {
-    if (this.informationSessionService.activatedDetailedCapture) {
-      combineLatest([
-        this.informationSessionService.activatedDetailedCapture.proof$,
-        this.informationSessionService.activatedDetailedCapture.caption$,
-      ])
-        .pipe(
-          first(),
-          concatMap(([proof, latestCaptionFromBackend]) => {
-            if (proof) {
-              proof.caption = latestCaptionFromBackend;
-              return this.proofRepository.update(
-                [proof],
-                (x, y) => getOldProof(x).hash === getOldProof(y).hash
-              );
-            }
-            return of(null);
-          }),
-          finalize(() => this.navController.back())
-        )
-        .subscribe();
-    }
   }
 }
