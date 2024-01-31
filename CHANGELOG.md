@@ -7,17 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.88.8] - 2024-01-31
+
+### Changed
+
+1. Revert Feat confirm dialog on pull to refresh (#3171)
+1. Revert Fix excessive api call (#3157)
+1. Revert Feat sort assets in VERIFIED tab by uploaded_at (#3158)
+
 ## [0.88.6] - 2024-01-11
 
 ### Added
 
-Feature update the NSE domain (#3161)
-Feat confirm dialog on pull to refresh (#3171)
-Feat sort assets in VERIFIED tab by uploaded_at (#3158)
+1. Feature update the NSE domain (#3161)
+1. Feat confirm dialog on pull to refresh (#3171)
+1. Feat sort assets in VERIFIED tab by uploaded_at (#3158)
 
 ### Fixed
 
-Fix excessive api call (#3157)
+1. Fix excessive api call (#3157)
 
 ## [0.87.1] - 2023-12-04
 
@@ -2238,7 +2246,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.88.6...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.88.8...HEAD
+[0.88.8]: https://github.com/numbersprotocol/capture-lite/compare/0.88.6...0.88.8
 [0.88.6]: https://github.com/numbersprotocol/capture-lite/compare/0.87.1...0.88.6
 [0.87.1]: https://github.com/numbersprotocol/capture-lite/compare/0.87.0...0.87.1
 [0.87.0]: https://github.com/numbersprotocol/capture-lite/compare/0.86.4...0.87.0
