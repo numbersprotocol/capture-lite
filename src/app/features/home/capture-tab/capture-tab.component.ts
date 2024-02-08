@@ -35,6 +35,7 @@ import {
   DiaBackendAssetRepository,
 } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAsseRefreshingService } from '../../../shared/dia-backend/asset/refreshing/dia-backend-asset-refreshing.service';
+import { DiaBackendAssetUploadingService } from '../../../shared/dia-backend/asset/uploading/dia-backend-asset-uploading.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { ErrorService } from '../../../shared/error/error.service';
@@ -153,6 +154,8 @@ export class CaptureTabComponent implements OnInit {
     )
   );
 
+  private pendingUploadTasks = 0;
+
   constructor(
     private readonly actionSheetController: ActionSheetController,
     private readonly router: Router,
@@ -160,7 +163,6 @@ export class CaptureTabComponent implements OnInit {
     private readonly database: Database,
     private readonly confirmAlert: ConfirmAlert,
     private readonly dialog: MatDialog,
-
     private readonly preferenceManager: PreferenceManager,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly proofRepository: ProofRepository,
@@ -173,8 +175,13 @@ export class CaptureTabComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly errorService: ErrorService,
     private readonly blockingActionService: BlockingActionService,
-    private readonly captureTabService: CaptureTabService
-  ) {}
+    private readonly captureTabService: CaptureTabService,
+    private readonly uploadService: DiaBackendAssetUploadingService
+  ) {
+    this.uploadService.pendingTasks$
+      .pipe(untilDestroyed(this))
+      .subscribe(value => (this.pendingUploadTasks = value));
+  }
 
   ngOnInit(): void {
     this.initSegmentListener();
@@ -339,6 +346,9 @@ export class CaptureTabComponent implements OnInit {
 
   async refreshCaptures(event: Event) {
     (<CustomEvent>event).detail.complete();
+
+    // Don't refresh if there are still captures being uploaded.
+    if (this.pendingUploadTasks > 0) return;
 
     const confirmRefresh = await this.showRefreshAlert();
     if (confirmRefresh) {
