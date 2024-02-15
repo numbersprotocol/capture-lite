@@ -1,6 +1,7 @@
 import { formatDate, KeyValue } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import {
   ActionSheetButton,
@@ -15,7 +16,6 @@ import {
   catchError,
   concatMap,
   concatMapTo,
-  finalize,
   map,
   pluck,
   shareReplay,
@@ -35,6 +35,7 @@ import {
   DiaBackendAssetRepository,
 } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAsseRefreshingService } from '../../../shared/dia-backend/asset/refreshing/dia-backend-asset-refreshing.service';
+import { DiaBackendAssetUploadingService } from '../../../shared/dia-backend/asset/uploading/dia-backend-asset-uploading.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
 import { ErrorService } from '../../../shared/error/error.service';
@@ -45,6 +46,7 @@ import { getOldProof } from '../../../shared/repositories/proof/old-proof-adapte
 import { Proof } from '../../../shared/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import { reloadApp } from '../../../utils/miscellaneous';
+import { PrefetchingDialogComponent } from '../onboarding/prefetching-dialog/prefetching-dialog.component';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -152,12 +154,15 @@ export class CaptureTabComponent implements OnInit {
     )
   );
 
+  private pendingUploadTasks = 0;
+
   constructor(
     private readonly actionSheetController: ActionSheetController,
     private readonly router: Router,
     private readonly mediaStore: MediaStore,
     private readonly database: Database,
     private readonly confirmAlert: ConfirmAlert,
+    private readonly dialog: MatDialog,
     private readonly preferenceManager: PreferenceManager,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly proofRepository: ProofRepository,
@@ -170,8 +175,13 @@ export class CaptureTabComponent implements OnInit {
     private readonly translocoService: TranslocoService,
     private readonly errorService: ErrorService,
     private readonly blockingActionService: BlockingActionService,
-    private readonly captureTabService: CaptureTabService
-  ) {}
+    private readonly captureTabService: CaptureTabService,
+    private readonly uploadService: DiaBackendAssetUploadingService
+  ) {
+    this.uploadService.pendingTasks$
+      .pipe(untilDestroyed(this))
+      .subscribe(value => (this.pendingUploadTasks = value));
+  }
 
   ngOnInit(): void {
     this.initSegmentListener();
@@ -334,17 +344,32 @@ export class CaptureTabComponent implements OnInit {
     return item.id;
   }
 
-  refreshCaptures(event: Event) {
-    this.diaBackendAssetRefreshingService
-      .refresh()
-      .pipe(
-        finalize(() => {
-          this.capturedTabPageIndex$.next(0);
-          this.collectedTabPageIndex$.next(0);
-          this.draftTabPageIndex$.next(0);
-          return (<CustomEvent>event).detail.complete();
-        })
-      )
-      .subscribe();
+  async refreshCaptures(event: Event) {
+    (<CustomEvent>event).detail.complete();
+
+    // Don't refresh if there are still captures being uploaded.
+    if (this.pendingUploadTasks > 0) return;
+
+    const confirmRefresh = await this.showRefreshAlert();
+    if (confirmRefresh) {
+      this.capturedTabPageIndex$.next(0);
+      this.collectedTabPageIndex$.next(0);
+      this.draftTabPageIndex$.next(0);
+
+      return this.dialog.open(PrefetchingDialogComponent, {
+        disableClose: true,
+      });
+    }
+  }
+
+  private async showRefreshAlert() {
+    return this.confirmAlert.present({
+      header: this.translocoService.translate('syncAndRestore'),
+      message: this.translocoService.translate('message.confirmSyncAndRestore'),
+      confirmButtonText: this.translocoService.translate(
+        'confirmSyncAndRestore'
+      ),
+      cancelButtonText: this.translocoService.translate('cancelSyncAndRestore'),
+    });
   }
 }
