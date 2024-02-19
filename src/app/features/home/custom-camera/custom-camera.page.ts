@@ -4,7 +4,7 @@ import { CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FilePicker, PickedFile } from '@capawesome/capacitor-file-picker';
-import { NavController, Platform } from '@ionic/angular';
+import { AlertController, NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import {
@@ -115,6 +115,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly errorService: ErrorService,
     private readonly userGuideService: UserGuideService,
     private readonly confirmAlert: ConfirmAlert,
+    private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService,
     private readonly captureTabService: CaptureTabService,
     private readonly ref: ChangeDetectorRef,
@@ -284,6 +285,16 @@ export class CustomCameraPage implements OnInit, OnDestroy {
 
   stopPreviewCamera() {
     this.customCameraService.stopPreviewCamera();
+  }
+
+  async redirectToCaptureDashboard() {
+    const alert = await this.alertController.create({
+      message: this.translocoService.translate(
+        'customCamera.redirectToCaptureDashboard'
+      ),
+      buttons: [this.translocoService.translate('ok')],
+    });
+    await alert.present();
   }
 
   /**
