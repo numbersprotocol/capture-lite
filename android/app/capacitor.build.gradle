@@ -26,7 +26,6 @@ dependencies {
     implementation project(':capacitor-share')
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-storage')
-    implementation project(':capawesome-capacitor-file-picker')
     implementation project(':numbersprotocol-preview-camera')
     implementation project(':numbersprotocol-preview-memory')
     implementation project(':numbersprotocol-preview-video')
