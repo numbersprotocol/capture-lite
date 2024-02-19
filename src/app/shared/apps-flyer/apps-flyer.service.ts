@@ -4,11 +4,7 @@ import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { AFEvent, AFInit, AppsFlyer } from 'appsflyer-capacitor-plugin';
 import { APPS_FLYER_DEV_KEY } from '../dia-backend/secret';
-import {
-  AFInAppEventParameterName,
-  AFInAppEventType,
-  CCamCustomEventType,
-} from './apps-flyer-enums';
+import { CCamCustomEventType } from './apps-flyer-enums';
 
 @Injectable({
   providedIn: 'root',
@@ -79,12 +75,7 @@ export class AppsFlyerService {
    */
   async logCameraShutterEvent() {
     const eventData: AFEvent = {
-      eventName: AFInAppEventType.LEVEL_ACHIEVED,
-      eventValue: {
-        [AFInAppEventParameterName.LEVEL]: '1',
-        af_score: '0',
-        af_achievement_id: CCamCustomEventType.CCAM_TRY_CLICK_CAMERA_SHUTTER,
-      },
+      eventName: CCamCustomEventType.CCAM_TRY_CLICK_CAMERA_SHUTTER,
     };
     await this.logEvent(eventData);
   }
