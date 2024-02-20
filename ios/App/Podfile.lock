@@ -45,8 +45,6 @@ PODS:
     - Capacitor
   - CapacitorStorage (1.2.4):
     - Capacitor
-  - CapawesomeCapacitorFilePicker (0.6.3):
-    - Capacitor
   - CordovaPlugins (5.0.5):
     - CapacitorCordova
   - Firebase/CoreOnly (10.14.0):
@@ -134,7 +132,6 @@ DEPENDENCIES:
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStorage (from `../../node_modules/@capacitor/storage`)"
-  - "CapawesomeCapacitorFilePicker (from `../../node_modules/@capawesome/capacitor-file-picker`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
   - Firebase/Messaging
   - FirebaseCore
@@ -201,8 +198,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/splash-screen"
   CapacitorStorage:
     :path: "../../node_modules/@capacitor/storage"
-  CapawesomeCapacitorFilePicker:
-    :path: "../../node_modules/@capawesome/capacitor-file-picker"
   CordovaPlugins:
     :path: "../capacitor-cordova-ios-plugins"
   NumbersprotocolPreviewCamera:
@@ -236,7 +231,6 @@ SPEC CHECKSUMS:
   CapacitorShare: 427bba238a1e3f116b2b349019aec6ea7f42cebd
   CapacitorSplashScreen: 93a389d4f7673c08214ae25bb6f21d867d5305c5
   CapacitorStorage: 8ec2cf8fec179d829288b16c6fba6c3c43d2bdc9
-  CapawesomeCapacitorFilePicker: f354c9ec6e4722908876032939a85ffb94642630
   CordovaPlugins: c905b3b4dfc87d2a11bdbdaf396289c4a22c39dd
   Firebase: 6c1bf3f534bc422d52af2e41fe0d50bf08b6b773
   FirebaseCore: 6fc17ac9f03509d51c131298aacb3ee5698b4f02
@@ -252,6 +246,6 @@ SPEC CHECKSUMS:
   NumbersprotocolPreviewVideo: 2cfa3fa666c83850903a220d74dc855ac5b6a520
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
 
-PODFILE CHECKSUM: 24ca1bcaa3932b2d964431fb23583535c4454ed9
+PODFILE CHECKSUM: bc27c544feb7d8f533aeb72cadce60b633a90ab4
 
 COCOAPODS: 1.14.3

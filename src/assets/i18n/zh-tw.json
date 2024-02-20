@@ -338,7 +338,8 @@
       "duplicateAsset": "您嘗試上傳的資產已有上鏈紀錄，請重新嘗試，或聯繫開發團隊取得協助。",
       "canNotStartCamera": "很抱歉，我們在啟動相機時遇到問題。對於造成的不便，我們深感抱歉。如果問題持續存在，請透過應用程式支援頁面的「聯絡開發人員」區域向我們的開發人員報告問題。您的反饋將有助於我們改善應用程式並更快地解決問題。感謝您的理解和配合。",
       "fileSizeExeedsLimit": "檔案大小超過25MB的限制，請選擇較小的檔案並重試。"
-    }
+    },
+    "redirectToCaptureDashboard": "為提供更好的上傳體驗，建議使用 <a href=\"https://dashboard.captureapp.xyz/\" target=\"_blank\">https://dashboard.captureapp.xyz</a>。"
   },
   "wallets": {
     "wallets": "錢包",

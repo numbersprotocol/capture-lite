@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
-import { FilePicker, PickedFile } from '@capawesome/capacitor-file-picker';
-import { NavController, Platform } from '@ionic/angular';
+import { AlertController, NavController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import {
@@ -39,10 +38,7 @@ import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.servic
 import { ErrorService } from '../../../shared/error/error.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
 import { GoProBluetoothService } from '../../settings/go-pro/services/go-pro-bluetooth.service';
-import {
-  MAX_RECORD_TIME_IN_MILLISECONDS,
-  toCustomCameraMimeType,
-} from './custom-camera';
+import { MAX_RECORD_TIME_IN_MILLISECONDS } from './custom-camera';
 import {
   CustomCameraService,
   SaveToCameraRollDecision,
@@ -115,6 +111,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly errorService: ErrorService,
     private readonly userGuideService: UserGuideService,
     private readonly confirmAlert: ConfirmAlert,
+    private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService,
     private readonly captureTabService: CaptureTabService,
     private readonly ref: ChangeDetectorRef,
@@ -286,82 +283,14 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     this.customCameraService.stopPreviewCamera();
   }
 
-  /**
-   * Handles media picking, prepares it for publishing, and deals with possible errors.
-   */
-  async pickMedia() {
-    try {
-      const filePickerResult = await FilePicker.pickMedia();
-      const file = filePickerResult.files[0];
-
-      const filePath = await this.convertFilePath(file);
-
-      if (filePath === undefined) return;
-
-      const result: CaptureSuccessResult = {
-        mimeType: toCustomCameraMimeType(file.mimeType),
-        name: file.name,
-        path: filePath,
-        size: file.size,
-      };
-
-      this.prepareForPublishing(result, CameraSource.Photos);
-    } catch (error: any) {
-      // User didn't pick a file, in this case, we do not bother the user by showing any alerts.
-      if (
-        !(error instanceof Error && error.message === 'pickFiles canceled.')
-      ) {
-        /**
-         * Error handling: In case the media picking or prepareForPublishing fails,
-         * an error should be reported to the crash reporting system (currently not in place).
-         * TODO: Implement error reporting to the crash reporting system when available.
-         */
-        // Error not reported due to the absence of a crash reporting system.
-        this.errorService.toastError$(error.message ?? error).subscribe();
-      }
-    }
-  }
-
-  private async convertFilePath(file: PickedFile): Promise<string | undefined> {
-    /**
-     * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/2857
-     * Convert Android picked image file path to "file:///" format for editing and saving.
-     *
-     * Here is the explanation of the WORKAROUND:
-     * We have a CapacitorJS project where we encounter an issue with picking images
-     * from the gallery on Android. When users pick media from the gallery on iOS, the
-     * file path is in the format "file:///", while on Android it is in the format
-     * "content:///". This discrepancy in file paths poses a challenge for us as we
-     * need to perform additional pre-publish editing, such as cropping and applying a
-     * grayscale filter, on the picked images. However, to save the edited image to the
-     * file system, we require the file path to be in the "file:///" format instead of
-     * "content:///".
-     *
-     * To address this issue, we have implemented a workaround that involves copying
-     * the picked image to the file system, ensuring that the file path is in the
-     * required "file:///" format. This workaround allows us to seamlessly perform the
-     * necessary editing operations on the image and successfully save it to the file
-     * system.
-     *
-     * Note: This workaround is specifically designed to handle picked images from the
-     * gallery on Android and does not impact the functionality on iOS.
-     *
-     */
-
-    if (file.path === undefined) return undefined;
-
-    if (this.platform.is('android') && file.mimeType.startsWith('image/')) {
-      const readFileResult = await Filesystem.readFile({ path: file.path });
-      const writeFileresult = await Filesystem.writeFile({
-        data: readFileResult.data,
-        path: `${file.name}`,
-        directory: Directory.Cache,
-        recursive: true,
-      });
-      return writeFileresult.uri;
-    }
-
-    return file.path;
+  async redirectToCaptureDashboard() {
+    const alert = await this.alertController.create({
+      message: this.translocoService.translate(
+        'customCamera.redirectToCaptureDashboard'
+      ),
+      buttons: [this.translocoService.translate('ok')],
+    });
+    await alert.present();
   }
 
   async flipCamera() {
