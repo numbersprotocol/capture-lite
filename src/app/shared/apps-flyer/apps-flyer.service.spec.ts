@@ -3,6 +3,7 @@ import { Platform } from '@ionic/angular';
 import { SharedTestingModule } from '../shared-testing.module';
 
 import { AFEvent } from 'appsflyer-capacitor-plugin';
+import { CCamCustomEventType } from './apps-flyer-enums';
 import { AppsFlyerService } from './apps-flyer.service';
 
 describe('AppsFlyerService', () => {
@@ -36,12 +37,7 @@ describe('AppsFlyerService', () => {
 
   it('should log camera shutter event through Appsflyer.logEvent method', async () => {
     const expectedEvent: AFEvent = {
-      eventName: 'af_level_achieved',
-      eventValue: {
-        af_level: '1',
-        af_score: '0',
-        af_achievement_id: 'ccam_try_click_camera_shutter',
-      },
+      eventName: CCamCustomEventType.CCAM_TRY_CLICK_CAMERA_SHUTTER,
     };
     // NOTE: We're accessing a private method here for testing purposes only.
     // TypeScript doesn't enforce private/protected visibility at runtime, only at compile time.
