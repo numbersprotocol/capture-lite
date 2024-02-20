@@ -30,6 +30,7 @@ import {
   throttleTime,
 } from 'rxjs/operators';
 import { AndroidBackButtonService } from '../../../shared/android-back-button/android-back-button.service';
+import { AppsFlyerService } from '../../../shared/apps-flyer/apps-flyer.service';
 import {
   CaptureTabSegments,
   CaptureTabService,
@@ -117,7 +118,8 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     private readonly ref: ChangeDetectorRef,
     private readonly androidBackButtonService: AndroidBackButtonService,
     private readonly navController: NavController,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly appsflyerService: AppsFlyerService
   ) {}
 
   ngOnInit() {
@@ -315,6 +317,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
     if (this.mode$.value === 'photo') {
       this.flashCameraScreen();
       this.customCameraService.takePhoto();
+      this.appsflyerService.logCameraShutterEvent();
       this.userGuideService.setHasCapturedPhotoWithCustomCamera(true);
     } else {
       if (this.isRecording$.value === true) {
@@ -322,6 +325,7 @@ export class CustomCameraPage implements OnInit, OnDestroy {
       } else {
         this.isRecording$.next(true);
         this.customCameraService.startRecord();
+        this.appsflyerService.logCameraShutterEvent();
         const intervalRate = 50;
         combineLatest([this.isRecording$, interval(intervalRate)])
           .pipe(
