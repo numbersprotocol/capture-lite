@@ -1,7 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defer } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { EMPTY, Observable, defer } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
+import { DiaBackendAssetRepository } from '../asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { PaginatedResponse } from '../pagination';
 import { BASE_URL } from '../secret';
@@ -12,8 +13,91 @@ import { BASE_URL } from '../secret';
 export class DiaBackendStoreService {
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly authService: DiaBackendAuthService
+    private readonly authService: DiaBackendAuthService,
+    private readonly diaBackendAssetRepository: DiaBackendAssetRepository
   ) {}
+
+  listAllNetworkAppOrders$({
+    offset,
+    limit,
+  }: {
+    offset?: number;
+    limit?: number;
+  }) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers => {
+        let params = new HttpParams();
+        if (offset !== undefined) {
+          params = params.set('offset', offset);
+        }
+
+        if (limit !== undefined) {
+          params = params.set('limit', limit);
+        }
+
+        return this.httpClient.get<PaginatedResponse<NetworkAppOrder>>(
+          `${BASE_URL}/api/v3/store/network-app-orders/`,
+          { headers, params }
+        );
+      })
+    );
+  }
+
+  /**
+   * Fetches a paginated list of network app orders along with their associated thumbnails,
+   * if available. The result will be a paginated response containing an array of
+   * `NetworkAppOrderWithThumbnail` objects. Since the basic `NetworkAppOrder` type does
+   * not include thumbnail information, we extend it with the `NetworkAppOrderWithThumbnail`
+   * type to incorporate thumbnail details when available.
+   */
+  listAllNetworkAppOrderWithThumbnail$({
+    offset,
+    limit,
+  }: {
+    offset?: number;
+    limit?: number;
+  }): Observable<PaginatedResponse<NetworkAppOrderWithThumbnail>> {
+    return this.listAllNetworkAppOrders$({ offset, limit }).pipe(
+      map(({ count, results, next, previous }) => {
+        const resultsWithThumbnail = results.map<NetworkAppOrderWithThumbnail>(
+          order => ({
+            ...order,
+            assetThumbnailUrl$: this.fetchAssetThumbnailUrl$(order),
+          })
+        );
+        return { count, results: resultsWithThumbnail, next, previous };
+      })
+    );
+  }
+
+  fetchAssetThumbnailUrl$(order: NetworkAppOrder) {
+    let id: string | undefined;
+
+    if (typeof order.action_args.nid === 'string') {
+      id = order.action_args.nid;
+    } else if (typeof order.action_args.cid === 'string') {
+      id = order.action_args.cid;
+    }
+
+    if (id) {
+      return this.diaBackendAssetRepository
+        .fetchById$(id)
+        .pipe(map(asset => asset.asset_file_thumbnail));
+    }
+
+    return EMPTY;
+  }
+
+  retrieveNetworkAppOrder$(id: string) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers => {
+        return this.httpClient.get<NetworkAppOrder>(
+          `${BASE_URL}/api/v3/store/network-app-orders/${id}`,
+          { headers }
+        );
+      })
+    );
+  }
 
   createNetworkAppOrder(networkApp: string, actionArgs: any, price = 0) {
     return defer(() => this.authService.getAuthHeadersWithApiKey()).pipe(
@@ -93,6 +177,10 @@ export interface NetworkAppOrder {
   owner: string;
   created_at: string;
   expired_at: string;
+}
+
+export interface NetworkAppOrderWithThumbnail extends NetworkAppOrder {
+  assetThumbnailUrl$?: Observable<string>;
 }
 
 export interface Product {

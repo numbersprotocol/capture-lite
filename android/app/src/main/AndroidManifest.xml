@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Permissions -->
 
@@ -41,6 +42,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <!-- For in-app purchases -->
     <uses-permission android:name="com.android.vending.BILLING" />
+    <!-- https://dev.appsflyer.com/hc/docs/install-android-sdk#revoking-the-ad_id-permission -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove"/>
 
 
     <queries>
@@ -82,6 +86,15 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="@string/custom_url_scheme" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" android:host="capture-cam-deep-links.web.app" />
             </intent-filter>
         </activity>
 

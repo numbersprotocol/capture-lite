@@ -242,7 +242,7 @@ export class SignupPage {
     }
     if (
       err instanceof HttpErrorResponse &&
-      err.error.error?.details?.username?.length > 0
+      err.error.error?.type === 'duplicate_username'
     ) {
       return this.errorService.toastError$(
         this.translocoService.translate('error.diaBackend.duplicate_username')

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Device } from '@capacitor/device';
 import { NavController, Platform } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, ReplaySubject, combineLatest, fromEvent } from 'rxjs';
@@ -87,20 +88,29 @@ export class CaptureDetailsWithIframeComponent {
         switchMap(() =>
           this.iframeLoaded$.pipe(
             take(1),
-            tap(() => {
-              /**
-               * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/2723
-               * Navigate back 1 time programmatically when iframe is reloaded
-               */
-              if (this.platform.is('android')) {
-                this.navController.back();
-              }
-            })
+            tap(() => this.handleIframeReloadWorkaround())
           )
         ),
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  private async handleIframeReloadWorkaround() {
+    /**
+     * WORKAROUND: https://github.com/numbersprotocol/capture-lite/issues/2723
+     * Navigate back 1 time programmatically if iframe was reloaded. Applicable to
+     * - all android devices
+     * - iOS device (iOS 16 and higher)
+     */
+    if (!this.platform.is('hybrid')) return; // navigate back on native platforms only.
+
+    const iOS16 = 160000;
+    const iOSVersion = (await Device.getInfo()).iOSVersion;
+
+    if (iOSVersion && iOSVersion <= iOS16) return;
+
+    this.navController.back();
   }
 
   private generateIframeUrl(

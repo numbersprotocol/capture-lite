@@ -7,6 +7,88 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.88.8] - 2024-01-31
+
+### Changed
+
+1. Revert Feat confirm dialog on pull to refresh (#3171)
+1. Revert Fix excessive api call (#3157)
+1. Revert Feat sort assets in VERIFIED tab by uploaded_at (#3158)
+
+## [0.88.6] - 2024-01-11
+
+### Added
+
+1. Feature update the NSE domain (#3161)
+1. Feat confirm dialog on pull to refresh (#3171)
+1. Feat sort assets in VERIFIED tab by uploaded_at (#3158)
+
+### Fixed
+
+1. Fix excessive api call (#3157)
+
+## [0.87.1] - 2023-12-04
+
+### Fixed
+
+1. Fix in app purchase by migrating cordove-plugin-purchase to v13 (#3125)
+
+## [0.87.0] - 2023-11-30
+
+### Added
+
+1. Feature add integrity sha on asset creation (#3094)
+1. Feature Add the API key to the header in the API that creates an asset to record the service_name of assets (#3117)
+
+## [0.86.4] - 2023-11-11
+
+### Added
+
+1. Feature newtork app ui update (#3073)
+1. Feature Update instructions about the upload size limitation (#3074)
+1. Feature fit figma profile page tab (#3075)
+
+### Fixed
+
+1. Fix Issue When user registers the account but user inputs the existing name the error message is wrong (#3076)
+
+## [0.85.2] - 2023-09-21
+
+### Added
+
+1.  Feature sprint 1 edit profile (#3028)
+
+### Fixed
+
+1.  Fix v230905 issue order details iframe url is broken (#3027)
+
+## [0.84.0] - 2023-08-29
+
+### Added
+
+1.  Feature v230822 use appsflyer official plugin (#3012)
+1.  Feature v230822 Remove options from list on ionic asset page (#3013)
+
+### Fixed
+
+1.  Fix v230814 issue Some asset can't show "share asset profile" on asset page (#3014)
+
+## [0.83.2] - 2023-08-15
+
+### Added
+
+1. Feature v230808 configure capture app to receive deep links (#2974)
+1. Feature v230725 showing order information in the transaction (#2971)
+1. Feature set ios minimum version to 15.7 (#2967)
+1. Feature v230725 showing order information in the transaction (#2965)
+
+### Fixed
+
+1. Fix v230808 Update Invite Friends Message Text (#2980)
+1. Fix v230808 After edit caption need to press back button (#2973)
+1. Fix v230725 Update Icon to Reflect Completed Email Verification Process (#2963)
+1. Fix v230725 appsflyer after capacitor 5 migration (#2962)
+
 ## [0.82.4] - 2023-08-01
 
 ### Fixed
@@ -2164,7 +2246,14 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.88.8...HEAD
+[0.88.8]: https://github.com/numbersprotocol/capture-lite/compare/0.88.6...0.88.8
+[0.88.6]: https://github.com/numbersprotocol/capture-lite/compare/0.87.1...0.88.6
+[0.87.1]: https://github.com/numbersprotocol/capture-lite/compare/0.87.0...0.87.1
+[0.87.0]: https://github.com/numbersprotocol/capture-lite/compare/0.86.4...0.87.0
+[0.86.4]: https://github.com/numbersprotocol/capture-lite/compare/0.83.2...0.86.4
+[0.83.2]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.85.2
+[0.82.4]: https://github.com/numbersprotocol/capture-lite/compare/0.82.4...0.83.2
 [0.82.4]: https://github.com/numbersprotocol/capture-lite/compare/0.82.3...0.82.4
 [0.82.3]: https://github.com/numbersprotocol/capture-lite/compare/0.82.2...0.82.3
 [0.82.2]: https://github.com/numbersprotocol/capture-lite/compare/0.81.2...0.82.2

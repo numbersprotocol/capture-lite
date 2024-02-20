@@ -1,0 +1,15 @@
+<div class="container" (click)="input.click()">
+  <ion-img
+    *ngIf="imagePreview$ | ngrxPush as imagePreview; else placeholder"
+    [src]="imagePreview"
+  ></ion-img>
+
+  <ng-template #placeholder>
+    <div class="placeholder">
+      <mat-icon svgIcon="capture-rebrand-add"></mat-icon>
+      <span>{{ placeholderText$ | async }}</span>
+    </div>
+  </ng-template>
+
+  <input #input type="file" (change)="onInputChange($event)" accept="image/*" />
+</div>

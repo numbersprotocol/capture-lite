@@ -86,6 +86,7 @@ export function getOldSignatures(proof: Proof): OldSignature[] {
       proofHash: assetHash,
       signature,
       publicKey,
+      integritySha: proof.integritySha,
     })
   );
 }

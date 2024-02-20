@@ -5,7 +5,7 @@ import { Clipboard } from '@capacitor/clipboard';
 import { IonModal } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { EMPTY, Subject, defer } from 'rxjs';
+import { EMPTY, Subject, defer, forkJoin } from 'rxjs';
 import {
   catchError,
   concatMapTo,
@@ -97,6 +97,12 @@ export class SettingsPage {
     private readonly snackBar: MatSnackBar,
     private readonly customCameraService: CustomCameraService
   ) {}
+
+  ionViewWillEnter() {
+    forkJoin([this.diaBackendAuthService.syncUser$()])
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
 
   ionViewDidEnter() {
     this.hiddenOptionClicks$

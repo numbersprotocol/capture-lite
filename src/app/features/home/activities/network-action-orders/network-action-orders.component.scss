@@ -1,7 +1,5 @@
 mat-spinner {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10%;
+  margin: 10% auto;
   width: 100%;
 }
 
@@ -28,24 +26,24 @@ mat-list-item {
     min-width: 25%;
   }
 
-  button.completed {
+  button.success {
     color: var(--ion-color-dark-contrast);
     border-color: var(--noir-simple);
     background-color: var(--noir-simple);
   }
 
-  button.paid {
+  button.pending {
     color: var(--noir-secondary-dark);
     border-color: var(--noir-secondary-dark);
   }
 
-  button.submitted {
+  button.created {
     color: var(--ion-color-dark-contrast);
     border-color: var(--noir-secondary-dark);
     background-color: var(--noir-secondary-dark);
   }
 
-  button.failed,
+  button.failure,
   button.payment_failed {
     color: var(--ion-color-dark-contrast);
     border-color: var(--noir-warn);

@@ -18,6 +18,7 @@
   "areYouSure": "Are You Sure",
   "cancel": "Cancel",
   "ok": "Ok",
+  "confirm": "Confirm",
   "emptyInbox": "Empty Inbox",
   "clickToEditCaption": "Click to Edit Caption",
   "editCaption": "Edit Caption",
@@ -85,6 +86,9 @@
   "restorePhotos": "Restore Captures",
   "restore": "Restore",
   "skip": "Skip",
+  "syncAndRestore": "Sync and restore all assets?",
+  "confirmSyncAndRestore": "Confirm",
+  "cancelSyncAndRestore": "Do it later",
   "contactUs": "Contact us",
   "editUsername": "Edit Username",
   "forgotPassword": "Forgot Password",
@@ -109,6 +113,7 @@
   "yourPrivateKey": "Your Private Key",
   "copyToClipboard": "Copy To Clipboard",
   "order": "Order",
+  "orders": "Orders",
   "resultUrl": "Result URL",
   "noResultUrlAvailable": "No Result URL available",
   "insufficientNum": "Insufficient NUM",
@@ -167,6 +172,7 @@
     "networkNotConnected": "No internet connections.",
     "allPhotosRegistered": "All Captures registered on blockchain successfully",
     "confirmPrefetch": "Do you want to restore the registered Captures? It may take minutes to complete.",
+    "confirmSyncAndRestore": "This will download all assets and making sure your local data is up to date",
     "loadingPreviousData": "Restoring Captures...",
     "doNotTurnOffApp": "Please keep the screen on and DO NOT leave the app.",
     "upgrading": "Upgrading...",
@@ -251,11 +257,10 @@
     "waitingToBeAccepted": "In Progress"
   },
   "networkActionOrderState": {
-    "submitted": "Submitted",
-    "paid": "Paid",
-    "payment_failed": "Payment Failed",
-    "completed": "Completed",
-    "failed": "Failed"
+    "created": "Created",
+    "pending:": "Pending",
+    "success": "Success",
+    "failure": "Failure"
   },
   "payment": {
     "confirmPayment": "Your Order",
@@ -270,6 +275,17 @@
       "collected": "Collected",
       "draft": "Draft",
       "captureNotUploadedYet": "Capture not uploaded yet"
+    },
+    "editProfile": {
+      "editProfile": "Edit profile",
+      "username": "Username",
+      "description": "Description",
+      "profilePicture": "Profile Picture",
+      "profileBackground": "Profile Background",
+      "saveChanges": "Save changes",
+      "error": {
+        "mustBeBetween": "Must be between {{ min }} to {{ max }} characters"
+      }
     }
   },
   "details": {
@@ -296,6 +312,15 @@
       "networkActionsAreUnavailable": "Network Actions are unavailable. Please try again later."
     }
   },
+  "actions": {
+    "actions": "Actions",
+    "whatAreNetworkActions": "What are network actions?",
+    "everythingYouNeedToKnow": "Everything you need to know, in one simple guide.",
+    "view": "View",
+    "whatAreActions": "What are actions?",
+    "whatAreActionsParagraph1": "As a Web 3.0 photo network, Capture aims to become the central hub for managing the authenticity, liquidity and monetization of Web3 assets and providing an enhanced photo experience for users. With Capture, users can take a photo using the Capture Cam and then share it seamlessly across various platforms and applications in the Capture ecosystem, eliminating the need to upload the same photo multiple times to different platforms.",
+    "whatAreActionsParagraph2": "By registering your Web 3.0 assets, such as images and videos, on the Capture network, you can ensure that these assets are traceable and can be trusted by the Capture ecosystem. This allows other apps within the ecosystem to provide services for your assets. Additionally, by registering your assets on Capture, you retain ownership of them and have the freedom to use them within the Capture ecosystem as you see fit."
+  },
   "customCamera": {
     "confirmCapture": "Next",
     "max": "Max",
@@ -312,7 +337,7 @@
     "error": {
       "duplicateAsset": "The asset you are trying to upload already exists on the blockchain. Please try again or contact support.",
       "canNotStartCamera": "Sorry, we encountered an issue while starting the camera. We apologize for the inconvenience. If the problem persists, please report the issue to our developers through the 'Contact Developers' section on the app's support page. Your feedback will help us improve the app and resolve the issue faster. Thank you for your understanding and cooperation.",
-      "fileSizeExeedsLimit": "File size exceeds 30MB limit. Please select a smaller file and try again."
+      "fileSizeExeedsLimit": "File size exceeds 25MB limit. Please select a smaller file and try again."
     }
   },
   "wallets": {
@@ -365,7 +390,7 @@
     "inviteFriendsBenefit": "Get 3 credits for each accepted invitation",
     "shareInvitationCode": "Share invitation code",
     "shareToGetRewarded": "Share to get rewarded",
-    "useMyReferralCodeToSignUpForCaptureAppPassVerificationAndWeBothGetNumPointsReward": "Use my referral code {{referralCode}} to sign up for Capture App, pass verification and we both get NUM Points reward!"
+    "useMyReferralCodeToSignUpForCaptureCamPassVerificationAndWeBothGetNumCreditsReward": "Use my referral code {{referralCode}} to sign up for Capture Cam, pass verification and we both get NUM Credits reward!"
   },
   "gopro": {
     "setup": "GoPro Setup",

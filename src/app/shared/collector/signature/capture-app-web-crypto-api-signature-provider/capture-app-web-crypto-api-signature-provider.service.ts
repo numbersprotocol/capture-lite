@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CameraSource } from '@capacitor/camera';
-import {
-  createEthAccount,
-  loadEthAccount,
-} from '../../../../utils/crypto/crypto';
+import { createEthAccount } from '../../../../utils/crypto/crypto';
+import { signWithIntegritySha } from '../../../../utils/nit/nit';
 import { PreferenceManager } from '../../../preference-manager/preference-manager.service';
 import { RecorderType, Signature } from '../../../repositories/proof/proof';
 import { SignatureProvider } from '../signature-provider';
@@ -72,12 +70,14 @@ export class CaptureAppWebCryptoApiSignatureProvider
     }
   }
 
-  async provide(serializedSortedSignedTargets: string): Promise<Signature> {
+  async provide(signMessage: string): Promise<Signature> {
     await this.initialize();
-    const account = loadEthAccount(await this.getPrivateKey());
-    const sign = account.sign(serializedSortedSignedTargets);
+    const signature = await signWithIntegritySha(
+      signMessage,
+      await this.getPrivateKey()
+    );
     const publicKey = await this.getPublicKey();
-    return { signature: sign.signature, publicKey };
+    return { signature, publicKey };
   }
 
   async getPublicKey() {

@@ -2,15 +2,57 @@
   <ion-refresher slot="fixed" (ionRefresh)="refreshCaptures($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <mat-card *transloco="let t" class="user-card" id="user-card">
-    <app-avatar mat-card-avatar></app-avatar>
+
+  <mat-card
+    *transloco="let t"
+    class="user-card"
+    id="user-card"
+    [style.background-image]="'url(' + (profileBackground$ | async) + ')'"
+  >
+    <mat-toolbar>
+      <button (click)="openMenu()" mat-mini-fab class="custom-fab-button">
+        <mat-icon>more_horiz</mat-icon>
+      </button>
+      <span class="toolbar-spacer"></span>
+      <button routerLink="activities" mat-mini-fab class="custom-fab-button">
+        <mat-icon [title]="'userGuide.activities' | transloco">
+          history
+        </mat-icon>
+      </button>
+      <button
+        routerLink="inbox"
+        mat-mini-fab
+        class="custom-fab-button margin-left-8"
+      >
+        <mat-icon
+          *ngrxLet="hasNewInbox$ as hasNewInbox"
+          matBadge="&#8288;"
+          [matBadgeHidden]="!hasNewInbox"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+        >
+          email
+        </mat-icon>
+      </button>
+    </mat-toolbar>
+    <div class="vertical-spacer"></div>
+    <app-avatar mat-card-avatar [editable]="false"></app-avatar>
     <mat-card-header>
-      <mat-card-title (click)="editUsername()">{{
-        username$ | ngrxPush
-      }}</mat-card-title>
+      <mat-card-title>
+        {{ username$ | ngrxPush }}
+        <ion-icon
+          src="assets/images/icons/edit.svg"
+          *ngIf="networkConnected$ | async"
+          routerLink="edit-profile"
+        ></ion-icon>
+      </mat-card-title>
       <div class="vertical-space-8"></div>
-      <mat-card-subtitle>{{ email$ | ngrxPush }} </mat-card-subtitle>
+      <mat-card-subtitle
+        >{{ profileDescription$ | ngrxPush }}
+      </mat-card-subtitle>
     </mat-card-header>
+
+    <div class="background-image-gradient"></div>
   </mat-card>
   <app-uploading-bar></app-uploading-bar>
 

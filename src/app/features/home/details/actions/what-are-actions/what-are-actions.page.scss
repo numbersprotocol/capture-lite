@@ -1,0 +1,25 @@
+mat-toolbar {
+  span {
+    padding-right: 40px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    color: white;
+  }
+}
+
+ion-content {
+  --padding-start: 24px;
+  --padding-end: 24px;
+
+  h1 {
+    margin-top: 32px;
+  }
+
+  p {
+    opacity: 0.75;
+    margin-bottom: 32px;
+  }
+}

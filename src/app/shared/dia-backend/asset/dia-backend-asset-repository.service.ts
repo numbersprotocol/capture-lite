@@ -6,13 +6,13 @@ import {
 import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
+  ReplaySubject,
+  Subject,
   defer,
   forkJoin,
   iif,
   merge,
   of,
-  ReplaySubject,
-  Subject,
   throwError,
 } from 'rxjs';
 import {
@@ -27,18 +27,19 @@ import {
 } from 'rxjs/operators';
 import { base64ToBlob } from '../../../utils/encoding/encoding';
 import { MimeType, toExtension } from '../../../utils/mime-type';
-import { isNonNullable, VOID$ } from '../../../utils/rx-operators/rx-operators';
+import { VOID$, isNonNullable } from '../../../utils/rx-operators/rx-operators';
+import { CaptureAppWebCryptoApiSignatureProvider } from '../../collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { Tuple } from '../../database/table/table';
 import {
+  OldSignature,
+  SortedProofInformation,
   getOldProof,
   getOldSignatures,
   getSortedProofInformation,
-  OldSignature,
-  SortedProofInformation,
 } from '../../repositories/proof/old-proof-adapter';
 import {
-  getSerializedSortedSignedMessage,
   Proof,
+  getSerializedSortedProofMetadata,
 } from '../../repositories/proof/proof';
 import { DiaBackendAuthService } from '../auth/dia-backend-auth.service';
 import { PaginatedResponse } from '../pagination';
@@ -216,7 +217,7 @@ export class DiaBackendAssetRepository {
 
   addCapture$(proof: Proof) {
     return forkJoin([
-      defer(() => this.authService.getAuthHeaders()),
+      defer(() => this.authService.getAuthHeadersWithApiKey()),
       defer(() => buildFormDataToCreateAsset(proof)),
     ]).pipe(
       concatMap(([headers, formData]) =>
@@ -335,6 +336,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly is_original_owner: boolean;
   readonly owner: string;
   readonly owner_name: string;
+  readonly owner_addresses: OwnerAddresses;
   readonly asset_file: string;
   readonly asset_file_thumbnail: string;
   readonly asset_file_mime_type: MimeType;
@@ -355,6 +357,11 @@ export interface DiaBackendAsset extends Tuple {
   readonly caption: string;
   readonly post_creation_workflow_id: string;
   readonly mint_workflow_id: string;
+}
+
+export interface OwnerAddresses extends Tuple {
+  asset_wallet_address: string;
+  managed_wallet_address: string;
 }
 
 export type AssetDownloadField =
@@ -380,12 +387,19 @@ async function buildFormDataToCreateAsset(proof: Proof) {
   const formData = new FormData();
 
   const info = await getSortedProofInformation(proof);
-  const signedMessage = await proof.generateSignedMessage();
-  const serializedSignedMessage =
-    getSerializedSortedSignedMessage(signedMessage);
+  const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
+    proof.cameraSource
+  );
+  const proofMetadata = await proof.generateProofMetadata(recorder);
+  const serializedSortedProofMetadata =
+    getSerializedSortedProofMetadata(proofMetadata);
   formData.set('meta', JSON.stringify(info));
-  formData.set('signed_metadata', serializedSignedMessage);
+  formData.set('signed_metadata', serializedSortedProofMetadata);
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
+  // The default value for 'claim_is_creator' is set to false.
+  // However, for captures uploaded using the capture cam,
+  // this value should be specifically set to true.
+  formData.set('claim_is_creator', 'true');
 
   const fileBase64 = Object.keys(await proof.getAssets())[0];
   const mimeType = Object.values(proof.indexedAssets)[0].mimeType;
@@ -402,10 +416,14 @@ async function buildFormDataToCreateAsset(proof: Proof) {
 
 async function buildFormDataToUpdateSignature(proof: Proof) {
   const formData = new FormData();
-  const signedMessage = await proof.generateSignedMessage();
-  const serializedSignedMessage =
-    getSerializedSortedSignedMessage(signedMessage);
-  formData.set('signed_metadata', serializedSignedMessage);
+
+  const recorder = CaptureAppWebCryptoApiSignatureProvider.recorderFor(
+    proof.cameraSource
+  );
+  const ProofMetadata = await proof.generateProofMetadata(recorder);
+  const serializedSortedProofMetadata =
+    getSerializedSortedProofMetadata(ProofMetadata);
+  formData.set('signed_metadata', serializedSortedProofMetadata);
   formData.set('signature', JSON.stringify(getOldSignatures(proof)));
   return formData;
 }
