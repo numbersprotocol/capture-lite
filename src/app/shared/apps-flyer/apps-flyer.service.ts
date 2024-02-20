@@ -57,6 +57,7 @@ export class AppsFlyerService {
     return isTruthy && Capacitor.isNativePlatform();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private async logEvent(event: AFEvent) {
     try {
       await AppsFlyer.logEvent(event);
