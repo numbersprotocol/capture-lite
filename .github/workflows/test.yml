@@ -1,6 +1,9 @@
 name: test
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      [master, 'feature-*', 'feat-*', 'fix-*', 'hotfix-*', 'milestone-*']
 
 jobs:
   lint:
