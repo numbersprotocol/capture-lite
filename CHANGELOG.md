@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.89.2] - 2024-02-21
+
+### Added
+
+1. Feature track new app users shutter click (#3215)
+1. Feature Disable upload feature on Capture Cam (#3216)
+
+### Fixed
+
+1. Hotfix test ci prevent actions run twice (#2989)
+
 ## [0.88.8] - 2024-01-31
 
 ### Changed
@@ -2246,7 +2257,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.88.8...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.89.2...HEAD
+[0.89.2]: https://github.com/numbersprotocol/capture-lite/compare/0.88.8...0.89.2
 [0.88.8]: https://github.com/numbersprotocol/capture-lite/compare/0.88.6...0.88.8
 [0.88.6]: https://github.com/numbersprotocol/capture-lite/compare/0.87.1...0.88.6
 [0.87.1]: https://github.com/numbersprotocol/capture-lite/compare/0.87.0...0.87.1
