@@ -338,7 +338,8 @@
       "duplicateAsset": "The asset you are trying to upload already exists on the blockchain. Please try again or contact support.",
       "canNotStartCamera": "Sorry, we encountered an issue while starting the camera. We apologize for the inconvenience. If the problem persists, please report the issue to our developers through the 'Contact Developers' section on the app's support page. Your feedback will help us improve the app and resolve the issue faster. Thank you for your understanding and cooperation.",
       "fileSizeExeedsLimit": "File size exceeds 25MB limit. Please select a smaller file and try again."
-    }
+    },
+    "redirectToCaptureDashboard": "Need to upload files? <br/> For a seamless upload experience, please visit <a href=\"https://dashboard.captureapp.xyz/\" target=\"_blank\">https://dashboard.captureapp.xyz</a>."
   },
   "wallets": {
     "wallets": "Wallets",

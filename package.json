@@ -1,6 +1,6 @@
 {
   "name": "capture-lite",
-  "version": "0.89.1",
+  "version": "0.89.2",
   "author": "numbersprotocol",
   "homepage": "https://numbersprotocol.io/",
   "scripts": {
@@ -50,7 +50,6 @@
     "@capacitor/share": "^5.0.4",
     "@capacitor/splash-screen": "^5.0.4",
     "@capacitor/storage": "^1.2.4",
-    "@capawesome/capacitor-file-picker": "^0.6.3",
     "@ionic/angular": "^6.2.5",
     "@ionic/core": "^6.2.5",
     "@ionic/pwa-elements": "^3.0.2",
