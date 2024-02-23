@@ -42,25 +42,14 @@ export class AppComponent {
     private readonly inAppStoreService: InAppStoreService,
     private readonly zone: NgZone,
     private readonly router: Router,
-    appsFlyerService: AppsFlyerService,
-    notificationService: NotificationService,
-    pushNotificationService: PushNotificationService,
-    langaugeService: LanguageService,
-    diaBackendAuthService: DiaBackendAuthService,
-    diaBackendNotificationService: DiaBackendNotificationService,
-    uploadService: DiaBackendAssetUploadingService
+    private readonly appsFlyerService: AppsFlyerService,
+    private readonly notificationService: NotificationService,
+    private readonly pushNotificationService: PushNotificationService,
+    private readonly langaugeService: LanguageService,
+    private readonly diaBackendAuthService: DiaBackendAuthService,
+    private readonly diaBackendNotificationService: DiaBackendNotificationService,
+    private readonly uploadService: DiaBackendAssetUploadingService
   ) {
-    appsFlyerService.initAppsFlyerSDK();
-    notificationService.requestPermission();
-    pushNotificationService.register();
-    langaugeService.initialize();
-    diaBackendAuthService.initialize$().pipe(untilDestroyed(this)).subscribe();
-    uploadService.initialize$().pipe(untilDestroyed(this)).subscribe();
-    diaBackendNotificationService
-      .initialize$()
-      .pipe(untilDestroyed(this))
-      .subscribe();
-    this.inAppStoreService.initialize();
     this.initializeApp();
     this.initializeDeepLinking();
     this.restoreAppState();
@@ -84,6 +73,21 @@ export class AppComponent {
     await this.platform.ready();
     AppComponent.setDarkMode(true);
     await SplashScreen.hide();
+
+    await this.appsFlyerService.initAppsFlyerSDK();
+    this.notificationService.requestPermission();
+    this.pushNotificationService.register();
+    this.langaugeService.initialize();
+    this.diaBackendAuthService
+      .initialize$()
+      .pipe(untilDestroyed(this))
+      .subscribe();
+    this.uploadService.initialize$().pipe(untilDestroyed(this)).subscribe();
+    this.diaBackendNotificationService
+      .initialize$()
+      .pipe(untilDestroyed(this))
+      .subscribe();
+    this.inAppStoreService.initialize();
   }
 
   async initializeDeepLinking() {

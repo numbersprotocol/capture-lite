@@ -1,8 +1,10 @@
 PODS:
   - AppsflyerCapacitorPlugin (6.12.1):
-    - AppsFlyerFramework/Strict (= 6.12.1)
+    - AppsFlyerFramework (= 6.12.1)
     - Capacitor
-  - AppsFlyerFramework/Strict (6.12.1)
+  - AppsFlyerFramework (6.12.1):
+    - AppsFlyerFramework/Main (= 6.12.1)
+  - AppsFlyerFramework/Main (6.12.1)
   - Capacitor (5.0.5):
     - CapacitorCordova
   - CapacitorApp (5.0.3):
@@ -208,7 +210,7 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@numbersprotocol/preview-video"
 
 SPEC CHECKSUMS:
-  AppsflyerCapacitorPlugin: 3cc3df807ba8f28f7ef44252b0107ffc2b4cb994
+  AppsflyerCapacitorPlugin: 0094cd9f754091410f30237ab7f21b2604db12f5
   AppsFlyerFramework: e29b63fc5441400a38a31c5501c1da500b9d53d0
   Capacitor: b1248915663add1bd6567e2b67c1c1fa3abcf5e8
   CapacitorApp: 7a5dec8b33573707164b293475d5c89ba684364a
@@ -246,6 +248,6 @@ SPEC CHECKSUMS:
   NumbersprotocolPreviewVideo: 2cfa3fa666c83850903a220d74dc855ac5b6a520
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
 
-PODFILE CHECKSUM: bc27c544feb7d8f533aeb72cadce60b633a90ab4
+PODFILE CHECKSUM: 617daf5c0347d391c6f083d98e214c77113572c6
 
 COCOAPODS: 1.14.3
