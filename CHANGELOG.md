@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.89.2] - 2024-02-21
 
+### Fixed
+
+1. Fix appsflyer iOS integration test IDFA not collected [#3223](https://github.com/numbersprotocol/capture-lite/pull/3223)
+
+## [0.89.2] - 2024-02-21
+
 ### Added
 
 1. Feature track new app users shutter click (#3215)
