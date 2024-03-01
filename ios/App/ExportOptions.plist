@@ -9,7 +9,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>io.numbersprotocol.capturelite</key>
-		<string>NumbersAppDistributionV4</string>
+		<string>NumbersAppDistributionV6</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>
