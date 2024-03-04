@@ -22,7 +22,7 @@ export class DiaBackendService {
   ) {}
 
   appInfo$() {
-    return defer(() => this.authService.getAuthHeaders()).pipe(
+    return defer(() => this.authService.getAuthHeadersWithApiKey()).pipe(
       concatMap(headers =>
         this.httpClient.get<DiaBackendAppInfo>(
           `${BASE_URL}/api/v3/services/app-info/`,
