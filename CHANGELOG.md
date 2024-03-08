@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.90.0] - 2024-03-08
+
+### Added
+
+1. Feature sort assets in VERIFIED tab by uploaded at [#3233](https://github.com/numbersprotocol/capture-lite/pull/3233)
+1. Feature pass x api key to get app info [#3231](https://github.com/numbersprotocol/capture-lite/pull/3231)
+
 ## [0.89.2] - 2024-02-21
 
 ### Fixed
@@ -2263,7 +2270,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.89.2...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.90.0...HEAD
+[0.90.0]: https://github.com/numbersprotocol/capture-lite/compare/0.89.2...0.90.0
 [0.89.2]: https://github.com/numbersprotocol/capture-lite/compare/0.88.8...0.89.2
 [0.88.8]: https://github.com/numbersprotocol/capture-lite/compare/0.88.6...0.88.8
 [0.88.6]: https://github.com/numbersprotocol/capture-lite/compare/0.87.1...0.88.6
