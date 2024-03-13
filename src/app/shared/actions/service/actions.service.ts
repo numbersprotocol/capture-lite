@@ -14,7 +14,9 @@ export class ActionsService {
   getActions$() {
     return defer(() =>
       this.httpClient
-        .get<GetActionsResponse<Action>>(`${BUBBLE_DB_URL}/api/1.1/obj/action`)
+        .get<GetActionsResponse<Action>>(
+          `${BUBBLE_DB_URL}/api/1.1/obj/action?sort_field=index`
+        )
         .pipe(map(response => response.response.results))
     );
   }
