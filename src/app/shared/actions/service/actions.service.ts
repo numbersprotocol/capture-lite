@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { defer, forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -12,9 +12,13 @@ export class ActionsService {
   constructor(private readonly httpClient: HttpClient) {}
 
   getActions$() {
+    const params = new HttpParams({ fromObject: { sort_field: 'index' } });
     return defer(() =>
       this.httpClient
-        .get<GetActionsResponse<Action>>(`${BUBBLE_DB_URL}/api/1.1/obj/action`)
+        .get<GetActionsResponse<Action>>(
+          `${BUBBLE_DB_URL}/api/1.1/obj/action`,
+          { params }
+        )
         .pipe(map(response => response.response.results))
     );
   }
