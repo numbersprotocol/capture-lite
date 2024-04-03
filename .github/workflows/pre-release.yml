@@ -167,7 +167,7 @@ jobs:
           track: alpha
 
   build-ios-prod:
-    runs-on: macos-latest
+    runs-on: macos-14
     timeout-minutes: 120
     continue-on-error: true
 
@@ -177,6 +177,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.11.1'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - name: Get release version
         id: version_check
@@ -245,7 +250,7 @@ jobs:
           path: build/ios-build-number.txt
 
   deploy-app-store:
-    runs-on: macos-latest
+    runs-on: macos-14
     needs: build-ios-prod
     timeout-minutes: 120
     continue-on-error: true
