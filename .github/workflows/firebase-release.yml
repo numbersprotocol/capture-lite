@@ -69,7 +69,7 @@ jobs:
           firebase appdistribution:distribute ./android/app/build/outputs/bundle/release/app-release.aab --app ${APP_ID} --groups "${TEST_GROUPS}"
 
   distribute-ios:
-    runs-on: macos-latest
+    runs-on: macos-14
     timeout-minutes: 120
 
     steps:
@@ -78,6 +78,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.11.1'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - name: Setup firebase
         run: |
