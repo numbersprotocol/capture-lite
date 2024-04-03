@@ -9,11 +9,11 @@ jobs:
   upload-google-drive:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16.15.0'
+          node-version: '20.11.1'
 
       - name: Build Ionic
         env:
@@ -23,7 +23,7 @@ jobs:
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
         run: |
           npm install -g @ionic/cli
-          npm install
+          npm install --legacy-peer-deps
           npm run build
 
       - name: Build APKs

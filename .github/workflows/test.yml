@@ -11,12 +11,12 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '16.15.0'
+          node-version: '20.11.1'
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
@@ -27,7 +27,7 @@ jobs:
         run: npm run preconfig.npmrc
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Lint
         run: npm run lint
@@ -37,12 +37,12 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '16.15.0'
+          node-version: '20.11.1'
 
       - name: Install Ionic CLI
         run: npm install -g @ionic/cli
@@ -53,7 +53,7 @@ jobs:
         run: npm run preconfig.npmrc
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Test
         run: npm run test.ci

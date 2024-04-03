@@ -27,11 +27,11 @@ jobs:
             bubble_iframe_url: NUMBERS_BUBBLE_IFRAME_URL
             bubble_db_url: NUMBERS_BUBBLE_DB_QA_URL # FIXME: rename to networ_action_url: NUMBERS_NETWORK_ACTION_QA_URL
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16.15.0'
+          node-version: '20.11.1'
 
       - name: Check if version has been updated
         id: version_check
@@ -62,7 +62,7 @@ jobs:
         run: |
           npm run preconfig.npmrc
           npm install -g @ionic/cli
-          npm install
+          npm install --legacy-peer-deps
           npm run build
 
       - name: Set up JDK 17
