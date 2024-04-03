@@ -11,11 +11,11 @@ jobs:
     timeout-minutes: 120
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16.15.0'
+          node-version: '20.11.1'
 
       - name: Setup firebase
         run: |
@@ -34,7 +34,7 @@ jobs:
         run: |
           npm run preconfig.npmrc
           npm install -g @ionic/cli
-          npm install
+          npm install --legacy-peer-deps
           npm run build
 
       - name: Set up JDK 17
@@ -73,11 +73,11 @@ jobs:
     timeout-minutes: 120
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16.15.0'
+          node-version: '20.11.1'
 
       - name: Setup firebase
         run: |
@@ -96,7 +96,7 @@ jobs:
         run: |
           npm run preconfig.npmrc
           npm install -g @ionic/cli
-          npm install
+          npm install --legacy-peer-deps
           npm run build
 
       - name: Import the Code-Signing PKCS12 Certificate
