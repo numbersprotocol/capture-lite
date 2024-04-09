@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.91.0] - 2024-04-03
+
+### Added
+1. Create a CI/CD workflow for Firebase distribution. [#3238](https://github.com/numbersprotocol/capture-lite/pull/3238)
+
+### Changed
+1. Upgrade macOS from version 12 to version 14 to resolve the SDK version issue. [#3239](https://github.com/numbersprotocol/capture-lite/pull/3239)
+1, Sort network actions by `index` field to allow control of display order [#3237](https://github.com/numbersprotocol/capture-lite/pull/3237)
+
 ## [0.90.0] - 2024-03-08
 
 ### Added
@@ -2270,7 +2279,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.90.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.91.0...HEAD
+[0.91.0]: https://github.com/numbersprotocol/capture-lite/compare/0.90.0...0.91.0
 [0.90.0]: https://github.com/numbersprotocol/capture-lite/compare/0.89.2...0.90.0
 [0.89.2]: https://github.com/numbersprotocol/capture-lite/compare/0.88.8...0.89.2
 [0.88.8]: https://github.com/numbersprotocol/capture-lite/compare/0.88.6...0.88.8
