@@ -23,7 +23,6 @@ import {
   tap,
 } from 'rxjs/operators';
 import SwiperCore, { Swiper, Virtual } from 'swiper';
-import { ActionsService } from '../../../shared/actions/service/actions.service';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { CaptureAppWebCryptoApiSignatureProvider } from '../../../shared/collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
@@ -241,7 +240,6 @@ export class DetailsPage {
     private readonly alertController: AlertController,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly userGuideService: UserGuideService,
-    private readonly actionsService: ActionsService,
     private readonly networkService: NetworkService,
     private readonly diaBackendStoreService: DiaBackendStoreService,
     private readonly iframeService: IframeService,
@@ -714,11 +712,6 @@ export class DetailsPage {
           activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
         ),
         isNonNullable(),
-        tap(diaBackendAsset =>
-          this.actionsService
-            .generateSeoImageAndDescription$(diaBackendAsset)
-            .toPromise()
-        ),
         concatMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
         catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)

@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.91.0] - 2024-04-03
 
 ### Added
+
 1. Create a CI/CD workflow for Firebase distribution. [#3238](https://github.com/numbersprotocol/capture-lite/pull/3238)
 
 ### Changed
+
 1. Upgrade macOS from version 12 to version 14 to resolve the SDK version issue. [#3239](https://github.com/numbersprotocol/capture-lite/pull/3239)
-1, Sort network actions by `index` field to allow control of display order [#3237](https://github.com/numbersprotocol/capture-lite/pull/3237)
+1. Sort network actions by `index` field to allow control of display order [#3237](https://github.com/numbersprotocol/capture-lite/pull/3237)
 
 ## [0.90.0] - 2024-03-08
 
