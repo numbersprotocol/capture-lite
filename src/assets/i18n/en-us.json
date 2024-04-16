@@ -180,7 +180,6 @@
     "transferOwnership": "Transfer ownership",
     "deregisterFromNetwork": "Deregister from network",
     "viewOnCaptureClub": "View on CaptureClub",
-    "viewAssetProfile": "View asset profile",
     "confirmDelete": "Your local data will be wiped out after deletion. Please double-check that you have created a backup and understand the risk.",
     "confirmLogout": "Your local data will be wipe out after logout. You can restore your Captures after login again.",
     "resetPasswordEnterEmail": "To reset the password, you have to enter your registered email.",
