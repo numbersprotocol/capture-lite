@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.92.0] - 2024-04-18
+
+### Changed
+
+1. Remove `View asset profile` and move `Share Asset Profile` to the first option in the detail share menu [#3241](https://github.com/numbersprotocol/capture-lite/pull/3241)
+1. Remove authmedia.net from the sharing process [#3240](https://github.com/numbersprotocol/capture-lite/pull/3240)
+
 ## [0.91.0] - 2024-04-03
 
 ### Added
@@ -2281,7 +2288,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.91.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.92.0...HEAD
+[0.92.0]: https://github.com/numbersprotocol/capture-lite/compare/0.91.0...0.92.0
 [0.91.0]: https://github.com/numbersprotocol/capture-lite/compare/0.90.0...0.91.0
 [0.90.0]: https://github.com/numbersprotocol/capture-lite/compare/0.89.2...0.90.0
 [0.89.2]: https://github.com/numbersprotocol/capture-lite/compare/0.88.8...0.89.2
