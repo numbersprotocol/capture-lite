@@ -44,7 +44,6 @@ import {
   isNonNullable,
   switchTap,
 } from '../../../utils/rx-operators/rx-operators';
-import { getAssetProfileForNSE } from '../../../utils/url';
 import {
   DetailedCapture,
   InformationSessionService,
@@ -192,15 +191,6 @@ export class DetailsPage {
     map(type => type === 'post-capture')
   );
 
-  readonly activeDetailedCaptureTmpShareToken$ =
-    this._activeDetailedCapture$.pipe(
-      distinctUntilChanged(),
-      concatMap(({ id }) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return this.diaBackendAssetRepository.createTemporaryShareToken$(id!);
-      })
-    );
-
   userToken: string | undefined;
 
   readonly isFromSeriesPage$ = this.type$.pipe(map(type => type === 'series'));
@@ -320,14 +310,9 @@ export class DetailsPage {
 
   openShareMenu() {
     combineLatest([
-      this.activeDetailedCapture$,
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
-      this.activeDetailedCapture$.pipe(
-        switchMap(c => c.postCreationWorkflowCompleted$)
-      ),
       this.capAppWebCryptoApiSignatureProvider.publicKey$,
       this.translocoService.selectTranslateObject({
-        'message.viewAssetProfile': null,
         'message.copyIpfsAddress': null,
         'message.shareAssetProfile': null,
       }),
@@ -336,38 +321,12 @@ export class DetailsPage {
         first(),
         concatMap(
           ([
-            detailedCapture,
             diaBackendAsset,
-            postCreationWorkflowCompleted,
             publicKey,
-            [
-              messageviewAssetProfile,
-              messageCopyIpfsAddress,
-              messageShareAssetProfile,
-            ],
+            [messageCopyIpfsAddress, messageShareAssetProfile],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
-              if (postCreationWorkflowCompleted && detailedCapture.id) {
-                buttons.push({
-                  text: messageviewAssetProfile,
-                  handler: () => {
-                    this.openCertificate();
-                    resolve();
-                  },
-                });
-              }
-              if (diaBackendAsset?.cid) {
-                buttons.push({
-                  text: messageCopyIpfsAddress,
-                  handler: () => {
-                    const ipfsAddress = `https://ipfs-pin.numbersprotocol.io/ipfs/${diaBackendAsset.cid}`;
-                    this.copyToClipboard(ipfsAddress);
-                    resolve();
-                  },
-                });
-              }
-
               if (
                 diaBackendAsset?.owner_addresses.asset_wallet_address ===
                 publicKey
@@ -388,6 +347,18 @@ export class DetailsPage {
                   },
                 });
               }
+
+              if (diaBackendAsset?.cid) {
+                buttons.push({
+                  text: messageCopyIpfsAddress,
+                  handler: () => {
+                    const ipfsAddress = `https://ipfs-pin.numbersprotocol.io/ipfs/${diaBackendAsset.cid}`;
+                    this.copyToClipboard(ipfsAddress);
+                    resolve();
+                  },
+                });
+              }
+
               this.actionSheetController
                 .create({ buttons })
                 .then(sheet => sheet.present());
@@ -714,30 +685,6 @@ export class DetailsPage {
         isNonNullable(),
         concatMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
         catchError((err: unknown) => this.errorService.toastError$(err)),
-        untilDestroyed(this)
-      )
-      .subscribe();
-  }
-
-  openCertificate() {
-    combineLatest([
-      this.activeDetailedCapture$,
-      this.activeDetailedCaptureTmpShareToken$,
-    ])
-      .pipe(
-        first(),
-        concatMap(([detailedCapture, tmpShareToken]) =>
-          defer(() =>
-            Browser.open({
-              url: getAssetProfileForNSE(
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                detailedCapture.id!,
-                tmpShareToken
-              ),
-              toolbarColor: '#564dfc',
-            })
-          )
-        ),
         untilDestroyed(this)
       )
       .subscribe();

@@ -260,22 +260,6 @@ export class DiaBackendAssetRepository {
     );
   }
 
-  createTemporaryShareToken$(id: string) {
-    const formData = new FormData();
-    const secondsInDay = 86400;
-    formData.append('expiration_seconds', `${secondsInDay}`);
-    return defer(() => this.authService.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.post<CreateTmpShareTokenResponse>(
-          `${BASE_URL}/api/v3/assets/${id}/private-share/`,
-          formData,
-          { headers }
-        )
-      ),
-      map(response => response.tmp_token)
-    );
-  }
-
   removeCaptureById$(id: string) {
     return defer(() => this.authService.getAuthHeaders()).pipe(
       concatMap(headers =>
@@ -372,14 +356,6 @@ export type AssetDownloadField =
 
 type CreateAssetResponse = DiaBackendAsset;
 type UpdateAssetResponse = DiaBackendAsset;
-
-export interface CreateTmpShareTokenResponse extends Tuple {
-  tmp_token: string;
-  url: string;
-  expiration_seconds: number;
-  created_at: string;
-  expired_at: string;
-}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface DeleteAssetResponse {}
