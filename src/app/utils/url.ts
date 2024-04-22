@@ -6,11 +6,8 @@ export function toDataUrl(base64: string, mimeType: MimeType | string) {
   return `data:${mimeType};base64,${base64}`;
 }
 
-export function getAssetProfileForNSE(id: string, token?: string) {
-  if (token) {
-    return `https://verify.numbersprotocol.io/asset-profile?nid=${id}&tmp_token=${token}`;
-  }
-  return `https://verify.numbersprotocol.io/asset-profile?nid=${id}`;
+export function getAssetProfileForNSE(id: string) {
+  return `https://verify.numbersprotocol.io/asset-profile/${id}`;
 }
 
 export function getAssetProfileForCaptureIframe(cid: string) {

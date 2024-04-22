@@ -27,7 +27,6 @@ export class CaptureDetailsWithIonicComponent {
   captionOn = true;
 
   readonly detailedCapture$ = new ReplaySubject<DetailedCapture>(1);
-  readonly detailedCaptureTmpShareToken$ = new ReplaySubject<string>(1);
   readonly thumbnailUrl$ = this.detailedCapture$.pipe(
     switchMap(capture => capture.proof$),
     isNonNullable(),
@@ -68,11 +67,6 @@ export class CaptureDetailsWithIonicComponent {
     if (value) this.detailedCapture$.next(value);
   }
 
-  @Input()
-  set detailedCaptureTmpShareToken(value: string | undefined) {
-    if (value) this.detailedCaptureTmpShareToken$.next(value);
-  }
-
   constructor(
     private readonly translocoService: TranslocoService,
     private readonly datePipe: DatePipe,
@@ -100,16 +94,15 @@ export class CaptureDetailsWithIonicComponent {
   }
 
   openCertificate() {
-    combineLatest([this.detailedCapture$, this.detailedCaptureTmpShareToken$])
+    combineLatest([this.detailedCapture$])
       .pipe(
         first(),
-        concatMap(([detailedCapture, tmpShareToken]) =>
+        concatMap(([detailedCapture]) =>
           defer(() =>
             Browser.open({
               url: getAssetProfileForNSE(
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                detailedCapture.id!,
-                tmpShareToken
+                detailedCapture.id!
               ),
               toolbarColor: '#564dfc',
             })
