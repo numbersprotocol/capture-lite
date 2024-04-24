@@ -30,10 +30,7 @@ import {
 } from '../../../shared/capture-tab/capture-tab.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { Database } from '../../../shared/database/database.service';
-import {
-  DiaBackendAsset,
-  DiaBackendAssetRepository,
-} from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
+import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAsseRefreshingService } from '../../../shared/dia-backend/asset/refreshing/dia-backend-asset-refreshing.service';
 import { DiaBackendAssetUploadingService } from '../../../shared/dia-backend/asset/uploading/dia-backend-asset-uploading.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
@@ -60,7 +57,7 @@ export class CaptureTabComponent implements OnInit {
    * Used in the HTML template to avoid hardcoded string values.
    */
   readonly captureTabSegments = CaptureTabSegments;
-  segment: CaptureTabSegments = CaptureTabSegments.COLLECTED;
+  segment: CaptureTabSegments = CaptureTabSegments.VERIFIED;
 
   readonly hasNewInbox$ = this.diaBackendTransactionRepository.inbox$.pipe(
     catchError((err: unknown) => this.errorService.toastError$(err)),
@@ -117,18 +114,7 @@ export class CaptureTabComponent implements OnInit {
 
   readonly capturedTabPageIndex$ = new BehaviorSubject<number>(0);
 
-  readonly collectedTabPageIndex$ = new BehaviorSubject<number>(0);
-
   readonly draftTabPageIndex$ = new BehaviorSubject<number>(0);
-
-  readonly collectedTabItems$ = combineLatest([
-    this.postCaptures$,
-    this.collectedTabPageIndex$,
-  ]).pipe(
-    map(([items, page]) =>
-      items.slice(0, page * this.itemsPerPage + this.itemsPerPage)
-    )
-  );
 
   readonly validatedCaptures$ = this.captures$.pipe(
     map(proofs => proofs.filter(p => p.diaBackendAssetId !== undefined))
@@ -202,9 +188,6 @@ export class CaptureTabComponent implements OnInit {
     switch (this.segment) {
       case CaptureTabSegments.VERIFIED:
         this.capturedTabPageIndex$.next(this.capturedTabPageIndex$.value + 1);
-        break;
-      case CaptureTabSegments.COLLECTED:
-        this.collectedTabPageIndex$.next(this.collectedTabPageIndex$.value + 1);
         break;
       case CaptureTabSegments.DRAFT:
         this.draftTabPageIndex$.next(this.draftTabPageIndex$.value + 1);
@@ -341,11 +324,6 @@ export class CaptureTabComponent implements OnInit {
     return getOldProof(item).hash;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  trackPostCapture(_: number, item: DiaBackendAsset) {
-    return item.id;
-  }
-
   async refreshCaptures(event: Event) {
     (<CustomEvent>event).detail.complete();
 
@@ -355,7 +333,6 @@ export class CaptureTabComponent implements OnInit {
     const confirmRefresh = await this.showRefreshAlert();
     if (confirmRefresh) {
       this.capturedTabPageIndex$.next(0);
-      this.collectedTabPageIndex$.next(0);
       this.draftTabPageIndex$.next(0);
 
       return this.dialog.open(PrefetchingDialogComponent, {

@@ -61,9 +61,6 @@
       <ion-segment-button [value]="captureTabSegments.VERIFIED">
         <ion-label>{{ 'home.profileTab.verified' | transloco }}</ion-label>
       </ion-segment-button>
-      <ion-segment-button [value]="captureTabSegments.COLLECTED">
-        <ion-label>{{ 'home.profileTab.collected' | transloco }}</ion-label>
-      </ion-segment-button>
       <ion-segment-button [value]="captureTabSegments.DRAFT">
         <ion-label>{{ 'home.profileTab.draft' | transloco }}</ion-label>
       </ion-segment-button>
@@ -87,36 +84,6 @@
           </mat-grid-tile>
         </mat-grid-list>
       </div>
-    </div>
-
-    <div class="post-captures" *ngSwitchCase="captureTabSegments.COLLECTED">
-      <mat-grid-list cols="2" gutterSize="16px">
-        <mat-grid-tile
-          class="capture-item"
-          *ngFor="
-            let postCapture of collectedTabItems$ | ngrxPush;
-            trackBy: trackPostCapture
-          "
-          [routerLink]="[
-            'details',
-            { type: 'post-capture', id: postCapture.id }
-          ]"
-        >
-          <ng-container *ngIf="postCapture.asset_file_mime_type as mimeType">
-            <ion-icon
-              *ngIf="mimeType | startsWith: 'video'"
-              name="videocam"
-              class="is-video"
-            ></ion-icon>
-          </ng-container>
-          <ion-icon
-            *ngIf="postCapture.source_type === 'store'"
-            name="storefront"
-            class="is-from-store"
-          ></ion-icon>
-          <ion-img [src]="postCapture.asset_file_thumbnail"></ion-img>
-        </mat-grid-tile>
-      </mat-grid-list>
     </div>
 
     <div *ngSwitchCase="captureTabSegments.DRAFT">

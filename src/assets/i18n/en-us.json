@@ -271,7 +271,6 @@
   "home": {
     "profileTab": {
       "verified": "Verified",
-      "collected": "Collected",
       "draft": "Draft",
       "captureNotUploadedYet": "Capture not uploaded yet"
     },

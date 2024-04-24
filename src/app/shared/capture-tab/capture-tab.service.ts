@@ -21,6 +21,5 @@ export class CaptureTabService {
 
 export enum CaptureTabSegments {
   VERIFIED = 'VERIFIED',
-  COLLECTED = 'COLLECTED',
   DRAFT = 'DRAFT',
 }
