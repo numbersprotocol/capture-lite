@@ -63,7 +63,7 @@ import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/pref
 export class HomePage {
   readonly initialTabIndex = 0;
   private readonly afterCaptureTabIndex = 0;
-  private readonly exploreTabIndex = 2;
+  private readonly CollectionTabIndex = 2;
   selectedTabIndex = this.initialTabIndex;
 
   readonly username$ = this.diaBackendAuthService.username$;
@@ -305,11 +305,11 @@ export class HomePage {
   overrideAndroidBackButtonBehavior() {
     this.androidBackButtonService
       .overrideAndroidBackButtonBehavior$(() => {
-        const shouldNavigateBackExploreTabIframe =
-          this.selectedTabIndex === this.exploreTabIndex &&
+        const shouldNavigateBackCollectionTabIframe =
+          this.selectedTabIndex === this.CollectionTabIndex &&
           this.router.url === '/home';
-        if (shouldNavigateBackExploreTabIframe) {
-          this.iframeService.navigateBackExploreTabIframe();
+        if (shouldNavigateBackCollectionTabIframe) {
+          this.iframeService.navigateBackCollectionTabIframe();
         } else {
           this.navController.back();
         }
@@ -424,32 +424,34 @@ export class HomePage {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async navigateToExploreTab() {
-    if (this.selectedTabIndex === this.exploreTabIndex) {
+  async navigateToCollectionTab() {
+    if (this.selectedTabIndex === this.CollectionTabIndex) {
       // window.location.reload();
-      this.iframeService.refreshExploreTabIframe();
+      this.iframeService.refreshCollectionTabIframe();
     }
-    const didExplain = await this.onboardingService.didExplainExploreTab();
+    // const didExplain = await this.onboardingService.didExplainCollectionTab();
+    const didExplain = false;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (didExplain === false) {
       await new Promise(resolve => {
         setTimeout(resolve, OnboardingService.ONBOARDING_POP_UP_DELAY);
       });
-      this.showExplainExploreTabPopUpDialog();
-      this.onboardingService.setDidExplainExploreTab(true);
+      this.showExplainCollectionTabPopUpDialog();
+      this.onboardingService.setDidExplainCollectionTab(true);
     }
   }
 
-  private showExplainExploreTabPopUpDialog() {
+  private showExplainCollectionTabPopUpDialog() {
     const panelClass = 'onboarding-pop-up-dialog';
     const data: OnboardingPopUpDialogData = {
       title: this.translocoService.translate(
-        'onboarding.explainExploreTabPopUp.title'
+        'onboarding.explainCollectionTabPopUp.title'
       ),
       content: this.translocoService.translate(
-        'onboarding.explainExploreTabPopUp.content'
+        'onboarding.explainCollectionTabPopUp.content'
       ),
       close: this.translocoService.translate(
-        'onboarding.explainExploreTabPopUp.close'
+        'onboarding.explainCollectionTabPopUp.close'
       ),
     };
     return this.dialog.open(OnboardingPopUpDialogComponent, {
