@@ -21,7 +21,7 @@ export class ExploreTabComponent {
     this.iframeService.exploreTabRefreshRequested$,
   ]).pipe(
     map(([token, _]) => {
-      const url = `${BUBBLE_IFRAME_URL}/?token=${token.access}&refresh_token=${token.refresh}`;
+      const url = `${BUBBLE_IFRAME_URL}/collection?token=${token.access}&refresh_token=${token.refresh}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     })
   );

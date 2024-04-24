@@ -140,6 +140,7 @@ export class AppComponent {
       'capture',
       'profile',
       'search',
+      'collection',
       'edit',
       'capture-rebrand-add',
     ];
