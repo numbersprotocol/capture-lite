@@ -4,7 +4,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CaptureItemComponent } from './capture-tab/capture-item/capture-item.component';
 import { CaptureTabComponent } from './capture-tab/capture-tab.component';
 import { UploadingBarComponent } from './capture-tab/uploading-bar/uploading-bar.component';
-import { ExploreTabComponent } from './explore-tab/explore-tab/explore-tab.component';
+import { CollectionTabComponent } from './collection-tab/collection-tab/collection-tab.component';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { UpdateAppDialogComponent } from './in-app-updates/update-app-dialog/update-app-dialog.component';
@@ -15,7 +15,7 @@ import { PostCaptureTabComponent } from './post-capture-tab/post-capture-tab.com
   declarations: [
     HomePage,
     CaptureTabComponent,
-    ExploreTabComponent,
+    CollectionTabComponent,
     PostCaptureTabComponent,
     PrefetchingDialogComponent,
     UpdateAppDialogComponent,

@@ -124,9 +124,9 @@
       </mat-tab>
       <mat-tab>
         <ng-template mat-tab-label>
-          <button mat-icon-button (click)="navigateToExploreTab()">
+          <button mat-icon-button (click)="navigateToCollectionTab()">
             <mat-icon
-              svgIcon="search"
+              svgIcon="collection"
               class="tab-action-button-icon"
               joyrideStep="highlightHomeTab"
               title="Home Tab"
@@ -134,7 +134,7 @@
             ></mat-icon>
           </button>
         </ng-template>
-        <app-explore-tab></app-explore-tab>
+        <app-collection-tab></app-collection-tab>
       </mat-tab>
     </mat-tab-group>
   </mat-sidenav-content>

@@ -10,14 +10,13 @@ export class IframeService {
 
   private readonly preferences = this.preferenceManager.getPreferences(this.id);
 
-  readonly exploreTabRefreshRequested$ = new BehaviorSubject(new Date());
+  readonly collectionTabRefreshRequested$ = new BehaviorSubject(new Date());
 
-  private readonly _exploreTabIframeNavigateBack$ = new ReplaySubject<boolean>(
-    1
-  );
+  private readonly _collectionTabIframeNavigateBack$ =
+    new ReplaySubject<boolean>(1);
 
-  readonly exploreTabIframeNavigateBack$ =
-    this._exploreTabIframeNavigateBack$.asObservable();
+  readonly collectionTabIframeNavigateBack$ =
+    this._collectionTabIframeNavigateBack$.asObservable();
 
   readonly detailsPageIframeReloadRequested$ = this.preferences.getNumber$(
     PrefKeys.DETAILS_PAGE_RELOAD_REQUESTED_TIMESTAMP,
@@ -26,12 +25,12 @@ export class IframeService {
 
   constructor(private readonly preferenceManager: PreferenceManager) {}
 
-  refreshExploreTabIframe() {
-    this.exploreTabRefreshRequested$.next(new Date());
+  refreshCollectionTabIframe() {
+    this.collectionTabRefreshRequested$.next(new Date());
   }
 
-  navigateBackExploreTabIframe() {
-    this._exploreTabIframeNavigateBack$.next(true);
+  navigateBackCollectionTabIframe() {
+    this._collectionTabIframeNavigateBack$.next(true);
   }
 
   refreshDetailsPageIframe() {

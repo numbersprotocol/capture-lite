@@ -181,11 +181,11 @@ export class OnboardingService {
     );
   }
 
-  async didExplainExploreTab() {
+  async didExplainCollectionTab() {
     return this.preferences.getBoolean(PrefKeys.DID_EXPLAIN_EXPLORE_TAB, false);
   }
 
-  async setDidExplainExploreTab(value: boolean) {
+  async setDidExplainCollectionTab(value: boolean) {
     return this.preferences.setBoolean(PrefKeys.DID_EXPLAIN_EXPLORE_TAB, value);
   }
 }

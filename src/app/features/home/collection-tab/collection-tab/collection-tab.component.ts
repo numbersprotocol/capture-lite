@@ -11,24 +11,25 @@ import { NetworkService } from '../../../../shared/network/network.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-explore-tab',
-  templateUrl: './explore-tab.component.html',
-  styleUrls: ['./explore-tab.component.scss'],
+  selector: 'app-collection-tab',
+  templateUrl: './collection-tab.component.html',
+  styleUrls: ['./collection-tab.component.scss'],
 })
-export class ExploreTabComponent {
+export class CollectionTabComponent {
   readonly bubbleIframeUrlWithCachedJWTToke$ = combineLatest([
     this.diaBackendAuthService.cachedQueryJWTToken$,
-    this.iframeService.exploreTabRefreshRequested$,
+    this.iframeService.collectionTabRefreshRequested$,
   ]).pipe(
     map(([token, _]) => {
-      const url = `${BUBBLE_IFRAME_URL}/?token=${token.access}&refresh_token=${token.refresh}`;
+      const url = `${BUBBLE_IFRAME_URL}/collection?token=${token.access}&refresh_token=${token.refresh}`;
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     })
   );
 
   readonly networkConnected$ = this.networkService.connected$;
 
-  @ViewChild('exploreIframe') exploreIframe?: ElementRef<HTMLIFrameElement>;
+  @ViewChild('collectionIframe')
+  collectionIframe?: ElementRef<HTMLIFrameElement>;
 
   constructor(
     private readonly networkService: NetworkService,
@@ -36,16 +37,16 @@ export class ExploreTabComponent {
     private readonly iframeService: IframeService,
     private readonly sanitizer: DomSanitizer
   ) {
-    iframeService.exploreTabIframeNavigateBack$
+    iframeService.collectionTabIframeNavigateBack$
       .pipe(
-        tap(_ => this.navigateBackExploreIframe()),
+        tap(_ => this.navigateBackCollectionIframe()),
         untilDestroyed(this)
       )
       .subscribe();
   }
 
-  navigateBackExploreIframe() {
-    this.exploreIframe?.nativeElement.contentWindow?.postMessage(
+  navigateBackCollectionIframe() {
+    this.collectionIframe?.nativeElement.contentWindow?.postMessage(
       IonicToBubblePostMessage.ANDROID_BACK_BUTTON,
       BUBBLE_IFRAME_URL
     );

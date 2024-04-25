@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 
-import { ExploreTabComponent } from './explore-tab.component';
+import { CollectionTabComponent } from './collection-tab.component';
 
-describe('ExploreTabComponent', () => {
-  let component: ExploreTabComponent;
-  let fixture: ComponentFixture<ExploreTabComponent>;
+describe('CollectionTabComponent', () => {
+  let component: CollectionTabComponent;
+  let fixture: ComponentFixture<CollectionTabComponent>;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [ExploreTabComponent],
+        declarations: [CollectionTabComponent],
         imports: [SharedTestingModule],
       }).compileComponents();
 
-      fixture = TestBed.createComponent(ExploreTabComponent);
+      fixture = TestBed.createComponent(CollectionTabComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
     })
