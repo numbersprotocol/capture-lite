@@ -429,9 +429,9 @@ export class HomePage {
       // window.location.reload();
       this.iframeService.refreshCollectionTabIframe();
     }
-    // const didExplain = await this.onboardingService.didExplainCollectionTab();
-    const didExplain = false;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    /* TODO: re-enable or remove the popup.
+        Hide the popup in current version as a temporary decision.
+    const didExplain = await this.onboardingService.didExplainCollectionTab();
     if (didExplain === false) {
       await new Promise(resolve => {
         setTimeout(resolve, OnboardingService.ONBOARDING_POP_UP_DELAY);
@@ -439,6 +439,7 @@ export class HomePage {
       this.showExplainCollectionTabPopUpDialog();
       this.onboardingService.setDidExplainCollectionTab(true);
     }
+    */
   }
 
   private showExplainCollectionTabPopUpDialog() {
