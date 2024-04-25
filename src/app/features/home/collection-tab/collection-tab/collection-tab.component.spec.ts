@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SharedTestingModule } from '../../../../shared/shared-testing.module';
 
-import { CollectionTabComponent } from './explore-tab.component';
+import { CollectionTabComponent } from './collection-tab.component';
 
 describe('CollectionTabComponent', () => {
   let component: CollectionTabComponent;
