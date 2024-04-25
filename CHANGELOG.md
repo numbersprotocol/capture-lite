@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.93.0] - 2024-04-25
+
+### Changed
+
+1. Change explorer tab to collection tab, replacing iframe URL and icon [#3243](https://github.com/numbersprotocol/capture-lite/pull/3243)
+1. Update the URL format of the asset profile from
+   `/asset-profile?nid=${nid}` to `/asset-profile/${nid}` [#3242](https://github.com/numbersprotocol/capture-lite/pull/3242)
+1. Remove the unused `tmp_token` from the asset profile URL [#3242](https://github.com/numbersprotocol/capture-lite/pull/3242)
+
 ## [0.92.0] - 2024-04-18
 
 ### Changed
@@ -2288,7 +2297,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.92.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.93.0...HEAD
+[0.92.0]: https://github.com/numbersprotocol/capture-lite/compare/0.92.0...0.93.0
 [0.92.0]: https://github.com/numbersprotocol/capture-lite/compare/0.91.0...0.92.0
 [0.91.0]: https://github.com/numbersprotocol/capture-lite/compare/0.90.0...0.91.0
 [0.90.0]: https://github.com/numbersprotocol/capture-lite/compare/0.89.2...0.90.0
