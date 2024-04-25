@@ -139,7 +139,6 @@ export class AppComponent {
       'capture-rebrand-camera-crop',
       'capture',
       'profile',
-      'search',
       'collection',
       'edit',
       'capture-rebrand-add',

@@ -18,7 +18,7 @@ import { NetworkService } from '../../../../shared/network/network.service';
 export class CollectionTabComponent {
   readonly bubbleIframeUrlWithCachedJWTToke$ = combineLatest([
     this.diaBackendAuthService.cachedQueryJWTToken$,
-    this.iframeService.CollectionTabRefreshRequested$,
+    this.iframeService.collectionTabRefreshRequested$,
   ]).pipe(
     map(([token, _]) => {
       const url = `${BUBBLE_IFRAME_URL}/collection?token=${token.access}&refresh_token=${token.refresh}`;
@@ -37,13 +37,15 @@ export class CollectionTabComponent {
     private readonly iframeService: IframeService,
     private readonly sanitizer: DomSanitizer
   ) {
-    iframeService.CollectionTabIframeNavigateBack$.pipe(
-      tap(_ => this.navigateBackcollectionIframe()),
-      untilDestroyed(this)
-    ).subscribe();
+    iframeService.collectionTabIframeNavigateBack$
+      .pipe(
+        tap(_ => this.navigateBackCollectionIframe()),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
-  navigateBackcollectionIframe() {
+  navigateBackCollectionIframe() {
     this.collectionIframe?.nativeElement.contentWindow?.postMessage(
       IonicToBubblePostMessage.ANDROID_BACK_BUTTON,
       BUBBLE_IFRAME_URL

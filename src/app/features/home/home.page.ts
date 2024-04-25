@@ -63,7 +63,7 @@ import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/pref
 export class HomePage {
   readonly initialTabIndex = 0;
   private readonly afterCaptureTabIndex = 0;
-  private readonly CollectionTabIndex = 2;
+  private readonly collectionTabIndex = 2;
   selectedTabIndex = this.initialTabIndex;
 
   readonly username$ = this.diaBackendAuthService.username$;
@@ -306,7 +306,7 @@ export class HomePage {
     this.androidBackButtonService
       .overrideAndroidBackButtonBehavior$(() => {
         const shouldNavigateBackCollectionTabIframe =
-          this.selectedTabIndex === this.CollectionTabIndex &&
+          this.selectedTabIndex === this.collectionTabIndex &&
           this.router.url === '/home';
         if (shouldNavigateBackCollectionTabIframe) {
           this.iframeService.navigateBackCollectionTabIframe();
@@ -425,7 +425,7 @@ export class HomePage {
 
   // eslint-disable-next-line class-methods-use-this
   async navigateToCollectionTab() {
-    if (this.selectedTabIndex === this.CollectionTabIndex) {
+    if (this.selectedTabIndex === this.collectionTabIndex) {
       // window.location.reload();
       this.iframeService.refreshCollectionTabIframe();
     }

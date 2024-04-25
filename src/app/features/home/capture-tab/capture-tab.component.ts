@@ -17,10 +17,8 @@ import {
   concatMap,
   concatMapTo,
   map,
-  pluck,
   shareReplay,
   startWith,
-  switchMap,
   tap,
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
@@ -99,16 +97,6 @@ export class CaptureTabComponent implements OnInit {
   );
 
   readonly networkConnected$ = this.networkService.connected$;
-
-  readonly postCaptures$ = this.networkConnected$.pipe(
-    switchMap(isConnected =>
-      iif(
-        () => isConnected,
-        this.diaBackendAssetRepository.postCaptures$.pipe(pluck('results'))
-      )
-    ),
-    catchError((err: unknown) => this.errorService.toastError$(err))
-  );
 
   private readonly itemsPerPage = 10;
 
