@@ -2,26 +2,29 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 import { PluginListenerHandle } from '@capacitor/core';
 import {
-  AppendFileOptions as FileAppendOptions,
   CopyOptions,
   CopyResult,
+  DownloadFileOptions,
+  DownloadFileResult,
+  AppendFileOptions as FileAppendOptions,
   DeleteFileOptions as FileDeleteOptions,
   FileInfo,
+  ReadFileOptions as FileReadOptions,
+  ReadFileResult as FileReadResult,
+  WriteFileOptions as FileWriteOptions,
+  WriteFileResult as FileWriteResult,
   FilesystemPlugin,
   GetUriOptions,
   GetUriResult,
   MkdirOptions,
   PermissionStatus,
+  ProgressListener,
   ReaddirOptions,
   ReaddirResult,
-  ReadFileOptions as FileReadOptions,
-  ReadFileResult as FileReadResult,
   RenameOptions,
   RmdirOptions,
   StatOptions,
   StatResult,
-  WriteFileOptions as FileWriteOptions,
-  WriteFileResult as FileWriteResult,
 } from '@capacitor/filesystem';
 import { groupBy } from 'lodash-es';
 import { base64ToString, stringToBase64 } from '../../utils/encoding/encoding';
@@ -116,10 +119,14 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
     throw new Error('Method not implemented.');
   }
 
+  async downloadFile(_: DownloadFileOptions): Promise<DownloadFileResult> {
+    throw new Error('Method not implemented.');
+  }
+
   addListener(
     _eventName: string,
-    _listenerFunc: () => any
-  ): PluginListenerHandle {
+    _listenerFunc: ProgressListener
+  ): Promise<PluginListenerHandle> & PluginListenerHandle {
     throw new Error('Method not implemented.');
   }
 }
