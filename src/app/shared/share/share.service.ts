@@ -22,8 +22,12 @@ export class ShareService {
     private readonly translocoService: TranslocoService
   ) {}
 
-  async canShare() {
+  static async canShare() {
     return (await Share.canShare()).value;
+  }
+
+  static async shareFile(url: string) {
+    return Share.share({ url: url });
   }
 
   async share(asset: DiaBackendAsset) {
@@ -31,10 +35,6 @@ export class ShareService {
       text: this.defaultShareText,
       url: await this.setPublicAndGetLink(asset),
     });
-  }
-
-  async shareFile(url: string) {
-    return Share.share({ url: url });
   }
 
   private async setPublicAndGetLink(asset: DiaBackendAsset) {

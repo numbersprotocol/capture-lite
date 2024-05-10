@@ -266,6 +266,31 @@ export class DetailsPage {
       .subscribe();
   }
 
+  private static isSupportC2paDownloadFormat(mimeType: MimeType) {
+    // https://github.com/contentauth/c2patool?tab=readme-ov-file#supported-file-formats
+    return [
+      'video/msvideo',
+      'video/avi',
+      'application-msvideo', // avi
+      'image/avif', // avif
+      'application/x-c2pa-manifest-store', // c2pa
+      'image/x-adobe-dng', // dng
+      'image/heic', // heic
+      'image/heif', // heif
+      'image/jpeg', // jpg, jpeg
+      'audio/mp4', // m4a
+      'audio/mpeg', // mp3
+      'video/mp4',
+      'application/mp4', // mp4
+      'video/quicktime', // mov
+      'image/png', // png
+      'image/svg+xml', // svg
+      'image/tiff', // tif, tiff
+      'audio/x-wav', // wav
+      'image/webp', // webp
+    ].includes(mimeType);
+  }
+
   iframeUrlFor(detailedCapture: any) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       `${BUBBLE_IFRAME_URL}/asset_page?nid=${detailedCapture.id}`
@@ -349,7 +374,7 @@ export class DetailsPage {
               const buttons: ActionSheetButton[] = [];
               if (
                 diaBackendAsset &&
-                this.isSupportC2paDownloadFormat(
+                DetailsPage.isSupportC2paDownloadFormat(
                   diaBackendAsset.asset_file_mime_type
                 )
               ) {
@@ -500,17 +525,13 @@ export class DetailsPage {
   }
 
   private async handleDownloadC2paAction(diaBackendAsset: DiaBackendAsset) {
-    let filePath = await this.diaBackendAssetRepository
+    const filePath = await this.diaBackendAssetRepository
       .downloadC2pa$(diaBackendAsset.id)
       .pipe(
-        catchError(err => {
+        catchError((err: unknown) => {
           if (err instanceof HttpErrorResponse) {
             const errorMessage = err.error?.error?.message;
             if (errorMessage) {
-              console.warn(
-                `Download C2PA error, code: ${err.error.status_code}, ` +
-                  `message: ${errorMessage}, detail: ${err.error?.error?.details}`
-              );
               return this.errorService.toastError$(errorMessage);
             }
           }
@@ -530,7 +551,7 @@ export class DetailsPage {
             });
           })
         ),
-        catchError(err => this.errorService.toastError$(err)),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
         switchMap(downloadResult => {
           if (!downloadResult.path) {
             return this.errorService.toastError$(
@@ -539,12 +560,12 @@ export class DetailsPage {
           }
           return of(downloadResult.path);
         }),
-        takeUntil(this.shareMemuDismissed$),
-        untilDestroyed(this)
+        untilDestroyed(this),
+        takeUntil(this.shareMemuDismissed$)
       )
       .toPromise();
 
-    if (!filePath || !(await this.shareService.canShare())) {
+    if (!filePath || !(await ShareService.canShare())) {
       // Failed or web no navigator share
       return;
     }
@@ -553,8 +574,7 @@ export class DetailsPage {
     if (!fileUrl.startsWith('file://')) {
       fileUrl = `file://${fileUrl}`;
     }
-    await this.shareService
-      .shareFile(fileUrl)
+    await ShareService.shareFile(fileUrl)
       .catch(async reason => {
         if (reason?.message !== 'Share canceled') {
           await this.errorService.toastError$(reason).toPromise();
@@ -636,7 +656,7 @@ export class DetailsPage {
         toolbarColor: '#564dfc',
       })
     )
-      .pipe(takeUntil(this.shareMemuDismissed$), untilDestroyed(this))
+      .pipe(untilDestroyed(this), takeUntil(this.shareMemuDismissed$))
       .toPromise();
   }
 
@@ -770,31 +790,6 @@ export class DetailsPage {
         )
         .subscribe();
     }
-  }
-
-  private isSupportC2paDownloadFormat(mimeType: MimeType) {
-    // https://github.com/contentauth/c2patool?tab=readme-ov-file#supported-file-formats
-    return [
-      'video/msvideo',
-      'video/avi',
-      'application-msvideo', // avi
-      'image/avif', // avif
-      'application/x-c2pa-manifest-store', // c2pa
-      'image/x-adobe-dng', // dng
-      'image/heic', // heic
-      'image/heif', // heif
-      'image/jpeg', // jpg, jpeg
-      'audio/mp4', // m4a
-      'audio/mpeg', // mp3
-      'video/mp4',
-      'application/mp4', // mp4
-      'video/quicktime', // mov
-      'image/png', // png
-      'image/svg+xml', // svg
-      'image/tiff', // tif, tiff
-      'audio/x-wav', // wav
-      'image/webp', // webp
-    ].includes(mimeType);
   }
 
   private openIpfsSupportingVideo() {
