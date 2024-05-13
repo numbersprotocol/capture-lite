@@ -190,7 +190,7 @@ export class DetailsPage {
     1
   );
 
-  private readonly shareMemuDismissed$ = new Subject<void>();
+  private readonly shareMenuDismissed$ = new Subject<void>();
 
   readonly activeDetailedCapture$ = this._activeDetailedCapture$.pipe(
     distinctUntilChanged(),
@@ -429,7 +429,7 @@ export class DetailsPage {
               this.actionSheetController.create({ buttons }).then(sheet => {
                 sheet.present();
                 sheet.onDidDismiss().then(() => {
-                  this.shareMemuDismissed$.next();
+                  this.shareMenuDismissed$.next();
                 });
               });
             })
@@ -561,7 +561,7 @@ export class DetailsPage {
           return of(downloadResult.path);
         }),
         untilDestroyed(this),
-        takeUntil(this.shareMemuDismissed$)
+        takeUntil(this.shareMenuDismissed$)
       )
       .toPromise();
 
@@ -656,7 +656,7 @@ export class DetailsPage {
         toolbarColor: '#564dfc',
       })
     )
-      .pipe(untilDestroyed(this), takeUntil(this.shareMemuDismissed$))
+      .pipe(untilDestroyed(this), takeUntil(this.shareMenuDismissed$))
       .toPromise();
   }
 
