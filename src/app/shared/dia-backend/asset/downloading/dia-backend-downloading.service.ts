@@ -9,7 +9,7 @@ import {
   getSignatures,
   getTruth,
 } from '../../../repositories/proof/old-proof-adapter';
-import { Proof } from '../../../repositories/proof/proof';
+import { Proof, Truth } from '../../../repositories/proof/proof';
 import { ProofRepository } from '../../../repositories/proof/proof-repository.service';
 import {
   DiaBackendAsset,
@@ -66,12 +66,19 @@ export class DiaBackendAssetDownloadingService {
     ) {
       return;
     }
-    const proof = new Proof(
-      this.mediaStore,
-      getTruth({
+    let truth: Truth;
+    try {
+      truth = getTruth({
         proof: diaBackendAsset.information.proof,
         information: diaBackendAsset.information.information,
-      }),
+      });
+    } catch {
+      return; // Skip storing proof without truth
+    }
+
+    const proof = new Proof(
+      this.mediaStore,
+      truth,
       getSignatures(diaBackendAsset.signature)
     );
     proof.setIndexedAssets({
