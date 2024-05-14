@@ -5,7 +5,7 @@ PODS:
   - AppsFlyerFramework (6.12.1):
     - AppsFlyerFramework/Main (= 6.12.1)
   - AppsFlyerFramework/Main (6.12.1)
-  - Capacitor (5.0.5):
+  - Capacitor (5.7.5):
     - CapacitorCordova
   - CapacitorApp (5.0.3):
     - Capacitor
@@ -26,7 +26,7 @@ PODS:
     - Capacitor
   - CapacitorCommunityWifi (0.0.1):
     - Capacitor
-  - CapacitorCordova (5.0.5)
+  - CapacitorCordova (5.7.5)
   - CapacitorDevice (5.0.4):
     - Capacitor
   - CapacitorFilesystem (5.0.4):
@@ -47,7 +47,7 @@ PODS:
     - Capacitor
   - CapacitorStorage (1.2.4):
     - Capacitor
-  - CordovaPlugins (5.0.5):
+  - CordovaPlugins (5.7.5):
     - CapacitorCordova
   - Firebase/CoreOnly (10.14.0):
     - FirebaseCore (= 10.14.0)
@@ -212,7 +212,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppsflyerCapacitorPlugin: 0094cd9f754091410f30237ab7f21b2604db12f5
   AppsFlyerFramework: e29b63fc5441400a38a31c5501c1da500b9d53d0
-  Capacitor: b1248915663add1bd6567e2b67c1c1fa3abcf5e8
+  Capacitor: 7d42085cb786b2d3ea9ac8a17ebd7e3305be7b72
   CapacitorApp: 7a5dec8b33573707164b293475d5c89ba684364a
   CapacitorBlobWriter: 110eeaf80611f19bf01a8a05ff3672149ed0baad
   CapacitorBrowser: 2688852d02f1e89560a31b70521c71a5e7348860
@@ -222,7 +222,7 @@ SPEC CHECKSUMS:
   CapacitorCommunityBluetoothLe: 7de4f21022a05b15195abfb002872884d00715fc
   CapacitorCommunityHttp: 7be90668527ef14ee10d08135b0e00fac9cf8247
   CapacitorCommunityWifi: 47188c74f2c6bcaefb619380863be8c67b1917c8
-  CapacitorCordova: f8c06b897c74ee8f7701fe10e6443b40822bc83a
+  CapacitorCordova: c946a6052b547e1e185fc46862003f7b9130ead1
   CapacitorDevice: eb4b5e3b42ac35d2527f20aad296b59e0785dc8d
   CapacitorFilesystem: e1bdfab09b95b181c844c16abcfda45ec8e8ed6b
   CapacitorGeolocation: 33015be1ef496585a60da9efa1c5642ff8624db3
@@ -233,7 +233,7 @@ SPEC CHECKSUMS:
   CapacitorShare: 427bba238a1e3f116b2b349019aec6ea7f42cebd
   CapacitorSplashScreen: 93a389d4f7673c08214ae25bb6f21d867d5305c5
   CapacitorStorage: 8ec2cf8fec179d829288b16c6fba6c3c43d2bdc9
-  CordovaPlugins: c905b3b4dfc87d2a11bdbdaf396289c4a22c39dd
+  CordovaPlugins: 99eaff153de2b294dcca53aa61ca5b9eb3b31043
   Firebase: 6c1bf3f534bc422d52af2e41fe0d50bf08b6b773
   FirebaseCore: 6fc17ac9f03509d51c131298aacb3ee5698b4f02
   FirebaseCoreInternal: d558159ee6cc4b823c2296ecc193de9f6d9a5bb3

@@ -6,11 +6,21 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
 import { Clipboard } from '@capacitor/clipboard';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { EMPTY, Observable, ReplaySubject, combineLatest, defer } from 'rxjs';
+import { extension } from 'mime-types';
+import {
+  EMPTY,
+  Observable,
+  ReplaySubject,
+  Subject,
+  combineLatest,
+  defer,
+  of,
+} from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -20,6 +30,7 @@ import {
   map,
   pluck,
   switchMap,
+  takeUntil,
   tap,
 } from 'rxjs/operators';
 import SwiperCore, { Swiper, Virtual } from 'swiper';
@@ -27,7 +38,10 @@ import { BlockingActionService } from '../../../shared/blocking-action/blocking-
 import { CaptureAppWebCryptoApiSignatureProvider } from '../../../shared/collector/signature/capture-app-web-crypto-api-signature-provider/capture-app-web-crypto-api-signature-provider.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { ContactSelectionDialogComponent } from '../../../shared/contact-selection-dialog/contact-selection-dialog.component';
-import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
+import {
+  DiaBackendAsset,
+  DiaBackendAssetRepository,
+} from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { BUBBLE_IFRAME_URL } from '../../../shared/dia-backend/secret';
 import { DiaBackendStoreService } from '../../../shared/dia-backend/store/dia-backend-store.service';
@@ -39,11 +53,13 @@ import { NetworkService } from '../../../shared/network/network.service';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import { ShareService } from '../../../shared/share/share.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
+import { MimeType } from '../../../utils/mime-type';
 import {
   VOID$,
   isNonNullable,
   switchTap,
 } from '../../../utils/rx-operators/rx-operators';
+import { getAssetProfileForNSE } from '../../../utils/url';
 import {
   DetailedCapture,
   InformationSessionService,
@@ -174,6 +190,8 @@ export class DetailsPage {
     1
   );
 
+  private readonly shareMenuDismissed$ = new Subject<void>();
+
   readonly activeDetailedCapture$ = this._activeDetailedCapture$.pipe(
     distinctUntilChanged(),
     tap(
@@ -248,6 +266,31 @@ export class DetailsPage {
       .subscribe();
   }
 
+  private static isSupportC2paDownloadFormat(mimeType: MimeType) {
+    // https://github.com/contentauth/c2patool?tab=readme-ov-file#supported-file-formats
+    return [
+      'video/msvideo',
+      'video/avi',
+      'application-msvideo', // avi
+      'image/avif', // avif
+      'application/x-c2pa-manifest-store', // c2pa
+      'image/x-adobe-dng', // dng
+      'image/heic', // heic
+      'image/heif', // heif
+      'image/jpeg', // jpg, jpeg
+      'audio/mp4', // m4a
+      'audio/mpeg', // mp3
+      'video/mp4',
+      'application/mp4', // mp4
+      'video/quicktime', // mov
+      'image/png', // png
+      'image/svg+xml', // svg
+      'image/tiff', // tif, tiff
+      'audio/x-wav', // wav
+      'image/webp', // webp
+    ].includes(mimeType);
+  }
+
   iframeUrlFor(detailedCapture: any) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       `${BUBBLE_IFRAME_URL}/asset_page?nid=${detailedCapture.id}`
@@ -313,8 +356,10 @@ export class DetailsPage {
       this.activeDetailedCapture$.pipe(switchMap(c => c.diaBackendAsset$)),
       this.capAppWebCryptoApiSignatureProvider.publicKey$,
       this.translocoService.selectTranslateObject({
-        'message.copyIpfsAddress': null,
-        'message.shareAssetProfile': null,
+        'details.shares.downloadC2pa': null,
+        'details.shares.viewBlockchainProof': null,
+        'details.shares.shareBlockchainProof': null,
+        'details.shares.copyNid': null,
       }),
     ])
       .pipe(
@@ -323,23 +368,46 @@ export class DetailsPage {
           ([
             diaBackendAsset,
             publicKey,
-            [messageCopyIpfsAddress, messageShareAssetProfile],
+            [downloadC2paText, viewProofText, shareProofText, copyNidText],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
+              if (
+                diaBackendAsset &&
+                DetailsPage.isSupportC2paDownloadFormat(
+                  diaBackendAsset.asset_file_mime_type
+                )
+              ) {
+                buttons.push({
+                  text: downloadC2paText,
+                  handler: async () => {
+                    await this.handleDownloadC2paAction(diaBackendAsset);
+                    resolve();
+                  },
+                });
+              }
               if (
                 diaBackendAsset?.owner_addresses.asset_wallet_address ===
                 publicKey
               ) {
                 buttons.push({
-                  text: messageShareAssetProfile,
+                  text: viewProofText,
                   handler: async () => {
-                    const result = await this.confirmAlert.present({
-                      message:
-                        this.translocoService.translate(
-                          'message.assetBecomePublicAfterSharing'
-                        ) + '!',
-                    });
+                    await this.handleOpenProofAction(diaBackendAsset.id);
+                    resolve();
+                  },
+                });
+                buttons.push({
+                  text: shareProofText,
+                  handler: async () => {
+                    const result =
+                      diaBackendAsset.public_access ||
+                      (await this.confirmAlert.present({
+                        message:
+                          this.translocoService.translate(
+                            'message.assetBecomePublicAfterSharing'
+                          ) + '!',
+                      }));
                     if (result) {
                       this.share();
                     }
@@ -350,18 +418,20 @@ export class DetailsPage {
 
               if (diaBackendAsset?.cid) {
                 buttons.push({
-                  text: messageCopyIpfsAddress,
+                  text: copyNidText,
                   handler: () => {
-                    const ipfsAddress = `https://ipfs-pin.numbersprotocol.io/ipfs/${diaBackendAsset.cid}`;
-                    this.copyToClipboard(ipfsAddress);
+                    this.copyToClipboard(diaBackendAsset.cid);
                     resolve();
                   },
                 });
               }
 
-              this.actionSheetController
-                .create({ buttons })
-                .then(sheet => sheet.present());
+              this.actionSheetController.create({ buttons }).then(sheet => {
+                sheet.present();
+                sheet.onDidDismiss().then(() => {
+                  this.shareMenuDismissed$.next();
+                });
+              });
             })
         ),
         untilDestroyed(this)
@@ -454,6 +524,65 @@ export class DetailsPage {
       .subscribe();
   }
 
+  private async handleDownloadC2paAction(diaBackendAsset: DiaBackendAsset) {
+    const filePath = await this.diaBackendAssetRepository
+      .downloadC2pa$(diaBackendAsset.id)
+      .pipe(
+        catchError((err: unknown) => {
+          if (err instanceof HttpErrorResponse) {
+            const errorMessage = err.error?.error?.message;
+            if (errorMessage) {
+              return this.errorService.toastError$(errorMessage);
+            }
+          }
+          return this.errorService.toastError$(err);
+        }),
+        switchMap(c2paResult =>
+          defer(() => {
+            let filePath = c2paResult.cid;
+            const ext = extension(diaBackendAsset.asset_file_mime_type);
+            if (ext) {
+              filePath += `.${ext}`;
+            }
+            return Filesystem.downloadFile({
+              url: c2paResult.url,
+              path: filePath,
+              directory: Directory.Cache,
+            });
+          })
+        ),
+        catchError((err: unknown) => this.errorService.toastError$(err)),
+        switchMap(downloadResult => {
+          if (!downloadResult.path) {
+            return this.errorService.toastError$(
+              this.translocoService.translate('error.unknownError')
+            );
+          }
+          return of(downloadResult.path);
+        }),
+        untilDestroyed(this),
+        takeUntil(this.shareMenuDismissed$)
+      )
+      .toPromise();
+
+    if (!filePath || !(await ShareService.canShare())) {
+      // Failed or web no navigator share
+      return;
+    }
+
+    let fileUrl = filePath;
+    if (!fileUrl.startsWith('file://')) {
+      fileUrl = `file://${fileUrl}`;
+    }
+    await ShareService.shareFile(fileUrl)
+      .catch(async reason => {
+        if (reason?.message !== 'Share canceled') {
+          await this.errorService.toastError$(reason).toPromise();
+        }
+      })
+      .finally(() => Filesystem.deleteFile({ path: filePath }));
+  }
+
   private handleEditAction() {
     combineLatest([
       this.showCaptureDetailsInIframe$,
@@ -518,6 +647,17 @@ export class DetailsPage {
         )
       )
       .subscribe();
+  }
+
+  private async handleOpenProofAction(id: string) {
+    await defer(() =>
+      Browser.open({
+        url: getAssetProfileForNSE(id),
+        toolbarColor: '#564dfc',
+      })
+    )
+      .pipe(untilDestroyed(this), takeUntil(this.shareMenuDismissed$))
+      .toPromise();
   }
 
   private async handleUnpublishAction() {
@@ -683,7 +823,13 @@ export class DetailsPage {
           activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
         ),
         isNonNullable(),
-        concatMap(diaBackendAsset => this.shareService.share(diaBackendAsset)),
+        concatMap(diaBackendAsset =>
+          this.shareService.share(diaBackendAsset).catch(reason => {
+            if (reason?.message !== 'Share canceled') {
+              throw reason;
+            }
+          })
+        ),
         catchError((err: unknown) => this.errorService.toastError$(err)),
         untilDestroyed(this)
       )

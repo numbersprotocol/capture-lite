@@ -201,6 +201,18 @@ export class DiaBackendAssetRepository {
     );
   }
 
+  downloadC2pa$(id: string) {
+    return defer(() => this.authService.getAuthHeaders()).pipe(
+      concatMap(headers =>
+        this.httpClient.post<DownloadC2paResponse>(
+          `${BASE_URL}/api/v3/assets/${id}/c2pa/`,
+          {},
+          { headers }
+        )
+      )
+    );
+  }
+
   downloadFile$({ id, field }: { id: string; field: AssetDownloadField }) {
     const formData = new FormData();
     formData.append('field', field);
@@ -342,6 +354,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly post_creation_workflow_id: string;
   readonly mint_workflow_id: string;
   readonly uploaded_at: string;
+  readonly public_access: boolean;
 }
 
 export interface OwnerAddresses extends Tuple {
@@ -359,6 +372,11 @@ type UpdateAssetResponse = DiaBackendAsset;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface DeleteAssetResponse {}
+
+interface DownloadC2paResponse {
+  url: string;
+  cid: string;
+}
 
 async function buildFormDataToCreateAsset(proof: Proof) {
   const formData = new FormData();

@@ -188,8 +188,6 @@
     "videoLimitation": "錄製的影片長度需小於 10 秒鐘。",
     "yesIUnderstand": "我了解",
     "verificationSuccess": "驗證成功",
-    "copyIpfsAddress": "複製 IPFS 位址",
-    "shareAssetProfile": "分享資產檔案",
     "assetBecomePublicAfterSharing": "該資產將在分享後公開",
     "assetBecomePublicFor24Hours": "其他用戶在接下來的 24 小時將可透過此連結存取影像",
     "mintNft": "鑄造 NFT",
@@ -296,6 +294,12 @@
       "unpublish": "取消發布",
       "networkActions": "網絡動作",
       "remove": "移除"
+    },
+    "shares": {
+      "copyNid": "複製 Nid",
+      "downloadC2pa": "下載 C2PA",
+      "shareBlockchainProof": "分享區塊鏈證明",
+      "viewBlockchainProof": "檢視區塊鏈證明"
     },
     "error": {
       "canNotPerfomEditAction": "暫時無法編輯。請確認連線穩定，或在資產註冊完成後再重試。",

@@ -188,8 +188,6 @@
     "videoLimitation": "Capture App DOES NOT support video recording longer than 10 secs. Recording longer than 10 secs will not be saved.",
     "yesIUnderstand": "Yes, I understand",
     "verificationSuccess": "Success",
-    "copyIpfsAddress": "Copy IPFS address",
-    "shareAssetProfile": "Share Asset Profile",
     "assetBecomePublicAfterSharing": "This asset will become public after sharing",
     "assetBecomePublicFor24Hours": "Anyone with the link will be able to access the asset in the next 24 hours",
     "mintNft": "Mint NFT",
@@ -296,6 +294,12 @@
       "unpublish": "Unpublish",
       "networkActions": "Network Actions",
       "remove": "Remove"
+    },
+    "shares": {
+      "copyNid": "Copy Nid",
+      "downloadC2pa": "Download C2PA",
+      "shareBlockchainProof": "Share Blockchain Proof",
+      "viewBlockchainProof": "View Blockchain Proof"
     },
     "error": {
       "canNotPerfomEditAction": "Temporarily unable to edit. Retry with stable connection or post-asset registration.",

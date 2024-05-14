@@ -22,6 +22,14 @@ export class ShareService {
     private readonly translocoService: TranslocoService
   ) {}
 
+  static async canShare() {
+    return (await Share.canShare()).value;
+  }
+
+  static async shareFile(url: string) {
+    return Share.share({ url: url });
+  }
+
   async share(asset: DiaBackendAsset) {
     return Share.share({
       text: this.defaultShareText,
@@ -30,12 +38,14 @@ export class ShareService {
   }
 
   private async setPublicAndGetLink(asset: DiaBackendAsset) {
-    const formData = new FormData();
-    formData.append('public_access', 'true');
-    await this.diaBackendAssetRepository
-      .updateCapture$(asset.id, formData)
-      .pipe(catchError((err: unknown) => this.errorService.toastError$(err)))
-      .toPromise();
+    if (!asset.public_access) {
+      const formData = new FormData();
+      formData.append('public_access', 'true');
+      await this.diaBackendAssetRepository
+        .updateCapture$(asset.id, formData)
+        .pipe(catchError((err: unknown) => this.errorService.toastError$(err)))
+        .toPromise();
+    }
     return getAssetProfileForNSE(asset.id);
   }
 
