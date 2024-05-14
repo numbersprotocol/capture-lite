@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.94.0] - 2024-05-14
+
+### Added
+
+1. Update the share menu in the asset detail page as follows: [#3244](https://github.com/numbersprotocol/capture-lite/pull/3244)
+   - Add "Download C2PA" (new option)
+   - Add "View Blockchain Proof" (old: View asset profile)
+   - Update "Share Blockchain Proof" (current: Share Asset Profile)
+   - Update "Copy Nid" (current: Copy IPFS address)
+
+### Fixed
+
+1. Fix prefetch error caused by incorrect asset information format [#3245](https://github.com/numbersprotocol/capture-lite/pull/3245)
+
 ## [0.93.0] - 2024-04-25
 
 ### Changed
@@ -2298,7 +2312,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Android - the APK file `app-debug.apk` is attached to this release
 
 [unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.93.0...HEAD
-[0.92.0]: https://github.com/numbersprotocol/capture-lite/compare/0.92.0...0.93.0
+[0.94.0]: https://github.com/numbersprotocol/capture-lite/compare/0.93.0...0.94.0
+[0.93.0]: https://github.com/numbersprotocol/capture-lite/compare/0.92.0...0.93.0
 [0.92.0]: https://github.com/numbersprotocol/capture-lite/compare/0.91.0...0.92.0
 [0.91.0]: https://github.com/numbersprotocol/capture-lite/compare/0.90.0...0.91.0
 [0.90.0]: https://github.com/numbersprotocol/capture-lite/compare/0.89.2...0.90.0
