@@ -29,7 +29,7 @@ PODS:
   - CapacitorCordova (5.7.5)
   - CapacitorDevice (5.0.4):
     - Capacitor
-  - CapacitorFilesystem (5.0.4):
+  - CapacitorFilesystem (5.1.1):
     - Capacitor
   - CapacitorGeolocation (5.0.4):
     - Capacitor
@@ -224,7 +224,7 @@ SPEC CHECKSUMS:
   CapacitorCommunityWifi: 47188c74f2c6bcaefb619380863be8c67b1917c8
   CapacitorCordova: c946a6052b547e1e185fc46862003f7b9130ead1
   CapacitorDevice: eb4b5e3b42ac35d2527f20aad296b59e0785dc8d
-  CapacitorFilesystem: e1bdfab09b95b181c844c16abcfda45ec8e8ed6b
+  CapacitorFilesystem: 38e85e56818420bed3f0aa1b77128f503a960821
   CapacitorGeolocation: 33015be1ef496585a60da9efa1c5642ff8624db3
   CapacitorLocalNotifications: c2d8b14794064fd4814b1d6c4ddbac8029afa295
   CapacitorNativeSettings: b6f40955945bc659f966a43fa54fc6be192d8f9b
