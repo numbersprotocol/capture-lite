@@ -6,12 +6,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
 import { Clipboard } from '@capacitor/clipboard';
-import { Directory, Filesystem } from '@capacitor/filesystem';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { extension } from 'mime-types';
 import {
   EMPTY,
   Observable,
@@ -19,13 +17,13 @@ import {
   Subject,
   combineLatest,
   defer,
-  of,
 } from 'rxjs';
 import {
   catchError,
   concatMap,
   concatMapTo,
   distinctUntilChanged,
+  finalize,
   first,
   map,
   pluck,
@@ -525,9 +523,36 @@ export class DetailsPage {
   }
 
   private async handleDownloadC2paAction(diaBackendAsset: DiaBackendAsset) {
-    const filePath = await this.diaBackendAssetRepository
-      .downloadC2pa$(diaBackendAsset.id)
+    let fileUrl: string | undefined = undefined;
+    const downloadC2paDismissed$ = new Subject<void>();
+    const alert = await this.alertController.create({
+      header: this.translocoService.translate('details.shares.downloadC2pa'),
+      message: `<ion-spinner></ion-spinner><br>${this.translocoService.translate(
+        'message.pleaseWait'
+      )}`,
+      backdropDismiss: false,
+      buttons: [
+        { text: this.translocoService.translate('cancel'), role: 'cancel' },
+      ],
+    });
+
+    alert.onDidDismiss().then(async () => {
+      downloadC2paDismissed$.next();
+      if (fileUrl) {
+        const link = document.createElement('a');
+        link.href = `${BUBBLE_IFRAME_URL}/download?url=${fileUrl}`;
+        link.hidden = true;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    });
+
+    defer(() => alert.present())
       .pipe(
+        switchMap(() =>
+          this.diaBackendAssetRepository.downloadC2pa$(diaBackendAsset.id)
+        ),
         catchError((err: unknown) => {
           if (err instanceof HttpErrorResponse) {
             const errorMessage = err.error?.error?.message;
@@ -537,50 +562,14 @@ export class DetailsPage {
           }
           return this.errorService.toastError$(err);
         }),
-        switchMap(c2paResult =>
-          defer(() => {
-            let filePath = c2paResult.cid;
-            const ext = extension(diaBackendAsset.asset_file_mime_type);
-            if (ext) {
-              filePath += `.${ext}`;
-            }
-            return Filesystem.downloadFile({
-              url: c2paResult.url,
-              path: filePath,
-              directory: Directory.Cache,
-            });
-          })
-        ),
-        catchError((err: unknown) => this.errorService.toastError$(err)),
-        switchMap(downloadResult => {
-          if (!downloadResult.path) {
-            return this.errorService.toastError$(
-              this.translocoService.translate('error.unknownError')
-            );
-          }
-          return of(downloadResult.path);
+        map(c2paResult => {
+          fileUrl = c2paResult.url;
         }),
+        finalize(() => alert.dismiss()),
         untilDestroyed(this),
-        takeUntil(this.shareMenuDismissed$)
+        takeUntil(downloadC2paDismissed$)
       )
-      .toPromise();
-
-    if (!filePath || !(await ShareService.canShare())) {
-      // Failed or web no navigator share
-      return;
-    }
-
-    let fileUrl = filePath;
-    if (!fileUrl.startsWith('file://')) {
-      fileUrl = `file://${fileUrl}`;
-    }
-    await ShareService.shareFile(fileUrl)
-      .catch(async reason => {
-        if (reason?.message !== 'Share canceled') {
-          await this.errorService.toastError$(reason).toPromise();
-        }
-      })
-      .finally(() => Filesystem.deleteFile({ path: filePath }));
+      .subscribe();
   }
 
   private handleEditAction() {
