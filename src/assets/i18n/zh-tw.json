@@ -288,6 +288,8 @@
     "collect": "蒐集",
     "noNetworkConnectionCannotPerformAction": "沒有網絡連接。 無法執行該操作。",
     "confirmUnpublish": "您確定要取消發布嗎",
+    "downloadC2paProgressHeader": "建立 C2PA 驗證簽章",
+    "downloadC2paProgressMessage": "C2PA 驗證簽章處理中，這可確保您的數位內容受到經過驗證的內容憑證保護，增強其真實性和可信度。這可能需要一些時間。",
     "actions": {
       "edit": "編輯",
       "mintAndShare": "鑄造並分享",

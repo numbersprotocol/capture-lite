@@ -526,9 +526,11 @@ export class DetailsPage {
     let fileUrl: string | undefined = undefined;
     const downloadC2paDismissed$ = new Subject<void>();
     const alert = await this.alertController.create({
-      header: this.translocoService.translate('details.shares.downloadC2pa'),
+      header: this.translocoService.translate(
+        'details.downloadC2paProgressHeader'
+      ),
       message: `<ion-spinner></ion-spinner><br>${this.translocoService.translate(
-        'message.pleaseWait'
+        'details.downloadC2paProgressMessage'
       )}`,
       backdropDismiss: false,
       buttons: [
@@ -539,8 +541,10 @@ export class DetailsPage {
     alert.onDidDismiss().then(async () => {
       downloadC2paDismissed$.next();
       if (fileUrl) {
+        const from = encodeURIComponent(this.router.url);
+        const url = encodeURIComponent(fileUrl);
         const link = document.createElement('a');
-        link.href = `${BUBBLE_IFRAME_URL}/download?url=${fileUrl}`;
+        link.href = `${BUBBLE_IFRAME_URL}/download?from=${from}&url=${url}`;
         link.hidden = true;
         document.body.appendChild(link);
         link.click();

@@ -288,6 +288,8 @@
     "collect": "collect",
     "noNetworkConnectionCannotPerformAction": "No internet connection. Cannot perform the action.",
     "confirmUnpublish": "Are you sure you want to Unpublish",
+    "downloadC2paProgressHeader": "Creating C2PA Signature",
+    "downloadC2paProgressMessage": "Processing your request to sign content with C2PA. This ensures your digital content is protected with verified content credentials, enhancing its authenticity and trustworthiness. Please wait a moment.",
     "actions": {
       "edit": "Edit",
       "mintAndShare": "Mint & Share",
