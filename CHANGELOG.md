@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.95.0] - 2024-05-29
+## [0.95.1] - 2024-05-30
 
-### Added
+### Changed
+
+1. Adjust the C2PA loading text and pass the current URL for returning back [#3248](https://github.com/numbersprotocol/capture-lite/pull/3248)
+
+## [0.95.0] - 2024-05-29
 
 ### Changed
 
@@ -2319,7 +2323,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.95.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.95.1...HEAD
+[0.95.1]: https://github.com/numbersprotocol/capture-lite/compare/0.95.0...0.95.1
 [0.95.0]: https://github.com/numbersprotocol/capture-lite/compare/0.94.0...0.95.0
 [0.94.0]: https://github.com/numbersprotocol/capture-lite/compare/0.93.0...0.94.0
 [0.93.0]: https://github.com/numbersprotocol/capture-lite/compare/0.92.0...0.93.0
