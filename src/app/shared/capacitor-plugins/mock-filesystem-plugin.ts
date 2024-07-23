@@ -27,7 +27,11 @@ import {
   StatResult,
 } from '@capacitor/filesystem';
 import { groupBy } from 'lodash-es';
-import { base64ToString, stringToBase64 } from '../../utils/encoding/encoding';
+import {
+  base64ToString,
+  blobToBase64,
+  stringToBase64,
+} from '../../utils/encoding/encoding';
 
 export class MockFilesystemPlugin implements FilesystemPlugin {
   private readonly files = new Map<string, string>();
@@ -55,7 +59,9 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
 
   async writeFile(options: FileWriteOptions): Promise<FileWriteResult> {
     const path = `${options.directory ?? ''}/${options.path}`;
-    if (!options.encoding) {
+    if (options.data instanceof Blob) {
+      this.files.set(path, await blobToBase64(options.data));
+    } else if (!options.encoding) {
       this.files.set(path, options.data);
     } else {
       this.files.set(path, stringToBase64(options.data));
@@ -123,10 +129,14 @@ export class MockFilesystemPlugin implements FilesystemPlugin {
     throw new Error('Method not implemented.');
   }
 
-  addListener(
+  async addListener(
     _eventName: string,
     _listenerFunc: ProgressListener
-  ): Promise<PluginListenerHandle> & PluginListenerHandle {
+  ): Promise<PluginListenerHandle> {
+    throw new Error('Method not implemented.');
+  }
+
+  async removeAllListeners(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

@@ -12,7 +12,7 @@ import { defer, merge } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { sha256WithBase64 } from '../../../utils/crypto/crypto';
 import { base64ToBlob, blobToBase64 } from '../../../utils/encoding/encoding';
-import { fromExtension, MimeType, toExtension } from '../../../utils/mime-type';
+import { MimeType, fromExtension, toExtension } from '../../../utils/mime-type';
 import { toDataUrl } from '../../../utils/url';
 import { FILESYSTEM_PLUGIN } from '../../capacitor-plugins/capacitor-plugins.module';
 import { Database } from '../../database/database.service';
@@ -80,7 +80,7 @@ export class MediaStore {
       directory: this.directory,
       path: `${this.rootDir}/${index}.${extension}`,
     });
-    return result.data;
+    return result.data as string;
   }
 
   async write(

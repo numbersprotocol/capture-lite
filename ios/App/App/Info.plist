@@ -44,8 +44,6 @@
 	<string>Uses Bluetooth to connect and interact with GoPro Camera</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Grant camera permission to allow the app to take images and videos of the unique moments that you want to keep.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Always grant GPS permission to allow the app to append location information to your photo automatically so that you or anyone who you share the photo with will know where the photo is taken.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Grant GPS permission when the app is in use to allow the app to append location information to your photo automatically so that you or anyone who you share the photo with will know where the photo is taken.</string>
 	<key>NSMicrophoneUsageDescription</key>

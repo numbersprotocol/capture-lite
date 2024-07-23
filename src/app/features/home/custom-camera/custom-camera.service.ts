@@ -110,7 +110,7 @@ export class CustomCameraService {
       const readFileResult = await this.filesystemPlugin.readFile({
         path: filePath,
       });
-      const base64 = readFileResult.data;
+      const base64 = readFileResult.data as string;
 
       const mimeType = type === 'image' ? 'image/jpeg' : 'video/mp4';
 
