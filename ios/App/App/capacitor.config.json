@@ -24,5 +24,31 @@
 	"cordova": {},
 	"server": {
 		"androidScheme": "https"
-	}
+	},
+	"packageClassList": [
+		"AdvertisingIdPlugin",
+		"BluetoothLe",
+		"HttpPlugin",
+		"Wifi",
+		"AppPlugin",
+		"CAPBrowserPlugin",
+		"CAPCameraPlugin",
+		"ClipboardPlugin",
+		"DevicePlugin",
+		"FilesystemPlugin",
+		"GeolocationPlugin",
+		"LocalNotificationsPlugin",
+		"CAPNetworkPlugin",
+		"PushNotificationsPlugin",
+		"SharePlugin",
+		"SplashScreenPlugin",
+		"StoragePlugin",
+		"PreviewCameraPlugin",
+		"PreviewMemoryPlugin",
+		"PreviewVideoPlugin",
+		"AppsFlyerPlugin",
+		"BlobWriter",
+		"NativeSettingsPlugin",
+		"CDVPlugin"
+	]
 }

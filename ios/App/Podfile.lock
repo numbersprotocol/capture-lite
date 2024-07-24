@@ -5,49 +5,49 @@ PODS:
   - AppsFlyerFramework (6.12.1):
     - AppsFlyerFramework/Main (= 6.12.1)
   - AppsFlyerFramework/Main (6.12.1)
-  - Capacitor (5.7.5):
+  - Capacitor (6.1.1):
     - CapacitorCordova
-  - CapacitorApp (5.0.3):
+  - CapacitorApp (6.0.0):
     - Capacitor
   - CapacitorBlobWriter (0.0.1):
     - Capacitor
     - GCDWebServer (~> 3.0)
-  - CapacitorBrowser (5.0.3):
+  - CapacitorBrowser (6.0.1):
     - Capacitor
-  - CapacitorCamera (5.0.4):
+  - CapacitorCamera (6.0.1):
     - Capacitor
-  - CapacitorClipboard (5.0.4):
+  - CapacitorClipboard (6.0.0):
     - Capacitor
-  - CapacitorCommunityAdvertisingId (5.0.0):
+  - CapacitorCommunityAdvertisingId (6.0.0):
     - Capacitor
-  - CapacitorCommunityBluetoothLe (2.2.3):
+  - CapacitorCommunityBluetoothLe (6.0.1):
     - Capacitor
   - CapacitorCommunityHttp (1.4.1):
     - Capacitor
   - CapacitorCommunityWifi (0.0.1):
     - Capacitor
-  - CapacitorCordova (5.7.5)
-  - CapacitorDevice (5.0.4):
+  - CapacitorCordova (6.1.1)
+  - CapacitorDevice (6.0.0):
     - Capacitor
-  - CapacitorFilesystem (5.1.1):
+  - CapacitorFilesystem (6.0.0):
     - Capacitor
-  - CapacitorGeolocation (5.0.4):
+  - CapacitorGeolocation (6.0.0):
     - Capacitor
-  - CapacitorLocalNotifications (5.0.6):
+  - CapacitorLocalNotifications (6.0.0):
     - Capacitor
   - CapacitorNativeSettings (4.0.3):
     - Capacitor
-  - CapacitorNetwork (5.0.4):
+  - CapacitorNetwork (6.0.1):
     - Capacitor
-  - CapacitorPushNotifications (5.0.6):
+  - CapacitorPushNotifications (6.0.1):
     - Capacitor
-  - CapacitorShare (5.0.4):
+  - CapacitorShare (6.0.1):
     - Capacitor
-  - CapacitorSplashScreen (5.0.4):
+  - CapacitorSplashScreen (6.0.1):
     - Capacitor
   - CapacitorStorage (1.2.4):
     - Capacitor
-  - CordovaPlugins (5.7.5):
+  - CordovaPlugins (6.1.1):
     - CapacitorCordova
   - Firebase/CoreOnly (10.14.0):
     - FirebaseCore (= 10.14.0)
@@ -212,28 +212,28 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppsflyerCapacitorPlugin: 0094cd9f754091410f30237ab7f21b2604db12f5
   AppsFlyerFramework: e29b63fc5441400a38a31c5501c1da500b9d53d0
-  Capacitor: 7d42085cb786b2d3ea9ac8a17ebd7e3305be7b72
-  CapacitorApp: 7a5dec8b33573707164b293475d5c89ba684364a
+  Capacitor: 8941aba4364ba9d1b22188569001f2ce45cc2b00
+  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
   CapacitorBlobWriter: 110eeaf80611f19bf01a8a05ff3672149ed0baad
-  CapacitorBrowser: 2688852d02f1e89560a31b70521c71a5e7348860
-  CapacitorCamera: 9b5c8e809c1042f263994f97ba846aa37e974f12
-  CapacitorClipboard: 46f3959735fa0d96b9989dafcc4aed52e624d163
-  CapacitorCommunityAdvertisingId: 41543d8212fb12b6913b798bf1442c2a6bc1ae91
-  CapacitorCommunityBluetoothLe: 7de4f21022a05b15195abfb002872884d00715fc
+  CapacitorBrowser: 473c7fd70ddbe541608ff09ec1be14da0078279e
+  CapacitorCamera: 3b77b3e8311b98220de65e63445c0e4d0b30ce3a
+  CapacitorClipboard: 80282f684154124b9019ebf401235b70b0cf4994
+  CapacitorCommunityAdvertisingId: 697e23d3853e3be04dab8f69968dce667b7a0fa3
+  CapacitorCommunityBluetoothLe: 694d91cd954a2b3149db8967faa7af433700eb6b
   CapacitorCommunityHttp: 7be90668527ef14ee10d08135b0e00fac9cf8247
   CapacitorCommunityWifi: 47188c74f2c6bcaefb619380863be8c67b1917c8
-  CapacitorCordova: c946a6052b547e1e185fc46862003f7b9130ead1
-  CapacitorDevice: eb4b5e3b42ac35d2527f20aad296b59e0785dc8d
-  CapacitorFilesystem: 38e85e56818420bed3f0aa1b77128f503a960821
-  CapacitorGeolocation: 33015be1ef496585a60da9efa1c5642ff8624db3
-  CapacitorLocalNotifications: c2d8b14794064fd4814b1d6c4ddbac8029afa295
+  CapacitorCordova: 8f2cc8d8d3619c566e9418fe8772064a94266106
+  CapacitorDevice: f8fd88f9edd1261c55a109f32015b09bbbfdc4a0
+  CapacitorFilesystem: 60e59ba274c234a979e7a3be2552feaadcee4263
+  CapacitorGeolocation: 1f12bbe372b65116e851bd8e3a94cf0ef9bacebb
+  CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
   CapacitorNativeSettings: b6f40955945bc659f966a43fa54fc6be192d8f9b
-  CapacitorNetwork: e2bd0bf1614aca34bb976f125a756a8a3df1c81a
-  CapacitorPushNotifications: 7eb70469f1fcc3dec07126336d4896520e4991db
-  CapacitorShare: 427bba238a1e3f116b2b349019aec6ea7f42cebd
-  CapacitorSplashScreen: 93a389d4f7673c08214ae25bb6f21d867d5305c5
+  CapacitorNetwork: 5c94acfdddc22043f2ffaff224ce9b4aa5a179f0
+  CapacitorPushNotifications: 293fabe42c7229756078e81f2d3a60394ba4e5d8
+  CapacitorShare: 02222f2457ff003e642370a9c1ecd101baaa27c8
+  CapacitorSplashScreen: 61645214e8f955ff2b80f16a6a3648960fe4c89f
   CapacitorStorage: 8ec2cf8fec179d829288b16c6fba6c3c43d2bdc9
-  CordovaPlugins: 99eaff153de2b294dcca53aa61ca5b9eb3b31043
+  CordovaPlugins: 66fd89535ee4dee6875cbbbb4c5ebd6ef5a3bd96
   Firebase: 6c1bf3f534bc422d52af2e41fe0d50bf08b6b773
   FirebaseCore: 6fc17ac9f03509d51c131298aacb3ee5698b4f02
   FirebaseCoreInternal: d558159ee6cc4b823c2296ecc193de9f6d9a5bb3
