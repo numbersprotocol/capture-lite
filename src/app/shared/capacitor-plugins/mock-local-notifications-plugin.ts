@@ -2,17 +2,18 @@
 
 import { PluginListenerHandle } from '@capacitor/core';
 import {
+  DeliveredNotifications,
+  LocalNotificationSchema as LocalNotification,
   ActionPerformed as LocalNotificationActionPerformed,
   ActionType as LocalNotificationActionType,
-  Channel as NotificationChannel,
-  DeliveredNotifications,
   EnabledResult as LocalNotificationEnabledResult,
-  ListChannelsResult as NotificationChannelList,
-  LocalNotificationSchema as LocalNotification,
-  LocalNotificationsPlugin,
   PendingResult as LocalNotificationPendingList,
-  PermissionStatus,
   ScheduleResult as LocalNotificationScheduleResult,
+  LocalNotificationsPlugin,
+  Channel as NotificationChannel,
+  ListChannelsResult as NotificationChannelList,
+  PermissionStatus,
+  SettingsPermissionStatus,
 } from '@capacitor/local-notifications';
 
 export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
@@ -62,6 +63,14 @@ export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
 
   async requestPermissions(): Promise<PermissionStatus> {
     return { display: 'granted' };
+  }
+
+  async changeExactNotificationSetting(): Promise<SettingsPermissionStatus> {
+    throw new Error('Method not implemented.');
+  }
+
+  async checkExactNotificationSetting(): Promise<SettingsPermissionStatus> {
+    throw new Error('Method not implemented.');
   }
 
   addListener(

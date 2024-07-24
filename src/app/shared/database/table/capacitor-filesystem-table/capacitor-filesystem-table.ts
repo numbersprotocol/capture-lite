@@ -91,7 +91,7 @@ export class CapacitorFilesystemTable<T extends Tuple> implements Table<T> {
       path: `${this.rootDir}/${this.id}.json`,
       encoding: FilesystemEncoding.UTF8,
     });
-    this.tuples$.next(JSON.parse(result.data));
+    this.tuples$.next(JSON.parse(result.data as string));
   }
 
   async insert(
