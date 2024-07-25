@@ -51,6 +51,7 @@ import { NetworkService } from '../../../shared/network/network.service';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
 import { ShareService } from '../../../shared/share/share.service';
 import { UserGuideService } from '../../../shared/user-guide/user-guide.service';
+import { browserToolbarColor } from '../../../utils/constants';
 import { MimeType } from '../../../utils/mime-type';
 import {
   VOID$,
@@ -646,7 +647,7 @@ export class DetailsPage {
     await defer(() =>
       Browser.open({
         url: getAssetProfileForNSE(id),
-        toolbarColor: '#564dfc',
+        toolbarColor: browserToolbarColor,
       })
     )
       .pipe(untilDestroyed(this), takeUntil(this.shareMenuDismissed$))
@@ -785,29 +786,6 @@ export class DetailsPage {
     }
   }
 
-  private openIpfsSupportingVideo() {
-    return this.activeDetailedCapture$
-      .pipe(
-        first(),
-        switchMap(
-          activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
-        ),
-        isNonNullable(),
-        switchMap(diaBackendAsset => {
-          if (!diaBackendAsset.supporting_file) return EMPTY;
-          return Browser.open({
-            url: diaBackendAsset.supporting_file.replace(
-              'ipfs://',
-              'https://ipfs-pin.numbersprotocol.io/ipfs/'
-            ),
-            toolbarColor: '#564dfc',
-          });
-        }),
-        untilDestroyed(this)
-      )
-      .subscribe();
-  }
-
   private share() {
     this.activeDetailedCapture$
       .pipe(
@@ -824,29 +802,6 @@ export class DetailsPage {
           })
         ),
         catchError((err: unknown) => this.errorService.toastError$(err)),
-        untilDestroyed(this)
-      )
-      .subscribe();
-  }
-
-  private openCaptureClub() {
-    combineLatest([
-      this.activeDetailedCapture$.pipe(
-        switchMap(
-          activeDetailedCapture => activeDetailedCapture.diaBackendAsset$
-        ),
-        isNonNullable()
-      ),
-      this.diaBackendAuthService.token$,
-    ])
-      .pipe(
-        first(),
-        concatMap(([diaBackendAsset, token]) =>
-          Browser.open({
-            url: `https://captureclub.cc/asset?mid=${diaBackendAsset.id}&token=${token}`,
-            toolbarColor: '#564dfc',
-          })
-        ),
         untilDestroyed(this)
       )
       .subscribe();
@@ -892,7 +847,7 @@ export class DetailsPage {
             if (geolocation)
               return Browser.open({
                 url: `https://maps.google.com/maps?q=${geolocation.latitude},${geolocation.longitude}`,
-                toolbarColor: '#564dfc',
+                toolbarColor: browserToolbarColor,
               });
             return EMPTY;
           })

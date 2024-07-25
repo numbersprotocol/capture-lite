@@ -23,3 +23,7 @@ export function getAppDownloadLink(isPlatform: (platformName: any) => boolean) {
 
   return urlToDownloadApp;
 }
+
+export function getFaqUrl() {
+  return 'https://docs.captureapp.xyz/faq';
+}

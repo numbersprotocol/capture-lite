@@ -96,11 +96,6 @@ const routes: Routes = [
         m => m.TermsOfUsePageModule
       ),
   },
-  {
-    path: 'faq',
-    loadChildren: () =>
-      import('./features/faq/faq.module').then(m => m.FaqPageModule),
-  },
 ];
 @NgModule({
   imports: [

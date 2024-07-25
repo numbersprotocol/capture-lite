@@ -41,7 +41,7 @@
         </a>
       </mat-list-item>
       <mat-list-item>
-        <a routerLink="/faq" (click)="sidenav.close()" mat-list-item>
+        <a (click)="sidenav.close(); openFaq()" mat-list-item>
           {{ t('faq') }}
         </a>
       </mat-list-item>
