@@ -68,8 +68,6 @@ export class HomePage {
 
   readonly username$ = this.diaBackendAuthService.username$;
 
-  private readonly userGuideIsTemporarelyDisabled = true;
-
   readonly hasNewInbox$ = this.diaBackendTransactionRepository.inbox$.pipe(
     catchError((err: unknown) => this.errorService.toastError$(err)),
     map(transactions => transactions.count !== 0),
@@ -471,6 +469,7 @@ export class HomePage {
       .subscribe();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async openFaq() {
     await Browser.open({ url: getFaqUrl(), toolbarColor: browserToolbarColor });
   }

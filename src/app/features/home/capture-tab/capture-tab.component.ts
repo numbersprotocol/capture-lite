@@ -162,6 +162,10 @@ export class CaptureTabComponent implements OnInit {
       .subscribe(value => (this.pendingUploadTasks = value));
   }
 
+  static async openFaq() {
+    await Browser.open({ url: getFaqUrl(), toolbarColor: browserToolbarColor });
+  }
+
   ngOnInit(): void {
     this.initSegmentListener();
   }
@@ -216,7 +220,7 @@ export class CaptureTabComponent implements OnInit {
       },
       {
         text: this.translocoService.translate('faq'),
-        handler: async () => await this.openFaq(),
+        handler: async () => await CaptureTabComponent.openFaq(),
       },
       {
         text: this.translocoService.translate('logout'),
@@ -249,10 +253,6 @@ export class CaptureTabComponent implements OnInit {
         untilDestroyed(this)
       )
       .subscribe();
-  }
-
-  async openFaq() {
-    await Browser.open({ url: getFaqUrl(), toolbarColor: browserToolbarColor });
   }
 
   async editUsername() {
