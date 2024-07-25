@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Browser } from '@capacitor/browser';
 import {
   ActionSheetButton,
   ActionSheetController,
@@ -40,7 +41,9 @@ import { PreferenceManager } from '../../../shared/preference-manager/preference
 import { getOldProof } from '../../../shared/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../shared/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
+import { browserToolbarColor } from '../../../utils/constants';
 import { reloadApp } from '../../../utils/miscellaneous';
+import { getFaqUrl } from '../../../utils/url';
 import { PrefetchingDialogComponent } from '../onboarding/prefetching-dialog/prefetching-dialog.component';
 
 @UntilDestroy({ checkProperties: true })
@@ -159,6 +162,10 @@ export class CaptureTabComponent implements OnInit {
       .subscribe(value => (this.pendingUploadTasks = value));
   }
 
+  static async openFaq() {
+    await Browser.open({ url: getFaqUrl(), toolbarColor: browserToolbarColor });
+  }
+
   ngOnInit(): void {
     this.initSegmentListener();
   }
@@ -213,7 +220,7 @@ export class CaptureTabComponent implements OnInit {
       },
       {
         text: this.translocoService.translate('faq'),
-        handler: () => this.router.navigate(['faq']),
+        handler: async () => await CaptureTabComponent.openFaq(),
       },
       {
         text: this.translocoService.translate('logout'),

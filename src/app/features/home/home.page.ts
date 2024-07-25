@@ -22,7 +22,6 @@ import {
   first,
   map,
   startWith,
-  switchMap,
   tap,
 } from 'rxjs/operators';
 import { AndroidBackButtonService } from '../../shared/android-back-button/android-back-button.service';
@@ -47,9 +46,10 @@ import {
 import { OnboardingService } from '../../shared/onboarding/onboarding.service';
 import { PreferenceManager } from '../../shared/preference-manager/preference-manager.service';
 import { UserGuideService } from '../../shared/user-guide/user-guide.service';
+import { browserToolbarColor } from '../../utils/constants';
 import { reloadApp } from '../../utils/miscellaneous';
 import { VOID$, switchTapTo } from '../../utils/rx-operators/rx-operators';
-import { getAppDownloadLink } from '../../utils/url';
+import { getAppDownloadLink, getFaqUrl } from '../../utils/url';
 import { GoProBluetoothService } from '../settings/go-pro/services/go-pro-bluetooth.service';
 import { UpdateAppDialogComponent } from './in-app-updates/update-app-dialog/update-app-dialog.component';
 import { PrefetchingDialogComponent } from './onboarding/prefetching-dialog/prefetching-dialog.component';
@@ -67,8 +67,6 @@ export class HomePage {
   selectedTabIndex = this.initialTabIndex;
 
   readonly username$ = this.diaBackendAuthService.username$;
-
-  private readonly userGuideIsTemporarelyDisabled = true;
 
   readonly hasNewInbox$ = this.diaBackendTransactionRepository.inbox$.pipe(
     catchError((err: unknown) => this.errorService.toastError$(err)),
@@ -408,22 +406,6 @@ export class HomePage {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  openCaptureClub() {
-    this.diaBackendAuthService.token$
-      .pipe(
-        first(),
-        switchMap(token =>
-          Browser.open({
-            url: `https://captureclub.cc/?token=${token}`,
-            toolbarColor: '#564dfc',
-          })
-        ),
-        untilDestroyed(this)
-      )
-      .subscribe();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
   async navigateToCollectionTab() {
     if (this.selectedTabIndex === this.collectionTabIndex) {
       // window.location.reload();
@@ -485,5 +467,10 @@ export class HomePage {
         untilDestroyed(this)
       )
       .subscribe();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async openFaq() {
+    await Browser.open({ url: getFaqUrl(), toolbarColor: browserToolbarColor });
   }
 }

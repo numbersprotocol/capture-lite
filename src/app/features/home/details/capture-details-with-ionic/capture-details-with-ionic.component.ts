@@ -13,6 +13,7 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
+import { browserToolbarColor } from '../../../../utils/constants';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
 import { getAssetProfileForNSE } from '../../../../utils/url';
 import { DetailedCapture } from '../information/session/information-session.service';
@@ -83,7 +84,7 @@ export class CaptureDetailsWithIonicComponent {
             if (geolocation)
               return Browser.open({
                 url: `https://maps.google.com/maps?q=${geolocation.latitude},${geolocation.longitude}`,
-                toolbarColor: '#564dfc',
+                toolbarColor: browserToolbarColor,
               });
             return EMPTY;
           })
@@ -104,7 +105,7 @@ export class CaptureDetailsWithIonicComponent {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 detailedCapture.id!
               ),
-              toolbarColor: '#564dfc',
+              toolbarColor: browserToolbarColor,
             })
           )
         ),

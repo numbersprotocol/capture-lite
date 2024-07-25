@@ -24,6 +24,7 @@ import { DiaBackendWalletService } from '../../../../shared/dia-backend/wallet/d
 import { ErrorService } from '../../../../shared/error/error.service';
 import { OrderDetailDialogComponent } from '../../../../shared/order-detail-dialog/order-detail-dialog.component';
 import { ProofRepository } from '../../../../shared/repositories/proof/proof-repository.service';
+import { browserToolbarColor } from '../../../../utils/constants';
 import {
   VOID$,
   isNonNullable,
@@ -208,7 +209,7 @@ export class ActionsPage {
         tap(cid =>
           Browser.open({
             url: `${url}?cid=${cid}&order_id=${orderId}`,
-            toolbarColor: '#564dfc',
+            toolbarColor: browserToolbarColor,
           })
         ),
         catchError((err: unknown) => {
