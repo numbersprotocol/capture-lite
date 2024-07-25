@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.96.0] - 2024-07-25
+
+### Changed
+
+1. Switch the Firebase release to use the iframe test version [#3252](https://github.com/numbersprotocol/capture-lite/pull/3252)
+1. Replace the iframe FAQ with the GitBook FAQ [#3251](https://github.com/numbersprotocol/capture-lite/pull/3251)
+1. Update target API level for Android [#3249](https://github.com/numbersprotocol/capture-lite/pull/3249)
+   - Update the app to target Android 14 (API level 34) to meet Google Play's target API level requirements
+   - Upgrade Capacitor to v6 to set Android Target SDK 34
+   - Update the code to resolve type hint errors
+
+### Fixed
+
+1. Fix the issue where the referral code is not included in the text when sharing in the zh setting [#3250](https://github.com/numbersprotocol/capture-lite/pull/3250)
+
 ## [0.95.1] - 2024-05-30
 
 ### Changed
@@ -2323,7 +2338,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.95.1...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.96.0...HEAD
+[0.96.0]: https://github.com/numbersprotocol/capture-lite/compare/0.95.1...0.96.0
 [0.95.1]: https://github.com/numbersprotocol/capture-lite/compare/0.95.0...0.95.1
 [0.95.0]: https://github.com/numbersprotocol/capture-lite/compare/0.94.0...0.95.0
 [0.94.0]: https://github.com/numbersprotocol/capture-lite/compare/0.93.0...0.94.0
