@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { Plugins } from '@capacitor/core';
+import { Clipboard } from '@capacitor/clipboard';
 import { NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -21,9 +21,7 @@ import { ErrorService } from '../../../../shared/error/error.service';
 import { BubbleToIonicPostMessage } from '../../../../shared/iframe/iframe';
 import { NetworkService } from '../../../../shared/network/network.service';
 import { isNonNullable } from '../../../../utils/rx-operators/rx-operators';
-import { getAssetProfileForNSE } from '../../../../utils/url';
 
-const { Browser, Clipboard } = Plugins;
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-network-action-order-details',
@@ -123,18 +121,6 @@ export class NetworkActionOrderDetailsPage {
         concatMap(orderId => this.copyToClipboard(orderId))
       )
       .subscribe();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  openResultUrl(url: string) {
-    if (url) {
-      Browser.open({ url, toolbarColor: '#000000' });
-    }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  resultUrlFromAssetId(assetId: string) {
-    return getAssetProfileForNSE(assetId);
   }
 
   async copyToClipboard(value: string) {

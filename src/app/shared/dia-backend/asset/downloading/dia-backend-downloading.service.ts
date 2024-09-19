@@ -89,6 +89,7 @@ export class DiaBackendAssetDownloadingService {
     proof.diaBackendAssetId = diaBackendAsset.id;
     proof.caption = diaBackendAsset.caption;
     proof.uploadedAt = diaBackendAsset.uploaded_at;
+    proof.parentAssetCid = diaBackendAsset.parent_asset_cid;
     if (diaBackendAsset.signed_metadata) proof.setSignatureVersion();
     return this.proofRepository.add(proof, OnConflictStrategy.REPLACE);
   }

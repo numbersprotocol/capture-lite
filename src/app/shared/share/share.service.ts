@@ -46,7 +46,7 @@ export class ShareService {
         .pipe(catchError((err: unknown) => this.errorService.toastError$(err)))
         .toPromise();
     }
-    return getAssetProfileForNSE(asset.id);
+    return getAssetProfileForNSE(asset.parent_asset_cid || asset.id);
   }
 
   async shareReferralCode(referralCode: string) {

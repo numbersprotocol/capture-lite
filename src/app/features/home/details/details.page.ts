@@ -392,7 +392,9 @@ export class DetailsPage {
                 buttons.push({
                   text: viewProofText,
                   handler: async () => {
-                    await this.handleOpenProofAction(diaBackendAsset.id);
+                    await this.handleOpenProofAction(
+                      diaBackendAsset.parent_asset_cid || diaBackendAsset.id
+                    );
                     resolve();
                   },
                 });
