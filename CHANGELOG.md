@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.97.1] - 2024-09-20
+
+### Fixed
+
+1. Fix the GitHub workflow issue where deprecated versions of actions/upload-artifact and actions/download-artifact are causing a deployment error. [#3254](https://github.com/numbersprotocol/capture-lite/pull/3254)
+
 ## [0.97.0] - 2024-09-20
 
 ### Changed
@@ -2344,7 +2350,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.97.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.97.1...HEAD
+[0.97.1]: https://github.com/numbersprotocol/capture-lite/compare/0.97.0...0.97.1
 [0.97.0]: https://github.com/numbersprotocol/capture-lite/compare/0.96.0...0.97.0
 [0.96.0]: https://github.com/numbersprotocol/capture-lite/compare/0.95.1...0.96.0
 [0.95.1]: https://github.com/numbersprotocol/capture-lite/compare/0.95.0...0.95.1
