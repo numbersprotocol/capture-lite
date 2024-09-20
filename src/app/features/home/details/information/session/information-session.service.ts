@@ -45,6 +45,11 @@ export class DetailedCapture {
       ? getOldProof(this.proofOrDiaBackendAsset).hash
       : this.proofOrDiaBackendAsset.proof_hash;
 
+  readonly parentAssetCid =
+    this.proofOrDiaBackendAsset instanceof Proof
+      ? this.proofOrDiaBackendAsset.parentAssetCid
+      : this.proofOrDiaBackendAsset.parent_asset_cid;
+
   readonly mediaUrl$ = defer(() => {
     if (this.proofOrDiaBackendAsset instanceof Proof) {
       const proof = this.proofOrDiaBackendAsset;

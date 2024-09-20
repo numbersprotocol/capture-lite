@@ -102,8 +102,11 @@ export class CaptureDetailsWithIonicComponent {
           defer(() =>
             Browser.open({
               url: getAssetProfileForNSE(
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                detailedCapture.id!
+                /* eslint-disable-next-line
+                  @typescript-eslint/no-non-null-assertion,
+                  @typescript-eslint/prefer-nullish-coalescing
+                */
+                detailedCapture.parentAssetCid || detailedCapture.id!
               ),
               toolbarColor: browserToolbarColor,
             })

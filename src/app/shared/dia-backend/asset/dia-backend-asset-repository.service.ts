@@ -355,6 +355,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly mint_workflow_id: string;
   readonly uploaded_at: string;
   readonly public_access: boolean;
+  readonly parent_asset_cid: string;
 }
 
 export interface OwnerAddresses extends Tuple {
