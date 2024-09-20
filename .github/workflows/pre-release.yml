@@ -50,13 +50,13 @@ jobs:
           ./gradlew assembleDebug
 
       - name: Upload debug APK and metadata to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug.apk
           path: ./android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload debug metadata to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: output-metadata.json
           path: ./android/app/build/outputs/apk/debug/output-metadata.json
@@ -68,12 +68,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download debug APK
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-debug.apk
 
       - name: Download debug metadata
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: output-metadata.json
 
@@ -137,7 +137,7 @@ jobs:
           keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
       - name: Upload release AAB to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-release.aab
           path: ./android/app/build/outputs/bundle/release/app-release.aab
@@ -151,7 +151,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download release AAB
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-release.aab
 
@@ -234,7 +234,7 @@ jobs:
           xcodebuild -exportArchive -archivePath build/App.xcarchive -exportPath build -exportOptionsPlist ios/App/ExportOptions.plist -allowProvisioningUpdates
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: App.ipa
           path: build/App.ipa
@@ -244,7 +244,7 @@ jobs:
           echo ${{ steps.current-time.outputs.formattedTime }} > build/ios-build-number.txt
 
       - name: Upload iOS build number
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ios-build-number.txt
           path: build/ios-build-number.txt
@@ -259,14 +259,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download IPA
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: App.ipa
-
-      - name: Download iOS build number
-        uses: actions/download-artifact@v3
-        with:
-          name: ios-build-number.txt
 
       - name: Upload IPA to App Store (Testflight)
         uses: Apple-Actions/upload-testflight-build@master
@@ -276,12 +271,6 @@ jobs:
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
-      - name: Upload iOS build number as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ios-build-number.txt
-          path: build/ios-build-number.txt
-
   get-ios-build-number:
     runs-on: ubuntu-latest
     needs: deploy-app-store
@@ -289,7 +278,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download iOS build number
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: ios-build-number.txt
 
