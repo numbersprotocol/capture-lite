@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.97.0] - 2024-09-20
+
+### Changed
+
+1. Link the asset profile to the parent asset instead of the child asset [#3253](https://github.com/numbersprotocol/capture-lite/pull/3253)
+
 ## [0.96.0] - 2024-07-25
 
 ### Changed
@@ -2338,7 +2344,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.96.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.97.0...HEAD
+[0.97.0]: https://github.com/numbersprotocol/capture-lite/compare/0.96.0...0.97.0
 [0.96.0]: https://github.com/numbersprotocol/capture-lite/compare/0.95.1...0.96.0
 [0.95.1]: https://github.com/numbersprotocol/capture-lite/compare/0.95.0...0.95.1
 [0.95.0]: https://github.com/numbersprotocol/capture-lite/compare/0.94.0...0.95.0
