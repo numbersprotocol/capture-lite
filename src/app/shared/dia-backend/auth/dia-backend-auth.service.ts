@@ -3,20 +3,24 @@ import { Injectable } from '@angular/core';
 import { Device } from '@capacitor/device';
 import { Storage } from '@capacitor/storage';
 import { isEqual, reject } from 'lodash-es';
-import { Observable, Subject, combineLatest, defer, forkJoin, of } from 'rxjs';
+import {
+  Observable,
+  ReplaySubject,
+  combineLatest,
+  defer,
+  forkJoin,
+  of,
+} from 'rxjs';
 import {
   concatMap,
   concatMapTo,
   distinctUntilChanged,
   filter,
   map,
-  pluck,
-  repeatWhen,
   switchMap,
   tap,
 } from 'rxjs/operators';
 import { secondSince } from '../../../utils/date';
-import { isNonNullable } from '../../../utils/rx-operators/rx-operators';
 import { LanguageService } from '../../language/service/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
@@ -40,6 +44,8 @@ export class DiaBackendAuthService {
 
   readonly username$ = this.preferences.getString$(PrefKeys.USERNAME);
 
+  readonly displayName$ = this.preferences.getString$(PrefKeys.DISPLAY_NAME);
+
   readonly email$ = this.preferences.getString$(PrefKeys.EMAIL);
 
   readonly token$ = this.preferences
@@ -50,47 +56,7 @@ export class DiaBackendAuthService {
     map(token => ({ authorization: `token ${token}` }))
   );
 
-  private readonly refreshAvatar$ = new Subject<string>();
-
-  readonly avatar$ = defer(() => this.getAuthHeaders()).pipe(
-    concatMap(headers =>
-      this.httpClient.get<GetAvatarResponse>(
-        `${BASE_URL}/auth/users/profile/`,
-        { headers }
-      )
-    ),
-    pluck('profile_picture_thumbnail'),
-    isNonNullable(),
-    repeatWhen(() => this.refreshAvatar$)
-  );
-
-  readonly profileBackground$ = defer(() => this.getAuthHeaders()).pipe(
-    concatMap(headers =>
-      this.httpClient.get<ReadProfileResponse>(
-        `${BASE_URL}/auth/users/profile/`,
-        { headers }
-      )
-    ),
-    map(response => response.profile_background_thumbnail),
-    isNonNullable(),
-    repeatWhen(() => this.refreshAvatar$) // TODO: refreshProfile$
-  );
-
-  readonly profileDescription$ = defer(() => this.getAuthHeaders()).pipe(
-    concatMap(headers =>
-      this.httpClient.get<ReadProfileResponse>(
-        `${BASE_URL}/auth/users/profile/`,
-        { headers }
-      )
-    ),
-    map(response => response.description),
-    isNonNullable(),
-    repeatWhen(() => this.refreshAvatar$) // TODO: refreshProfile$
-  );
-
-  readonly phoneVerified$ = this.preferences.getBoolean$(
-    PrefKeys.PHONE_VERIFIED
-  );
+  readonly profile$ = new ReplaySubject<ReadProfileResponse>(1);
 
   readonly emailVerified$ = this.preferences.getBoolean$(
     PrefKeys.EMAIL_VERIFIED
@@ -213,7 +179,11 @@ export class DiaBackendAuthService {
             headers,
           }
         )
-      )
+      ),
+      tap(response => {
+        this.profile$.next(response);
+        this.setDisplayName(response.display_name);
+      })
     );
   }
 
@@ -299,36 +269,19 @@ export class DiaBackendAuthService {
     );
   }
 
-  updateUser$({ username }: { username: string }) {
-    return defer(() => this.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.patch<UpdateUserResponse>(
-          `${BASE_URL}/auth/users/me/`,
-          { username },
-          { headers }
-        )
-      ),
-      concatMapTo(this.readUser$()),
-      concatMap(response =>
-        forkJoin([
-          this.setUsername(response.username),
-          this.setEmail(response.email),
-          this.setRerferralCode(response.referral_code),
-        ])
-      )
-    );
-  }
-
   updateProfile$({
+    displayName,
     description,
     profilePicture,
     profileBackground,
   }: {
+    displayName: string;
     description: string;
     profilePicture?: File;
     profileBackground?: File;
   }) {
     const formData = new FormData();
+    formData.append('display_name', displayName);
     formData.append('description', description);
     if (profilePicture) {
       formData.append('profile_picture', profilePicture);
@@ -344,31 +297,10 @@ export class DiaBackendAuthService {
           { headers }
         )
       ),
-      map(response => response.profile_picture_thumbnail),
-      tap(url => this.refreshAvatar$.next(url))
-    );
-  }
-
-  deleteUser$(email: string) {
-    return defer(() => this.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.post<UpdateUserResponse>(
-          `https://node.numbersprotocol.io/api/1.1/wf/delete_user`,
-          {
-            account: email,
-            token: headers.authorization,
-          },
-          { headers }
-        )
-      ),
-      concatMapTo(this.readUser$()),
-      concatMap(response =>
-        forkJoin([
-          this.setUsername(response.username),
-          this.setEmail(response.email),
-          this.setRerferralCode(response.referral_code),
-        ])
-      )
+      tap(response => {
+        this.profile$.next(response);
+        this.setDisplayName(response.display_name);
+      })
     );
   }
 
@@ -394,7 +326,7 @@ export class DiaBackendAuthService {
     formData.append('profile_picture', picture);
     return defer(() => this.getAuthHeaders()).pipe(
       concatMap(headers =>
-        this.httpClient.patch<UploadAvatarResponse>(
+        this.httpClient.patch<UpdateProfileResponse>(
           `${BASE_URL}/auth/users/profile/`,
           formData,
           {
@@ -402,8 +334,7 @@ export class DiaBackendAuthService {
           }
         )
       ),
-      pluck('profile_picture_thumbnail'),
-      tap(url => this.refreshAvatar$.next(url))
+      tap(profile => this.profile$.next(profile))
     );
   }
 
@@ -419,22 +350,12 @@ export class DiaBackendAuthService {
     );
   }
 
-  verifyPhoneVerification$(phoneNumber: string, verificationCode: string) {
-    return defer(() => this.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.post<VerifyPhoneVerificationResponse>(
-          `${BASE_URL}/auth/users/verify-phone-verification/`,
-          { phone_number: phoneNumber, verification_code: verificationCode },
-          { headers }
-        )
-      ),
-      concatMapTo(this.readUser$()),
-      concatMap(response => this.setPhoneVerfied(response.phone_verified))
-    );
-  }
-
   syncUser$() {
     return this.readUser$().pipe(
+      tap(response => {
+        this.profile$.next(response.profile);
+        this.setDisplayName(response.profile.display_name);
+      }),
       concatMap(response => {
         return forkJoin([
           this.setUsername(response.username),
@@ -454,12 +375,12 @@ export class DiaBackendAuthService {
     return !!token;
   }
 
-  async getUsername() {
-    return this.preferences.getString(PrefKeys.USERNAME);
-  }
-
   private async setUsername(value: string) {
     return this.preferences.setString(PrefKeys.USERNAME, value);
+  }
+
+  private async setDisplayName(value: string) {
+    return this.preferences.setString(PrefKeys.DISPLAY_NAME, value);
   }
 
   async getEmail() {
@@ -529,24 +450,12 @@ export class DiaBackendAuthService {
     return this.preferences.setBoolean(PrefKeys.PHONE_VERIFIED, value);
   }
 
-  async getPhoneVerified() {
-    return this.preferences.getBoolean(PrefKeys.PHONE_VERIFIED);
-  }
-
   private async setEmailVerfied(value: boolean) {
     return this.preferences.setBoolean(PrefKeys.EMAIL_VERIFIED, value);
   }
 
-  async getEmailVerified() {
-    return this.preferences.getBoolean(PrefKeys.EMAIL_VERIFIED);
-  }
-
   private async setPoints(value: number) {
     return this.preferences.setNumber(PrefKeys.POINTS, value);
-  }
-
-  async getPoints() {
-    return this.preferences.getNumber(PrefKeys.POINTS);
   }
 
   private async setRerferralCode(value: string) {
@@ -561,6 +470,7 @@ export class DiaBackendAuthService {
 const enum PrefKeys {
   TOKEN = 'TOKEN',
   USERNAME = 'USERNAME',
+  DISPLAY_NAME = 'DISPLAY_NAME',
   EMAIL = 'EMAIL',
   EMAIL_VERIFIED = 'EMAIL_VERIFIED',
   PHONE_VERIFIED = 'PHONE_VERIFIED',
@@ -592,6 +502,7 @@ export interface ReadUserResponse {
   readonly email: string;
   readonly phone_verified: boolean;
   readonly email_verified: boolean;
+  readonly profile: ReadProfileResponse;
   readonly user_wallet: {
     asset_wallet: string;
     asset_wallet_num: string | null;
@@ -608,9 +519,6 @@ export interface ReadUserResponse {
 interface CreateUserResponse {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface UpdateUserResponse {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ResendActivationEmailResponse {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -619,21 +527,12 @@ interface ResetPasswordResponse {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface SendPhoneVerificationResponse {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface VerifyPhoneVerificationResponse {}
-
-type GetAvatarResponse = UploadAvatarResponse;
-
-interface UploadAvatarResponse {
-  readonly profile_picture_thumbnail?: string;
-}
-
 export interface ReadProfileResponse {
   display_name: string;
-  profile_background: string;
-  profile_background_thumbnail: string;
-  profile_picture: string;
-  profile_picture_thumbnail: string;
+  profile_background: string | null;
+  profile_background_thumbnail: string | null;
+  profile_picture: string | null;
+  profile_picture_thumbnail: string | null;
   description: string;
   phone_number: string;
 }

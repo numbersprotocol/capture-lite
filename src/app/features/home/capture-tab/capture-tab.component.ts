@@ -1,14 +1,9 @@
 import { formatDate, KeyValue } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
-import {
-  ActionSheetButton,
-  ActionSheetController,
-  AlertController,
-} from '@ionic/angular';
+import { ActionSheetButton, ActionSheetController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { groupBy } from 'lodash-es';
@@ -18,7 +13,6 @@ import {
   concatMap,
   concatMapTo,
   map,
-  shareReplay,
   startWith,
   tap,
 } from 'rxjs/operators';
@@ -30,7 +24,6 @@ import {
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { Database } from '../../../shared/database/database.service';
 import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
-import { DiaBackendAsseRefreshingService } from '../../../shared/dia-backend/asset/refreshing/dia-backend-asset-refreshing.service';
 import { DiaBackendAssetUploadingService } from '../../../shared/dia-backend/asset/uploading/dia-backend-asset-uploading.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
@@ -75,12 +68,15 @@ export class CaptureTabComponent implements OnInit {
 
   readonly email$ = this.diaBackendAuthService.email$;
 
-  readonly profileDescription$ = this.diaBackendAuthService.profileDescription$;
+  readonly displayName$ = this.diaBackendAuthService.displayName$;
 
-  readonly profileBackground$ =
-    this.diaBackendAuthService.profileBackground$.pipe(
-      shareReplay({ bufferSize: 1, refCount: true })
-    );
+  readonly profileDescription$ = this.diaBackendAuthService.profile$.pipe(
+    map(profile => profile.description)
+  );
+
+  readonly profileBackground$ = this.diaBackendAuthService.profile$.pipe(
+    map(profile => profile.profile_background_thumbnail ?? '')
+  );
 
   private readonly proofs$ = this.proofRepository.all$;
 
@@ -148,8 +144,6 @@ export class CaptureTabComponent implements OnInit {
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
-    private readonly diaBackendAssetRefreshingService: DiaBackendAsseRefreshingService,
-    private readonly alertController: AlertController,
     private readonly networkService: NetworkService,
     private readonly translocoService: TranslocoService,
     private readonly errorService: ErrorService,
@@ -160,6 +154,10 @@ export class CaptureTabComponent implements OnInit {
     this.uploadService.pendingTasks$
       .pipe(untilDestroyed(this))
       .subscribe(value => (this.pendingUploadTasks = value));
+    this.diaBackendAuthService
+      .readProfile$()
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 
   static async openFaq() {
@@ -253,52 +251,6 @@ export class CaptureTabComponent implements OnInit {
         untilDestroyed(this)
       )
       .subscribe();
-  }
-
-  async editUsername() {
-    const alert = await this.alertController.create({
-      header: this.translocoService.translate('editUsername'),
-      inputs: [
-        {
-          name: 'username',
-          type: 'text',
-          value: await this.diaBackendAuthService.getUsername(),
-        },
-      ],
-      buttons: [
-        {
-          text: this.translocoService.translate('cancel'),
-          role: 'cancel',
-        },
-        {
-          text: this.translocoService.translate('ok'),
-          handler: value => this.updateUsername(value.username),
-        },
-      ],
-    });
-    return alert.present();
-  }
-
-  private updateUsername(username: string) {
-    const action$ = this.diaBackendAuthService
-      .updateUser$({ username })
-      .pipe(catchError((err: unknown) => this.handleUpdateUsernameError$(err)));
-    return this.blockingActionService
-      .run$(action$)
-      .pipe(untilDestroyed(this))
-      .subscribe();
-  }
-
-  private handleUpdateUsernameError$(err: unknown) {
-    if (err instanceof HttpErrorResponse) {
-      const errorType = err.error.error?.type;
-      if (errorType === 'duplicate_username') {
-        return this.errorService.toastError$(
-          this.translocoService.translate(`error.diaBackend.${errorType}`)
-        );
-      }
-    }
-    return this.errorService.toastError$(err);
   }
 
   // eslint-disable-next-line class-methods-use-this

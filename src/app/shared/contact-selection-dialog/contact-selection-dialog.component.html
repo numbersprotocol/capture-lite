@@ -19,7 +19,13 @@
           '/assets/images/avatar-placeholder.png'
         "
       />
-      <div mat-line>{{ contact.contact_name || contact.contact_email }}</div>
+      <div mat-line>
+        {{
+          contact.contact_profile_display_name ||
+            contact.contact_name ||
+            contact.contact_email
+        }}
+      </div>
     </mat-list-item>
     <mat-list-item (click)="openFriendInvitationDialog()">
       <mat-icon mat-list-icon>share</mat-icon>

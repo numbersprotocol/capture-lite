@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { of, ReplaySubject } from 'rxjs';
-import { catchError, concatMap, first, shareReplay, tap } from 'rxjs/operators';
+import { catchError, concatMap, first, map, tap } from 'rxjs/operators';
 import { isNonNullable } from '../../utils/rx-operators/rx-operators';
 import { DiaBackendAuthService } from '../dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../error/error.service';
@@ -23,8 +23,8 @@ export class AvatarComponent {
     if (value) this.avatarInput$.next(value.nativeElement);
   }
 
-  readonly avatar$ = this.diaBackendAuthService.avatar$.pipe(
-    shareReplay({ bufferSize: 1, refCount: true })
+  readonly avatar$ = this.diaBackendAuthService.profile$.pipe(
+    map(profile => profile.profile_picture_thumbnail)
   );
 
   @Input()

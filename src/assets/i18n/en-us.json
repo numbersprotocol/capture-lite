@@ -90,7 +90,6 @@
   "confirmSyncAndRestore": "Confirm",
   "cancelSyncAndRestore": "Do it later",
   "contactUs": "Contact us",
-  "editUsername": "Edit Username",
   "forgotPassword": "Forgot Password",
   "resetPassword": "Reset Password",
   "friends": "Friends",
@@ -119,17 +118,8 @@
   "insufficientNum": "Insufficient NUM",
   "verification": {
     "verification": "Verification",
-    "clickToVerify": "Click me to verify",
-    "phoneVerification": "Phone Verification",
-    "phoneVerificationInstruction": "Please check you mobile phone and get the 6-digit verification code",
-    "enterPhoneNumber": "Enter your phone number",
-    "phonePlaceHolder": "+886 Please enter international phone number",
-    "enterVerificationCode": "Enter SMS verification code",
-    "verificationCodePlaceHolder": "Please enter 6-digit verification code",
     "emailVerification": "Email Verification",
-    "emailVerificationInstruction": "Please follow the instruction from the received email to verify your email.",
-    "verify": "Verfiy",
-    "verified": "Verified"
+    "emailVerificationInstruction": "Please follow the instruction from the received email to verify your email."
   },
   "tutorial": {
     "switchBetween0": "Switch between",
@@ -187,7 +177,6 @@
     "viewSupportingVideoOnIpfs": "View supporting video on IPFS",
     "videoLimitation": "Capture App DOES NOT support video recording longer than 10 secs. Recording longer than 10 secs will not be saved.",
     "yesIUnderstand": "Yes, I understand",
-    "verificationSuccess": "Success",
     "assetBecomePublicAfterSharing": "This asset will become public after sharing",
     "assetBecomePublicFor24Hours": "Anyone with the link will be able to access the asset in the next 24 hours",
     "mintNft": "Mint NFT",
@@ -274,7 +263,7 @@
     },
     "editProfile": {
       "editProfile": "Edit profile",
-      "username": "Username",
+      "profileName": "Profile Name",
       "description": "Description",
       "profilePicture": "Profile Picture",
       "profileBackground": "Profile Background",

@@ -89,8 +89,8 @@ export class DetailedCapture {
 
   readonly creator$ = defer(() => {
     if (this.proofOrDiaBackendAsset instanceof Proof)
-      return this.diaBackendAuthService.username$;
-    return of(this.proofOrDiaBackendAsset.creator_name);
+      return this.diaBackendAuthService.displayName$;
+    return of(this.proofOrDiaBackendAsset.creator_profile_display_name ?? '');
   });
 
   readonly geolocation$ = defer(async () => {

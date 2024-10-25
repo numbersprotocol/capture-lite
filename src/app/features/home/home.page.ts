@@ -66,7 +66,7 @@ export class HomePage {
   private readonly collectionTabIndex = 2;
   selectedTabIndex = this.initialTabIndex;
 
-  readonly username$ = this.diaBackendAuthService.username$;
+  readonly displayName$ = this.diaBackendAuthService.displayName$;
 
   readonly hasNewInbox$ = this.diaBackendTransactionRepository.inbox$.pipe(
     catchError((err: unknown) => this.errorService.toastError$(err)),
