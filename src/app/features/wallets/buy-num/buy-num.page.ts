@@ -5,6 +5,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { filter, first, map, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
+import { DiaBackendWalletService } from '../../../shared/dia-backend/wallet/dia-backend-wallet.service';
 import { InAppStoreService } from '../../../shared/in-app-store/in-app-store.service';
 
 @UntilDestroy()
@@ -43,7 +44,8 @@ export class BuyNumPage implements OnInit {
     private readonly ref: ChangeDetectorRef,
     private readonly alertController: AlertController,
     private readonly translocoService: TranslocoService,
-    private readonly blockingActionService: BlockingActionService
+    private readonly blockingActionService: BlockingActionService,
+    private readonly diaBackendWalletService: DiaBackendWalletService
   ) {}
 
   ngOnInit() {
@@ -51,6 +53,7 @@ export class BuyNumPage implements OnInit {
   }
 
   purchase(product: CdvPurchase.Product) {
+    this.diaBackendWalletService.reloadWallet$.next(true);
     this.showLoadingIndicatorUntillOrderIsProcessed();
     this.store.purchase(product);
   }

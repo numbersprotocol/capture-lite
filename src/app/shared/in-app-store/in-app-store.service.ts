@@ -238,7 +238,11 @@ export class InAppStoreService implements OnDestroy {
   private readonly onStoreError = (error: CdvPurchase.IError) => {
     this.isProcessingOrder$.next(false);
 
-    if (error.message === 'The user cancelled the order.') return;
+    if (
+      error.code === CdvPurchase.ErrorCode.PAYMENT_CANCELLED ||
+      error.message === 'The user cancelled the order.'
+    )
+      return;
 
     const errorMessage = this.translocoService.translate(
       'inAppPurchase.inAppPurchaseErrorOcurred'

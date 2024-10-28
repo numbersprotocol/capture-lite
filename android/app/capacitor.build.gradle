@@ -32,7 +32,7 @@ dependencies {
     implementation project(':appsflyer-capacitor-plugin')
     implementation project(':capacitor-blob-writer')
     implementation project(':capacitor-native-settings')
-    implementation "com.android.billingclient:billing:5.2.1"
+    implementation "com.android.billingclient:billing:7.0.0"
 }
 
 
