@@ -14,6 +14,7 @@ import {
   concatMapTo,
   map,
   startWith,
+  switchMap,
   tap,
 } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
@@ -23,7 +24,6 @@ import {
 } from '../../../shared/capture-tab/capture-tab.service';
 import { ConfirmAlert } from '../../../shared/confirm-alert/confirm-alert.service';
 import { Database } from '../../../shared/database/database.service';
-import { DiaBackendAssetRepository } from '../../../shared/dia-backend/asset/dia-backend-asset-repository.service';
 import { DiaBackendAssetUploadingService } from '../../../shared/dia-backend/asset/uploading/dia-backend-asset-uploading.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { DiaBackendTransactionRepository } from '../../../shared/dia-backend/transaction/dia-backend-transaction-repository.service';
@@ -34,9 +34,10 @@ import { PreferenceManager } from '../../../shared/preference-manager/preference
 import { getOldProof } from '../../../shared/repositories/proof/old-proof-adapter';
 import { Proof } from '../../../shared/repositories/proof/proof';
 import { ProofRepository } from '../../../shared/repositories/proof/proof-repository.service';
+import { ShareService } from '../../../shared/share/share.service';
 import { browserToolbarColor } from '../../../utils/constants';
 import { reloadApp } from '../../../utils/miscellaneous';
-import { getFaqUrl } from '../../../utils/url';
+import { getFaqUrl, getShowcaseUrl } from '../../../utils/url';
 import { PrefetchingDialogComponent } from '../onboarding/prefetching-dialog/prefetching-dialog.component';
 
 @UntilDestroy({ checkProperties: true })
@@ -142,7 +143,6 @@ export class CaptureTabComponent implements OnInit {
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly proofRepository: ProofRepository,
     private readonly diaBackendAuthService: DiaBackendAuthService,
-    private readonly diaBackendAssetRepository: DiaBackendAssetRepository,
     private readonly diaBackendTransactionRepository: DiaBackendTransactionRepository,
     private readonly networkService: NetworkService,
     private readonly translocoService: TranslocoService,
@@ -155,7 +155,7 @@ export class CaptureTabComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(value => (this.pendingUploadTasks = value));
     this.diaBackendAuthService
-      .readProfile$()
+      .syncUser$()
       .pipe(untilDestroyed(this))
       .subscribe();
   }
@@ -230,6 +230,17 @@ export class CaptureTabComponent implements OnInit {
     this.actionSheetController
       .create({ buttons })
       .then(sheet => sheet.present());
+  }
+
+  shareShowcaseLink() {
+    defer(() => this.username$)
+      .pipe(
+        switchMap(username =>
+          ShareService.shareShowcasePage(getShowcaseUrl(username))
+        ),
+        untilDestroyed(this)
+      )
+      .subscribe();
   }
 
   logout() {

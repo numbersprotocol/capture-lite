@@ -170,23 +170,6 @@ export class DiaBackendAuthService {
     );
   }
 
-  readProfile$() {
-    return defer(() => this.getAuthHeaders()).pipe(
-      concatMap(headers =>
-        this.httpClient.get<ReadProfileResponse>(
-          `${BASE_URL}/auth/users/profile/`,
-          {
-            headers,
-          }
-        )
-      ),
-      tap(response => {
-        this.profile$.next(response);
-        this.setDisplayName(response.display_name);
-      })
-    );
-  }
-
   createUser$(
     username: string,
     email: string,

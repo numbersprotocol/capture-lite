@@ -14,7 +14,18 @@
         <mat-icon>more_horiz</mat-icon>
       </button>
       <span class="toolbar-spacer"></span>
-      <button routerLink="activities" mat-mini-fab class="custom-fab-button">
+      <button
+        (click)="shareShowcaseLink()"
+        mat-mini-fab
+        class="custom-fab-button"
+      >
+        <mat-icon svgIcon="capture-rebrand-share"></mat-icon>
+      </button>
+      <button
+        routerLink="activities"
+        mat-mini-fab
+        class="custom-fab-button margin-left-8"
+      >
         <mat-icon [title]="'userGuide.activities' | transloco">
           history
         </mat-icon>
