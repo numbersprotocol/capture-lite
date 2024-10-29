@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.98.0] - 2024-10-29
+
+### Added
+
+1. Add a shared link to the Showcase page on the Home page [#3256](https://github.com/numbersprotocol/capture-lite/pull/3256)
+
+### Changed
+
+1. Upgrade library cordova-plugin-purchase to version 13.11.1 to support Google Play Billing library 7.0.0 [c07f1d0](https://github.com/numbersprotocol/capture-lite/commit/09df7c07cc410488e23a179ea58c2ab2ee0b474b)
+1. Display and update profile name instead of username [#3255](https://github.com/numbersprotocol/capture-lite/pull/3255)
+1. Reduce duplicate API calls for profile [#3255](https://github.com/numbersprotocol/capture-lite/pull/3255)
+
+### Fixed
+
+1. Fix wallet credits not refreshing after a purchase [c07f1d0](https://github.com/numbersprotocol/capture-lite/commit/09df7c07cc410488e23a179ea58c2ab2ee0b474b)
+1. Fix toast error display when canceling a purchase [c07f1d0](https://github.com/numbersprotocol/capture-lite/commit/09df7c07cc410488e23a179ea58c2ab2ee0b474b)
+
+### Removed
+
+1. Remove unused pages: `ProfilePage` and `PhoneVerificationPage`, and the service `DiaBackendAssetRefreshingService` [#3255](https://github.com/numbersprotocol/capture-lite/pull/3255)
+
 ## [0.97.1] - 2024-09-20
 
 ### Fixed
@@ -2350,7 +2371,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.97.1...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.98.0...HEAD
+[0.98.0]: https://github.com/numbersprotocol/capture-lite/compare/0.97.1...0.98.0
 [0.97.1]: https://github.com/numbersprotocol/capture-lite/compare/0.97.0...0.97.1
 [0.97.0]: https://github.com/numbersprotocol/capture-lite/compare/0.96.0...0.97.0
 [0.96.0]: https://github.com/numbersprotocol/capture-lite/compare/0.95.1...0.96.0
