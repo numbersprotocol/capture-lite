@@ -27,3 +27,7 @@ export function getAppDownloadLink(isPlatform: (platformName: any) => boolean) {
 export function getFaqUrl() {
   return 'https://docs.captureapp.xyz/faq';
 }
+
+export function getShowcaseUrl(username: string) {
+  return `https://dashboard.captureapp.xyz/showcase/${username}`;
+}

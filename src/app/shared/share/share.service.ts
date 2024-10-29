@@ -26,8 +26,8 @@ export class ShareService {
     return (await Share.canShare()).value;
   }
 
-  static async shareFile(url: string) {
-    return Share.share({ url: url });
+  static async shareShowcasePage(url: string) {
+    return Share.share({ text: url });
   }
 
   async share(asset: DiaBackendAsset) {
