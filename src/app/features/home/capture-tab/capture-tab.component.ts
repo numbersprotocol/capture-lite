@@ -68,7 +68,7 @@ export class CaptureTabComponent implements OnInit {
 
   readonly email$ = this.diaBackendAuthService.email$;
 
-  readonly displayName$ = this.diaBackendAuthService.displayName$;
+  readonly profileName$ = this.diaBackendAuthService.profileName$;
 
   readonly profileDescription$ = this.diaBackendAuthService.profile$.pipe(
     map(profile => profile.description)

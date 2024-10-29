@@ -67,7 +67,7 @@ export class HomePage {
   private shouldReloadWallet = false;
   selectedTabIndex = this.initialTabIndex;
 
-  readonly displayName$ = this.diaBackendAuthService.displayName$;
+  readonly profileName$ = this.diaBackendAuthService.profileName$;
 
   readonly hasNewInbox$ = this.diaBackendTransactionRepository.inbox$.pipe(
     catchError((err: unknown) => this.errorService.toastError$(err)),
