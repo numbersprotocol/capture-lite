@@ -332,6 +332,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly is_original_owner: boolean;
   readonly owner: string;
   readonly owner_name: string;
+  readonly owner_profile_display_name: string;
   readonly owner_addresses: OwnerAddresses;
   readonly asset_file: string;
   readonly asset_file_thumbnail: string;
@@ -343,6 +344,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly source_transaction: DiaBackendAssetTransaction | null;
   readonly parsed_meta: DiaBackendAssetParsedMeta;
   readonly creator_name: string;
+  readonly creator_profile_display_name: string | null;
   readonly supporting_file: string | null;
   readonly source_type: 'original' | 'post_capture' | 'store';
   readonly cai_file: string;

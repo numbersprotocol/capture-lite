@@ -18,7 +18,11 @@
           "
         />
       </ion-avatar>
-      <ion-label>{{ contact.contact_name || contact.contact_email }}</ion-label>
+      <ion-label>{{
+        contact.contact_profile_display_name ||
+          contact.contact_name ||
+          contact.contact_email
+      }}</ion-label>
       <ion-button
         (click)="delete(contact)"
         color="dark"

@@ -78,6 +78,7 @@ export class SendingPostCapturePage {
           of({
             contact_email: email,
             contact_name: email,
+            contact_profile_display_name: email,
             contact_profile_picture_thumbnail:
               '/assets/images/avatar-placeholder.png',
           })
@@ -112,7 +113,7 @@ export class SendingPostCapturePage {
         caption: this.message !== '' ? this.message : asset.caption,
         source_transaction: {
           id: '',
-          sender: asset.owner_name,
+          sender: asset.owner_profile_display_name,
           receiver_email: receiverEmail,
           created_at: '',
           fulfilled_at: formatDate(Date.now(), 'short', 'en-US'),
@@ -127,8 +128,8 @@ export class SendingPostCapturePage {
     })
   );
 
-  readonly ownerAvatar$ = this.diaBackendAuthService.avatar$.pipe(
-    shareReplay({ bufferSize: 1, refCount: true })
+  readonly ownerAvatar$ = this.diaBackendAuthService.profile$.pipe(
+    map(profile => profile.profile_picture_thumbnail)
   );
 
   message = '';

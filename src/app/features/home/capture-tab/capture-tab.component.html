@@ -39,7 +39,7 @@
     <app-avatar mat-card-avatar [editable]="false"></app-avatar>
     <mat-card-header>
       <mat-card-title>
-        {{ username$ | ngrxPush }}
+        {{ profileName$ | ngrxPush }}
         <ion-icon
           src="assets/images/icons/edit.svg"
           *ngIf="networkConnected$ | async"

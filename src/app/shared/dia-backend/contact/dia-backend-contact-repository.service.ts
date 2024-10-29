@@ -114,6 +114,7 @@ export class DiaBackendContactRepository {
 export interface DiaBackendContact extends Tuple {
   readonly contact_email: string;
   readonly contact_name: string;
+  readonly contact_profile_display_name: string | null;
   readonly contact_profile_picture_thumbnail: string | null;
 }
 

@@ -1,19 +1,11 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, UntypedFormGroup } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { combineLatest, forkJoin } from 'rxjs';
-import {
-  catchError,
-  first,
-  map,
-  shareReplay,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { catchError, first, map, tap } from 'rxjs/operators';
 import { BlockingActionService } from '../../../shared/blocking-action/blocking-action.service';
 import { DiaBackendAuthService } from '../../../shared/dia-backend/auth/dia-backend-auth.service';
 import { ErrorService } from '../../../shared/error/error.service';
@@ -27,22 +19,21 @@ import { NetworkService } from '../../../shared/network/network.service';
 })
 export class EditProfilePage {
   readonly networkConnected$ = this.networkService.connected$;
-  readonly username$ = this.diaBackendAuthService.username$;
-  readonly avatar$ = this.diaBackendAuthService.avatar$.pipe(
-    shareReplay({ bufferSize: 1, refCount: true })
+  readonly profileName$ = this.diaBackendAuthService.profile$.pipe(
+    map(profile => profile.display_name)
   );
-  readonly profile$ = this.diaBackendAuthService
-    .readProfile$()
-    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
-  readonly description$ = this.profile$.pipe(
+  readonly description$ = this.diaBackendAuthService.profile$.pipe(
     map(profile => profile.description)
   );
-  readonly background$ = this.profile$.pipe(
+  readonly avatar$ = this.diaBackendAuthService.profile$.pipe(
+    map(profile => profile.profile_picture_thumbnail)
+  );
+  readonly background$ = this.diaBackendAuthService.profile$.pipe(
     map(profile => profile.profile_background_thumbnail)
   );
   readonly form = new UntypedFormGroup({});
   model: EditProfileFormModel = {
-    username: '',
+    profileName: '',
     description: '',
     profilePicture: undefined,
     profileBackground: undefined,
@@ -67,27 +58,27 @@ export class EditProfilePage {
 
   createFormFields() {
     combineLatest([
-      this.translocoService.selectTranslate('home.editProfile.username'),
+      this.translocoService.selectTranslate('home.editProfile.profileName'),
       this.translocoService.selectTranslate('home.editProfile.description'),
     ])
       .pipe(
-        tap(([usernameTranslation, descriptionTranslation]) => {
+        tap(([profileNameTranslation, descriptionTranslation]) => {
           this.fields = [
             {
-              key: 'username',
+              key: 'profileName',
               type: 'input',
               templateOptions: {
-                label: usernameTranslation,
-                placeholder: usernameTranslation,
+                label: profileNameTranslation,
+                placeholder: profileNameTranslation,
                 appearance: 'outline',
               },
               validators: {
-                username: {
-                  expression: (c: FormControl) => /^.{1,21}$/.test(c.value),
+                profileName: {
+                  expression: (c: FormControl) => /^.{1,15}$/.test(c.value),
                   message: () =>
                     this.translocoService.translate(
                       'home.editProfile.error.mustBeBetween',
-                      { min: 1, max: 21 }
+                      { min: 1, max: 15 }
                     ),
                 },
               },
@@ -102,12 +93,12 @@ export class EditProfilePage {
                 rows: 4,
               },
               validators: {
-                username: {
-                  expression: (c: FormControl) => /^.{0,255}$/.test(c.value),
+                description: {
+                  expression: (c: FormControl) => /^.{0,125}$/.test(c.value),
                   message: () =>
                     this.translocoService.translate(
                       'home.editProfile.error.mustBeBetween',
-                      { min: 0, max: 255 }
+                      { min: 0, max: 125 }
                     ),
                 },
               },
@@ -130,11 +121,11 @@ export class EditProfilePage {
   }
 
   populateFormFields() {
-    combineLatest([this.username$, this.description$])
+    combineLatest([this.profileName$, this.description$])
       .pipe(
         first(),
-        tap(([username, description]) => {
-          this.model = { ...this.model, username, description };
+        tap(([profileName, description]) => {
+          this.model = { ...this.model, profileName, description };
         })
       )
       .subscribe();
@@ -151,19 +142,11 @@ export class EditProfilePage {
   }
 
   async onSubmit() {
-    const updateUserNameAction$ = this.blockingActionService
-      .run$(
-        this.diaBackendAuthService
-          .updateUser$({ username: this.model.username })
-          .pipe(
-            catchError((err: unknown) => this.handleUpdateUsernameError$(err))
-          )
-      )
-      .pipe(untilDestroyed(this));
-    const updateProfileAction$ = this.blockingActionService
+    this.blockingActionService
       .run$(
         this.diaBackendAuthService
           .updateProfile$({
+            profileName: this.model.profileName,
             description: this.model.description,
             profilePicture: this.model.profilePicture,
             profileBackground: this.model.profileBackground,
@@ -173,39 +156,7 @@ export class EditProfilePage {
           )
       )
       .pipe(
-        switchMap(() => this.diaBackendAuthService.syncUser$()),
-        untilDestroyed(this)
-      );
-    forkJoin([updateUserNameAction$, updateProfileAction$])
-      .pipe(tap(() => this.navController.back()))
-      .subscribe();
-  }
-
-  private handleUpdateUsernameError$(err: unknown) {
-    if (err instanceof HttpErrorResponse) {
-      const errorType = err.error.error?.type;
-      if (errorType === 'duplicate_username') {
-        return this.errorService.toastError$(
-          this.translocoService.translate(`error.diaBackend.${errorType}`)
-        );
-      }
-    }
-    return this.errorService.toastError$(err);
-  }
-
-  private updateProfile() {
-    const updateProfileAction$ = this.diaBackendAuthService
-      .updateProfile$({
-        description: this.model.description,
-        profilePicture: this.model.profilePicture,
-        profileBackground: this.model.profileBackground,
-      })
-      .pipe(catchError((err: unknown) => this.handleUpdateProfileError(err)));
-
-    this.blockingActionService
-      .run$(updateProfileAction$)
-      .pipe(
-        switchMap(() => this.diaBackendAuthService.syncUser$()),
+        tap(() => this.navController.back()),
         untilDestroyed(this)
       )
       .subscribe();
@@ -217,7 +168,7 @@ export class EditProfilePage {
 }
 
 interface EditProfileFormModel {
-  username: string;
+  profileName: string;
   description: string;
   profilePicture: File | undefined;
   profileBackground: File | undefined;

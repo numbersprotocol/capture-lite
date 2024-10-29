@@ -90,7 +90,6 @@
   "confirmSyncAndRestore": "確認",
   "cancelSyncAndRestore": "稍後再說",
   "contactUs": "聯絡我們",
-  "editUsername": "修改使用者名稱",
   "forgotPassword": "忘記密碼",
   "resetPassword": "重設密碼",
   "friends": "好友",
@@ -119,17 +118,8 @@
   "noResultUrlAvailable": "沒有可以顯示的結果連結",
   "verification": {
     "verification": "驗證",
-    "clickToVerify": "點擊驗證",
-    "phoneVerification": "手機驗證",
-    "phoneVerificationInstruction": "請檢查手機收到的六位數字驗證碼",
-    "enterPhoneNumber": "輸入手機號碼",
-    "phonePlaceHolder": "+886 請輸入國際碼",
-    "enterVerificationCode": "輸入簡訊驗證碼",
-    "verificationCodePlaceHolder": "請輸入六位數字驗證碼",
     "emailVerification": "電子郵件驗證",
-    "emailVerificationInstruction": "請遵從收到電子郵件中的指示，完成驗證電子郵件。",
-    "verify": "驗證",
-    "verified": "已驗證"
+    "emailVerificationInstruction": "請遵從收到電子郵件中的指示，完成驗證電子郵件。"
   },
   "tutorial": {
     "switchBetween0": "切換影像與收藏模式",
@@ -187,7 +177,6 @@
     "viewSupportingVideoOnIpfs": "於 IPFS 檢視附件影片",
     "videoLimitation": "錄製的影片長度需小於 10 秒鐘。",
     "yesIUnderstand": "我了解",
-    "verificationSuccess": "驗證成功",
     "assetBecomePublicAfterSharing": "該資產將在分享後公開",
     "assetBecomePublicFor24Hours": "其他用戶在接下來的 24 小時將可透過此連結存取影像",
     "mintNft": "鑄造 NFT",
@@ -274,7 +263,7 @@
     },
     "editProfile": {
       "editProfile": "編輯個人頁面",
-      "username": "用戶名稱",
+      "profileName": "個人頁面名稱",
       "description": "描述",
       "profilePicture": "個人頁面頭像",
       "profileBackground": "個人頁面背景",
