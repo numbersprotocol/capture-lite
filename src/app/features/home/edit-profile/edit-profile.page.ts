@@ -19,7 +19,7 @@ import { NetworkService } from '../../../shared/network/network.service';
 })
 export class EditProfilePage {
   readonly networkConnected$ = this.networkService.connected$;
-  readonly displayName$ = this.diaBackendAuthService.profile$.pipe(
+  readonly profileName$ = this.diaBackendAuthService.profile$.pipe(
     map(profile => profile.display_name)
   );
   readonly description$ = this.diaBackendAuthService.profile$.pipe(
@@ -33,7 +33,7 @@ export class EditProfilePage {
   );
   readonly form = new UntypedFormGroup({});
   model: EditProfileFormModel = {
-    displayName: '',
+    profileName: '',
     description: '',
     profilePicture: undefined,
     profileBackground: undefined,
@@ -65,7 +65,7 @@ export class EditProfilePage {
         tap(([profileNameTranslation, descriptionTranslation]) => {
           this.fields = [
             {
-              key: 'displayName',
+              key: 'profileName',
               type: 'input',
               templateOptions: {
                 label: profileNameTranslation,
@@ -73,7 +73,7 @@ export class EditProfilePage {
                 appearance: 'outline',
               },
               validators: {
-                displayName: {
+                profileName: {
                   expression: (c: FormControl) => /^.{1,15}$/.test(c.value),
                   message: () =>
                     this.translocoService.translate(
@@ -121,11 +121,11 @@ export class EditProfilePage {
   }
 
   populateFormFields() {
-    combineLatest([this.displayName$, this.description$])
+    combineLatest([this.profileName$, this.description$])
       .pipe(
         first(),
-        tap(([displayName, description]) => {
-          this.model = { ...this.model, displayName, description };
+        tap(([profileName, description]) => {
+          this.model = { ...this.model, profileName, description };
         })
       )
       .subscribe();
@@ -146,7 +146,7 @@ export class EditProfilePage {
       .run$(
         this.diaBackendAuthService
           .updateProfile$({
-            displayName: this.model.displayName,
+            profileName: this.model.profileName,
             description: this.model.description,
             profilePicture: this.model.profilePicture,
             profileBackground: this.model.profileBackground,
@@ -168,7 +168,7 @@ export class EditProfilePage {
 }
 
 interface EditProfileFormModel {
-  displayName: string;
+  profileName: string;
   description: string;
   profilePicture: File | undefined;
   profileBackground: File | undefined;

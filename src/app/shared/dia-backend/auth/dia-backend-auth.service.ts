@@ -44,7 +44,7 @@ export class DiaBackendAuthService {
 
   readonly username$ = this.preferences.getString$(PrefKeys.USERNAME);
 
-  readonly displayName$ = this.preferences.getString$(PrefKeys.DISPLAY_NAME);
+  readonly profileName$ = this.preferences.getString$(PrefKeys.PROFILE_NAME);
 
   readonly email$ = this.preferences.getString$(PrefKeys.EMAIL);
 
@@ -253,18 +253,18 @@ export class DiaBackendAuthService {
   }
 
   updateProfile$({
-    displayName,
+    profileName,
     description,
     profilePicture,
     profileBackground,
   }: {
-    displayName: string;
+    profileName: string;
     description: string;
     profilePicture?: File;
     profileBackground?: File;
   }) {
     const formData = new FormData();
-    formData.append('display_name', displayName);
+    formData.append('display_name', profileName);
     formData.append('description', description);
     if (profilePicture) {
       formData.append('profile_picture', profilePicture);
@@ -282,7 +282,7 @@ export class DiaBackendAuthService {
       ),
       tap(response => {
         this.profile$.next(response);
-        this.setDisplayName(response.display_name);
+        this.setProfileName(response.display_name);
       })
     );
   }
@@ -337,7 +337,7 @@ export class DiaBackendAuthService {
     return this.readUser$().pipe(
       tap(response => {
         this.profile$.next(response.profile);
-        this.setDisplayName(response.profile.display_name);
+        this.setProfileName(response.profile.display_name);
       }),
       concatMap(response => {
         return forkJoin([
@@ -362,8 +362,8 @@ export class DiaBackendAuthService {
     return this.preferences.setString(PrefKeys.USERNAME, value);
   }
 
-  private async setDisplayName(value: string) {
-    return this.preferences.setString(PrefKeys.DISPLAY_NAME, value);
+  private async setProfileName(value: string) {
+    return this.preferences.setString(PrefKeys.PROFILE_NAME, value);
   }
 
   async getEmail() {
@@ -453,7 +453,7 @@ export class DiaBackendAuthService {
 const enum PrefKeys {
   TOKEN = 'TOKEN',
   USERNAME = 'USERNAME',
-  DISPLAY_NAME = 'DISPLAY_NAME',
+  PROFILE_NAME = 'PROFILE_NAME',
   EMAIL = 'EMAIL',
   EMAIL_VERIFIED = 'EMAIL_VERIFIED',
   PHONE_VERIFIED = 'PHONE_VERIFIED',

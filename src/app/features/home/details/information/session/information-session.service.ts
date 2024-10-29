@@ -89,7 +89,7 @@ export class DetailedCapture {
 
   readonly creator$ = defer(() => {
     if (this.proofOrDiaBackendAsset instanceof Proof)
-      return this.diaBackendAuthService.displayName$;
+      return this.diaBackendAuthService.profileName$;
     return of(this.proofOrDiaBackendAsset.creator_profile_display_name ?? '');
   });
 
