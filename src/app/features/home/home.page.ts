@@ -64,6 +64,7 @@ export class HomePage {
   readonly initialTabIndex = 0;
   private readonly afterCaptureTabIndex = 0;
   private readonly collectionTabIndex = 2;
+  private shouldReloadWallet = false;
   selectedTabIndex = this.initialTabIndex;
 
   readonly displayName$ = this.diaBackendAuthService.displayName$;
@@ -112,6 +113,28 @@ export class HomePage {
     this.downloadExpiredPostCaptures();
     this.overrideAndroidBackButtonBehavior();
     this.encourageUserToTakePhoto();
+    this.reloadWalletPage();
+  }
+
+  private reloadWalletPage() {
+    this.diaBackendWalletService.reloadWallet$
+      .pipe(
+        tap(reload => {
+          if (reload) {
+            this.shouldReloadWallet = true;
+            this.diaBackendWalletService.reloadWallet$.next(false);
+          }
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  ionViewWillEnter() {
+    if (this.shouldReloadWallet) {
+      this.shouldReloadWallet = false;
+      this.router.navigate(['wallets']);
+    }
   }
 
   ionViewDidEnter() {

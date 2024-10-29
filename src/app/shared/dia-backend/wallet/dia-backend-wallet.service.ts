@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { combineLatest, defer, forkJoin } from 'rxjs';
+import { BehaviorSubject, combineLatest, defer, forkJoin } from 'rxjs';
 import { catchError, concatMap, first } from 'rxjs/operators';
 import { ErrorService } from '../../error/error.service';
 import { NetworkService } from '../../network/network.service';
@@ -35,6 +35,8 @@ export class DiaBackendWalletService {
   );
 
   // For integrity wallet addr, use WebCryptoApiSignatureProvider.publicKey$
+
+  readonly reloadWallet$ = new BehaviorSubject(false);
 
   readonly networkConnected$ = this.networkService.connected$;
 

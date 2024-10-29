@@ -37,6 +37,7 @@ export class WalletsPage {
 
   elementType = NgxQrcodeElementTypes.URL;
   shouldHideDepositButton = false;
+  private reload = false;
 
   constructor(
     private readonly diaBackendWalletService: DiaBackendWalletService,
@@ -48,6 +49,14 @@ export class WalletsPage {
     private readonly navController: NavController
   ) {
     this.processIframeEvents();
+    this.reloadPage();
+  }
+
+  ionViewWillEnter() {
+    if (this.reload) {
+      this.reload = false;
+      this.navController.back({ animated: false });
+    }
   }
 
   private processIframeEvents() {
@@ -77,6 +86,19 @@ export class WalletsPage {
               break;
             default:
               break;
+          }
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  private reloadPage() {
+    this.diaBackendWalletService.reloadWallet$
+      .pipe(
+        tap(reload => {
+          if (reload) {
+            this.reload = true;
           }
         }),
         untilDestroyed(this)
