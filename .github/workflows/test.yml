@@ -1,9 +1,6 @@
 name: test
 
-on:
-  push:
-    branches:
-      [master, 'feature-*', 'feat-*', 'fix-*', 'hotfix-*', 'milestone-*']
+on: push
 
 jobs:
   lint:

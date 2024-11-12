@@ -2,7 +2,7 @@ name: build
 
 on:
   pull_request:
-    branches: [master, develop]
+    branches: [main]
 
 jobs:
   android:
@@ -121,7 +121,7 @@ jobs:
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
-        if: ${{ github.ref == 'refs/heads/develop' || github.event.pull_request.base.ref == 'develop'}}
+        if: ${{ github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'}}
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_COLOR: 'success'
@@ -136,7 +136,7 @@ jobs:
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
-        if: ${{ github.ref == 'refs/heads/develop' || github.event.pull_request.base.ref == 'develop'}}
+        if: ${{ github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'}}
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_COLOR: 'failure'
