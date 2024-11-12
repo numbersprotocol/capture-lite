@@ -60,7 +60,7 @@
     "@ngrx/store": "^14.3.0",
     "@ngx-formly/core": "^5.10.22",
     "@ngx-formly/material": "^5.10.22",
-    "@ngx-formly/schematics": "^5.10.22",
+    "@ngx-formly/schematics": "^6.3.10",
     "@numbersprotocol/preview-camera": "github:numbersprotocol/preview-camera#0.0.11",
     "@numbersprotocol/preview-video": "github:numbersprotocol/preview-video",
     "@pqina/angular-pintura": "^8.44.1",
