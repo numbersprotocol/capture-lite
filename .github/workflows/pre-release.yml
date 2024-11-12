@@ -302,7 +302,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          body: Thanks for following along! For more information check out the [CHANGELOG](https://github.com/numbersprotocol/capture-lite/blob/master/CHANGELOG.md).
+          body: Thanks for following along! For more information check out the [CHANGELOG](https://github.com/numbersprotocol/capture-lite/blob/main/CHANGELOG.md).
           prerelease: true
 
       - name: Send Slack notification
