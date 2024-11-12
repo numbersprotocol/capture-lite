@@ -68,7 +68,7 @@
     "@techiediaries/ngx-qrcode": "^9.1.0",
     "appsflyer-capacitor-plugin": "^6.12.1",
     "async-mutex": "^0.3.2",
-    "buffer": "^5.7.1",
+    "buffer": "^6.0.3",
     "capacitor-blob-writer": "^1.0.4",
     "capacitor-native-settings": "^4.0.3",
     "compressorjs": "^1.0.7",
