@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { ExportPrivateKeyModalComponent } from './export-private-key-modal.component';
 
-describe('ActionsDialogComponent', () => {
+describe('ExportPrivateKeyModalComponent', () => {
   let component: ExportPrivateKeyModalComponent;
   let fixture: ComponentFixture<ExportPrivateKeyModalComponent>;
 

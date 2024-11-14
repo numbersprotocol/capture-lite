@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SharedTestingModule } from '../../shared/shared-testing.module';
 import { OrderDetailDialogComponent } from './order-detail-dialog.component';
 
-describe('ActionsDialogComponent', () => {
+describe('OrderDetailDialogComponent', () => {
   let component: OrderDetailDialogComponent;
   let fixture: ComponentFixture<OrderDetailDialogComponent>;
 

@@ -72,28 +72,6 @@ ion-footer {
       font-weight: 700;
     }
   }
-
-  .custom-button {
-    padding: 16px 20px;
-    background-color: #3880ff;
-    color: white;
-    border: none;
-    border-radius: 37px;
-    cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    letter-spacing: 0.26px;
-    text-transform: uppercase;
-
-    &:hover {
-      background-color: #0056b3;
-    }
-  }
 }
 
 ion-spinner {
