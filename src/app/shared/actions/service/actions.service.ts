@@ -53,7 +53,7 @@ export interface Action {
 }
 
 export interface Param {
-  readonly default_values_list_text: string[];
+  readonly default_values_list_text?: string[];
   readonly description_text: string;
   readonly display_text_text: string;
   readonly name_text: string;

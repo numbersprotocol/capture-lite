@@ -123,7 +123,9 @@ export class ActionDetailsPage {
     const formModel: any = {};
 
     for (const param of params)
-      formModel[param.name_text] = param.default_values_list_text[0] || '';
+      formModel[param.name_text] = param.default_values_list_text?.length
+        ? param.default_values_list_text[0].trim()
+        : '';
 
     return formModel;
   }
@@ -140,10 +142,11 @@ export class ActionDetailsPage {
           key: param.name_text,
           type: 'select',
           templateOptions: {
-            options: param.default_values_list_text.map(value => ({
-              label: value,
-              value: value,
-            })),
+            options:
+              param.default_values_list_text?.map(value => ({
+                label: value.trim(),
+                value: value.trim(),
+              })) ?? [],
             placeholder: param.placeholder_text,
             disabled: !param.user_input_boolean,
             required: !isOptional,

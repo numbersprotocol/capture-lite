@@ -33,14 +33,14 @@
       <div class="price-number">{{ price$ | async }} NUM</div>
     </div>
 
-    <button
+    <ion-button
       type="submit"
-      class="custom-button"
+      shape="round"
       [disabled]="!form.form.valid"
       (click)="performAction(form.model)"
     >
       {{ title$ | async | uppercase }}
-    </button>
+    </ion-button>
   </ion-footer>
 </ng-container>
 
