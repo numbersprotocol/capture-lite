@@ -75,7 +75,7 @@
     "capacitor-native-settings": "^4.0.3",
     "compressorjs": "^1.0.7",
     "cordova-plugin-purchase": "^13.11.1",
-    "ethers": "^6.8.1",
+    "ethers": "^6.13.4",
     "hammerjs": "^2.0.8",
     "immutable": "^4.0.0-rc.14",
     "lodash-es": "^4.17.21",
