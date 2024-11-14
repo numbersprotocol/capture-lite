@@ -16,7 +16,9 @@
     "test.ci": "npm run preconfig && ng test --no-watch --no-progress --source-map=false --browsers=ChromeHeadlessCI",
     "lint": "npm run preconfig && prettier --check . && stylelint \"**/*.{css,scss,sass}\" && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng lint",
     "e2e": "npm run preconfig && ng e2e",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "cypress:open": "npm run preconfig && cypress open",
+    "cypress:run": "npm run preconfig && cypress run"
   },
   "private": true,
   "dependencies": {
@@ -82,18 +84,16 @@
     "ngx-joyride": "^2.5.0",
     "ngx-long-press2": "^2.0.0",
     "ngx-pinch-zoom": "^2.6.0",
-    "packages": "^0.0.8",
     "process": "^0.11.10",
     "rxjs": "^6.6.7",
     "stream-browserify": "^2.0.2",
     "swiper": "^8.4.7",
     "tslib": "^2.3.1",
-    "url": "^0.11.0",
-    "web3": "^1.5.2",
+    "web3": "^4.15.0",
     "zone.js": "^0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "^0.1200.5",
+    "@angular-devkit/architect": "^0.1402.13",
     "@angular-devkit/build-angular": "^14.2.1",
     "@angular-eslint/builder": "^14.0.3",
     "@angular-eslint/eslint-plugin": "^14.0.3",
@@ -105,7 +105,8 @@
     "@angular/compiler-cli": "^14.2.0",
     "@angular/language-service": "^14.2.0",
     "@capacitor/cli": "^6.0.0",
-    "@ionic/angular-toolkit": "^4.0.0",
+    "@cypress/schematic": "^2.5.2",
+    "@ionic/angular-toolkit": "^7.0.0",
     "@types/hammerjs": "^2.0.41",
     "@types/jasmine": "^3.8.2",
     "@types/jasminewd2": "^2.0.10",
@@ -114,6 +115,7 @@
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.36.2",
     "assert": "^2.0.0",
+    "cypress": "^13.15.0",
     "crypto-browserify": "^3.12.0",
     "eslint": "^8.18.0",
     "eslint-plugin-import": "2.25.2",
@@ -131,13 +133,12 @@
     "lint-staged": "^11.1.2",
     "os-browserify": "^0.3.0",
     "prettier": "^2.3.2",
-    "protractor": "~7.0.0",
     "stream-http": "^3.2.0",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "stylelint-scss": "^3.20.1",
     "ts-node": "^10.2.1",
-    "typescript": "^4.6.4"
+    "typescript": "~4.7.4"
   },
   "description": "Capture lite app.",
   "lint-staged": {
