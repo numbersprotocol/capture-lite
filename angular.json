@@ -144,44 +144,47 @@
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
           "options": {
-            "protractorConfig": "e2e/protractor.conf.js"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "app:serve:production"
-            },
-            "ci": {
-              "devServerTarget": "app:serve:ci"
-            },
-            "development": {
-              "devServerTarget": "app:serve:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "ionic-cordova-build": {
-          "builder": "@ionic/angular-toolkit:cordova-build",
-          "options": {
-            "browserTarget": "app:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "app:build:production"
-            }
-          }
-        },
-        "ionic-cordova-serve": {
-          "builder": "@ionic/angular-toolkit:cordova-serve",
-          "options": {
-            "cordovaBuildTarget": "app:ionic-cordova-build",
             "devServerTarget": "app:serve"
           },
           "configurations": {
             "production": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:production",
+              "devServerTarget": "app:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false
+          }
+        },
+        "ct": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "app:serve",
+            "watch": true,
+            "headless": false,
+            "testingType": "component"
+          },
+          "configurations": {
+            "development": {
+              "devServerTarget": "app:serve:development"
+            }
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "app:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "production": {
               "devServerTarget": "app:serve:production"
             }
           }
@@ -191,7 +194,11 @@
   },
   "cli": {
     "analytics": false,
-    "schematicCollections": ["@ionic/angular-toolkit"]
+    "schematicCollections": [
+      "@cypress/schematic",
+      "@ionic/angular-toolkit",
+      "@schematics/angular"
+    ]
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
