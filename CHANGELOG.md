@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.99.0] - 2024-11-15
+
+### Changed
+
+1. Bumps follow-redirects from 1.14.1 to 1.15.9 [#3295](https://github.com/numbersprotocol/capture-lite/pull/3295)
+1. Bumps braces from 3.0.2 to 3.0.3 [#3288](https://github.com/numbersprotocol/capture-lite/pull/3288)
+1. Bumps ejs from 3.1.8 to 3.1.10 [#3293](https://github.com/numbersprotocol/capture-lite/pull/3293)
+1. Bumps socket.io from 4.5.4 to 4.8.1 [#3292](https://github.com/numbersprotocol/capture-lite/pull/3292)
+1. Bumps json5 from 1.0.1 to 1.0.2 [#2453](https://github.com/numbersprotocol/capture-lite/pull/2453)
+1. Bumps decode-uri-component from 0.2.0 to 0.2.2 [#2374](https://github.com/numbersprotocol/capture-lite/pull/2374)
+1. Bumps loader-utils from 2.0.0 to 2.0.4 [#2318](https://github.com/numbersprotocol/capture-lite/pull/2318)
+1. Bumps body-parser and express. These dependencies needed to be updated together [#3261](https://github.com/numbersprotocol/capture-lite/pull/3261)
+1. Bumps secp256k1 from 4.0.2 to 4.0.4 [#3262](https://github.com/numbersprotocol/capture-lite/pull/3262)
+1. Bumps http-cache-semantics from 4.1.0 to 4.1.1 [#2558](https://github.com/numbersprotocol/capture-lite/pull/2558)
+1. Bumps cookiejar from 2.1.2 to 2.1.4 [#2513](https://github.com/numbersprotocol/capture-lite/pull/2513)
+1. Bumps karma from 6.3.4 to 6.3.16 [#1346](https://github.com/numbersprotocol/capture-lite/pull/1346)
+
+### Fixed
+
+1. Fix the default value for network action by removing the extra space, and ensure the default_values_list_text field is handled if it's missing in the response [#3291](https://github.com/numbersprotocol/capture-lite/pull/3291)
+1. Fix the issue where the button color doesn't change on the network action detail page when it is disabled [#3291](https://github.com/numbersprotocol/capture-lite/pull/3291)
+1. Fix npm WARN EBADENGINE and npm WARN deprecated warnings [#3287](https://github.com/numbersprotocol/capture-lite/pull/3287)
+
+### Removed
+
+1. Remove the unused ActionsDialogComponent [#3291](https://github.com/numbersprotocol/capture-lite/pull/3291)
+
+### Chore
+
+1. Fix issue preventing Dependabot checks from completing [#3280](https://github.com/numbersprotocol/capture-lite/pull/3280)
+
 ## [0.98.0] - 2024-10-29
 
 ### Added
@@ -2371,7 +2402,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.98.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.99.0...HEAD
+[0.99.0]: https://github.com/numbersprotocol/capture-lite/compare/0.98.0...0.99.0
 [0.98.0]: https://github.com/numbersprotocol/capture-lite/compare/0.97.1...0.98.0
 [0.97.1]: https://github.com/numbersprotocol/capture-lite/compare/0.97.0...0.97.1
 [0.97.0]: https://github.com/numbersprotocol/capture-lite/compare/0.96.0...0.97.0
