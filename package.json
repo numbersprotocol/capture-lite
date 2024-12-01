@@ -33,7 +33,7 @@
     "@angular/router": "^14.2.0",
     "@awesome-cordova-plugins/core": "^5.46.0",
     "@capacitor-community/advertising-id": "^6.0.0",
-    "@capacitor-community/bluetooth-le": "^6.0.1",
+    "@capacitor-community/bluetooth-le": "^6.1.0",
     "@capacitor-community/http": "github:numbersprotocol/http#fix-catch-disabled-Local-Network-case-on-iOS",
     "@capacitor-community/wifi": "github:numbersprotocol/community-capacitor-wifi#capacitor3",
     "@capacitor/android": "^6.0.0",
