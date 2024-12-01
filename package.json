@@ -108,7 +108,7 @@
     "@cypress/schematic": "^2.5.2",
     "@ionic/angular-toolkit": "^7.0.0",
     "@types/hammerjs": "^2.0.41",
-    "@types/jasmine": "^3.8.2",
+    "@types/jasmine": "^5.1.5",
     "@types/jasminewd2": "^2.0.10",
     "@types/lodash-es": "^4.17.4",
     "@types/node": "^16.7.10",
