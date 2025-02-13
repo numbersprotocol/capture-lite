@@ -3,7 +3,7 @@ import { Share } from '@capacitor/share';
 import { TranslocoService } from '@ngneat/transloco';
 import { catchError } from 'rxjs/operators';
 import { urlToDownloadApp } from '../../utils/constants';
-import { getAssetProfileForNSE } from '../../utils/url';
+import { getCapturePage } from '../../utils/url';
 import {
   DiaBackendAsset,
   DiaBackendAssetRepository,
@@ -46,7 +46,7 @@ export class ShareService {
         .pipe(catchError((err: unknown) => this.errorService.toastError$(err)))
         .toPromise();
     }
-    return getAssetProfileForNSE(asset.parent_asset_cid || asset.id);
+    return getCapturePage(asset);
   }
 
   async shareReferralCode(referralCode: string) {

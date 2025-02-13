@@ -328,6 +328,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly id: string;
   readonly uuid: string;
   readonly cid: string;
+  readonly type: 'unique' | 'child';
   readonly proof_hash: string;
   readonly is_original_owner: boolean;
   readonly owner: string;
@@ -348,6 +349,7 @@ export interface DiaBackendAsset extends Tuple {
   readonly supporting_file: string | null;
   readonly source_type: 'original' | 'post_capture' | 'store';
   readonly cai_file: string;
+  readonly nft_chain_id: number | null;
   readonly nft_token_id: string | null;
   readonly nft_token_uri: string;
   readonly nft_blockchain_name: string;
