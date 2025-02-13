@@ -289,7 +289,7 @@
     "shares": {
       "copyNid": "Copy Nid",
       "downloadC2pa": "Download C2PA",
-      "shareBlockchainProof": "Share Blockchain Proof",
+      "shareCapturePage": "Social Share",
       "viewBlockchainProof": "View Blockchain Proof"
     },
     "error": {

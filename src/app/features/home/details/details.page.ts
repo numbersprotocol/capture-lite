@@ -357,7 +357,7 @@ export class DetailsPage {
       this.translocoService.selectTranslateObject({
         'details.shares.downloadC2pa': null,
         'details.shares.viewBlockchainProof': null,
-        'details.shares.shareBlockchainProof': null,
+        'details.shares.shareCapturePage': null,
         'details.shares.copyNid': null,
       }),
     ])
@@ -367,7 +367,7 @@ export class DetailsPage {
           ([
             diaBackendAsset,
             publicKey,
-            [downloadC2paText, viewProofText, shareProofText, copyNidText],
+            [downloadC2paText, viewProofText, shareCaptureText, copyNidText],
           ]) =>
             new Promise<void>(resolve => {
               const buttons: ActionSheetButton[] = [];
@@ -399,7 +399,7 @@ export class DetailsPage {
                   },
                 });
                 buttons.push({
-                  text: shareProofText,
+                  text: shareCaptureText,
                   handler: async () => {
                     const result =
                       diaBackendAsset.public_access ||
