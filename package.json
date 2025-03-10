@@ -87,7 +87,7 @@
     "process": "^0.11.10",
     "rxjs": "^6.6.7",
     "stream-browserify": "^2.0.2",
-    "swiper": "^8.4.7",
+    "swiper": "^11.2.2",
     "tslib": "^2.3.1",
     "web3": "^4.15.0",
     "zone.js": "^0.11.4"
