@@ -49,14 +49,14 @@ export class SignupPage {
         tap(
           ([
             emailTranslation,
-            usernameTranlation,
+            usernameTranslation,
             passwordTranslation,
             confirmPasswordTranslation,
             referralCodeOptionalTranslation,
           ]) =>
             this.createFormFields(
               emailTranslation,
-              usernameTranlation,
+              usernameTranslation,
               passwordTranslation,
               confirmPasswordTranslation,
               referralCodeOptionalTranslation
@@ -69,7 +69,7 @@ export class SignupPage {
 
   private createFormFields(
     emailTranslation: string,
-    usernameTranlation: string,
+    usernameTranslation: string,
     passwordTranslation: string,
     confirmPasswordTranslation: string,
     referralCodeOptionalTranslation: string
@@ -133,7 +133,7 @@ export class SignupPage {
             type: 'input',
             templateOptions: {
               type: 'text',
-              placeholder: usernameTranlation,
+              placeholder: usernameTranslation,
               required: true,
               hideRequiredMarker: true,
             },
