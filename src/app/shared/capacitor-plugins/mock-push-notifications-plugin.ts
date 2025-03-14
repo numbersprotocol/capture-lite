@@ -54,26 +54,26 @@ export class MockPushNotificationsPlugin implements PushNotificationsPlugin {
     throw new Error('Method not implemented.');
   }
 
-  addListener(
+  async addListener(
     eventName: 'registration',
     listenerFunc: (token: PushNotificationToken) => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
+  ): Promise<PluginListenerHandle>;
+  async addListener(
     eventName: 'registrationError',
     listenerFunc: (error: any) => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
+  ): Promise<PluginListenerHandle>;
+  async addListener(
     eventName: 'pushNotificationReceived',
     listenerFunc: (notification: PushNotification) => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
+  ): Promise<PluginListenerHandle>;
+  async addListener(
     eventName: 'pushNotificationActionPerformed',
     listenerFunc: (notification: PushNotificationActionPerformed) => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
+  ): Promise<PluginListenerHandle>;
+  async addListener(
     _eventName: any,
     _listenerFunc: any
-  ): Promise<PluginListenerHandle> & PluginListenerHandle {
+  ): Promise<PluginListenerHandle> {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     // return { remove: () => {} };
     throw new Error('Method not implemented.');

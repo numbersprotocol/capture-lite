@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Device } from '@capacitor/device';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 import { isEqual, reject } from 'lodash-es';
 import {
   Observable,
@@ -86,7 +86,7 @@ export class DiaBackendAuthService {
 
   // TODO: remove this method
   private async migrate() {
-    const oldToken = await Storage.get({
+    const oldToken = await Preferences.get({
       key: 'numbersStoragePublisher_authToken',
     });
     if (oldToken.value) {
@@ -96,14 +96,14 @@ export class DiaBackendAuthService {
       }
     }
 
-    const oldUsername = await Storage.get({
+    const oldUsername = await Preferences.get({
       key: 'numbersStoragePublisher_userName',
     });
     if (oldUsername.value) {
       this.setUsername(oldUsername.value);
     }
 
-    const oldEmail = await Storage.get({
+    const oldEmail = await Preferences.get({
       key: 'numbersStoragePublisher_email',
     });
     if (oldEmail.value) {

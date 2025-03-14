@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import '@capacitor-community/http';
-import { Http } from '@capacitor-community/http';
 import { CameraSource } from '@capacitor/camera';
-import { Capacitor } from '@capacitor/core';
 import {
   Directory as FilesystemDirectory,
   FilesystemPlugin,
@@ -56,28 +53,12 @@ export class GoProMediaService {
   }> {
     if (!mediaFile) return { isDownloaded: false, isCaptured: false };
 
-    const fileName = extractFileNameFromGoProUrl(mediaFile.url);
-
     let isDownloaded = false;
     let isCaptured = false;
 
     try {
-      await Http.downloadFile({
-        url: mediaFile.url,
-        filePath: fileName,
-        fileDirectory: this.directory,
-        method: 'GET',
-      });
-
-      const readResult = await this.filesystemPlugin.getUri({
-        directory: this.directory,
-        path: fileName,
-      });
-
-      const url = Capacitor.convertFileSrc(readResult.uri);
-
       const blob = await this.httpClient
-        .get(url, { responseType: 'blob' })
+        .get(mediaFile.url, { responseType: 'blob' })
         .toPromise();
 
       const base64 = await blobToBase64(blob);
@@ -91,12 +72,6 @@ export class GoProMediaService {
         source: CameraSource.Camera,
       });
       isCaptured = true;
-
-      // delete temp downloaded file
-      await this.filesystemPlugin.deleteFile({
-        directory: this.directory,
-        path: fileName,
-      });
     } catch (error: any) {
       const printIndentation = 2;
       // eslint-disable-next-line no-console
@@ -108,16 +83,10 @@ export class GoProMediaService {
 
   async getFilesFromGoPro(): Promise<GoProFile[]> {
     const url = this.goproBaseUrl + '/gopro/media/list';
-    const params = {};
-    const headers = {};
-    const response = await Http.request({
-      method: 'GET',
-      url,
-      headers,
-      params,
-    });
+    const data = await this.httpClient
+      .get<{ media: { fs: string[] }[] }>(url)
+      .toPromise();
 
-    const data = response.data;
     const files = (data.media[0].fs as any[]).reverse();
     const fileNames: string[] = files.map(e => e.n);
 
