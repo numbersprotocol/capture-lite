@@ -8,11 +8,11 @@ import {
   LocalNotificationsPlugin,
 } from '@capacitor/local-notifications';
 import { Network, NetworkPlugin } from '@capacitor/network';
+import { Preferences, PreferencesPlugin } from '@capacitor/preferences';
 import {
   PushNotifications,
   PushNotificationsPlugin,
 } from '@capacitor/push-notifications';
-import { Storage, StoragePlugin } from '@capacitor/storage';
 
 export const APP_PLUGIN = new InjectionToken<AppPlugin>('APP_PLUGIN');
 export const CAMERA_PLUGIN = new InjectionToken<CameraPlugin>('CAMERA_PLUGIN');
@@ -27,8 +27,8 @@ export const LOCAL_NOTIFICATIONS_PLUGIN =
 export const NETOWRK_PLUGIN = new InjectionToken<NetworkPlugin>(
   'NETWORK_PLUGIN'
 );
-export const STORAGE_PLUGIN = new InjectionToken<StoragePlugin>(
-  'STORAGE_PLUGIN'
+export const PREFERENCES_PLUGIN = new InjectionToken<PreferencesPlugin>(
+  'PREFERENCES_PLUGIN'
 );
 export const PUSH_NOTIFICATIONS_PLUGIN =
   new InjectionToken<PushNotificationsPlugin>('PUSH_NOTIFICATIONS_PLUGIN');
@@ -60,8 +60,8 @@ export const PUSH_NOTIFICATIONS_PLUGIN =
       useValue: Network,
     },
     {
-      provide: STORAGE_PLUGIN,
-      useValue: Storage,
+      provide: PREFERENCES_PLUGIN,
+      useValue: Preferences,
     },
     {
       provide: PUSH_NOTIFICATIONS_PLUGIN,

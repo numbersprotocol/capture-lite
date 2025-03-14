@@ -23,27 +23,27 @@ export class MockAppPlugin implements AppPlugin {
   addListener(
     eventName: 'appStateChange',
     listenerFunc: StateChangeListener
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   addListener(
     eventName: 'pause',
     listenerFunc: () => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   addListener(
     eventName: 'resume',
     listenerFunc: () => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   addListener(
     eventName: 'appUrlOpen',
     listenerFunc: URLOpenListener
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   addListener(
     eventName: 'appRestoredResult',
     listenerFunc: RestoredListener
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   addListener(
     eventName: 'backButton',
     listenerFunc: BackButtonListener
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   async addListener(_: unknown, __: unknown): Promise<PluginListenerHandle> {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const remove = async () => {};

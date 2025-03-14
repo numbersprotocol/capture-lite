@@ -76,15 +76,15 @@ export class MockLocalNotificationsPlugin implements LocalNotificationsPlugin {
   addListener(
     eventName: 'localNotificationReceived',
     listenerFunc: (notification: LocalNotification) => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   addListener(
     eventName: 'localNotificationActionPerformed',
     listenerFunc: (notificationAction: LocalNotificationActionPerformed) => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   addListener(
     _eventName: any,
     _listenerFunc: any
-  ): Promise<PluginListenerHandle> & PluginListenerHandle {
+  ): Promise<PluginListenerHandle> {
     throw new Error('Method not implemented.');
   }
 

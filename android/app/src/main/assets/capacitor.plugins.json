@@ -1,19 +1,11 @@
 [
 	{
 		"pkg": "@capacitor-community/advertising-id",
-		"classpath": "com.thomasvidas.advertising.AdvertisingIdPlugin"
+		"classpath": "com.capacitorjs.community.advertisingid.AdvertisingIdPlugin"
 	},
 	{
 		"pkg": "@capacitor-community/bluetooth-le",
 		"classpath": "com.capacitorjs.community.plugins.bluetoothle.BluetoothLe"
-	},
-	{
-		"pkg": "@capacitor-community/http",
-		"classpath": "com.getcapacitor.plugin.http.Http"
-	},
-	{
-		"pkg": "@capacitor-community/wifi",
-		"classpath": "com.digaus.capacitor.wifi.Wifi"
 	},
 	{
 		"pkg": "@capacitor/app",
@@ -52,6 +44,10 @@
 		"classpath": "com.capacitorjs.plugins.network.NetworkPlugin"
 	},
 	{
+		"pkg": "@capacitor/preferences",
+		"classpath": "com.capacitorjs.plugins.preferences.PreferencesPlugin"
+	},
+	{
 		"pkg": "@capacitor/push-notifications",
 		"classpath": "com.capacitorjs.plugins.pushnotifications.PushNotificationsPlugin"
 	},
@@ -64,16 +60,12 @@
 		"classpath": "com.capacitorjs.plugins.splashscreen.SplashScreenPlugin"
 	},
 	{
-		"pkg": "@capacitor/storage",
-		"classpath": "com.capacitorjs.plugins.storage.StoragePlugin"
+		"pkg": "@falconeta/capacitor-wifi-connect",
+		"classpath": "com.falconeta.capacitor_wifi_connect.CapacitorWifiConnectPlugin"
 	},
 	{
 		"pkg": "@numbersprotocol/preview-camera",
 		"classpath": "io.numbersprotocol.capturelite.plugins.previewcamera.PreviewCameraPlugin"
-	},
-	{
-		"pkg": "@numbersprotocol/preview-memory",
-		"classpath": "io.numbersprotocol.capturelite.plugins.previewmemory.PreviewMemoryPlugin"
 	},
 	{
 		"pkg": "@numbersprotocol/preview-video",

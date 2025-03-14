@@ -1,17 +1,20 @@
 import { Inject, Injectable } from '@angular/core';
-import { StoragePlugin } from '@capacitor/storage';
-import { STORAGE_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
+import { PreferencesPlugin } from '@capacitor/preferences';
+import { PREFERENCES_PLUGIN } from '../capacitor-plugins/capacitor-plugins.module';
 import { CapacitorStoragePreferences } from './preferences/capacitor-storage-preferences/capacitor-storage-preferences';
-import { Preferences } from './preferences/preferences';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PreferenceManager {
-  private readonly preferencesMap = new Map<string, Preferences>();
+  private readonly preferencesMap = new Map<
+    string,
+    CapacitorStoragePreferences
+  >();
 
   constructor(
-    @Inject(STORAGE_PLUGIN) private readonly storagePlugin: StoragePlugin
+    @Inject(PREFERENCES_PLUGIN)
+    private readonly preferencesPlugin: PreferencesPlugin
   ) {}
 
   getPreferences(id: string) {
@@ -23,7 +26,7 @@ export class PreferenceManager {
   }
 
   private createPreferences(id: string) {
-    const created = new CapacitorStoragePreferences(id, this.storagePlugin);
+    const created = new CapacitorStoragePreferences(id, this.preferencesPlugin);
     this.preferencesMap.set(id, created);
     return created;
   }

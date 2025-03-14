@@ -5,7 +5,7 @@ import {
   numbersToDataView,
   ScanResult,
 } from '@capacitor-community/bluetooth-le';
-import { Wifi } from '@capacitor-community/wifi';
+import { CapacitorWifiConnect } from '@falconeta/capacitor-wifi-connect';
 import { isPlatform } from '@ionic/core';
 import { isEqual } from 'lodash-es';
 import { BehaviorSubject } from 'rxjs';
@@ -243,10 +243,17 @@ export class GoProBluetoothService {
     await this.sendBluetoothWriteCommand(this.enableGoProWiFiCommand);
 
     const wifiCreds = await this.getGoProWiFiCreds();
-    await Wifi.connect({
-      ssid: wifiCreds.wifiSSID,
-      password: wifiCreds.wifiPASS,
-    });
+    let { value } = await CapacitorWifiConnect.checkPermission();
+    if (value === 'prompt') {
+      const data = await CapacitorWifiConnect.requestPermission();
+      value = data.value;
+    }
+    if (value === 'granted') {
+      await CapacitorWifiConnect.secureConnect({
+        ssid: wifiCreds.wifiSSID,
+        password: wifiCreds.wifiPASS,
+      });
+    }
   }
 
   /** Trigger pairing between device and GoPro.

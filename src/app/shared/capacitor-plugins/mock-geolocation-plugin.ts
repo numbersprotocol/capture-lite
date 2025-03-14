@@ -1,11 +1,10 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
-import { PluginListenerHandle } from '@capacitor/core';
 import {
+  PositionOptions as GeolocationOptions,
   GeolocationPlugin,
   GeolocationPluginPermissions,
-  PermissionStatus,
   Position as GeolocationPosition,
-  PositionOptions as GeolocationOptions,
+  PermissionStatus,
   WatchPositionCallback,
 } from '@capacitor/geolocation';
 
@@ -45,13 +44,6 @@ export class MockGeolocationPlugin implements GeolocationPlugin {
   }
 
   async clearWatch(_options: { id: string }): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
-
-  addListener(
-    _eventName: string,
-    _listenerFunc: () => any
-  ): PluginListenerHandle {
     throw new Error('Method not implemented.');
   }
 }
