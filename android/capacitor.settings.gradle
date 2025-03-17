@@ -47,6 +47,9 @@ project(':capacitor-share').projectDir = new File('../node_modules/@capacitor/sh
 include ':capacitor-splash-screen'
 project(':capacitor-splash-screen').projectDir = new File('../node_modules/@capacitor/splash-screen/android')
 
+include ':capgo-capacitor-social-login'
+project(':capgo-capacitor-social-login').projectDir = new File('../node_modules/@capgo/capacitor-social-login/android')
+
 include ':falconeta-capacitor-wifi-connect'
 project(':falconeta-capacitor-wifi-connect').projectDir = new File('../node_modules/@falconeta/capacitor-wifi-connect/android')
 

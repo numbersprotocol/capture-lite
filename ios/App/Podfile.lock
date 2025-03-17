@@ -1,4 +1,15 @@
 PODS:
+  - Alamofire (5.10.2)
+  - AppAuth (1.7.6):
+    - AppAuth/Core (= 1.7.6)
+    - AppAuth/ExternalUserAgent (= 1.7.6)
+  - AppAuth/Core (1.7.6)
+  - AppAuth/ExternalUserAgent (1.7.6):
+    - AppAuth/Core
+  - AppCheckCore (11.2.0):
+    - GoogleUtilities/Environment (~> 8.0)
+    - GoogleUtilities/UserDefaults (~> 8.0)
+    - PromisesObjC (~> 2.4)
   - AppsflyerCapacitorPlugin (6.15.2):
     - AppsFlyerFramework (= 6.15.3)
     - Capacitor
@@ -44,10 +55,24 @@ PODS:
     - Capacitor
   - CapacitorSplashScreen (7.0.0):
     - Capacitor
+  - CapgoCapacitorSocialLogin (7.2.3):
+    - Alamofire (~> 5.10.2)
+    - Capacitor
+    - FBSDKCoreKit (= 17.4.0)
+    - FBSDKLoginKit (= 17.4.0)
+    - GoogleSignIn (~> 8.0.0)
   - CordovaPlugins (7.0.1):
     - CapacitorCordova
   - FalconetaCapacitorWifiConnect (7.0.0):
     - Capacitor
+  - FBAEMKit (17.4.0):
+    - FBSDKCoreKit_Basics (= 17.4.0)
+  - FBSDKCoreKit (17.4.0):
+    - FBAEMKit (= 17.4.0)
+    - FBSDKCoreKit_Basics (= 17.4.0)
+  - FBSDKCoreKit_Basics (17.4.0)
+  - FBSDKLoginKit (17.4.0):
+    - FBSDKCoreKit (= 17.4.0)
   - Firebase/CoreOnly (11.9.0):
     - FirebaseCore (~> 11.9.0)
   - Firebase/Messaging (11.9.0):
@@ -79,6 +104,11 @@ PODS:
   - GoogleDataTransport (10.1.0):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
+  - GoogleSignIn (8.0.0):
+    - AppAuth (< 2.0, >= 1.7.3)
+    - AppCheckCore (~> 11.0)
+    - GTMAppAuth (< 5.0, >= 4.1.1)
+    - GTMSessionFetcher/Core (~> 3.3)
   - GoogleUtilities/AppDelegateSwizzler (8.0.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -103,6 +133,10 @@ PODS:
   - GoogleUtilities/UserDefaults (8.0.2):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
+  - GTMAppAuth (4.1.1):
+    - AppAuth/Core (~> 1.7)
+    - GTMSessionFetcher/Core (< 4.0, >= 3.3)
+  - GTMSessionFetcher/Core (3.5.0)
   - IONGeolocationLib (1.0.0)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
@@ -136,6 +170,7 @@ DEPENDENCIES:
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
+  - "CapgoCapacitorSocialLogin (from `../../node_modules/@capgo/capacitor-social-login`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
   - "FalconetaCapacitorWifiConnect (from `../../node_modules/@falconeta/capacitor-wifi-connect`)"
   - Firebase/Messaging
@@ -145,7 +180,14 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - AppAuth
+    - AppCheckCore
     - AppsFlyerFramework
+    - FBAEMKit
+    - FBSDKCoreKit
+    - FBSDKCoreKit_Basics
+    - FBSDKLoginKit
     - Firebase
     - FirebaseCore
     - FirebaseCoreInternal
@@ -153,7 +195,10 @@ SPEC REPOS:
     - FirebaseMessaging
     - GCDWebServer
     - GoogleDataTransport
+    - GoogleSignIn
     - GoogleUtilities
+    - GTMAppAuth
+    - GTMSessionFetcher
     - IONGeolocationLib
     - nanopb
     - PromisesObjC
@@ -199,6 +244,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/share"
   CapacitorSplashScreen:
     :path: "../../node_modules/@capacitor/splash-screen"
+  CapgoCapacitorSocialLogin:
+    :path: "../../node_modules/@capgo/capacitor-social-login"
   CordovaPlugins:
     :path: "../capacitor-cordova-ios-plugins"
   FalconetaCapacitorWifiConnect:
@@ -209,6 +256,9 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@numbersprotocol/preview-video"
 
 SPEC CHECKSUMS:
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
+  AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
+  AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
   AppsflyerCapacitorPlugin: 48bbfe5a0008a8ebebbb4f035352f3dcb96b8c00
   AppsFlyerFramework: ad7ff0d22aa36c7f8cc4f71a5424e19b89ccb8ae
   Capacitor: 23fff43571a4d1e3ee7d67b5a3588c6e757c2913
@@ -230,8 +280,13 @@ SPEC CHECKSUMS:
   CapacitorPushNotifications: c4feed483e03825369c278f5bab75100fb3f94a0
   CapacitorShare: 2fcf1758cd07e0558f6aed40d7437bf8a3a42297
   CapacitorSplashScreen: f4e58cc02aafd91c7cbaf32a3d1b44d02a115125
+  CapgoCapacitorSocialLogin: 9e7dfd389c1f7197c196b8df74d357503540422a
   CordovaPlugins: b6c4fe30efd4fd24c6f91684266771eba8aa652f
   FalconetaCapacitorWifiConnect: 7bce3ed1ae2682a3e3c50e0e995c6eb2ad777f59
+  FBAEMKit: 58cb5f302cdd715a56d4c1d0dfdd2e423ac1421a
+  FBSDKCoreKit: 94d7461d0cecf441b1ba7c41acfff41daa8ccd41
+  FBSDKCoreKit_Basics: 151b43db8b834d3f0e02f95d36a44ffd36265e45
+  FBSDKLoginKit: 5c1cd53c91a2282b3a4fe6e6d3dcf2b8b0d33d55
   Firebase: 819b973f669bc894c85e181f814171e9d4440b29
   FirebaseCore: 7cfcf7e8b33985c06478fd2b96e2f7101eb61a1c
   FirebaseCoreInternal: 154779013b85b4b290fdba38414df475f42e3096
@@ -239,13 +294,16 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 07e196b68580e68104df5c1c1b09ac26d04b24ea
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
+  GoogleSignIn: ce8c89bb9b37fb624b92e7514cc67335d1e277e4
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
+  GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
+  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   IONGeolocationLib: 81f33f88d025846946de2cf63b0c7628e7c6bc9d
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   NumbersprotocolPreviewCamera: 1eb1a294cddc9f259d008de67098471ec2bbd1d1
   NumbersprotocolPreviewVideo: 192b4115d6c68880776d6222a461e8aa3ecb9604
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
 
-PODFILE CHECKSUM: e903efce1edb210b63664c91ce988387661d84d5
+PODFILE CHECKSUM: 2394fade62c1adf76db3b1db96ba8820bfa95220
 
 COCOAPODS: 1.16.2

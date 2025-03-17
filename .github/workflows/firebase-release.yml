@@ -127,8 +127,10 @@ jobs:
 
       - name: Build iOS Xcode Archive
         env:
+          GOOGLE_IOS_URL_SCHEME: ${{ secrets.GOOGLE_IOS_URL_SCHEME }}
           PROVISIONING_PROFILE: ${{ secrets.FIREBASE_PROVISIONING_PROFILE_NAME }}
         run: |
+          sed -i '' "s/\$(GOOGLE_IOS_URL_SCHEME)/${GOOGLE_IOS_URL_SCHEME}/g" ios/App/App/info.plist
           npx cap sync ios
           sed -i '' "s/NumbersAppDistributionV6/${PROVISIONING_PROFILE}/g" ios/App/ExportOptions.plist
           sed -i '' 's/app-store/ad-hoc/g' ios/App/ExportOptions.plist

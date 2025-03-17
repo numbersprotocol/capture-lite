@@ -60,6 +60,10 @@
 		"classpath": "com.capacitorjs.plugins.splashscreen.SplashScreenPlugin"
 	},
 	{
+		"pkg": "@capgo/capacitor-social-login",
+		"classpath": "ee.forgr.capacitor.social.login.SocialLoginPlugin"
+	},
+	{
 		"pkg": "@falconeta/capacitor-wifi-connect",
 		"classpath": "com.falconeta.capacitor_wifi_connect.CapacitorWifiConnectPlugin"
 	},

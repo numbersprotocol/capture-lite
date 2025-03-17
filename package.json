@@ -50,6 +50,7 @@
     "@capacitor/push-notifications": "^7.0.0",
     "@capacitor/share": "^7.0.0",
     "@capacitor/splash-screen": "^7.0.0",
+    "@capgo/capacitor-social-login": "^7.2.3",
     "@falconeta/capacitor-wifi-connect": "^7.0.0",
     "@ionic/angular": "^6.2.5",
     "@ionic/core": "^6.2.5",

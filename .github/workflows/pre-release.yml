@@ -225,7 +225,10 @@ jobs:
           format: YYYYMMDDHHmmss
 
       - name: Build iOS Xcode Archive
+        env:
+          GOOGLE_IOS_URL_SCHEME: ${{ secrets.GOOGLE_IOS_URL_SCHEME }}
         run: |
+          sed -i '' "s/\$(GOOGLE_IOS_URL_SCHEME)/${GOOGLE_IOS_URL_SCHEME}/g" ios/App/App/info.plist
           npx cap sync ios
           xcodebuild archive -workspace ios/App/App.xcworkspace -scheme App -sdk iphoneos  -configuration Release -archivePath build/App.xcarchive -showBuildTimingSummary  MARKETING_VERSION=${{ steps.version_check.outputs.version }}  CURRENT_PROJECT_VERSION=${{ steps.current-time.outputs.formattedTime }}  -allowProvisioningUpdates archive
 

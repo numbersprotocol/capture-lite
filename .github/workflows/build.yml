@@ -107,7 +107,10 @@ jobs:
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
       - name: Build iOS
+        env:
+          GOOGLE_IOS_URL_SCHEME: ${{ secrets.GOOGLE_IOS_URL_SCHEME }}
         run: |
+          sed -i '' "s/\$(GOOGLE_IOS_URL_SCHEME)/${GOOGLE_IOS_URL_SCHEME}/g" ios/App/App/info.plist
           npx cap sync ios
           xcodebuild archive -workspace ios/App/App.xcworkspace -scheme App -sdk iphoneos  -configuration Debug -archivePath build/App.xcarchive -showBuildTimingSummary -allowProvisioningUpdates archive
 

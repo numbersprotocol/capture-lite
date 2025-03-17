@@ -41,6 +41,7 @@
 		"PushNotificationsPlugin",
 		"SharePlugin",
 		"SplashScreenPlugin",
+		"SocialLoginPlugin",
 		"CapacitorWifiConnectPlugin",
 		"PreviewCameraPlugin",
 		"PreviewVideoPlugin",
