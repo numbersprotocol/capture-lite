@@ -259,8 +259,8 @@ export class HomePage {
     currentVersion: string,
     latestVersion: string
   ) {
-    const currentVersionArray = currentVersion.split('.');
-    const latestVersionArray = latestVersion.split('.');
+    const currentVersionArray = currentVersion.split('.').map(Number);
+    const latestVersionArray = latestVersion.split('.').map(Number);
 
     for (const index in currentVersionArray) {
       if (currentVersionArray[index] > latestVersionArray[index]) {
