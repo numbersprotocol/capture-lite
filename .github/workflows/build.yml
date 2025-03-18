@@ -37,6 +37,8 @@ jobs:
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           APPS_FLYER_DEV_KEY: ${{ secrets.APPS_FLYER_DEV_KEY }}
           NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
+          GOOGLE_IOS_CLIENT_ID: ${{ secrets.GOOGLE_IOS_CLIENT_ID }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
         run: npm run build
 
       - name: Set up JDK 21
@@ -89,6 +91,8 @@ jobs:
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           APPS_FLYER_DEV_KEY: ${{ secrets.APPS_FLYER_DEV_KEY }}
           NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
+          GOOGLE_IOS_CLIENT_ID: ${{ secrets.GOOGLE_IOS_CLIENT_ID }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
         run: npm run build
 
       - name: Import the Code-Signing PKCS12 Certificate

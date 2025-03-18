@@ -232,6 +232,32 @@ export class DiaBackendAuthService {
     ]);
   }
 
+  signupWithGoogle$(idToken: string, device?: UserDevice, language?: string) {
+    const requestBody: {
+      id_token: string;
+      device?: UserDevice;
+      language?: string;
+    } = {
+      id_token: idToken,
+    };
+
+    if (device) {
+      requestBody.device = device;
+    }
+
+    if (language) {
+      requestBody.language = language;
+    }
+
+    return this.httpClient
+      .post<SignupGoogleResponse>(
+        `${BASE_URL}/auth/users/signup-google/`,
+        requestBody,
+        { headers: { 'x-api-key': TRUSTED_CLIENT_KEY } }
+      )
+      .pipe(tap(response => this.setToken(response.auth_token)));
+  }
+
   private updateDevice$(headers: { [header: string]: string | string[] }) {
     return combineLatest([
       this.pushNotificationService.getToken$(),
@@ -521,6 +547,13 @@ export interface ReadProfileResponse {
 }
 
 type UpdateProfileResponse = ReadProfileResponse;
+
+interface SignupGoogleResponse {
+  readonly auth_token: string;
+  readonly username: string;
+  readonly language: string;
+  readonly email: string;
+}
 
 /**
  * Represents the request body for https://dia-backend-dev.numbersprotocol.io/api/v3/redoc/#operation/auth_users_create

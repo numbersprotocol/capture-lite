@@ -21,6 +21,8 @@ jobs:
           NUMBERS_STORAGE_TRUSTED_CLIENT_KEY: ${{ secrets.NUMBERS_STORAGE_TRUSTED_CLIENT_KEY }}
           NUMBERS_BUBBLE_DB_URL: ${{ secrets.NUMBERS_BUBBLE_DB_URL }}
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
+          GOOGLE_IOS_CLIENT_ID: ${{ secrets.GOOGLE_IOS_CLIENT_ID }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
         run: |
           npm install -g @ionic/cli
           npm install --legacy-peer-deps
