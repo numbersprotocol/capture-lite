@@ -82,5 +82,10 @@ public class MainActivity extends BridgeActivity implements ModifiedMainActivity
 
   // This function will never be called, leave it empty
   @Override
-  public void IHaveModifiedTheMainActivityForTheUseWithSocialLoginPlugin() {}
+  public void IHaveModifiedTheMainActivityForTheUseWithSocialLoginPlugin() {
+    // This method is required by the ModifiedMainActivityForSocialLoginPlugin interface
+    // but is never called by the SocialLoginPlugin library. It serves as a marker to
+    // indicate that MainActivity has been correctly configured for use with the plugin.
+    // The method is intentionally left empty as per the plugin's requirements.
+  }
 }

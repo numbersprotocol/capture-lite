@@ -71,7 +71,7 @@ jobs:
           firebase appdistribution:distribute ./android/app/build/outputs/bundle/release/app-release.aab --app ${APP_ID} --groups "${TEST_GROUPS}"
 
   distribute-ios:
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 120
 
     steps:
