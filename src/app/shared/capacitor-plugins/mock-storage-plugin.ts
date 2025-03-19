@@ -1,13 +1,12 @@
 /* eslint-disable class-methods-use-this, @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { PluginListenerHandle } from '@capacitor/core';
 import {
   ConfigureOptions,
   MigrateResult,
-  StoragePlugin,
-} from '@capacitor/storage';
+  PreferencesPlugin,
+} from '@capacitor/preferences';
 
-export class MockStoragePlugin implements StoragePlugin {
+export class MockStoragePlugin implements PreferencesPlugin {
   private readonly map = new Map<string, string>();
 
   async get(options: { key: string }): Promise<{ value: string }> {
@@ -39,13 +38,6 @@ export class MockStoragePlugin implements StoragePlugin {
   }
 
   async removeOld(): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
-
-  addListener(
-    _eventName: string,
-    _listenerFunc: () => any
-  ): PluginListenerHandle {
     throw new Error('Method not implemented.');
   }
 }

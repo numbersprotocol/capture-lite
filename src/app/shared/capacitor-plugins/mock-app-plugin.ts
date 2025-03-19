@@ -20,30 +20,30 @@ export class MockAppPlugin implements AppPlugin {
     throw new Error('Method not implemented.');
   }
 
-  addListener(
+  async addListener(
     eventName: 'appStateChange',
     listenerFunc: StateChangeListener
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
+  ): Promise<PluginListenerHandle>;
+  async addListener(
     eventName: 'pause',
     listenerFunc: () => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
+  ): Promise<PluginListenerHandle>;
+  async addListener(
     eventName: 'resume',
     listenerFunc: () => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
+  ): Promise<PluginListenerHandle>;
+  async addListener(
     eventName: 'appUrlOpen',
     listenerFunc: URLOpenListener
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
+  ): Promise<PluginListenerHandle>;
+  async addListener(
     eventName: 'appRestoredResult',
     listenerFunc: RestoredListener
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
-  addListener(
+  ): Promise<PluginListenerHandle>;
+  async addListener(
     eventName: 'backButton',
     listenerFunc: BackButtonListener
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   async addListener(_: unknown, __: unknown): Promise<PluginListenerHandle> {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const remove = async () => {};

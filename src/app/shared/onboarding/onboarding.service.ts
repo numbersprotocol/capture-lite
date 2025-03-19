@@ -99,8 +99,10 @@ export class OnboardingService {
   // eslint-disable-next-line class-methods-use-this
   private isLowerThanRebrandVersion(shownTutorialVersion: string): boolean {
     const rebrandVersion = '0.65.1';
-    const rebrandVersionArray = rebrandVersion.split('.');
-    const shownTutorialVersionArray = shownTutorialVersion.split('.');
+    const rebrandVersionArray = rebrandVersion.split('.').map(Number);
+    const shownTutorialVersionArray = shownTutorialVersion
+      .split('.')
+      .map(Number);
 
     for (const index in shownTutorialVersionArray) {
       const shownNumber = shownTutorialVersionArray[index];

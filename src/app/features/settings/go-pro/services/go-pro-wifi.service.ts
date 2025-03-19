@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Wifi } from '@capacitor-community/wifi';
+import { Capacitor } from '@capacitor/core';
+import {
+  CapacitorWifiConnect,
+  ConnectState,
+} from '@falconeta/capacitor-wifi-connect';
 import { Platform } from '@ionic/angular';
 import { PreferenceManager } from '../../../../shared/preference-manager/preference-manager.service';
 import { GoProBluetoothService } from './go-pro-bluetooth.service';
@@ -20,25 +24,38 @@ export class GoProWifiService {
 
   // eslint-disable-next-line class-methods-use-this
   async isConnectedToGoProWifi(): Promise<boolean> {
-    const result = await Wifi.getSSID();
-    return result.ssid?.startsWith('GP') ?? false;
+    if (!Capacitor.isNativePlatform()) return false;
+
+    const result = await CapacitorWifiConnect.getAppSSID();
+    return result.value.startsWith('GP');
   }
 
   // eslint-disable-next-line class-methods-use-this
   async getConnectedWifiSSID() {
-    const result = await Wifi.getSSID();
-    return result.ssid;
+    if (!Capacitor.isNativePlatform()) return '';
+
+    const result = await CapacitorWifiConnect.getAppSSID();
+    return result.value;
   }
 
   async connectToGoProWiFi(): Promise<string> {
+    if (!Capacitor.isNativePlatform()) return '';
+
     await this.goProBluetoothService.enableGoProWifi();
     const creds = await this.goProBluetoothService.getGoProWiFiCreds();
-    const result = await Wifi.connect({
-      ssid: creds.wifiSSID,
-      password: creds.wifiPASS,
-    });
-
-    return result.ssid ?? '';
+    let { value } = await CapacitorWifiConnect.checkPermission();
+    if (value === 'prompt') {
+      const data = await CapacitorWifiConnect.requestPermission();
+      value = data.value;
+    }
+    if (value === 'granted') {
+      const result = await CapacitorWifiConnect.secureConnect({
+        ssid: creds.wifiSSID,
+        password: creds.wifiPASS,
+      });
+      return result.value === ConnectState.Ok ? creds.wifiSSID : '';
+    }
+    return '';
   }
 
   async showTutorialForMobileDataOnlyApps() {

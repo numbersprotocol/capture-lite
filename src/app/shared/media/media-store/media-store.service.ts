@@ -102,7 +102,7 @@ export class MediaStore {
     await this.initialize();
     return this.mutex.runExclusive(async () => {
       const mediaExtension = await this.setMediaExtension(index, mimeType);
-      if (Capacitor.isNative) {
+      if (Capacitor.isNativePlatform()) {
         const blob = await base64ToBlob(base64, mimeType);
         await write_blob({
           directory: this.directory,
@@ -262,7 +262,7 @@ export class MediaStore {
    * directly when dealing with small image for better performance.
    */
   async getUrl(index: string, mimeType: MimeType) {
-    if (Capacitor.isNative) {
+    if (Capacitor.isNativePlatform()) {
       // Workaround to fix urls (thumbnails) saved as incorrect mimeType.
       await this.fixIncorrectExtension(index, mimeType);
       return Capacitor.convertFileSrc(await this.getUri(index));

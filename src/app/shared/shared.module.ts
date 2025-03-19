@@ -26,6 +26,7 @@ import { OnboardingPopUpDialogComponent } from './onboarding/onboarding-pop-up-d
 import { OrderDetailDialogComponent } from './order-detail-dialog/order-detail-dialog.component';
 import { SafeResourceUrlPipe } from './pipes/safe-resource-url/safe-resource-url.pipe';
 import { StartsWithPipe } from './pipes/starts-with/starts-with.pipe';
+import { SocialLoginButtonComponent } from './social-login-button/social-login-button.component';
 import { UserGuideService } from './user-guide/user-guide.service';
 
 const declarations = [
@@ -41,6 +42,7 @@ const declarations = [
   OrderDetailDialogComponent,
   CaptureBackButtonComponent,
   OnboardingPopUpDialogComponent,
+  SocialLoginButtonComponent,
 ];
 
 const imports = [

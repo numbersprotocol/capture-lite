@@ -6,8 +6,8 @@ import {
   GEOLOCATION_PLUGIN,
   LOCAL_NOTIFICATIONS_PLUGIN,
   NETOWRK_PLUGIN,
+  PREFERENCES_PLUGIN,
   PUSH_NOTIFICATIONS_PLUGIN,
-  STORAGE_PLUGIN,
 } from './capacitor-plugins.module';
 import { MockAppPlugin } from './mock-app-plugin';
 import { MockCameraPlugin } from './mock-camera-plugin';
@@ -45,7 +45,7 @@ import { MockStoragePlugin } from './mock-storage-plugin';
       useClass: MockNetworkPlugin,
     },
     {
-      provide: STORAGE_PLUGIN,
+      provide: PREFERENCES_PLUGIN,
       useClass: MockStoragePlugin,
     },
     {

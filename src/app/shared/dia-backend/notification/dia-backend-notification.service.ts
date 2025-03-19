@@ -50,7 +50,7 @@ export class DiaBackendNotificationService {
   }
 
   private async needLocalNotification() {
-    if (Capacitor.platform !== 'android') {
+    if (Capacitor.getPlatform() !== 'android') {
       return false;
     }
     return (await this.appPlugin.getState()).isActive;

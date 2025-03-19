@@ -1,16 +1,23 @@
 package io.numbersprotocol.capturelite;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginHandle;
+
+import ee.forgr.capacitor.social.login.GoogleProvider;
+import ee.forgr.capacitor.social.login.SocialLoginPlugin;
+import ee.forgr.capacitor.social.login.ModifiedMainActivityForSocialLoginPlugin;
 
 import java.util.ArrayList;
 import android.content.res.Configuration;
 import android.webkit.WebSettings;
 
-public class MainActivity extends BridgeActivity {
+public class MainActivity extends BridgeActivity implements ModifiedMainActivityForSocialLoginPlugin {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -52,5 +59,33 @@ public class MainActivity extends BridgeActivity {
   public void onResume() {
     super.onResume();
     // setDarkMode();
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode >= GoogleProvider.REQUEST_AUTHORIZE_GOOGLE_MIN && requestCode < GoogleProvider.REQUEST_AUTHORIZE_GOOGLE_MAX) {
+      PluginHandle pluginHandle = getBridge().getPlugin("SocialLogin");
+      if (pluginHandle == null) {
+        Log.i("Google Activity Result", "SocialLogin login handle is null");
+        return;
+      }
+      Plugin plugin = pluginHandle.getInstance();
+      if (!(plugin instanceof SocialLoginPlugin)) {
+        Log.i("Google Activity Result", "SocialLogin plugin instance is not SocialLoginPlugin");
+        return;
+      }
+      ((SocialLoginPlugin) plugin).handleGoogleLoginIntent(requestCode, data);
+    }
+  }
+
+  // This function will never be called, leave it empty
+  @Override
+  public void IHaveModifiedTheMainActivityForTheUseWithSocialLoginPlugin() {
+    // This method is required by the ModifiedMainActivityForSocialLoginPlugin interface
+    // but is never called by the SocialLoginPlugin library. It serves as a marker to
+    // indicate that MainActivity has been correctly configured for use with the plugin.
+    // The method is intentionally left empty as per the plugin's requirements.
   }
 }

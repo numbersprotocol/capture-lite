@@ -2,8 +2,8 @@
 
 android {
   compileOptions {
-      sourceCompatibility JavaVersion.VERSION_17
-      targetCompatibility JavaVersion.VERSION_17
+      sourceCompatibility JavaVersion.VERSION_21
+      targetCompatibility JavaVersion.VERSION_21
   }
 }
 
@@ -11,8 +11,6 @@ apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-advertising-id')
     implementation project(':capacitor-community-bluetooth-le')
-    implementation project(':capacitor-community-http')
-    implementation project(':capacitor-community-wifi')
     implementation project(':capacitor-app')
     implementation project(':capacitor-browser')
     implementation project(':capacitor-camera')
@@ -22,12 +20,13 @@ dependencies {
     implementation project(':capacitor-geolocation')
     implementation project(':capacitor-local-notifications')
     implementation project(':capacitor-network')
+    implementation project(':capacitor-preferences')
     implementation project(':capacitor-push-notifications')
     implementation project(':capacitor-share')
     implementation project(':capacitor-splash-screen')
-    implementation project(':capacitor-storage')
+    implementation project(':capgo-capacitor-social-login')
+    implementation project(':falconeta-capacitor-wifi-connect')
     implementation project(':numbersprotocol-preview-camera')
-    implementation project(':numbersprotocol-preview-memory')
     implementation project(':numbersprotocol-preview-video')
     implementation project(':appsflyer-capacitor-plugin')
     implementation project(':capacitor-blob-writer')

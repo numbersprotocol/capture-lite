@@ -49,6 +49,7 @@
   "resendActivationEmail": "Resend Activation Email",
   "alreadyHaveAnAccount": "Already Have an Account",
   "logout": "Logout",
+  "continueWithGoogle": "Continue with Google",
   "moreInformation": "More Information",
   "mediaId": "Media ID",
   "media": "Media",
@@ -225,7 +226,8 @@
       "invalid_referral_code": "Invalid referral code",
       "duplicate_email": "The email has already been registered",
       "duplicate_username": "User with this username already exists",
-      "asset_commit_insufficient_fund": "Insufficient NUM balance. Please top up your balance to complete the asset registration."
+      "asset_commit_insufficient_fund": "Insufficient NUM balance. Please top up your balance to complete the asset registration.",
+      "authentication_failed": "Authentication failed, please login again."
     },
     "wallets": {
       "emptyTransferAmount": "Please enter a valid transfer amount.",

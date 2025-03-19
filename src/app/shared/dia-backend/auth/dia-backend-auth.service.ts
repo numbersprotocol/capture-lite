@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Device } from '@capacitor/device';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 import { isEqual, reject } from 'lodash-es';
 import {
   Observable,
@@ -86,7 +86,7 @@ export class DiaBackendAuthService {
 
   // TODO: remove this method
   private async migrate() {
-    const oldToken = await Storage.get({
+    const oldToken = await Preferences.get({
       key: 'numbersStoragePublisher_authToken',
     });
     if (oldToken.value) {
@@ -96,14 +96,14 @@ export class DiaBackendAuthService {
       }
     }
 
-    const oldUsername = await Storage.get({
+    const oldUsername = await Preferences.get({
       key: 'numbersStoragePublisher_userName',
     });
     if (oldUsername.value) {
       this.setUsername(oldUsername.value);
     }
 
-    const oldEmail = await Storage.get({
+    const oldEmail = await Preferences.get({
       key: 'numbersStoragePublisher_email',
     });
     if (oldEmail.value) {
@@ -230,6 +230,32 @@ export class DiaBackendAuthService {
       defer(() => Device.getInfo()),
       defer(() => Device.getId()),
     ]);
+  }
+
+  signupWithGoogle$(idToken: string, device?: UserDevice, language?: string) {
+    const requestBody: {
+      id_token: string;
+      device?: UserDevice;
+      language?: string;
+    } = {
+      id_token: idToken,
+    };
+
+    if (device) {
+      requestBody.device = device;
+    }
+
+    if (language) {
+      requestBody.language = language;
+    }
+
+    return this.httpClient
+      .post<SignupGoogleResponse>(
+        `${BASE_URL}/auth/users/signup-google/`,
+        requestBody,
+        { headers: { 'x-api-key': TRUSTED_CLIENT_KEY } }
+      )
+      .pipe(tap(response => this.setToken(response.auth_token)));
   }
 
   private updateDevice$(headers: { [header: string]: string | string[] }) {
@@ -521,6 +547,13 @@ export interface ReadProfileResponse {
 }
 
 type UpdateProfileResponse = ReadProfileResponse;
+
+interface SignupGoogleResponse {
+  readonly auth_token: string;
+  readonly username: string;
+  readonly language: string;
+  readonly email: string;
+}
 
 /**
  * Represents the request body for https://dia-backend-dev.numbersprotocol.io/api/v3/redoc/#operation/auth_users_create
