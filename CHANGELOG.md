@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.101.0] - 2025-03-29
+
+### Added
+
+1. Support Google account for login and sign-up [#3328](https://github.com/numbersprotocol/capture-lite/pull/3328)
+
+### Changed
+
+1. Upgrade Capacitor to v7 [#3328](https://github.com/numbersprotocol/capture-lite/pull/3328)
+
+### Fixed
+
+1. Fix the persistent popup tutorial [#3328](https://github.com/numbersprotocol/capture-lite/pull/3328)
+2. Fix the typo on the signup page [#3327](https://github.com/numbersprotocol/capture-lite/pull/3327)
+3. Fix the persistent migration popup dialog caused by incorrect string version comparison [#3325](https://github.com/numbersprotocol/capture-lite/pull/3325)
+
 ## [0.100.0] - 2025-02-13
 
 ### Changed
@@ -2408,7 +2424,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.100.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.101.0...HEAD
+[0.101.0]: https://github.com/numbersprotocol/capture-lite/compare/0.100.0...0.101.0
 [0.100.0]: https://github.com/numbersprotocol/capture-lite/compare/0.99.0...0.100.0
 [0.99.0]: https://github.com/numbersprotocol/capture-lite/compare/0.98.0...0.99.0
 [0.98.0]: https://github.com/numbersprotocol/capture-lite/compare/0.97.1...0.98.0
