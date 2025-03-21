@@ -182,8 +182,10 @@ export class DiaBackendAuthService {
       email,
       password,
       referral_code: referralCodeOptional,
-      device,
     };
+    if (device) {
+      requestBody.device = device;
+    }
     if (referralCodeOptional === '') delete requestBody.referral_code;
 
     return this.httpClient.post<CreateUserResponse>(
@@ -226,7 +228,7 @@ export class DiaBackendAuthService {
 
   readDevice$() {
     return combineLatest([
-      this.pushNotificationService.getToken$(),
+      this.pushNotificationService.getToken$(false),
       defer(() => Device.getInfo()),
       defer(() => Device.getId()),
     ]);

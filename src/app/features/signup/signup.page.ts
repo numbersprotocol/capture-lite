@@ -194,17 +194,20 @@ export class SignupPage {
   onSubmit() {
     const device$ = this.diaBackendAuthService.readDevice$();
     const createUser$ = device$.pipe(
-      concatMap(([fcmToken, deviceInfo, device]) => {
+      concatMap(([fcmToken, deviceInfo, deviceId]) => {
+        const device = fcmToken
+          ? {
+              fcm_token: fcmToken,
+              platform: deviceInfo.platform,
+              device_identifier: deviceId.identifier,
+            }
+          : undefined;
         return this.diaBackendAuthService.createUser$(
           this.model.username,
           this.model.email,
           this.model.password,
           this.model.referralCodeOptional,
-          {
-            fcm_token: fcmToken,
-            platform: deviceInfo.platform,
-            device_identifier: device.identifier,
-          }
+          device
         );
       })
     );

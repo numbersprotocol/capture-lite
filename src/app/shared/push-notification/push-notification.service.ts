@@ -32,8 +32,9 @@ export class PushNotificationService {
     }
   }
 
-  getToken$() {
-    return this.token$.asObservable().pipe(isNonNullable());
+  getToken$(filterNull = true) {
+    const observable$ = this.token$.asObservable();
+    return filterNull ? observable$.pipe(isNonNullable()) : observable$;
   }
 
   getPushData$() {
