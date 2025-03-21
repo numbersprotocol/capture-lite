@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.101.0] - 2025-03-29
+## [0.101.1] - 2025-03-21
+
+### Fixed
+
+1. Fix issue where login gets stuck on "Please wait…" after logout on Android or after rejecting a notification [#3332](https://github.com/numbersprotocol/capture-lite/pull/3332)
+
+## [0.101.0] - 2025-03-19
 
 ### Added
 
@@ -2424,7 +2430,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.101.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.101.1...HEAD
+[0.101.1]: https://github.com/numbersprotocol/capture-lite/compare/0.101.0...0.101.1
 [0.101.0]: https://github.com/numbersprotocol/capture-lite/compare/0.100.0...0.101.0
 [0.100.0]: https://github.com/numbersprotocol/capture-lite/compare/0.99.0...0.100.0
 [0.99.0]: https://github.com/numbersprotocol/capture-lite/compare/0.98.0...0.99.0
