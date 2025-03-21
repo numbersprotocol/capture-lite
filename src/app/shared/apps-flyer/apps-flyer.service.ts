@@ -10,6 +10,7 @@ import { CCamCustomEventType } from './apps-flyer-enums';
   providedIn: 'root',
 })
 export class AppsFlyerService {
+  private readonly INIT_TIMEOUT_MS = 2000;
   private readonly afConfig: AFInit = {
     appID: '1536388009', // AppStore Application ID. For iOS only.
     devKey: APPS_FLYER_DEV_KEY,
@@ -34,7 +35,22 @@ export class AppsFlyerService {
 
       await AdvertisingId.requestTracking();
 
-      await AppsFlyer.initSDK(this.afConfig);
+      /**
+       * Initializes the AppsFlyer SDK with the configuration.
+       * This promise is used to track the initialization status.
+       *
+       * Note: This is a workaround to prevent AppsFlyer.initSDK from not resolving
+       * after Android hot reload.
+       */
+      const initPromise = AppsFlyer.initSDK(this.afConfig);
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(
+          () => reject(new Error('AppsFlyer initialization timed out')),
+          this.INIT_TIMEOUT_MS
+        );
+      });
+
+      await Promise.race([initPromise, timeoutPromise]);
     } catch (error) {
       // TODO: Report error to Crashlytics or any other error reporting service if available.
     }

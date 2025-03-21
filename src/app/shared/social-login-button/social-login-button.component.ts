@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, defer, Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { catchError, concatMap, tap } from 'rxjs/operators';
 import { LanguageService } from '../../shared/language/service/language.service';
 import { BlockingActionService } from '../blocking-action/blocking-action.service';
@@ -40,26 +40,28 @@ export class SocialLoginButtonComponent {
       .signInWithGoogle$()
       .pipe(
         concatMap(socialUser => {
-          const action$ = defer(() => {
-            return combineLatest([
-              this.diaBackendAuthService.readDevice$(),
-              this.languageService.currentLanguageKey$,
-            ]).pipe(
-              concatMap(([[fcmToken, deviceInfo, device], language]) =>
-                this.diaBackendAuthService.signupWithGoogle$(
-                  socialUser.idToken,
-                  {
+          const action$ = combineLatest([
+            this.diaBackendAuthService.readDevice$(),
+            this.languageService.currentLanguageKey$,
+          ]).pipe(
+            concatMap(([[fcmToken, deviceInfo, deviceId], language]) => {
+              const device = fcmToken
+                ? {
                     fcm_token: fcmToken,
                     platform: deviceInfo.platform,
-                    device_identifier: device.identifier,
-                  },
-                  language
-                )
-              ),
-              tap(_ => (this.onboardingService.isNewLogin = true)),
-              catchError((err: unknown) => this.handleSocialLoginError$(err))
-            );
-          });
+                    device_identifier: deviceId.identifier,
+                  }
+                : undefined;
+
+              return this.diaBackendAuthService.signupWithGoogle$(
+                socialUser.idToken,
+                device,
+                language
+              );
+            }),
+            tap(_ => (this.onboardingService.isNewLogin = true)),
+            catchError((err: unknown) => this.handleSocialLoginError$(err))
+          );
 
           return this.blockingActionService.run$(action$);
         }),
