@@ -1,0 +1,17 @@
+name: Add Issues to Backlog Project
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-to-project:
+    name: Add issue to Backlog project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add issue to Backlog project
+        uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/orgs/numbersprotocol/projects/8
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
