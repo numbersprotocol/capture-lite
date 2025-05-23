@@ -61,11 +61,12 @@ export class Proof {
    */
   get uploadedAtOrTimestamp() {
     const MILLISECONDS_PER_SECOND = 1000;
-    const LENGTH_IN_MILLISECONDS = 13;
+    const MILLISECONDS_THRESHOLD = 10000000000; // 10^10, timestamps after March 2001
 
     // convert timestamp to milliseconds if needed
+    // Use threshold-based approach instead of string length to determine if timestamp is in milliseconds
     const proofTimestampInMilliseconds =
-      this.timestamp.toString().length === LENGTH_IN_MILLISECONDS
+      this.timestamp > MILLISECONDS_THRESHOLD
         ? this.timestamp
         : this.timestamp * MILLISECONDS_PER_SECOND;
 
@@ -80,7 +81,8 @@ export class Proof {
    * Note: After restoring or syncing with the backend assets, the timestamp will be in seconds.
    * For more details, refer to https://github.com/numbersprotocol/storage-backend/issues/976
    *
-   * Note: Milliseconds are 13 digits long, while seconds are 10 digits long.
+   * Note: Milliseconds are typically 13 digits long (after 2001), while seconds are typically 10 digits long.
+   * We use a threshold-based approach to detect and convert between these formats.
    */
   get timestamp() {
     return this.truth.timestamp;
