@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+1. Add missing NSLocationAlwaysAndWhenInUseUsageDescription purpose string in Info.plist for iOS
+
 ## [0.101.1] - 2025-03-21
 
 ### Fixed
