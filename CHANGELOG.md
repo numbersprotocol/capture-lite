@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+1. Fix incorrect asset date display when viewing restored data offline [#3336](https://github.com/numbersprotocol/capture-lite/issues/3336)
 1. Add missing NSLocationAlwaysAndWhenInUseUsageDescription purpose string in Info.plist for iOS
 
 ## [0.101.1] - 2025-03-21

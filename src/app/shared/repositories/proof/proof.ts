@@ -58,19 +58,12 @@ export class Proof {
 
   /**
    * Used to sort the assets in the VERIFIED tab either by timestamp or uploadedAt (if available).
+   * Since timestamp getter now ensures values are always in milliseconds, we don't need
+   * to perform the seconds-to-milliseconds conversion here.
    */
   get uploadedAtOrTimestamp() {
-    const MILLISECONDS_PER_SECOND = 1000;
-    const LENGTH_IN_MILLISECONDS = 13;
-
-    // convert timestamp to milliseconds if needed
-    const proofTimestampInMilliseconds =
-      this.timestamp.toString().length === LENGTH_IN_MILLISECONDS
-        ? this.timestamp
-        : this.timestamp * MILLISECONDS_PER_SECOND;
-
     const serverTimestampInMilliseconds = Date.parse(this.uploadedAt ?? '');
-    return serverTimestampInMilliseconds || proofTimestampInMilliseconds;
+    return serverTimestampInMilliseconds || this.timestamp;
   }
 
   /**
@@ -80,10 +73,21 @@ export class Proof {
    * Note: After restoring or syncing with the backend assets, the timestamp will be in seconds.
    * For more details, refer to https://github.com/numbersprotocol/storage-backend/issues/976
    *
-   * Note: Milliseconds are 13 digits long, while seconds are 10 digits long.
+   * Note: Milliseconds are typically 13 digits long (after 2001), while seconds are
+   * typically 10 digits long.
+   * We use a threshold-based approach to detect and convert between these formats.
+   *
+   * This getter ensures timestamps are always returned in milliseconds regardless of
+   * how they're stored (seconds or milliseconds).
    */
   get timestamp() {
-    return this.truth.timestamp;
+    const MILLISECONDS_PER_SECOND = 1000;
+    const MILLISECONDS_THRESHOLD = 10000000000; // 10^10, timestamps after March 2001
+
+    // Convert to milliseconds if the timestamp is in seconds
+    return this.truth.timestamp > MILLISECONDS_THRESHOLD
+      ? this.truth.timestamp
+      : this.truth.timestamp * MILLISECONDS_PER_SECOND;
   }
 
   get deviceName() {
