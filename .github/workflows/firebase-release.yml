@@ -1,14 +1,28 @@
 name: firebase-release
 
 on:
-  push:
-    tags:
-      - 'firebase-*'
+  workflow_dispatch:
+    inputs:
+      android:
+        description: 'Build Android'
+        required: false
+        default: true
+        type: boolean
+      ios:
+        description: 'Build iOS'
+        required: false
+        default: true
+        type: boolean
+      description:
+        description: 'Build description (optional)'
+        required: false
+        type: string
 
 jobs:
   distribute-android:
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    if: ${{ inputs.android }}
 
     steps:
       - uses: actions/checkout@v4
@@ -73,6 +87,7 @@ jobs:
   distribute-ios:
     runs-on: macos-15
     timeout-minutes: 120
+    if: ${{ inputs.ios }}
 
     steps:
       - uses: actions/checkout@v4

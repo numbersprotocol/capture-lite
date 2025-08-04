@@ -5,65 +5,108 @@
 
 | branch  |                                                                                        build                                                                                         |                                                                                                                                        coverage                                                                                                                                         |                                                                                                                                      quality                                                                                                                                      |
 | :-----: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| master  |        [![build](https://github.com/numbersprotocol/capture-lite/workflows/build/badge.svg)](https://github.com/numbersprotocol/capture-lite/actions?query=workflow%3Abuild)         |        [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/45ae18aaa6a7474497e0efd818452a46)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Coverage)         |        [![Codacy Badge](https://app.codacy.com/project/badge/Grade/45ae18aaa6a7474497e0efd818452a46)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Grade)         |
+|  main   |        [![build](https://github.com/numbersprotocol/capture-lite/workflows/build/badge.svg)](https://github.com/numbersprotocol/capture-lite/actions?query=workflow%3Abuild)         |        [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/45ae18aaa6a7474497e0efd818452a46)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Coverage)         |        [![Codacy Badge](https://app.codacy.com/project/badge/Grade/45ae18aaa6a7474497e0efd818452a46)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Grade)         |
 | develop | [![build](https://github.com/numbersprotocol/capture-lite/workflows/build/badge.svg?branch=develop)](https://github.com/numbersprotocol/capture-lite/actions?query=workflow%3Abuild) | [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/45ae18aaa6a7474497e0efd818452a46?branch=develop)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Coverage) | [![Codacy Badge](https://app.codacy.com/project/badge/Grade/45ae18aaa6a7474497e0efd818452a46?branch=develop)](https://www.codacy.com/gh/numbersprotocol/capture-lite?utm_source=github.com&utm_medium=referral&utm_content=numbersprotocol/capture-lite&utm_campaign=Badge_Grade) |
 
 ## Getting Started
 
-Node 16.2.0+ and NPM 7.13.0+ is required.
+### Quick Setup with AI
 
-Install the dependencies.
+For rapid development environment setup, use this prompt with Claude or other AI assistants:
+
+```
+I need to set up the development environment for the Numbers Protocol Capture Cam mobile app from scratch. This is an Angular/Ionic mobile application with the following requirements:
+
+- Node.js v20.11.1+ (v20.11.1 or higher)
+- NPM (comes with Node.js)
+- Git for cloning the repository
+
+Setup steps needed:
+1. Clone the repository: git clone https://github.com/numbersprotocol/capture-lite.git
+2. Navigate to project directory: cd capture-lite
+
+**Important Note**: Some commands require environment-specific configurations and commercial package licenses that may not be available locally:
+
+3. Install dependencies: npm install --legacy-peer-deps
+   *Note: Requires commercial package authentication for some dependencies*
+4. Start development server: npm run serve
+   *Note: Limited functionality without full environment setup*
+5. Run tests: npm run test
+   *Note: Works with dependencies installed*
+6. Run linting: npm run lint
+   *Note: Works with dependencies installed*
+
+**Alternative for environments without full setup:**
+- Edit source code directly using your preferred IDE/editor
+- Use GitHub Actions (Firebase Release) for testing with full dependencies
+- Download builds via Firebase App Distribution for device testing
+
+Please help me:
+1. Verify/install the correct Node.js version (v20.11.1+)
+2. Clone the repository and set up code editing environment
+3. Understand the codebase structure for effective development
+4. Guide me through the GitHub Actions testing workflow
+5. Help me with specific development tasks I want to accomplish
+```
+
+### Manual Setup
+
+Node.js v20.11.1+ is required (v20.11.1 or higher recommended).
+
+Clone the repository:
 
 ```bash
-npm i
+git clone https://github.com/numbersprotocol/capture-lite.git
+cd capture-lite
 ```
 
-Set the system environment variables `NUMBERS_STORAGE_BASE_URL`, `NUMBERS_STORAGE_TRUSTED_CLIENT_KEY`, `NUMBERS_BUBBLE_DB_URL`, `BUBBLE_API_URL` and `APPS_FLYER_DEV_KEY` before building the app by appending the following string in `~/.profile`:
+Install the dependencies:
 
-```txt
-export NUMBERS_STORAGE_BASE_URL="THE PRIVATE BASE URL"
-export NUMBERS_STORAGE_TRUSTED_CLIENT_KEY="THE TRUSTED CLIENT KEY"
-export NUMBERS_BUBBLE_DB_URL="THE BUBBLE DB URL"
-export BUBBLE_API_URL="BUBBLE API URL"
-export APPS_FLYER_DEV_KEY="APPS FLYER DEV KEY
+```bash
+npm install --legacy-peer-deps
+# Note: Requires commercial package authentication
 ```
 
-Preview the app in web browser.
+Start the development server:
 
 ```bash
 npm run serve
+# Note: Limited functionality without full environment setup
 ```
+
+Run linting and tests:
+
+```bash
+npm run lint    # Requires dependencies installed
+npm run test    # Requires dependencies installed
+```
+
+**Alternative Development Approach:**
+If dependencies can't be installed due to missing environment variables, you can still:
+
+- Edit source code directly using your IDE/editor
+- Use GitHub Actions workflows for testing (see [Development Workflow](./DEPLOYMENT.md#development-workflow-overview))
+- Test builds via Firebase App Distribution
 
 ## Development
 
-Start a local dev server for app dev/testing.
+### Common Commands
 
 ```bash
-npm run serve
+npm run serve      # Start development server
+npm run test       # Run unit tests
+npm run test.ci    # Run tests in headless mode
+npm run lint       # Run linting (required before commit)
+npm run build      # Build for production
 ```
 
-Run tests.
+### Platform Development
 
 ```bash
-npm run test
-```
-
-Run tests in headless mode.
-
-```bash
-npm run test.ci
-```
-
-Lint the projects.
-
-```bash
-npm run lint
-```
-
-[Update `cordova-res` (splash screens and launcher icons)](https://capacitorjs.com/docs/guides/splash-screens-and-icons).
-
-```bash
-cordova-res android --skip-config --copy
+npm run build.android    # Build and sync for Android
+npm run build.ios        # Build and sync for iOS
+npx cap open android     # Open in Android Studio
+npx cap open ios         # Open in Xcode
 ```
 
 ### Contribution
@@ -109,37 +152,25 @@ npm run build.android
 - This app is still in the experimental stage.
 - This app uses raw file system to save proofs, and thus the performance is not optimized.
 
-### Release
+## Development & Deployment Workflow
 
-See the [Capture App release flow (Miro)](https://miro.com/app/board/o9J_knEiIYo=/?moveToWidget=3458764542656055086&cot=14).
+Due to local environment limitations, the recommended development flow uses GitHub Actions for testing:
 
-Some nodes below:
+### Development Testing
 
-Bump version in `package.json`.
+1. **Make code changes** and ensure local build/tests pass
+2. **Deploy for testing** using GitHub Actions:
+   - **Android APK Build**: For Android device testing
+   - **Firebase Release**: For distributing to test groups (Android & iOS)
+3. **Test your implementation** using the deployed build
+4. **Request code review** from senior developers after confirming changes work
 
-```json
-{
-  "version": "a.b.c"
-}
-```
+### QA/Production Deployment
 
-Bump version in `android/app/build.gradle`.
+After code review approval:
 
-```gradle
-android {
-    defaultConfig {
-        versionCode <versionCode++>
-        versionName "a.b.c"
-    }
-}
-```
+1. Bump version numbers (see [DEPLOYMENT.md](./DEPLOYMENT.md))
+2. Trigger pre-release GitHub Action for Play Store (alpha) and TestFlight
+3. QA team handles promotion to production
 
-Run `npm i` to update `package-lock.json`.
-
-Write the changelog in `CHANGELOG.md`.
-
-When push to the `master` branch with new version tag, GitHub Action would automatically do the following jobs:
-
-1. Create release GitHub page with debug APK.
-1. Publish the app to Play Console on alpha track and Apple Store.
-1. Send notification to the private `reminder-releases` slack channel.
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.

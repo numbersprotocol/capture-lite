@@ -313,31 +313,3 @@ jobs:
         with:
           body: Thanks for following along! For more information check out the [CHANGELOG](https://github.com/numbersprotocol/capture-lite/blob/main/CHANGELOG.md).
           prerelease: true
-
-      - name: Send Slack notification
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: reminder-releases
-          SLACK_COLOR: '#6EE4D3'
-          SLACK_ICON: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-          SLACK_MESSAGE: |
-            Version: ${{ steps.version_check.outputs.version }}
-            <https://github.com/numbersprotocol/capture-lite/releases/tag/${{ steps.version_check.outputs.version }}|GitHub Release Note>
-
-            APKs
-
-            - <https://drive.google.com/drive/folders/1NH-4mruBBubxHMfXF6VXaKRCQ76Ldg_n?usp=sharing|Google Drive>
-            - <https://play.google.com/apps/testing/io.numbersprotocol.capturelite|Google Play Closed Alpha Testing (release)>
-
-            iOS Testflight
-
-            Build: ${{ env.ios_build_number }}
-            A push notification will be sent to the device with TestFlight installed when the build is ready.
-
-            Notes
-
-            - Publishing process usually requires some time to complete, and thus the link provided above might still display the old version of the app. Please check the app version before download and install the app.
-            - This message is automatically sent from GitHub Action.
-          SLACK_TITLE: Capture Lite QA Release
-          SLACK_USERNAME: GitHub Action
