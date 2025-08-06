@@ -7,10 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.102.0] - 2025-08-06
+
+### Added
+
+1. Add NSLocationAlwaysAndWhenInUseUsageDescription purpose string in Info.plist for iOS [#3337](https://github.com/numbersprotocol/capture-lite/pull/3337)
+
 ### Fixed
 
-1. Fix incorrect asset date display when viewing restored data offline [#3336](https://github.com/numbersprotocol/capture-lite/issues/3336)
-1. Add missing NSLocationAlwaysAndWhenInUseUsageDescription purpose string in Info.plist for iOS
+1. Fix incorrect asset date display when viewing restored data offline [#3336](https://github.com/numbersprotocol/capture-lite/issues/3336) [#3338](https://github.com/numbersprotocol/capture-lite/pull/3338)
+1. Hide Google login on iOS platform [#3344](https://github.com/numbersprotocol/capture-lite/pull/3344)
+
+### Changed
+
+1. Update androidx.window:window dependency from 1.0.0-alpha09 to 1.2.0 [#3341](https://github.com/numbersprotocol/capture-lite/pull/3341)
+1. Remove READ_MEDIA_IMAGES permission to comply with Google Play policy [#3342](https://github.com/numbersprotocol/capture-lite/pull/3342)
+1. Improve development documentation [#3343](https://github.com/numbersprotocol/capture-lite/pull/3343)
+
+### Chore
+
+1. Add new issues to backlog project [#3333](https://github.com/numbersprotocol/capture-lite/pull/3333)
+1. Rename project [#3335](https://github.com/numbersprotocol/capture-lite/pull/3335)
 
 ## [0.101.1] - 2025-03-21
 
@@ -2435,7 +2452,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.101.1...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.102.0...HEAD
+[0.102.0]: https://github.com/numbersprotocol/capture-lite/compare/0.101.1...0.102.0
 [0.101.1]: https://github.com/numbersprotocol/capture-lite/compare/0.101.0...0.101.1
 [0.101.0]: https://github.com/numbersprotocol/capture-lite/compare/0.100.0...0.101.0
 [0.100.0]: https://github.com/numbersprotocol/capture-lite/compare/0.99.0...0.100.0

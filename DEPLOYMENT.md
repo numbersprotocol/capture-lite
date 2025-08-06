@@ -148,10 +148,10 @@ MARKETING_VERSION = 0.102.0;     // e.g., 0.101.0 → 0.102.0
 Add a new release section with:
 
 - Release date
-- Added features
-- Changed functionality
-- Fixed bugs
-- Update the comparison links at the bottom
+- **All PRs merged between the last version and current version** (check `git log --oneline --grep="Merge pull request" 0.101.1..HEAD`)
+- Organize PRs by category: Added, Changed, Fixed, Chore, etc.
+- Add comparison link below the existing `[unreleased]:` link: `[0.102.0]: https://github.com/numbersprotocol/capture-lite/compare/0.101.1...0.102.0`
+- Update the `[unreleased]:` link to point to the new version: `[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.102.0...HEAD`
 
 #### 5. Update package-lock.json
 
