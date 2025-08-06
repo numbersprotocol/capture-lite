@@ -4,6 +4,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Capacitor } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
@@ -36,6 +37,8 @@ export class LoginPage {
   fields: FormlyFieldConfig[] = [];
 
   showResendEmailButton = false;
+
+  readonly isIOS = Capacitor.getPlatform() === 'ios';
 
   constructor(
     private readonly blockingActionService: BlockingActionService,

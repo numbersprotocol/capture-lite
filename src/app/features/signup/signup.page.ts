@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
@@ -30,6 +31,8 @@ export class SignupPage {
   };
 
   fields: FormlyFieldConfig[] = [];
+
+  readonly isIOS = Capacitor.getPlatform() === 'ios';
 
   constructor(
     private readonly blockingActionService: BlockingActionService,
