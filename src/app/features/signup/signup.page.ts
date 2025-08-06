@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Capacitor } from '@capacitor/core';
+import { Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
@@ -32,14 +32,17 @@ export class SignupPage {
 
   fields: FormlyFieldConfig[] = [];
 
-  readonly isIOS = Capacitor.getPlatform() === 'ios';
+  get isIOS(): boolean {
+    return this.platform.is('ios');
+  }
 
   constructor(
     private readonly blockingActionService: BlockingActionService,
     private readonly diaBackendAuthService: DiaBackendAuthService,
     private readonly errorService: ErrorService,
     private readonly translocoService: TranslocoService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly platform: Platform
   ) {
     combineLatest([
       this.translocoService.selectTranslate('email'),

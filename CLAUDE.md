@@ -146,5 +146,6 @@ npx cap open ios              # Open project in Xcode
 - Use Visual Studio Code with Prettier extension
 - Run `npm run lint` before commits
 - Maintain comprehensive test coverage
+- **Platform Detection**: Use `Platform.is('ios')` from `@ionic/angular` instead of `Capacitor.getPlatform() === 'ios'` for better Ionic integration and consistency
 
 This mobile application combines modern web technologies with native mobile capabilities to create a content authenticity and blockchain integration platform.

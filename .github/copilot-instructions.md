@@ -104,6 +104,7 @@ npx cap open ios              # Open in Xcode
 - Implement offline support with local database sync
 - Optimize performance with lazy loading and asset optimization
 - Follow mobile-first responsive design principles
+- **Platform Detection**: Use `Platform.is('ios')` from `@ionic/angular` instead of `Capacitor.getPlatform() === 'ios'` for better Ionic integration and consistency
 
 ## Configuration Files
 

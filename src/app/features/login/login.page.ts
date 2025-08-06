@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
-import { Capacitor } from '@capacitor/core';
+import { AlertController, Platform } from '@ionic/angular';
 import { TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormlyFieldConfig } from '@ngx-formly/core';
@@ -38,7 +37,9 @@ export class LoginPage {
 
   showResendEmailButton = false;
 
-  readonly isIOS = Capacitor.getPlatform() === 'ios';
+  get isIOS(): boolean {
+    return this.platform.is('ios');
+  }
 
   constructor(
     private readonly blockingActionService: BlockingActionService,
@@ -48,6 +49,7 @@ export class LoginPage {
     private readonly snackbar: MatSnackBar,
     private readonly onboardingService: OnboardingService,
     private readonly errorService: ErrorService,
+    private readonly platform: Platform,
     private readonly route: ActivatedRoute,
     private readonly alertController: AlertController
   ) {
