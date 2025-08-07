@@ -1,4 +1,4 @@
-# Capture Lite
+# Capture Cam
 
 <a href='https://play.google.com/store/apps/details?id=io.numbersprotocol.capturelite'><img alt='Get it on Google Play' src='https://i.imgur.com/nqDY3fd.png' height="64"/></a>
 <a href='https://apps.apple.com/tw/app/capture-app/id1536388009'><img alt='Get it on Google Play' src='https://i.imgur.com/OdHCgWO.png' height="64"/></a>
