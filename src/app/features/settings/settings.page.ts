@@ -181,9 +181,7 @@ export class SettingsPage {
   }
 
   async deleteAccount() {
-    const email: string = await this.diaBackendAuthService.getEmail();
-
-    const action$ = this.diaBackendAuthService.deleteAccount$(email).pipe(
+    const action$ = this.diaBackendAuthService.deleteAccount$().pipe(
       // logout
       concatMapTo(defer(() => this.mediaStore.clear())),
       concatMapTo(defer(() => this.database.clear())),
