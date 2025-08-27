@@ -24,11 +24,7 @@ import { secondSince } from '../../../utils/date';
 import { LanguageService } from '../../language/service/language.service';
 import { PreferenceManager } from '../../preference-manager/preference-manager.service';
 import { PushNotificationService } from '../../push-notification/push-notification.service';
-import {
-  BASE_URL,
-  PIPEDREAM_DELETE_CAPTURE_ACCOUNT,
-  TRUSTED_CLIENT_KEY,
-} from '../secret';
+import { BASE_URL, TRUSTED_CLIENT_KEY } from '../secret';
 
 @Injectable({
   providedIn: 'root',
@@ -315,19 +311,14 @@ export class DiaBackendAuthService {
     );
   }
 
-  deleteAccount$(email: string) {
+  deleteAccount$() {
     return defer(() => this.getAuthHeaders()).pipe(
       concatMap(authHeaders => {
-        const body = { email };
-        return this.httpClient.post<any>(
-          `${PIPEDREAM_DELETE_CAPTURE_ACCOUNT}`,
-          body,
-          {
-            headers: new HttpHeaders()
-              .set('Authorization', `${authHeaders.authorization}`)
-              .set('Content-Type', 'application/json'),
-          }
-        );
+        return this.httpClient.delete<any>(`${BASE_URL}/auth/users/me/`, {
+          headers: new HttpHeaders()
+            .set('Authorization', `${authHeaders.authorization}`)
+            .set('Content-Type', 'application/json'),
+        });
       })
     );
   }

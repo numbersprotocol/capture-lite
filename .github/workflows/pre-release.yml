@@ -30,7 +30,6 @@ jobs:
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           APPS_FLYER_DEV_KEY: ${{ secrets.APPS_FLYER_DEV_KEY }}
           NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
-          PIPEDREAM_DELETE_CAPTURE_ACCOUNT: ${{ secrets.PIPEDREAM_DELETE_CAPTURE_ACCOUNT }}
           GOOGLE_IOS_CLIENT_ID: ${{ secrets.GOOGLE_IOS_CLIENT_ID }}
           GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
         run: |
@@ -110,7 +109,6 @@ jobs:
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           APPS_FLYER_DEV_KEY: ${{ secrets.APPS_FLYER_DEV_KEY }}
           NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
-          PIPEDREAM_DELETE_CAPTURE_ACCOUNT: ${{ secrets.PIPEDREAM_DELETE_CAPTURE_ACCOUNT }}
           GOOGLE_IOS_CLIENT_ID: ${{ secrets.GOOGLE_IOS_CLIENT_ID }}
           GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
         run: |
@@ -200,7 +198,6 @@ jobs:
           BUBBLE_API_URL: ${{ secrets.BUBBLE_API_URL }}
           APPS_FLYER_DEV_KEY: ${{ secrets.APPS_FLYER_DEV_KEY }}
           NUMBERS_PQINA_NPM_KEY: ${{ secrets.NUMBERS_PQINA_NPM_KEY }}
-          PIPEDREAM_DELETE_CAPTURE_ACCOUNT: ${{ secrets.PIPEDREAM_DELETE_CAPTURE_ACCOUNT }}
           GOOGLE_IOS_CLIENT_ID: ${{ secrets.GOOGLE_IOS_CLIENT_ID }}
           GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
         run: |
