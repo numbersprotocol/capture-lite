@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.103.0] - 2025-08-27
+
+### Changed
+
+1. Migrate account deletion from Pipedream webhook to backend DELETE /auth/users/me/ endpoint [#3345](https://github.com/numbersprotocol/capture-cam/pull/3345)
+
+### Fixed
+
+1. Set Xcode 16.4 to resolve SDK issues in CI [#3345](https://github.com/numbersprotocol/capture-cam/pull/3345)
+
+### Chore
+
+1. Update README.md documentation
+
 ## [0.102.0] - 2025-08-06
 
 ### Added
@@ -2452,7 +2466,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.102.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.103.0...HEAD
+[0.103.0]: https://github.com/numbersprotocol/capture-lite/compare/0.102.0...0.103.0
 [0.102.0]: https://github.com/numbersprotocol/capture-lite/compare/0.101.1...0.102.0
 [0.101.1]: https://github.com/numbersprotocol/capture-lite/compare/0.101.0...0.101.1
 [0.101.0]: https://github.com/numbersprotocol/capture-lite/compare/0.100.0...0.101.0
