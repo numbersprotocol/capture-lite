@@ -176,6 +176,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.4'
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20.11.1'
@@ -263,6 +268,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.4'
 
       - name: Download IPA
         uses: actions/download-artifact@v4
