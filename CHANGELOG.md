@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.103.1] - 2025-09-01
+
+### Fixed
+
+1. Fix camera not opening issue caused by androidx.window dependency conflict
+2. Update @numbersprotocol/preview-camera to version 0.0.20 with proper WindowMetricsCalculator implementation
+3. Resolve Google Play Console warning about outdated androidx.window:window SDK version
+
+### Changed
+
+1. Upgrade androidx.window from 1.0.0-alpha09 to 1.4.0 via updated preview-camera plugin
+2. Migrate from deprecated WindowManager to stable WindowMetricsCalculator API in preview-camera plugin
+
 ## [0.103.0] - 2025-08-27
 
 ### Changed
@@ -2466,7 +2479,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.103.0...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.103.1...HEAD
+[0.103.1]: https://github.com/numbersprotocol/capture-lite/compare/0.103.0...0.103.1
 [0.103.0]: https://github.com/numbersprotocol/capture-lite/compare/0.102.0...0.103.0
 [0.102.0]: https://github.com/numbersprotocol/capture-lite/compare/0.101.1...0.102.0
 [0.101.1]: https://github.com/numbersprotocol/capture-lite/compare/0.101.0...0.101.1
