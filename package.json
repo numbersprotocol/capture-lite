@@ -1,6 +1,6 @@
 {
   "name": "capture-lite",
-  "version": "0.103.0",
+  "version": "0.103.1",
   "author": "numbersprotocol",
   "homepage": "https://numbersprotocol.io/",
   "scripts": {
@@ -62,7 +62,7 @@
     "@ngx-formly/core": "^5.10.22",
     "@ngx-formly/material": "^5.10.22",
     "@ngx-formly/schematics": "^5.10.22",
-    "@numbersprotocol/preview-camera": "github:numbersprotocol/preview-camera#0.0.19",
+    "@numbersprotocol/preview-camera": "github:numbersprotocol/preview-camera#0.0.20",
     "@numbersprotocol/preview-video": "github:numbersprotocol/preview-video#0.0.5",
     "@pqina/angular-pintura": "^8.44.1",
     "@pqina/pintura": "^8.44.1",
