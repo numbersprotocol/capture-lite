@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.103.2] - 2025-09-03
+
+### Fixed
+
+1. Fix bottom navigation tabs overlap on Android 15+ devices with edge-to-edge display [#3348](https://github.com/numbersprotocol/capture-lite/pull/3348)
+2. Resolve navigation bar visibility issues on foldable devices (Pixel 9 Pro Fold) [#3348](https://github.com/numbersprotocol/capture-lite/pull/3348)
+3. Ensure proper safe area inset detection across different Android navigation modes [#3348](https://github.com/numbersprotocol/capture-lite/pull/3348)
+
+### Changed
+
+1. Upgrade Capacitor core and CLI to version 7.4.3 for improved edge-to-edge support [#3348](https://github.com/numbersprotocol/capture-lite/pull/3348)
+2. Install @capawesome/capacitor-android-edge-to-edge-support plugin for advanced system UI control [#3348](https://github.com/numbersprotocol/capture-lite/pull/3348)
+3. Configure adjustMarginsForEdgeToEdge to properly handle system navigation bar overlap [#3348](https://github.com/numbersprotocol/capture-lite/pull/3348)
+
 ## [0.103.1] - 2025-09-01
 
 ### Fixed
@@ -2479,7 +2493,8 @@ This is the first release! _Capture Lite_ is a cross-platform app adapted from [
 - Web - see the demo [here](https://github.com/numbersprotocol/capture-lite#demo-app)
 - Android - the APK file `app-debug.apk` is attached to this release
 
-[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.103.1...HEAD
+[unreleased]: https://github.com/numbersprotocol/capture-lite/compare/0.103.2...HEAD
+[0.103.2]: https://github.com/numbersprotocol/capture-lite/compare/0.103.1...0.103.2
 [0.103.1]: https://github.com/numbersprotocol/capture-lite/compare/0.103.0...0.103.1
 [0.103.0]: https://github.com/numbersprotocol/capture-lite/compare/0.102.0...0.103.0
 [0.102.0]: https://github.com/numbersprotocol/capture-lite/compare/0.101.1...0.102.0
