@@ -4,7 +4,13 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
+  "android": {
+    "adjustMarginsForEdgeToEdge": "auto"
+  },
   "plugins": {
+    "EdgeToEdge": {
+      "backgroundColor": "#000000"
+    },
     "SplashScreen": {
       "androidScaleType": "CENTER_CROP",
       "launchAutoHide": false
