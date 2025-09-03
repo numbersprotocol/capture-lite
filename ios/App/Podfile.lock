@@ -16,7 +16,7 @@ PODS:
   - AppsFlyerFramework (6.15.3):
     - AppsFlyerFramework/Main (= 6.15.3)
   - AppsFlyerFramework/Main (6.15.3)
-  - Capacitor (7.0.1):
+  - Capacitor (7.4.3):
     - CapacitorCordova
   - CapacitorApp (7.0.0):
     - Capacitor
@@ -33,7 +33,7 @@ PODS:
     - Capacitor
   - CapacitorCommunityBluetoothLe (7.0.0):
     - Capacitor
-  - CapacitorCordova (7.0.1)
+  - CapacitorCordova (7.4.3)
   - CapacitorDevice (7.0.0):
     - Capacitor
   - CapacitorFilesystem (7.0.0):
@@ -61,7 +61,7 @@ PODS:
     - FBSDKCoreKit (= 17.4.0)
     - FBSDKLoginKit (= 17.4.0)
     - GoogleSignIn (~> 8.0.0)
-  - CordovaPlugins (7.0.1):
+  - CordovaPlugins (7.4.3):
     - CapacitorCordova
   - FalconetaCapacitorWifiConnect (7.0.0):
     - Capacitor
@@ -143,7 +143,7 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
-  - NumbersprotocolPreviewCamera (0.0.19):
+  - NumbersprotocolPreviewCamera (0.0.20):
     - Capacitor
   - NumbersprotocolPreviewVideo (0.0.5):
     - Capacitor
@@ -261,7 +261,7 @@ SPEC CHECKSUMS:
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
   AppsflyerCapacitorPlugin: 3510699914dd2f25ca7ed47c9bfe833f402be053
   AppsFlyerFramework: ad7ff0d22aa36c7f8cc4f71a5424e19b89ccb8ae
-  Capacitor: de199cba6c8b20995428ad0b7cb0bc6ca625ffd4
+  Capacitor: 28d6c01026a9a3f7156529498ec1f389a2a28dbc
   CapacitorApp: 9cb31064a6c6bb2b1438583733a7bf45557fc1da
   CapacitorBlobWriter: d709e5d22ab9989afd730eb4773873d1ded5fd08
   CapacitorBrowser: 55c21db47416dcc8fc3b623e18fd7d09acb26081
@@ -269,7 +269,7 @@ SPEC CHECKSUMS:
   CapacitorClipboard: 007d79cd6c104002b274546d13873526ca20beb7
   CapacitorCommunityAdvertisingId: 112c7b79f2897c2d9e61803f8448409c49999b32
   CapacitorCommunityBluetoothLe: f911fcbecc25033bca1cfcc5782c46c11ebf62ec
-  CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
+  CapacitorCordova: 435121e81a2df4d0034f0fb11fcefab5104cfdb5
   CapacitorDevice: 069faf433b3a99c3d5f0e500fbe634f60a8c6a84
   CapacitorFilesystem: 59a2b7b56a897c6a3de4d04c5718e1d80de9d2f5
   CapacitorGeolocation: c0755715aaadf5c86dc0053e1127b368444c914b
@@ -281,7 +281,7 @@ SPEC CHECKSUMS:
   CapacitorShare: d94c53d7656f1ce8f6712ae8d19ab0c18a69259f
   CapacitorSplashScreen: 7e7a0a1113833032f196b3af6fa437baccacf5bc
   CapgoCapacitorSocialLogin: 0fcf5cf6d447ec4992c3e9e4fcae70c19d12919b
-  CordovaPlugins: fa7014202e3bec4576cfab24575959b3004a792a
+  CordovaPlugins: 32fa8833e41de121e3f185b0c033815b1be91a13
   FalconetaCapacitorWifiConnect: c8c26550fe3fca67cf7aac174b09f0805aabf107
   FBAEMKit: 58cb5f302cdd715a56d4c1d0dfdd2e423ac1421a
   FBSDKCoreKit: 94d7461d0cecf441b1ba7c41acfff41daa8ccd41
@@ -300,7 +300,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   IONGeolocationLib: 81f33f88d025846946de2cf63b0c7628e7c6bc9d
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
-  NumbersprotocolPreviewCamera: 97466d16e7abacf40d732065e30c25f763cbe24e
+  NumbersprotocolPreviewCamera: ad1dcbb6067429855ecef9c10f674c7777dece8a
   NumbersprotocolPreviewVideo: 1f42fd2d699611638352d5400488d18fa5e03fc0
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
 
